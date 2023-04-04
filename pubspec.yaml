@@ -1,0 +1,32 @@
+name: flutter_misskey_app
+description: A new Flutter project.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+dependencies:
+  collection: ^1.16.0
+  flutter:
+    sdk: flutter
+  flutter_html: 3.0.0-alpha.6
+  flutter_riverpod: ^2.3.2
+  misskey_dart:
+    path: ../misskey_dart
+  mfm:
+    path: ../mfm
+  tuple: ^2.0.1
+  path_provider: ^2.0.14
+  dio: ^5.1.1
+  path: ^1.8.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
