@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^2.0.14
   dio: ^5.1.1
   path: ^1.8.2
+  auto_route: ^6.0.5
 
 dev_dependencies:
   flutter_test:

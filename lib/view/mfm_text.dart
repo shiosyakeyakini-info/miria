@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_misskey_app/providers.dart';
@@ -22,6 +24,9 @@ Widget customEmojiRenderer(
 CustomRenderMatcher emojiMatcher() =>
     (context) => context.tree.element?.localName == "customemoji";
 
+CustomRenderMatcher rotateMatcher() =>
+    (context) => context.tree.element?.localName == "rotate";
+
 class MfmText extends ConsumerWidget {
   final String mfmText;
   final TextStyle? style;
@@ -38,6 +43,16 @@ class MfmText extends ConsumerWidget {
         emojiMatcher(): CustomRender.widget(
             widget: (context, children) => customEmojiRenderer(
                 context, ref.read(emojiRepositoryProvider))),
+        rotateMatcher(): CustomRender.widget(
+          widget: (context, children) => Transform.rotate(
+            angle: (double.tryParse(context.tree.attributes["deg"] ?? "") ?? 0.0) * pi / 180,
+            child: RichText(
+              text: TextSpan(
+                children: children(),
+              ),
+            ),
+          ),
+        )
       },
       style: {
         "body": Style(
@@ -53,7 +68,7 @@ class MfmText extends ConsumerWidget {
           height: Height(24),
         ),
       },
-      tagsList: Html.tags..addAll(["customemoji"]),
+      tagsList: Html.tags..addAll(["customemoji", "rotate"]),
     );
   }
 }

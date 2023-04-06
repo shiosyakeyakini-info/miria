@@ -12,7 +12,7 @@ class MfmToFlutterHtml {
     if (color == null) {
       return null;
     } else if (color.length == 3) {
-      return "#${color.substring(0, 1)}{color.substring(0,1)}{color.substring(1,2)}{color.substring(1,2)}{color.substring(2,3)}{color.substring(2,3)}";
+      return "#${color.substring(0, 1)}${color.substring(0,1)}${color.substring(1,2)}${color.substring(1,2)}${color.substring(2,3)}${color.substring(2,3)}";
     } else if (color.length == 6) {
       return "#$color";
     } else if (color.length == 8) {
@@ -26,11 +26,13 @@ class MfmToFlutterHtml {
     return text
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
+        .replaceAll(" ", "&nbsp;")
         .replaceAll("\n", "<br>");
   }
 
   String toHtml(List<MfmNode>? nodes) {
     if (nodes == null) return "";
+    print(nodes);
 
     var str = "";
 
@@ -61,12 +63,12 @@ class MfmToFlutterHtml {
         str +=
             "<div style=\"text-align:center\">${toHtml(node.children)}</div>";
       } else if (node is MfmCodeBlock) {
-        str += "<pre>${node.code}</pre>";
+        str += "<pre style=\"background-color:#000;color:#fff;font-family:monospace;padding:12px;\">${node.code}</pre>";
       } else if (node is MfmEmojiCode) {
         final found = emojiRepository.emoji
             ?.firstWhereOrNull((element) => element.name == node.name);
         if (found != null) {
-          str += "<customemoji name=\"${found.name}\">";
+          str += "<customemoji name=\"${found.name}\"></customemoji>";
         } else {
           str += ":${_safeAsPlain(node.name)}:";
         }
@@ -74,6 +76,12 @@ class MfmToFlutterHtml {
         if (node.name == "x2") {
           str +=
               "<span style=\"font-size:2em;\">${toHtml(node.children)}</span>";
+        } else if(node.name == "x3") {
+          str +=
+              "<span style=\"font-size:3em;\">${toHtml(node.children)}</span>";
+        } else if(node.name == "x4") {
+          str +=
+              "<span style=\"font-size:4em;\">${toHtml(node.children)}</span>";
         } else if (node.name == "fg") {
           final htmlParsedColor = _toHtmlColor(node.args["color"]);
           if (htmlParsedColor != null) {
@@ -86,7 +94,7 @@ class MfmToFlutterHtml {
           final htmlParsedColor = _toHtmlColor(node.args["color"]);
           if (htmlParsedColor != null) {
             str +=
-                "<span style=\"background-color:${node.args["color"]};\">${toHtml(node.children)}</span>";
+                "<span style=\"background-color:$htmlParsedColor;\">${toHtml(node.children)}</span>";
           } else {
             return toHtml(node.children);
           }
@@ -95,11 +103,16 @@ class MfmToFlutterHtml {
             str +=
                 "<span style=\"font-family:'Noto Serif CJK JP Regular', 'MS P Mincho', serif;\">${toHtml(node.children)}</span>";
           }
+        } else if(node.name == "rotate") {
+          if(node.args.containsKey("deg")) {
+            str += "<rotate deg=\"${node.args["deg"]}\">${toHtml(node.children)}</rotate>";
+          }
         } else {
           str += toHtml(node.children);
         }
       }
     }
+    print(str);
 
     return str;
   }

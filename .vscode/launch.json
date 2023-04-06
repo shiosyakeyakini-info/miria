@@ -7,7 +7,8 @@
         {
             "name": "flutter_misskey_app",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "./lib/main.dart"
         },
         {
             "name": "flutter_misskey_app (profile mode)",

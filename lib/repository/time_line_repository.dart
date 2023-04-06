@@ -2,27 +2,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-
-class LocalTimeLineRepository extends ChangeNotifier{
-
-  late final SocketController socketController;
-
-  final Misskey misskey;
-
-  LocalTimeLineRepository(this.misskey);
-
+abstract class TimeLineRepository extends ChangeNotifier {
   final QueueList<Note> notes = QueueList();
 
-  void startTimeLine() {
-    socketController = misskey.localTimelineStream((note) {
-      notes.add(note);
+  void startTimeLine() {}
 
-      if(notes.length > 100) {
-        notes.removeFirst();
-      }
-      
-      notifyListeners();
-    });
-    socketController.startStreaming();
-  }
+  void disconnect() {}
+  
 }

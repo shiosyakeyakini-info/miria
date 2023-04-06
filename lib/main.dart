@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/view/misskey_time_line.dart';
+import 'package:flutter_misskey_app/view/time_line_page/misskey_time_line.dart';
+import 'package:flutter_misskey_app/view/time_line_page/time_line_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
@@ -33,6 +34,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const MisskeyTimeline();
+    return const TimeLinePage();
   }
 }

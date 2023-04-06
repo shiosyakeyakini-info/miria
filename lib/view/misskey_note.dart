@@ -1,17 +1,23 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/view/custom_emoji.dart';
 import 'package:flutter_misskey_app/view/mfm_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 
 class MisskeyNote extends ConsumerWidget {
-  final Note note;
+  final String noteId;
+  final ChangeNotifierProvider<TimeLineRepository> timelineProvider;
 
-  const MisskeyNote({super.key, required this.note});
+  const MisskeyNote({super.key, required this.noteId, required this.timelineProvider});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final note = ref.watch(timelineProvider.select(
+        (value) => value.notes.firstWhereOrNull((e) => e.id == noteId)));
+    if (note == null) return Container();
+
     final displayNote = note.renote ?? note;
 
     return Container(
