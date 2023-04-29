@@ -13,13 +13,25 @@ class MyApp extends StatelessWidget {
 
   final _appRouter = AppRouter();
 
+  final themeData = ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: Colors.blue,
+      fontFamily: "Hiragino Maru Gothic ProN");
+
+  final darkThemeData = ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.blue,
+      primaryColor: Colors.blue,
+      fontFamily: "Hiragino Maru Gothic ProN");
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Demo',
-      theme: ThemeData(
-          primarySwatch: Colors.blue, fontFamily: "Hiragino Maru Gothic ProN"),
+      theme: themeData,
+      darkTheme: darkThemeData,
+      themeMode: ThemeMode.system,
       routerConfig: _appRouter.config(initialRoutes: [
         TimeLineRoute(
             currentTabSetting: const TabSettings(

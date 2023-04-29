@@ -18,6 +18,9 @@ abstract class TimeLineRepository extends ChangeNotifier {
         notes[index] = newNote;
         isChanged = true;
       }
+      if (element.renote?.id == newNote.id) {
+        notes[index] = notes[index].copyWith(renote: newNote);
+      }
     });
 
     if (isChanged) {

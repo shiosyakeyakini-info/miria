@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/view/common/misskey_note.dart';
-import 'package:flutter_misskey_app/view/note_detail_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
   final ChangeNotifierProvider<TimeLineRepository> timeLineRepositoryProvider;
+  final ScrollController controller;
 
-  const MisskeyTimeline({super.key, required this.timeLineRepositoryProvider});
+  MisskeyTimeline({
+    super.key,
+    ScrollController? controller,
+    required this.timeLineRepositoryProvider,
+  }) : controller = controller ?? ScrollController();
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MisskeyTimelineState();
@@ -16,30 +20,33 @@ class MisskeyTimeline extends ConsumerStatefulWidget {
 
 class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   List<Note> showingNotes = [];
-  final ScrollController scrollController = ScrollController();
+  late final ScrollController scrollController = widget.controller;
   double previousPosition = 0.0;
+  double previousMaxExtent = 0.0;
 
   @override
   void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
-    ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
-    ref.read(widget.timeLineRepositoryProvider).startTimeLine();
+    if (oldWidget.timeLineRepositoryProvider !=
+        widget.timeLineRepositoryProvider) {
+      print("didUpdateWidget called. oldWidget=$oldWidget");
+      ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
+      ref.read(widget.timeLineRepositoryProvider).startTimeLine();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    // ref.read(widget.timeLineRepositoryProvider).startTimeLine();
 
-    /*scrollController.addListener(() {
-      final currentPositon = scrollController.position.pixels;
-      if (currentPositon != 0 && previousPosition == 0) {
-        showingNotes = ref.watch(widget.timeLineRepositoryProvider).notes;
-      } else if (currentPositon == 0) {
-        showingNotes = [];
-      }
-      previousPosition = 0;
-    });*/
+    scrollController.addListener(() {
+      final currentPosition = scrollController.position.pixels;
+
+      previousPosition = currentPosition;
+      previousMaxExtent = scrollController.position.maxScrollExtent;
+    });
+
+    ref.read(widget.timeLineRepositoryProvider).startTimeLine();
   }
 
   @override
@@ -48,13 +55,30 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     super.dispose();
   }
 
+  void scrollToTop() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final currentPosition = scrollController.position.pixels;
+      if (previousPosition == previousMaxExtent &&
+          currentPosition != scrollController.position.maxScrollExtent) {
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+        previousPosition = scrollController.position.maxScrollExtent;
+        previousMaxExtent = scrollController.position.maxScrollExtent;
+      }
+
+      if (previousPosition == previousMaxExtent) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          scrollToTop();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<Note> notes;
-    if (showingNotes.isEmpty) {
-      notes = ref.watch(widget.timeLineRepositoryProvider).notes;
-    } else {
-      notes = showingNotes;
+    final List<Note> notes = ref.watch(widget.timeLineRepositoryProvider).notes;
+
+    if (scrollController.positions.isNotEmpty) {
+      scrollToTop();
     }
 
     return Padding(
@@ -63,8 +87,6 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
         itemCount: notes.length,
         controller: scrollController,
         reverse: true,
-        addAutomaticKeepAlives: false,
-        addRepaintBoundaries: false,
         itemBuilder: (context, index) {
           return NoteWrapper(
             index: index,

@@ -9,6 +9,7 @@ class ReactionButton extends ConsumerStatefulWidget {
   final int reactionCount;
   final String? myReaction;
   final String noteId;
+  final String? anotherServerUrl;
 
   const ReactionButton({
     super.key,
@@ -16,6 +17,7 @@ class ReactionButton extends ConsumerStatefulWidget {
     required this.reactionCount,
     required this.myReaction,
     required this.noteId,
+    required this.anotherServerUrl,
   });
 
   @override
@@ -36,6 +38,19 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
   @override
   Widget build(BuildContext context) {
     final isMyReaction = widget.myReaction == widget.reactionKey;
+    final isAnotherServer = widget.anotherServerUrl != null;
+    final backgroundColor = isMyReaction
+        ? Theme.of(context).primaryColor
+        : isAnotherServer
+            ? Colors.transparent
+            : MediaQuery.of(context).platformBrightness == Brightness.light
+                ? Colors.grey.shade200
+                : Colors.grey.shade700;
+
+    final computedLuminance = (backgroundColor == Colors.transparent
+            ? Theme.of(context).scaffoldBackgroundColor
+            : backgroundColor)
+        .computeLuminance();
 
     return ElevatedButton(
         onPressed: () async {
@@ -50,24 +65,23 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
             return;
           }
+          final customEmojiRegExp =
+              RegExp(r"\:(.+?)@.\:").firstMatch(widget.reactionKey);
+          final String? found = customEmojiRegExp?.group(1);
+          print(found);
 
           // すでに別のリアクションを行っている
           if (widget.myReaction != null) return;
 
-          final customEmojiRegExp =
-              RegExp(r"\:(.+?)@.\:").firstMatch(widget.reactionKey);
-          final String? found = customEmojiRegExp?.group(1);
           if (found != null) {
             await ref.read(misskeyProvider).notes.reactions.create(
                 NotesReactionsCreateRequest(
-                    noteId: widget.noteId, reaction: found));
+                    noteId: widget.noteId, reaction: ":$found:"));
             await ref.read(noteRefreshServiceProvider).refresh(widget.noteId);
           }
         },
         style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(isMyReaction
-              ? Colors.amberAccent.shade400
-              : Colors.grey.shade200),
+          backgroundColor: MaterialStatePropertyAll(backgroundColor),
           padding: const MaterialStatePropertyAll(EdgeInsets.all(5)),
           elevation: const MaterialStatePropertyAll(0),
           minimumSize: const MaterialStatePropertyAll(Size(0, 0)),
@@ -78,13 +92,16 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           children: [
             SizedBox(
                 height: 24 * MediaQuery.of(context).textScaleFactor,
-                child: CustomEmoji.fromEmojiName(widget.reactionKey,
-                        ref.read(emojiRepositoryProvider)) ??
-                    Container()),
+                child: CustomEmoji.fromEmojiName(
+                  widget.reactionKey,
+                  ref.read(emojiRepositoryProvider),
+                  anotherServerUrl: widget.anotherServerUrl,
+                )),
             const Padding(padding: EdgeInsets.only(left: 5)),
             Text(widget.reactionCount.toString(),
-                style: const TextStyle(
-                  color: Colors.black45,
+                style: TextStyle(
+                  color:
+                      computedLuminance < 0.5 ? Colors.white : Colors.black54,
                 )),
           ],
         ));

@@ -40,6 +40,7 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
             children: [
               TextField(
                 autofocus: true,
+                keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
                   setState(() {
                     emojis.clear();
@@ -61,7 +62,15 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
                 runSpacing: 5,
                 children: [
                   for (final emoji in emojis)
-                    IconButton(
+                    ElevatedButton(
+                        style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.transparent),
+                          padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+                          elevation: MaterialStatePropertyAll(0),
+                          minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
                         onPressed: () async {
                           try {
                             await ref
@@ -78,7 +87,9 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
                             Navigator.of(context).pop();
                           }
                         },
-                        icon: CustomEmoji(emoji: emoji))
+                        child: SizedBox(
+                            height: 32 * MediaQuery.of(context).textScaleFactor,
+                            child: CustomEmoji(emoji: emoji)))
                 ],
               )
             ],

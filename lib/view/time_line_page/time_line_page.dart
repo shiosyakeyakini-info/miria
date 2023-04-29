@@ -20,6 +20,7 @@ class TimeLinePage extends ConsumerStatefulWidget {
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
   final textEditingController = TextEditingController();
+  final scrollController = ScrollController();
 
   void note() {
     ref.read(misskeyProvider).notes.create(NotesCreateRequest(
@@ -43,15 +44,22 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
           for (final tabSetting
               in ref.read(tabSettingsRepositoryProvider).tabSettings)
             IconButton(
-              icon: Icon(tabSetting.icon),
-              onPressed: () => context
-                  .replaceRoute(TimeLineRoute(currentTabSetting: tabSetting)),
-            )
+                icon: Icon(tabSetting.icon),
+                onPressed: () {
+                  if (tabSetting == widget.currentTabSetting) {
+                    scrollController
+                        .jumpTo(scrollController.position.maxScrollExtent);
+                  } else {
+                    context.replaceRoute(
+                        TimeLineRoute(currentTabSetting: tabSetting));
+                  }
+                })
         ]),
         actions: [
           IconButton(
               onPressed: () => ref
-                  .read(widget.currentTabSetting.tabType.timelineProvider)
+                  .read(widget.currentTabSetting.tabType
+                      .timelineProvider(widget.currentTabSetting))
                   .reconnect(),
               icon: const Icon(Icons.refresh))
         ],
@@ -60,8 +68,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         children: [
           Expanded(
             child: MisskeyTimeline(
-                timeLineRepositoryProvider:
-                    widget.currentTabSetting.tabType.timelineProvider),
+                controller: scrollController,
+                timeLineRepositoryProvider: widget.currentTabSetting.tabType
+                    .timelineProvider(widget.currentTabSetting)),
           ),
           Row(
             children: [

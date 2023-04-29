@@ -27,8 +27,8 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
     final files = directory.listSync().whereType<File>();
 
-    final found = files
-        .firstWhereOrNull((file) => file.path.endsWith("${emoji.name}.png"));
+    final found = files.firstWhereOrNull((file) =>
+        file.path.endsWith("${Platform.pathSeparator}${emoji.name}.png"));
     if (found != null) {
       return found;
     }

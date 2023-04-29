@@ -21,6 +21,21 @@ class HomeTimeLineRepository extends TimeLineRepository {
         print(e);
         print(s);
       });
+    } else {
+      misskey.notes
+          .homeTimeline(const NotesTimelineRequest(limit: 30))
+          .then((resultNotes) {
+        for (final note in resultNotes.toList().reversed) {
+          final foundNote =
+              notes.indexWhere((element) => element.id == note.id);
+          if (foundNote == -1) {
+            notes.add(note);
+          } else {
+            notes[foundNote] = note;
+          }
+        }
+        notifyListeners();
+      });
     }
 
     socketController = misskey.homeTimelineStream((note) {

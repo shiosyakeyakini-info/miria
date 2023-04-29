@@ -1,4 +1,5 @@
 import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_flutter_html.dart';
+import 'package:flutter_misskey_app/repository/channel_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_misskey_app/repository/global_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/home_time_line_repository.dart';
@@ -18,7 +19,10 @@ final homeTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
     (ref) => HomeTimeLineRepository(ref.read(misskeyProvider)));
 final globalTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
     (ref) => GlobalTimeLineRepository(ref.read(misskeyProvider)));
-
+final channelTimelineProvider =
+    ChangeNotifierProvider.family<ChannelTimelineRepository, String>(
+        (ref, chanelId) =>
+            ChannelTimelineRepository(ref.read(misskeyProvider), chanelId));
 final noteRefreshServiceProvider =
     Provider((ref) => NoteRefreshService(ref.read));
 

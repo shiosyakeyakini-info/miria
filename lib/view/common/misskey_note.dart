@@ -69,15 +69,39 @@ class MisskeyNote extends ConsumerWidget {
                       spacing: 5 * MediaQuery.of(context).textScaleFactor,
                       runSpacing: 5 * MediaQuery.of(context).textScaleFactor,
                       children: [
-                        for (final reaction in displayNote.reactions.entries)
+                        for (final reaction in displayNote.reactions.entries
+                            .sorted((a, b) => b.value.compareTo(a.value)))
                           ReactionButton(
                             reactionKey: reaction.key,
                             reactionCount: reaction.value,
                             myReaction: displayNote.myReaction,
                             noteId: displayNote.id,
+                            anotherServerUrl: displayNote.reactionEmojis.entries
+                                .firstWhereOrNull((element) =>
+                                    ":${element.key}:" == reaction.key)
+                                ?.value,
                           )
                       ],
                     ),
+                    if (displayNote.channel != null) ...[
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.tv,
+                            size:
+                                Theme.of(context).textTheme.bodySmall?.fontSize,
+                            color: Theme.of(context).textTheme.bodySmall?.color,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 5),
+                          ),
+                          Text(
+                            displayNote.channel!.name,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      )
+                    ],
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       mainAxisSize: MainAxisSize.max,

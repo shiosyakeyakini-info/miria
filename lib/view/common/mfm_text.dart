@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_misskey_app/extensions/string_extensions.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
@@ -35,10 +36,21 @@ class MfmText extends ConsumerStatefulWidget {
   const MfmText({super.key, required this.mfmText, this.style});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final htmlText = ref.read(mfmToFlutterHtmlProvider).parse(mfmText);
+  ConsumerState<ConsumerStatefulWidget> createState() => MfmTextState();
+}
 
-    return Html(
+class MfmTextState extends ConsumerState<MfmText> {
+  Widget? cachedWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    final htmlText = ref.read(mfmToFlutterHtmlProvider).parse(widget.mfmText);
+
+    if (cachedWidget != null) {
+      return cachedWidget!;
+    }
+
+    cachedWidget = Html(
       data: htmlText,
       customRenders: {
         emojiMatcher(): CustomRender.widget(
@@ -83,10 +95,12 @@ class MfmText extends ConsumerStatefulWidget {
         }
       },
     );
+
+    return cachedWidget!;
   }
 }
 
-class UserInformation extends ConsumerWidget {
+class UserInformation extends ConsumerStatefulWidget {
   final User user;
 
   const UserInformation({
@@ -95,12 +109,25 @@ class UserInformation extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userName = ref.read(mfmToFlutterHtmlProvider).parse(user.name ?? "");
-    final htmlText =
-        "<span style=\"font-weight: bold;\">$userName</span>&nbsp;&nbsp;&nbsp;<span style=\"color:#888888\">@${user.username}</span>";
+  ConsumerState<ConsumerStatefulWidget> createState() => UserInformationState();
+}
 
-    return Html(
+class UserInformationState extends ConsumerState<UserInformation> {
+  Widget? cachedWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    final userName = ref
+        .read(mfmToFlutterHtmlProvider)
+        .parse(widget.user.name ?? widget.user.username);
+    final htmlText =
+        "<span style=\"font-weight: bold;\">$userName</span>&nbsp;&nbsp;&nbsp;<span style=\"color:#888888\">@${widget.user.username.tight}</span>";
+
+    if (cachedWidget != null) {
+      return cachedWidget!;
+    }
+
+    cachedWidget = Html(
       data: htmlText,
       customRenders: {
         emojiMatcher(): CustomRender.widget(
@@ -123,5 +150,7 @@ class UserInformation extends ConsumerWidget {
         )
       },
     );
+
+    return cachedWidget!;
   }
 }
