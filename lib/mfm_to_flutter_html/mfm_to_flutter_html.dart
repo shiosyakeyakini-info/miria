@@ -32,8 +32,6 @@ class MfmToFlutterHtml {
 
   String toHtml(List<MfmNode>? nodes) {
     if (nodes == null) return "";
-    print(nodes);
-
     var str = "";
 
     for (final node in nodes) {
@@ -112,7 +110,6 @@ class MfmToFlutterHtml {
         }
       }
     }
-    print(str);
 
     return str;
   }

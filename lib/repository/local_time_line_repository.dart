@@ -13,9 +13,9 @@ class LocalTimeLineRepository extends TimeLineRepository {
     socketController = misskey.localTimelineStream((note) {
       notes.add(note);
 
-      if (notes.length > 100) {
-        notes.removeFirst();
-      }
+      // if (notes.length > 100) {
+      //   notes.removeFirst();
+      // }
 
       notifyListeners();
     })
@@ -25,5 +25,10 @@ class LocalTimeLineRepository extends TimeLineRepository {
   @override
   void disconnect() {
     socketController?.disconnect();
+  }
+
+  @override
+  void reconnect() {
+    socketController?.reconnect();
   }
 }

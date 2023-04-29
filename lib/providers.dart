@@ -3,6 +3,7 @@ import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_misskey_app/repository/global_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/home_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/local_time_line_repository.dart';
+import 'package:flutter_misskey_app/repository/note_refresh_service.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm/mfm.dart';
@@ -18,6 +19,8 @@ final homeTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
 final globalTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
     (ref) => GlobalTimeLineRepository(ref.read(misskeyProvider)));
 
+final noteRefreshServiceProvider =
+    Provider((ref) => NoteRefreshService(ref.read));
 
 final emojiRepositoryProvider =
     Provider((ref) => EmojiRepositoryImpl(misskey: ref.read(misskeyProvider)));

@@ -22,12 +22,17 @@ dependencies:
   dio: ^5.1.1
   path: ^1.8.2
   auto_route: ^6.0.5
+  freezed_annotation: ^2.2.0
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  auto_route_generator: ^6.0.0
+  build_runner: ^2.3.3
+  freezed: ^2.3.2
 
 flutter:
   uses-material-design: true

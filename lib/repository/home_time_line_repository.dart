@@ -10,12 +10,21 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   @override
   void startTimeLine() {
+    if (notes.isEmpty) {
+      misskey.notes.homeTimeline(const NotesTimelineRequest(limit: 30)).then(
+          (resultNotes) {
+        for (final note in resultNotes.toList().reversed) {
+          notes.addLast(note);
+        }
+        notifyListeners();
+      }, onError: (e, s) {
+        print(e);
+        print(s);
+      });
+    }
+
     socketController = misskey.homeTimelineStream((note) {
       notes.add(note);
-
-      if (notes.length > 100) {
-        notes.removeFirst();
-      }
 
       notifyListeners();
     })
@@ -25,5 +34,10 @@ class HomeTimeLineRepository extends TimeLineRepository {
   @override
   void disconnect() {
     socketController?.disconnect();
+  }
+
+  @override
+  void reconnect() {
+    socketController?.reconnect();
   }
 }

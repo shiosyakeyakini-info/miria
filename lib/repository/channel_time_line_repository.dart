@@ -13,9 +13,9 @@ class HomeTimeLineRepository extends TimeLineRepository {
     socketController = misskey.homeTimelineStream((note) {
       notes.add(note);
 
-      if (notes.length > 100) {
-        notes.removeFirst();
-      }
+      // if (notes.length > 100) {
+      //   notes.removeFirst();
+      // }
 
       notifyListeners();
     })
@@ -25,5 +25,10 @@ class HomeTimeLineRepository extends TimeLineRepository {
   @override
   void disconnect() {
     socketController?.disconnect();
+  }
+
+  @override
+  void reconnect() {
+    socketController?.reconnect();
   }
 }

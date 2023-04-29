@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
-import 'package:flutter_misskey_app/view/custom_emoji.dart';
-import 'package:flutter_misskey_app/view/misskey_note.dart';
+import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
+import 'package:flutter_misskey_app/view/common/misskey_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -11,7 +11,8 @@ class NoteDetailDialog extends ConsumerStatefulWidget {
   final Note note;
   final ChangeNotifierProvider<TimeLineRepository> timeLineRepository;
 
-  const NoteDetailDialog({super.key, required this.note, required this.timeLineRepository});
+  const NoteDetailDialog(
+      {super.key, required this.note, required this.timeLineRepository});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

@@ -1,39 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/view/time_line_page/misskey_time_line.dart';
-import 'package:flutter_misskey_app/view/time_line_page/time_line_page.dart';
+import 'package:flutter_misskey_app/model/tab_settings.dart';
+import 'package:flutter_misskey_app/model/tab_type.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final _appRouter = AppRouter();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
-      theme:
-          ThemeData(primarySwatch: Colors.blue, fontFamily: "Noto Sans CJK JP"),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData(
+          primarySwatch: Colors.blue, fontFamily: "Hiragino Maru Gothic ProN"),
+      routerConfig: _appRouter.config(initialRoutes: [
+        TimeLineRoute(
+            currentTabSetting: const TabSettings(
+                icon: Icons.home, tabType: TabType.localTimeline))
+      ]),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const TimeLinePage();
   }
 }
