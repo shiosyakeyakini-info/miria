@@ -68,7 +68,6 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           final customEmojiRegExp =
               RegExp(r"\:(.+?)@.\:").firstMatch(widget.reactionKey);
           final String? found = customEmojiRegExp?.group(1);
-          print(found);
 
           // すでに別のリアクションを行っている
           if (widget.myReaction != null) return;
@@ -80,11 +79,11 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             await ref.read(noteRefreshServiceProvider).refresh(widget.noteId);
           }
         },
-        style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(backgroundColor),
-          padding: const MaterialStatePropertyAll(EdgeInsets.all(5)),
-          elevation: const MaterialStatePropertyAll(0),
-          minimumSize: const MaterialStatePropertyAll(Size(0, 0)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          padding: const EdgeInsets.all(5),
+          elevation: 0,
+          minimumSize: const Size(0, 0),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         child: Row(

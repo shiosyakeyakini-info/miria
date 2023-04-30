@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
@@ -53,13 +52,10 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
         height: MediaQuery.of(context).size.height * 0.8,
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5),
             child: Column(
               children: [
-                MisskeyNote(
-                  noteId: widget.note.id,
-                  timelineProvider: widget.timeLineRepository,
-                ),
+                MisskeyNote(note: widget.note),
                 TextField(
                   controller: reactionTextField,
                 ),

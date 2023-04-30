@@ -19,6 +19,7 @@ mixin _$TabSettings {
   IconData get icon => throw _privateConstructorUsedError;
   TabType get tabType => throw _privateConstructorUsedError;
   String? get channelId => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TabSettingsCopyWith<TabSettings> get copyWith =>
@@ -31,7 +32,7 @@ abstract class $TabSettingsCopyWith<$Res> {
           TabSettings value, $Res Function(TabSettings) then) =
       _$TabSettingsCopyWithImpl<$Res, TabSettings>;
   @useResult
-  $Res call({IconData icon, TabType tabType, String? channelId});
+  $Res call({IconData icon, TabType tabType, String? channelId, String name});
 }
 
 /// @nodoc
@@ -50,6 +51,7 @@ class _$TabSettingsCopyWithImpl<$Res, $Val extends TabSettings>
     Object? icon = null,
     Object? tabType = null,
     Object? channelId = freezed,
+    Object? name = null,
   }) {
     return _then(_value.copyWith(
       icon: null == icon
@@ -64,6 +66,10 @@ class _$TabSettingsCopyWithImpl<$Res, $Val extends TabSettings>
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
               as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -76,7 +82,7 @@ abstract class _$$_TabSettingsCopyWith<$Res>
       __$$_TabSettingsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({IconData icon, TabType tabType, String? channelId});
+  $Res call({IconData icon, TabType tabType, String? channelId, String name});
 }
 
 /// @nodoc
@@ -93,6 +99,7 @@ class __$$_TabSettingsCopyWithImpl<$Res>
     Object? icon = null,
     Object? tabType = null,
     Object? channelId = freezed,
+    Object? name = null,
   }) {
     return _then(_$_TabSettings(
       icon: null == icon
@@ -107,6 +114,10 @@ class __$$_TabSettingsCopyWithImpl<$Res>
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
               as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -115,7 +126,10 @@ class __$$_TabSettingsCopyWithImpl<$Res>
 
 class _$_TabSettings implements _TabSettings {
   const _$_TabSettings(
-      {required this.icon, required this.tabType, this.channelId});
+      {required this.icon,
+      required this.tabType,
+      this.channelId,
+      required this.name});
 
   @override
   final IconData icon;
@@ -123,10 +137,12 @@ class _$_TabSettings implements _TabSettings {
   final TabType tabType;
   @override
   final String? channelId;
+  @override
+  final String name;
 
   @override
   String toString() {
-    return 'TabSettings(icon: $icon, tabType: $tabType, channelId: $channelId)';
+    return 'TabSettings(icon: $icon, tabType: $tabType, channelId: $channelId, name: $name)';
   }
 
   @override
@@ -137,11 +153,12 @@ class _$_TabSettings implements _TabSettings {
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.tabType, tabType) || other.tabType == tabType) &&
             (identical(other.channelId, channelId) ||
-                other.channelId == channelId));
+                other.channelId == channelId) &&
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, icon, tabType, channelId);
+  int get hashCode => Object.hash(runtimeType, icon, tabType, channelId, name);
 
   @JsonKey(ignore: true)
   @override
@@ -154,7 +171,8 @@ abstract class _TabSettings implements TabSettings {
   const factory _TabSettings(
       {required final IconData icon,
       required final TabType tabType,
-      final String? channelId}) = _$_TabSettings;
+      final String? channelId,
+      required final String name}) = _$_TabSettings;
 
   @override
   IconData get icon;
@@ -162,6 +180,8 @@ abstract class _TabSettings implements TabSettings {
   TabType get tabType;
   @override
   String? get channelId;
+  @override
+  String get name;
   @override
   @JsonKey(ignore: true)
   _$$_TabSettingsCopyWith<_$_TabSettings> get copyWith =>

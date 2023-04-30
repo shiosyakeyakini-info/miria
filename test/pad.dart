@@ -38,7 +38,8 @@ class TestWidgetState extends ConsumerState<TestWidget> {
 }
 
 void main() {
-  const mfmText = r"""$[fg.color=29BEEF $[bg.color=000 $[rotate.deg=-90 **こんにちは？**] こんにちは！] げんき]""";
+  const mfmText =
+      r"""$[fg.color=29BEEF $[bg.color=000 $[rotate.deg=-90 **こんにちは？**] こんにちは！] げんき]""";
 
   runApp(ProviderScope(
       overrides: [
@@ -49,18 +50,18 @@ void main() {
           theme: ThemeData(fontFamily: "Noto Sans CJK JP"),
           home: Scaffold(
               body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Table(
-                  border: TableBorder.all(color: Colors.black45),
-                  columnWidths: {
-                    0: FixedColumnWidth(150),
-                    1: FlexColumnWidth(1.0)
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  
-                  children: [
-            TableRow(children: [Text("もとのテキスト"), Text(mfmText)]),
-            TableRow(children: [Text("表示"), TestWidget(mfmText: mfmText)])
-          ]),
-              )))));
+            padding: const EdgeInsets.all(8.0),
+            child: Table(
+                border: TableBorder.all(color: Colors.black45),
+                columnWidths: const {
+                  0: FixedColumnWidth(150),
+                  1: FlexColumnWidth(1.0)
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  const TableRow(children: [Text("もとのテキスト"), Text(mfmText)]),
+                  const TableRow(
+                      children: [Text("表示"), TestWidget(mfmText: mfmText)])
+                ]),
+          )))));
 }

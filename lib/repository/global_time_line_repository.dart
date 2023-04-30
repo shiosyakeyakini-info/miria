@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

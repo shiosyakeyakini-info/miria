@@ -68,7 +68,10 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
     if (widget.anotherServerEmojiUrl != null) {
-      return Image.network(widget.anotherServerEmojiUrl!);
+      return Image.network(
+        widget.anotherServerEmojiUrl!,
+        errorBuilder: (context, e, s) => Container(),
+      );
     }
     if (widget.naturalEmoji != null) {
       return Text(widget.naturalEmoji!);

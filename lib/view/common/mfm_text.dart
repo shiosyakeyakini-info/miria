@@ -43,6 +43,14 @@ class MfmTextState extends ConsumerState<MfmText> {
   Widget? cachedWidget;
 
   @override
+  void didUpdateWidget(covariant MfmText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.mfmText != widget.mfmText) {
+      cachedWidget = null;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final htmlText = ref.read(mfmToFlutterHtmlProvider).parse(widget.mfmText);
 
@@ -116,12 +124,21 @@ class UserInformationState extends ConsumerState<UserInformation> {
   Widget? cachedWidget;
 
   @override
+  void didUpdateWidget(covariant UserInformation oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.user != widget.user) {
+      cachedWidget = null;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userName = ref
         .read(mfmToFlutterHtmlProvider)
         .parse(widget.user.name ?? widget.user.username);
-    final htmlText =
-        "<span style=\"font-weight: bold;\">$userName</span>&nbsp;&nbsp;&nbsp;<span style=\"color:#888888\">@${widget.user.username.tight}</span>";
+
+    final htmlText = "<span style=\"font-weight: bold;\">$userName</span>";
 
     if (cachedWidget != null) {
       return cachedWidget!;

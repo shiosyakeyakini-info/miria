@@ -14,6 +14,22 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    NotificationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const NotificationPage(),
+      );
+    },
+    UserRoute.name: (routeData) {
+      final args = routeData.argsAs<UserRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserPage(
+          key: args.key,
+          userId: args.userId,
+        ),
+      );
+    },
     TimeLineRoute.name: (routeData) {
       final args = routeData.argsAs<TimeLineRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -23,8 +39,59 @@ abstract class _$AppRouter extends RootStackRouter {
           currentTabSetting: args.currentTabSetting,
         ),
       );
-    }
+    },
   };
+}
+
+/// generated route for
+/// [NotificationPage]
+class NotificationRoute extends PageRouteInfo<void> {
+  const NotificationRoute({List<PageRouteInfo>? children})
+      : super(
+          NotificationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NotificationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserPage]
+class UserRoute extends PageRouteInfo<UserRouteArgs> {
+  UserRoute({
+    Key? key,
+    required String userId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserRoute.name,
+          args: UserRouteArgs(
+            key: key,
+            userId: userId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserRoute';
+
+  static const PageInfo<UserRouteArgs> page = PageInfo<UserRouteArgs>(name);
+}
+
+class UserRouteArgs {
+  const UserRouteArgs({
+    this.key,
+    required this.userId,
+  });
+
+  final Key? key;
+
+  final String userId;
+
+  @override
+  String toString() {
+    return 'UserRouteArgs{key: $key, userId: $userId}';
+  }
 }
 
 /// generated route for

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter_misskey_app/extensions/string_extensions.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:mfm/mfm.dart';
 
@@ -12,7 +13,7 @@ class MfmToFlutterHtml {
     if (color == null) {
       return null;
     } else if (color.length == 3) {
-      return "#${color.substring(0, 1)}${color.substring(0,1)}${color.substring(1,2)}${color.substring(1,2)}${color.substring(2,3)}${color.substring(2,3)}";
+      return "#${color.substring(0, 1)}${color.substring(0, 1)}${color.substring(1, 2)}${color.substring(1, 2)}${color.substring(2, 3)}${color.substring(2, 3)}";
     } else if (color.length == 6) {
       return "#$color";
     } else if (color.length == 8) {
@@ -23,7 +24,7 @@ class MfmToFlutterHtml {
   }
 
   String _safeAsPlain(String text) {
-    return text
+    return text.tight
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll(" ", "&nbsp;")
@@ -61,7 +62,8 @@ class MfmToFlutterHtml {
         str +=
             "<div style=\"text-align:center\">${toHtml(node.children)}</div>";
       } else if (node is MfmCodeBlock) {
-        str += "<pre style=\"background-color:#000;color:#fff;font-family:monospace;padding:12px;\">${node.code}</pre>";
+        str +=
+            "<pre style=\"background-color:#000;color:#fff;font-family:monospace;padding:12px;\">${node.code}</pre>";
       } else if (node is MfmEmojiCode) {
         final found = emojiRepository.emoji
             ?.firstWhereOrNull((element) => element.name == node.name);
@@ -74,10 +76,10 @@ class MfmToFlutterHtml {
         if (node.name == "x2") {
           str +=
               "<span style=\"font-size:2em;\">${toHtml(node.children)}</span>";
-        } else if(node.name == "x3") {
+        } else if (node.name == "x3") {
           str +=
               "<span style=\"font-size:3em;\">${toHtml(node.children)}</span>";
-        } else if(node.name == "x4") {
+        } else if (node.name == "x4") {
           str +=
               "<span style=\"font-size:4em;\">${toHtml(node.children)}</span>";
         } else if (node.name == "fg") {
@@ -101,9 +103,10 @@ class MfmToFlutterHtml {
             str +=
                 "<span style=\"font-family:'Noto Serif CJK JP Regular', 'MS P Mincho', serif;\">${toHtml(node.children)}</span>";
           }
-        } else if(node.name == "rotate") {
-          if(node.args.containsKey("deg")) {
-            str += "<rotate deg=\"${node.args["deg"]}\">${toHtml(node.children)}</rotate>";
+        } else if (node.name == "rotate") {
+          if (node.args.containsKey("deg")) {
+            str +=
+                "<rotate deg=\"${node.args["deg"]}\">${toHtml(node.children)}</rotate>";
           }
         } else {
           str += toHtml(node.children);

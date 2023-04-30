@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_file_view.dart';
 import 'package:flutter_misskey_app/view/common/reaction_button.dart';
@@ -9,49 +12,60 @@ import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-class MisskeyNote extends ConsumerWidget {
-  final String noteId;
-  final ChangeNotifierProvider<TimeLineRepository> timelineProvider;
+class MisskeyNote extends ConsumerStatefulWidget {
+  final Note note;
 
-  const MisskeyNote(
-      {super.key, required this.noteId, required this.timelineProvider});
+  const MisskeyNote({super.key, required this.note});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final note = ref.watch(timelineProvider.select(
-        (value) => value.notes.firstWhereOrNull((e) => e.id == noteId)));
-    if (note == null) return Container();
+  ConsumerState<ConsumerStatefulWidget> createState() => MisskeyNoteState();
+}
 
-    final displayNote = note.renote ?? note;
+class MisskeyNoteState extends ConsumerState<MisskeyNote> {
+  var isCwOpened = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final displayNote = widget.note.renote ?? widget.note;
+
+    final userId =
+        "@${displayNote.user.username}${displayNote.user.host == null ? "" : "@${displayNote.user.host}"}";
 
     return Container(
       padding: EdgeInsets.only(
           top: 5 * MediaQuery.of(context).textScaleFactor,
           bottom: 5 * MediaQuery.of(context).textScaleFactor),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5))),
+      decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: Theme.of(context).dividerColor, width: 0.5))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (note.renote != null)
+          if (widget.note.renote != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 2),
               child: Text(
-                "${note.user.name ?? ""} が ${note.user.username == note.renote?.user.username ? "セルフRenote" : "Renote"}",
-                style: const TextStyle(color: Colors.grey, fontSize: 10),
+                "${widget.note.user.name ?? ""} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: SizedBox(
-                    width: 24 * MediaQuery.of(context).textScaleFactor,
-                    height: 24 * MediaQuery.of(context).textScaleFactor,
-                    child:
-                        Image.network(displayNote.user.avatarUrl.toString())),
+              GestureDetector(
+                onTap: () {
+                  context.pushRoute(UserRoute(userId: displayNote.user.id));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: SizedBox(
+                      width: 32 * MediaQuery.of(context).textScaleFactor,
+                      height: 32 * MediaQuery.of(context).textScaleFactor,
+                      child:
+                          Image.network(displayNote.user.avatarUrl.toString())),
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.only(left: 10),
@@ -61,10 +75,62 @@ class MisskeyNote extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UserInformation(user: displayNote.user),
-                    MfmText(mfmText: displayNote.text ?? ""),
-                    MisskeyFileView(files: displayNote.files),
-                    const Padding(padding: EdgeInsets.only(bottom: 5)),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: UserInformation(user: displayNote.user)),
+                        Text(
+                          displayNote.createdAt.differenceNow,
+                          textAlign: TextAlign.right,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            userId,
+                            style: Theme.of(context).textTheme.bodySmall,
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                        if (displayNote.user.instance != null)
+                          Text(displayNote.user.instance?.name ?? "",
+                              style: Theme.of(context).textTheme.bodySmall),
+                      ],
+                    ),
+                    if (displayNote.cw != null) ...[
+                      MfmText(mfmText: displayNote.cw ?? ""),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            padding: const EdgeInsets.all(5),
+                            textStyle: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.fontSize),
+                            minimumSize: const Size(0, 0),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isCwOpened = !isCwOpened;
+                            });
+                          },
+                          child: Text(
+                            isCwOpened ? "隠す" : "続きを見る",
+                          ))
+                    ],
+                    if (displayNote.cw == null ||
+                        displayNote.cw != null && isCwOpened) ...[
+                      MfmText(mfmText: displayNote.text ?? ""),
+                      MisskeyFileView(files: displayNote.files),
+                    ],
+                    if (displayNote.reactions.isNotEmpty)
+                      const Padding(padding: EdgeInsets.only(bottom: 5)),
                     Wrap(
                       spacing: 5 * MediaQuery.of(context).textScaleFactor,
                       runSpacing: 5 * MediaQuery.of(context).textScaleFactor,
@@ -119,6 +185,8 @@ class MisskeyNote extends ConsumerWidget {
                             icon: Icon(
                               Icons.reply,
                               size: 16 * MediaQuery.of(context).textScaleFactor,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             )),
                         IconButton(
                             onPressed: () {},
@@ -133,6 +201,8 @@ class MisskeyNote extends ConsumerWidget {
                             icon: Icon(
                               Icons.repeat,
                               size: 16 * MediaQuery.of(context).textScaleFactor,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             )),
                         IconButton(
                             onPressed: () async => await reactionControl(
@@ -150,6 +220,8 @@ class MisskeyNote extends ConsumerWidget {
                                   ? Icons.add
                                   : Icons.remove,
                               size: 16 * MediaQuery.of(context).textScaleFactor,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             )),
                         IconButton(
                             onPressed: () {},
@@ -164,6 +236,8 @@ class MisskeyNote extends ConsumerWidget {
                             icon: Icon(
                               Icons.more_horiz,
                               size: 16 * MediaQuery.of(context).textScaleFactor,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
                             )),
                       ],
                     )

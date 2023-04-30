@@ -10,5 +10,6 @@ class TabSettings with _$TabSettings {
     required IconData icon,
     required TabType tabType,
     String? channelId,
+    required String name,
   }) = _TabSettings;
 }
