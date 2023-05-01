@@ -85,7 +85,7 @@ class MisskeyImageState extends State<MisskeyImage> {
                 child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.warning, color: Colors.white),
+                const Icon(Icons.warning_rounded, color: Colors.white),
                 const Padding(padding: EdgeInsets.only(left: 5)),
                 Column(
                   mainAxisSize: MainAxisSize.min,

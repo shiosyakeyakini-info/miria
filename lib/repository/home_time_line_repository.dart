@@ -25,7 +25,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
       misskey.notes
           .homeTimeline(const NotesTimelineRequest(limit: 30))
           .then((resultNotes) {
-        for (final note in resultNotes.toList().reversed) {
+        for (final note in resultNotes) {
           final foundNote =
               notes.indexWhere((element) => element.id == note.id);
           if (foundNote == -1) {
@@ -54,5 +54,27 @@ class HomeTimeLineRepository extends TimeLineRepository {
   @override
   void reconnect() {
     socketController?.reconnect();
+  }
+
+  @override
+  void previousLoad() {
+    if (notes.isEmpty) {
+      return;
+    }
+    misskey.notes
+        .homeTimeline(
+      NotesTimelineRequest(
+        limit: 30,
+        untilId: notes.first.id,
+      ),
+    )
+        .then(
+      (resultNotes) {
+        for (final note in resultNotes) {
+          notes.addFirst(note);
+        }
+        notifyListeners();
+      },
+    );
   }
 }

@@ -27,4 +27,14 @@ abstract class TimeLineRepository extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// 最近のノートを残してリセットする
+  void resetAsRemainedLatestNotes() {
+    if (notes.length > 10) {
+      notes.removeRange(0, notes.length - 10);
+    }
+    notifyListeners();
+  }
+
+  void previousLoad() {}
 }

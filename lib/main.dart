@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
             currentTabSetting: const TabSettings(
                 icon: Icons.house,
                 tabType: TabType.localTimeline,
-                name: "パブリックタイムライン"))
+                name: "ローカルタイムライン"))
       ]),
     );
   }

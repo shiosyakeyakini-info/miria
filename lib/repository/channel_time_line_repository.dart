@@ -28,7 +28,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
           .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30))
           .then(
         (resultNotes) {
-          for (final note in resultNotes.toList().reversed) {
+          for (final note in resultNotes) {
             final foundNote =
                 notes.indexWhere((element) => element.id == note.id);
             if (foundNote == -1) {
@@ -58,5 +58,28 @@ class ChannelTimelineRepository extends TimeLineRepository {
   @override
   void reconnect() {
     socketController?.reconnect();
+  }
+
+  @override
+  void previousLoad() {
+    if (notes.isEmpty) {
+      return;
+    }
+    misskey.channels
+        .timeline(
+      ChannelsTimelineRequest(
+        channelId: channelId,
+        limit: 30,
+        untilId: notes.first.id,
+      ),
+    )
+        .then(
+      (resultNotes) {
+        for (final note in resultNotes) {
+          notes.addFirst(note);
+        }
+        notifyListeners();
+      },
+    );
   }
 }

@@ -59,7 +59,6 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
   void scrollToTop() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final currentPosition = scrollController.position.pixels;
       if (previousPosition == previousMaxExtent &&
           scrollController.position.maxScrollExtent !=
               scrollController.position.pixels) {
@@ -86,15 +85,26 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: ListView.builder(
-        itemCount: notes.length,
+        itemCount: notes.length + 1,
         controller: scrollController,
         reverse: true,
         itemBuilder: (context, index) {
           if (index == notes.length - 1) {
             scrollToTop();
           }
+
+          if (index == 0) {
+            return Center(
+                child: IconButton(
+              onPressed: () {
+                ref.read(widget.timeLineRepositoryProvider).previousLoad();
+              },
+              icon: Icon(Icons.keyboard_arrow_down),
+            ));
+          }
+
           return NoteWrapper(
-            index: index,
+            index: index - 1,
             timeLineRepositoryProvider: widget.timeLineRepositoryProvider,
           );
         },

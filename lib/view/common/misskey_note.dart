@@ -7,6 +7,7 @@ import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_file_view.dart';
+import 'package:flutter_misskey_app/view/common/note_modal_sheet.dart';
 import 'package:flutter_misskey_app/view/common/reaction_button.dart';
 import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,8 +47,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           if (widget.note.renote != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 2),
-              child: Text(
-                "${widget.note.user.name ?? ""} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
+              child: MfmText(
+                mfmText:
+                    "${widget.note.user.name ?? ""} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -102,7 +104,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       ],
                     ),
                     if (displayNote.cw != null) ...[
-                      MfmText(mfmText: displayNote.cw ?? ""),
+                      MfmText(
+                        mfmText: displayNote.cw ?? "",
+                        emojiFontSizeRatio: 1.2,
+                      ),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -126,7 +131,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                     ],
                     if (displayNote.cw == null ||
                         displayNote.cw != null && isCwOpened) ...[
-                      MfmText(mfmText: displayNote.text ?? ""),
+                      MfmText(
+                        mfmText: displayNote.text ?? "",
+                        emojiFontSizeRatio: 2,
+                      ),
                       MisskeyFileView(files: displayNote.files),
                     ],
                     if (displayNote.reactions.isNotEmpty)
@@ -224,7 +232,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   Theme.of(context).textTheme.bodySmall?.color,
                             )),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (builder) {
+                                    return NoteModalSheet(note: displayNote);
+                                  });
+                            },
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                             style: const ButtonStyle(

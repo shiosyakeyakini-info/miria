@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
@@ -10,20 +11,23 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final Emoji? emoji;
   final String? anotherServerEmojiUrl;
   final String? naturalEmoji;
+  final double fontSizeRatio;
 
   const CustomEmoji({
     super.key,
     required this.emoji,
     this.anotherServerEmojiUrl,
     this.naturalEmoji,
+    this.fontSizeRatio = 1,
   });
 
   factory CustomEmoji.fromEmojiName(String name, EmojiRepository repository,
-      {String? anotherServerUrl}) {
+      {String? anotherServerUrl, double fontSizeRatio = 1}) {
     if (anotherServerUrl != null) {
       return CustomEmoji(
         emoji: null,
         anotherServerEmojiUrl: anotherServerUrl,
+        fontSizeRatio: fontSizeRatio,
       );
     }
 
@@ -31,14 +35,35 @@ class CustomEmoji extends ConsumerStatefulWidget {
       return CustomEmoji(
         emoji: null,
         naturalEmoji: name,
+        fontSizeRatio: fontSizeRatio,
       );
     }
 
-    final customEmojiRegExp = RegExp(r"\:(.+?)@.\:").firstMatch(name);
-    final Emoji? found = repository.emoji?.firstWhereOrNull(
-        (e) => e.name == (customEmojiRegExp?.group(1) ?? name));
+    final customEmojiRegExp = RegExp(r"\:(.+?)@.\:");
+    if (customEmojiRegExp.hasMatch(name)) {
+      final Emoji? found = repository.emoji?.firstWhereOrNull((e) =>
+          e.name == (customEmojiRegExp.firstMatch(name)?.group(1) ?? name));
 
-    return CustomEmoji(emoji: found);
+      return CustomEmoji(
+        emoji: found,
+        fontSizeRatio: fontSizeRatio,
+      );
+    }
+
+    final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
+    if (customEmojiRegExp2.hasMatch(name)) {
+      final Emoji? found = repository.emoji?.firstWhereOrNull((e) =>
+          e.name == (customEmojiRegExp2.firstMatch(name)?.group(1) ?? name));
+
+      return CustomEmoji(
+        emoji: found,
+        fontSizeRatio: fontSizeRatio,
+      );
+    }
+    return CustomEmoji(
+      emoji: null,
+      fontSizeRatio: fontSizeRatio,
+    );
   }
 
   @override
@@ -67,11 +92,13 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   @override
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
+    final scopedFontSize = (DefaultTextStyle.of(context).style.fontSize ?? 22) *
+        widget.fontSizeRatio;
+    print("$scopedFontSize / ${widget.fontSizeRatio}");
+
     if (widget.anotherServerEmojiUrl != null) {
-      return Image.network(
-        widget.anotherServerEmojiUrl!,
-        errorBuilder: (context, e, s) => Container(),
-      );
+      return Image.network(widget.anotherServerEmojiUrl!,
+          errorBuilder: (context, e, s) => Container(), height: scopedFontSize);
     }
     if (widget.naturalEmoji != null) {
       return Text(widget.naturalEmoji!);
@@ -82,11 +109,11 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
           if (snapshot.connectionState == ConnectionState.done) {
             final data = snapshot.data;
             if (data != null) {
-              cachedImage = Image.memory(data, height: 24);
+              cachedImage = Image.memory(data, height: scopedFontSize);
               return cachedImage!;
             }
           }
-          return const SizedBox(width: 24, height: 24);
+          return SizedBox(width: scopedFontSize, height: scopedFontSize);
         });
   }
 }

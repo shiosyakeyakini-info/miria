@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/tab_settings.dart';
 import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
@@ -110,25 +111,27 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                           : Colors.white,
                     ),
                     onPressed: () {
-                      //TODO: イケてる実装にする
                       if (tabSetting == widget.currentTabSetting) {
                         if (widget.currentTabSetting.tabType ==
                                 TabType.globalTimeline ||
                             widget.currentTabSetting.tabType ==
-                                TabType.homeTimeline) {
-                          final notes = ref
-                              .read(widget.currentTabSetting.tabType
-                                  .timelineProvider(widget.currentTabSetting))
-                              .notes;
-                          notes.removeRange(0, notes.length - 10);
+                                TabType.homeTimeline ||
+                            widget.currentTabSetting.tabType ==
+                                TabType.hybridTimeline) {
                           ref
-                              .read(widget.currentTabSetting.tabType
-                                  .timelineProvider(widget.currentTabSetting))
-                              .notifyListeners();
+                              .read(widget.currentTabSetting.timelineProvider)
+                              .resetAsRemainedLatestNotes();
                         }
                         scrollController
                             .jumpTo(scrollController.position.maxScrollExtent);
                       } else {
+                        if (tabSetting.tabType == TabType.globalTimeline ||
+                            tabSetting.tabType == TabType.homeTimeline ||
+                            tabSetting.tabType == TabType.hybridTimeline) {
+                          ref
+                              .read(tabSetting.timelineProvider)
+                              .resetAsRemainedLatestNotes();
+                        }
                         context.replaceRoute(
                             TimeLineRoute(currentTabSetting: tabSetting));
                       }
@@ -226,11 +229,13 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 ),
               ),
               IconButton(onPressed: note, icon: const Icon(Icons.edit)),
-              IconButton(
-                  onPressed: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  },
-                  icon: const Icon(Icons.keyboard_arrow_down))
+              if (defaultTargetPlatform == TargetPlatform.android ||
+                  defaultTargetPlatform == TargetPlatform.iOS)
+                IconButton(
+                    onPressed: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    icon: const Icon(Icons.keyboard_arrow_down))
             ],
           ),
         ],

@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
-import 'package:flutter_misskey_app/view/mfm_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,7 +32,7 @@ class TestWidgetState extends ConsumerState<TestWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(child: MfmText(mfmText: widget.mfmText));
+    return SingleChildScrollView(child: Container());
   }
 }
 

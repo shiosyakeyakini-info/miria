@@ -124,12 +124,13 @@ class __$$_TabSettingsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_TabSettings implements _TabSettings {
+class _$_TabSettings extends _TabSettings {
   const _$_TabSettings(
       {required this.icon,
       required this.tabType,
       this.channelId,
-      required this.name});
+      required this.name})
+      : super._();
 
   @override
   final IconData icon;
@@ -167,12 +168,13 @@ class _$_TabSettings implements _TabSettings {
       __$$_TabSettingsCopyWithImpl<_$_TabSettings>(this, _$identity);
 }
 
-abstract class _TabSettings implements TabSettings {
+abstract class _TabSettings extends TabSettings {
   const factory _TabSettings(
       {required final IconData icon,
       required final TabType tabType,
       final String? channelId,
       required final String name}) = _$_TabSettings;
+  const _TabSettings._() : super._();
 
   @override
   IconData get icon;

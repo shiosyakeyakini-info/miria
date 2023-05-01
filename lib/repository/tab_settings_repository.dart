@@ -13,7 +13,7 @@ class TabSettingsRepository {
     TabSettings(
         icon: Icons.public,
         tabType: TabType.localTimeline,
-        name: "パブリックタイムライン"),
+        name: "ローカルタイムライン"),
     TabSettings(
         icon: Icons.rocket,
         tabType: TabType.globalTimeline,
