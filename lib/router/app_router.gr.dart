@@ -40,6 +40,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    FavoritedNoteRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const FavoritedNotePage(),
+      );
+    },
+    ClipListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ClipListPage(),
+      );
+    },
   };
 }
 
@@ -130,4 +142,32 @@ class TimeLineRouteArgs {
   String toString() {
     return 'TimeLineRouteArgs{key: $key, currentTabSetting: $currentTabSetting}';
   }
+}
+
+/// generated route for
+/// [FavoritedNotePage]
+class FavoritedNoteRoute extends PageRouteInfo<void> {
+  const FavoritedNoteRoute({List<PageRouteInfo>? children})
+      : super(
+          FavoritedNoteRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FavoritedNoteRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ClipListPage]
+class ClipListRoute extends PageRouteInfo<void> {
+  const ClipListRoute({List<PageRouteInfo>? children})
+      : super(
+          ClipListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ClipListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -26,6 +26,8 @@ dependencies:
   url_launcher: ^6.1.10
   intl: ^0.18.1
   scrollable_positioned_list: ^0.3.6
+  kana_kit: ^2.0.0
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

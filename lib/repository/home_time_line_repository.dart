@@ -1,3 +1,4 @@
+import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -8,13 +9,33 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   HomeTimeLineRepository(this.misskey);
 
+  void reloadLatestNotes() {
+    misskey.notes
+        .homeTimeline(const NotesTimelineRequest(limit: 30))
+        .then((resultNotes) {
+      for (final note in resultNotes) {
+        final foundNote = notes.indexWhere((element) => element.id == note.id);
+        if (foundNote == -1) {
+          if (note.createdAt < notes.last.createdAt) {
+            notes.addFirst(note);
+          } else {
+            notes.addLast(note);
+          }
+        } else {
+          notes[foundNote] = note;
+        }
+      }
+      notifyListeners();
+    });
+  }
+
   @override
   void startTimeLine() {
     if (notes.isEmpty) {
       misskey.notes.homeTimeline(const NotesTimelineRequest(limit: 30)).then(
           (resultNotes) {
-        for (final note in resultNotes.toList().reversed) {
-          notes.addLast(note);
+        for (final note in resultNotes.toList()) {
+          notes.addFirst(note);
         }
         notifyListeners();
       }, onError: (e, s) {
@@ -22,20 +43,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
         print(s);
       });
     } else {
-      misskey.notes
-          .homeTimeline(const NotesTimelineRequest(limit: 30))
-          .then((resultNotes) {
-        for (final note in resultNotes) {
-          final foundNote =
-              notes.indexWhere((element) => element.id == note.id);
-          if (foundNote == -1) {
-            notes.add(note);
-          } else {
-            notes[foundNote] = note;
-          }
-        }
-        notifyListeners();
-      });
+      reloadLatestNotes();
     }
 
     socketController = misskey.homeTimelineStream((note) {
@@ -54,6 +62,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
   @override
   void reconnect() {
     socketController?.reconnect();
+    reloadLatestNotes();
   }
 
   @override

@@ -26,6 +26,8 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   double previousMaxExtent = 0.0;
   bool isScrolling = false;
 
+  final lastKey = GlobalKey();
+
   @override
   void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -65,11 +67,14 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
         scrollController.jumpTo(scrollController.position.maxScrollExtent);
         previousPosition = scrollController.position.maxScrollExtent;
         previousMaxExtent = scrollController.position.maxScrollExtent;
-      }
-      if (previousPosition == previousMaxExtent) {
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          scrollToTop();
-        });
+
+        final lastKeyContext = lastKey.currentContext;
+        if (lastKeyContext != null) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            Scrollable.ensureVisible(lastKeyContext);
+            scrollToTop();
+          });
+        }
       }
     });
   }
@@ -85,14 +90,10 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: ListView.builder(
-        itemCount: notes.length + 1,
+        itemCount: notes.length + 2,
         controller: scrollController,
         reverse: true,
         itemBuilder: (context, index) {
-          if (index == notes.length - 1) {
-            scrollToTop();
-          }
-
           if (index == 0) {
             return Center(
                 child: IconButton(
@@ -101,6 +102,13 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
               },
               icon: Icon(Icons.keyboard_arrow_down),
             ));
+          }
+
+          if (index == notes.length + 1) {
+            scrollToTop();
+            return Container(
+              key: lastKey,
+            );
           }
 
           return NoteWrapper(

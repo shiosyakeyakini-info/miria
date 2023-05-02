@@ -7,6 +7,7 @@ import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_file_view.dart';
+import 'package:flutter_misskey_app/view/common/network_image.dart';
 import 'package:flutter_misskey_app/view/common/note_modal_sheet.dart';
 import 'package:flutter_misskey_app/view/common/reaction_button.dart';
 import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_dialog.dart';
@@ -65,8 +66,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                   child: SizedBox(
                       width: 32 * MediaQuery.of(context).textScaleFactor,
                       height: 32 * MediaQuery.of(context).textScaleFactor,
-                      child:
-                          Image.network(displayNote.user.avatarUrl.toString())),
+                      child: NetworkImageView(
+                        url: displayNote.user.avatarUrl.toString(),
+                        type: ImageType.avatarIcon,
+                      )),
                 ),
               ),
               const Padding(

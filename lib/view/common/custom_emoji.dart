@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
+import 'package:flutter_misskey_app/view/common/network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -94,11 +95,14 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
     if (cachedImage != null) return cachedImage!;
     final scopedFontSize = (DefaultTextStyle.of(context).style.fontSize ?? 22) *
         widget.fontSizeRatio;
-    print("$scopedFontSize / ${widget.fontSizeRatio}");
 
     if (widget.anotherServerEmojiUrl != null) {
-      return Image.network(widget.anotherServerEmojiUrl!,
-          errorBuilder: (context, e, s) => Container(), height: scopedFontSize);
+      return NetworkImageView(
+        url: widget.anotherServerEmojiUrl!,
+        type: ImageType.customEmoji,
+        errorBuilder: (context, e, s) => Container(),
+        height: scopedFontSize,
+      );
     }
     if (widget.naturalEmoji != null) {
       return Text(widget.naturalEmoji!);

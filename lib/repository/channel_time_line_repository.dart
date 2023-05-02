@@ -1,3 +1,4 @@
+import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -8,6 +9,26 @@ class ChannelTimelineRepository extends TimeLineRepository {
   final String channelId;
 
   ChannelTimelineRepository(this.misskey, this.channelId);
+
+  void reloadLatestNotes() {
+    misskey.channels
+        .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30))
+        .then((resultNotes) {
+      for (final note in resultNotes) {
+        final foundNote = notes.indexWhere((element) => element.id == note.id);
+        if (foundNote == -1) {
+          if (note.createdAt < notes.last.createdAt) {
+            notes.addFirst(note);
+          } else {
+            notes.addLast(note);
+          }
+        } else {
+          notes[foundNote] = note;
+        }
+      }
+      notifyListeners();
+    });
+  }
 
   @override
   void startTimeLine() {
@@ -24,22 +45,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
         print(s);
       });
     } else {
-      misskey.channels
-          .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30))
-          .then(
-        (resultNotes) {
-          for (final note in resultNotes) {
-            final foundNote =
-                notes.indexWhere((element) => element.id == note.id);
-            if (foundNote == -1) {
-              notes.add(note);
-            } else {
-              notes[foundNote] = note;
-            }
-          }
-          notifyListeners();
-        },
-      );
+      reloadLatestNotes();
     }
 
     socketController = misskey.channelStream(channelId, (note) {
@@ -58,6 +64,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
   @override
   void reconnect() {
     socketController?.reconnect();
+    reloadLatestNotes();
   }
 
   @override

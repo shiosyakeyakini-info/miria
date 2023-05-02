@@ -49,18 +49,15 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
           }
           return;
         }
-        final searchedEmojis = ref
-            .read(emojiRepositoryProvider)
-            .emoji
-            ?.where((element) =>
-                element.name.contains(searchValue) ||
-                element.aliases
-                    .any((element2) => element2.contains(searchValue)))
-            .take(30)
-            .toList();
 
-        setState(() {
-          filteringInputEmoji = searchedEmojis ?? [];
+        Future(() async {
+          final searchedEmojis = await (ref
+              .read(emojiRepositoryProvider)
+              .searchEmojis(searchValue));
+
+          setState(() {
+            filteringInputEmoji = searchedEmojis ?? [];
+          });
         });
       } else {
         if (filteringInputEmoji.isNotEmpty) {
@@ -139,14 +136,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               )
           ]),
         ),
-        actions: [
-          IconButton(
-              onPressed: () => ref
-                  .read(widget.currentTabSetting.tabType
-                      .timelineProvider(widget.currentTabSetting))
-                  .reconnect(),
-              icon: const Icon(Icons.refresh))
-        ],
       ),
       body: Column(
         children: [
@@ -174,6 +163,12 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 const Padding(
                   padding: EdgeInsets.only(right: 5),
                 ),
+                IconButton(
+                    onPressed: () => ref
+                        .read(widget.currentTabSetting.tabType
+                            .timelineProvider(widget.currentTabSetting))
+                        .reconnect(),
+                    icon: const Icon(Icons.refresh))
               ],
             ),
           ),
@@ -251,9 +246,21 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 context.pushRoute(const NotificationRoute());
               },
             ),
+            ListTile(
+                leading: const Icon(Icons.star),
+                title: const Text("お気に入り"),
+                onTap: () {
+                  context.pushRoute(const FavoritedNoteRoute());
+                }),
             const ListTile(title: Text("リスト")),
             const ListTile(title: Text("アンテナ")),
-            const ListTile(title: Text("クリップ")),
+            ListTile(
+              leading: const Icon(Icons.attach_file),
+              title: const Text("クリップ"),
+              onTap: () {
+                context.pushRoute(const ClipListRoute());
+              },
+            ),
             const ListTile(title: Text("チャンネル")),
             const ListTile(title: Text("設定")),
           ],

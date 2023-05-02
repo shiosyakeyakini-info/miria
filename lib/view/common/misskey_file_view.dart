@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
+import 'network_image.dart';
+
 class MisskeyFileView extends StatelessWidget {
   final List<MisskeyFile> files;
 
@@ -116,8 +118,9 @@ class MisskeyImageState extends State<MisskeyImage> {
             context: context,
             builder: (context) => ImageDialog(imageUrl: widget.url));
       },
-      child: Image.network(
-        widget.thumbnailUrl,
+      child: NetworkImageView(
+        url: widget.thumbnailUrl,
+        type: ImageType.imageThumbnail,
         loadingBuilder: (context, widget, chunkEvent) => SizedBox(
           width: double.infinity,
           height: 200,

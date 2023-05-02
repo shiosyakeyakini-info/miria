@@ -88,7 +88,7 @@ class MfmToFlutterHtml {
             str +=
                 "<span style=\"color:$htmlParsedColor;\">${toHtml(node.children)}</span>";
           } else {
-            return toHtml(node.children);
+            str += toHtml(node.children);
           }
         } else if (node.name == "bg") {
           final htmlParsedColor = _toHtmlColor(node.args["color"]);
@@ -96,18 +96,38 @@ class MfmToFlutterHtml {
             str +=
                 "<span style=\"background-color:$htmlParsedColor;\">${toHtml(node.children)}</span>";
           } else {
-            return toHtml(node.children);
+            str += toHtml(node.children);
           }
         } else if (node.name == "font") {
           if (node.args.containsKey("serif")) {
             str +=
                 "<span style=\"font-family:'Noto Serif CJK JP Regular', 'MS P Mincho', serif;\">${toHtml(node.children)}</span>";
+          } else if (node.args.containsKey("monospace")) {
+            str +=
+                "<span style=\"font-family:'Monaco', 'SF Mono', serif;\">${toHtml(node.children)}</span>";
+          } else {
+            str += toHtml(node.children);
           }
         } else if (node.name == "rotate") {
           if (node.args.containsKey("deg")) {
             str +=
                 "<rotate deg=\"${node.args["deg"]}\">${toHtml(node.children)}</rotate>";
+          } else {
+            str += "<rotate deg=\"90\">${toHtml(node.children)}</rotate>";
           }
+        } else if (node.name == "scale") {
+          final x = node.args.containsKey("x") ? node.args["x"] : null;
+          final y = node.args.containsKey("y") ? node.args["y"] : null;
+          str +=
+              "<scale ${x == null ? "" : "x=\"$x\""} ${y == null ? "" : "y=\"$y\""}\">${toHtml(node.children)}</scale>";
+        } else if (node.name == "position") {
+          final x = node.args.containsKey("x") ? node.args["x"] : null;
+          final y = node.args.containsKey("y") ? node.args["y"] : null;
+          str +=
+              "<position ${x == null ? "" : "x=\"$x\""} ${y == null ? "" : "y=\"$y\""}\">${toHtml(node.children)}</position>";
+        } else if (node.name == "tada") {
+          str +=
+              "<span style=\"font-size:2em;\">${toHtml(node.children)}</span>";
         } else {
           str += toHtml(node.children);
         }

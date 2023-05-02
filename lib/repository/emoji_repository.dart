@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:kana_kit/kana_kit.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -10,12 +11,27 @@ class EmojiRepository {
   List<Emoji>? emoji;
 }
 
+class EmojiWrap {
+  final Emoji emoji;
+  final String kanaName;
+  final Iterable<String> kanaAliases;
+
+  const EmojiWrap(this.emoji, this.kanaName, this.kanaAliases);
+}
+
 class EmojiRepositoryImpl extends EmojiRepository {
   final Misskey misskey;
   EmojiRepositoryImpl({required this.misskey});
 
+  final List<EmojiWrap> _emojiWrap = [];
+
   Future<void> loadFromSource() async {
     emoji = (await misskey.emojis()).emojis;
+
+    final toH = const KanaKit().toHiragana;
+    _emojiWrap.addAll(emoji?.map(
+            (e) => EmojiWrap(e, toH(e.name), e.aliases.map((e2) => toH(e2)))) ??
+        []);
   }
 
   Future<File> requestEmoji(Emoji emoji) async {
@@ -50,4 +66,40 @@ class EmojiRepositoryImpl extends EmojiRepository {
   }
 
   Future<void> downloadAllEmojis() async {}
+
+  Future<List<Emoji>> searchEmojis(String name, {int limit = 30}) async {
+    if (name == "") {
+      return emoji?.take(limit).toList() ?? [];
+    }
+
+    final converted = const KanaKit().toHiragana(name);
+
+    return _emojiWrap
+            .where((element) =>
+                element.emoji.name.contains(name) ||
+                element.emoji.aliases
+                    .any((element2) => element2.contains(name)) ||
+                element.kanaName.contains(converted) ||
+                element.kanaAliases.any((element2) => element2.contains(name)))
+            .sorted((a, b) {
+              final aValue = [
+                if (a.emoji.name.contains(name)) a.emoji.name,
+                ...a.emoji.aliases.where((e2) => e2.contains(name)),
+                if (a.kanaName.contains(converted)) a.kanaName,
+                ...a.kanaAliases.where((e2) => e2.contains(converted))
+              ].map((e) => e.length);
+              final bValue = [
+                if (b.emoji.name.contains(name)) b.emoji.name,
+                ...b.emoji.aliases.where((element2) => element2.contains(name)),
+                if (b.kanaName.contains(converted)) b.kanaName,
+                ...b.kanaAliases.where((e2) => e2.contains(converted))
+              ].map((e) => e.length);
+
+              return aValue.min.compareTo(bValue.min);
+            })
+            .take(limit)
+            .map((e) => e.emoji)
+            .toList() ??
+        [];
+  }
 }

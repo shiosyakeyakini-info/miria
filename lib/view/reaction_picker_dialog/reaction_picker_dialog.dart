@@ -42,17 +42,14 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
-                  setState(() {
-                    emojis.clear();
-                    emojis.addAll(ref
-                            .read(emojiRepositoryProvider)
-                            .emoji
-                            ?.where((element) =>
-                                element.name.contains(value) ||
-                                element.aliases.any(
-                                    (element2) => element2.contains(value)))
-                            .take(30) ??
-                        []);
+                  Future(() async {
+                    final result = await ref
+                        .read(emojiRepositoryProvider)
+                        .searchEmojis(value);
+                    setState(() {
+                      emojis.clear();
+                      emojis.addAll(result);
+                    });
                   });
                 },
               ),

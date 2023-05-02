@@ -43,6 +43,12 @@ CustomRenderMatcher emojiMatcher() =>
 CustomRenderMatcher rotateMatcher() =>
     (context) => context.tree.element?.localName == "rotate";
 
+CustomRenderMatcher scaleMatcher() =>
+    (context) => context.tree.element?.localName == "scale";
+
+CustomRenderMatcher positionMatcher() =>
+    (context) => context.tree.element?.localName == "position";
+
 class MfmText extends ConsumerStatefulWidget {
   final String mfmText;
   final TextStyle? style;
@@ -107,13 +113,40 @@ class MfmTextState extends ConsumerState<MfmText> {
                       0.0) *
                   pi /
                   180,
-              child: RichText(
-                text: TextSpan(
-                  children: children(),
-                ),
-              ),
+              child: RichText(text: TextSpan(children: children())),
             ),
-          )
+          ),
+          scaleMatcher(): CustomRender.widget(
+              widget: (context, children) => Transform.scale(
+                    scaleX:
+                        (double.tryParse(context.tree.attributes["x"] ?? "")) ??
+                            1,
+                    scaleY:
+                        (double.tryParse(context.tree.attributes["y"] ?? "")) ??
+                            1,
+                    child: RichText(text: TextSpan(children: children())),
+                  )),
+          positionMatcher(): CustomRender.widget(widget: (context, children) {
+            final x = double.tryParse(context.tree.attributes["x"] ?? "") ?? 0;
+            final y = double.tryParse(context.tree.attributes["y"] ?? "") ?? 0;
+
+            final double styleFontSizeRatio;
+            final double? value = context.tree.style.fontSize?.value;
+            final double defaultFontSize =
+                DefaultTextStyle.of(context.buildContext).style.fontSize ?? 22;
+            if (value != null) {
+              styleFontSizeRatio = value / defaultFontSize;
+            } else {
+              styleFontSizeRatio = 1.0;
+            }
+
+            return Transform.translate(
+                offset: Offset(
+                  x * defaultFontSize * styleFontSizeRatio,
+                  y * defaultFontSize * styleFontSizeRatio,
+                ),
+                child: RichText(text: TextSpan(children: children())));
+          }),
         },
         style: {
           "body": Style(
@@ -133,10 +166,10 @@ class MfmTextState extends ConsumerState<MfmText> {
             height: Height(24 * (widget.style?.fontSize ?? 2) / 2),
           ),
         },
-        tagsList: Html.tags..addAll(["customemoji", "rotate"]),
+        tagsList: Html.tags
+          ..addAll(["customemoji", "rotate", "scale", "position"]),
         onLinkTap: (url, context, value, element) async {
           final uri = Uri.tryParse(url ?? "");
-          print(uri);
           if (uri != null) {
             if (await canLaunchUrl(uri)) {
               launchUrl(uri, mode: LaunchMode.inAppWebView);
