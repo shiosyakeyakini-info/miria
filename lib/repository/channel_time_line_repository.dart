@@ -1,4 +1,5 @@
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
+import 'package:flutter_misskey_app/repository/note_repository.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -8,7 +9,12 @@ class ChannelTimelineRepository extends TimeLineRepository {
   final Misskey misskey;
   final String channelId;
 
-  ChannelTimelineRepository(this.misskey, this.channelId);
+  ChannelTimelineRepository(
+    this.misskey,
+    super.noteRepository,
+    super.globalNotificationRepository,
+    this.channelId,
+  );
 
   void reloadLatestNotes() {
     misskey.channels
@@ -63,30 +69,33 @@ class ChannelTimelineRepository extends TimeLineRepository {
 
   @override
   void reconnect() {
+    super.reconnect();
     socketController?.reconnect();
     reloadLatestNotes();
   }
 
   @override
-  void previousLoad() {
+  Future<void> previousLoad() async {
     if (notes.isEmpty) {
       return;
     }
-    misskey.channels
-        .timeline(
+    final resultNotes = await misskey.channels.timeline(
       ChannelsTimelineRequest(
         channelId: channelId,
         limit: 30,
         untilId: notes.first.id,
       ),
-    )
-        .then(
-      (resultNotes) {
-        for (final note in resultNotes) {
-          notes.addFirst(note);
-        }
-        notifyListeners();
-      },
     );
+    for (final note in resultNotes) {
+      notes.addFirst(note);
+    }
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    socketController?.disconnect();
+    socketController = null;
   }
 }

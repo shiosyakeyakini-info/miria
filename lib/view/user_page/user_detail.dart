@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/view/common/mfm_text.dart';

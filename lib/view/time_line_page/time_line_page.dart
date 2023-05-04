@@ -1,20 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/tab_settings.dart';
-import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
+import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/model/tab_type.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/channel_dialog.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
+import 'package:flutter_misskey_app/view/common/notification_icon.dart';
 import 'package:flutter_misskey_app/view/time_line_page/misskey_time_line.dart';
+import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
 class TimeLinePage extends ConsumerStatefulWidget {
-  final TabSettings currentTabSetting;
+  final TabSetting currentTabSetting;
 
   const TimeLinePage({super.key, required this.currentTabSetting});
 
@@ -24,7 +26,7 @@ class TimeLinePage extends ConsumerStatefulWidget {
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
   final textEditingController = TextEditingController();
-  final scrollController = ScrollController();
+  final scrollController = TimelineScrollController();
 
   var filteringInputEmoji = <Emoji>[];
 
@@ -52,11 +54,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
         Future(() async {
           final searchedEmojis = await (ref
-              .read(emojiRepositoryProvider)
+              .read(emojiRepositoryProvider(widget.currentTabSetting.account))
               .searchEmojis(searchValue));
 
           setState(() {
-            filteringInputEmoji = searchedEmojis ?? [];
+            filteringInputEmoji = searchedEmojis;
           });
         });
       } else {
@@ -70,7 +72,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   }
 
   void note() {
-    ref.read(misskeyProvider).notes.create(
+    ref.read(misskeyProvider(widget.currentTabSetting.account)).notes.create(
           NotesCreateRequest(
             text: textEditingController.value.text,
             channelId: widget.currentTabSetting.channelId,
@@ -84,189 +86,29 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    ref.read(emojiRepositoryProvider).loadFromSource();
+    ref
+        .read(emojiRepositoryProvider(widget.currentTabSetting.account))
+        .loadFromSource();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(children: [
-            for (final tabSetting
-                in ref.read(tabSettingsRepositoryProvider).tabSettings)
-              Ink(
-                color: tabSetting == widget.currentTabSetting
-                    ? Colors.white
-                    : Colors.transparent,
-                child: IconButton(
-                    icon: Icon(
-                      tabSetting.icon,
-                      color: tabSetting == widget.currentTabSetting
-                          ? Theme.of(context).primaryColor
-                          : Colors.white,
-                    ),
-                    onPressed: () {
-                      if (tabSetting == widget.currentTabSetting) {
-                        if (widget.currentTabSetting.tabType ==
-                                TabType.globalTimeline ||
-                            widget.currentTabSetting.tabType ==
-                                TabType.homeTimeline ||
-                            widget.currentTabSetting.tabType ==
-                                TabType.hybridTimeline) {
-                          ref
-                              .read(widget.currentTabSetting.timelineProvider)
-                              .resetAsRemainedLatestNotes();
-                        }
-                        scrollController
-                            .jumpTo(scrollController.position.maxScrollExtent);
-                      } else {
-                        if (tabSetting.tabType == TabType.globalTimeline ||
-                            tabSetting.tabType == TabType.homeTimeline ||
-                            tabSetting.tabType == TabType.hybridTimeline) {
-                          ref
-                              .read(tabSetting.timelineProvider)
-                              .resetAsRemainedLatestNotes();
-                        }
-                        context.replaceRoute(
-                            TimeLineRoute(currentTabSetting: tabSetting));
-                      }
-                    }),
-              )
-          ]),
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Theme.of(context).primaryColor))),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, top: 5, bottom: 5),
-                        child: Text(widget.currentTabSetting.name))),
-                if (widget.currentTabSetting.tabType == TabType.channel)
-                  IconButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => ChannelDialog(
-                                channelId:
-                                    widget.currentTabSetting.channelId ?? ""));
-                      },
-                      icon: const Icon(Icons.info_outline)),
-                const Padding(
-                  padding: EdgeInsets.only(right: 5),
-                ),
-                IconButton(
-                    onPressed: () => ref
-                        .read(widget.currentTabSetting.tabType
-                            .timelineProvider(widget.currentTabSetting))
-                        .reconnect(),
-                    icon: const Icon(Icons.refresh))
-              ],
-            ),
-          ),
-          Expanded(
-            child: MisskeyTimeline(
-                controller: scrollController,
-                timeLineRepositoryProvider: widget.currentTabSetting.tabType
-                    .timelineProvider(widget.currentTabSetting)),
-          ),
-          if (filteringInputEmoji.isNotEmpty)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top: BorderSide(
-                              color: Theme.of(context).primaryColor))),
-                  padding: const EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (final emoji in filteringInputEmoji)
-                        GestureDetector(
-                          onTap: () => insertEmoji(emoji),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: SizedBox(
-                                height:
-                                    32 * MediaQuery.of(context).textScaleFactor,
-                                child: CustomEmoji(emoji: emoji)),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: textEditingController,
-                  ),
-                ),
-              ),
-              IconButton(onPressed: note, icon: const Icon(Icons.edit)),
-              if (defaultTargetPlatform == TargetPlatform.android ||
-                  defaultTargetPlatform == TargetPlatform.iOS)
-                IconButton(
-                    onPressed: () {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    icon: const Icon(Icons.keyboard_arrow_down))
-            ],
-          ),
-        ],
-      ),
-      resizeToAvoidBottomInset: true,
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text("通知"),
-              onTap: () {
-                context.pushRoute(const NotificationRoute());
-              },
-            ),
-            ListTile(
-                leading: const Icon(Icons.star),
-                title: const Text("お気に入り"),
-                onTap: () {
-                  context.pushRoute(const FavoritedNoteRoute());
-                }),
-            const ListTile(title: Text("リスト")),
-            const ListTile(title: Text("アンテナ")),
-            ListTile(
-              leading: const Icon(Icons.attach_file),
-              title: const Text("クリップ"),
-              onTap: () {
-                context.pushRoute(const ClipListRoute());
-              },
-            ),
-            const ListTile(title: Text("チャンネル")),
-            const ListTile(title: Text("設定")),
-          ],
-        ),
-      ),
-    );
+  void changeTabOrReload(TabSetting tabSetting) {
+    if (tabSetting == widget.currentTabSetting) {
+      if (widget.currentTabSetting.tabType == TabType.globalTimeline ||
+          widget.currentTabSetting.tabType == TabType.homeTimeline ||
+          widget.currentTabSetting.tabType == TabType.hybridTimeline) {
+        ref
+            .read(widget.currentTabSetting.timelineProvider)
+            .resetAsRemainedLatestNotes();
+      }
+      scrollController.forceScrollToTop();
+    } else {
+      if (tabSetting.tabType == TabType.globalTimeline ||
+          tabSetting.tabType == TabType.homeTimeline ||
+          tabSetting.tabType == TabType.hybridTimeline) {
+        ref.read(tabSetting.timelineProvider).resetAsRemainedLatestNotes();
+      }
+      context.replaceRoute(TimeLineRoute(currentTabSetting: tabSetting));
+    }
   }
 
   void insertEmoji(Emoji emoji) {
@@ -279,7 +121,185 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
             "$beforeSearchText:${emoji.name}:${currentPosition == text.length ? "" : text.substring(currentPosition, text.length - 1)}",
         selection: TextSelection.collapsed(
             offset: beforeSearchText.length + emoji.name.length + 2));
+  }
 
-    ;
+  @override
+  Widget build(BuildContext context) {
+    return AccountScope(
+      account: widget.currentTabSetting.account,
+      child: Scaffold(
+        appBar: AppBar(
+          title: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(children: [
+              for (final tabSetting
+                  in ref.read(tabSettingsRepositoryProvider).tabSettings)
+                Ink(
+                  color: tabSetting == widget.currentTabSetting
+                      ? Colors.white
+                      : Colors.transparent,
+                  child: IconButton(
+                    icon: Icon(
+                      tabSetting.icon,
+                      color: tabSetting == widget.currentTabSetting
+                          ? Theme.of(context).primaryColor
+                          : Colors.white,
+                    ),
+                    onPressed: () => changeTabOrReload(tabSetting),
+                  ),
+                )
+            ]),
+          ),
+          actions: [const NotificationIcon()],
+        ),
+        body: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom:
+                          BorderSide(color: Theme.of(context).primaryColor))),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 5, top: 5, bottom: 5),
+                          child: Text(widget.currentTabSetting.name))),
+                  if (widget.currentTabSetting.tabType == TabType.channel)
+                    IconButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => ChannelDialog(
+                                    channelId:
+                                        widget.currentTabSetting.channelId ??
+                                            "",
+                                    account: widget.currentTabSetting.account,
+                                  ));
+                        },
+                        icon: const Icon(Icons.info_outline)),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 5),
+                  ),
+                  IconButton(
+                      onPressed: () => ref
+                          .read(widget.currentTabSetting.tabType
+                              .timelineProvider(widget.currentTabSetting))
+                          .reconnect(),
+                      icon: const Icon(Icons.refresh))
+                ],
+              ),
+            ),
+            Expanded(
+              child: MisskeyTimeline(
+                  controller: scrollController,
+                  timeLineRepositoryProvider: widget.currentTabSetting.tabType
+                      .timelineProvider(widget.currentTabSetting)),
+            ),
+            if (filteringInputEmoji.isNotEmpty)
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minWidth: MediaQuery.of(context).size.width),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            top: BorderSide(
+                                color: Theme.of(context).primaryColor))),
+                    padding: const EdgeInsets.all(5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final emoji in filteringInputEmoji)
+                          GestureDetector(
+                            onTap: () => insertEmoji(emoji),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: SizedBox(
+                                  height: 32 *
+                                      MediaQuery.of(context).textScaleFactor,
+                                  child: CustomEmoji(
+                                    emoji: emoji,
+                                  )),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      controller: textEditingController,
+                    ),
+                  ),
+                ),
+                IconButton(onPressed: note, icon: const Icon(Icons.edit)),
+                if (defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS)
+                  IconButton(
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      icon: const Icon(Icons.keyboard_arrow_down))
+              ],
+            ),
+          ],
+        ),
+        resizeToAvoidBottomInset: true,
+        drawer: Drawer(
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: ListView(
+              children: [
+                for (final account in ref.read(accountRepository).account) ...[
+                  Text(
+                    "@${account.userId}@${account.server}",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.notifications),
+                    title: const Text("通知"),
+                    onTap: () {
+                      context.pushRoute(NotificationRoute(account: account));
+                    },
+                  ),
+                  ListTile(
+                      leading: const Icon(Icons.star),
+                      title: const Text("お気に入り"),
+                      onTap: () {
+                        context.pushRoute(FavoritedNoteRoute(account: account));
+                      }),
+                  const ListTile(title: Text("リスト")),
+                  const ListTile(title: Text("アンテナ")),
+                  ListTile(
+                    leading: const Icon(Icons.attach_file),
+                    title: const Text("クリップ"),
+                    onTap: () {
+                      context.pushRoute(ClipListRoute(account: account));
+                    },
+                  ),
+                  const ListTile(title: Text("チャンネル")),
+                ],
+                ListTile(
+                    leading: const Icon(Icons.settings),
+                    onTap: () => context.pushRoute(const SettingsRoute()),
+                    title: Text("設定")),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

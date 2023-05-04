@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -68,66 +67,86 @@ class MisskeyImage extends StatefulWidget {
 
 class MisskeyImageState extends State<MisskeyImage> {
   var nsfwAccepted = false;
+  Widget? cachedWidget;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isSensitive && !nsfwAccepted) {
-      return GestureDetector(
-        onTap: () {
-          setState(() {
-            nsfwAccepted = true;
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Container(
-            decoration: const BoxDecoration(color: Colors.black54),
-            width: double.infinity,
-            child: Center(
-                child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.warning_rounded, color: Colors.white),
-                const Padding(padding: EdgeInsets.only(left: 5)),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "閲覧注意",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      "タップして表示",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize:
-                              Theme.of(context).textTheme.bodySmall?.fontSize),
-                    )
-                  ],
-                ),
-              ],
-            )),
-          ),
-        ),
-      );
-    }
-
-    return GestureDetector(
-      onTap: () {
+    return GestureDetector(onTap: () {
+      if (widget.isSensitive && !nsfwAccepted) {
+        setState(() {
+          nsfwAccepted = true;
+        });
+        return;
+      } else {
         showDialog(
             context: context,
             builder: (context) => ImageDialog(imageUrl: widget.url));
+      }
+    }, child: Builder(
+      builder: (context) {
+        if (widget.isSensitive && !nsfwAccepted) {
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.black54),
+              width: double.infinity,
+              child: Center(
+                  child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.warning_rounded, color: Colors.white),
+                  const Padding(padding: EdgeInsets.only(left: 5)),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        "閲覧注意",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "タップして表示",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.fontSize),
+                      )
+                    ],
+                  ),
+                ],
+              )),
+            ),
+          );
+        }
+
+        if (cachedWidget != null) {
+          return cachedWidget!;
+        }
+
+        return FutureBuilder(
+          future: Future.delayed(Duration(milliseconds: 100)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              cachedWidget = SizedBox(
+                height: 200,
+                child: NetworkImageView(
+                  url: widget.thumbnailUrl,
+                  type: ImageType.imageThumbnail,
+                  loadingBuilder: (context, widget, chunkEvent) => SizedBox(
+                    width: double.infinity,
+                    height: 200,
+                    child: widget,
+                  ),
+                ),
+              );
+              return cachedWidget!;
+            }
+            return Container();
+          },
+        );
       },
-      child: NetworkImageView(
-        url: widget.thumbnailUrl,
-        type: ImageType.imageThumbnail,
-        loadingBuilder: (context, widget, chunkEvent) => SizedBox(
-          width: double.infinity,
-          height: 200,
-          child: widget,
-        ),
-      ),
-    );
+    ));
   }
 }
 

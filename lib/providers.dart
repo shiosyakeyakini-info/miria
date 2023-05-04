@@ -1,33 +1,78 @@
 import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_flutter_html.dart';
+import 'package:flutter_misskey_app/model/account.dart';
+import 'package:flutter_misskey_app/model/tab_setting.dart';
+import 'package:flutter_misskey_app/repository/account_repository.dart';
 import 'package:flutter_misskey_app/repository/channel_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
+import 'package:flutter_misskey_app/repository/favorite_repository.dart';
+import 'package:flutter_misskey_app/repository/main_stream_repository.dart';
 import 'package:flutter_misskey_app/repository/global_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/home_time_line_repository.dart';
 import 'package:flutter_misskey_app/repository/local_time_line_repository.dart';
-import 'package:flutter_misskey_app/repository/note_refresh_service.dart';
+import 'package:flutter_misskey_app/repository/note_repository.dart';
+import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm/mfm.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-final misskeyProvider = Provider((ref) =>
-    Misskey(token: "Ptk6oVyZg9JrLOJpRTSzfu6iofZ9Dz2O", host: "misskey.io"));
+// "Ptk6oVyZg9JrLOJpRTSzfu6iofZ9Dz2O"
+final misskeyProvider = Provider.family<Misskey, Account>(
+    (ref, account) => Misskey(token: account.token, host: account.server));
 
-final localTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
-    (ref) => LocalTimeLineRepository(ref.read(misskeyProvider)));
-final homeTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
-    (ref) => HomeTimeLineRepository(ref.read(misskeyProvider)));
-final globalTimeLineProvider = ChangeNotifierProvider<TimeLineRepository>(
-    (ref) => GlobalTimeLineRepository(ref.read(misskeyProvider)));
+final localTimeLineProvider =
+    ChangeNotifierProvider.family<TimeLineRepository, TabSetting>(
+        (ref, tabSetting) => LocalTimeLineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+            ));
+final homeTimeLineProvider =
+    ChangeNotifierProvider.family<TimeLineRepository, TabSetting>(
+        (ref, tabSetting) => HomeTimeLineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+            ));
+final globalTimeLineProvider =
+    ChangeNotifierProvider.family<TimeLineRepository, TabSetting>(
+        (ref, tabSetting) => GlobalTimeLineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+            ));
 final channelTimelineProvider =
-    ChangeNotifierProvider.family<ChannelTimelineRepository, String>(
-        (ref, chanelId) =>
-            ChannelTimelineRepository(ref.read(misskeyProvider), chanelId));
-final noteRefreshServiceProvider =
-    Provider((ref) => NoteRefreshService(ref.read));
+    ChangeNotifierProvider.family<ChannelTimelineRepository, TabSetting>(
+        (ref, tabSetting) => ChannelTimelineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              tabSetting.channelId!,
+            ));
+final mainStreamRepositoryProvider =
+    ChangeNotifierProvider.family<MainStreamRepository, Account>(
+        (ref, account) => MainStreamRepository(
+            ref.read(misskeyProvider(account)),
+            ref.read(emojiRepositoryProvider(account))));
 
-final emojiRepositoryProvider =
-    Provider((ref) => EmojiRepositoryImpl(misskey: ref.read(misskeyProvider)));
-final mfmToFlutterHtmlProvider = Provider((ref) => MfmToFlutterHtml(
-    ref.read(emojiRepositoryProvider), ref.read(mfmParserProvider)));
+final favoriteProvider = ChangeNotifierProvider.autoDispose
+    .family<FavoriteRepository, Account>((ref, account) => FavoriteRepository(
+        ref.read(misskeyProvider(account)), ref.read(notesProvider(account))));
+
+final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
+    (ref, account) => NoteRepository(ref.read(misskeyProvider(account))));
+
+//TODO: アカウント毎である必要はない
+final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
+    (ref, account) =>
+        EmojiRepositoryImpl(misskey: ref.read(misskeyProvider(account))));
+final mfmToFlutterHtmlProvider = Provider.family<MfmToFlutterHtml, Account>(
+    (ref, account) => MfmToFlutterHtml(
+        ref.read(emojiRepositoryProvider(account)),
+        ref.read(mfmParserProvider)));
 final mfmParserProvider = Provider<MfmParser>((ref) => const MfmParser());
+
+final accountRepository = Provider(
+    (ref) => AccountRepository(ref.read(tabSettingsRepositoryProvider)));
+final tabSettingsRepositoryProvider =
+    ChangeNotifierProvider((ref) => TabSettingsRepository());

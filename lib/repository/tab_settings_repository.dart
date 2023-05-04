@@ -1,34 +1,37 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/tab_settings.dart';
-import 'package:flutter_misskey_app/model/tab_type.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:convert';
 
-final tabSettingsRepositoryProvider =
-    Provider((ref) => TabSettingsRepository());
+import 'package:flutter/widgets.dart';
+import 'package:flutter_misskey_app/model/tab_setting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TabSettingsRepository {
-  List<TabSettings> tabSettings = const [
-    TabSettings(
-        icon: Icons.house, tabType: TabType.homeTimeline, name: "ホームタイムライン"),
-    TabSettings(
-        icon: Icons.public,
-        tabType: TabType.localTimeline,
-        name: "ローカルタイムライン"),
-    TabSettings(
-        icon: Icons.rocket,
-        tabType: TabType.globalTimeline,
-        name: "グローバルタイムライン"),
-    TabSettings(
-        icon: Icons.hub, tabType: TabType.hybridTimeline, name: "ソーシャルタイムライン"),
-    TabSettings(
-        icon: Icons.games_rounded,
-        tabType: TabType.channel,
-        channelId: "9b3chwrm7f",
-        name: "Misskeyアークナイツ部"),
-    TabSettings(
-        icon: Icons.gamepad_outlined,
-        tabType: TabType.channel,
-        channelId: "9c0i1s4abg",
-        name: "ブル○カ変態妄想垂れ流し部"),
-  ];
+class TabSettingsRepository extends ChangeNotifier {
+  List<TabSetting> _tabSettings = [];
+
+  Iterable<TabSetting> get tabSettings => _tabSettings;
+
+  TabSettingsRepository();
+
+  Future<void> load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedData = prefs.getString("tab_settings");
+    if (storedData == null) {
+      return;
+    }
+    try {
+      _tabSettings
+        ..clear()
+        ..addAll((jsonDecode(storedData) as List)
+            .map((e) => TabSetting.fromJson(e)));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> save(List<TabSetting> tabSettings) async {
+    _tabSettings = tabSettings.toList();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("tab_settings",
+        jsonEncode(_tabSettings.map((e) => e.toJson()).toList()));
+    notifyListeners();
+  }
 }

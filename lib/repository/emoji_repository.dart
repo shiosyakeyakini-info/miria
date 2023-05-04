@@ -7,8 +7,11 @@ import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-class EmojiRepository {
+abstract class EmojiRepository {
   List<Emoji>? emoji;
+  Future<void> loadFromSource();
+  Future<File> requestEmoji(Emoji emoji);
+  Future<List<Emoji>> searchEmojis(String name, {int limit = 30});
 }
 
 class EmojiWrap {
@@ -25,15 +28,19 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   final List<EmojiWrap> _emojiWrap = [];
 
+  @override
   Future<void> loadFromSource() async {
     emoji = (await misskey.emojis()).emojis;
 
     final toH = const KanaKit().toHiragana;
-    _emojiWrap.addAll(emoji?.map(
-            (e) => EmojiWrap(e, toH(e.name), e.aliases.map((e2) => toH(e2)))) ??
-        []);
+    _emojiWrap
+      ..clear()
+      ..addAll(emoji?.map((e) =>
+              EmojiWrap(e, toH(e.name), e.aliases.map((e2) => toH(e2)))) ??
+          []);
   }
 
+  @override
   Future<File> requestEmoji(Emoji emoji) async {
     final directory = Directory(
         "${(await getApplicationDocumentsDirectory()).path}${Platform.pathSeparator}emoji_caches");
@@ -67,6 +74,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   Future<void> downloadAllEmojis() async {}
 
+  @override
   Future<List<Emoji>> searchEmojis(String name, {int limit = 30}) async {
     if (name == "") {
       return emoji?.take(limit).toList() ?? [];
@@ -75,31 +83,29 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final converted = const KanaKit().toHiragana(name);
 
     return _emojiWrap
-            .where((element) =>
-                element.emoji.name.contains(name) ||
-                element.emoji.aliases
-                    .any((element2) => element2.contains(name)) ||
-                element.kanaName.contains(converted) ||
-                element.kanaAliases.any((element2) => element2.contains(name)))
-            .sorted((a, b) {
-              final aValue = [
-                if (a.emoji.name.contains(name)) a.emoji.name,
-                ...a.emoji.aliases.where((e2) => e2.contains(name)),
-                if (a.kanaName.contains(converted)) a.kanaName,
-                ...a.kanaAliases.where((e2) => e2.contains(converted))
-              ].map((e) => e.length);
-              final bValue = [
-                if (b.emoji.name.contains(name)) b.emoji.name,
-                ...b.emoji.aliases.where((element2) => element2.contains(name)),
-                if (b.kanaName.contains(converted)) b.kanaName,
-                ...b.kanaAliases.where((e2) => e2.contains(converted))
-              ].map((e) => e.length);
+        .where((element) =>
+            element.emoji.name.contains(name) ||
+            element.emoji.aliases.any((element2) => element2.contains(name)) ||
+            element.kanaName.contains(converted) ||
+            element.kanaAliases.any((element2) => element2.contains(name)))
+        .sorted((a, b) {
+          final aValue = [
+            if (a.emoji.name.contains(name)) a.emoji.name,
+            ...a.emoji.aliases.where((e2) => e2.contains(name)),
+            if (a.kanaName.contains(converted)) a.kanaName,
+            ...a.kanaAliases.where((e2) => e2.contains(converted))
+          ].map((e) => e.length);
+          final bValue = [
+            if (b.emoji.name.contains(name)) b.emoji.name,
+            ...b.emoji.aliases.where((element2) => element2.contains(name)),
+            if (b.kanaName.contains(converted)) b.kanaName,
+            ...b.kanaAliases.where((e2) => e2.contains(converted))
+          ].map((e) => e.length);
 
-              return aValue.min.compareTo(bValue.min);
-            })
-            .take(limit)
-            .map((e) => e.emoji)
-            .toList() ??
-        [];
+          return aValue.min.compareTo(bValue.min);
+        })
+        .take(limit)
+        .map((e) => e.emoji)
+        .toList();
   }
 }

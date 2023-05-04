@@ -6,7 +6,11 @@ class LocalTimeLineRepository extends TimeLineRepository {
 
   final Misskey misskey;
 
-  LocalTimeLineRepository(this.misskey);
+  LocalTimeLineRepository(
+    this.misskey,
+    super.noteRepository,
+    super.globalNotificationRepository,
+  );
 
   @override
   void startTimeLine() {
@@ -29,6 +33,14 @@ class LocalTimeLineRepository extends TimeLineRepository {
 
   @override
   void reconnect() {
+    super.reconnect();
     socketController?.reconnect();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    socketController?.disconnect();
+    socketController = null;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
@@ -8,10 +9,15 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class NoteDetailDialog extends ConsumerStatefulWidget {
   final Note note;
+  final Account account;
   final ChangeNotifierProvider<TimeLineRepository> timeLineRepository;
 
-  const NoteDetailDialog(
-      {super.key, required this.note, required this.timeLineRepository});
+  const NoteDetailDialog({
+    super.key,
+    required this.note,
+    required this.timeLineRepository,
+    required this.account,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -31,7 +37,7 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
         foundEmojis.clear();
         if (reactionTextField.text.isNotEmpty) {
           foundEmojis.addAll(ref
-                  .read(emojiRepositoryProvider)
+                  .read(emojiRepositoryProvider(widget.account))
                   .emoji
                   ?.where((element) =>
                       element.name.contains(reactionTextField.text) ||

@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/tab_settings.dart';
+import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/model/tab_type.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
+import 'package:flutter_misskey_app/view/common/main_stream.dart';
+import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/tab_settings_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 void main() {
-  runApp(ProviderScope(child: MyApp()));
+  FlutterError.demangleStackTrace = (StackTrace stack) {
+    if (stack is stack_trace.Trace) return stack.vmTrace;
+    if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+    return stack;
+  };
+
+  runApp(const ProviderScope(child: InitializeWidget()));
 }
 
 class InitializeWidget extends ConsumerStatefulWidget {
@@ -19,7 +28,10 @@ class InitializeWidget extends ConsumerStatefulWidget {
 }
 
 class InitializeWidgetState extends ConsumerState<InitializeWidget> {
-  Future<void> initialize() async {}
+  Future<void> initialize() async {
+    await ref.read(accountRepository).load();
+    await ref.read(tabSettingsRepositoryProvider).load();
+  }
 
   @override
   void didChangeDependencies() {
@@ -45,7 +57,7 @@ class InitializeWidgetState extends ConsumerState<InitializeWidget> {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
   final _appRouter = AppRouter();
@@ -57,6 +69,10 @@ class MyApp extends StatelessWidget {
         elevation: 0,
         titleSpacing: 0,
       ),
+      tabBarTheme: const TabBarTheme(
+          labelColor: const Color.fromARGB(255, 103, 103, 103),
+          indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(color: Colors.blue))),
       textTheme: ThemeData.light().textTheme.apply(
           fontFamily: "Hiragino Maru Gothic ProN",
           bodyColor: const Color.fromARGB(255, 103, 103, 103)));
@@ -70,18 +86,29 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isSigned = ref.read(accountRepository).account.isNotEmpty;
+    final hasTabSetting =
+        ref.read(tabSettingsRepositoryProvider).tabSettings.isNotEmpty;
+
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: themeData,
       darkTheme: darkThemeData,
       themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
+      builder: (context, widget) {
+        return MainStream(child: widget ?? Container());
+      },
       routerConfig: _appRouter.config(initialRoutes: [
-        TimeLineRoute(
-            currentTabSetting: const TabSettings(
-                icon: Icons.house,
-                tabType: TabType.localTimeline,
-                name: "ローカルタイムライン"))
+        if (isSigned && hasTabSetting)
+          TimeLineRoute(
+              currentTabSetting:
+                  ref.read(tabSettingsRepositoryProvider).tabSettings.first)
+        else if (isSigned && !hasTabSetting)
+          const TabSettingsListRoute()
+        else
+          const LoginRoute(),
       ]),
     );
   }

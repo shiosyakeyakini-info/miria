@@ -28,6 +28,9 @@ dependencies:
   scrollable_positioned_list: ^0.3.6
   kana_kit: ^2.0.0
   cached_network_image: ^3.2.3
+  json_annotation: ^4.8.0
+  shared_preferences: ^2.1.0
+  badges: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +40,7 @@ dev_dependencies:
   auto_route_generator: ^6.0.0
   build_runner: ^2.3.3
   freezed: ^2.3.2
+  json_serializable: ^6.6.1
 
 flutter:
   uses-material-design: true

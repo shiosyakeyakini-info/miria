@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DebugInfoPage extends StatefulWidget {
+  const DebugInfoPage({super.key});
+
   @override
   State<StatefulWidget> createState() => DebugInfoPageState();
 }

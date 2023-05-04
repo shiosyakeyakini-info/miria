@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/view/common/misskey_note.dart';
+import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'dart:math';
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
   final ChangeNotifierProvider<TimeLineRepository> timeLineRepositoryProvider;
-  final ScrollController controller;
+  final TimelineScrollController controller;
 
   MisskeyTimeline({
     super.key,
-    ScrollController? controller,
+    TimelineScrollController? controller,
     required this.timeLineRepositoryProvider,
-  }) : controller = controller ?? ScrollController();
+  }) : controller = controller ?? TimelineScrollController();
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MisskeyTimelineState();
@@ -21,16 +22,19 @@ class MisskeyTimeline extends ConsumerStatefulWidget {
 
 class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   List<Note> showingNotes = [];
-  late final ScrollController scrollController = widget.controller;
-  double previousPosition = 0.0;
-  double previousMaxExtent = 0.0;
+  late final TimelineScrollController scrollController = widget.controller;
   bool isScrolling = false;
+  late final TimeLineRepository timelineRepository =
+      ref.read(widget.timeLineRepositoryProvider);
+  bool contextAccessed = false;
 
   final lastKey = GlobalKey();
+  bool isInitStated = false;
 
   @override
   void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
+    contextAccessed = true;
     if (oldWidget.timeLineRepositoryProvider !=
         widget.timeLineRepositoryProvider) {
       print("didUpdateWidget called. oldWidget=$oldWidget");
@@ -42,41 +46,16 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   @override
   void initState() {
     super.initState();
-
-    scrollController.addListener(() {
-      final currentPosition = scrollController.position.pixels;
-
-      previousPosition = currentPosition;
-      previousMaxExtent = scrollController.position.maxScrollExtent;
+    if (isInitStated) return;
+    Future(() {
+      ref.read(widget.timeLineRepositoryProvider).startTimeLine();
     });
-
-    ref.read(widget.timeLineRepositoryProvider).startTimeLine();
   }
 
   @override
   void dispose() {
-    ref.read(widget.timeLineRepositoryProvider).disconnect();
     super.dispose();
-  }
-
-  void scrollToTop() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (previousPosition == previousMaxExtent &&
-          scrollController.position.maxScrollExtent !=
-              scrollController.position.pixels) {
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
-        previousPosition = scrollController.position.maxScrollExtent;
-        previousMaxExtent = scrollController.position.maxScrollExtent;
-
-        final lastKeyContext = lastKey.currentContext;
-        if (lastKeyContext != null) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            Scrollable.ensureVisible(lastKeyContext);
-            scrollToTop();
-          });
-        }
-      }
-    });
+    if (contextAccessed) timelineRepository.disconnect();
   }
 
   @override
@@ -84,7 +63,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     final List<Note> notes = ref.watch(widget.timeLineRepositoryProvider).notes;
 
     if (scrollController.positions.isNotEmpty) {
-      scrollToTop();
+      scrollController.scrollToTop();
     }
 
     return Padding(
@@ -97,15 +76,19 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
           if (index == 0) {
             return Center(
                 child: IconButton(
-              onPressed: () {
-                ref.read(widget.timeLineRepositoryProvider).previousLoad();
+              onPressed: () async {
+                final firstNote = notes.first.id;
+                await ref
+                    .read(widget.timeLineRepositoryProvider)
+                    .previousLoad();
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
               },
-              icon: Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.keyboard_arrow_down),
             ));
           }
 
           if (index == notes.length + 1) {
-            scrollToTop();
+            scrollController.scrollToTop();
             return Container(
               key: lastKey,
             );
@@ -133,8 +116,11 @@ class NoteWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.read(timeLineRepositoryProvider).notes.length <= index) {
+      return Container();
+    }
     final note = ref.watch(timeLineRepositoryProvider
         .select((repository) => repository.notes[index]));
-    return MisskeyNote(note: note);
+    return MisskeyNote(note: note, key: ValueKey<String>(note.id));
   }
 }

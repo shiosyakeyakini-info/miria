@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,8 +25,13 @@ class TestWidgetState extends ConsumerState<TestWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Future(() async {
-      ref.read(emojiRepositoryProvider).emoji =
-          (await ref.read(misskeyProvider).emojis()).emojis;
+      ref
+          .read(emojiRepositoryProvider(
+              Account(server: "", userId: "userId", token: "token")))
+          .emoji = (await ref
+              .read(misskeyProvider(Account(server: "", userId: "", token: "")))
+              .emojis())
+          .emojis;
       setState(() {});
     });
   }
@@ -43,7 +49,12 @@ void main() {
   runApp(ProviderScope(
       overrides: [
         emojiRepositoryProvider.overrideWith(
-            (ref) => EmojiRepositoryImpl(misskey: ref.read(misskeyProvider)))
+          (ref, account) => EmojiRepositoryImpl(
+            misskey: ref.read(
+              misskeyProvider(account),
+            ),
+          ),
+        )
       ],
       child: MaterialApp(
           theme: ThemeData(fontFamily: "Noto Sans CJK JP"),

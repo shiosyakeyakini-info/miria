@@ -2,9 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_file_view.dart';
 import 'package:flutter_misskey_app/view/common/network_image.dart';
@@ -28,7 +30,22 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
   @override
   Widget build(BuildContext context) {
-    final displayNote = widget.note.renote ?? widget.note;
+    final latestActualNote = ref.watch(notesProvider(AccountScope.of(context))
+        .select((value) => value.notes[widget.note.id]));
+    final renoteId = widget.note.renote?.id;
+    final Note? renoteNote;
+    if (renoteId != null) {
+      renoteNote = ref.watch(notesProvider(AccountScope.of(context))
+          .select((value) => value.notes[renoteId]));
+    } else {
+      renoteNote = null;
+    }
+    final displayNote = renoteNote ?? latestActualNote;
+
+    if (displayNote == null) {
+      // ありえない
+      return Container();
+    }
 
     final userId =
         "@${displayNote.user.username}${displayNote.user.host == null ? "" : "@${displayNote.user.host}"}";
@@ -50,7 +67,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
               padding: const EdgeInsets.only(bottom: 2),
               child: MfmText(
                 mfmText:
-                    "${widget.note.user.name ?? ""} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
+                    "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -59,7 +76,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             children: [
               GestureDetector(
                 onTap: () {
-                  context.pushRoute(UserRoute(userId: displayNote.user.id));
+                  context.pushRoute(UserRoute(
+                      userId: displayNote.user.id,
+                      account: AccountScope.of(context)));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 3),
@@ -270,17 +289,21 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
   Future<void> reactionControl(
       WidgetRef ref, BuildContext context, Note displayNote) async {
+    final account = AccountScope.of(context);
     if (displayNote.myReaction != null) {
       await ref
-          .read(misskeyProvider)
+          .read(misskeyProvider(account))
           .notes
           .reactions
           .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
-      await ref.read(noteRefreshServiceProvider).refresh(displayNote.id);
+      await ref.read(notesProvider(account)).refresh(displayNote.id);
       return;
     }
     showDialog(
         context: context,
-        builder: (context) => ReactionPickerDialog(targetNote: displayNote));
+        builder: (context) => ReactionPickerDialog(
+              targetNote: displayNote,
+              account: account,
+            ));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -7,7 +8,11 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   final Misskey misskey;
 
-  HomeTimeLineRepository(this.misskey);
+  HomeTimeLineRepository(
+    this.misskey,
+    super.noteRepository,
+    super.globalNotificationRepository,
+  );
 
   void reloadLatestNotes() {
     misskey.notes
@@ -16,7 +21,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
       for (final note in resultNotes) {
         final foundNote = notes.indexWhere((element) => element.id == note.id);
         if (foundNote == -1) {
-          if (note.createdAt < notes.last.createdAt) {
+          if (note.createdAt < (notes.lastOrNull?.createdAt ?? DateTime(0))) {
             notes.addFirst(note);
           } else {
             notes.addLast(note);
@@ -61,29 +66,30 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   @override
   void reconnect() {
+    super.reconnect();
     socketController?.reconnect();
     reloadLatestNotes();
   }
 
   @override
-  void previousLoad() {
+  Future<void> previousLoad() async {
     if (notes.isEmpty) {
       return;
     }
-    misskey.notes
-        .homeTimeline(
-      NotesTimelineRequest(
-        limit: 30,
-        untilId: notes.first.id,
-      ),
-    )
-        .then(
-      (resultNotes) {
-        for (final note in resultNotes) {
-          notes.addFirst(note);
-        }
-        notifyListeners();
-      },
-    );
+    final resultNotes = await misskey.notes.homeTimeline(NotesTimelineRequest(
+      limit: 30,
+      untilId: notes.first.id,
+    ));
+    for (final note in resultNotes) {
+      notes.addFirst(note);
+    }
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    socketController?.disconnect();
+    socketController = null;
   }
 }

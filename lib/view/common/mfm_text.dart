@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_flutter_html.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -84,7 +86,9 @@ class MfmTextState extends ConsumerState<MfmText> {
 
     final String htmlText;
     try {
-      htmlText = ref.read(mfmToFlutterHtmlProvider).parse(widget.mfmText);
+      htmlText = ref
+          .read(mfmToFlutterHtmlProvider(AccountScope.of(context)))
+          .parse(widget.mfmText);
     } catch (e, s) {
       print(e);
       print(s);
@@ -104,7 +108,8 @@ class MfmTextState extends ConsumerState<MfmText> {
           emojiMatcher(): CustomRender.widget(
               widget: (context, children) => customEmojiRenderer(
                     context,
-                    ref.read(emojiRepositoryProvider),
+                    ref.read(emojiRepositoryProvider(
+                        AccountScope.of(context.buildContext))),
                     fontSizeRatio: widget.emojiFontSizeRatio,
                   )),
           rotateMatcher(): CustomRender.widget(
@@ -185,7 +190,6 @@ class MfmTextState extends ConsumerState<MfmText> {
 
 class UserInformation extends ConsumerStatefulWidget {
   final User user;
-
   const UserInformation({
     super.key,
     required this.user,
@@ -210,10 +214,10 @@ class UserInformationState extends ConsumerState<UserInformation> {
   @override
   Widget build(BuildContext context) {
     final userName = ref
-        .read(mfmToFlutterHtmlProvider)
+        .read(mfmToFlutterHtmlProvider(AccountScope.of(context)))
         .parse(widget.user.name ?? widget.user.username);
 
-    final htmlText = "<span style=\"font-weight: bold;\">$userName</span>";
+    var htmlText = "<span style=\"font-weight: bold;\">$userName</span>";
 
     if (cachedWidget != null) {
       return cachedWidget!;
@@ -224,7 +228,9 @@ class UserInformationState extends ConsumerState<UserInformation> {
       customRenders: {
         emojiMatcher(): CustomRender.widget(
             widget: (context, children) => customEmojiRenderer(
-                context, ref.read(emojiRepositoryProvider))),
+                context,
+                ref.read(emojiRepositoryProvider(
+                    AccountScope.of(context.buildContext))))),
       },
       tagsList: Html.tags..addAll(["customemoji"]),
       style: {

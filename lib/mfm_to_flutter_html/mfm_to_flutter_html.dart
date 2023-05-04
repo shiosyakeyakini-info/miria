@@ -12,7 +12,13 @@ class MfmToFlutterHtml {
   String? _toHtmlColor(String? color) {
     if (color == null) {
       return null;
-    } else if (color.length == 3) {
+    }
+
+    if (!RegExp(r'^[0-9a-fA-F]+?$').hasMatch(color)) {
+      return null;
+    }
+
+    if (color.length == 3) {
       return "#${color.substring(0, 1)}${color.substring(0, 1)}${color.substring(1, 2)}${color.substring(1, 2)}${color.substring(2, 3)}${color.substring(2, 3)}";
     } else if (color.length == 6) {
       return "#$color";

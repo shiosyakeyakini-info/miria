@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -55,13 +57,15 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
     return ElevatedButton(
         onPressed: () async {
           // リアクション取り消し
+          final account = AccountScope.of(context);
           if (isMyReaction) {
             await ref
-                .read(misskeyProvider)
+                .read(misskeyProvider(account))
                 .notes
                 .reactions
                 .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
-            await ref.read(noteRefreshServiceProvider).refresh(widget.noteId);
+
+            await ref.read(notesProvider(account)).refresh(widget.noteId);
 
             return;
           }
@@ -73,10 +77,10 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           if (widget.myReaction != null) return;
 
           if (found != null) {
-            await ref.read(misskeyProvider).notes.reactions.create(
+            await ref.read(misskeyProvider(account)).notes.reactions.create(
                 NotesReactionsCreateRequest(
                     noteId: widget.noteId, reaction: ":$found:"));
-            await ref.read(noteRefreshServiceProvider).refresh(widget.noteId);
+            await ref.read(notesProvider(account)).refresh(widget.noteId);
           }
         },
         style: ElevatedButton.styleFrom(
@@ -93,7 +97,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                 height: 24 * MediaQuery.of(context).textScaleFactor,
                 child: CustomEmoji.fromEmojiName(
                   widget.reactionKey,
-                  ref.read(emojiRepositoryProvider),
+                  ref.read(emojiRepositoryProvider(AccountScope.of(context))),
                   anotherServerUrl: widget.anotherServerUrl,
                 )),
             const Padding(padding: EdgeInsets.only(left: 5)),

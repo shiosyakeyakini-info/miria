@@ -6,16 +6,16 @@ class GlobalTimeLineRepository extends TimeLineRepository {
 
   final Misskey misskey;
 
-  GlobalTimeLineRepository(this.misskey);
+  GlobalTimeLineRepository(
+    this.misskey,
+    super.noteRepository,
+    super.globalNotificationRepository,
+  );
 
   @override
   void startTimeLine() {
     socketController = misskey.globalTimelineStream((note) {
       notes.add(note);
-
-      // if (notes.length > 100) {
-      //   notes.removeFirst();
-      // }
 
       notifyListeners();
     })
@@ -29,6 +29,14 @@ class GlobalTimeLineRepository extends TimeLineRepository {
 
   @override
   void reconnect() {
+    super.reconnect();
     socketController?.reconnect();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    socketController?.disconnect();
+    socketController = null;
   }
 }
