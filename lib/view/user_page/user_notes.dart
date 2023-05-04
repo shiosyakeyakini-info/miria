@@ -40,8 +40,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
       ref.read(notesProvider(AccountScope.of(context))).registerAll(notes);
       return notes.toList();
     }, nextFuture: (lastElement) async {
-      final notes = await misskey.users.notes(
-          UsersNotesRequest(userId: widget.userId, untilId: lastElement.id));
+      final notes = await misskey.users.notes(UsersNotesRequest(
+          userId: widget.userId, untilId: lastElement.listId));
       if (!mounted) return [];
       ref.read(notesProvider(AccountScope.of(context))).registerAll(notes);
       return notes.toList();

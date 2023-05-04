@@ -8,7 +8,7 @@ class Account with _$Account {
   const Account._();
 
   const factory Account({
-    required String server,
+    required String host,
     required String userId,
     required String token,
   }) = _Account;

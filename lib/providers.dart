@@ -18,7 +18,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 // "Ptk6oVyZg9JrLOJpRTSzfu6iofZ9Dz2O"
 final misskeyProvider = Provider.family<Misskey, Account>(
-    (ref, account) => Misskey(token: account.token, host: account.server));
+    (ref, account) => Misskey(token: account.token, host: account.host));
 
 final localTimeLineProvider =
     ChangeNotifierProvider.family<TimeLineRepository, TabSetting>(

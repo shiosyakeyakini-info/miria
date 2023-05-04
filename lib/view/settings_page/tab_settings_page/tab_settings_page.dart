@@ -87,7 +87,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   for (final account in ref.read(accountRepository).account)
                     DropdownMenuItem(
                       value: account,
-                      child: Text("${account.userId}@${account.server}"),
+                      child: Text("${account.userId}@${account.host}"),
                     )
                 ],
                 onChanged: (value) {

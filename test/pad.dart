@@ -27,9 +27,9 @@ class TestWidgetState extends ConsumerState<TestWidget> {
     Future(() async {
       ref
           .read(emojiRepositoryProvider(
-              Account(server: "", userId: "userId", token: "token")))
+              Account(host: "", userId: "userId", token: "token")))
           .emoji = (await ref
-              .read(misskeyProvider(Account(server: "", userId: "", token: "")))
+              .read(misskeyProvider(Account(host: "", userId: "", token: "")))
               .emojis())
           .emojis;
       setState(() {});

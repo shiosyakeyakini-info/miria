@@ -10,7 +10,7 @@ import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_file_view.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/network_image.dart';
-import 'package:flutter_misskey_app/view/common/note_modal_sheet.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/note_modal_sheet.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/reaction_button.dart';
 import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +27,27 @@ class MisskeyNote extends ConsumerStatefulWidget {
 
 class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   var isCwOpened = false;
+  var isRenoted = false;
+
+  Future<void> renote() async {
+    // 一回の表示期間内に何回もRenoteを防ぐ
+    if (isRenoted) return;
+
+    isRenoted = true;
+
+    try {
+      await ref
+          .read(misskeyProvider(AccountScope.of(context)))
+          .notes
+          .create(NotesCreateRequest(renoteId: widget.note.id));
+    } catch (e, s) {
+      isRenoted = false;
+      rethrow;
+    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +150,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       MfmText(
                         mfmText: displayNote.cw ?? "",
                         emojiFontSizeRatio: 2,
+                        host: displayNote.user.host,
                       ),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -156,6 +178,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       MfmText(
                         mfmText: displayNote.text ?? "",
                         emojiFontSizeRatio: 2,
+                        host: displayNote.user.host,
                       ),
                       MisskeyFileView(files: displayNote.files),
                     ],
@@ -219,7 +242,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   Theme.of(context).textTheme.bodySmall?.color,
                             )),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () => renote(),
                             constraints: const BoxConstraints(),
                             padding: EdgeInsets.zero,
                             style: const ButtonStyle(
@@ -229,7 +252,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             icon: Icon(
-                              Icons.repeat,
+                              Icons.repeat_rounded,
                               size: 16 * MediaQuery.of(context).textScaleFactor,
                               color:
                                   Theme.of(context).textTheme.bodySmall?.color,
@@ -258,7 +281,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               showModalBottomSheet(
                                   context: context,
                                   builder: (builder) {
-                                    return NoteModalSheet(note: displayNote);
+                                    return NoteModalSheet(
+                                        note: displayNote,
+                                        account: AccountScope.of(context));
                                   });
                             },
                             padding: EdgeInsets.zero,

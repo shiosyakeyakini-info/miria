@@ -20,12 +20,19 @@ class ChannelTimelineRepository extends TimeLineRepository {
     misskey.channels
         .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30))
         .then((resultNotes) {
-      for (final note in resultNotes) {
+      for (final note in resultNotes.toList().reversed) {
         final foundNote = notes.indexWhere((element) => element.id == note.id);
         if (foundNote == -1) {
-          if (note.createdAt < notes.last.createdAt) {
-            notes.addFirst(note);
-          } else {
+          var isInserted = false;
+          //TODO: もうちょっとイケてる感じに
+          for (int i = notes.length - 1; i >= 0; i--) {
+            if (notes[i].createdAt < note.createdAt) {
+              notes.insert(i, note);
+              isInserted = true;
+              break;
+            }
+          }
+          if (!isInserted) {
             notes.addLast(note);
           }
         } else {

@@ -50,7 +50,7 @@ class TabSettingsListPageState extends ConsumerState<TabSettingsListPage> {
                     leading: Icon(tabSettings[index].icon),
                     title: Text(tabSettings[index].name),
                     subtitle: Text(
-                        "${tabSettings[index].tabType.displayName} / @${tabSettings[index].account.userId}@${tabSettings[index].account.server} "),
+                        "${tabSettings[index].tabType.displayName} / @${tabSettings[index].account.userId}@${tabSettings[index].account.host} "),
                     onTap: () =>
                         context.pushRoute(TabSettingsRoute(tabIndex: index)),
                   );

@@ -3,19 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
-  final Future<List<T>> Function(dynamic) nextFuture;
-  final Widget Function(BuildContext, dynamic) itemBuilder;
+  final Future<List<T>> Function(T) nextFuture;
+  final Widget Function(BuildContext, T) itemBuilder;
+  final Object listKey;
 
-  const PushableListView({
-    super.key,
-    required this.initializeFuture,
-    required this.nextFuture,
-    required this.itemBuilder,
-  });
+  const PushableListView(
+      {super.key,
+      required this.initializeFuture,
+      required this.nextFuture,
+      required this.itemBuilder,
+      this.listKey = ""});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      PushableListViewState();
+      PushableListViewState<T>();
 }
 
 class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
@@ -24,20 +25,32 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
 
   final items = <T>[];
 
+  void initialize() {
+    isLoading = true;
+    Future(() async {
+      items
+        ..clear()
+        ..addAll(await widget.initializeFuture());
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     if (items.isEmpty) {
-      isLoading = true;
-      Future(() async {
-        items
-          ..clear()
-          ..addAll(await widget.initializeFuture());
-        setState(() {
-          isLoading = false;
-        });
-      });
+      initialize();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant PushableListView<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.listKey != widget.listKey) {
+      initialize();
     }
   }
 

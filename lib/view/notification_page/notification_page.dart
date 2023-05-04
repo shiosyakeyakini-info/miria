@@ -55,89 +55,96 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                 .registerAll(result.map((e) => e.note).whereNotNull());
             return result.toList();
           },
-          itemBuilder: (context, notification) {
-            assert(notification is INotificationsResponse);
-            if (notification.type != NotificationType.reaction &&
-                notification.type != NotificationType.renote &&
-                notification.type != NotificationType.reply) {
-              print(notification);
-            }
-
-            return Container(
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Theme.of(context).dividerColor))),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (notification.user != null)
-                          SizedBox(
-                              width: 32,
-                              child: Image.network(
-                                  notification.user!.avatarUrl.toString())),
-                        if (notification.reaction != null) ...[
-                          const Padding(padding: EdgeInsets.only(top: 10)),
-                          SizedBox(
-                            width: 32,
-                            height: 32,
-                            child: CustomEmoji.fromEmojiName(
-                                notification.reaction!,
-                                ref.read(
-                                    emojiRepositoryProvider(widget.account))),
-                          ),
-                        ]
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (notification.type == NotificationType.reaction) ...[
-                          mfm_text.MfmText(
-                              mfmText:
-                                  "${notification.user?.name ?? notification.user?.username} <small>からリアクション</small>"),
-                          misskey_note.MisskeyNote(note: notification.note!),
-                        ],
-                        if (notification.type == NotificationType.renote) ...[
-                          mfm_text.MfmText(
-                            mfmText:
-                                "${notification.user?.name ?? notification.user?.username} <small>からRenote</small>",
-                          ),
-                          misskey_note.MisskeyNote(note: notification.note!)
-                        ],
-                        if (notification.type == NotificationType.reply) ...[
-                          mfm_text.MfmText(
-                            mfmText:
-                                "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
-                          ),
-                          misskey_note.MisskeyNote(note: notification.note!)
-                        ],
-                        if (notification.type ==
-                            NotificationType.pollEnded) ...[
-                          const Text("投票が終わりました。"),
-                          misskey_note.MisskeyNote(note: notification.note!)
-                        ]
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
+          itemBuilder: (context, notification) => NotificationItem(
+            notification: notification,
+          ),
         ),
       ),
     );
+  }
+}
+
+class NotificationItem extends ConsumerWidget {
+  final INotificationsResponse notification;
+
+  const NotificationItem({super.key, required this.notification});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (notification.type != NotificationType.reaction &&
+        notification.type != NotificationType.renote &&
+        notification.type != NotificationType.reply) {
+      print(notification);
+    }
+
+    return Container(
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: Theme.of(context).dividerColor))),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  if (notification.user != null)
+                    SizedBox(
+                        width: 32,
+                        child: Image.network(
+                            notification.user!.avatarUrl.toString())),
+                  if (notification.reaction != null) ...[
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: CustomEmoji.fromEmojiName(
+                          notification.reaction!,
+                          ref.read(emojiRepositoryProvider(
+                              AccountScope.of(context)))),
+                    ),
+                  ]
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (notification.type == NotificationType.reaction) ...[
+                    mfm_text.MfmText(
+                        mfmText:
+                            "${notification.user?.name ?? notification.user?.username} <small>からリアクション</small>"),
+                    misskey_note.MisskeyNote(note: notification.note!),
+                  ],
+                  if (notification.type == NotificationType.renote) ...[
+                    mfm_text.MfmText(
+                      mfmText:
+                          "${notification.user?.name ?? notification.user?.username} <small>からRenote</small>",
+                    ),
+                    misskey_note.MisskeyNote(note: notification.note!)
+                  ],
+                  if (notification.type == NotificationType.reply) ...[
+                    mfm_text.MfmText(
+                      mfmText:
+                          "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
+                    ),
+                    misskey_note.MisskeyNote(note: notification.note!)
+                  ],
+                  if (notification.type == NotificationType.pollEnded) ...[
+                    const Text("投票が終わりました。"),
+                    misskey_note.MisskeyNote(note: notification.note!)
+                  ]
+                ],
+              ),
+            )
+          ],
+        ));
   }
 }

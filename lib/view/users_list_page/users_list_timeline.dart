@@ -1,0 +1,40 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
+import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:misskey_dart/misskey_dart.dart';
+
+class UsersListTimeline extends ConsumerWidget {
+  final String listId;
+
+  const UsersListTimeline({super.key, required this.listId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = AccountScope.of(context);
+    return PushableListView(
+      initializeFuture: () async {
+        final response = await ref
+            .read(misskeyProvider(account))
+            .notes
+            .userListTimeline(UserListTimelineRequest(listId: listId));
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      nextFuture: (lastItem) async {
+        final response = await ref
+            .read(misskeyProvider(account))
+            .notes
+            .userListTimeline(
+                UserListTimelineRequest(listId: listId, untilId: lastItem.id));
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      itemBuilder: (context, item) {
+        return MisskeyNote(note: item);
+      },
+    );
+  }
+}

@@ -6,6 +6,7 @@ import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/clip_item.dart';
+import 'package:flutter_misskey_app/view/common/futable_list_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
@@ -25,28 +26,10 @@ class ClipListPageState extends ConsumerState<ClipListPage> {
           title: const Text("クリップ一覧"),
         ),
         body: AccountScope(
-          account: widget.account,
-          child: FutureBuilder(
+            account: widget.account,
+            child: FutureListView(
               future: ref.read(misskeyProvider(widget.account)).clips.list(),
-              builder: (context, snapshot) {
-                final list = snapshot.data?.toList();
-
-                if (list != null) {
-                  return ListView.builder(
-                      itemCount: list.length,
-                      itemBuilder: (context, index) {
-                        return ClipItem(clip: list[index]);
-                      });
-                }
-
-                if (snapshot.hasError) {
-                  print(snapshot.error);
-                  print(snapshot.stackTrace);
-                  return const Center(child: Text("えらー"));
-                }
-
-                return const Center(child: CircularProgressIndicator());
-              }),
-        ));
+              builder: (context, item) => ClipItem(clip: item),
+            )));
   }
 }

@@ -1,20 +1,29 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm/mfm.dart';
+import 'package:misskey_dart/misskey_dart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../view/common/account_scope.dart';
 
 class MfmToWidget extends ConsumerStatefulWidget {
   final String mfmText;
   final double emojiFontSizeRatio;
-  const MfmToWidget(this.mfmText,
-      {super.key, required this.emojiFontSizeRatio});
+  final String? host;
+  const MfmToWidget(
+    this.mfmText, {
+    super.key,
+    required this.host,
+    required this.emojiFontSizeRatio,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MfmToWidgetState();
@@ -32,10 +41,11 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
       actualNode = nodes!;
     }
 
-    return DefaultTextStyle.merge(
-      style: TextStyle(color: Color.fromARGB(255, 103, 103, 103)),
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.bodyMedium!,
       child: MfmWidgetScope(
         emojiFontSizeRatio: widget.emojiFontSizeRatio,
+        host: widget.host,
         child: MfmElementWidget(nodes: actualNode),
       ),
     );
@@ -44,21 +54,23 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
 
 class MfmWidgetScope extends InheritedWidget {
   final double emojiFontSizeRatio;
+  final String? host;
 
   const MfmWidgetScope({
     super.key,
     required this.emojiFontSizeRatio,
+    this.host,
     required super.child,
   });
 
-  static double of(BuildContext context) {
+  static MfmWidgetScope of(BuildContext context) {
     final mfmWidgetScope =
         context.dependOnInheritedWidgetOfExactType<MfmWidgetScope>();
     if (mfmWidgetScope == null) {
       throw Exception("has not ancestor");
     }
 
-    return mfmWidgetScope.emojiFontSizeRatio;
+    return mfmWidgetScope;
   }
 
   @override
@@ -66,109 +78,192 @@ class MfmWidgetScope extends InheritedWidget {
       emojiFontSizeRatio != oldWidget.emojiFontSizeRatio;
 }
 
-class MfmElementWidget extends ConsumerWidget {
+class MfmElementWidget extends ConsumerStatefulWidget {
   final List<MfmNode>? nodes;
 
   const MfmElementWidget({super.key, required this.nodes});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      MfmElementWidgetState();
+}
+
+class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
+  Future<void> onTapLink(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      return; //TODO: なおす
+    }
+    final account = AccountScope.of(context);
+
+    // 他サーバーや外部サイトは別アプリで起動する
+    if (uri.host != AccountScope.of(context).host) {
+      if (await canLaunchUrl(uri)) {
+        if (!await launchUrl(uri,
+            mode: LaunchMode.externalNonBrowserApplication)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+      }
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "clips") {
+      // クリップはクリップの画面で開く
+      context.pushRoute(
+          ClipDetailRoute(account: account, id: uri.pathSegments[1]));
+    } else if (uri.pathSegments.length == 1 &&
+        uri.pathSegments.first.startsWith("@")) {
+      await onTapUserName(uri.pathSegments.first);
+    } else {
+      // 自サーバーは内部ブラウザで起動する
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.inAppWebView);
+      }
+    }
+  }
+
+  Future<void> onTapUserName(String userName) async {
+    // 自分のインスタンスの誰か
+    // 本当は向こうで呼べばいいのでいらないのだけど
+    final regResult = RegExp(r'^@?(.+?)(@(.+?))?$').firstMatch(userName);
+
+    final contextHost = AccountScope.of(context).host;
+    final noteHost =
+        MfmWidgetScope.of(context).host ?? AccountScope.of(context).host;
+    final regResultHost = regResult?.group(3);
+    final String? finalHost;
+
+    if (regResultHost == null && noteHost == contextHost) {
+      // @なし
+      finalHost = null;
+    } else if (regResultHost == contextHost) {
+      // @自分ドメイン
+      finalHost = null;
+    } else if (regResultHost != null) {
+      finalHost = regResultHost;
+    } else {
+      finalHost = noteHost;
+    }
+
+    final response = await ref
+        .read(misskeyProvider(AccountScope.of(context)))
+        .users
+        .showByName(UsersShowByUserNameRequest(
+            userName: regResult?.group(1) ?? "", host: finalHost));
+
+    if (!mounted) return;
+    context.pushRoute(
+        UserRoute(userId: response.id, account: AccountScope.of(context)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return RichText(
+        textScaleFactor: MediaQuery.of(context).textScaleFactor,
         text: TextSpan(children: [
-      for (final node in nodes ?? [])
-        if (node is MfmText)
-          TextSpan(style: DefaultTextStyle.of(context).style, text: node.text)
-        else if (node is MfmCenter)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Center(child: MfmElementWidget(nodes: node.children)))
-        else if (node is MfmCodeBlock)
-          WidgetSpan(
-              child: Container(
-            decoration: const BoxDecoration(color: Colors.black87),
-            width: double.infinity,
-            child: Text(
-              node.code,
-              style: const TextStyle(color: Colors.white70),
-            ),
-          ))
-        else if (node is MfmEmojiCode)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: CustomEmoji.fromEmojiName(
-                ":${node.name}:",
-                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-                fontSizeRatio: MfmWidgetScope.of(context),
-              ))
-        else if (node is MfmBold)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: DefaultTextStyle.merge(
-                style: const TextStyle(fontWeight: FontWeight.w800),
-                child: MfmElementWidget(nodes: node.children),
-              ))
-        else if (node is MfmSmall)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: DefaultTextStyle.merge(
-                style: TextStyle(
-                  fontSize:
-                      DefaultTextStyle.of(context).style.fontSize ?? 22 * 0.8,
-                  color: Theme.of(context).disabledColor,
+          for (final node in widget.nodes ?? [])
+            if (node is MfmText)
+              TextSpan(
+                  style: DefaultTextStyle.of(context).style, text: node.text)
+            else if (node is MfmCenter)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Center(child: MfmElementWidget(nodes: node.children)))
+            else if (node is MfmCodeBlock)
+              WidgetSpan(
+                  child: Container(
+                decoration: const BoxDecoration(color: Colors.black87),
+                width: double.infinity,
+                child: Text(
+                  node.code,
+                  style: const TextStyle(color: Colors.white70),
                 ),
-                child: MfmElementWidget(nodes: node.children),
               ))
-        else if (node is MfmItalic)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: DefaultTextStyle.merge(
-                style: const TextStyle(fontStyle: FontStyle.italic),
-                child: MfmElementWidget(nodes: node.children),
-              ))
-        else if (node is MfmStrike)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: DefaultTextStyle.merge(
-                style: const TextStyle(decoration: TextDecoration.lineThrough),
-                child: MfmElementWidget(nodes: node.children),
-              ))
-        else if (node is MfmPlain)
-          TextSpan(style: DefaultTextStyle.of(context).style, text: node.text)
-        else if (node is MfmInlineCode)
-          TextSpan(
-              style: const TextStyle(
-                  backgroundColor: Colors.black87, color: Colors.white70),
-              text: node.code)
-        else if (node is MfmMention)
-          TextSpan(
-              style: const TextStyle(color: Colors.deepOrangeAccent),
-              text: node.acct,
-              recognizer: TapGestureRecognizer()..onTap = () {})
-        else if (node is MfmHashTag)
-          TextSpan(
-              style: const TextStyle(color: Colors.deepOrangeAccent),
-              text: "#${node.hashTag}",
-              recognizer: TapGestureRecognizer()..onTap = () {})
-        else if (node is MfmLink)
-          WidgetSpan(
-            child: DefaultTextStyle.merge(
-              style: const TextStyle(color: Colors.deepOrangeAccent),
-              child: GestureDetector(
-                  onTap: () {}, child: MfmElementWidget(nodes: node.children)),
-            ),
-          )
-        else if (node is MfmURL)
-          TextSpan(
-              style: const TextStyle(color: Colors.deepOrangeAccent),
-              text: node.value,
-              recognizer: TapGestureRecognizer()..onTap = () {})
-        else if (node is MfmFn)
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: MfmFnElementWidget(function: node))
-        else
-          WidgetSpan(child: MfmElementWidget(nodes: node.children))
-    ]));
+            else if (node is MfmEmojiCode)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: CustomEmoji.fromEmojiName(
+                    ":${node.name}:",
+                    ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+                    fontSizeRatio:
+                        MfmWidgetScope.of(context).emojiFontSizeRatio *
+                            MediaQuery.of(context).textScaleFactor,
+                  ))
+            else if (node is MfmBold)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: DefaultTextStyle.merge(
+                    style: const TextStyle(fontWeight: FontWeight.w800),
+                    child: MfmElementWidget(nodes: node.children),
+                  ))
+            else if (node is MfmSmall)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: DefaultTextStyle.merge(
+                    style: TextStyle(
+                      fontSize: DefaultTextStyle.of(context).style.fontSize ??
+                          22 * 0.8,
+                      color: Theme.of(context).disabledColor,
+                    ),
+                    child: MfmElementWidget(nodes: node.children),
+                  ))
+            else if (node is MfmItalic)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: DefaultTextStyle.merge(
+                    style: const TextStyle(fontStyle: FontStyle.italic),
+                    child: MfmElementWidget(nodes: node.children),
+                  ))
+            else if (node is MfmStrike)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: DefaultTextStyle.merge(
+                    style:
+                        const TextStyle(decoration: TextDecoration.lineThrough),
+                    child: MfmElementWidget(nodes: node.children),
+                  ))
+            else if (node is MfmPlain)
+              TextSpan(
+                  style: DefaultTextStyle.of(context).style, text: node.text)
+            else if (node is MfmInlineCode)
+              TextSpan(
+                  style: const TextStyle(
+                      backgroundColor: Colors.black87, color: Colors.white70),
+                  text: node.code)
+            else if (node is MfmMention)
+              WidgetSpan(
+                  child: DefaultTextStyle.merge(
+                      style: const TextStyle(color: Colors.deepOrangeAccent),
+                      child: GestureDetector(
+                          onTap: () => onTapLink(node.acct),
+                          child: Text(node.acct))))
+            else if (node is MfmHashTag)
+              WidgetSpan(
+                  child: DefaultTextStyle.merge(
+                      style: const TextStyle(color: Colors.deepOrangeAccent),
+                      child: GestureDetector(
+                          onTap: () => {}, child: Text(node.hashTag))))
+            else if (node is MfmLink)
+              WidgetSpan(
+                child: DefaultTextStyle.merge(
+                  style: const TextStyle(color: Colors.deepOrangeAccent),
+                  child: GestureDetector(
+                      onTap: () => onTapLink(node.url),
+                      child: MfmElementWidget(nodes: node.children)),
+                ),
+              )
+            else if (node is MfmURL)
+              WidgetSpan(
+                  child: DefaultTextStyle.merge(
+                      style: const TextStyle(color: Colors.deepOrangeAccent),
+                      child: GestureDetector(
+                          onTap: () => onTapLink(node.value),
+                          child: Text(node.value))))
+            else if (node is MfmFn)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: MfmFnElementWidget(function: node))
+            else
+              WidgetSpan(child: MfmElementWidget(nodes: node.children))
+        ]));
   }
 }
 
@@ -269,8 +364,8 @@ class MfmFnElementWidget extends StatelessWidget {
     }
 
     if (function.name == "scale") {
-      final x = double.tryParse(function.args["x"] ?? "");
-      final y = double.tryParse(function.args["y"] ?? "");
+      final x = double.tryParse(function.args["x"] ?? "") ?? 1.0;
+      final y = double.tryParse(function.args["y"] ?? "") ?? 1.0;
 
       // scale.x=0, scale.y=0は表示しない
       if (x == 0 || y == 0) {
@@ -289,6 +384,7 @@ class MfmFnElementWidget extends StatelessWidget {
       final y = double.tryParse(function.args["y"] ?? "") ?? 0;
       final double defaultFontSize =
           DefaultTextStyle.of(context).style.fontSize ?? 22;
+
       return Transform.translate(
         offset: Offset(x * defaultFontSize, y * defaultFontSize),
         child: MfmElementWidget(nodes: function.children),

@@ -60,14 +60,14 @@ class AccountRepository {
       String server, String userId, String password) async {
     final token =
         await MisskeyServer().loginAsPassword(server, userId, password);
-    final account = Account(server: server, token: token, userId: userId);
+    final account = Account(host: server, token: token, userId: userId);
     addAccount(account);
     await _addIfTabSettingNothing();
   }
 
   Future<void> loginAsToken(String server, String token) async {
     final me = await Misskey(token: token, host: server).i.i();
-    addAccount(Account(server: server, userId: me.username, token: token));
+    addAccount(Account(host: server, userId: me.username, token: token));
     await _addIfTabSettingNothing();
   }
 

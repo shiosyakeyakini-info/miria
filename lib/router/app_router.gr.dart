@@ -117,6 +117,48 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UsersListTimelineRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListTimelineRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListTimelinePage(
+          args.account,
+          args.listId,
+          key: args.key,
+        ),
+      );
+    },
+    UsersListRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListPage(
+          args.account,
+          key: args.key,
+        ),
+      );
+    },
+    ChannelsRoute.name: (routeData) {
+      final args = routeData.argsAs<ChannelsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ChannelsPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
+    ChannelDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<ChannelDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ChannelDetailPage(
+          key: args.key,
+          account: args.account,
+          channelId: args.channelId,
+        ),
+      );
+    },
   };
 }
 
@@ -472,5 +514,167 @@ class NoteCreateRouteArgs {
   @override
   String toString() {
     return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount}';
+  }
+}
+
+/// generated route for
+/// [UsersListTimelinePage]
+class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
+  UsersListTimelineRoute({
+    required Account account,
+    required String listId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListTimelineRoute.name,
+          args: UsersListTimelineRouteArgs(
+            account: account,
+            listId: listId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListTimelineRoute';
+
+  static const PageInfo<UsersListTimelineRouteArgs> page =
+      PageInfo<UsersListTimelineRouteArgs>(name);
+}
+
+class UsersListTimelineRouteArgs {
+  const UsersListTimelineRouteArgs({
+    required this.account,
+    required this.listId,
+    this.key,
+  });
+
+  final Account account;
+
+  final String listId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UsersListTimelineRouteArgs{account: $account, listId: $listId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UsersListPage]
+class UsersListRoute extends PageRouteInfo<UsersListRouteArgs> {
+  UsersListRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListRoute.name,
+          args: UsersListRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListRoute';
+
+  static const PageInfo<UsersListRouteArgs> page =
+      PageInfo<UsersListRouteArgs>(name);
+}
+
+class UsersListRouteArgs {
+  const UsersListRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UsersListRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ChannelsPage]
+class ChannelsRoute extends PageRouteInfo<ChannelsRouteArgs> {
+  ChannelsRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChannelsRoute.name,
+          args: ChannelsRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChannelsRoute';
+
+  static const PageInfo<ChannelsRouteArgs> page =
+      PageInfo<ChannelsRouteArgs>(name);
+}
+
+class ChannelsRouteArgs {
+  const ChannelsRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ChannelsRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [ChannelDetailPage]
+class ChannelDetailRoute extends PageRouteInfo<ChannelDetailRouteArgs> {
+  ChannelDetailRoute({
+    Key? key,
+    required Account account,
+    required String channelId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChannelDetailRoute.name,
+          args: ChannelDetailRouteArgs(
+            key: key,
+            account: account,
+            channelId: channelId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChannelDetailRoute';
+
+  static const PageInfo<ChannelDetailRouteArgs> page =
+      PageInfo<ChannelDetailRouteArgs>(name);
+}
+
+class ChannelDetailRouteArgs {
+  const ChannelDetailRouteArgs({
+    this.key,
+    required this.account,
+    required this.channelId,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final String channelId;
+
+  @override
+  String toString() {
+    return 'ChannelDetailRouteArgs{key: $key, account: $account, channelId: $channelId}';
   }
 }
