@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
-import 'package:flutter_misskey_app/view/common/misskey_note.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
 import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';

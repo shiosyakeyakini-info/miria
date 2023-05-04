@@ -106,6 +106,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    NoteCreateRoute.name: (routeData) {
+      final args = routeData.argsAs<NoteCreateRouteArgs>(
+          orElse: () => const NoteCreateRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: NoteCreatePage(
+          key: args.key,
+          initialAccount: args.initialAccount,
+        ),
+      );
+    },
   };
 }
 
@@ -423,5 +434,43 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [NoteCreatePage]
+class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
+  NoteCreateRoute({
+    Key? key,
+    Account? initialAccount,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NoteCreateRoute.name,
+          args: NoteCreateRouteArgs(
+            key: key,
+            initialAccount: initialAccount,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NoteCreateRoute';
+
+  static const PageInfo<NoteCreateRouteArgs> page =
+      PageInfo<NoteCreateRouteArgs>(name);
+}
+
+class NoteCreateRouteArgs {
+  const NoteCreateRouteArgs({
+    this.key,
+    this.initialAccount,
+  });
+
+  final Key? key;
+
+  final Account? initialAccount;
+
+  @override
+  String toString() {
+    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount}';
   }
 }

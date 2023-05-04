@@ -5,6 +5,7 @@ import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/view/clip_list_page/clip_detail_page.dart';
 import 'package:flutter_misskey_app/view/clip_list_page/clip_list_page.dart';
 import 'package:flutter_misskey_app/view/favorited_note_page/favorited_note_page.dart';
+import 'package:flutter_misskey_app/view/note_create_page/note_create_page.dart';
 import 'package:flutter_misskey_app/view/notification_page/notification_page.dart';
 import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/tab_settings_list_page.dart';
 import 'package:flutter_misskey_app/view/time_line_page/time_line_page.dart';
@@ -30,5 +31,6 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: SettingsRoute.page),
     AutoRoute(page: TabSettingsListRoute.page),
     AutoRoute(page: TabSettingsRoute.page),
+    AutoRoute(page: NoteCreateRoute.page),
   ];
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/misskey_note.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
 import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';

@@ -39,6 +39,7 @@ class MisskeyFileView extends StatelessWidget {
               child: MisskeyImage(
                 isSensitive: targetFile.isSensitive,
                 url: targetFile.url.toString(),
+                //mimeType: targetFile.type,
                 thumbnailUrl:
                     (targetFile.thumbnailUrl ?? targetFile.url).toString(),
               ),
@@ -53,12 +54,14 @@ class MisskeyImage extends StatefulWidget {
   final bool isSensitive;
   final String thumbnailUrl;
   final String url;
+  //final String mimeType;
 
   const MisskeyImage({
     super.key,
     required this.isSensitive,
     required this.thumbnailUrl,
     required this.url,
+    //required this.mimeType,
   });
 
   @override

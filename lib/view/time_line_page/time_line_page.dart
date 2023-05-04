@@ -7,7 +7,7 @@ import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/channel_dialog.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_misskey_app/view/common/notification_icon.dart';
 import 'package:flutter_misskey_app/view/time_line_page/misskey_time_line.dart';
 import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
@@ -251,7 +251,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       onPressed: () {
                         FocusManager.instance.primaryFocus?.unfocus();
                       },
-                      icon: const Icon(Icons.keyboard_arrow_down))
+                      icon: const Icon(Icons.keyboard_arrow_down)),
+                IconButton(
+                  onPressed: () => context.pushRoute(NoteCreateRoute()),
+                  icon: const Icon(Icons.keyboard_arrow_right),
+                )
               ],
             ),
           ],

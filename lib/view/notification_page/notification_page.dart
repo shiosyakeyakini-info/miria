@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/custom_emoji.dart';
-import 'package:flutter_misskey_app/view/common/mfm_text.dart' as mfm_text;
-import 'package:flutter_misskey_app/view/common/misskey_note.dart'
+import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart'
+    as mfm_text;
+import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
 import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
-import 'package:flutter_misskey_app/view/common/mfm_text.dart';
-import 'package:flutter_misskey_app/view/common/misskey_note.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserDetail extends StatelessWidget {
