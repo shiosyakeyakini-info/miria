@@ -14,7 +14,7 @@ class UsersListTimeline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
-    return PushableListView(
+    return PushableListView<Note>(
       initializeFuture: () async {
         final response = await ref
             .read(misskeyProvider(account))

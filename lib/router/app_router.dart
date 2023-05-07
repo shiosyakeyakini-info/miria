@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/model/tab_setting.dart';
+import 'package:flutter_misskey_app/view/antenna_page/antenna_page.dart';
 import 'package:flutter_misskey_app/view/channels_page/channels_page.dart';
 import 'package:flutter_misskey_app/view/clip_list_page/clip_detail_page.dart';
 import 'package:flutter_misskey_app/view/clip_list_page/clip_list_page.dart';
@@ -14,7 +15,9 @@ import 'package:flutter_misskey_app/view/user_page/user_page.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_page.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_timeline.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_timeline_page.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 
+import '../view/antenna_page/antenna_notes_page.dart';
 import '../view/channels_page/channel_detail_page.dart';
 import '../view/login_page/login_page.dart';
 import '../view/settings_page/settings_page.dart';
@@ -26,6 +29,8 @@ part 'app_router.gr.dart';
 class AppRouter extends _$AppRouter {
   @override
   final List<AutoRoute> routes = [
+    AutoRoute(page: AntennaRoute.page),
+    AutoRoute(page: AntennaNotesRoute.page),
     AutoRoute(page: TimeLineRoute.page),
     AutoRoute(page: UserRoute.page),
     AutoRoute(page: NotificationRoute.page),

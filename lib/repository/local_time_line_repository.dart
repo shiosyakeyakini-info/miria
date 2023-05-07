@@ -10,6 +10,7 @@ class LocalTimeLineRepository extends TimeLineRepository {
     this.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
+    super.tabSetting,
   );
 
   @override

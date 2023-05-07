@@ -26,6 +26,7 @@ final localTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              tabSetting,
             ));
 final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimeLineRepository, TabSetting>(
@@ -33,6 +34,7 @@ final homeTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              tabSetting,
             ));
 final globalTimeLineProvider =
     ChangeNotifierProvider.family<TimeLineRepository, TabSetting>(
@@ -40,6 +42,7 @@ final globalTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              tabSetting,
             ));
 final channelTimelineProvider =
     ChangeNotifierProvider.family<ChannelTimelineRepository, TabSetting>(
@@ -47,7 +50,7 @@ final channelTimelineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              tabSetting.channelId!,
+              tabSetting,
             ));
 final mainStreamRepositoryProvider =
     ChangeNotifierProvider.family<MainStreamRepository, Account>(

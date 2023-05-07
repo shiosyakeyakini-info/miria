@@ -12,6 +12,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
     this.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
+    super.tabSetting,
   );
 
   void reloadLatestNotes() {
@@ -24,7 +25,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
           var isInserted = false;
           //TODO: もうちょっとイケてる感じに
           for (int i = notes.length - 1; i >= 0; i--) {
-            if (notes[i].createdAt < note.createdAt) {
+            if (notes[i].createdAt > note.createdAt) {
               notes.insert(i, note);
               isInserted = true;
               break;

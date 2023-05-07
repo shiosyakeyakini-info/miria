@@ -7,7 +7,13 @@ import 'network_image.dart';
 class MisskeyFileView extends StatelessWidget {
   final List<MisskeyFile> files;
 
-  const MisskeyFileView({super.key, required this.files});
+  final double height;
+
+  const MisskeyFileView({
+    super.key,
+    required this.files,
+    this.height = 200,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,7 @@ class MisskeyFileView extends StatelessWidget {
       final targetFile = targetFiles.first;
       return Center(
         child: ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 200),
+            constraints: BoxConstraints(maxHeight: height),
             child: MisskeyImage(
               isSensitive: targetFile.isSensitive,
               url: targetFile.url.toString(),
@@ -35,7 +41,7 @@ class MisskeyFileView extends StatelessWidget {
         children: [
           for (final targetFile in targetFiles)
             SizedBox(
-              height: 200,
+              height: height,
               child: MisskeyImage(
                 isSensitive: targetFile.isSensitive,
                 url: targetFile.url.toString(),

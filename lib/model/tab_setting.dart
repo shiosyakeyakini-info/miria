@@ -22,6 +22,7 @@ class TabSetting with _$TabSetting {
     String? channelId,
     required String name,
     required Account account,
+    @Default(true) bool renoteDisplay,
   }) = _TabSetting;
 
   factory TabSetting.fromJson(Map<String, Object?> json) =>

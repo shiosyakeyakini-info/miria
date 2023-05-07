@@ -12,8 +12,12 @@ class NoteRepository extends ChangeNotifier {
   void _registerNote(Note note) {
     _notes[note.id] = note;
     final renote = note.renote;
+    final reply = note.reply;
     if (renote != null) {
-      _notes[renote.id] = renote;
+      _registerNote(renote);
+    }
+    if (reply != null) {
+      _registerNote(reply);
     }
   }
 

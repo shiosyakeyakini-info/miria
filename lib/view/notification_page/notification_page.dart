@@ -1,8 +1,10 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart'
@@ -10,6 +12,7 @@ import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart'
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
 import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
+import 'package:flutter_misskey_app/view/user_page/user_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -93,10 +96,15 @@ class NotificationItem extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (notification.user != null)
-                    SizedBox(
-                        width: 32,
-                        child: Image.network(
-                            notification.user!.avatarUrl.toString())),
+                    GestureDetector(
+                      onTap: () => context.pushRoute(UserRoute(
+                          userId: notification.user!.id,
+                          account: AccountScope.of(context))),
+                      child: SizedBox(
+                          width: 32,
+                          child: Image.network(
+                              notification.user!.avatarUrl.toString())),
+                    ),
                   if (notification.reaction != null) ...[
                     const Padding(padding: EdgeInsets.only(top: 10)),
                     SizedBox(
@@ -121,25 +129,54 @@ class NotificationItem extends ConsumerWidget {
                     mfm_text.MfmText(
                         mfmText:
                             "${notification.user?.name ?? notification.user?.username} <small>からリアクション</small>"),
-                    misskey_note.MisskeyNote(note: notification.note!),
+                    MediaQuery(
+                        data: MediaQueryData(
+                            textScaleFactor:
+                                MediaQuery.of(context).textScaleFactor * 0.7),
+                        child: misskey_note.MisskeyNote(
+                          note: notification.note!,
+                          isDisplayBorder: false,
+                        )),
                   ],
                   if (notification.type == NotificationType.renote) ...[
                     mfm_text.MfmText(
                       mfmText:
                           "${notification.user?.name ?? notification.user?.username} <small>からRenote</small>",
                     ),
-                    misskey_note.MisskeyNote(note: notification.note!)
+                    MediaQuery(
+                      data: MediaQueryData(
+                          textScaleFactor:
+                              MediaQuery.of(context).textScaleFactor * 0.7),
+                      child: misskey_note.MisskeyNote(
+                        note: notification.note!,
+                        isDisplayBorder: false,
+                      ),
+                    )
                   ],
                   if (notification.type == NotificationType.reply) ...[
                     mfm_text.MfmText(
                       mfmText:
                           "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
                     ),
-                    misskey_note.MisskeyNote(note: notification.note!)
+                    MediaQuery(
+                        data: MediaQueryData(
+                            textScaleFactor:
+                                MediaQuery.of(context).textScaleFactor * 0.7),
+                        child: misskey_note.MisskeyNote(
+                          note: notification.note!,
+                          isDisplayBorder: false,
+                        ))
                   ],
                   if (notification.type == NotificationType.pollEnded) ...[
                     const Text("投票が終わりました。"),
-                    misskey_note.MisskeyNote(note: notification.note!)
+                    MediaQuery(
+                        data: MediaQueryData(
+                            textScaleFactor:
+                                MediaQuery.of(context).textScaleFactor * 0.7),
+                        child: misskey_note.MisskeyNote(
+                          note: notification.note!,
+                          isDisplayBorder: false,
+                        ))
                   ]
                 ],
               ),

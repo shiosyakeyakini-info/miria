@@ -26,6 +26,7 @@ mixin _$TabSetting {
   String? get channelId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   Account get account => throw _privateConstructorUsedError;
+  bool get renoteDisplay => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,7 +45,8 @@ abstract class $TabSettingCopyWith<$Res> {
       TabType tabType,
       String? channelId,
       String name,
-      Account account});
+      Account account,
+      bool renoteDisplay});
 
   $AccountCopyWith<$Res> get account;
 }
@@ -67,6 +69,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? channelId = freezed,
     Object? name = null,
     Object? account = null,
+    Object? renoteDisplay = null,
   }) {
     return _then(_value.copyWith(
       icon: null == icon
@@ -89,6 +92,10 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.account
           : account // ignore: cast_nullable_to_non_nullable
               as Account,
+      renoteDisplay: null == renoteDisplay
+          ? _value.renoteDisplay
+          : renoteDisplay // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -114,7 +121,8 @@ abstract class _$$_TabSettingCopyWith<$Res>
       TabType tabType,
       String? channelId,
       String name,
-      Account account});
+      Account account,
+      bool renoteDisplay});
 
   @override
   $AccountCopyWith<$Res> get account;
@@ -136,6 +144,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
     Object? channelId = freezed,
     Object? name = null,
     Object? account = null,
+    Object? renoteDisplay = null,
   }) {
     return _then(_$_TabSetting(
       icon: null == icon
@@ -158,6 +167,10 @@ class __$$_TabSettingCopyWithImpl<$Res>
           ? _value.account
           : account // ignore: cast_nullable_to_non_nullable
               as Account,
+      renoteDisplay: null == renoteDisplay
+          ? _value.renoteDisplay
+          : renoteDisplay // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -170,7 +183,8 @@ class _$_TabSetting extends _TabSetting {
       required this.tabType,
       this.channelId,
       required this.name,
-      required this.account})
+      required this.account,
+      this.renoteDisplay = true})
       : super._();
 
   factory _$_TabSetting.fromJson(Map<String, dynamic> json) =>
@@ -187,10 +201,13 @@ class _$_TabSetting extends _TabSetting {
   final String name;
   @override
   final Account account;
+  @override
+  @JsonKey()
+  final bool renoteDisplay;
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, name: $name, account: $account)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -203,13 +220,15 @@ class _$_TabSetting extends _TabSetting {
             (identical(other.channelId, channelId) ||
                 other.channelId == channelId) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.account, account) || other.account == account));
+            (identical(other.account, account) || other.account == account) &&
+            (identical(other.renoteDisplay, renoteDisplay) ||
+                other.renoteDisplay == renoteDisplay));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, icon, tabType, channelId, name, account);
+  int get hashCode => Object.hash(
+      runtimeType, icon, tabType, channelId, name, account, renoteDisplay);
 
   @JsonKey(ignore: true)
   @override
@@ -231,7 +250,8 @@ abstract class _TabSetting extends TabSetting {
       required final TabType tabType,
       final String? channelId,
       required final String name,
-      required final Account account}) = _$_TabSetting;
+      required final Account account,
+      final bool renoteDisplay}) = _$_TabSetting;
   const _TabSetting._() : super._();
 
   factory _TabSetting.fromJson(Map<String, dynamic> json) =
@@ -248,6 +268,8 @@ abstract class _TabSetting extends TabSetting {
   String get name;
   @override
   Account get account;
+  @override
+  bool get renoteDisplay;
   @override
   @JsonKey(ignore: true)
   _$$_TabSettingCopyWith<_$_TabSetting> get copyWith =>

@@ -26,6 +26,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   CommunityChannel? selectedChannel;
   TextEditingController nameController = TextEditingController();
   IconData? selectedIcon;
+  bool renoteDisplay = true;
 
   @override
   void didChangeDependencies() {
@@ -40,6 +41,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       final channelId = tabSetting.channelId;
       nameController.text = tabSetting.name;
       selectedIcon = tabSetting.icon;
+      renoteDisplay = tabSetting.renoteDisplay;
       if (channelId != null) {
         Future(() async {
           selectedChannel = await ref
@@ -161,6 +163,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       icon: const Icon(Icons.navigate_next))
                 ],
               ),
+              CheckboxListTile(
+                title: const Text("リノートを表示する"),
+                value: renoteDisplay,
+                onChanged: (value) =>
+                    setState(() => renoteDisplay = !renoteDisplay),
+              ),
               ElevatedButton(
                 onPressed: () async {
                   final account = selectedAccount;
@@ -187,12 +195,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       .tabSettings
                       .toList();
                   final newTabSetting = TabSetting(
-                    icon: icon,
-                    tabType: tabType,
-                    name: nameController.text,
-                    account: account,
-                    channelId: selectedChannel?.id,
-                  );
+                      icon: icon,
+                      tabType: tabType,
+                      name: nameController.text,
+                      account: account,
+                      channelId: selectedChannel?.id,
+                      renoteDisplay: renoteDisplay);
                   if (widget.tabIndex == null) {
                     await ref
                         .read(tabSettingsRepositoryProvider)

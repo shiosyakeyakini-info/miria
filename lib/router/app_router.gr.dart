@@ -159,6 +159,27 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    AntennaRoute.name: (routeData) {
+      final args = routeData.argsAs<AntennaRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AntennaPage(
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+    AntennaNotesRoute.name: (routeData) {
+      final args = routeData.argsAs<AntennaNotesRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AntennaNotesPage(
+          key: args.key,
+          antenna: args.antenna,
+          account: args.account,
+        ),
+      );
+    },
   };
 }
 
@@ -676,5 +697,86 @@ class ChannelDetailRouteArgs {
   @override
   String toString() {
     return 'ChannelDetailRouteArgs{key: $key, account: $account, channelId: $channelId}';
+  }
+}
+
+/// generated route for
+/// [AntennaPage]
+class AntennaRoute extends PageRouteInfo<AntennaRouteArgs> {
+  AntennaRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AntennaRoute.name,
+          args: AntennaRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AntennaRoute';
+
+  static const PageInfo<AntennaRouteArgs> page =
+      PageInfo<AntennaRouteArgs>(name);
+}
+
+class AntennaRouteArgs {
+  const AntennaRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AntennaRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [AntennaNotesPage]
+class AntennaNotesRoute extends PageRouteInfo<AntennaNotesRouteArgs> {
+  AntennaNotesRoute({
+    Key? key,
+    required Antenna antenna,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AntennaNotesRoute.name,
+          args: AntennaNotesRouteArgs(
+            key: key,
+            antenna: antenna,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AntennaNotesRoute';
+
+  static const PageInfo<AntennaNotesRouteArgs> page =
+      PageInfo<AntennaNotesRouteArgs>(name);
+}
+
+class AntennaNotesRouteArgs {
+  const AntennaNotesRouteArgs({
+    this.key,
+    required this.antenna,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Antenna antenna;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'AntennaNotesRouteArgs{key: $key, antenna: $antenna, account: $account}';
   }
 }

@@ -38,7 +38,11 @@ class CommonDrawer extends ConsumerWidget {
                 onTap: () =>
                     context.pushRoute(UsersListRoute(account: account)),
               ),
-              const ListTile(title: Text("アンテナ")),
+              ListTile(
+                leading: const Icon(Icons.settings_input_antenna),
+                title: Text("アンテナ"),
+                onTap: () => context.pushRoute(AntennaRoute(account: account)),
+              ),
               ListTile(
                 leading: const Icon(Icons.attach_file),
                 title: const Text("クリップ"),

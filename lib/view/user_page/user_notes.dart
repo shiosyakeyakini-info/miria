@@ -33,15 +33,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
 
   @override
   Widget build(BuildContext context) {
-    return PushableListView(initializeFuture: () async {
+    return PushableListView<Note>(initializeFuture: () async {
       final notes =
           await misskey.users.notes(UsersNotesRequest(userId: widget.userId));
       if (!mounted) return [];
       ref.read(notesProvider(AccountScope.of(context))).registerAll(notes);
       return notes.toList();
     }, nextFuture: (lastElement) async {
-      final notes = await misskey.users.notes(UsersNotesRequest(
-          userId: widget.userId, untilId: lastElement.listId));
+      final notes = await misskey.users.notes(
+          UsersNotesRequest(userId: widget.userId, untilId: lastElement.id));
       if (!mounted) return [];
       ref.read(notesProvider(AccountScope.of(context))).registerAll(notes);
       return notes.toList();

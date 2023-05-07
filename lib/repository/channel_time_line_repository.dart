@@ -1,4 +1,5 @@
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
+import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/repository/note_repository.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -7,18 +8,18 @@ class ChannelTimelineRepository extends TimeLineRepository {
   SocketController? socketController;
 
   final Misskey misskey;
-  final String channelId;
 
   ChannelTimelineRepository(
     this.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
-    this.channelId,
+    super.tabSetting,
   );
 
   void reloadLatestNotes() {
     misskey.channels
-        .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30))
+        .timeline(ChannelsTimelineRequest(
+            channelId: tabSetting.channelId!, limit: 30))
         .then((resultNotes) {
       for (final note in resultNotes.toList().reversed) {
         final foundNote = notes.indexWhere((element) => element.id == note.id);
@@ -26,7 +27,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
           var isInserted = false;
           //TODO: もうちょっとイケてる感じに
           for (int i = notes.length - 1; i >= 0; i--) {
-            if (notes[i].createdAt < note.createdAt) {
+            if (notes[i].createdAt > note.createdAt) {
               notes.insert(i, note);
               isInserted = true;
               break;
@@ -47,7 +48,8 @@ class ChannelTimelineRepository extends TimeLineRepository {
   void startTimeLine() {
     if (notes.isEmpty) {
       misskey.channels
-          .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30))
+          .timeline(ChannelsTimelineRequest(
+              channelId: tabSetting.channelId!, limit: 30))
           .then((resultNotes) {
         for (final note in resultNotes.toList().reversed) {
           notes.addLast(note);
@@ -61,7 +63,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
       reloadLatestNotes();
     }
 
-    socketController = misskey.channelStream(channelId, (note) {
+    socketController = misskey.channelStream(tabSetting.channelId!, (note) {
       notes.add(note);
 
       notifyListeners();
@@ -88,7 +90,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
     }
     final resultNotes = await misskey.channels.timeline(
       ChannelsTimelineRequest(
-        channelId: channelId,
+        channelId: tabSetting.channelId!,
         limit: 30,
         untilId: notes.first.id,
       ),

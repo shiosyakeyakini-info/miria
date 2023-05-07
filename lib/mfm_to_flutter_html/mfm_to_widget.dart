@@ -158,6 +158,7 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
   Widget build(BuildContext context) {
     return RichText(
         textScaleFactor: MediaQuery.of(context).textScaleFactor,
+        textAlign: MfmAlignScope.of(context),
         text: TextSpan(children: [
           for (final node in widget.nodes ?? [])
             if (node is MfmText)
@@ -166,7 +167,12 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
             else if (node is MfmCenter)
               WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
-                  child: Center(child: MfmElementWidget(nodes: node.children)))
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: MfmAlignScope(
+                        align: TextAlign.center,
+                        child: MfmElementWidget(nodes: node.children)),
+                  ))
             else if (node is MfmCodeBlock)
               WidgetSpan(
                   child: Container(
@@ -199,8 +205,9 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                   alignment: PlaceholderAlignment.middle,
                   child: DefaultTextStyle.merge(
                     style: TextStyle(
-                      fontSize: DefaultTextStyle.of(context).style.fontSize ??
-                          22 * 0.8,
+                      fontSize:
+                          (DefaultTextStyle.of(context).style.fontSize ?? 22) *
+                              0.8,
                       color: Theme.of(context).disabledColor,
                     ),
                     child: MfmElementWidget(nodes: node.children),
@@ -229,34 +236,36 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                       backgroundColor: Colors.black87, color: Colors.white70),
                   text: node.code)
             else if (node is MfmMention)
-              WidgetSpan(
-                  child: DefaultTextStyle.merge(
-                      style: const TextStyle(color: Colors.deepOrangeAccent),
-                      child: GestureDetector(
-                          onTap: () => onTapLink(node.acct),
-                          child: Text(node.acct))))
+              TextSpan(
+                  style: DefaultTextStyle.of(context)
+                      .style
+                      .merge(const TextStyle(color: Colors.deepOrangeAccent)),
+                  text: node.acct,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => onTapUserName(node.acct))
             else if (node is MfmHashTag)
-              WidgetSpan(
-                  child: DefaultTextStyle.merge(
-                      style: const TextStyle(color: Colors.deepOrangeAccent),
-                      child: GestureDetector(
-                          onTap: () => {}, child: Text(node.hashTag))))
+              TextSpan(
+                  style: DefaultTextStyle.of(context)
+                      .style
+                      .merge(const TextStyle(color: Colors.deepOrangeAccent)),
+                  text: "#${node.hashTag}",
+                  recognizer: TapGestureRecognizer()..onTap = () {})
             else if (node is MfmLink)
               WidgetSpan(
-                child: DefaultTextStyle.merge(
-                  style: const TextStyle(color: Colors.deepOrangeAccent),
-                  child: GestureDetector(
-                      onTap: () => onTapLink(node.url),
-                      child: MfmElementWidget(nodes: node.children)),
-                ),
-              )
-            else if (node is MfmURL)
-              WidgetSpan(
                   child: DefaultTextStyle.merge(
-                      style: const TextStyle(color: Colors.deepOrangeAccent),
-                      child: GestureDetector(
-                          onTap: () => onTapLink(node.value),
-                          child: Text(node.value))))
+                style: const TextStyle(color: Colors.deepOrangeAccent),
+                child: GestureDetector(
+                    onTap: () => onTapLink(node.url),
+                    child: MfmElementWidget(nodes: node.children)),
+              ))
+            else if (node is MfmURL)
+              TextSpan(
+                  style: DefaultTextStyle.of(context)
+                      .style
+                      .merge(const TextStyle(color: Colors.deepOrangeAccent)),
+                  text: node.value,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => onTapLink(node.value))
             else if (node is MfmFn)
               WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
@@ -333,13 +342,6 @@ class MfmFnElementWidget extends StatelessWidget {
         decoration: BoxDecoration(color: _toColor(function.args["color"])),
         child: MfmElementWidget(nodes: function.children),
       );
-      // return DefaultTextStyle.merge(
-      //     style: TextStyle(
-      //       background: Paint()
-      //         ..style = PaintingStyle.fill
-      //         ..color = _toColor(function.args["color"]) ?? Colors.transparent,
-      //     ),
-      //     child: MfmElementWidget(nodes: function.children));
     }
 
     if (function.name == "font") {
@@ -383,7 +385,8 @@ class MfmFnElementWidget extends StatelessWidget {
       final x = double.tryParse(function.args["x"] ?? "") ?? 0;
       final y = double.tryParse(function.args["y"] ?? "") ?? 0;
       final double defaultFontSize =
-          DefaultTextStyle.of(context).style.fontSize ?? 22;
+          (DefaultTextStyle.of(context).style.fontSize ?? 22) *
+              MediaQuery.of(context).textScaleFactor;
 
       return Transform.translate(
         offset: Offset(x * defaultFontSize, y * defaultFontSize),
@@ -401,6 +404,33 @@ class MfmFnElementWidget extends StatelessWidget {
 
     if (function.name == "blur") {
       return MfmFnBlur(child: MfmElementWidget(nodes: function.children));
+    }
+
+    if (function.name == "flip") {
+      final isVertical = function.args.containsKey("v");
+      final isHorizontal = function.args.containsKey("h");
+
+      if ((!isVertical && !isHorizontal) || (isHorizontal && !isVertical)) {
+        return Transform(
+          transform: Matrix4.rotationY(pi),
+          alignment: Alignment.center,
+          child: MfmElementWidget(nodes: function.children),
+        );
+      }
+
+      if (isVertical && !isHorizontal) {
+        return Transform(
+          transform: Matrix4.rotationX(pi),
+          alignment: Alignment.center,
+          child: MfmElementWidget(nodes: function.children),
+        );
+      }
+
+      return Transform(
+        transform: Matrix4.rotationZ(pi),
+        alignment: Alignment.center,
+        child: MfmElementWidget(nodes: function.children),
+      );
     }
 
     print("ignored function: ${function.name}");
@@ -433,4 +463,28 @@ class MfmFnBlurState extends State<MfmFnBlur> {
       ),
     );
   }
+}
+
+class MfmAlignScope extends InheritedWidget {
+  final TextAlign align;
+
+  const MfmAlignScope({
+    super.key,
+    required super.child,
+    required this.align,
+  });
+
+  static TextAlign of(BuildContext context) {
+    final mfmWidgetScope =
+        context.dependOnInheritedWidgetOfExactType<MfmAlignScope>();
+    if (mfmWidgetScope == null) {
+      return TextAlign.start;
+    }
+
+    return mfmWidgetScope.align;
+  }
+
+  @override
+  bool updateShouldNotify(covariant MfmAlignScope oldWidget) =>
+      oldWidget.align != align;
 }

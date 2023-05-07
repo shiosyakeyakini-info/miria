@@ -115,7 +115,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return MfmToWidget(widget.user.name ?? widget.user.username,
+    return MfmToWidget("**${widget.user.name ?? widget.user.username}**",
         host: AccountScope.of(context).host, emojiFontSizeRatio: 1.0);
   }
 }

@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 extension DateTimeExtension on DateTime {
   Duration operator -(DateTime other) => difference(other);
   operator <(DateTime other) => compareTo(other) < 0;
+  operator <=(DateTime other) => compareTo(other) <= 0;
+  operator >(DateTime other) => compareTo(other) > 0;
+  operator >=(DateTime other) => compareTo(other) >= 0;
 
   String get format => DateFormat("yyyy 年 M 月 d 日").format(this);
 
