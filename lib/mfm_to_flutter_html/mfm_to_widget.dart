@@ -250,7 +250,12 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                       .style
                       .merge(const TextStyle(color: Colors.deepOrangeAccent)),
                   text: "#${node.hashTag}",
-                  recognizer: TapGestureRecognizer()..onTap = () {})
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      context.pushRoute(HashtagRoute(
+                          account: AccountScope.of(context),
+                          hashtag: node.hashTag));
+                    })
             else if (node is MfmLink)
               WidgetSpan(
                   child: DefaultTextStyle.merge(
@@ -328,7 +333,7 @@ class MfmFnElementWidget extends StatelessWidget {
       return DefaultTextStyle.merge(
           style: TextStyle(
               fontSize:
-                  (DefaultTextStyle.of(context).style.fontSize ?? 22) * 3),
+                  (DefaultTextStyle.of(context).style.fontSize ?? 22) * 4),
           child: MfmElementWidget(nodes: function.children));
     }
 

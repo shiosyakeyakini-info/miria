@@ -53,6 +53,12 @@ class CommonDrawer extends ConsumerWidget {
                   title: const Text("チャンネル"),
                   onTap: () =>
                       context.pushRoute(ChannelsRoute(account: account))),
+              ListTile(
+                leading: const Icon(Icons.search),
+                title: const Text("検索"),
+                onTap: () =>
+                    context.pushRoute(NoteSearchRoute(account: account)),
+              )
             ],
             ListTile(
                 leading: const Icon(Icons.settings),

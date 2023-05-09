@@ -202,6 +202,28 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    NoteSearchRoute.name: (routeData) {
+      final args = routeData.argsAs<NoteSearchRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: NoteSearchPage(
+          key: args.key,
+          initialSearchText: args.initialSearchText,
+          account: args.account,
+        ),
+      );
+    },
+    HashtagRoute.name: (routeData) {
+      final args = routeData.argsAs<HashtagRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: HashtagPage(
+          key: args.key,
+          hashtag: args.hashtag,
+          account: args.account,
+        ),
+      );
+    },
   };
 }
 
@@ -886,5 +908,91 @@ class UserFolloweeRouteArgs {
   @override
   String toString() {
     return 'UserFolloweeRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [NoteSearchPage]
+class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
+  NoteSearchRoute({
+    Key? key,
+    String? initialSearchText,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NoteSearchRoute.name,
+          args: NoteSearchRouteArgs(
+            key: key,
+            initialSearchText: initialSearchText,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NoteSearchRoute';
+
+  static const PageInfo<NoteSearchRouteArgs> page =
+      PageInfo<NoteSearchRouteArgs>(name);
+}
+
+class NoteSearchRouteArgs {
+  const NoteSearchRouteArgs({
+    this.key,
+    this.initialSearchText,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final String? initialSearchText;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'NoteSearchRouteArgs{key: $key, initialSearchText: $initialSearchText, account: $account}';
+  }
+}
+
+/// generated route for
+/// [HashtagPage]
+class HashtagRoute extends PageRouteInfo<HashtagRouteArgs> {
+  HashtagRoute({
+    Key? key,
+    required String hashtag,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          HashtagRoute.name,
+          args: HashtagRouteArgs(
+            key: key,
+            hashtag: hashtag,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'HashtagRoute';
+
+  static const PageInfo<HashtagRouteArgs> page =
+      PageInfo<HashtagRouteArgs>(name);
+}
+
+class HashtagRouteArgs {
+  const HashtagRouteArgs({
+    this.key,
+    required this.hashtag,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final String hashtag;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'HashtagRouteArgs{key: $key, hashtag: $hashtag, account: $account}';
   }
 }
