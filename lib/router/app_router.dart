@@ -11,6 +11,8 @@ import 'package:flutter_misskey_app/view/note_create_page/note_create_page.dart'
 import 'package:flutter_misskey_app/view/notification_page/notification_page.dart';
 import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/tab_settings_list_page.dart';
 import 'package:flutter_misskey_app/view/time_line_page/time_line_page.dart';
+import 'package:flutter_misskey_app/view/user_page/user_followee.dart';
+import 'package:flutter_misskey_app/view/user_page/user_follower.dart';
 import 'package:flutter_misskey_app/view/user_page/user_page.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_page.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_timeline.dart';
@@ -44,6 +46,8 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: NoteCreateRoute.page),
     AutoRoute(page: UsersListRoute.page),
     AutoRoute(page: UsersListTimelineRoute.page),
+    AutoRoute(page: UserFollowerRoute.page),
+    AutoRoute(page: UserFolloweeRoute.page),
     AutoRoute(page: ChannelsRoute.page),
     AutoRoute(page: ChannelDetailRoute.page),
   ];

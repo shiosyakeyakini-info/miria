@@ -9,6 +9,7 @@ import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
+import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_file_view.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/network_image.dart';
@@ -124,23 +125,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    context.pushRoute(UserRoute(
-                        userId: displayNote.user.id,
-                        account: AccountScope.of(context)));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: SizedBox(
-                        width: 32 * MediaQuery.of(context).textScaleFactor,
-                        height: 32 * MediaQuery.of(context).textScaleFactor,
-                        child: NetworkImageView(
-                          url: displayNote.user.avatarUrl.toString(),
-                          type: ImageType.avatarIcon,
-                        )),
-                  ),
-                ),
+                AvatarIcon(user: displayNote.user),
                 const Padding(
                   padding: EdgeInsets.only(left: 10),
                 ),
@@ -282,26 +267,24 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     .bodySmall
                                     ?.color,
                               )),
-                          IconButton(
-                              onPressed: () => renote(),
-                              constraints: const BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                              style: const ButtonStyle(
-                                padding:
-                                    MaterialStatePropertyAll(EdgeInsets.zero),
-                                minimumSize:
-                                    MaterialStatePropertyAll(Size(0, 0)),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              icon: Icon(
-                                Icons.repeat_rounded,
-                                size:
-                                    16 * MediaQuery.of(context).textScaleFactor,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.color,
-                              )),
+                          TextButton.icon(
+                            onPressed: () => renote(),
+                            icon: Icon(
+                              Icons.repeat_rounded,
+                              size: 16 * MediaQuery.of(context).textScaleFactor,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                            ),
+                            label: Text(
+                                "${displayNote.renoteCount != 0 ? displayNote.renoteCount : ""}",
+                                style: Theme.of(context).textTheme.bodySmall),
+                            style: const ButtonStyle(
+                              padding:
+                                  MaterialStatePropertyAll(EdgeInsets.zero),
+                              minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
                           IconButton(
                               onPressed: () async => await reactionControl(
                                   ref, context, displayNote),

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/model/tab_type.dart';
 import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/main_stream.dart';
-import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/tab_settings_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
@@ -28,6 +25,8 @@ class InitializeWidget extends ConsumerStatefulWidget {
 }
 
 class InitializeWidgetState extends ConsumerState<InitializeWidget> {
+  Widget? cacheWidget;
+
   Future<void> initialize() async {
     await ref.read(accountRepository).load();
     await ref.read(tabSettingsRepositoryProvider).load();
@@ -40,11 +39,13 @@ class InitializeWidgetState extends ConsumerState<InitializeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (cacheWidget != null) return cacheWidget!;
     return FutureBuilder(
       future: initialize(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return MyApp();
+          cacheWidget = MyApp();
+          return cacheWidget!;
         } else {
           return const MaterialApp(
             home: Scaffold(

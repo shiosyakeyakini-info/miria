@@ -10,6 +10,7 @@ import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/common_drawer.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_misskey_app/view/common/notification_icon.dart';
+import 'package:flutter_misskey_app/view/common/timeline_listview.dart';
 import 'package:flutter_misskey_app/view/time_line_page/misskey_time_line.dart';
 import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,19 +95,13 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   void changeTabOrReload(TabSetting tabSetting) {
     if (tabSetting == widget.currentTabSetting) {
-      if (widget.currentTabSetting.tabType == TabType.globalTimeline ||
-          widget.currentTabSetting.tabType == TabType.homeTimeline ||
-          widget.currentTabSetting.tabType == TabType.hybridTimeline) {
-        ref
-            .read(widget.currentTabSetting.timelineProvider)
-            .resetAsRemainedLatestNotes();
-      }
+      ref.read(tabSetting.timelineProvider).moveToOlder();
       scrollController.forceScrollToTop();
     } else {
       if (tabSetting.tabType == TabType.globalTimeline ||
           tabSetting.tabType == TabType.homeTimeline ||
           tabSetting.tabType == TabType.hybridTimeline) {
-        ref.read(tabSetting.timelineProvider).resetAsRemainedLatestNotes();
+        ref.read(tabSetting.timelineProvider).moveToOlder();
       }
       context.replaceRoute(TimeLineRoute(currentTabSetting: tabSetting));
     }

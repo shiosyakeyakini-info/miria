@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
@@ -21,6 +22,7 @@ class ReactionPickerDialog extends ConsumerStatefulWidget {
 
 class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
   final emojis = <Emoji>[];
+  final categoryList = <String>[];
 
   EmojiRepository get emojiRepository =>
       ref.read(emojiRepositoryProvider(widget.account));
@@ -35,6 +37,15 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
     super.didChangeDependencies();
     emojis.clear();
     emojis.addAll(emojiRepository.emoji?.take(30) ?? []);
+
+    categoryList
+      ..clear()
+      ..addAll(emojiRepository.emoji
+              ?.map((e) => e.category)
+              .toSet()
+              .toList()
+              .whereNotNull() ??
+          []);
   }
 
   @override
@@ -62,42 +73,45 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
                   },
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
-                Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  children: [
-                    for (final emoji in emojis)
-                      ElevatedButton(
-                          style: const ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.transparent),
-                            padding:
-                                MaterialStatePropertyAll(EdgeInsets.all(5)),
-                            elevation: MaterialStatePropertyAll(0),
-                            minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 5,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    children: [
+                      for (final emoji in emojis)
+                        EmojiButton(emoji: emoji, targetNote: widget.targetNote)
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: categoryList.length,
+                  itemBuilder: (context, index) => ExpansionTile(
+                    title: Text(categoryList[index]),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Wrap(
+                            spacing: 5,
+                            runSpacing: 5,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            children: [
+                              for (final emoji in (emojiRepository.emoji ?? [])
+                                  .where((element) =>
+                                      element.category == categoryList[index]))
+                                EmojiButton(
+                                    emoji: emoji, targetNote: widget.targetNote)
+                            ],
                           ),
-                          onPressed: () async {
-                            try {
-                              await ref
-                                  .read(misskeyProvider(widget.account))
-                                  .notes
-                                  .reactions
-                                  .create(NotesReactionsCreateRequest(
-                                      noteId: widget.targetNote.id,
-                                      reaction: ":${emoji.name}:"));
-                              await ref
-                                  .read(notesProvider(widget.account))
-                                  .refresh(widget.targetNote.id);
-                            } finally {
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: SizedBox(
-                              height:
-                                  32 * MediaQuery.of(context).textScaleFactor,
-                              child: CustomEmoji(emoji: emoji)))
-                  ],
+                        ),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
@@ -105,5 +119,38 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
         ),
       ),
     );
+  }
+}
+
+class EmojiButton extends ConsumerWidget {
+  final Emoji emoji;
+  final Note targetNote;
+
+  const EmojiButton({super.key, required this.emoji, required this.targetNote});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+        style: const ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+          padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+          elevation: MaterialStatePropertyAll(0),
+          minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        onPressed: () async {
+          final account = AccountScope.of(context);
+          try {
+            await ref.read(misskeyProvider(account)).notes.reactions.create(
+                NotesReactionsCreateRequest(
+                    noteId: targetNote.id, reaction: ":${emoji.name}:"));
+            await ref.read(notesProvider(account)).refresh(targetNote.id);
+          } finally {
+            Navigator.of(context).pop();
+          }
+        },
+        child: SizedBox(
+            height: 32 * MediaQuery.of(context).textScaleFactor,
+            child: CustomEmoji(emoji: emoji)));
   }
 }

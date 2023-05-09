@@ -180,6 +180,28 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UserFollowerRoute.name: (routeData) {
+      final args = routeData.argsAs<UserFollowerRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserFollowerPage(
+          key: args.key,
+          userId: args.userId,
+          account: args.account,
+        ),
+      );
+    },
+    UserFolloweeRoute.name: (routeData) {
+      final args = routeData.argsAs<UserFolloweeRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserFolloweePage(
+          key: args.key,
+          userId: args.userId,
+          account: args.account,
+        ),
+      );
+    },
   };
 }
 
@@ -778,5 +800,91 @@ class AntennaNotesRouteArgs {
   @override
   String toString() {
     return 'AntennaNotesRouteArgs{key: $key, antenna: $antenna, account: $account}';
+  }
+}
+
+/// generated route for
+/// [UserFollowerPage]
+class UserFollowerRoute extends PageRouteInfo<UserFollowerRouteArgs> {
+  UserFollowerRoute({
+    Key? key,
+    required String userId,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserFollowerRoute.name,
+          args: UserFollowerRouteArgs(
+            key: key,
+            userId: userId,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserFollowerRoute';
+
+  static const PageInfo<UserFollowerRouteArgs> page =
+      PageInfo<UserFollowerRouteArgs>(name);
+}
+
+class UserFollowerRouteArgs {
+  const UserFollowerRouteArgs({
+    this.key,
+    required this.userId,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final String userId;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'UserFollowerRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [UserFolloweePage]
+class UserFolloweeRoute extends PageRouteInfo<UserFolloweeRouteArgs> {
+  UserFolloweeRoute({
+    Key? key,
+    required String userId,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserFolloweeRoute.name,
+          args: UserFolloweeRouteArgs(
+            key: key,
+            userId: userId,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserFolloweeRoute';
+
+  static const PageInfo<UserFolloweeRouteArgs> page =
+      PageInfo<UserFolloweeRouteArgs>(name);
+}
+
+class UserFolloweeRouteArgs {
+  const UserFolloweeRouteArgs({
+    this.key,
+    required this.userId,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final String userId;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'UserFolloweeRouteArgs{key: $key, userId: $userId, account: $account}';
   }
 }

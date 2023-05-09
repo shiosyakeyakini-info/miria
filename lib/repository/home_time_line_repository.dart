@@ -16,26 +16,31 @@ class HomeTimeLineRepository extends TimeLineRepository {
   );
 
   void reloadLatestNotes() {
+    moveToOlder();
     misskey.notes
         .homeTimeline(const NotesTimelineRequest(limit: 30))
         .then((resultNotes) {
+      if (olderNotes.isEmpty) {
+        olderNotes.addAll(resultNotes);
+        notifyListeners();
+        return;
+      }
+
+      if (olderNotes.first.createdAt < resultNotes.last.createdAt) {
+        olderNotes
+          ..clear()
+          ..addAll(resultNotes);
+        notifyListeners();
+        return;
+      }
+
       for (final note in resultNotes.toList().reversed) {
-        final foundNote = notes.indexWhere((element) => element.id == note.id);
-        if (foundNote == -1) {
-          var isInserted = false;
-          //TODO: もうちょっとイケてる感じに
-          for (int i = notes.length - 1; i >= 0; i--) {
-            if (notes[i].createdAt > note.createdAt) {
-              notes.insert(i, note);
-              isInserted = true;
-              break;
-            }
-          }
-          if (!isInserted) {
-            notes.addLast(note);
-          }
+        final index = olderNotes.indexWhere((element) => element.id == note.id);
+        if (index != -1) {
+          olderNotes[index] = note;
+          noteRepository.registerNote(note);
         } else {
-          notes[foundNote] = note;
+          olderNotes.addFirst(note);
         }
       }
       notifyListeners();
@@ -44,12 +49,10 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   @override
   void startTimeLine() {
-    if (notes.isEmpty) {
+    if (olderNotes.isEmpty) {
       misskey.notes.homeTimeline(const NotesTimelineRequest(limit: 30)).then(
           (resultNotes) {
-        for (final note in resultNotes.toList()) {
-          notes.addFirst(note);
-        }
+        olderNotes.addAll(resultNotes);
         notifyListeners();
       }, onError: (e, s) {
         print(e);
@@ -60,7 +63,7 @@ class HomeTimeLineRepository extends TimeLineRepository {
     }
 
     socketController = misskey.homeTimelineStream((note) {
-      notes.add(note);
+      newerNotes.add(note);
 
       notifyListeners();
     })
@@ -81,16 +84,14 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   @override
   Future<void> previousLoad() async {
-    if (notes.isEmpty) {
+    if (newerNotes.isEmpty && olderNotes.isEmpty) {
       return;
     }
     final resultNotes = await misskey.notes.homeTimeline(NotesTimelineRequest(
       limit: 30,
-      untilId: notes.first.id,
+      untilId: olderNotes.lastOrNull?.id ?? newerNotes.first.id,
     ));
-    for (final note in resultNotes) {
-      notes.addFirst(note);
-    }
+    olderNotes.addAll(resultNotes);
     notifyListeners();
   }
 

@@ -1,6 +1,5 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/repository/note_repository.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -17,27 +16,32 @@ class ChannelTimelineRepository extends TimeLineRepository {
   );
 
   void reloadLatestNotes() {
+    moveToOlder();
     misskey.channels
         .timeline(ChannelsTimelineRequest(
             channelId: tabSetting.channelId!, limit: 30))
         .then((resultNotes) {
+      if (olderNotes.isEmpty) {
+        olderNotes.addAll(resultNotes);
+        notifyListeners();
+        return;
+      }
+
+      if (olderNotes.first.createdAt < resultNotes.last.createdAt) {
+        olderNotes
+          ..clear()
+          ..addAll(resultNotes);
+        notifyListeners();
+        return;
+      }
+
       for (final note in resultNotes.toList().reversed) {
-        final foundNote = notes.indexWhere((element) => element.id == note.id);
-        if (foundNote == -1) {
-          var isInserted = false;
-          //TODO: もうちょっとイケてる感じに
-          for (int i = notes.length - 1; i >= 0; i--) {
-            if (notes[i].createdAt > note.createdAt) {
-              notes.insert(i, note);
-              isInserted = true;
-              break;
-            }
-          }
-          if (!isInserted) {
-            notes.addLast(note);
-          }
+        final index = olderNotes.indexWhere((element) => element.id == note.id);
+        if (index != -1) {
+          olderNotes[index] = note;
+          noteRepository.registerNote(note);
         } else {
-          notes[foundNote] = note;
+          olderNotes.addFirst(note);
         }
       }
       notifyListeners();
@@ -46,14 +50,12 @@ class ChannelTimelineRepository extends TimeLineRepository {
 
   @override
   void startTimeLine() {
-    if (notes.isEmpty) {
+    if (olderNotes.isEmpty) {
       misskey.channels
           .timeline(ChannelsTimelineRequest(
               channelId: tabSetting.channelId!, limit: 30))
           .then((resultNotes) {
-        for (final note in resultNotes.toList().reversed) {
-          notes.addLast(note);
-        }
+        olderNotes.addAll(resultNotes);
         notifyListeners();
       }, onError: (e, s) {
         print(e);
@@ -64,7 +66,7 @@ class ChannelTimelineRepository extends TimeLineRepository {
     }
 
     socketController = misskey.channelStream(tabSetting.channelId!, (note) {
-      notes.add(note);
+      newerNotes.add(note);
 
       notifyListeners();
     })
@@ -85,19 +87,17 @@ class ChannelTimelineRepository extends TimeLineRepository {
 
   @override
   Future<void> previousLoad() async {
-    if (notes.isEmpty) {
+    if (newerNotes.isEmpty && olderNotes.isEmpty) {
       return;
     }
     final resultNotes = await misskey.channels.timeline(
       ChannelsTimelineRequest(
         channelId: tabSetting.channelId!,
         limit: 30,
-        untilId: notes.first.id,
+        untilId: olderNotes.lastOrNull?.id ?? newerNotes.first.id,
       ),
     );
-    for (final note in resultNotes) {
-      notes.addFirst(note);
-    }
+    olderNotes.addAll(resultNotes);
     notifyListeners();
   }
 

@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -35,7 +38,7 @@ class UserDetail extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MfmText(
-                            mfmText: response.name,
+                            mfmText: response.name ?? response.username,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           Text(
@@ -132,25 +135,38 @@ class UserDetail extends StatelessWidget {
                       )
                     ],
                   ),
-                  Column(
-                    children: [
-                      Text(response.followingCount.toString(),
-                          style: Theme.of(context).textTheme.titleMedium),
-                      Text(
-                        "フォロー",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      )
-                    ],
+                  GestureDetector(
+                    onTap: () => context.pushRoute(UserFolloweeRoute(
+                        userId: response.id,
+                        account: AccountScope.of(context))),
+                    behavior: HitTestBehavior.opaque,
+                    child: Column(
+                      children: [
+                        Text(response.followingCount.toString(),
+                            style: Theme.of(context).textTheme.titleMedium),
+                        Text(
+                          "フォロー",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      Text(response.followersCount.toString(),
-                          style: Theme.of(context).textTheme.titleMedium),
-                      Text(
-                        "フォロワー",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      )
-                    ],
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => context.pushRoute(UserFollowerRoute(
+                        userId: response.id,
+                        account: AccountScope.of(context))),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(response.followersCount.toString(),
+                            style: Theme.of(context).textTheme.titleMedium),
+                        Text(
+                          "フォロワー",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

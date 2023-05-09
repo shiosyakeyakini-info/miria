@@ -16,7 +16,7 @@ class LocalTimeLineRepository extends TimeLineRepository {
   @override
   void startTimeLine() {
     socketController = misskey.localTimelineStream((note) {
-      notes.add(note);
+      newerNotes.add(note);
 
       // if (notes.length > 100) {
       //   notes.removeFirst();

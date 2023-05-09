@@ -16,7 +16,7 @@ class GlobalTimeLineRepository extends TimeLineRepository {
   @override
   void startTimeLine() {
     socketController = misskey.globalTimelineStream((note) {
-      notes.add(note);
+      newerNotes.add(note);
 
       notifyListeners();
     })

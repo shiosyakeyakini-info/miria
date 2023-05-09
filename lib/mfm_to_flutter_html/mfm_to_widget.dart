@@ -46,7 +46,10 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
       child: MfmWidgetScope(
         emojiFontSizeRatio: widget.emojiFontSizeRatio,
         host: widget.host,
-        child: MfmElementWidget(nodes: actualNode),
+        child: Text.rich(
+          WidgetSpan(child: MfmElementWidget(nodes: actualNode)),
+          textScaleFactor: MediaQuery.of(context).textScaleFactor,
+        ),
       ),
     );
   }
@@ -157,7 +160,6 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
   @override
   Widget build(BuildContext context) {
     return RichText(
-        textScaleFactor: MediaQuery.of(context).textScaleFactor,
         textAlign: MfmAlignScope.of(context),
         text: TextSpan(children: [
           for (final node in widget.nodes ?? [])
@@ -232,8 +234,7 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                   style: DefaultTextStyle.of(context).style, text: node.text)
             else if (node is MfmInlineCode)
               TextSpan(
-                  style: const TextStyle(
-                      backgroundColor: Colors.black87, color: Colors.white70),
+                  style: const TextStyle(color: Colors.white70),
                   text: node.code)
             else if (node is MfmMention)
               TextSpan(

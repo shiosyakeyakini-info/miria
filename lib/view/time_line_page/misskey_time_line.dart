@@ -1,10 +1,14 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
+import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
-import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
+import 'package:flutter_misskey_app/view/common/timeline_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
-import 'dart:math';
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
   final ChangeNotifierProvider<TimeLineRepository> timeLineRepositoryProvider;
@@ -24,11 +28,10 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   List<Note> showingNotes = [];
   late final TimelineScrollController scrollController = widget.controller;
   bool isScrolling = false;
-  late final TimeLineRepository timelineRepository =
+  late TimeLineRepository timelineRepository =
       ref.read(widget.timeLineRepositoryProvider);
   bool contextAccessed = false;
 
-  final lastKey = GlobalKey();
   bool isInitStated = false;
 
   @override
@@ -40,6 +43,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
       print("didUpdateWidget called. oldWidget=$oldWidget");
       ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
       ref.read(widget.timeLineRepositoryProvider).startTimeLine();
+      timelineRepository = ref.read(widget.timeLineRepositoryProvider);
     }
   }
 
@@ -60,67 +64,80 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Note> notes = ref.watch(widget.timeLineRepositoryProvider).notes;
-
     if (scrollController.positions.isNotEmpty) {
       scrollController.scrollToTop();
     }
+    final repository = ref.watch(widget.timeLineRepositoryProvider);
 
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: ListView.builder(
-        itemCount: notes.length + 2,
-        controller: scrollController,
-        reverse: true,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Center(
-                child: IconButton(
-              onPressed: () async {
-                final firstNote = notes.first.id;
-                await ref
-                    .read(widget.timeLineRepositoryProvider)
-                    .previousLoad();
-                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-              },
-              icon: const Icon(Icons.keyboard_arrow_down),
-            ));
-          }
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: TimelineListView.builder(
+          reverse: true,
+          controller: scrollController,
+          itemCount:
+              repository.newerNotes.length + repository.olderNotes.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            // final corecctedIndex = index - 5;
+            final correctedNewer = [
+              if (timelineRepository.olderNotes.isNotEmpty)
+                ...timelineRepository.olderNotes
+                    .slice(0, min(4, timelineRepository.olderNotes.length - 1))
+                    .reversed,
+              ...timelineRepository.newerNotes,
+            ];
+            final correctedOlder = [
+              if (timelineRepository.olderNotes.length > 5)
+                ...timelineRepository.olderNotes
+                    .slice(5, timelineRepository.olderNotes.length - 1)
+            ];
 
-          if (index == notes.length + 1) {
-            scrollController.scrollToTop();
-            return Container(
-              key: lastKey,
-            );
-          }
+            if (index > 0) {
+              if ((index - 1) >= correctedNewer.length) {
+                return null;
+              }
 
-          return NoteWrapper(
-            index: index - 1,
-            timeLineRepositoryProvider: widget.timeLineRepositoryProvider,
-          );
-        },
-      ),
-    );
+              return NoteWrapper(
+                targetNote: correctedNewer[index - 1],
+              );
+            }
+
+            if (-index == correctedOlder.length) {
+              return Center(
+                  child: IconButton(
+                onPressed: () async {
+                  await timelineRepository.previousLoad();
+                },
+                icon: const Icon(Icons.keyboard_arrow_down),
+              ));
+            }
+
+            if (-index >= correctedOlder.length) {
+              return null;
+            }
+
+            return NoteWrapper(targetNote: correctedOlder[-index]);
+          },
+        ));
   }
 }
 
 class NoteWrapper extends ConsumerWidget {
-  final int index;
-  final ChangeNotifierProvider<TimeLineRepository> timeLineRepositoryProvider;
+  final Note targetNote;
 
   const NoteWrapper({
     super.key,
-    required this.timeLineRepositoryProvider,
-    required this.index,
+    required this.targetNote,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.read(timeLineRepositoryProvider).notes.length <= index) {
-      return Container();
+    final note = ref.watch(notesProvider(AccountScope.of(context))
+        .select((note) => note.notes[targetNote.id]));
+    if (note == null) {
+      print("note was not found. $targetNote");
+      return MisskeyNote(
+          note: targetNote, key: ValueKey<String>(targetNote.id));
     }
-    final note = ref.watch(timeLineRepositoryProvider
-        .select((repository) => repository.notes[index]));
     return MisskeyNote(note: note, key: ValueKey<String>(note.id));
   }
 }
