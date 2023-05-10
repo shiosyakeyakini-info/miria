@@ -14,8 +14,7 @@ class UserListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return InkWell(
       onTap: () => context.pushRoute(
           UserRoute(userId: user.id, account: AccountScope.of(context))),
       child: Padding(

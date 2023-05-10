@@ -21,49 +21,63 @@ class CommonDrawer extends ConsumerWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               ListTile(
-                leading: const Icon(Icons.notifications),
-                title: const Text("通知"),
-                onTap: () =>
-                    context.pushRoute(NotificationRoute(account: account)),
-              ),
+                  leading: const Icon(Icons.notifications),
+                  title: const Text("通知"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushRoute(NotificationRoute(account: account));
+                  }),
               ListTile(
                 leading: const Icon(Icons.star),
                 title: const Text("お気に入り"),
-                onTap: () =>
-                    context.pushRoute(FavoritedNoteRoute(account: account)),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  context.pushRoute(FavoritedNoteRoute(account: account));
+                },
               ),
               ListTile(
-                leading: const Icon(Icons.list),
-                title: const Text("リスト"),
-                onTap: () =>
-                    context.pushRoute(UsersListRoute(account: account)),
-              ),
+                  leading: const Icon(Icons.list),
+                  title: const Text("リスト"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushRoute(UsersListRoute(account: account));
+                  }),
               ListTile(
-                leading: const Icon(Icons.settings_input_antenna),
-                title: Text("アンテナ"),
-                onTap: () => context.pushRoute(AntennaRoute(account: account)),
-              ),
+                  leading: const Icon(Icons.settings_input_antenna),
+                  title: Text("アンテナ"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushRoute(AntennaRoute(account: account));
+                  }),
               ListTile(
-                leading: const Icon(Icons.attach_file),
-                title: const Text("クリップ"),
-                onTap: () => context.pushRoute(ClipListRoute(account: account)),
-              ),
+                  leading: const Icon(Icons.attach_file),
+                  title: const Text("クリップ"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushRoute(ClipListRoute(account: account));
+                  }),
               ListTile(
                   leading: const Icon(Icons.tv),
                   title: const Text("チャンネル"),
-                  onTap: () =>
-                      context.pushRoute(ChannelsRoute(account: account))),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushRoute(ChannelsRoute(account: account));
+                  }),
               ListTile(
-                leading: const Icon(Icons.search),
-                title: const Text("検索"),
-                onTap: () =>
-                    context.pushRoute(NoteSearchRoute(account: account)),
-              )
+                  leading: const Icon(Icons.search),
+                  title: const Text("検索"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushRoute(NoteSearchRoute(account: account));
+                  })
             ],
             ListTile(
                 leading: const Icon(Icons.settings),
-                onTap: () => context.pushRoute(const SettingsRoute()),
-                title: Text("設定")),
+                title: const Text("設定"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  context.pushRoute(const SettingsRoute());
+                }),
           ],
         ),
       ),

@@ -30,11 +30,14 @@ class UserPageState extends ConsumerState<UserPage> {
           account: widget.account,
           child: Column(
             children: [
-              const TabBar(tabs: [
-                Tab(text: "アカウント情報"),
-                Tab(text: "ノート"),
-                Tab(text: "クリップ")
-              ]),
+              const TabBar(
+                tabs: [
+                  Tab(text: "アカウント情報"),
+                  Tab(text: "ノート"),
+                  Tab(text: "クリップ")
+                ],
+                isScrollable: true,
+              ),
               Expanded(
                 child: TabBarView(
                   children: [

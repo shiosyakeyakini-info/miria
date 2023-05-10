@@ -25,13 +25,16 @@ class ChannelsPage extends StatelessWidget {
             account: account,
             child: Column(
               children: const [
-                TabBar(tabs: [
-                  Tab(text: "検索"),
-                  Tab(text: "トレンド"),
-                  Tab(text: "お気に入り"),
-                  Tab(text: "フォロー中"),
-                  Tab(text: "管理中")
-                ]),
+                TabBar(
+                  tabs: [
+                    Tab(text: "検索"),
+                    Tab(text: "トレンド"),
+                    Tab(text: "お気に入り"),
+                    Tab(text: "フォロー中"),
+                    Tab(text: "管理中")
+                  ],
+                  isScrollable: true,
+                ),
                 Expanded(
                     child: TabBarView(children: [
                   ChannelSearch(),

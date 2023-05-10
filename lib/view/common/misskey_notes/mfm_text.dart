@@ -1,11 +1,8 @@
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_flutter_html.dart';
 import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_widget.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
@@ -115,7 +112,24 @@ class UserInformationState extends ConsumerState<UserInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return MfmToWidget("**${widget.user.name ?? widget.user.username}**",
-        host: AccountScope.of(context).host, emojiFontSizeRatio: 1.0);
+    return Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        runAlignment: WrapAlignment.center,
+        children: [
+          MfmToWidget("<b>${widget.user.name ?? widget.user.username} </b>",
+              host: AccountScope.of(context).host, emojiFontSizeRatio: 1.0),
+          for (final badge in widget.user.badgeRoles ?? [])
+            Tooltip(
+              message: badge.name,
+              child: Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: SizedBox(
+                    height: MediaQuery.of(context).textScaleFactor *
+                        (Theme.of(context).textTheme.bodyMedium?.fontSize ??
+                            22),
+                    child: Image.network(badge.iconUrl.toString())),
+              ),
+            )
+        ]);
   }
 }

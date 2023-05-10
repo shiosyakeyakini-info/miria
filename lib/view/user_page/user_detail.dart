@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
+import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -26,9 +27,10 @@ class UserDetail extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  SizedBox(
-                      width: 80,
-                      child: Image.network(response.avatarUrl.toString())),
+                  AvatarIcon.fromUserResponse(
+                    response,
+                    height: 80,
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -135,11 +137,10 @@ class UserDetail extends StatelessWidget {
                       )
                     ],
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () => context.pushRoute(UserFolloweeRoute(
                         userId: response.id,
                         account: AccountScope.of(context))),
-                    behavior: HitTestBehavior.opaque,
                     child: Column(
                       children: [
                         Text(response.followingCount.toString(),
@@ -151,8 +152,7 @@ class UserDetail extends StatelessWidget {
                       ],
                     ),
                   ),
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
+                  InkWell(
                     onTap: () => context.pushRoute(UserFollowerRoute(
                         userId: response.id,
                         account: AccountScope.of(context))),

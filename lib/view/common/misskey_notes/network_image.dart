@@ -9,6 +9,7 @@ class NetworkImageView extends StatelessWidget {
   final ImageLoadingBuilder? loadingBuilder;
   final ImageErrorWidgetBuilder? errorBuilder;
   final double? height;
+  final BoxFit? fit;
 
   const NetworkImageView({
     super.key,
@@ -17,6 +18,7 @@ class NetworkImageView extends StatelessWidget {
     this.loadingBuilder,
     this.errorBuilder,
     this.height,
+    this.fit,
   });
 
   @override
@@ -26,6 +28,7 @@ class NetworkImageView extends StatelessWidget {
         type == ImageType.imageThumbnail) {
       return CachedNetworkImage(
         imageUrl: url,
+        fit: fit,
         errorWidget: (context, url, error) =>
             errorBuilder?.call(context, error, StackTrace.current) ??
             Container(),
@@ -37,6 +40,7 @@ class NetworkImageView extends StatelessWidget {
     } else {
       return Image.network(
         url,
+        fit: fit,
         loadingBuilder: loadingBuilder,
         errorBuilder: errorBuilder,
         height: height,

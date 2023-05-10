@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/extensions/string_extensions.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
@@ -177,12 +178,17 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                   ))
             else if (node is MfmCodeBlock)
               WidgetSpan(
-                  child: Container(
-                decoration: const BoxDecoration(color: Colors.black87),
-                width: double.infinity,
-                child: Text(
-                  node.code,
-                  style: const TextStyle(color: Colors.white70),
+                  child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  decoration: const BoxDecoration(color: Colors.black87),
+                  padding: EdgeInsets.all(10),
+                  width: double.infinity,
+                  child: Text(
+                    node.code,
+                    style: const TextStyle(
+                        color: Colors.white70, fontFamily: "Monaco"),
+                  ),
                 ),
               ))
             else if (node is MfmEmojiCode)
@@ -233,15 +239,26 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
               TextSpan(
                   style: DefaultTextStyle.of(context).style, text: node.text)
             else if (node is MfmInlineCode)
-              TextSpan(
-                  style: const TextStyle(color: Colors.white70),
-                  text: node.code)
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.black87),
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  child: Text.rich(
+                    textAlign: MfmAlignScope.of(context),
+                    TextSpan(
+                        style: const TextStyle(
+                            color: Colors.white70, fontFamily: "Monaco"),
+                        text: node.code),
+                  ),
+                ),
+              )
             else if (node is MfmMention)
               TextSpan(
                   style: DefaultTextStyle.of(context)
                       .style
                       .merge(const TextStyle(color: Colors.deepOrangeAccent)),
-                  text: node.acct,
+                  text: node.acct.tight,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => onTapUserName(node.acct))
             else if (node is MfmHashTag)
@@ -249,7 +266,7 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                   style: DefaultTextStyle.of(context)
                       .style
                       .merge(const TextStyle(color: Colors.deepOrangeAccent)),
-                  text: "#${node.hashTag}",
+                  text: "#${node.hashTag.tight}",
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       context.pushRoute(HashtagRoute(
@@ -258,18 +275,19 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                     })
             else if (node is MfmLink)
               WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
                   child: DefaultTextStyle.merge(
-                style: const TextStyle(color: Colors.deepOrangeAccent),
-                child: GestureDetector(
-                    onTap: () => onTapLink(node.url),
-                    child: MfmElementWidget(nodes: node.children)),
-              ))
+                    style: const TextStyle(color: Colors.deepOrangeAccent),
+                    child: GestureDetector(
+                        onTap: () => onTapLink(node.url),
+                        child: MfmElementWidget(nodes: node.children)),
+                  ))
             else if (node is MfmURL)
               TextSpan(
                   style: DefaultTextStyle.of(context)
                       .style
                       .merge(const TextStyle(color: Colors.deepOrangeAccent)),
-                  text: node.value,
+                  text: node.value.tight,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => onTapLink(node.value))
             else if (node is MfmFn)

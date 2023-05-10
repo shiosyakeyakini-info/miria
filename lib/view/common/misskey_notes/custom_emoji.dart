@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
@@ -116,7 +115,9 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
           if (snapshot.connectionState == ConnectionState.done) {
             final data = snapshot.data;
             if (data != null) {
-              cachedImage = Image.memory(data, height: scopedFontSize);
+              cachedImage = Tooltip(
+                  message: ":${widget.emoji?.name ?? ""}:",
+                  child: Image.memory(data, height: scopedFontSize));
               return cachedImage!;
             }
           }

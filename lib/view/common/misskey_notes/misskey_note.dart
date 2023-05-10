@@ -4,17 +4,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
-import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/repository/time_line_repository.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_file_view.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/note_modal_sheet.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/reaction_button.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/renote_modal_sheet.dart';
 import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -37,27 +34,6 @@ class MisskeyNote extends ConsumerStatefulWidget {
 
 class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   var isCwOpened = false;
-  var isRenoted = false;
-
-  Future<void> renote() async {
-    // 一回の表示期間内に何回もRenoteを防ぐ
-    if (isRenoted) return;
-
-    isRenoted = true;
-
-    try {
-      await ref
-          .read(misskeyProvider(AccountScope.of(context)))
-          .notes
-          .create(NotesCreateRequest(renoteId: widget.note.id));
-    } catch (e, s) {
-      isRenoted = false;
-      rethrow;
-    }
-    if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,16 +110,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                              child: UserInformation(user: displayNote.user)),
-                          Text(
-                            displayNote.createdAt.differenceNow,
-                            textAlign: TextAlign.right,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
+                      NoteHeader1(
+                        displayNote: displayNote,
                       ),
                       Row(
                         children: [
@@ -221,28 +189,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             )
                         ],
                       ),
-                      if (displayNote.channel != null) ...[
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.tv,
-                              size: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.fontSize,
-                              color:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 5),
-                            ),
-                            Text(
-                              displayNote.channel!.name,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        )
-                      ],
+                      if (displayNote.channel != null)
+                        NoteChannelView(channel: displayNote.channel!),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.max,
@@ -268,7 +216,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     ?.color,
                               )),
                           TextButton.icon(
-                            onPressed: () => renote(),
+                            onPressed: () => showModalBottomSheet(
+                                context: context,
+                                builder: (innerContext) => RenoteModalSheet(
+                                    note: displayNote,
+                                    account: AccountScope.of(context))),
                             icon: Icon(
                               Icons.repeat_rounded,
                               size: 16 * MediaQuery.of(context).textScaleFactor,
@@ -379,5 +331,116 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
               targetNote: displayNote,
               account: account,
             ));
+  }
+}
+
+class NoteHeader1 extends StatelessWidget {
+  final Note displayNote;
+
+  const NoteHeader1({super.key, required this.displayNote});
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    return Row(
+      children: [
+        Expanded(child: UserInformation(user: displayNote.user)),
+        Text(
+          displayNote.createdAt.differenceNow,
+          textAlign: TextAlign.right,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        if (displayNote.visibility == NoteVisibility.followers)
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Icon(
+              Icons.lock,
+              size: Theme.of(context).textTheme.bodySmall?.fontSize,
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
+          ),
+        if (displayNote.visibility == NoteVisibility.home)
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Icon(
+              Icons.home,
+              size: Theme.of(context).textTheme.bodySmall?.fontSize,
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
+          ),
+        if (displayNote.visibility == NoteVisibility.specified)
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Icon(
+              Icons.mail,
+              size: Theme.of(context).textTheme.bodySmall?.fontSize,
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
+          ),
+        if (displayNote.localOnly)
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Stack(
+              children: [
+                Icon(
+                  Icons.rocket,
+                  size: Theme.of(context).textTheme.bodySmall?.fontSize,
+                  color: Theme.of(context).textTheme.bodySmall?.color,
+                ),
+                Transform.translate(
+                  offset: Offset(
+                      3,
+                      (Theme.of(context).textTheme.bodySmall?.fontSize ?? 22) /
+                              2 -
+                          1),
+                  child: Transform.rotate(
+                    angle: 45 * pi / 180,
+                    child: Container(
+                      width: Theme.of(context).textTheme.bodySmall?.fontSize,
+                      height: Theme.of(context).textTheme.bodySmall?.fontSize,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(
+                            color:
+                                Theme.of(context).textTheme.bodySmall?.color ??
+                                    Colors.grey,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+      ],
+    );
+  }
+}
+
+class NoteChannelView extends StatelessWidget {
+  final NoteChannelInfo channel;
+
+  const NoteChannelView({super.key, required this.channel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          Icons.tv,
+          size: Theme.of(context).textTheme.bodySmall?.fontSize,
+          color: Theme.of(context).textTheme.bodySmall?.color,
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 5),
+        ),
+        Text(
+          channel.name,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
   }
 }
