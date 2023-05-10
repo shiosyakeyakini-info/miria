@@ -19,11 +19,15 @@ class MfmToWidget extends ConsumerStatefulWidget {
   final String mfmText;
   final double emojiFontSizeRatio;
   final String? host;
+  final List<MfmNode> Function(String)? parser;
+  final TextStyle? style;
   const MfmToWidget(
     this.mfmText, {
     super.key,
     required this.host,
     required this.emojiFontSizeRatio,
+    this.parser,
+    this.style,
   });
 
   @override
@@ -37,13 +41,17 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
   Widget build(BuildContext context) {
     final List<MfmNode> actualNode;
     if (nodes == null) {
-      actualNode = ref.read(mfmParserProvider).parse(widget.mfmText);
+      actualNode = (widget.parser ?? ref.read(mfmParserProvider).parse)
+          .call(widget.mfmText);
     } else {
       actualNode = nodes!;
     }
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyMedium!,
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium!
+          .merge(widget.style ?? const TextStyle()),
       child: MfmWidgetScope(
         emojiFontSizeRatio: widget.emojiFontSizeRatio,
         host: widget.host,
@@ -179,10 +187,10 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
             else if (node is MfmCodeBlock)
               WidgetSpan(
                   child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Container(
                   decoration: const BoxDecoration(color: Colors.black87),
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   width: double.infinity,
                   child: Text(
                     node.code,
@@ -242,8 +250,8 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Container(
-                  decoration: BoxDecoration(color: Colors.black87),
-                  padding: EdgeInsets.only(left: 5, right: 5),
+                  decoration: const BoxDecoration(color: Colors.black87),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Text.rich(
                     textAlign: MfmAlignScope.of(context),
                     TextSpan(
@@ -253,6 +261,29 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                   ),
                 ),
               )
+            else if (node is MfmQuote)
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                            left: BorderSide(
+                                color: Theme.of(context).dividerColor,
+                                width: 3)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: DefaultTextStyle.merge(
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color),
+                          child: MfmElementWidget(nodes: node.children),
+                        ),
+                      ),
+                    ),
+                  ))
             else if (node is MfmMention)
               TextSpan(
                   style: DefaultTextStyle.of(context)

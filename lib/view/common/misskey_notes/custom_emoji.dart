@@ -14,6 +14,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final String? anotherServerEmojiUrl;
   final String? naturalEmoji;
   final double fontSizeRatio;
+  final bool isAttachTooltip;
 
   const CustomEmoji({
     super.key,
@@ -21,15 +22,22 @@ class CustomEmoji extends ConsumerStatefulWidget {
     this.anotherServerEmojiUrl,
     this.naturalEmoji,
     this.fontSizeRatio = 1,
+    this.isAttachTooltip = true,
   });
 
-  factory CustomEmoji.fromEmojiName(String name, EmojiRepository repository,
-      {String? anotherServerUrl, double fontSizeRatio = 1}) {
+  factory CustomEmoji.fromEmojiName(
+    String name,
+    EmojiRepository repository, {
+    String? anotherServerUrl,
+    double fontSizeRatio = 1,
+    bool isAttachTooltip = true,
+  }) {
     if (anotherServerUrl != null) {
       return CustomEmoji(
         emoji: null,
         anotherServerEmojiUrl: anotherServerUrl,
         fontSizeRatio: fontSizeRatio,
+        isAttachTooltip: isAttachTooltip,
       );
     }
 
@@ -38,6 +46,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
         emoji: null,
         naturalEmoji: name,
         fontSizeRatio: fontSizeRatio,
+        isAttachTooltip: isAttachTooltip,
       );
     }
 
@@ -49,6 +58,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
       return CustomEmoji(
         emoji: found,
         fontSizeRatio: fontSizeRatio,
+        isAttachTooltip: isAttachTooltip,
       );
     }
 
@@ -57,10 +67,20 @@ class CustomEmoji extends ConsumerStatefulWidget {
       final Emoji? found = repository.emoji?.firstWhereOrNull((e) =>
           e.name == (customEmojiRegExp2.firstMatch(name)?.group(1) ?? name));
 
-      return CustomEmoji(
-        emoji: found,
-        fontSizeRatio: fontSizeRatio,
-      );
+      if (found != null) {
+        return CustomEmoji(
+          emoji: found,
+          fontSizeRatio: fontSizeRatio,
+          isAttachTooltip: isAttachTooltip,
+        );
+      } else {
+        return CustomEmoji(
+          emoji: null,
+          naturalEmoji: ":${customEmojiRegExp2.firstMatch(name)?.group(1)}:",
+          fontSizeRatio: fontSizeRatio,
+          isAttachTooltip: isAttachTooltip,
+        );
+      }
     }
     return CustomEmoji(
       emoji: null,
@@ -115,11 +135,22 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
           if (snapshot.connectionState == ConnectionState.done) {
             final data = snapshot.data;
             if (data != null) {
-              cachedImage = Tooltip(
-                  message: ":${widget.emoji?.name ?? ""}:",
-                  child: Image.memory(data, height: scopedFontSize));
+              final memoryImage = Image.memory(data, height: scopedFontSize);
+              if (widget.isAttachTooltip) {
+                cachedImage = Tooltip(
+                    message: ":${widget.emoji?.name ?? ""}:",
+                    child: memoryImage);
+              } else {
+                cachedImage = memoryImage;
+              }
               return cachedImage!;
             }
+          }
+
+          if (snapshot.hasError ||
+              (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.data == null)) {
+            return Text(":${widget.emoji?.name ?? ""}:");
           }
           return SizedBox(width: scopedFontSize, height: scopedFontSize);
         });

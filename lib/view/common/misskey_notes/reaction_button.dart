@@ -3,6 +3,7 @@ import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/reaction_user_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -83,6 +84,16 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             await ref.read(notesProvider(account)).refresh(widget.noteId);
           }
         },
+        onLongPress: () {
+          showDialog(
+              context: context,
+              builder: (context2) {
+                return ReactionUserDialog(
+                    account: AccountScope.of(context),
+                    reaction: widget.reactionKey,
+                    noteId: widget.noteId);
+              });
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.all(5),
@@ -99,6 +110,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                   widget.reactionKey,
                   ref.read(emojiRepositoryProvider(AccountScope.of(context))),
                   anotherServerUrl: widget.anotherServerUrl,
+                  isAttachTooltip: false,
                 )),
             const Padding(padding: EdgeInsets.only(left: 5)),
             Text(widget.reactionCount.toString(),

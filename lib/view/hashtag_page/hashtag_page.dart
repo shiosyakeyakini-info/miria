@@ -24,9 +24,9 @@ class HashtagPage extends ConsumerWidget {
     return AccountScope(
         account: account,
         child: Scaffold(
-          appBar: AppBar(title: Text(hashtag)),
+          appBar: AppBar(title: Text("#$hashtag")),
           body: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: PushableListView(
               initializeFuture: () async {
                 final response = await ref

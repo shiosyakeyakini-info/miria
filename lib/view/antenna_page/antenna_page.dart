@@ -1,9 +1,7 @@
 import 'package:auto_route/annotations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/view/antenna_page/antenna_list.dart';
-import 'package:flutter_misskey_app/view/antenna_page/antenna_notes_page.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -20,7 +18,7 @@ class AntennaPage extends ConsumerWidget {
       account: account,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("アンテナ"),
+          title: const Text("アンテナ"),
         ),
         body: const Padding(
             padding: EdgeInsets.only(left: 10, right: 10),
