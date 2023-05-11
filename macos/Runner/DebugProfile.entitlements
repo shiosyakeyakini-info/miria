@@ -12,7 +12,7 @@
 	<true/>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.example.flutterMisskeyApp</string>
+		<string>info.shiosyakeyakini.miria</string>
 	</array>
 </dict>
 </plist>

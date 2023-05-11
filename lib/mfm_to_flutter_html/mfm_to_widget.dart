@@ -56,7 +56,9 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
         emojiFontSizeRatio: widget.emojiFontSizeRatio,
         host: widget.host,
         child: Text.rich(
-          WidgetSpan(child: MfmElementWidget(nodes: actualNode)),
+          WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: MfmElementWidget(nodes: actualNode)),
           textScaleFactor: MediaQuery.of(context).textScaleFactor,
         ),
       ),
@@ -170,11 +172,10 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
   Widget build(BuildContext context) {
     return RichText(
         textAlign: MfmAlignScope.of(context),
-        text: TextSpan(children: [
+        text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
           for (final node in widget.nodes ?? [])
             if (node is MfmText)
-              TextSpan(
-                  style: DefaultTextStyle.of(context).style, text: node.text)
+              TextSpan(text: node.text)
             else if (node is MfmCenter)
               WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
@@ -326,7 +327,9 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
                   alignment: PlaceholderAlignment.middle,
                   child: MfmFnElementWidget(function: node))
             else
-              WidgetSpan(child: MfmElementWidget(nodes: node.children))
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: MfmElementWidget(nodes: node.children))
         ]));
   }
 }
@@ -338,7 +341,7 @@ class MfmFnElementWidget extends StatelessWidget {
 
   Color? _toColor(String? color) {
     if (color == null) {
-      return null;
+      return const Color(0xFFFF0000);
     }
 
     if (!RegExp(r'^[0-9a-fA-F]+?$').hasMatch(color)) {

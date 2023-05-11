@@ -1,4 +1,3 @@
-import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_flutter_html.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/repository/account_repository.dart';
@@ -69,10 +68,6 @@ final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
 final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
     (ref, account) =>
         EmojiRepositoryImpl(misskey: ref.read(misskeyProvider(account))));
-final mfmToFlutterHtmlProvider = Provider.family<MfmToFlutterHtml, Account>(
-    (ref, account) => MfmToFlutterHtml(
-        ref.read(emojiRepositoryProvider(account)),
-        ref.read(mfmParserProvider)));
 final mfmParserProvider = Provider<MfmParser>((ref) => const MfmParser());
 
 final accountRepository = Provider(

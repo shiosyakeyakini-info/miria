@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
+import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_widget.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
@@ -87,9 +88,12 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             if (isEmptyRenote)
               Padding(
                 padding: const EdgeInsets.only(bottom: 2),
-                child: MfmText(
-                  mfmText:
-                      "<small>${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}</small>",
+                child: MfmToWidget(
+                  "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
+                  emojiFontSizeRatio: 1,
+                  host: AccountScope.of(context).host,
+                  parser: ref.read(mfmParserProvider).parseSimple,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
             if (displayNote.reply != null)
@@ -344,7 +348,10 @@ class NoteHeader1 extends StatelessWidget {
   ) {
     return Row(
       children: [
-        Expanded(child: UserInformation(user: displayNote.user)),
+        Expanded(
+            child: Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: UserInformation(user: displayNote.user))),
         Text(
           displayNote.createdAt.differenceNow,
           textAlign: TextAlign.right,

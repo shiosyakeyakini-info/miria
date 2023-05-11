@@ -5,6 +5,7 @@ import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/model/tab_type.dart';
 import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,8 +19,8 @@ class AccountRepository {
   AccountRepository(this.tabSettingsRepository);
 
   Future<void> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedData = prefs.getString("accounts");
+    const prefs = FlutterSecureStorage();
+    final storedData = await prefs.read(key: "accounts");
     if (storedData == null) {
       return;
     }
@@ -73,8 +74,9 @@ class AccountRepository {
 
   Future<void> addAccount(Account account) async {
     _account.add(account);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        "accounts", jsonEncode(_account.map((e) => e.toJson()).toList()));
+    final prefs = FlutterSecureStorage();
+    await prefs.write(
+        key: "accounts",
+        value: jsonEncode(_account.map((e) => e.toJson()).toList()));
   }
 }
