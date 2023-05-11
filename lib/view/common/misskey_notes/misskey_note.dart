@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_widget.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/local_only_icon.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_file_view.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/note_modal_sheet.dart';
@@ -387,38 +387,9 @@ class NoteHeader1 extends StatelessWidget {
         if (displayNote.localOnly)
           Padding(
             padding: const EdgeInsets.only(left: 5),
-            child: Stack(
-              children: [
-                Icon(
-                  Icons.rocket,
-                  size: Theme.of(context).textTheme.bodySmall?.fontSize,
-                  color: Theme.of(context).textTheme.bodySmall?.color,
-                ),
-                Transform.translate(
-                  offset: Offset(
-                      3,
-                      (Theme.of(context).textTheme.bodySmall?.fontSize ?? 22) /
-                              2 -
-                          1),
-                  child: Transform.rotate(
-                    angle: 45 * pi / 180,
-                    child: Container(
-                      width: Theme.of(context).textTheme.bodySmall?.fontSize,
-                      height: Theme.of(context).textTheme.bodySmall?.fontSize,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
-                            color:
-                                Theme.of(context).textTheme.bodySmall?.color ??
-                                    Colors.grey,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+            child: LocalOnlyIcon(
+              size: Theme.of(context).textTheme.bodySmall?.fontSize,
+              color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           )
       ],

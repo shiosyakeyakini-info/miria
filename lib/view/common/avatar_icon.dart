@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
@@ -17,6 +16,19 @@ class AvatarIcon extends StatelessWidget {
     required this.user,
     this.height = 48,
   });
+
+  factory AvatarIcon.fromIResponse(IResponse response, {double height = 48}) {
+    return AvatarIcon(
+      user: User(
+        id: response.id,
+        username: response.username,
+        avatarUrl: response.avatarUrl,
+        isCat: response.isCat,
+        isBot: response.isBot,
+      ),
+      height: height,
+    );
+  }
 
   factory AvatarIcon.fromUserResponse(UsersShowResponse response,
       {double height = 48}) {

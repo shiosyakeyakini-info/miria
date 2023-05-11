@@ -11,6 +11,7 @@ import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/repository/emoji_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 
 class TestWidget extends ConsumerStatefulWidget {
   final String mfmText;
@@ -26,10 +27,14 @@ class TestWidgetState extends ConsumerState<TestWidget> {
     super.didChangeDependencies();
     Future(() async {
       ref
-          .read(emojiRepositoryProvider(
-              Account(host: "", userId: "userId", token: "token")))
+          .read(emojiRepositoryProvider(Account(
+              host: "",
+              userId: "userId",
+              token: "token",
+              i: IResponse.fromJson({}))))
           .emoji = (await ref
-              .read(misskeyProvider(Account(host: "", userId: "", token: "")))
+              .read(misskeyProvider(Account(
+                  host: "", userId: "", token: "", i: IResponse.fromJson({}))))
               .emojis())
           .emojis;
       setState(() {});

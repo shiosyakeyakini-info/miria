@@ -51,7 +51,7 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
       style: Theme.of(context)
           .textTheme
           .bodyMedium!
-          .merge(widget.style ?? const TextStyle()),
+          .merge(widget.style ?? const TextStyle(height: 1)),
       child: MfmWidgetScope(
         emojiFontSizeRatio: widget.emojiFontSizeRatio,
         host: widget.host,
@@ -60,6 +60,7 @@ class MfmToWidgetState extends ConsumerState<MfmToWidget> {
               alignment: PlaceholderAlignment.middle,
               child: MfmElementWidget(nodes: actualNode)),
           textScaleFactor: MediaQuery.of(context).textScaleFactor,
+          strutStyle: const StrutStyle(height: 1.5),
         ),
       ),
     );
@@ -171,11 +172,13 @@ class MfmElementWidgetState extends ConsumerState<MfmElementWidget> {
   @override
   Widget build(BuildContext context) {
     return RichText(
+        strutStyle: const StrutStyle(),
         textAlign: MfmAlignScope.of(context),
         text: TextSpan(style: DefaultTextStyle.of(context).style, children: [
           for (final node in widget.nodes ?? [])
             if (node is MfmText)
-              TextSpan(text: node.text)
+              TextSpan(
+                  text: node.text, style: DefaultTextStyle.of(context).style)
             else if (node is MfmCenter)
               WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
