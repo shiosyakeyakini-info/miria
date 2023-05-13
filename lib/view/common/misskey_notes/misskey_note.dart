@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
-import 'package:flutter_misskey_app/mfm_to_flutter_html/mfm_to_widget.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
@@ -56,7 +55,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     final displayNote = renoteNote ?? latestActualNote;
 
     if (displayNote == null) {
-      // ありえない
+      // 削除された？
       return Container();
     }
 
@@ -88,11 +87,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             if (isEmptyRenote)
               Padding(
                 padding: const EdgeInsets.only(bottom: 2),
-                child: MfmToWidget(
+                child: SimpleMfmText(
                   "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
-                  emojiFontSizeRatio: 1,
-                  host: AccountScope.of(context).host,
-                  parser: ref.read(mfmParserProvider).parseSimple,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -134,8 +130,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       ),
                       if (displayNote.cw != null) ...[
                         MfmText(
-                          mfmText: displayNote.cw ?? "",
-                          emojiFontSizeRatio: 2,
+                          displayNote.cw ?? "",
                           host: displayNote.user.host,
                         ),
                         ElevatedButton(
@@ -162,8 +157,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       if (displayNote.cw == null ||
                           displayNote.cw != null && isCwOpened) ...[
                         MfmText(
-                          mfmText: displayNote.text ?? "",
-                          emojiFontSizeRatio: 2,
+                          displayNote.text ?? "",
                           host: displayNote.user.host,
                         ),
                         MisskeyFileView(
