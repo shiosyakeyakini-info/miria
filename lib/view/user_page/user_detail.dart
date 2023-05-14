@@ -40,7 +40,7 @@ class UserDetail extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MfmText(
-                            mfmText: response.name ?? response.username,
+                            response.name ?? response.username,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           Text(
@@ -70,7 +70,7 @@ class UserDetail extends StatelessWidget {
               const Padding(padding: EdgeInsets.only(top: 5)),
               Align(
                 alignment: Alignment.center,
-                child: MfmText(mfmText: response.description ?? ""),
+                child: MfmText(response.description ?? ""),
               ),
               const Padding(padding: EdgeInsets.only(top: 20)),
               Table(
@@ -117,8 +117,8 @@ class UserDetail extends StatelessWidget {
                   children: [
                     for (final field in response.fields ?? <UserField>[])
                       TableRow(children: [
-                        TableCell(child: MfmText(mfmText: field.name)),
-                        TableCell(child: MfmText(mfmText: field.value)),
+                        TableCell(child: MfmText(field.name)),
+                        TableCell(child: MfmText(field.value)),
                       ])
                   ],
                 ),

@@ -58,30 +58,46 @@ class AvatarIcon extends StatelessWidget {
                 Positioned(
                     left: 0,
                     top: 0,
-                    width: height,
-                    height: height,
+                    width: height * MediaQuery.of(context).textScaleFactor,
+                    height: height * MediaQuery.of(context).textScaleFactor,
                     child: Transform.rotate(
                       angle: -0 * pi / 180,
                       child: Transform.translate(
-                        offset: Offset(-height * 0.3, -height * 0.3),
+                        offset: Offset(
+                            -height *
+                                0.3 *
+                                MediaQuery.of(context).textScaleFactor,
+                            -height *
+                                0.3 *
+                                MediaQuery.of(context).textScaleFactor),
                         child: Icon(Icons.play_arrow_rounded,
                             color: Theme.of(context).primaryColor,
-                            size: height * 1),
+                            size: height *
+                                1 *
+                                MediaQuery.of(context).textScaleFactor),
                       ),
                     )),
               if (user.isCat)
                 Positioned(
                     left: 0,
                     top: 0,
-                    width: height,
-                    height: height,
+                    width: height * MediaQuery.of(context).textScaleFactor,
+                    height: height * MediaQuery.of(context).textScaleFactor,
                     child: Transform.translate(
-                      offset: Offset(height * 1.333, -height * 0.3),
+                      offset: Offset(
+                          height *
+                              1.333 *
+                              MediaQuery.of(context).textScaleFactor,
+                          -height *
+                              0.3 *
+                              MediaQuery.of(context).textScaleFactor),
                       child: Transform(
                         transform: Matrix4.rotationY(pi),
                         child: Icon(Icons.play_arrow_rounded,
                             color: Theme.of(context).primaryColor,
-                            size: height * 1),
+                            size: height *
+                                1 *
+                                MediaQuery.of(context).textScaleFactor),
                       ),
                     )),
               ClipRRect(

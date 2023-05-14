@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -32,7 +34,17 @@ class RenoteModalSheet extends ConsumerWidget {
           },
           title: const Text("Renote"),
         ),
-        const ListTile(title: Text("引用Renote")),
+        ListTile(
+            onTap: () {
+              final scaffoldMessenger = ScaffoldMessenger.of(context);
+              final navigator = Navigator.of(context);
+              context.pushRoute(
+                  NoteCreateRoute(renote: note, initialAccount: account));
+              scaffoldMessenger
+                  .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
+              navigator.pop();
+            },
+            title: const Text("引用Renote")),
         const ListTile(title: Text("チャンネルへRenote")),
         const ListTile(title: Text("チャンネルへ引用Renote")),
       ],

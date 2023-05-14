@@ -12,7 +12,6 @@ import 'package:flutter_misskey_app/repository/note_repository.dart';
 import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
 import 'package:flutter_misskey_app/repository/time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm/mfm.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 // "Ptk6oVyZg9JrLOJpRTSzfu6iofZ9Dz2O"
@@ -68,7 +67,6 @@ final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
 final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
     (ref, account) =>
         EmojiRepositoryImpl(misskey: ref.read(misskeyProvider(account))));
-final mfmParserProvider = Provider<MfmParser>((ref) => const MfmParser());
 
 final accountRepository = Provider(
     (ref) => AccountRepository(ref.read(tabSettingsRepositoryProvider)));

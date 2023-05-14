@@ -116,12 +116,15 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
     final scopedFontSize = (DefaultTextStyle.of(context).style.fontSize ?? 22) *
-        widget.fontSizeRatio;
+        widget.fontSizeRatio *
+        MediaQuery.of(context).textScaleFactor;
 
     if (widget.anotherServerEmojiUrl != null) {
       return NetworkImageView(
         url: widget.anotherServerEmojiUrl!,
         type: ImageType.customEmoji,
+        loadingBuilder: (context, widget, chunk) =>
+            SizedBox(width: scopedFontSize, height: scopedFontSize),
         errorBuilder: (context, e, s) => Container(),
         height: scopedFontSize,
       );
@@ -129,7 +132,23 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
     if (widget.naturalEmoji != null) {
       return Text(widget.naturalEmoji!);
     }
-    return FutureBuilder(
+
+    final emoji = widget.emoji;
+    if (emoji == null) return Container();
+
+    cachedImage = Tooltip(
+        message: ":${emoji.name ?? ""}:",
+        child: NetworkImageView(
+            url: emoji.url.toString(),
+            type: ImageType.customEmoji,
+            loadingBuilder: (context, widget, chunk) => SizedBox(
+                  height: scopedFontSize,
+                  width: scopedFontSize,
+                ),
+            height: scopedFontSize));
+    return cachedImage!;
+
+    /*return FutureBuilder(
         future: requestEmoji(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -153,6 +172,6 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             return Text(":${widget.emoji?.name ?? ""}:");
           }
           return SizedBox(width: scopedFontSize, height: scopedFontSize);
-        });
+        });*/
   }
 }

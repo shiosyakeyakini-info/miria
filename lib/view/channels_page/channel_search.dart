@@ -20,8 +20,9 @@ class ChannelSearchState extends ConsumerState<ChannelSearch> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const Padding(padding: EdgeInsets.only(top: 5)),
         TextField(
-            decoration: const InputDecoration(icon: Icon(Icons.search)),
+            decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
             textInputAction: TextInputAction.done,
             onSubmitted: (value) {
               ref.read(channelSearchProvider.notifier).state = value;

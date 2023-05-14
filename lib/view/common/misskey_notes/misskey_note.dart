@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
 import 'package:flutter_misskey_app/providers.dart';
+import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/local_only_icon.dart';
@@ -90,6 +92,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                 child: SimpleMfmText(
                   "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
                   style: Theme.of(context).textTheme.bodySmall,
+                  emojis: widget.note.user.emojis ?? {},
                 ),
               ),
             if (displayNote.reply != null)
@@ -132,6 +135,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         MfmText(
                           displayNote.cw ?? "",
                           host: displayNote.user.host,
+                          emoji: displayNote.emojis,
                         ),
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -159,6 +163,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         MfmText(
                           displayNote.text ?? "",
                           host: displayNote.user.host,
+                          emoji: displayNote.emojis,
                         ),
                         MisskeyFileView(
                           files: displayNote.files,
@@ -194,7 +199,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.pushRoute(
+                                    NoteCreateRoute(reply: displayNote));
+                              },
                               constraints: const BoxConstraints(),
                               padding: EdgeInsets.zero,
                               style: const ButtonStyle(
@@ -323,12 +331,16 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       await ref.read(notesProvider(account)).refresh(displayNote.id);
       return;
     }
-    showDialog(
+    final selectedEmoji = await showDialog<Emoji?>(
         context: context,
         builder: (context) => ReactionPickerDialog(
-              targetNote: displayNote,
               account: account,
             ));
+    if (selectedEmoji == null) return;
+    await ref.read(misskeyProvider(account)).notes.reactions.create(
+        NotesReactionsCreateRequest(
+            noteId: displayNote.id, reaction: ":${selectedEmoji.name}:"));
+    await ref.read(notesProvider(account)).refresh(displayNote.id);
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
+import 'package:flutter_misskey_app/view/common/app_theme.dart';
 import 'package:flutter_misskey_app/view/common/main_stream.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -65,31 +66,79 @@ class MyApp extends ConsumerWidget {
 
   final _appRouter = AppRouter();
 
-  final themeData = ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: Colors.blue,
-          appBarTheme: const AppBarTheme(
+  ThemeData buildTheme(BuildContext context) {
+    const foregroundColor = Color.fromARGB(255, 103, 103, 103);
+    final textTheme = Theme.of(context).textTheme.merge(ThemeData.light()
+        .textTheme
+        .apply(
+            fontFamily: "Hiragino Maru Gothic ProN",
+            bodyColor: foregroundColor));
+
+    final themeData = ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: const MaterialColor(0xFF86b300, {
+          50: Color(0xFFF0F6E0),
+          100: Color(0xFFDBE8B3),
+          200: Color(0xFFC3D980),
+          300: Color(0xFFAACA4D),
+          400: Color(0xFF98BE26),
+          500: Color(0xFF86B300),
+          600: Color(0xFF7EAC00),
+          700: Color(0xFF73A300),
+          800: Color(0xFF699A00),
+          900: Color(0xFF568B00),
+        }),
+        appBarTheme: AppBarTheme(
             elevation: 0,
             titleSpacing: 0,
+            titleTextStyle:
+                textTheme.headlineSmall?.copyWith(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white)),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 249, 249, 249),
+        tabBarTheme: TabBarTheme(
+            labelColor: foregroundColor,
+            labelStyle: textTheme.titleSmall,
+            unselectedLabelStyle: textTheme.titleSmall
+                ?.copyWith(color: textTheme.bodySmall?.color),
+            indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(color: Theme.of(context).primaryColor))),
+        textTheme: textTheme,
+        iconTheme: const IconThemeData(color: foregroundColor),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                textStyle: const MaterialStatePropertyAll(
+                    TextStyle(color: Colors.white70)),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100))))),
+        inputDecorationTheme: InputDecorationTheme(
+          fillColor: Colors.white,
+          filled: true,
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              borderRadius: BorderRadius.circular(10)),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(10),
           ),
-          tabBarTheme: const TabBarTheme(
-              labelColor: const Color.fromARGB(255, 103, 103, 103),
-              indicator: UnderlineTabIndicator(
-                  borderSide: BorderSide(color: Colors.blue))),
-          textTheme: ThemeData.light().textTheme.apply(
-              fontFamily: "Hiragino Maru Gothic ProN",
-              bodyColor: const Color.fromARGB(255, 103, 103, 103)))
-      .copyWith(
-    textTheme: defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.macOS
-        ? null
-        : GoogleFonts.kosugiTextTheme().merge(const TextTheme(
-            titleSmall: TextStyle(height: 1.5),
-            bodyLarge: TextStyle(height: 1.5),
-            bodyMedium: TextStyle(height: 1.5),
-            bodySmall: TextStyle(height: 1.5),
-          )),
-  );
+          contentPadding: const EdgeInsets.all(5),
+          hintStyle: textTheme.bodySmall
+              ?.copyWith(fontSize: textTheme.titleMedium?.fontSize),
+          isDense: true,
+        )).copyWith(
+        // textTheme: defaultTargetPlatform == TargetPlatform.iOS ||
+        //         defaultTargetPlatform == TargetPlatform.macOS
+        //     ? null
+        //     : GoogleFonts.kosugiTextTheme().merge(const TextTheme(
+        //         titleSmall: TextStyle(height: 1.5),
+        //         bodyLarge: TextStyle(height: 1.5),
+        //         bodyMedium: TextStyle(height: 1.5),
+        //         bodySmall: TextStyle(height: 1.5),
+        //       )),
+        );
+
+    return themeData;
+  }
 
   final darkThemeData = ThemeData(
     brightness: Brightness.dark,
@@ -98,14 +147,36 @@ class MyApp extends ConsumerWidget {
     appBarTheme: const AppBarTheme(elevation: 0),
     fontFamily: "Hiragino Maru Gothic ProN",
   ).copyWith(
-    textTheme: defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.macOS
-        ? null
-        : GoogleFonts.kosugiTextTheme().copyWith(
-            bodySmall: TextStyle(height: 1.5),
-            bodyMedium: TextStyle(height: 1.5),
-          ),
-  );
+      // textTheme: defaultTargetPlatform == TargetPlatform.iOS ||
+      //         defaultTargetPlatform == TargetPlatform.macOS
+      //     ? null
+      //     : GoogleFonts.kosugiTextTheme().copyWith(
+      //         bodySmall: TextStyle(height: 1.5),
+      //         bodyMedium: TextStyle(height: 1.5),
+      //       ),
+      );
+
+  AppThemeData buildAppThemeData(BuildContext context) {
+    return AppThemeData(
+      noteTextStyle: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black54),
+            borderRadius: BorderRadius.circular(10)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(10)),
+      ),
+      reactionButtonStyle: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).primaryColor,
+          padding: const EdgeInsets.all(5),
+          elevation: 0,
+          minimumSize: const Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+      linkStyle: const TextStyle(color: Color.fromARGB(255, 255, 145, 86)),
+    );
+  }
 
   // This widget is the root of your application.
   @override
@@ -116,12 +187,17 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Flutter Demo',
-      theme: themeData,
+      theme: buildTheme(context),
       darkTheme: darkThemeData,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       builder: (context, widget) {
-        return MainStream(child: widget ?? Container());
+        return AppTheme(
+          themeData: buildAppThemeData(context),
+          child: MainStream(
+            child: widget ?? Container(),
+          ),
+        );
       },
       routerConfig: _appRouter.config(initialRoutes: [
         if (isSigned && hasTabSetting)

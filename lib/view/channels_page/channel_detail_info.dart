@@ -71,7 +71,7 @@ class ChannelDetailInfo extends ConsumerWidget {
               ),
             ),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            MfmText(mfmText: data.description ?? ""),
+            MfmText(data.description ?? ""),
             for (final pinnedNote in data.pinnedNotes ?? [])
               MisskeyNote(note: pinnedNote)
           ],

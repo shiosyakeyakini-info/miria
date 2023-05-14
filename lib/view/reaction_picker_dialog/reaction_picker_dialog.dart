@@ -9,11 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ReactionPickerDialog extends ConsumerStatefulWidget {
-  final Note targetNote;
   final Account account;
 
-  const ReactionPickerDialog(
-      {super.key, required this.targetNote, required this.account});
+  const ReactionPickerDialog({super.key, required this.account});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -51,11 +49,12 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: const EdgeInsets.all(5),
       content: AccountScope(
         account: widget.account,
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.9,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -80,8 +79,7 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
                     runSpacing: 5,
                     crossAxisAlignment: WrapCrossAlignment.start,
                     children: [
-                      for (final emoji in emojis)
-                        EmojiButton(emoji: emoji, targetNote: widget.targetNote)
+                      for (final emoji in emojis) EmojiButton(emoji: emoji)
                     ],
                   ),
                 ),
@@ -104,8 +102,7 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
                               for (final emoji in (emojiRepository.emoji ?? [])
                                   .where((element) =>
                                       element.category == categoryList[index]))
-                                EmojiButton(
-                                    emoji: emoji, targetNote: widget.targetNote)
+                                EmojiButton(emoji: emoji)
                             ],
                           ),
                         ),
@@ -124,9 +121,8 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
 
 class EmojiButton extends ConsumerWidget {
   final Emoji emoji;
-  final Note targetNote;
 
-  const EmojiButton({super.key, required this.emoji, required this.targetNote});
+  const EmojiButton({super.key, required this.emoji});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -139,15 +135,7 @@ class EmojiButton extends ConsumerWidget {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         onPressed: () async {
-          final account = AccountScope.of(context);
-          try {
-            await ref.read(misskeyProvider(account)).notes.reactions.create(
-                NotesReactionsCreateRequest(
-                    noteId: targetNote.id, reaction: ":${emoji.name}:"));
-            await ref.read(notesProvider(account)).refresh(targetNote.id);
-          } finally {
-            Navigator.of(context).pop();
-          }
+          Navigator.of(context).pop(emoji);
         },
         child: SizedBox(
             height: 32 * MediaQuery.of(context).textScaleFactor,

@@ -11,8 +11,6 @@
 	<key>com.apple.security.network.server</key>
 	<true/>
 	<key>keychain-access-groups</key>
-	<array>
-		<string>info.shiosyakeyakini.miria</string>
-	</array>
+	<array/>
 </dict>
 </plist>

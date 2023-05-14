@@ -1,12 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CommonDrawer extends ConsumerWidget {
-  const CommonDrawer({super.key});
+  final Account initialOpenAccount;
+
+  const CommonDrawer({super.key, required this.initialOpenAccount});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,10 +21,14 @@ class CommonDrawer extends ConsumerWidget {
             for (final account in ref.read(accountRepository).account) ...[
               ExpansionTile(
                   leading: AvatarIcon.fromIResponse(account.i),
-                  title: Text(account.i.name ?? account.i.username),
+                  initiallyExpanded:
+                      account.userId == initialOpenAccount.userId &&
+                          account.host == initialOpenAccount.host,
+                  title: Text(account.i.name ?? account.i.username,
+                      style: Theme.of(context).textTheme.titleMedium),
                   subtitle: Text(
                     "@${account.userId}@${account.host}",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   children: [
                     ListTile(

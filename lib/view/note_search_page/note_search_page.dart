@@ -47,14 +47,19 @@ class NoteSearchPageState extends ConsumerState<NoteSearchPage> {
             ),
             body: Column(
               children: [
-                TextField(
-                    controller: TextEditingController(
-                        text: widget.initialSearchText ?? ""),
-                    decoration: const InputDecoration(icon: Icon(Icons.search)),
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (value) {
-                      ref.read(noteSearchProvider.notifier).state = value;
-                    }),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                      controller: TextEditingController(
+                          text: widget.initialSearchText ?? ""),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                      ),
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (value) {
+                        ref.read(noteSearchProvider.notifier).state = value;
+                      }),
+                ),
                 const Expanded(
                     child: Padding(
                         padding: EdgeInsets.only(left: 10, right: 10),

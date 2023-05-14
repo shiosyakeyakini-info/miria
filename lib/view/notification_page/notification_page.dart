@@ -8,6 +8,7 @@ import 'package:flutter_misskey_app/view/common/account_scope.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart'
     as mfm_text;
+import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
 import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
@@ -125,9 +126,10 @@ class NotificationItem extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (notification.type == NotificationType.reaction) ...[
-                    mfm_text.MfmText(
-                        mfmText:
-                            "${notification.user?.name ?? notification.user?.username} <small>からリアクション</small>"),
+                    SimpleMfmText(
+                      "${notification.user?.name ?? notification.user?.username} からリアクション",
+                      emojis: notification.user?.emojis ?? {},
+                    ),
                     MediaQuery(
                         data: MediaQueryData(
                             textScaleFactor:
@@ -138,9 +140,9 @@ class NotificationItem extends ConsumerWidget {
                         )),
                   ],
                   if (notification.type == NotificationType.renote) ...[
-                    mfm_text.MfmText(
-                      mfmText:
-                          "${notification.user?.name ?? notification.user?.username} <small>からRenote</small>",
+                    SimpleMfmText(
+                      "${notification.user?.name ?? notification.user?.username} からRenote",
+                      emojis: notification.user?.emojis ?? {},
                     ),
                     MediaQuery(
                       data: MediaQueryData(
@@ -154,8 +156,7 @@ class NotificationItem extends ConsumerWidget {
                   ],
                   if (notification.type == NotificationType.reply) ...[
                     mfm_text.MfmText(
-                      mfmText:
-                          "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
+                      "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
                     ),
                     MediaQuery(
                         data: MediaQueryData(

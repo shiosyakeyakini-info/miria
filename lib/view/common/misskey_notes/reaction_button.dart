@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
+import 'package:flutter_misskey_app/view/common/app_theme.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/reaction_user_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,18 +95,17 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                     noteId: widget.noteId);
               });
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          padding: const EdgeInsets.all(5),
-          elevation: 0,
-          minimumSize: const Size(0, 0),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
+        style: AppTheme.of(context).reactionButtonStyle.copyWith(
+            backgroundColor: MaterialStatePropertyAll(backgroundColor)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-                height: 24 * MediaQuery.of(context).textScaleFactor,
+            ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: double.infinity,
+                  minHeight: 24 * MediaQuery.of(context).textScaleFactor,
+                  maxHeight: 24 * MediaQuery.of(context).textScaleFactor,
+                ),
                 child: CustomEmoji.fromEmojiName(
                   widget.reactionKey,
                   ref.read(emojiRepositoryProvider(AccountScope.of(context))),

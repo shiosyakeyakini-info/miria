@@ -74,6 +74,19 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   Future<void> downloadAllEmojis() async {}
 
+  bool emojiSearchCondition(
+      String query, String convertedQuery, EmojiWrap element) {
+    if (query.length == 1) {
+      return element.emoji.name == query ||
+          element.emoji.aliases.any((element2) => element2 == query);
+    }
+    return element.emoji.name.contains(query) ||
+        element.emoji.aliases.any((element2) => element2.contains(query)) ||
+        element.kanaName.contains(convertedQuery) ||
+        element.kanaAliases
+            .any((element2) => element2.contains(convertedQuery));
+  }
+
   @override
   Future<List<Emoji>> searchEmojis(String name, {int limit = 30}) async {
     if (name == "") {
@@ -83,11 +96,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final converted = const KanaKit().toHiragana(name);
 
     return _emojiWrap
-        .where((element) =>
-            element.emoji.name.contains(name) ||
-            element.emoji.aliases.any((element2) => element2.contains(name)) ||
-            element.kanaName.contains(converted) ||
-            element.kanaAliases.any((element2) => element2.contains(name)))
+        .where((element) => emojiSearchCondition(name, converted, element))
         .sorted((a, b) {
           final aValue = [
             if (a.emoji.name.contains(name)) a.emoji.name,

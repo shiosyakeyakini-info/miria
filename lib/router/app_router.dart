@@ -11,13 +11,13 @@ import 'package:flutter_misskey_app/view/hashtag_page/hashtag_page.dart';
 import 'package:flutter_misskey_app/view/note_create_page/note_create_page.dart';
 import 'package:flutter_misskey_app/view/note_search_page/note_search_page.dart';
 import 'package:flutter_misskey_app/view/notification_page/notification_page.dart';
+import 'package:flutter_misskey_app/view/settings_page/account_settings_page/account_list.dart';
 import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/tab_settings_list_page.dart';
 import 'package:flutter_misskey_app/view/time_line_page/time_line_page.dart';
 import 'package:flutter_misskey_app/view/user_page/user_followee.dart';
 import 'package:flutter_misskey_app/view/user_page/user_follower.dart';
 import 'package:flutter_misskey_app/view/user_page/user_page.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_page.dart';
-import 'package:flutter_misskey_app/view/users_list_page/users_list_timeline.dart';
 import 'package:flutter_misskey_app/view/users_list_page/users_list_timeline_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -41,10 +41,6 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: FavoritedNoteRoute.page),
     AutoRoute(page: ClipListRoute.page),
     AutoRoute(page: ClipDetailRoute.page),
-    AutoRoute(page: LoginRoute.page),
-    AutoRoute(page: SettingsRoute.page),
-    AutoRoute(page: TabSettingsListRoute.page),
-    AutoRoute(page: TabSettingsRoute.page),
     AutoRoute(page: NoteCreateRoute.page),
     AutoRoute(page: UsersListRoute.page),
     AutoRoute(page: UsersListTimelineRoute.page),
@@ -54,5 +50,10 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: ChannelDetailRoute.page),
     AutoRoute(page: NoteSearchRoute.page),
     AutoRoute(page: HashtagRoute.page),
+    AutoRoute(page: LoginRoute.page),
+    AutoRoute(page: SettingsRoute.page),
+    AutoRoute(page: TabSettingsListRoute.page),
+    AutoRoute(page: TabSettingsRoute.page),
+    AutoRoute(page: AccountListRoute.page),
   ];
 }

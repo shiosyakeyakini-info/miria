@@ -7,6 +7,8 @@ import 'package:flutter_misskey_app/model/tab_type.dart';
 import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 class AccountRepository {
   final List<Account> _account = [];
@@ -56,6 +58,12 @@ class AccountRepository {
     }
   }
 
+  Future<void> remove(Account account) async {
+    _account.remove(account);
+    await tabSettingsRepository.removeAccount(account);
+    await save();
+  }
+
   Future<void> loginAsPassword(
       String server, String userId, String password) async {
     final token =
@@ -72,9 +80,28 @@ class AccountRepository {
     await _addIfTabSettingNothing();
   }
 
+  final sessionId = const Uuid().v4();
+
+  Future<void> openMiAuth(String server) async {
+    await launchUrl(MisskeyServer().buildMiAuthURL(server, sessionId,
+        name: "Miria", permission: Permission.values));
+  }
+
+  Future<void> validateMiAuth(String server) async {
+    final token = await MisskeyServer().checkMiAuthToken(server, sessionId);
+    final i = await Misskey(token: token, host: server).i.i();
+    await addAccount(
+        Account(host: server, userId: i.username, token: token, i: i));
+    await _addIfTabSettingNothing();
+  }
+
   Future<void> addAccount(Account account) async {
     _account.add(account);
-    final prefs = FlutterSecureStorage();
+    await save();
+  }
+
+  Future<void> save() async {
+    const prefs = FlutterSecureStorage();
     await prefs.write(
         key: "accounts",
         value: jsonEncode(_account.map((e) => e.toJson()).toList()));

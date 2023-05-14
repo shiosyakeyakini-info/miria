@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_misskey_app/model/account.dart';
 import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,14 @@ class TabSettingsRepository extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("tab_settings",
         jsonEncode(_tabSettings.map((e) => e.toJson()).toList()));
+    notifyListeners();
+  }
+
+  Future<void> removeAccount(Account account) async {
+    _tabSettings.removeWhere((element) =>
+        element.account.host == account.host &&
+        element.account.userId == account.userId);
+    await save(_tabSettings);
     notifyListeners();
   }
 }

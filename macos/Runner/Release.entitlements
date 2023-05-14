@@ -5,8 +5,6 @@
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
 	<key>keychain-access-groups</key>
-	<array>
-		<string>info.shiosyakeyakini.miria</string>
-	</array>
+	<array/>
 </dict>
 </plist>

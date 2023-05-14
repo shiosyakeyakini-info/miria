@@ -1,17 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_misskey_app/extensions/text_editing_controller_extension.dart';
 import 'package:flutter_misskey_app/model/tab_setting.dart';
 import 'package:flutter_misskey_app/model/tab_type.dart';
 import 'package:flutter_misskey_app/providers.dart';
 import 'package:flutter_misskey_app/router/app_router.dart';
 import 'package:flutter_misskey_app/view/channel_dialog.dart';
 import 'package:flutter_misskey_app/view/common/account_scope.dart';
+import 'package:flutter_misskey_app/view/common/app_theme.dart';
 import 'package:flutter_misskey_app/view/common/common_drawer.dart';
 import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
+import 'package:flutter_misskey_app/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_misskey_app/view/common/notification_icon.dart';
 import 'package:flutter_misskey_app/view/common/timeline_listview.dart';
 import 'package:flutter_misskey_app/view/time_line_page/misskey_time_line.dart';
+import 'package:flutter_misskey_app/view/time_line_page/timeline_emoji.dart';
+import 'package:flutter_misskey_app/view/time_line_page/timeline_note.dart';
 import 'package:flutter_misskey_app/view/time_line_page/timeline_scroll_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -27,29 +32,17 @@ class TimeLinePage extends ConsumerStatefulWidget {
 }
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
-  final textEditingController = TextEditingController();
   final scrollController = TimelineScrollController();
-
-  var filteringInputEmoji = <Emoji>[];
 
   @override
   void initState() {
     super.initState();
 
-    textEditingController.addListener(() {
-      final position = textEditingController.selection.base.offset;
-      final value = textEditingController.text;
-
-      if (value.substring(0, position).contains(":")) {
-        final startPosition = value.substring(0, position).lastIndexOf(":") + 1;
-        final searchValue = value.substring(startPosition, position);
-        print(value.substring(0, startPosition));
-        if (RegExp(r':[a-zA-z_0-9]+?:$')
-            .hasMatch(value.substring(0, startPosition))) {
-          if (filteringInputEmoji.isNotEmpty) {
-            setState(() {
-              filteringInputEmoji = [];
-            });
+    ref.read(timelineNoteProvider).addListener(() {
+      if (ref.read(timelineNoteProvider).isIncludeBeforeColon) {
+        if (ref.read(timelineNoteProvider).isEmojiScope) {
+          if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
+            ref.read(filteredInputEmojiProvider.notifier).state = [];
           }
           return;
         }
@@ -57,17 +50,12 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         Future(() async {
           final searchedEmojis = await (ref
               .read(emojiRepositoryProvider(widget.currentTabSetting.account))
-              .searchEmojis(searchValue));
-
-          setState(() {
-            filteringInputEmoji = searchedEmojis;
-          });
+              .searchEmojis(ref.read(timelineNoteProvider).emojiSearchValue));
+          ref.read(filteredInputEmojiProvider.notifier).state = searchedEmojis;
         });
       } else {
-        if (filteringInputEmoji.isNotEmpty) {
-          setState(() {
-            filteringInputEmoji = [];
-          });
+        if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
+          ref.read(filteredInputEmojiProvider.notifier).state = [];
         }
       }
     });
@@ -76,11 +64,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   void note() {
     ref.read(misskeyProvider(widget.currentTabSetting.account)).notes.create(
           NotesCreateRequest(
-            text: textEditingController.value.text,
+            text: ref.read(timelineNoteProvider).value.text,
             channelId: widget.currentTabSetting.channelId,
           ),
         );
-    textEditingController.clear();
+    ref.read(timelineNoteProvider).clear();
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -105,18 +93,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       }
       context.replaceRoute(TimeLineRoute(currentTabSetting: tabSetting));
     }
-  }
-
-  void insertEmoji(Emoji emoji) {
-    final currentPosition = textEditingController.selection.base.offset;
-    final text = textEditingController.text;
-    final beforeSearchText =
-        text.substring(0, text.substring(0, currentPosition).lastIndexOf(":"));
-    textEditingController.value = TextEditingValue(
-        text:
-            "$beforeSearchText:${emoji.name}:${currentPosition == text.length ? "" : text.substring(currentPosition, text.length - 1)}",
-        selection: TextSelection.collapsed(
-            offset: beforeSearchText.length + emoji.name.length + 2));
   }
 
   @override
@@ -162,6 +138,14 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                             padding: const EdgeInsets.only(
                                 left: 5, top: 5, bottom: 5),
                             child: Text(widget.currentTabSetting.name))),
+                    const SizedBox(
+                      height: 24,
+                      child: NetworkImageView(
+                        url:
+                            "https://nos3.arkjp.net/image.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fc8a26f2b-7541-4fc6-bebb-036482b53cec.gif&emoji=1",
+                        type: ImageType.customEmoji,
+                      ),
+                    ),
                     if (widget.currentTabSetting.tabType == TabType.channel)
                       IconButton(
                           onPressed: () {
@@ -193,71 +177,40 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     timeLineRepositoryProvider: widget.currentTabSetting.tabType
                         .timelineProvider(widget.currentTabSetting)),
               ),
-              if (filteringInputEmoji.isNotEmpty)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              top: BorderSide(
-                                  color: Theme.of(context).primaryColor))),
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (final emoji in filteringInputEmoji)
-                            GestureDetector(
-                              onTap: () => insertEmoji(emoji),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: SizedBox(
-                                    height: 32 *
-                                        MediaQuery.of(context).textScaleFactor,
-                                    child: CustomEmoji(
-                                      emoji: emoji,
-                                    )),
-                              ),
-                            ),
-                        ],
-                      ),
+              const TimelineEmoji(),
+              Container(
+                // decoration: filteringInputEmoji.isEmpty
+                //     ? BoxDecoration(
+                //         border: Border(
+                //             top: BorderSide(
+                //                 color: Theme.of(context).primaryColor)))
+                //     : null,
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: TimelineNoteField(),
                     ),
-                  ),
-                ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        controller: textEditingController,
-                      ),
-                    ),
-                  ),
-                  IconButton(onPressed: note, icon: const Icon(Icons.edit)),
-                  if (defaultTargetPlatform == TargetPlatform.android ||
-                      defaultTargetPlatform == TargetPlatform.iOS)
+                    IconButton(onPressed: note, icon: const Icon(Icons.edit)),
+                    if (defaultTargetPlatform == TargetPlatform.android ||
+                        defaultTargetPlatform == TargetPlatform.iOS)
+                      IconButton(
+                          onPressed: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          icon: const Icon(Icons.keyboard_arrow_down)),
                     IconButton(
-                        onPressed: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        icon: const Icon(Icons.keyboard_arrow_down)),
-                  IconButton(
-                    onPressed: () => context.pushRoute(NoteCreateRoute()),
-                    icon: const Icon(Icons.keyboard_arrow_right),
-                  )
-                ],
+                      onPressed: () => context.pushRoute(NoteCreateRoute()),
+                      icon: const Icon(Icons.keyboard_arrow_right),
+                    )
+                  ],
+                ),
               ),
             ],
           ),
           resizeToAvoidBottomInset: true,
-          drawer: const CommonDrawer()),
+          drawer: CommonDrawer(
+            initialOpenAccount: widget.currentTabSetting.account,
+          )),
     );
   }
 }
