@@ -47,3 +47,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+fonts:
+  - family: KosugiMaru
+    fonts:
+      - asset: assets/fonts/KosugiMaru-Regular.ttf
+        weight: 300
+      - asset: assets/fonts/KosugiMaru-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/KosugiMaru-Regular.ttf
+        weight: 500
+      - asset: assets/fonts/KosugiMaru-Regular.ttf
+        weight: 600

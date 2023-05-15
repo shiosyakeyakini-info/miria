@@ -66,12 +66,24 @@ class MyApp extends ConsumerWidget {
 
   final _appRouter = AppRouter();
 
+  String resolveFontFamilyName() {
+    if(defaultTargetPlatform == TargetPlatform.iOS) {
+      return "Hiragino Maru Gothic ProN";
+    }
+    if(defaultTargetPlatform == TargetPlatform.macOS) {
+      return "Hiragino Maru Gothic ProN";
+    }
+
+    return "KosugiMaru";
+  }
+
   ThemeData buildTheme(BuildContext context) {
     const foregroundColor = Color.fromARGB(255, 103, 103, 103);
     final textTheme = Theme.of(context).textTheme.merge(ThemeData.light()
         .textTheme
         .apply(
-            fontFamily: "Hiragino Maru Gothic ProN",
+            fontFamily: "Segoe UI",
+            fontFamilyFallback: ["Noto Sans CJK JP", "KosugiMaru", "BIZ UDPGothic"],
             bodyColor: foregroundColor));
 
     final themeData = ThemeData(
@@ -146,15 +158,7 @@ class MyApp extends ConsumerWidget {
     primaryColor: Colors.blue,
     appBarTheme: const AppBarTheme(elevation: 0),
     fontFamily: "Hiragino Maru Gothic ProN",
-  ).copyWith(
-      // textTheme: defaultTargetPlatform == TargetPlatform.iOS ||
-      //         defaultTargetPlatform == TargetPlatform.macOS
-      //     ? null
-      //     : GoogleFonts.kosugiTextTheme().copyWith(
-      //         bodySmall: TextStyle(height: 1.5),
-      //         bodyMedium: TextStyle(height: 1.5),
-      //       ),
-      );
+  ).copyWith();
 
   AppThemeData buildAppThemeData(BuildContext context) {
     return AppThemeData(
