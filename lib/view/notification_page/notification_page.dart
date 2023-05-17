@@ -1,18 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart'
-    as mfm_text;
-import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart'
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart' as mfm_text;
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import 'package:miria/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
-import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
-import 'package:flutter_misskey_app/view/user_page/user_page.dart';
+import 'package:miria/view/common/pushable_listview.dart';
+import 'package:miria/view/user_page/user_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

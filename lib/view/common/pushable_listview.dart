@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/view/common/error_detail.dart';
+import 'package:miria/view/common/error_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/repository/main_stream_repository.dart';
-import 'package:flutter_misskey_app/repository/note_repository.dart';
+import 'package:miria/model/tab_setting.dart';
+import 'package:miria/repository/main_stream_repository.dart';
+import 'package:miria/repository/note_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class NotifierQueueList extends QueueList<Note> {

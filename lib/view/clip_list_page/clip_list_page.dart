@@ -1,12 +1,12 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/clip_item.dart';
-import 'package:flutter_misskey_app/view/common/futable_list_builder.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/clip_item.dart';
+import 'package:miria/view/common/futable_list_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()

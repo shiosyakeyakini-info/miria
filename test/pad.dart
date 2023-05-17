@@ -6,9 +6,9 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/repository/emoji_repository.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/repository/emoji_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:misskey_dart/misskey_dart.dart';

@@ -1,11 +1,11 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/model/tab_type.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/channel_select_dialog.dart';
-import 'package:flutter_misskey_app/view/settings_page/tab_settings_page/icon_select_dialog.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/model/tab_setting.dart';
+import 'package:miria/model/tab_type.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
+import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

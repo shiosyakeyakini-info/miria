@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_misskey_app/repository/note_repository.dart';
+import 'package:miria/repository/note_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class FavoriteRepository extends ChangeNotifier {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/extensions/text_editing_controller_extension.dart';
-import 'package:flutter_misskey_app/view/time_line_page/timeline_note.dart';
+import 'package:miria/extensions/text_editing_controller_extension.dart';
+import 'package:miria/view/time_line_page/timeline_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomKeyboard extends StatelessWidget {

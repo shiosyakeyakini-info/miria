@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
-import 'package:flutter_misskey_app/view/common/app_theme.dart';
-import 'package:flutter_misskey_app/view/common/main_stream.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/common/main_stream.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;

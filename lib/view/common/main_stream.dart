@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_misskey_app/providers.dart';
+import 'package:miria/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MainStream extends ConsumerStatefulWidget {

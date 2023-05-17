@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/network_image.dart';
-import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
+import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'dart:ui' as ui;

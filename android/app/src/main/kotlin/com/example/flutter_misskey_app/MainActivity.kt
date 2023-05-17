@@ -1,4 +1,4 @@
-package com.example.flutter_misskey_app
+package com.example.miria
 
 import io.flutter.embedding.android.FlutterActivity
 

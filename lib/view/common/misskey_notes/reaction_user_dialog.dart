@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/futable_list_builder.dart';
-import 'package:flutter_misskey_app/view/common/pushable_listview.dart';
-import 'package:flutter_misskey_app/view/user_page/user_list_item.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/futable_list_builder.dart';
+import 'package:miria/view/common/pushable_listview.dart';
+import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

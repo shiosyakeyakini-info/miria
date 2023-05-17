@@ -1,6 +1,6 @@
 {
-    "name": "flutter_misskey_app",
-    "short_name": "flutter_misskey_app",
+    "name": "miria",
+    "short_name": "miria",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
