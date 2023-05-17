@@ -17,6 +17,7 @@ class MfmText extends ConsumerStatefulWidget {
   final String? host;
   final TextStyle? style;
   final Map<String, String> emoji;
+  final bool isNyaize;
 
   const MfmText(
     this.mfmText, {
@@ -24,6 +25,7 @@ class MfmText extends ConsumerStatefulWidget {
     this.host,
     this.style,
     this.emoji = const {},
+    this.isNyaize = false,
   });
 
   @override
@@ -95,6 +97,15 @@ class MfmTextState extends ConsumerState<MfmText> {
         UserRoute(userId: response.id, account: AccountScope.of(context)));
   }
 
+  Future<void> onSearch(String query) async {
+    final uri = Uri(
+        scheme: "https",
+        host: "google.com",
+        pathSegments: ["search"],
+        queryParameters: {"q": query});
+    launchUrl(uri);
+  }
+
   void onHashtagTap(String hashtag) {
     context.pushRoute(
         HashtagRoute(account: AccountScope.of(context), hashtag: hashtag));
@@ -114,7 +125,9 @@ class MfmTextState extends ConsumerState<MfmText> {
       linkStyle: AppTheme.of(context).linkStyle,
       mentionTap: (userName, host, acct) => onMentionTap(acct),
       hashtagTap: onHashtagTap,
+      searchTap: onSearch,
       style: widget.style,
+      isNyaize: widget.isNyaize,
     );
   }
 }

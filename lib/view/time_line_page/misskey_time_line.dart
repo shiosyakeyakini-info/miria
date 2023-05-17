@@ -98,6 +98,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
               return NoteWrapper(
                 targetNote: correctedNewer[index - 1],
+                timeline: timelineRepository,
               );
             }
 
@@ -115,28 +116,50 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
               return null;
             }
 
-            return NoteWrapper(targetNote: correctedOlder[-index]);
+            return NoteWrapper(
+              targetNote: correctedOlder[-index],
+              timeline: timelineRepository,
+            );
           },
         ));
   }
 }
 
-class NoteWrapper extends ConsumerWidget {
+class NoteWrapper extends ConsumerStatefulWidget {
   final Note targetNote;
+  final TimeLineRepository timeline;
 
   const NoteWrapper({
     super.key,
     required this.targetNote,
+    required this.timeline,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => NoteWrapperState();
+}
+
+class NoteWrapperState extends ConsumerState<NoteWrapper> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    widget.timeline.subscribe(widget.targetNote.id);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.timeline.describe(widget.targetNote.id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final note = ref.watch(notesProvider(AccountScope.of(context))
-        .select((note) => note.notes[targetNote.id]));
+        .select((note) => note.notes[widget.targetNote.id]));
     if (note == null) {
-      print("note was not found. $targetNote");
+      print("note was not found. ${widget.targetNote}");
       return MisskeyNote(
-          note: targetNote, key: ValueKey<String>(targetNote.id));
+          note: widget.targetNote, key: ValueKey<String>(widget.targetNote.id));
     }
     return MisskeyNote(note: note, key: ValueKey<String>(note.id));
   }

@@ -69,6 +69,12 @@ class ChannelTimelineRepository extends TimeLineRepository {
       newerNotes.add(note);
 
       notifyListeners();
+    }, (id, value) {
+      final registeredNote = noteRepository.notes[id];
+      if (registeredNote == null) return;
+      final reaction = Map.of(registeredNote.reactions);
+      reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
+      noteRepository.registerNote(registeredNote.copyWith(reactions: reaction));
     })
       ..startStreaming();
   }
@@ -106,5 +112,21 @@ class ChannelTimelineRepository extends TimeLineRepository {
     super.dispose();
     socketController?.disconnect();
     socketController = null;
+  }
+
+  final List<String> capturedId = [];
+
+  @override
+  void subscribe(String id) {
+    if (!capturedId.contains(id)) {
+      socketController?.send(ChannelDataType.subNote, id);
+      capturedId.add(id);
+    }
+  }
+
+  @override
+  void describe(String id) {
+    socketController?.send(ChannelDataType.unsubNote, id);
+    capturedId.remove(id);
   }
 }

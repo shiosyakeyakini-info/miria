@@ -331,16 +331,17 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       await ref.read(notesProvider(account)).refresh(displayNote.id);
       return;
     }
+    final misskey = ref.read(misskeyProvider(account));
+    final note = ref.read(notesProvider(account));
     final selectedEmoji = await showDialog<Emoji?>(
         context: context,
         builder: (context) => ReactionPickerDialog(
               account: account,
             ));
     if (selectedEmoji == null) return;
-    await ref.read(misskeyProvider(account)).notes.reactions.create(
-        NotesReactionsCreateRequest(
-            noteId: displayNote.id, reaction: ":${selectedEmoji.name}:"));
-    await ref.read(notesProvider(account)).refresh(displayNote.id);
+    await misskey.notes.reactions.create(NotesReactionsCreateRequest(
+        noteId: displayNote.id, reaction: ":${selectedEmoji.name}:"));
+    await note.refresh(displayNote.id);
   }
 }
 

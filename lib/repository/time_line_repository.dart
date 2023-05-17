@@ -107,4 +107,8 @@ abstract class TimeLineRepository extends ChangeNotifier {
   }
 
   Future<void> previousLoad() async {}
+
+  void subscribe(String id) {}
+
+  void describe(String id) {}
 }

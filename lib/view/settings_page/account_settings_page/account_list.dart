@@ -47,7 +47,9 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
                             content: const Text("ほんまに削除してええな？"),
                             actions: [
                               OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                   child: const Text("やっぱりせえへん")),
                               ElevatedButton(
                                   onPressed: () async {

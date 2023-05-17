@@ -52,9 +52,10 @@ class NoteSearchPageState extends ConsumerState<NoteSearchPage> {
                   child: TextField(
                       controller: TextEditingController(
                           text: widget.initialSearchText ?? ""),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                       ),
+                      autofocus: true,
                       textInputAction: TextInputAction.done,
                       onSubmitted: (value) {
                         ref.read(noteSearchProvider.notifier).state = value;

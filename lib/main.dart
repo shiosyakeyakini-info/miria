@@ -111,8 +111,85 @@ class MyApp extends ConsumerWidget {
                 foregroundColor: const MaterialStatePropertyAll(Colors.white),
                 shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100))))),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100))))),
         inputDecorationTheme: InputDecorationTheme(
           fillColor: Colors.white,
+          filled: true,
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              borderRadius: BorderRadius.circular(10)),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding: const EdgeInsets.all(5),
+          hintStyle: textTheme.bodySmall
+              ?.copyWith(fontSize: textTheme.titleMedium?.fontSize),
+          isDense: true,
+        )).copyWith(
+        // textTheme: defaultTargetPlatform == TargetPlatform.iOS ||
+        //         defaultTargetPlatform == TargetPlatform.macOS
+        //     ? null
+        //     : GoogleFonts.kosugiTextTheme().merge(const TextTheme(
+        //         titleSmall: TextStyle(height: 1.5),
+        //         bodyLarge: TextStyle(height: 1.5),
+        //         bodyMedium: TextStyle(height: 1.5),
+        //         bodySmall: TextStyle(height: 1.5),
+        //       )),
+        );
+
+    return themeData;
+  }
+
+  ThemeData buildDarkTheme(BuildContext context) {
+    const foregroundColor = Color.fromARGB(255, 255, 255, 255);
+    final textTheme = Theme.of(context).textTheme.merge(ThemeData.dark()
+        .textTheme
+        .apply(fontFamily: "Hiragino Maru Gothic ProN"));
+    final themeData = ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: const MaterialColor(0xFF86b300, {
+          50: Color(0xFFF0F6E0),
+          100: Color(0xFFDBE8B3),
+          200: Color(0xFFC3D980),
+          300: Color(0xFFAACA4D),
+          400: Color(0xFF98BE26),
+          500: Color(0xFF86B300),
+          600: Color(0xFF7EAC00),
+          700: Color(0xFF73A300),
+          800: Color(0xFF699A00),
+          900: Color(0xFF568B00),
+        }),
+        appBarTheme: AppBarTheme(
+            elevation: 0,
+            titleSpacing: 0,
+            titleTextStyle:
+                textTheme.headlineSmall?.copyWith(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white)),
+        tabBarTheme: TabBarTheme(
+            labelColor: foregroundColor,
+            labelStyle: textTheme.titleSmall,
+            unselectedLabelStyle: textTheme.titleSmall
+                ?.copyWith(color: textTheme.bodySmall?.color),
+            indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(color: Theme.of(context).primaryColor))),
+        textTheme: textTheme,
+        iconTheme: const IconThemeData(color: foregroundColor),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                textStyle: const MaterialStatePropertyAll(
+                    TextStyle(color: Colors.white70)),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100))))),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100))))),
+        inputDecorationTheme: InputDecorationTheme(
           filled: true,
           border: OutlineInputBorder(
               borderSide: BorderSide(color: Theme.of(context).primaryColor),
@@ -188,7 +265,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: buildTheme(context),
-      darkTheme: darkThemeData,
+      darkTheme: buildDarkTheme(context),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       builder: (context, widget) {

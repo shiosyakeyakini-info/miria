@@ -95,6 +95,39 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     }
   }
 
+  void noteCreateRoute() {
+    CommunityChannel? channel;
+    if (widget.currentTabSetting.channelId != null) {
+      final Note? note;
+      final timeline = ref.read(widget.currentTabSetting.timelineProvider);
+      if (timeline.olderNotes.isNotEmpty) {
+        note = timeline.olderNotes.first;
+      } else if (timeline.newerNotes.isNotEmpty) {
+        note = timeline.newerNotes.first;
+      } else {
+        //TODO: チャンネルにノートがないとき
+        note = null;
+      }
+      final noteChannel = note?.channel;
+
+      if (noteChannel != null) {
+        channel = CommunityChannel(
+          id: noteChannel.id,
+          createdAt: DateTime.now(),
+          name: noteChannel.name,
+          pinnedNoteIds: [],
+          usersCount: 0,
+          notesCount: 0,
+          isFollowing: false,
+          isFavorited: false,
+          hasUnreadNote: false,
+          pinnedNotes: [],
+        );
+      }
+    }
+    context.pushRoute(NoteCreateRoute(channel: channel));
+  }
+
   @override
   Widget build(BuildContext context) {
     return AccountScope(
@@ -199,7 +232,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                           },
                           icon: const Icon(Icons.keyboard_arrow_down)),
                     IconButton(
-                      onPressed: () => context.pushRoute(NoteCreateRoute()),
+                      onPressed: noteCreateRoute,
                       icon: const Icon(Icons.keyboard_arrow_right),
                     )
                   ],
