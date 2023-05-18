@@ -125,7 +125,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         );
       }
     }
-    context.pushRoute(NoteCreateRoute(channel: channel));
+    context.pushRoute(NoteCreateRoute(
+      channel: channel,
+      initialAccount: widget.currentTabSetting.account,
+    ));
   }
 
   @override

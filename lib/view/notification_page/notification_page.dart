@@ -175,8 +175,10 @@ class NotificationItem extends ConsumerWidget {
                         child: misskey_note.MisskeyNote(
                           note: notification.note!,
                           isDisplayBorder: false,
-                        ))
-                  ]
+                        )),
+                  ],
+                  if (notification.type == NotificationType.achievementEarned)
+                    Text("実績を解除したで  [${notification.achievement}]")
                 ],
               ),
             )

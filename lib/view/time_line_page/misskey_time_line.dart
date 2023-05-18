@@ -143,13 +143,25 @@ class NoteWrapperState extends ConsumerState<NoteWrapper> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.timeline.subscribe(widget.targetNote.id);
+    if (widget.targetNote.renoteId != null && widget.targetNote.text == null) {
+      widget.timeline.subscribe(SubscribeItem(
+        noteId: widget.targetNote.renoteId!,
+        renoteId: null,
+        replyId: null,
+      ));
+    } else {
+      widget.timeline.subscribe(SubscribeItem(
+        noteId: widget.targetNote.id,
+        renoteId: widget.targetNote.renoteId,
+        replyId: widget.targetNote.replyId,
+      ));
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.timeline.describe(widget.targetNote.id);
+    widget.timeline.preserveDescribe(widget.targetNote.id);
   }
 
   @override

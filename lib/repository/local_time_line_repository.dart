@@ -52,19 +52,23 @@ class LocalTimeLineRepository extends TimeLineRepository {
     socketController = null;
   }
 
-  final List<String> capturedId = [];
-
   @override
-  void subscribe(String id) {
-    if (!capturedId.contains(id)) {
-      socketController?.send(ChannelDataType.subNote, id);
-      capturedId.add(id);
+  void subscribe(SubscribeItem item) {
+    super.subscribe(item);
+    socketController?.send(ChannelDataType.subNote, item.noteId);
+    final renoteId = item.renoteId;
+    if (renoteId != null) {
+      socketController?.send(ChannelDataType.subNote, renoteId);
+    }
+
+    final replyId = item.replyId;
+    if (replyId != null) {
+      socketController?.send(ChannelDataType.subNote, replyId);
     }
   }
 
   @override
   void describe(String id) {
     socketController?.send(ChannelDataType.unsubNote, id);
-    capturedId.remove(id);
   }
 }

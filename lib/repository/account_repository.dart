@@ -83,8 +83,11 @@ class AccountRepository {
   final sessionId = const Uuid().v4();
 
   Future<void> openMiAuth(String server) async {
-    await launchUrl(MisskeyServer().buildMiAuthURL(server, sessionId,
-        name: "Miria", permission: Permission.values));
+    await launchUrl(
+      MisskeyServer().buildMiAuthURL(server, sessionId,
+          name: "Miria", permission: Permission.values),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   Future<void> validateMiAuth(String server) async {

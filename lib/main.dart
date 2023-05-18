@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/app_theme.dart';
@@ -268,6 +269,15 @@ class MyApp extends ConsumerWidget {
       darkTheme: buildDarkTheme(context),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+      locale: const Locale("ja", "JP"),
+      supportedLocales: const [
+        Locale("ja", "JP"),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       builder: (context, widget) {
         return AppTheme(
           themeData: buildAppThemeData(context),
