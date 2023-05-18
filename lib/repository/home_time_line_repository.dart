@@ -110,16 +110,44 @@ class HomeTimeLineRepository extends TimeLineRepository {
 
   @override
   void subscribe(SubscribeItem item) {
-    super.subscribe(item);
-    socketController?.send(ChannelDataType.subNote, item.noteId);
+    final index =
+        subscribedList.indexWhere((element) => element.noteId == item.noteId);
+    final isSubscribed = subscribedList.indexWhere((element) =>
+        element.noteId == item.noteId ||
+        element.renoteId == item.noteId ||
+        element.replyId == item.noteId);
+
+    if (index == -1) {
+      subscribedList.add(item);
+      if (isSubscribed == -1) {
+        socketController?.send(ChannelDataType.subNote, item.noteId);
+      }
+    } else {
+      subscribedList[index] = item;
+    }
+
     final renoteId = item.renoteId;
+
     if (renoteId != null) {
-      socketController?.send(ChannelDataType.subNote, renoteId);
+      final isRenoteSubscribed = subscribedList.indexWhere((element) =>
+          element.noteId == renoteId ||
+          element.renoteId == renoteId ||
+          element.replyId == renoteId);
+      if (isRenoteSubscribed == -1) {
+        socketController?.send(ChannelDataType.subNote, renoteId);
+      }
     }
 
     final replyId = item.replyId;
     if (replyId != null) {
       socketController?.send(ChannelDataType.subNote, replyId);
+      final isRenoteSubscribed = subscribedList.indexWhere((element) =>
+          element.noteId == replyId ||
+          element.renoteId == replyId ||
+          element.replyId == replyId);
+      if (isRenoteSubscribed == -1) {
+        socketController?.send(ChannelDataType.subNote, replyId);
+      }
     }
   }
 
