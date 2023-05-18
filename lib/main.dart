@@ -6,7 +6,6 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/app_theme.dart';
 import 'package:miria/view/common/main_stream.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 Future<void> main() async {
@@ -68,14 +67,25 @@ class MyApp extends ConsumerWidget {
   final _appRouter = AppRouter();
 
   String resolveFontFamilyName() {
-    if(defaultTargetPlatform == TargetPlatform.iOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       return "Hiragino Maru Gothic ProN";
     }
-    if(defaultTargetPlatform == TargetPlatform.macOS) {
+    if (defaultTargetPlatform == TargetPlatform.macOS) {
       return "Hiragino Maru Gothic ProN";
     }
 
     return "KosugiMaru";
+  }
+
+  List<String> resolveFontFamilyCallback() {
+    if (defaultTargetPlatform == TargetPlatform.windows) {
+      return ["Noto Sans CJK JP", "KosugiMaru", "BIZ UDPGothic"];
+    }
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      return ["SF Pro Text", "Apple Color Emoji"];
+    }
+    return [];
   }
 
   ThemeData buildTheme(BuildContext context) {
@@ -83,8 +93,8 @@ class MyApp extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme.merge(ThemeData.light()
         .textTheme
         .apply(
-            fontFamily: "Segoe UI",
-            fontFamilyFallback: ["Noto Sans CJK JP", "KosugiMaru", "BIZ UDPGothic"],
+            fontFamily: resolveFontFamilyName(),
+            fontFamilyFallback: resolveFontFamilyCallback(),
             bodyColor: foregroundColor));
 
     final themeData = ThemeData(
@@ -159,9 +169,11 @@ class MyApp extends ConsumerWidget {
 
   ThemeData buildDarkTheme(BuildContext context) {
     const foregroundColor = Color.fromARGB(255, 255, 255, 255);
-    final textTheme = Theme.of(context).textTheme.merge(ThemeData.dark()
-        .textTheme
-        .apply(fontFamily: "Hiragino Maru Gothic ProN"));
+    final textTheme =
+        Theme.of(context).textTheme.merge(ThemeData.dark().textTheme.apply(
+              fontFamily: resolveFontFamilyName(),
+              fontFamilyFallback: resolveFontFamilyCallback(),
+            ));
     final themeData = ThemeData(
         brightness: Brightness.dark,
         primarySwatch: const MaterialColor(0xFF86b300, {
@@ -229,14 +241,6 @@ class MyApp extends ConsumerWidget {
 
     return themeData;
   }
-
-  final darkThemeData = ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.blue,
-    primaryColor: Colors.blue,
-    appBarTheme: const AppBarTheme(elevation: 0),
-    fontFamily: "Hiragino Maru Gothic ProN",
-  ).copyWith();
 
   AppThemeData buildAppThemeData(BuildContext context) {
     return AppThemeData(
