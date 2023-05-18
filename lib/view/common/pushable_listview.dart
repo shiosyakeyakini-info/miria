@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/view/common/error_detail.dart';
+import 'package:miria/view/common/error_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {
@@ -8,13 +8,18 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function(T) nextFuture;
   final Widget Function(BuildContext, T) itemBuilder;
   final Object listKey;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
 
-  const PushableListView(
-      {super.key,
-      required this.initializeFuture,
-      required this.nextFuture,
-      required this.itemBuilder,
-      this.listKey = ""});
+  const PushableListView({
+    super.key,
+    required this.initializeFuture,
+    required this.nextFuture,
+    required this.itemBuilder,
+    this.listKey = "",
+    this.shrinkWrap = false,
+    this.physics,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -68,6 +73,8 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: widget.shrinkWrap,
+      physics: widget.physics,
       itemCount: items.length + 1,
       itemBuilder: (context, index) {
         if (items.length == index) {

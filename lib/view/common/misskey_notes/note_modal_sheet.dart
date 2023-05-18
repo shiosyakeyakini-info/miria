@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/not_implements_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -31,7 +32,14 @@ class NoteModalSheet extends ConsumerWidget {
         }
         return ListView(
           children: [
-            const ListTile(title: Text("詳細")),
+            ListTile(
+              title: Text("詳細"),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => NotImplementationDialog());
+              },
+            ),
             ListTile(
               title: const Text("内容をコピー"),
               onTap: () {
@@ -72,7 +80,14 @@ class NoteModalSheet extends ConsumerWidget {
 
                   Navigator.of(context).pop();
                 }),
-            ListTile(title: const Text("ノートを共有")), //TODO: 未実装
+            ListTile(
+              title: const Text("ノートを共有"),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => NotImplementationDialog());
+              },
+            ), //TODO: 未実装
             ListTile(
                 onTap: () async {
                   if (data.isFavorited) {
@@ -94,7 +109,14 @@ class NoteModalSheet extends ConsumerWidget {
                 },
                 title:
                     Text(data.isFavorited ? "お気に入り解除" : "お気に入り")), //TODO: 未実装
-            ListTile(title: Text("クリップ")), //TODO: 未実装
+            ListTile(
+              title: const Text("クリップ"),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => NotImplementationDialog());
+              },
+            ), //TODO: 未実装
           ],
         );
       },

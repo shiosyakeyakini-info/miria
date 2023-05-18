@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/model/tab_type.dart';
-import 'package:flutter_misskey_app/repository/tab_settings_repository.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/model/tab_setting.dart';
+import 'package:miria/model/tab_type.dart';
+import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -83,8 +83,11 @@ class AccountRepository {
   final sessionId = const Uuid().v4();
 
   Future<void> openMiAuth(String server) async {
-    await launchUrl(MisskeyServer().buildMiAuthURL(server, sessionId,
-        name: "Miria", permission: Permission.values));
+    await launchUrl(
+      MisskeyServer().buildMiAuthURL(server, sessionId,
+          name: "Miria", permission: Permission.values),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   Future<void> validateMiAuth(String server) async {

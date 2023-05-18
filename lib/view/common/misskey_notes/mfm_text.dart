@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/app_theme.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -17,6 +17,7 @@ class MfmText extends ConsumerStatefulWidget {
   final String? host;
   final TextStyle? style;
   final Map<String, String> emoji;
+  final bool isNyaize;
 
   const MfmText(
     this.mfmText, {
@@ -24,6 +25,7 @@ class MfmText extends ConsumerStatefulWidget {
     this.host,
     this.style,
     this.emoji = const {},
+    this.isNyaize = false,
   });
 
   @override
@@ -95,6 +97,15 @@ class MfmTextState extends ConsumerState<MfmText> {
         UserRoute(userId: response.id, account: AccountScope.of(context)));
   }
 
+  Future<void> onSearch(String query) async {
+    final uri = Uri(
+        scheme: "https",
+        host: "google.com",
+        pathSegments: ["search"],
+        queryParameters: {"q": query});
+    launchUrl(uri);
+  }
+
   void onHashtagTap(String hashtag) {
     context.pushRoute(
         HashtagRoute(account: AccountScope.of(context), hashtag: hashtag));
@@ -114,7 +125,9 @@ class MfmTextState extends ConsumerState<MfmText> {
       linkStyle: AppTheme.of(context).linkStyle,
       mentionTap: (userName, host, acct) => onMentionTap(acct),
       hashtagTap: onHashtagTap,
+      searchTap: onSearch,
       style: widget.style,
+      isNyaize: widget.isNyaize,
     );
   }
 }

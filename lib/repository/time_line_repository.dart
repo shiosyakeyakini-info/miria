@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/repository/main_stream_repository.dart';
-import 'package:flutter_misskey_app/repository/note_repository.dart';
+import 'package:miria/model/tab_setting.dart';
+import 'package:miria/repository/main_stream_repository.dart';
+import 'package:miria/repository/note_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class NotifierQueueList extends QueueList<Note> {
@@ -57,13 +59,69 @@ class NotifierQueueList extends QueueList<Note> {
   }
 }
 
+class SubscribeItem {
+  final DateTime? unsubscribedTime;
+  final String noteId;
+  final String? renoteId;
+  final String? replyId;
+
+  const SubscribeItem({
+    required this.noteId,
+    required this.renoteId,
+    required this.replyId,
+    this.unsubscribedTime,
+  });
+}
+
 abstract class TimeLineRepository extends ChangeNotifier {
   final NoteRepository noteRepository;
   final MainStreamRepository globalNotificationRepository;
   final TabSetting tabSetting;
 
+  final List<SubscribeItem> subscribedList = [];
+
   TimeLineRepository(
-      this.noteRepository, this.globalNotificationRepository, this.tabSetting);
+      this.noteRepository, this.globalNotificationRepository, this.tabSetting) {
+    // describer
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      final now = DateTime.now();
+      bool condition(SubscribeItem element) =>
+          element.unsubscribedTime != null &&
+          now.difference(element.unsubscribedTime!) <
+              const Duration(seconds: 10);
+      for (final item in subscribedList.where(condition)) {
+        // 他に参照がなければ、購読を解除する
+        if (subscribedList.every(
+            (e) => e.renoteId != item.noteId && e.replyId != item.noteId)) {
+          describe(item.noteId);
+        }
+
+        final renoteId = item.renoteId;
+        if (renoteId != null) {
+          if (subscribedList.every((e) =>
+              (e.noteId != item.renoteId &&
+                  e.replyId != item.renoteId &&
+                  (e.noteId != item.noteId && e.renoteId != item.renoteId)) ||
+              e.noteId == item.noteId)) {
+            describe(renoteId);
+          }
+        }
+
+        final replyId = item.replyId;
+        if (replyId != null) {
+          if (subscribedList.every((e) =>
+              (e.noteId != item.replyId &&
+                  e.replyId != item.replyId &&
+                  (e.noteId != item.noteId && e.replyId != item.replyId)) ||
+              e.noteId == item.noteId)) {
+            describe(replyId);
+          }
+        }
+      }
+
+      subscribedList.removeWhere(condition);
+    });
+  }
 
   late final QueueList<Note> newerNotes =
       NotifierQueueList(noteRepository, tabSetting);
@@ -107,4 +165,31 @@ abstract class TimeLineRepository extends ChangeNotifier {
   }
 
   Future<void> previousLoad() async {}
+
+  void subscribe(SubscribeItem item) {
+    final index =
+        subscribedList.indexWhere((element) => element.noteId == item.noteId);
+    if (index == -1) {
+      subscribedList.add(item);
+    } else {
+      subscribedList[index] = item;
+    }
+  }
+
+  void preserveDescribe(String id) {
+    final index = subscribedList.indexWhere((element) => element.noteId == id);
+    if (index == -1) {
+      // already described?
+    }
+    final item = subscribedList[index];
+
+    subscribedList[index] = SubscribeItem(
+      noteId: item.noteId,
+      renoteId: item.renoteId,
+      replyId: item.replyId,
+      unsubscribedTime: DateTime.now(),
+    );
+  }
+
+  void describe(String id) {}
 }

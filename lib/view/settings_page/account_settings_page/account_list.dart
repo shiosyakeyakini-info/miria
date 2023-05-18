@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
-import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/avatar_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
@@ -47,7 +47,9 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
                             content: const Text("ほんまに削除してええな？"),
                             actions: [
                               OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                   child: const Text("やっぱりせえへん")),
                               ElevatedButton(
                                   onPressed: () async {

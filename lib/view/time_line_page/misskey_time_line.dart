@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/repository/time_line_repository.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
-import 'package:flutter_misskey_app/view/common/timeline_listview.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/repository/time_line_repository.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/view/common/timeline_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -98,6 +98,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
               return NoteWrapper(
                 targetNote: correctedNewer[index - 1],
+                timeline: timelineRepository,
               );
             }
 
@@ -115,28 +116,62 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
               return null;
             }
 
-            return NoteWrapper(targetNote: correctedOlder[-index]);
+            return NoteWrapper(
+              targetNote: correctedOlder[-index],
+              timeline: timelineRepository,
+            );
           },
         ));
   }
 }
 
-class NoteWrapper extends ConsumerWidget {
+class NoteWrapper extends ConsumerStatefulWidget {
   final Note targetNote;
+  final TimeLineRepository timeline;
 
   const NoteWrapper({
     super.key,
     required this.targetNote,
+    required this.timeline,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => NoteWrapperState();
+}
+
+class NoteWrapperState extends ConsumerState<NoteWrapper> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.targetNote.renoteId != null && widget.targetNote.text == null) {
+      widget.timeline.subscribe(SubscribeItem(
+        noteId: widget.targetNote.renoteId!,
+        renoteId: null,
+        replyId: null,
+      ));
+    } else {
+      widget.timeline.subscribe(SubscribeItem(
+        noteId: widget.targetNote.id,
+        renoteId: widget.targetNote.renoteId,
+        replyId: widget.targetNote.replyId,
+      ));
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.timeline.preserveDescribe(widget.targetNote.id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final note = ref.watch(notesProvider(AccountScope.of(context))
-        .select((note) => note.notes[targetNote.id]));
+        .select((note) => note.notes[widget.targetNote.id]));
     if (note == null) {
-      print("note was not found. $targetNote");
+      print("note was not found. ${widget.targetNote}");
       return MisskeyNote(
-          note: targetNote, key: ValueKey<String>(targetNote.id));
+          note: widget.targetNote, key: ValueKey<String>(widget.targetNote.id));
     }
     return MisskeyNote(note: note, key: ValueKey<String>(note.id));
   }

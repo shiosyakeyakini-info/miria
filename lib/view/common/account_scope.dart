@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_misskey_app/model/account.dart';
+import 'package:miria/model/account.dart';
 
 class AccountScope extends InheritedWidget {
   final Account account;

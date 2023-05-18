@@ -1,16 +1,28 @@
-# flutter_misskey_app
+# Miria
 
-A new Flutter project.
+Miriaはスマートフォン向けMisskeyクライアントです。
 
-## Getting Started
+## コンセプト
 
-This project is a starting point for a Flutter application.
+- Misskeyをブラウザで見たときと近い世界観を構築しつつ、アプリならではの操作感にフィットできること
+- シームレスに操作ができること
+- MFMアートがそれなりに描画できること
 
-A few resources to get you started if this is your first Flutter project:
+## スケジュール
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+おおよその予定しているスケジュールはこのような感じです。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+5月末〜7月上旬 TestFlightで公開(iOS), apkファイル直接配布(Android)
+7月中旬頃 正式にストア公開
+
+## 対応予定
+
+### 対応する予定がないもの
+
+- ページ、PlayなどのAiScriptが必要な機能
+  - これらの機能は実装がたいへん難しいので、いまのところ対応する予定はありません。
+- CalckeyなどのMisskeyベースの他のSNS対応
+  - APIのレスポンスの型が異なるなどさまざまな制約から、現状対応する予定はありません。
+- Misskeyの機能の網羅
+  - このアプリはMisskeyの機能を完全に網羅する予定はありません。
+    使用頻度の少ない機能（チャンネルの作成など）はWebと併用する使い方を想定しています。

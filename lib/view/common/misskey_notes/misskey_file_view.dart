@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 import 'network_image.dart';
 
 class MisskeyFileView extends StatelessWidget {
-  final List<MisskeyFile> files;
+  final List<DriveFile> files;
 
   final double height;
 

@@ -1,8 +1,8 @@
-name: flutter_misskey_app
-description: A new Flutter project.
+name: miria
+description: Miria is Misskey Client for Mobile App.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 0.0.3+3
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -10,6 +10,8 @@ environment:
 dependencies:
   collection: ^1.16.0
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   flutter_html: 3.0.0-alpha.6
   flutter_riverpod: ^2.3.2
@@ -24,7 +26,7 @@ dependencies:
   auto_route: ^6.0.5
   freezed_annotation: ^2.2.0
   url_launcher: ^6.1.10
-  intl: ^0.18.1
+  intl: ^0.18.0
   scrollable_positioned_list: ^0.3.6
   kana_kit: ^2.0.0
   cached_network_image: ^3.2.3
@@ -34,6 +36,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   google_fonts: ^4.0.4
   uuid: ^3.0.7
+  file_picker: ^5.3.0
 
 dev_dependencies:
   flutter_test:

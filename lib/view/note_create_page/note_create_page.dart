@@ -1,15 +1,22 @@
+import 'dart:io';
+
 import 'package:auto_route/annotations.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/extensions/text_editing_controller_extension.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/app_theme.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
-import 'package:flutter_misskey_app/view/note_create_page/note_create_setting_top.dart';
-import 'package:flutter_misskey_app/view/note_create_page/note_emoji.dart';
-import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_dialog.dart';
+import 'package:miria/extensions/text_editing_controller_extension.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
+import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/view/common/not_implements_dialog.dart';
+import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
+import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
+import 'package:miria/view/note_create_page/note_create_setting_top.dart';
+import 'package:miria/view/note_create_page/note_emoji.dart';
+import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -51,6 +58,8 @@ final noteVisibilityProvider =
     StateProvider.autoDispose<NoteVisibility>((ref) => NoteVisibility.public);
 final isLocalProvider = StateProvider.autoDispose((ref) => false);
 final noteCreateEmojisProvider = StateProvider.autoDispose((ref) => <Emoji>[]);
+final filesProvider = StateProvider.autoDispose((ref) => <DriveFile>[]);
+final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
 
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
@@ -93,6 +102,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
 
   Future<void> note() async {
     final account = ref.read(selectedAccountProvider);
+    final files = ref.read(filesProvider);
     if (account == null) return;
     ref.read(misskeyProvider(account)).notes.create(NotesCreateRequest(
           visibility: ref.read(noteVisibilityProvider),
@@ -102,8 +112,51 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           replyId: widget.reply?.id,
           renoteId: widget.renote?.id,
           channelId: widget.channel?.id,
+          fileIds: files.isNotEmpty ? files.map((e) => e.id).toList() : null,
         ));
     Navigator.of(context).pop();
+  }
+
+  Future<void> driveConnect() async {
+    final result = await showModalBottomSheet<DriveModalSheetReturnValue?>(
+        context: context, builder: (context) => const DriveModalSheet());
+    final account = ref.read(selectedAccountProvider);
+    if (account == null) return;
+    final misskey = ref.read(misskeyProvider(account));
+
+    if (result == DriveModalSheetReturnValue.drive) {
+      if (!mounted) return;
+      final result = await showDialog<DriveFile?>(
+          context: context,
+          builder: (context) => DriveFileSelectDialog(account: account));
+      if (result == null) return;
+
+      ref.read(filesProvider.notifier).state = [
+        ...ref.read(filesProvider),
+        result
+      ];
+    } else if (result == DriveModalSheetReturnValue.upload) {
+      final result = await FilePicker.platform.pickFiles(type: FileType.image);
+      if (result == null) return;
+
+      final path = result.files.single.path;
+      if (path == null) return;
+      if (!mounted) return;
+      ref.read(progressFileUploadProvider.notifier).state = true;
+      final response = await misskey.drive.files.create(
+          DriveFilesCreateRequest(
+            force: true,
+            name: path.substring(
+                path.lastIndexOf(Platform.pathSeparator) + 1, path.length),
+          ),
+          File(path));
+      if (!mounted) return;
+      ref.read(filesProvider.notifier).state = [
+        ...ref.read(filesProvider),
+        response
+      ];
+      ref.read(progressFileUploadProvider.notifier).state = false;
+    }
   }
 
   @override
@@ -184,6 +237,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                 minLines: 5,
                 keyboardType: TextInputType.multiline,
                 decoration: noteDecoration,
+                autofocus: true,
               ),
               if (widget.renote != null && selectedAccount != null) ...[
                 Text(
@@ -206,7 +260,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
               ],
               Row(
                 children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.image)),
+                  IconButton(onPressed: driveConnect, icon: Icon(Icons.image)),
                   IconButton(onPressed: () {}, icon: Icon(Icons.how_to_vote)),
                   IconButton(
                       onPressed: () {
@@ -237,6 +291,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                 ],
               ),
               const MfmPreview(),
+              const FilePreview(),
             ],
           ),
         ),
@@ -265,8 +320,29 @@ class MfmPreview extends ConsumerWidget {
       account: account,
       child: Padding(
         padding: const EdgeInsets.all(5),
-        child: MfmText(previewText.text),
+        child: MfmText(
+          previewText.text,
+          isNyaize: account.i.isCat,
+        ),
       ),
+    );
+  }
+}
+
+class FilePreview extends ConsumerWidget {
+  const FilePreview({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final files = ref.watch(filesProvider);
+    final isUploading = ref.watch(progressFileUploadProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (isUploading)
+          const Padding(padding: EdgeInsets.all(10), child: Text("アップロード中...")),
+        MisskeyFileView(files: files),
+      ],
     );
   }
 }

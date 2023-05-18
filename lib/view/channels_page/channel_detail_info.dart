@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

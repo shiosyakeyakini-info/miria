@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
+import 'package:miria/model/tab_setting.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()

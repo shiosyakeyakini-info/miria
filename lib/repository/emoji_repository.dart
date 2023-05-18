@@ -28,6 +28,13 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   final List<EmojiWrap> _emojiWrap = [];
 
+  String format(String emojiName) {
+    return emojiName
+        .replaceAll("_", "")
+        .replaceAll("+", "")
+        .replaceAll("-", "");
+  }
+
   @override
   Future<void> loadFromSource() async {
     emoji = (await misskey.emojis()).emojis;
@@ -35,8 +42,8 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final toH = const KanaKit().toHiragana;
     _emojiWrap
       ..clear()
-      ..addAll(emoji?.map((e) =>
-              EmojiWrap(e, toH(e.name), e.aliases.map((e2) => toH(e2)))) ??
+      ..addAll(emoji?.map((e) => EmojiWrap(e, format(toH(e.name)),
+              e.aliases.map((e2) => format(toH(e2))))) ??
           []);
   }
 
@@ -78,7 +85,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
       String query, String convertedQuery, EmojiWrap element) {
     if (query.length == 1) {
       return element.emoji.name == query ||
-          element.emoji.aliases.any((element2) => element2 == query);
+          element.emoji.aliases.any((element2) => element2 == query) ||
+          element.kanaName == convertedQuery ||
+          element.kanaAliases.any((element2) => element2 == convertedQuery);
     }
     return element.emoji.name.contains(query) ||
         element.emoji.aliases.any((element2) => element2.contains(query)) ||
@@ -93,7 +102,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
       return emoji?.take(limit).toList() ?? [];
     }
 
-    final converted = const KanaKit().toHiragana(name);
+    final converted = format(const KanaKit().toHiragana(name));
 
     return _emojiWrap
         .where((element) => emojiSearchCondition(name, converted, element))

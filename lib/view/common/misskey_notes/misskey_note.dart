@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/extensions/date_time_extension.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/router/app_router.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/avatar_icon.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/local_only_icon.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/mfm_text.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/misskey_file_view.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/note_modal_sheet.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/reaction_button.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/renote_modal_sheet.dart';
-import 'package:flutter_misskey_app/view/reaction_picker_dialog/reaction_picker_dialog.dart';
+import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/avatar_icon.dart';
+import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
+import 'package:miria/view/common/misskey_notes/note_modal_sheet.dart';
+import 'package:miria/view/common/misskey_notes/reaction_button.dart';
+import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
+import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -331,16 +331,17 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       await ref.read(notesProvider(account)).refresh(displayNote.id);
       return;
     }
+    final misskey = ref.read(misskeyProvider(account));
+    final note = ref.read(notesProvider(account));
     final selectedEmoji = await showDialog<Emoji?>(
         context: context,
         builder: (context) => ReactionPickerDialog(
               account: account,
             ));
     if (selectedEmoji == null) return;
-    await ref.read(misskeyProvider(account)).notes.reactions.create(
-        NotesReactionsCreateRequest(
-            noteId: displayNote.id, reaction: ":${selectedEmoji.name}:"));
-    await ref.read(notesProvider(account)).refresh(displayNote.id);
+    await misskey.notes.reactions.create(NotesReactionsCreateRequest(
+        noteId: displayNote.id, reaction: ":${selectedEmoji.name}:"));
+    await note.refresh(displayNote.id);
   }
 }
 

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "flutter_misskey_app" "\0"
+            VALUE "FileDescription", "miria" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_misskey_app" "\0"
+            VALUE "InternalName", "miria" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_misskey_app.exe" "\0"
-            VALUE "ProductName", "flutter_misskey_app" "\0"
+            VALUE "OriginalFilename", "miria.exe" "\0"
+            VALUE "ProductName", "miria" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

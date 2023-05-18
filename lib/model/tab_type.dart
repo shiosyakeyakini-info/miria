@@ -1,6 +1,6 @@
-import 'package:flutter_misskey_app/model/tab_setting.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/repository/time_line_repository.dart';
+import 'package:miria/model/tab_setting.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/repository/time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum TabType {

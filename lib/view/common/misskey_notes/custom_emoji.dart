@@ -2,10 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_misskey_app/providers.dart';
-import 'package:flutter_misskey_app/repository/emoji_repository.dart';
-import 'package:flutter_misskey_app/view/common/account_scope.dart';
-import 'package:flutter_misskey_app/view/common/misskey_notes/network_image.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/repository/emoji_repository.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

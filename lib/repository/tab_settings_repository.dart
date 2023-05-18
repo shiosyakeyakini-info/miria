@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_misskey_app/model/account.dart';
-import 'package:flutter_misskey_app/model/tab_setting.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/model/tab_setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabSettingsRepository extends ChangeNotifier {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_misskey_app/view/common/note_create/input_completation.dart';
+import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'note_create_page.dart';
