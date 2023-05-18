@@ -47,6 +47,7 @@ dev_dependencies:
   build_runner: ^2.3.3
   freezed: ^2.3.2
   json_serializable: ^6.6.1
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -62,3 +63,16 @@ fonts:
         weight: 500
       - asset: assets/fonts/KosugiMaru-Regular.ttf
         weight: 600
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.png"
+  min_sdk_android: 21
+  windows:
+    generate: true
+    image_path: "assets/images/icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/icon.png"
