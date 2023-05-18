@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^4.0.4
   uuid: ^3.0.7
   file_picker: ^5.3.0
+  package_info_plus: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +52,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/fonts/
+    - assets/images/
 
 fonts:
   - family: KosugiMaru

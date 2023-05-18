@@ -20,6 +20,10 @@ class SettingsPage extends StatelessWidget {
             title: const Text("タブ設定"),
             onTap: () => context.pushRoute(const TabSettingsListRoute()),
           ),
+          ListTile(
+            title: const Text("このアプリについて"),
+            onTap: () => context.pushRoute(const AppInfoRoute()),
+          )
         ],
       ),
     );

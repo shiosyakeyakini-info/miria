@@ -12,6 +12,7 @@ import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/note_search_page/note_search_page.dart';
 import 'package:miria/view/notification_page/notification_page.dart';
 import 'package:miria/view/settings_page/account_settings_page/account_list.dart';
+import 'package:miria/view/settings_page/app_info_page/app_info_page.dart';
 import 'package:miria/view/settings_page/tab_settings_page/tab_settings_list_page.dart';
 import 'package:miria/view/time_line_page/time_line_page.dart';
 import 'package:miria/view/user_page/user_followee.dart';
@@ -55,5 +56,6 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: TabSettingsListRoute.page),
     AutoRoute(page: TabSettingsRoute.page),
     AutoRoute(page: AccountListRoute.page),
+    AutoRoute(page: AppInfoRoute.page),
   ];
 }

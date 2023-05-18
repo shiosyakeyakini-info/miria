@@ -201,6 +201,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const TabSettingsListPage(),
       );
     },
+    AppInfoRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AppInfoPage(),
+      );
+    },
     SettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -927,6 +933,20 @@ class TabSettingsListRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'TabSettingsListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AppInfoPage]
+class AppInfoRoute extends PageRouteInfo<void> {
+  const AppInfoRoute({List<PageRouteInfo>? children})
+      : super(
+          AppInfoRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AppInfoRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
