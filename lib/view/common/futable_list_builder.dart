@@ -25,6 +25,8 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
         if (snapshot.connectionState == ConnectionState.done) {
           final data = snapshot.data;
           if (data == null) {
+            print(snapshot.error);
+            print(snapshot.stackTrace);
             return const Text("エラー： データなし");
           }
           final list = data.toList();

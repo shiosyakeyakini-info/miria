@@ -4,6 +4,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/login_page/centraing_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
 
 class MiAuthLogin extends ConsumerStatefulWidget {
   const MiAuthLogin({super.key});
@@ -33,7 +34,19 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
               const Text("サーバー"),
               TextField(
                 controller: serverController,
-                decoration: const InputDecoration(prefixIcon: Icon(Icons.dns)),
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.dns),
+                    suffixIcon: IconButton(
+                        onPressed: () async {
+                          final url = await showDialog<String?>(
+                              context: context,
+                              builder: (context) =>
+                                  const MisskeyServerListDialog());
+                          if (url != null && url.isNotEmpty) {
+                            serverController.text = url;
+                          }
+                        },
+                        icon: Icon(Icons.search))),
               ),
             ]),
             TableRow(children: [

@@ -10,7 +10,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 class NoteDetailDialog extends ConsumerStatefulWidget {
   final Note note;
   final Account account;
-  final ChangeNotifierProvider<TimeLineRepository> timeLineRepository;
+  final ChangeNotifierProvider<TimelineRepository> timeLineRepository;
 
   const NoteDetailDialog({
     super.key,
