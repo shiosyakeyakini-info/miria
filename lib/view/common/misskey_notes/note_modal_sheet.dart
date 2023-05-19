@@ -51,8 +51,7 @@ class NoteModalSheet extends ConsumerWidget {
               title: const Text("リンクをコピー"),
               onTap: () {
                 Clipboard.setData(ClipboardData(
-                    text:
-                        "https://${AccountScope.of(context).host}/notes/${note.id}"));
+                    text: "https://${account.host}/notes/${note.id}"));
                 Navigator.of(context).pop();
               },
             ),
