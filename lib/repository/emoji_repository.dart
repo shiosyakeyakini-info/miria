@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:kana_kit/kana_kit.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/repository/account_settings_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -12,6 +14,7 @@ abstract class EmojiRepository {
   Future<void> loadFromSource();
   Future<File> requestEmoji(Emoji emoji);
   Future<List<Emoji>> searchEmojis(String name, {int limit = 30});
+  List<Emoji> defaultEmojis({int limit});
 }
 
 class EmojiWrap {
@@ -24,7 +27,13 @@ class EmojiWrap {
 
 class EmojiRepositoryImpl extends EmojiRepository {
   final Misskey misskey;
-  EmojiRepositoryImpl({required this.misskey});
+  final Account account;
+  final AccountSettingsRepository accountSettingsRepository;
+  EmojiRepositoryImpl({
+    required this.misskey,
+    required this.account,
+    required this.accountSettingsRepository,
+  });
 
   final List<EmojiWrap> _emojiWrap = [];
 
@@ -99,7 +108,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
   @override
   Future<List<Emoji>> searchEmojis(String name, {int limit = 30}) async {
     if (name == "") {
-      return emoji?.take(limit).toList() ?? [];
+      return defaultEmojis(limit: limit);
     }
 
     final converted = format(const KanaKit().toHiragana(name));
@@ -125,5 +134,19 @@ class EmojiRepositoryImpl extends EmojiRepository {
         .take(limit)
         .map((e) => e.emoji)
         .toList();
+  }
+
+  @override
+  List<Emoji> defaultEmojis({int limit = 30}) {
+    final reactionDeck =
+        accountSettingsRepository.fromAccount(account).reactions;
+    if (reactionDeck.isEmpty) {
+      return emoji?.take(limit).toList() ?? [];
+    } else {
+      return reactionDeck
+          .map((e) => emoji?.firstWhereOrNull((element) => element.name == e))
+          .whereNotNull()
+          .toList();
+    }
   }
 }

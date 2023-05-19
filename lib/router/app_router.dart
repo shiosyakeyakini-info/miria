@@ -14,6 +14,8 @@ import 'package:miria/view/notification_page/notification_page.dart';
 import 'package:miria/view/settings_page/account_settings_page/account_list.dart';
 import 'package:miria/view/settings_page/app_info_page/app_info_page.dart';
 import 'package:miria/view/settings_page/tab_settings_page/tab_settings_list_page.dart';
+import 'package:miria/view/several_account_settings_page/reaction_deck_page/reaction_deck_page.dart';
+import 'package:miria/view/several_account_settings_page/several_account_settings_page.dart';
 import 'package:miria/view/time_line_page/time_line_page.dart';
 import 'package:miria/view/user_page/user_followee.dart';
 import 'package:miria/view/user_page/user_follower.dart';
@@ -57,5 +59,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: TabSettingsRoute.page),
     AutoRoute(page: AccountListRoute.page),
     AutoRoute(page: AppInfoRoute.page),
+    AutoRoute(page: SeveralAccountSettingsRoute.page),
+    AutoRoute(page: ReactionDeckRoute.page),
   ];
 }

@@ -81,7 +81,17 @@ class CommonDrawer extends ConsumerWidget {
                         onTap: () {
                           Navigator.of(context).pop();
                           context.pushRoute(NoteSearchRoute(account: account));
-                        })
+                        }),
+                    ListTile(
+                      leading: const Icon(Icons.settings),
+                      title:
+                          Text("${account.i.name ?? account.i.username} の設定"),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        context.pushRoute(
+                            SeveralAccountSettingsRoute(account: account));
+                      },
+                    )
                   ])
             ],
             ListTile(

@@ -1,6 +1,7 @@
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/repository/account_repository.dart';
+import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/channel_time_line_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/favorite_repository.dart';
@@ -73,12 +74,21 @@ final favoriteProvider = ChangeNotifierProvider.autoDispose
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
     (ref, account) => NoteRepository(ref.read(misskeyProvider(account))));
 
-//TODO: アカウント毎である必要はない
+//TODO: アカウント毎である必要はない ホスト毎
+//TODO: のつもりだったけど、絵文字にロールが関係するようになるとアカウント毎になる
 final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
-    (ref, account) =>
-        EmojiRepositoryImpl(misskey: ref.read(misskeyProvider(account))));
+    (ref, account) => EmojiRepositoryImpl(
+        misskey: ref.read(misskeyProvider(account)),
+        account: account,
+        accountSettingsRepository:
+            ref.read(accountSettingsRepositoryProvider)));
 
-final accountRepository = Provider(
-    (ref) => AccountRepository(ref.read(tabSettingsRepositoryProvider)));
+final accountRepository = Provider((ref) => AccountRepository(
+      ref.read(tabSettingsRepositoryProvider),
+      ref.read(accountSettingsRepositoryProvider),
+    ));
 final tabSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => TabSettingsRepository());
+
+final accountSettingsRepositoryProvider =
+    ChangeNotifierProvider((ref) => AccountSettingsRepository());

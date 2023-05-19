@@ -131,6 +131,26 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SeveralAccountSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<SeveralAccountSettingsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SeveralAccountSettingsPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
+    ReactionDeckRoute.name: (routeData) {
+      final args = routeData.argsAs<ReactionDeckRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ReactionDeckPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     UsersListTimelineRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListTimelineRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -677,6 +697,83 @@ class UserFollowerRouteArgs {
   @override
   String toString() {
     return 'UserFollowerRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [SeveralAccountSettingsPage]
+class SeveralAccountSettingsRoute
+    extends PageRouteInfo<SeveralAccountSettingsRouteArgs> {
+  SeveralAccountSettingsRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SeveralAccountSettingsRoute.name,
+          args: SeveralAccountSettingsRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SeveralAccountSettingsRoute';
+
+  static const PageInfo<SeveralAccountSettingsRouteArgs> page =
+      PageInfo<SeveralAccountSettingsRouteArgs>(name);
+}
+
+class SeveralAccountSettingsRouteArgs {
+  const SeveralAccountSettingsRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'SeveralAccountSettingsRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [ReactionDeckPage]
+class ReactionDeckRoute extends PageRouteInfo<ReactionDeckRouteArgs> {
+  ReactionDeckRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ReactionDeckRoute.name,
+          args: ReactionDeckRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ReactionDeckRoute';
+
+  static const PageInfo<ReactionDeckRouteArgs> page =
+      PageInfo<ReactionDeckRouteArgs>(name);
+}
+
+class ReactionDeckRouteArgs {
+  const ReactionDeckRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ReactionDeckRouteArgs{key: $key, account: $account}';
   }
 }
 

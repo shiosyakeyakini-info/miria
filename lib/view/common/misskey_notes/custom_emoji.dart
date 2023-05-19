@@ -9,6 +9,8 @@ import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
+//TODO: ぐちゃぐちゃなので整理する
+
 class CustomEmoji extends ConsumerStatefulWidget {
   final Emoji? emoji;
   final String? anotherServerEmojiUrl;

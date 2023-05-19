@@ -15,7 +15,7 @@ class TabSettingsRepository extends ChangeNotifier {
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
     final storedData = prefs.getString("tab_settings");
-    if (storedData == null) {
+    if (storedData == null || storedData.isEmpty) {
       return;
     }
     try {

@@ -38,6 +38,7 @@ dependencies:
   uuid: ^3.0.7
   file_picker: ^5.3.0
   package_info_plus: ^4.0.0
+  reorderables: ^0.6.0
 
 dev_dependencies:
   flutter_test:

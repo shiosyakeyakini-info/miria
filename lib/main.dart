@@ -33,6 +33,7 @@ class InitializeWidgetState extends ConsumerState<InitializeWidget> {
   Future<void> initialize() async {
     await ref.read(accountRepository).load();
     await ref.read(tabSettingsRepositoryProvider).load();
+    await ref.read(accountSettingsRepositoryProvider).load();
 
     LicenseRegistry.addLicense(() => Stream.fromIterable(<LicenseEntry>[
           const LicenseEntryWithLineBreaks(["Blob Emoji"], """

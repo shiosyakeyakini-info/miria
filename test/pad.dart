@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -52,14 +53,36 @@ void main() {
       r"""$[fg.color=29BEEF $[bg.color=000 $[rotate.deg=-90 **こんにちは？**] こんにちは！] げんき]""";
 
   runApp(ProviderScope(
-      overrides: [
-        emojiRepositoryProvider.overrideWith(
-          (ref, account) => EmojiRepositoryImpl(
-            misskey: ref.read(
-              misskeyProvider(account),
-            ),
-          ),
-        )
+      overrides: const [
+        // emojiRepositoryProvider.overrideWith(
+        //   (ref, account) => EmojiRepositoryImpl(
+        //       misskey: ref.read(
+        //         misskeyProvider(account),
+        //       ),
+        //       account: Account(
+        //           host: "",
+        //           userId: "",
+        //           token: "",
+        //           i: IResponse(
+        //               id: "",
+        //               name: "",
+        //               username: "",
+        //               avatarUrl: Uri.parse("https://example.com"),
+        //             isBot: false,
+        //             isCat: false,
+        //             badgeRoles: [],
+        //             createdAt: DateTime.now(),
+        //             isSilenced: false,
+        //             isLocked: false,
+        //             isSuspended: false,
+        //             followersCount: 0,
+        //             followingCount: 0,
+        //             notesCount: 0,
+        //             publicReactions: [],
+        //
+        //           )),
+        //       accountSettingsRepository: AccountSettingsRepository()),
+        // )
       ],
       child: MaterialApp(
           theme: ThemeData(fontFamily: "Noto Sans CJK JP"),

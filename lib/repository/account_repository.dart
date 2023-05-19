@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
+import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -16,8 +17,9 @@ class AccountRepository {
   Iterable<Account> get account => _account;
 
   final TabSettingsRepository tabSettingsRepository;
+  final AccountSettingsRepository accountSettingsRepository;
 
-  AccountRepository(this.tabSettingsRepository);
+  AccountRepository(this.tabSettingsRepository, this.accountSettingsRepository);
 
   Future<void> load() async {
     const prefs = FlutterSecureStorage();
@@ -61,6 +63,7 @@ class AccountRepository {
   Future<void> remove(Account account) async {
     _account.remove(account);
     await tabSettingsRepository.removeAccount(account);
+    await accountSettingsRepository.removeAccount(account);
     await save();
   }
 

@@ -34,7 +34,7 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     emojis.clear();
-    emojis.addAll(emojiRepository.emoji?.take(30) ?? []);
+    emojis.addAll(emojiRepository.defaultEmojis().toList());
 
     categoryList
       ..clear()
