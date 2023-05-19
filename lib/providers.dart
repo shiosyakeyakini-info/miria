@@ -15,7 +15,6 @@ import 'package:miria/repository/time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-// "Ptk6oVyZg9JrLOJpRTSzfu6iofZ9Dz2O"
 final misskeyProvider = Provider.family<Misskey, Account>(
     (ref, account) => Misskey(token: account.token, host: account.host));
 
