@@ -85,6 +85,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
     return CustomEmoji(
       emoji: null,
       fontSizeRatio: fontSizeRatio,
+      isAttachTooltip: isAttachTooltip,
     );
   }
 
@@ -136,7 +137,8 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
     final emoji = widget.emoji;
     if (emoji == null) return Container();
 
-    cachedImage = Tooltip(
+    cachedImage = ConditionalTooltip(
+        isAttachTooltip: widget.isAttachTooltip,
         message: ":${emoji.name ?? ""}:",
         child: NetworkImageView(
             url: emoji.url.toString(),
@@ -147,31 +149,29 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
                 ),
             height: scopedFontSize));
     return cachedImage!;
+  }
+}
 
-    /*return FutureBuilder(
-        future: requestEmoji(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            final data = snapshot.data;
-            if (data != null) {
-              final memoryImage = Image.memory(data, height: scopedFontSize);
-              if (widget.isAttachTooltip) {
-                cachedImage = Tooltip(
-                    message: ":${widget.emoji?.name ?? ""}:",
-                    child: memoryImage);
-              } else {
-                cachedImage = memoryImage;
-              }
-              return cachedImage!;
-            }
-          }
+class ConditionalTooltip extends StatelessWidget {
+  final bool isAttachTooltip;
+  final String message;
+  final Widget child;
 
-          if (snapshot.hasError ||
-              (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.data == null)) {
-            return Text(":${widget.emoji?.name ?? ""}:");
-          }
-          return SizedBox(width: scopedFontSize, height: scopedFontSize);
-        });*/
+  const ConditionalTooltip(
+      {super.key,
+      required this.isAttachTooltip,
+      required this.message,
+      required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    if (isAttachTooltip) {
+      return Tooltip(
+        message: message,
+        child: child,
+      );
+    } else {
+      return child;
+    }
   }
 }
