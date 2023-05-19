@@ -14,7 +14,7 @@ enum TabType {
   final String displayName;
   const TabType(this.displayName);
 
-  ChangeNotifierProvider<TimeLineRepository> timelineProvider(
+  ChangeNotifierProvider<TimelineRepository> timelineProvider(
       TabSetting setting) {
     switch (this) {
       case TabType.localTimeline:
@@ -24,7 +24,7 @@ enum TabType {
       case TabType.globalTimeline:
         return globalTimeLineProvider(setting);
       case TabType.hybridTimeline:
-        return localTimeLineProvider(setting); //FIXME
+        return hybridTimeLineProvider(setting); //FIXME
       case TabType.channel:
         return channelTimelineProvider(setting);
     }

@@ -1,7 +1,7 @@
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-class GlobalTimeLineRepository extends TimeLineRepository {
+class GlobalTimeLineRepository extends TimelineRepository {
   SocketController? socketController;
 
   final Misskey misskey;

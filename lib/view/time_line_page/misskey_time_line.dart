@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
-  final ChangeNotifierProvider<TimeLineRepository> timeLineRepositoryProvider;
+  final ChangeNotifierProvider<TimelineRepository> timeLineRepositoryProvider;
   final TimelineScrollController controller;
 
   MisskeyTimeline({
@@ -28,7 +28,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   List<Note> showingNotes = [];
   late final TimelineScrollController scrollController = widget.controller;
   bool isScrolling = false;
-  late TimeLineRepository timelineRepository =
+  late TimelineRepository timelineRepository =
       ref.read(widget.timeLineRepositoryProvider);
   bool contextAccessed = false;
 
@@ -127,7 +127,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
 class NoteWrapper extends ConsumerStatefulWidget {
   final Note targetNote;
-  final TimeLineRepository timeline;
+  final TimelineRepository timeline;
 
   const NoteWrapper({
     super.key,

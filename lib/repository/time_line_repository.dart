@@ -73,14 +73,14 @@ class SubscribeItem {
   });
 }
 
-abstract class TimeLineRepository extends ChangeNotifier {
+abstract class TimelineRepository extends ChangeNotifier {
   final NoteRepository noteRepository;
   final MainStreamRepository globalNotificationRepository;
   final TabSetting tabSetting;
 
   final List<SubscribeItem> subscribedList = [];
 
-  TimeLineRepository(
+  TimelineRepository(
       this.noteRepository, this.globalNotificationRepository, this.tabSetting) {
     // describer
     Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -180,6 +180,7 @@ abstract class TimeLineRepository extends ChangeNotifier {
     final index = subscribedList.indexWhere((element) => element.noteId == id);
     if (index == -1) {
       // already described?
+      return;
     }
     final item = subscribedList[index];
 

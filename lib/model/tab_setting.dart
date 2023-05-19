@@ -13,14 +13,25 @@ part 'tab_setting.g.dart';
 class TabSetting with _$TabSetting {
   const TabSetting._();
 
-  ChangeNotifierProvider<TimeLineRepository> get timelineProvider =>
+  ChangeNotifierProvider<TimelineRepository> get timelineProvider =>
       tabType.timelineProvider(this);
 
   const factory TabSetting({
     @IconDataConverter() required IconData icon,
+
+    /// タブ種別
     required TabType tabType,
+
+    /// チャンネルのノートの場合、チャンネルID
     String? channelId,
+
+    /// ノートの投稿のキャプチャをするかどうか
+    @Default(true) isSubscribe,
+
+    /// タブ名
     required String name,
+
+    /// アカウント情報
     required Account account,
     @Default(true) bool renoteDisplay,
   }) = _TabSetting;
