@@ -53,6 +53,10 @@ class MfmTextState extends ConsumerState<MfmText> {
       // クリップはクリップの画面で開く
       context.pushRoute(
           ClipDetailRoute(account: account, id: uri.pathSegments[1]));
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "channels") {
+      context.pushRoute(
+          ChannelDetailRoute(account: account, channelId: uri.pathSegments[1]));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(uri.pathSegments.first);
