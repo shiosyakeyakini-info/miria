@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +46,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
           isLoading = false;
         });
       } catch (e) {
-        print(e);
+        if (kDebugMode) print(e);
         setState(() {
           error = e;
           isLoading = false;

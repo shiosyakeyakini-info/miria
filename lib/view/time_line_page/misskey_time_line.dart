@@ -40,7 +40,6 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     contextAccessed = true;
     if (oldWidget.timeLineRepositoryProvider !=
         widget.timeLineRepositoryProvider) {
-      print("didUpdateWidget called. oldWidget=$oldWidget");
       ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
       ref.read(widget.timeLineRepositoryProvider).startTimeLine();
       timelineRepository = ref.read(widget.timeLineRepositoryProvider);

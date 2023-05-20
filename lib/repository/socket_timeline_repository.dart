@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -53,8 +54,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         olderNotes.addAll(resultNotes);
         notifyListeners();
       }, onError: (e, s) {
-        print(e);
-        print(s);
+        if (kDebugMode) {
+          print(e);
+          print(s);
+        }
       });
     } else {
       reloadLatestNotes();

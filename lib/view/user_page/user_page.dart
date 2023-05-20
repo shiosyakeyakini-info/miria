@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -87,11 +88,14 @@ class UserDetailTab extends ConsumerWidget {
           return SingleChildScrollView(
               child: UserDetail(
             response: data,
+            account: AccountScope.of(context),
           ));
         }
         if (snapshot.hasError) {
-          print(snapshot.error);
-          print(snapshot.stackTrace);
+          if (kDebugMode) {
+            print(snapshot.error);
+            print(snapshot.stackTrace);
+          }
           return const Center(
             child: Text("えらー"),
           );

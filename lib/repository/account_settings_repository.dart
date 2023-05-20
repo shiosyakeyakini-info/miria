@@ -22,7 +22,7 @@ class AccountSettingsRepository extends ChangeNotifier {
         ..addAll((jsonDecode(storedData) as List)
             .map((e) => AccountSettings.fromJson(e)));
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 

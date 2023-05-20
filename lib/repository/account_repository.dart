@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/repository/account_settings_repository.dart';
+import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -18,8 +22,10 @@ class AccountRepository {
 
   final TabSettingsRepository tabSettingsRepository;
   final AccountSettingsRepository accountSettingsRepository;
+  final T Function<T>(ProviderListenable<T> provider) reader;
 
-  AccountRepository(this.tabSettingsRepository, this.accountSettingsRepository);
+  AccountRepository(
+      this.tabSettingsRepository, this.accountSettingsRepository, this.reader);
 
   Future<void> load() async {
     const prefs = FlutterSecureStorage();
@@ -33,7 +39,9 @@ class AccountRepository {
         ..addAll(
             (jsonDecode(storedData) as List).map((e) => Account.fromJson(e)));
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -81,6 +89,7 @@ class AccountRepository {
     final i = await Misskey(token: token, host: server).i.i();
     addAccount(Account(host: server, userId: i.username, token: token, i: i));
     await _addIfTabSettingNothing();
+    await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
   final sessionId = const Uuid().v4();
@@ -99,6 +108,7 @@ class AccountRepository {
     await addAccount(
         Account(host: server, userId: i.username, token: token, i: i));
     await _addIfTabSettingNothing();
+    await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
   Future<void> addAccount(Account account) async {

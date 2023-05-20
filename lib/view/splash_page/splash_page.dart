@@ -72,7 +72,17 @@ The license follows the meowmoji official server community at  https://discord.g
                         .tabSettings
                         .first));
               } else if (isSigned && !hasTabSetting) {
-                context.replaceRoute(const TabSettingsListRoute());
+                // KeyChainに保存したデータだけアンインストールしても残るので
+                // この状況が発生する
+                Future(() async {
+                  final accounts = ref.read(accountRepository).account.toList();
+                  for (final account in accounts) {
+                    await ref.read(accountRepository).remove(account);
+                  }
+                  if (!mounted) return;
+
+                  context.replaceRoute(const LoginRoute());
+                });
               } else {
                 context.replaceRoute(const LoginRoute());
               }

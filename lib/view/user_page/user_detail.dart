@@ -2,18 +2,21 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/view/user_page/user_control_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserDetail extends ConsumerStatefulWidget {
+  final Account account;
   final UsersShowResponse response;
 
-  const UserDetail({super.key, required this.response});
+  const UserDetail({super.key, required this.response, required this.account});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserDetailState();
@@ -55,6 +58,47 @@ class UserDetailState extends ConsumerState<UserDetail> {
     });
   }
 
+  Future<void> userControl() async {
+    final result = await showModalBottomSheet<UserControl?>(
+        context: context,
+        builder: (context) =>
+            UserControlDialog(account: widget.account, response: response));
+    if (result == null) return;
+
+    switch (result) {
+      case UserControl.createMute:
+        setState(() {
+          response = response.copyWith(isMuted: true);
+        });
+        break;
+      case UserControl.deleteMute:
+        setState(() {
+          response = response.copyWith(isMuted: false);
+        });
+        break;
+      case UserControl.createRenoteMute:
+        setState(() {
+          response = response.copyWith(isRenoteMuted: true);
+        });
+        break;
+      case UserControl.deleteRenoteMute:
+        setState(() {
+          response = response.copyWith(isRenoteMuted: false);
+        });
+        break;
+      case UserControl.createBlock:
+        setState(() {
+          response = response.copyWith(isBlocked: true);
+        });
+        break;
+      case UserControl.deleteBlock:
+        setState(() {
+          response = response.copyWith(isBlocked: false);
+        });
+        break;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,48 +118,75 @@ class UserDetailState extends ConsumerState<UserDetail> {
           Padding(
               padding: const EdgeInsets.only(right: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if ((response.isFollowed ?? false))
-                    const Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Card(
-                          child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text("フォローされています"),
-                      )),
-                    ),
-                  if (!isFollowEditing)
-                    Align(
-                        alignment: Alignment.centerRight,
-                        child: (response.isFollowing ?? false)
-                            ? ElevatedButton(
-                                onPressed: followDelete,
-                                child: const Text("フォロー解除"))
-                            : OutlinedButton(
-                                onPressed: followCreate,
-                                child: const Text("フォローする")))
-                  else
-                    Align(
+                  Expanded(
+                    child: Align(
                       alignment: Alignment.centerRight,
-                      child: TextButton.icon(
-                          onPressed: () {},
-                          icon: SizedBox(
-                              width: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.fontSize ??
-                                  22,
-                              height: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.fontSize ??
-                                  22,
-                              child: CircularProgressIndicator()),
-                          label: Text("更新中")),
+                      child: Wrap(
+                        children: [
+                          if (response.isRenoteMuted ?? false)
+                            const Card(
+                                child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text("Renoteのミュート中"),
+                            )),
+                          if (response.isMuted ?? false)
+                            const Card(
+                                child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text("ミュート中"),
+                            )),
+                          if (response.isBlocked ?? false)
+                            const Card(
+                                child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text("ブロック中"),
+                            )),
+                          if ((response.isFollowed ?? false))
+                            const Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text("フォローされています"),
+                              )),
+                            ),
+                          if (!isFollowEditing)
+                            (response.isFollowing ?? false)
+                                ? ElevatedButton(
+                                    onPressed: followDelete,
+                                    child: const Text("フォロー解除"))
+                                : OutlinedButton(
+                                    onPressed: followCreate,
+                                    child: const Text("フォローする"))
+                          else
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton.icon(
+                                  onPressed: () {},
+                                  icon: SizedBox(
+                                      width: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.fontSize ??
+                                          22,
+                                      height: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.fontSize ??
+                                          22,
+                                      child: CircularProgressIndicator()),
+                                  label: Text("更新中")),
+                            ),
+                        ],
+                      ),
                     ),
+                  ),
+                  IconButton(
+                      onPressed: userControl,
+                      icon: const Icon(Icons.more_vert)),
                 ],
               )),
         const Divider(),

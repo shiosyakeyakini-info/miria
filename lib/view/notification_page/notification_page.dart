@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -77,7 +78,9 @@ class NotificationItem extends ConsumerWidget {
     if (notification.type != NotificationType.reaction &&
         notification.type != NotificationType.renote &&
         notification.type != NotificationType.reply) {
-      print(notification);
+      if (kDebugMode) {
+        print(notification);
+      }
     }
 
     return Container(

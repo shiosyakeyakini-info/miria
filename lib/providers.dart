@@ -84,9 +84,9 @@ final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
             ref.read(accountSettingsRepositoryProvider)));
 
 final accountRepository = Provider((ref) => AccountRepository(
-      ref.read(tabSettingsRepositoryProvider),
-      ref.read(accountSettingsRepositoryProvider),
-    ));
+    ref.read(tabSettingsRepositoryProvider),
+    ref.read(accountSettingsRepositoryProvider),
+    ref.read));
 final tabSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => TabSettingsRepository());
 
