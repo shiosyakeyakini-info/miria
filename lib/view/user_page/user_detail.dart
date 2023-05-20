@@ -69,53 +69,55 @@ class UserDetailState extends ConsumerState<UserDetail> {
       children: [
         if (response.bannerUrl != null)
           Image.network(response.bannerUrl.toString()),
-        Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if ((response.isFollowed ?? false))
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Card(
-                        child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text("フォローされています"),
-                    )),
-                  ),
-                if (!isFollowEditing)
-                  Align(
+        if (widget.response.host == null &&
+            widget.response.username != AccountScope.of(context).userId)
+          Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if ((response.isFollowed ?? false))
+                    const Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Card(
+                          child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text("フォローされています"),
+                      )),
+                    ),
+                  if (!isFollowEditing)
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: (response.isFollowing ?? false)
+                            ? ElevatedButton(
+                                onPressed: followDelete,
+                                child: const Text("フォロー解除"))
+                            : OutlinedButton(
+                                onPressed: followCreate,
+                                child: const Text("フォローする")))
+                  else
+                    Align(
                       alignment: Alignment.centerRight,
-                      child: (response.isFollowing ?? false)
-                          ? ElevatedButton(
-                              onPressed: followDelete,
-                              child: const Text("フォロー解除"))
-                          : OutlinedButton(
-                              onPressed: followCreate,
-                              child: const Text("フォローする")))
-                else
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton.icon(
-                        onPressed: () {},
-                        icon: SizedBox(
-                            width: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.fontSize ??
-                                22,
-                            height: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.fontSize ??
-                                22,
-                            child: CircularProgressIndicator()),
-                        label: Text("更新中")),
-                  ),
-              ],
-            )),
+                      child: TextButton.icon(
+                          onPressed: () {},
+                          icon: SizedBox(
+                              width: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.fontSize ??
+                                  22,
+                              height: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.fontSize ??
+                                  22,
+                              child: CircularProgressIndicator()),
+                          label: Text("更新中")),
+                    ),
+                ],
+              )),
         const Divider(),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
