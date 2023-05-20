@@ -163,21 +163,6 @@ class _$_Account extends _Account {
     return 'Account(host: $host, userId: $userId, token: $token, i: $i)';
   }
 
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_Account &&
-            (identical(other.host, host) || other.host == host) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.token, token) || other.token == token) &&
-            (identical(other.i, i) || other.i == i));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, host, userId, token, i);
-
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
