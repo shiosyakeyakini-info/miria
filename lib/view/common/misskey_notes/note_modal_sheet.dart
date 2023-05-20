@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/common/not_implements_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -116,6 +117,20 @@ class NoteModalSheet extends ConsumerWidget {
                     builder: (context) => NotImplementationDialog());
               },
             ), //TODO: 未実装
+            ListTile(
+              title: const Text("通報する"),
+              onTap: () {
+                Navigator.of(context).pop();
+                showDialog(
+                    context: context,
+                    builder: (context) => AbuseDialog(
+                          account: account,
+                          targetUser: note.user,
+                          defaultText:
+                              "Note:\nhttps://${account.host}/notes/${note.id}\n-----",
+                        ));
+              },
+            )
           ],
         );
       },
