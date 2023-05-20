@@ -156,88 +156,92 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
             ),
             actions: [const NotificationIcon()],
           ),
-          body: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom:
-                            BorderSide(color: Theme.of(context).primaryColor))),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 5, top: 5, bottom: 5),
-                            child: Text(widget.currentTabSetting.name))),
-                    const SizedBox(
-                      height: 24,
-                      child: NetworkImageView(
-                        url:
-                            "https://nos3.arkjp.net/image.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fc8a26f2b-7541-4fc6-bebb-036482b53cec.gif&emoji=1",
-                        type: ImageType.customEmoji,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Theme.of(context).primaryColor))),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 5, top: 5, bottom: 5),
+                              child: Text(widget.currentTabSetting.name))),
+                      const SizedBox(
+                        height: 24,
+                        child: NetworkImageView(
+                          url:
+                              "https://nos3.arkjp.net/image.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fc8a26f2b-7541-4fc6-bebb-036482b53cec.gif&emoji=1",
+                          type: ImageType.customEmoji,
+                        ),
                       ),
-                    ),
-                    if (widget.currentTabSetting.tabType == TabType.channel)
+                      if (widget.currentTabSetting.tabType == TabType.channel)
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => ChannelDialog(
+                                        channelId: widget
+                                                .currentTabSetting.channelId ??
+                                            "",
+                                        account:
+                                            widget.currentTabSetting.account,
+                                      ));
+                            },
+                            icon: const Icon(Icons.info_outline)),
+                      const Padding(
+                        padding: EdgeInsets.only(right: 5),
+                      ),
                       IconButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => ChannelDialog(
-                                      channelId:
-                                          widget.currentTabSetting.channelId ??
-                                              "",
-                                      account: widget.currentTabSetting.account,
-                                    ));
-                          },
-                          icon: const Icon(Icons.info_outline)),
-                    const Padding(
-                      padding: EdgeInsets.only(right: 5),
-                    ),
-                    IconButton(
-                        onPressed: () => ref
-                            .read(widget.currentTabSetting.tabType
-                                .timelineProvider(widget.currentTabSetting))
-                            .reconnect(),
-                        icon: const Icon(Icons.refresh))
-                  ],
+                          onPressed: () => ref
+                              .read(widget.currentTabSetting.tabType
+                                  .timelineProvider(widget.currentTabSetting))
+                              .reconnect(),
+                          icon: const Icon(Icons.refresh))
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: MisskeyTimeline(
-                    controller: scrollController,
-                    timeLineRepositoryProvider: widget.currentTabSetting.tabType
-                        .timelineProvider(widget.currentTabSetting)),
-              ),
-              const TimelineEmoji(),
-              Container(
-                // decoration: filteringInputEmoji.isEmpty
-                //     ? BoxDecoration(
-                //         border: Border(
-                //             top: BorderSide(
-                //                 color: Theme.of(context).primaryColor)))
-                //     : null,
-                child: Row(
-                  children: [
-                    const Expanded(
-                      child: TimelineNoteField(),
-                    ),
-                    IconButton(onPressed: note, icon: const Icon(Icons.edit)),
-                    if (defaultTargetPlatform == TargetPlatform.android ||
-                        defaultTargetPlatform == TargetPlatform.iOS)
+                Expanded(
+                  child: MisskeyTimeline(
+                      controller: scrollController,
+                      timeLineRepositoryProvider: widget
+                          .currentTabSetting.tabType
+                          .timelineProvider(widget.currentTabSetting)),
+                ),
+                const TimelineEmoji(),
+                Container(
+                  // decoration: filteringInputEmoji.isEmpty
+                  //     ? BoxDecoration(
+                  //         border: Border(
+                  //             top: BorderSide(
+                  //                 color: Theme.of(context).primaryColor)))
+                  //     : null,
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: TimelineNoteField(),
+                      ),
+                      IconButton(onPressed: note, icon: const Icon(Icons.edit)),
+                      if (defaultTargetPlatform == TargetPlatform.android ||
+                          defaultTargetPlatform == TargetPlatform.iOS)
+                        IconButton(
+                            onPressed: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            icon: const Icon(Icons.keyboard_arrow_down)),
                       IconButton(
-                          onPressed: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          icon: const Icon(Icons.keyboard_arrow_down)),
-                    IconButton(
-                      onPressed: noteCreateRoute,
-                      icon: const Icon(Icons.keyboard_arrow_right),
-                    )
-                  ],
+                        onPressed: noteCreateRoute,
+                        icon: const Icon(Icons.keyboard_arrow_right),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           resizeToAvoidBottomInset: true,
           drawer: CommonDrawer(
