@@ -28,6 +28,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   TextEditingController nameController = TextEditingController();
   IconData? selectedIcon;
   bool renoteDisplay = true;
+  bool isSubscribe = true;
 
   @override
   void didChangeDependencies() {
@@ -43,6 +44,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       nameController.text = tabSetting.name;
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
+      isSubscribe = tabSetting.isSubscribe;
       if (channelId != null) {
         Future(() async {
           selectedChannel = await ref
@@ -170,55 +172,67 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 onChanged: (value) =>
                     setState(() => renoteDisplay = !renoteDisplay),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final account = selectedAccount;
-                  if (account == null) {
-                    SimpleMessageDialog.show(context, "アカウントを選択してください。");
-                    return;
-                  }
+              CheckboxListTile(
+                title: const Text("リアクションや投票数を自動更新する"),
+                subtitle: const Text(
+                    "オフにすると、リアクションや投票数が自動更新されませんが、バッテリー消費を抑えられることがあります。"),
+                value: isSubscribe,
+                onChanged: (value) =>
+                    setState(() => isSubscribe = !isSubscribe),
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final account = selectedAccount;
+                    if (account == null) {
+                      SimpleMessageDialog.show(context, "アカウントを選択してください。");
+                      return;
+                    }
 
-                  final tabType = selectedTabType;
-                  if (tabType == null) {
-                    SimpleMessageDialog.show(context, "タブの種類を選択してください。");
-                    return;
-                  }
+                    final tabType = selectedTabType;
+                    if (tabType == null) {
+                      SimpleMessageDialog.show(context, "タブの種類を選択してください。");
+                      return;
+                    }
 
-                  final icon = selectedIcon;
-                  if (icon == null) {
-                    SimpleMessageDialog.show(context, "アイコンを選択してください。");
-                    return;
-                  }
+                    final icon = selectedIcon;
+                    if (icon == null) {
+                      SimpleMessageDialog.show(context, "アイコンを選択してください。");
+                      return;
+                    }
 
-                  if (tabType == TabType.channel && selectedChannel == null) {
-                    SimpleMessageDialog.show(context, "チャンネルを指定してください。");
-                    return;
-                  }
+                    if (tabType == TabType.channel && selectedChannel == null) {
+                      SimpleMessageDialog.show(context, "チャンネルを指定してください。");
+                      return;
+                    }
 
-                  final list = ref
-                      .read(tabSettingsRepositoryProvider)
-                      .tabSettings
-                      .toList();
-                  final newTabSetting = TabSetting(
+                    final list = ref
+                        .read(tabSettingsRepositoryProvider)
+                        .tabSettings
+                        .toList();
+                    final newTabSetting = TabSetting(
                       icon: icon,
                       tabType: tabType,
                       name: nameController.text,
                       account: account,
                       channelId: selectedChannel?.id,
-                      renoteDisplay: renoteDisplay);
-                  if (widget.tabIndex == null) {
-                    await ref
-                        .read(tabSettingsRepositoryProvider)
-                        .save([...list, newTabSetting]);
-                  } else {
-                    list[widget.tabIndex!] = newTabSetting;
-                    await ref.read(tabSettingsRepositoryProvider).save(list);
-                  }
+                      renoteDisplay: renoteDisplay,
+                      isSubscribe: isSubscribe,
+                    );
+                    if (widget.tabIndex == null) {
+                      await ref
+                          .read(tabSettingsRepositoryProvider)
+                          .save([...list, newTabSetting]);
+                    } else {
+                      list[widget.tabIndex!] = newTabSetting;
+                      await ref.read(tabSettingsRepositoryProvider).save(list);
+                    }
 
-                  if (!mounted) return;
-                  Navigator.of(context).pop();
-                },
-                child: const Text("ほい"),
+                    if (!mounted) return;
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("ほい"),
+                ),
               )
             ],
           ),
