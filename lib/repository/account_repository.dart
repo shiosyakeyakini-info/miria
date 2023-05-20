@@ -92,9 +92,10 @@ class AccountRepository {
     await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
-  final sessionId = const Uuid().v4();
+  String sessionId = "";
 
   Future<void> openMiAuth(String server) async {
+    sessionId = const Uuid().v4();
     await launchUrl(
       MisskeyServer().buildMiAuthURL(server, sessionId,
           name: "Miria", permission: Permission.values),
