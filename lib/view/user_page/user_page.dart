@@ -25,7 +25,9 @@ class UserPageState extends ConsumerState<UserPage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [],
+        ),
         body: AccountScope(
           account: widget.account,
           child: Column(

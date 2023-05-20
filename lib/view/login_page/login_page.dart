@@ -2,13 +2,9 @@ import 'dart:ffi';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/tab_settings_repository.dart';
-import 'package:miria/router/app_router.dart';
 import 'package:miria/view/login_page/api_key_login.dart';
 import 'package:miria/view/login_page/mi_auth_login.dart';
 import 'package:miria/view/login_page/password_login.dart';
-import 'package:miria/view/time_line_page/time_line_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()

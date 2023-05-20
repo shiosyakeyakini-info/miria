@@ -259,6 +259,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SplashRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SplashPage(),
+      );
+    },
   };
 }
 
@@ -1150,4 +1156,18 @@ class FavoritedNoteRouteArgs {
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
   }
+}
+
+/// generated route for
+/// [SplashPage]
+class SplashRoute extends PageRouteInfo<void> {
+  const SplashRoute({List<PageRouteInfo>? children})
+      : super(
+          SplashRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SplashRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }

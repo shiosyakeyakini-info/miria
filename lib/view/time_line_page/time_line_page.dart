@@ -75,10 +75,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    ref
-        .read(emojiRepositoryProvider(widget.currentTabSetting.account))
-        .loadFromSource();
   }
 
   void changeTabOrReload(TabSetting tabSetting) {

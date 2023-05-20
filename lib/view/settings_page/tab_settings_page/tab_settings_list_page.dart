@@ -68,14 +68,16 @@ class TabSettingsListPageState extends ConsumerState<TabSettingsListPage> {
                 }),
           ),
           Align(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.center,
             child: Padding(
               padding: EdgeInsets.all(10),
               child: ElevatedButton(
                   onPressed: () {
-                    exit(0);
+                    context.router
+                      ..removeWhere((route) => true)
+                      ..push(const SplashRoute());
                   },
-                  child: const Text("反映する（再起動が必要です）")),
+                  child: const Text("反映する")),
             ),
           )
         ],
