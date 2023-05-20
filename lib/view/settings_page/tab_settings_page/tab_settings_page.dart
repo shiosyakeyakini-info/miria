@@ -4,6 +4,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/simple_message_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -173,20 +174,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 onPressed: () async {
                   final account = selectedAccount;
                   if (account == null) {
+                    SimpleMessageDialog.show(context, "アカウントを選択してください。");
                     return;
                   }
 
                   final tabType = selectedTabType;
                   if (tabType == null) {
+                    SimpleMessageDialog.show(context, "タブの種類を選択してください。");
                     return;
                   }
 
                   final icon = selectedIcon;
                   if (icon == null) {
+                    SimpleMessageDialog.show(context, "アイコンを選択してください。");
                     return;
                   }
 
                   if (tabType == TabType.channel && selectedChannel == null) {
+                    SimpleMessageDialog.show(context, "チャンネルを指定してください。");
                     return;
                   }
 

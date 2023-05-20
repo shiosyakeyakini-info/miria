@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 class SimpleMessageDialog extends StatelessWidget {
   final String message;
 
+  static void show(BuildContext context, String message) => showDialog(
+      context: context,
+      builder: (context) => SimpleMessageDialog(message: message));
+
   const SimpleMessageDialog({
     super.key,
     required this.message,
