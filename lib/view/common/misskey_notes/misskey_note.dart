@@ -412,21 +412,29 @@ class NoteChannelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          Icons.tv,
-          size: Theme.of(context).textTheme.bodySmall?.fontSize,
-          color: Theme.of(context).textTheme.bodySmall?.color,
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 5),
-        ),
-        Text(
-          channel.name,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
+    return GestureDetector(
+      onTap: () {
+        context.pushRoute(ChannelDetailRoute(
+          account: AccountScope.of(context),
+          channelId: channel.id,
+        ));
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.tv,
+            size: Theme.of(context).textTheme.bodySmall?.fontSize,
+            color: Theme.of(context).textTheme.bodySmall?.color,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 5),
+          ),
+          Text(
+            channel.name,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
     );
   }
 }
