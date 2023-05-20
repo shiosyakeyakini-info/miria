@@ -265,6 +265,26 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
+    HardMuteRoute.name: (routeData) {
+      final args = routeData.argsAs<HardMuteRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: HardMutePage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
+    InstanceMuteRoute.name: (routeData) {
+      final args = routeData.argsAs<InstanceMuteRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: InstanceMutePage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
   };
 }
 
@@ -1170,4 +1190,80 @@ class SplashRoute extends PageRouteInfo<void> {
   static const String name = 'SplashRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HardMutePage]
+class HardMuteRoute extends PageRouteInfo<HardMuteRouteArgs> {
+  HardMuteRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          HardMuteRoute.name,
+          args: HardMuteRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'HardMuteRoute';
+
+  static const PageInfo<HardMuteRouteArgs> page =
+      PageInfo<HardMuteRouteArgs>(name);
+}
+
+class HardMuteRouteArgs {
+  const HardMuteRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'HardMuteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [InstanceMutePage]
+class InstanceMuteRoute extends PageRouteInfo<InstanceMuteRouteArgs> {
+  InstanceMuteRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          InstanceMuteRoute.name,
+          args: InstanceMuteRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'InstanceMuteRoute';
+
+  static const PageInfo<InstanceMuteRouteArgs> page =
+      PageInfo<InstanceMuteRouteArgs>(name);
+}
+
+class InstanceMuteRouteArgs {
+  const InstanceMuteRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'InstanceMuteRouteArgs{key: $key, account: $account}';
+  }
 }

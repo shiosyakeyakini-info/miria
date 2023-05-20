@@ -200,8 +200,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                context.pushRoute(
-                                    NoteCreateRoute(reply: displayNote));
+                                context.pushRoute(NoteCreateRoute(
+                                    reply: displayNote,
+                                    initialAccount: AccountScope.of(context)));
                               },
                               constraints: const BoxConstraints(),
                               padding: EdgeInsets.zero,

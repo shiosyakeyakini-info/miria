@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/common/error_notification.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
@@ -47,6 +48,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         print(e);
         setState(() {
           error = e;
+          isLoading = false;
         });
         rethrow;
       }
@@ -84,30 +86,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
 
           return Column(
             children: [
-              if (error != null)
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Theme.of(context).dividerColor)),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "エラーが発生しました",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          ErrorDetail(error: error)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              if (error != null) ErrorNotification(error: error),
               Center(
                 child: !isLoading
                     ? IconButton(
