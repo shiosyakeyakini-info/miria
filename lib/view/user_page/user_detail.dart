@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
@@ -8,10 +10,56 @@ import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-class UserDetail extends StatelessWidget {
+class UserDetail extends ConsumerStatefulWidget {
   final UsersShowResponse response;
 
   const UserDetail({super.key, required this.response});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => UserDetailState();
+}
+
+class UserDetailState extends ConsumerState<UserDetail> {
+  late UsersShowResponse response;
+  bool isFollowEditing = false;
+
+  Future<void> followCreate() async {
+    if (isFollowEditing) return;
+    setState(() {
+      isFollowEditing = true;
+    });
+    await ref
+        .read(misskeyProvider(AccountScope.of(context)))
+        .following
+        .create(FollowingCreateRequest(userId: response.id));
+    if (!mounted) return;
+    setState(() {
+      isFollowEditing = false;
+      response = response.copyWith(isFollowing: true);
+    });
+  }
+
+  Future<void> followDelete() async {
+    if (isFollowEditing) return;
+    setState(() {
+      isFollowEditing = true;
+    });
+    await ref
+        .read(misskeyProvider(AccountScope.of(context)))
+        .following
+        .delete(FollowingDeleteRequest(userId: response.id));
+    if (!mounted) return;
+    setState(() {
+      isFollowEditing = false;
+      response = response.copyWith(isFollowing: false);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    response = widget.response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +69,54 @@ class UserDetail extends StatelessWidget {
       children: [
         if (response.bannerUrl != null)
           Image.network(response.bannerUrl.toString()),
+        Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if ((response.isFollowed ?? false))
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Card(
+                        child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text("フォローされています"),
+                    )),
+                  ),
+                if (!isFollowEditing)
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: (response.isFollowing ?? false)
+                          ? ElevatedButton(
+                              onPressed: followDelete,
+                              child: const Text("フォロー解除"))
+                          : OutlinedButton(
+                              onPressed: followCreate,
+                              child: const Text("フォローする")))
+                else
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                        onPressed: () {},
+                        icon: SizedBox(
+                            width: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.fontSize ??
+                                22,
+                            height: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.fontSize ??
+                                22,
+                            child: CircularProgressIndicator()),
+                        label: Text("更新中")),
+                  ),
+              ],
+            )),
+        const Divider(),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
           child: Column(

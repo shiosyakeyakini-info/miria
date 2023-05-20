@@ -5,6 +5,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart' as mfm_text;
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -91,18 +92,23 @@ class NotificationItem extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (notification.user != null)
                     GestureDetector(
                       onTap: () => context.pushRoute(UserRoute(
                           userId: notification.user!.id,
                           account: AccountScope.of(context))),
-                      child: SizedBox(
-                          width: 32,
-                          child: Image.network(
-                              notification.user!.avatarUrl.toString())),
+                      child: AvatarIcon(
+                        user: notification.user!,
+                        height: (Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.fontSize ??
+                                22) *
+                            MediaQuery.of(context).textScaleFactor,
+                      ),
                     ),
                   if (notification.reaction != null) ...[
                     const Padding(padding: EdgeInsets.only(top: 10)),
@@ -178,7 +184,20 @@ class NotificationItem extends ConsumerWidget {
                         )),
                   ],
                   if (notification.type == NotificationType.achievementEarned)
-                    Text("実績を解除したで  [${notification.achievement}]")
+                    Text("実績を解除したで  [${notification.achievement}]"),
+                  if (notification.type == NotificationType.follow)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        SimpleMfmText(
+                          "${notification.user?.name ?? notification.user?.username} ",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text("からフォローされました")
+                      ],
+                    )
                 ],
               ),
             )
