@@ -141,7 +141,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final reactionDeck =
         accountSettingsRepository.fromAccount(account).reactions;
     if (reactionDeck.isEmpty) {
-      return emoji?.take(limit).toList() ?? [];
+      return [];
     } else {
       return reactionDeck
           .map((e) => emoji?.firstWhereOrNull((element) => element.name == e))
