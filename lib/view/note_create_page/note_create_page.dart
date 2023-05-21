@@ -62,6 +62,8 @@ final filesProvider = StateProvider.autoDispose((ref) => <DriveFile>[]);
 final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
 final channelProvider =
     StateProvider.autoDispose<CommunityChannel?>((ref) => null);
+final replyProvider = StateProvider.autoDispose<Note?>((ref) => null);
+final renoteProvider = StateProvider.autoDispose<Note?>((ref) => null);
 
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
@@ -100,7 +102,25 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       ref.read(selectedAccountProvider.notifier).state =
           widget.initialAccount ?? ref.read(accountRepository).account.first;
       ref.read(channelProvider.notifier).state = widget.channel;
-      if (widget.channel != null) {
+
+      final renote = widget.renote;
+      if (renote != null) {
+        ref.read(renoteProvider.notifier).state = renote;
+        ref.read(noteVisibilityProvider.notifier).state = renote.visibility;
+      }
+
+      final reply = widget.reply;
+      ref.read(replyProvider.notifier).state = reply;
+      if (reply != null) {
+        // リプライの可視性はリノートより強くする
+        ref.read(noteVisibilityProvider.notifier).state = reply.visibility;
+      }
+
+      // チャンネルのノートか、リプライまたはリノートが連合オフの場合、
+      // 返信やRenoteも強制連合オフ
+      if (widget.channel != null ||
+          widget.reply?.localOnly == true ||
+          widget.renote?.localOnly == true) {
         ref.read(isLocalProvider.notifier).state = true;
       }
     });
@@ -193,14 +213,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const NoteCreateSettingTop(),
-              if (widget.reply != null && selectedAccount != null)
-                AccountScope(
-                  account: selectedAccount,
-                  child: MediaQuery(
-                      data: const MediaQueryData(textScaleFactor: 0.8),
-                      child: MisskeyNote(note: widget.reply!)),
-                ),
               const ChannelName(),
+              const ReplyArea(),
               if (isCw)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
@@ -228,25 +242,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                 decoration: noteDecoration,
                 autofocus: true,
               ),
-              if (widget.renote != null && selectedAccount != null) ...[
-                Text(
-                  "RN:",
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Theme.of(context).primaryColor)),
-                  padding: const EdgeInsets.all(5),
-                  child: AccountScope(
-                    account: selectedAccount,
-                    child: MediaQuery(
-                      data: const MediaQueryData(textScaleFactor: 0.8),
-                      child: MisskeyNote(note: widget.renote!),
-                    ),
-                  ),
-                )
-              ],
+              const RenoteArea(),
               Row(
                 children: [
                   IconButton(onPressed: driveConnect, icon: Icon(Icons.image)),
@@ -360,5 +356,59 @@ class ChannelName extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class ReplyArea extends ConsumerWidget {
+  const ReplyArea({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reply = ref.watch(replyProvider);
+    final account = ref.watch(selectedAccountProvider);
+
+    if (reply != null && account != null) {
+      return AccountScope(
+        account: account,
+        child: MediaQuery(
+            data: const MediaQueryData(textScaleFactor: 0.8),
+            child: MisskeyNote(note: reply)),
+      );
+    }
+
+    return Container();
+  }
+}
+
+class RenoteArea extends ConsumerWidget {
+  const RenoteArea({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = ref.watch(selectedAccountProvider);
+    final renote = ref.watch(renoteProvider);
+
+    if (renote != null && account != null) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          "RN:",
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).primaryColor)),
+          padding: const EdgeInsets.all(5),
+          child: AccountScope(
+            account: account,
+            child: MediaQuery(
+              data: const MediaQueryData(textScaleFactor: 0.8),
+              child: MisskeyNote(note: renote),
+            ),
+          ),
+        )
+      ]);
+    }
+
+    return Container();
   }
 }

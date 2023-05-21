@@ -240,27 +240,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     .bodySmall
                                     ?.color,
                               )),
-                          TextButton.icon(
-                            onPressed: () => showModalBottomSheet(
-                                context: context,
-                                builder: (innerContext) => RenoteModalSheet(
-                                    note: displayNote,
-                                    account: AccountScope.of(context))),
-                            icon: Icon(
-                              Icons.repeat_rounded,
-                              size: 16 * MediaQuery.of(context).textScaleFactor,
-                              color:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                            label: Text(
-                                "${displayNote.renoteCount != 0 ? displayNote.renoteCount : ""}",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            style: const ButtonStyle(
-                              padding:
-                                  MaterialStatePropertyAll(EdgeInsets.zero),
-                              minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
+                          RenoteButton(
+                            displayNote: displayNote,
                           ),
                           IconButton(
                               onPressed: () async => await reactionControl(
@@ -371,9 +352,7 @@ class NoteHeader1 extends StatelessWidget {
 
   const NoteHeader1({super.key, required this.displayNote});
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -454,6 +433,51 @@ class NoteChannelView extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class RenoteButton extends StatelessWidget {
+  final Note displayNote;
+  const RenoteButton({
+    super.key,
+    required this.displayNote,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final account = AccountScope.of(context);
+
+    // 他人のノートで、ダイレクトまたはフォロワーのみへの公開の場合、リノート不可
+    if ((displayNote.visibility == NoteVisibility.specified ||
+            displayNote.visibility == NoteVisibility.followers) &&
+        !(account.host == displayNote.user.host &&
+            account.userId == displayNote.user.username)) {
+      return Icon(
+        Icons.block,
+        size: 16 * MediaQuery.of(context).textScaleFactor,
+        color: Theme.of(context).textTheme.bodySmall?.color,
+      );
+    }
+
+    return TextButton.icon(
+      onPressed: () => showModalBottomSheet(
+          context: context,
+          builder: (innerContext) => RenoteModalSheet(
+              note: displayNote, account: AccountScope.of(context))),
+      icon: Icon(
+        Icons.repeat_rounded,
+        size: 16 * MediaQuery.of(context).textScaleFactor,
+        color: Theme.of(context).textTheme.bodySmall?.color,
+      ),
+      label: Text(
+          "${displayNote.renoteCount != 0 ? displayNote.renoteCount : ""}",
+          style: Theme.of(context).textTheme.bodySmall),
+      style: const ButtonStyle(
+        padding: MaterialStatePropertyAll(EdgeInsets.zero),
+        minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
   }

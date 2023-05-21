@@ -57,10 +57,17 @@ class NoteCreateSettingTop extends ConsumerWidget {
         IconButton(
             onPressed: () async {
               // チャンネルのノートは強制ローカルから変えられない
-              final channel = ref.read(channelProvider);
-              if (channel != null) {
+              if (ref.read(channelProvider) != null) {
                 SimpleMessageDialog.show(context, "チャンネルのノートを連合にすることはでけへんねん。");
                 return;
+              }
+              if (ref.read(replyProvider) != null) {
+                SimpleMessageDialog.show(
+                    context, "リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。");
+              }
+              if (ref.read(renoteProvider) != null) {
+                SimpleMessageDialog.show(context,
+                    "リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。");
               }
               ref.read(isLocalProvider.notifier).state =
                   !ref.read(isLocalProvider);
