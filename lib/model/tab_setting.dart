@@ -28,6 +28,9 @@ class TabSetting with _$TabSetting {
     /// リストのノートの場合、リストID
     String? listId,
 
+    /// アンテナのノートの場合、アンテナID
+    String? antennaId,
+
     /// ノートの投稿のキャプチャをするかどうか
     @Default(true) isSubscribe,
 

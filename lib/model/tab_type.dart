@@ -10,6 +10,7 @@ enum TabType {
   hybridTimeline("ソーシャルタイムライン"),
   channel("チャンネル"),
   userList("リスト"),
+  antenna("アンテナ"),
   ;
 
   final String displayName;
@@ -30,6 +31,8 @@ enum TabType {
         return channelTimelineProvider(setting);
       case TabType.userList:
         return userListTimelineProvider(setting);
+      case TabType.antenna:
+        return antennaTimelineProvider(setting);
     }
   }
 }

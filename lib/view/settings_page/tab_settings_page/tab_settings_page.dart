@@ -191,6 +191,29 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   ],
                 )
               ],
+              if (selectedTabType == TabType.antenna) ...[
+                const Text("アンテナ"),
+                Row(
+                  children: [
+                    Expanded(child: Text(selectedAntenna?.name ?? "")),
+                    IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount;
+                          if (selected == null) return;
+
+                          selectedAntenna = await showDialog<Antenna>(
+                              context: context,
+                              builder: (context) =>
+                                  AntennaSelectDialog(account: selected));
+                          setState(() {
+                            nameController.text =
+                                selectedAntenna?.name ?? nameController.text;
+                          });
+                        },
+                        icon: const Icon(Icons.navigate_next))
+                  ],
+                )
+              ],
               const Padding(padding: EdgeInsets.all(10)),
               const Text("タブの名前"),
               TextField(
@@ -257,6 +280,11 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     if (tabType == TabType.userList &&
                         selectedUserList == null) {
                       SimpleMessageDialog.show(context, "リストを指定してください。");
+                      return;
+                    }
+
+                    if (tabType == TabType.antenna && selectedAntenna == null) {
+                      SimpleMessageDialog.show(context, "アンテナを指定してください。");
                       return;
                     }
 

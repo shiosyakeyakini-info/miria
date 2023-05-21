@@ -2,6 +2,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/account_settings_repository.dart';
+import 'package:miria/repository/antenna_timeline_repository.dart';
 import 'package:miria/repository/channel_time_line_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/favorite_repository.dart';
@@ -66,6 +67,15 @@ final channelTimelineProvider =
 final userListTimelineProvider =
     ChangeNotifierProvider.family<UserListTimelineRepository, TabSetting>(
         (ref, tabSetting) => UserListTimelineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              tabSetting,
+            ));
+
+final antennaTimelineProvider =
+    ChangeNotifierProvider.family<AntennaTimelineRepository, TabSetting>(
+        (ref, tabSetting) => AntennaTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
