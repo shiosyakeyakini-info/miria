@@ -60,6 +60,8 @@ final isLocalProvider = StateProvider.autoDispose((ref) => false);
 final noteCreateEmojisProvider = StateProvider.autoDispose((ref) => <Emoji>[]);
 final filesProvider = StateProvider.autoDispose((ref) => <DriveFile>[]);
 final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
+final channelProvider =
+    StateProvider.autoDispose<CommunityChannel?>((ref) => null);
 
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
@@ -97,6 +99,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
     Future(() async {
       ref.read(selectedAccountProvider.notifier).state =
           widget.initialAccount ?? ref.read(accountRepository).account.first;
+      ref.read(channelProvider.notifier).state = widget.channel;
+      if (widget.channel != null) {
+        ref.read(isLocalProvider.notifier).state = true;
+      }
     });
   }
 
@@ -194,24 +200,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       data: const MediaQueryData(textScaleFactor: 0.8),
                       child: MisskeyNote(note: widget.reply!)),
                 ),
-              if (widget.channel != null)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.tv,
-                        size: Theme.of(context).textTheme.bodySmall!.fontSize! *
-                            MediaQuery.of(context).textScaleFactor,
-                        color: Theme.of(context).textTheme.bodySmall?.color,
-                      ),
-                      Text(
-                        widget.channel!.name,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                ),
+              const ChannelName(),
               if (isCw)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
@@ -343,6 +332,33 @@ class FilePreview extends ConsumerWidget {
           const Padding(padding: EdgeInsets.all(10), child: Text("アップロード中...")),
         MisskeyFileView(files: files),
       ],
+    );
+  }
+}
+
+class ChannelName extends ConsumerWidget {
+  const ChannelName({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final channel = ref.watch(channelProvider);
+    if (channel == null) return Container();
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Row(
+        children: [
+          Icon(
+            Icons.tv,
+            size: Theme.of(context).textTheme.bodySmall!.fontSize! *
+                MediaQuery.of(context).textScaleFactor,
+            color: Theme.of(context).textTheme.bodySmall?.color,
+          ),
+          Text(
+            channel.name,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
     );
   }
 }

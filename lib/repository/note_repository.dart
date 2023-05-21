@@ -23,14 +23,18 @@ class NoteRepository extends ChangeNotifier {
 
   void registerNote(Note note) {
     _registerNote(note);
-    notifyListeners();
+    Future(() {
+      notifyListeners();
+    });
   }
 
   void registerAll(Iterable<Note> notes) {
     for (final element in notes) {
       _registerNote(element);
     }
-    notifyListeners();
+    Future(() {
+      notifyListeners();
+    });
   }
 
   Future<void> refresh(String noteId) async {

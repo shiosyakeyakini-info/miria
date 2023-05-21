@@ -38,10 +38,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         final index = olderNotes.indexWhere((element) => element.id == note.id);
         if (index != -1) {
           olderNotes[index] = note;
-          noteRepository.registerNote(note);
         } else {
           olderNotes.addFirst(note);
         }
+        noteRepository.registerNote(note);
       }
       notifyListeners();
     });

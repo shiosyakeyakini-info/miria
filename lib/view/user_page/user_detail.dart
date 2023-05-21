@@ -123,7 +123,6 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 children: [
                   Expanded(
                     child: Align(
-                      alignment: Alignment.centerRight,
                       child: Wrap(
                         children: [
                           if (response.isRenoteMuted ?? false)
