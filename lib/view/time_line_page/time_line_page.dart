@@ -38,27 +38,36 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   void initState() {
     super.initState();
 
-    ref.read(timelineNoteProvider).addListener(() {
-      if (ref.read(timelineNoteProvider).isIncludeBeforeColon) {
-        if (ref.read(timelineNoteProvider).isEmojiScope) {
-          if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-            ref.read(filteredInputEmojiProvider.notifier).state = [];
-          }
-          return;
-        }
+    ref.read(timelineNoteProvider).addListener(inputListener);
+  }
 
-        Future(() async {
-          final searchedEmojis = await (ref
-              .read(emojiRepositoryProvider(widget.currentTabSetting.account))
-              .searchEmojis(ref.read(timelineNoteProvider).emojiSearchValue));
-          ref.read(filteredInputEmojiProvider.notifier).state = searchedEmojis;
-        });
-      } else {
+  @override
+  void dispose() {
+    super.dispose();
+
+    ref.read(timelineNoteProvider).removeListener(inputListener);
+  }
+
+  void inputListener() {
+    if (ref.read(timelineNoteProvider).isIncludeBeforeColon) {
+      if (ref.read(timelineNoteProvider).isEmojiScope) {
         if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
           ref.read(filteredInputEmojiProvider.notifier).state = [];
         }
+        return;
       }
-    });
+
+      Future(() async {
+        final searchedEmojis = await (ref
+            .read(emojiRepositoryProvider(widget.currentTabSetting.account))
+            .searchEmojis(ref.read(timelineNoteProvider).emojiSearchValue));
+        ref.read(filteredInputEmojiProvider.notifier).state = searchedEmojis;
+      });
+    } else {
+      if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
+        ref.read(filteredInputEmojiProvider.notifier).state = [];
+      }
+    }
   }
 
   void note() {
