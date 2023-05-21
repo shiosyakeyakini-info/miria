@@ -308,11 +308,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                 ),
               ],
             ),
-            if (!isEmptyRenote && displayNote.renote != null)
+            if (!isEmptyRenote &&
+                displayNote.renote != null &&
+                widget.recursive < 2)
               Container(
                 decoration: BoxDecoration(
                     border:
-                        Border.all(color: Colors.deepOrangeAccent.shade700)),
+                        Border.all(color: Theme.of(context).primaryColorDark)),
                 padding: const EdgeInsets.all(5),
                 child: MisskeyNote(
                   note: displayNote.renote!,
