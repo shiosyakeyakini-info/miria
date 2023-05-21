@@ -92,7 +92,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                 child: SimpleMfmText(
                   "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
                   style: Theme.of(context).textTheme.bodySmall,
-                  emojis: widget.note.user.emojis ?? {},
+                  emojis: widget.note.user.emojis,
                 ),
               ),
             if (displayNote.reply != null)
@@ -170,6 +170,18 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           displayNote.text ?? "",
                           host: displayNote.user.host,
                           emoji: displayNote.emojis,
+                          suffixSpan: [
+                            if (!isEmptyRenote &&
+                                displayNote.renoteId != null &&
+                                widget.recursive == 2)
+                              TextSpan(
+                                text: "  RN:...",
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                          ],
                         ),
                         MisskeyFileView(
                           files: displayNote.files,
@@ -309,7 +321,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
               ],
             ),
             if (!isEmptyRenote &&
-                displayNote.renote != null &&
+                displayNote.renoteId != null &&
                 widget.recursive < 2)
               Container(
                 decoration: BoxDecoration(
@@ -321,7 +333,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                   isDisplayBorder: false,
                   recursive: widget.recursive + 1,
                 ),
-              ),
+              )
           ],
         ),
       ),

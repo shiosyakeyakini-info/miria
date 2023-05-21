@@ -10,7 +10,10 @@ class NoteRepository extends ChangeNotifier {
   Map<String, Note> get notes => _notes;
 
   void _registerNote(Note note) {
-    _notes[note.id] = note;
+    _notes[note.id] = note.copyWith(
+      renote: note.renote ?? _notes[note.renoteId],
+      reply: note.reply ?? _notes[note.replyId],
+    );
     final renote = note.renote;
     final reply = note.reply;
     if (renote != null) {
