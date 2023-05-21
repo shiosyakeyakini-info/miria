@@ -5,8 +5,10 @@ import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/simple_message_dialog.dart';
+import 'package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
+import 'package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -25,6 +27,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   late Account? selectedAccount = ref.read(accountRepository).account.first;
   TabType? selectedTabType = TabType.localTimeline;
   CommunityChannel? selectedChannel;
+  UsersList? selectedUserList;
+  Antenna? selectedAntenna;
   TextEditingController nameController = TextEditingController();
   IconData? selectedIcon;
   bool renoteDisplay = true;
@@ -41,6 +45,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       selectedAccount = tabSetting.account;
       selectedTabType = tabSetting.tabType;
       final channelId = tabSetting.channelId;
+      final listId = tabSetting.listId;
+      final antennaId = tabSetting.antennaId;
       nameController.text = tabSetting.name;
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
@@ -51,6 +57,25 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .read(misskeyProvider(tabSetting.account))
               .channels
               .show(ChannelsShowRequest(channelId: channelId));
+          setState(() {});
+        });
+      }
+      if (listId != null) {
+        Future(() async {
+          selectedUserList = await ref
+              .read(misskeyProvider(tabSetting.account))
+              .users
+              .list
+              .show(UsersListsShowRequest(listId: listId));
+          setState(() {});
+        });
+      }
+      if (antennaId != null) {
+        Future(() async {
+          selectedAntenna = await ref
+              .read(misskeyProvider(tabSetting.account))
+              .antennas
+              .show(AntennasShowRequest(antennaId: antennaId));
           setState(() {});
         });
       }
@@ -143,6 +168,29 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   ],
                 )
               ],
+              if (selectedTabType == TabType.userList) ...[
+                const Text("リスト"),
+                Row(
+                  children: [
+                    Expanded(child: Text(selectedUserList?.name ?? "")),
+                    IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount;
+                          if (selected == null) return;
+
+                          selectedUserList = await showDialog<UsersList>(
+                              context: context,
+                              builder: (context) =>
+                                  UserListSelectDialog(account: selected));
+                          setState(() {
+                            nameController.text =
+                                selectedUserList?.name ?? nameController.text;
+                          });
+                        },
+                        icon: const Icon(Icons.navigate_next))
+                  ],
+                )
+              ],
               const Padding(padding: EdgeInsets.all(10)),
               const Text("タブの名前"),
               TextField(
@@ -206,6 +254,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       return;
                     }
 
+                    if (tabType == TabType.userList &&
+                        selectedUserList == null) {
+                      SimpleMessageDialog.show(context, "リストを指定してください。");
+                      return;
+                    }
+
                     final list = ref
                         .read(tabSettingsRepositoryProvider)
                         .tabSettings
@@ -216,6 +270,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       name: nameController.text,
                       account: account,
                       channelId: selectedChannel?.id,
+                      listId: selectedUserList?.id,
+                      antennaId: selectedAntenna?.id,
                       renoteDisplay: renoteDisplay,
                       isSubscribe: isSubscribe,
                     );

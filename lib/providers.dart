@@ -13,6 +13,7 @@ import 'package:miria/repository/local_time_line_repository.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
+import 'package:miria/repository/user_list_time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -61,6 +62,16 @@ final channelTimelineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               tabSetting,
             ));
+
+final userListTimelineProvider =
+    ChangeNotifierProvider.family<UserListTimelineRepository, TabSetting>(
+        (ref, tabSetting) => UserListTimelineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              tabSetting,
+            ));
+
 final mainStreamRepositoryProvider =
     ChangeNotifierProvider.family<MainStreamRepository, Account>(
         (ref, account) => MainStreamRepository(

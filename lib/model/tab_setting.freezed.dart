@@ -29,6 +29,9 @@ mixin _$TabSetting {
   /// チャンネルのノートの場合、チャンネルID
   String? get channelId => throw _privateConstructorUsedError;
 
+  /// リストのノートの場合、リストID
+  String? get listId => throw _privateConstructorUsedError;
+
   /// ノートの投稿のキャプチャをするかどうか
   dynamic get isSubscribe => throw _privateConstructorUsedError;
 
@@ -55,6 +58,7 @@ abstract class $TabSettingCopyWith<$Res> {
       {@IconDataConverter() IconData icon,
       TabType tabType,
       String? channelId,
+      String? listId,
       dynamic isSubscribe,
       String name,
       Account account,
@@ -79,6 +83,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? icon = null,
     Object? tabType = null,
     Object? channelId = freezed,
+    Object? listId = freezed,
     Object? isSubscribe = freezed,
     Object? name = null,
     Object? account = null,
@@ -96,6 +101,10 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
       channelId: freezed == channelId
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      listId: freezed == listId
+          ? _value.listId
+          : listId // ignore: cast_nullable_to_non_nullable
               as String?,
       isSubscribe: freezed == isSubscribe
           ? _value.isSubscribe
@@ -137,6 +146,7 @@ abstract class _$$_TabSettingCopyWith<$Res>
       {@IconDataConverter() IconData icon,
       TabType tabType,
       String? channelId,
+      String? listId,
       dynamic isSubscribe,
       String name,
       Account account,
@@ -160,6 +170,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
     Object? icon = null,
     Object? tabType = null,
     Object? channelId = freezed,
+    Object? listId = freezed,
     Object? isSubscribe = freezed,
     Object? name = null,
     Object? account = null,
@@ -177,6 +188,10 @@ class __$$_TabSettingCopyWithImpl<$Res>
       channelId: freezed == channelId
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      listId: freezed == listId
+          ? _value.listId
+          : listId // ignore: cast_nullable_to_non_nullable
               as String?,
       isSubscribe: freezed == isSubscribe ? _value.isSubscribe! : isSubscribe,
       name: null == name
@@ -202,6 +217,7 @@ class _$_TabSetting extends _TabSetting {
       {@IconDataConverter() required this.icon,
       required this.tabType,
       this.channelId,
+      this.listId,
       this.isSubscribe = true,
       required this.name,
       required this.account,
@@ -223,6 +239,10 @@ class _$_TabSetting extends _TabSetting {
   @override
   final String? channelId;
 
+  /// リストのノートの場合、リストID
+  @override
+  final String? listId;
+
   /// ノートの投稿のキャプチャをするかどうか
   @override
   @JsonKey()
@@ -241,7 +261,7 @@ class _$_TabSetting extends _TabSetting {
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, isSubscribe: $isSubscribe, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, listId: $listId, isSubscribe: $isSubscribe, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -253,6 +273,7 @@ class _$_TabSetting extends _TabSetting {
             (identical(other.tabType, tabType) || other.tabType == tabType) &&
             (identical(other.channelId, channelId) ||
                 other.channelId == channelId) &&
+            (identical(other.listId, listId) || other.listId == listId) &&
             const DeepCollectionEquality()
                 .equals(other.isSubscribe, isSubscribe) &&
             (identical(other.name, name) || other.name == name) &&
@@ -268,6 +289,7 @@ class _$_TabSetting extends _TabSetting {
       icon,
       tabType,
       channelId,
+      listId,
       const DeepCollectionEquality().hash(isSubscribe),
       name,
       account,
@@ -292,6 +314,7 @@ abstract class _TabSetting extends TabSetting {
       {@IconDataConverter() required final IconData icon,
       required final TabType tabType,
       final String? channelId,
+      final String? listId,
       final dynamic isSubscribe,
       required final String name,
       required final Account account,
@@ -312,6 +335,10 @@ abstract class _TabSetting extends TabSetting {
 
   /// チャンネルのノートの場合、チャンネルID
   String? get channelId;
+  @override
+
+  /// リストのノートの場合、リストID
+  String? get listId;
   @override
 
   /// ノートの投稿のキャプチャをするかどうか
