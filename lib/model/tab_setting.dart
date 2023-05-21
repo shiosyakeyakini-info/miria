@@ -25,6 +25,12 @@ class TabSetting with _$TabSetting {
     /// チャンネルのノートの場合、チャンネルID
     String? channelId,
 
+    /// リストのノートの場合、リストID
+    String? listId,
+
+    /// アンテナのノートの場合、アンテナID
+    String? antennaId,
+
     /// ノートの投稿のキャプチャをするかどうか
     @Default(true) isSubscribe,
 

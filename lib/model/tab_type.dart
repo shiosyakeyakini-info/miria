@@ -9,6 +9,8 @@ enum TabType {
   globalTimeline("グローバルタイムライン"),
   hybridTimeline("ソーシャルタイムライン"),
   channel("チャンネル"),
+  userList("リスト"),
+  antenna("アンテナ"),
   ;
 
   final String displayName;
@@ -27,6 +29,10 @@ enum TabType {
         return hybridTimeLineProvider(setting); //FIXME
       case TabType.channel:
         return channelTimelineProvider(setting);
+      case TabType.userList:
+        return userListTimelineProvider(setting);
+      case TabType.antenna:
+        return antennaTimelineProvider(setting);
     }
   }
 }
