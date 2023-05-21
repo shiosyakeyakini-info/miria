@@ -90,25 +90,28 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
               if (error != null) ErrorNotification(error: error),
               Center(
                 child: !isLoading
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isLoading = true;
-                            Future(() async {
-                              final result =
-                                  await widget.nextFuture(items.last);
-                              if (result.isEmpty) isFinalPage = true;
-                              items.addAll(result);
-                              setState(() {
-                                isLoading = false;
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isLoading = true;
+                              Future(() async {
+                                final result =
+                                    await widget.nextFuture(items.last);
+                                if (result.isEmpty) isFinalPage = true;
+                                items.addAll(result);
+                                setState(() {
+                                  isLoading = false;
+                                });
                               });
                             });
-                          });
-                        },
-                        icon: const Icon(Icons.keyboard_arrow_down),
+                          },
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                        ),
                       )
                     : const Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(20),
                         child: CircularProgressIndicator()),
               )
             ],
