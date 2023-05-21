@@ -136,27 +136,33 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           displayNote.cw ?? "",
                           host: displayNote.user.host,
                           emoji: displayNote.emojis,
-                        ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              padding: const EdgeInsets.all(5),
-                              textStyle: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.fontSize),
-                              minimumSize: const Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          suffixSpan: [
+                            WidgetSpan(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  padding: const EdgeInsets.all(5),
+                                  textStyle: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.fontSize),
+                                  minimumSize: const Size(0, 0),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    isCwOpened = !isCwOpened;
+                                  });
+                                },
+                                child: Text(
+                                  isCwOpened ? "隠す" : "続きを見る",
+                                ),
+                              ),
                             ),
-                            onPressed: () {
-                              setState(() {
-                                isCwOpened = !isCwOpened;
-                              });
-                            },
-                            child: Text(
-                              isCwOpened ? "隠す" : "続きを見る",
-                            ))
+                          ],
+                        ),
                       ],
                       if (displayNote.cw == null ||
                           displayNote.cw != null && isCwOpened) ...[

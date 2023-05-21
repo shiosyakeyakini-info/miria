@@ -18,6 +18,8 @@ class MfmText extends ConsumerStatefulWidget {
   final TextStyle? style;
   final Map<String, String> emoji;
   final bool isNyaize;
+  final List<InlineSpan> suffixSpan;
+  final List<InlineSpan> prefixSpan;
 
   const MfmText(
     this.mfmText, {
@@ -26,6 +28,8 @@ class MfmText extends ConsumerStatefulWidget {
     this.style,
     this.emoji = const {},
     this.isNyaize = false,
+    this.suffixSpan = const [],
+    this.prefixSpan = const [],
   });
 
   @override
@@ -132,6 +136,8 @@ class MfmTextState extends ConsumerState<MfmText> {
       searchTap: onSearch,
       style: widget.style,
       isNyaize: widget.isNyaize,
+      suffixSpan: widget.suffixSpan,
+      prefixSpan: widget.prefixSpan,
     );
   }
 }
@@ -140,12 +146,16 @@ class SimpleMfmText extends ConsumerWidget {
   final String text;
   final TextStyle? style;
   final Map<String, String> emojis;
+  final List<InlineSpan> suffixSpan;
+  final List<InlineSpan> prefixSpan;
 
   const SimpleMfmText(
     this.text, {
     super.key,
     this.style,
     this.emojis = const {},
+    this.suffixSpan = const [],
+    this.prefixSpan = const [],
   });
 
   @override
@@ -159,6 +169,8 @@ class SimpleMfmText extends ConsumerWidget {
         anotherServerUrl: emojis[emojiName],
       ),
       style: style,
+      suffixSpan: suffixSpan,
+      prefixSpan: prefixSpan,
     );
   }
 }
@@ -177,23 +189,22 @@ class UserInformation extends ConsumerStatefulWidget {
 class UserInformationState extends ConsumerState<UserInformation> {
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        runAlignment: WrapAlignment.center,
-        children: [
-          SimpleMfmText(
-            widget.user.name ?? widget.user.username,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            emojis: widget.user.emojis,
-          ),
-          for (final badge in widget.user.badgeRoles ?? [])
-            Tooltip(
+    return SimpleMfmText(
+      widget.user.name ?? widget.user.username,
+      style: const TextStyle(fontWeight: FontWeight.bold),
+      emojis: widget.user.emojis,
+      suffixSpan: [
+        for (final badge in widget.user.badgeRoles ?? [])
+          WidgetSpan(
+            child: Tooltip(
               message: badge.name,
               child: SizedBox(
                   height: MediaQuery.of(context).textScaleFactor *
                       (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
                   child: Image.network(badge.iconUrl.toString())),
-            )
-        ]);
+            ),
+          )
+      ],
+    );
   }
 }
