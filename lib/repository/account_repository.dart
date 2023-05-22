@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,6 +40,12 @@ class AccountRepository {
         ..clear()
         ..addAll(
             (jsonDecode(storedData) as List).map((e) => Account.fromJson(e)));
+
+      // 起動時にアカウント情報を取得する
+      for (int i = 0; i < _account.length; i++) {
+        _account[i] = _account[i]
+            .copyWith(i: await reader(misskeyProvider(_account[i])).i.i());
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);

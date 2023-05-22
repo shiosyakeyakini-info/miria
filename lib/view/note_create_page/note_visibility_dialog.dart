@@ -22,6 +22,12 @@ class NoteVisibilityDialog extends ConsumerWidget {
               return;
             }
 
+            if (ref.read(selectedAccountProvider)?.i.isSilenced == true) {
+              SimpleMessageDialog.show(
+                  context, "サイレンスロールになっているため、パブリックで投稿することはできません。");
+              return;
+            }
+
             Navigator.of(context).pop(NoteVisibility.public);
           },
           leading: const Icon(Icons.public),

@@ -123,6 +123,13 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           widget.renote?.localOnly == true) {
         ref.read(isLocalProvider.notifier).state = true;
       }
+
+      // サイレンスの場合、ホーム以下に強制
+      final isSilenced = ref.read(selectedAccountProvider)?.i.isSilenced;
+      if (isSilenced == true &&
+          ref.read(noteVisibilityProvider) == NoteVisibility.public) {
+        ref.read(noteVisibilityProvider.notifier).state = NoteVisibility.home;
+      }
     });
   }
 
