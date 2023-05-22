@@ -138,6 +138,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           emoji: displayNote.emojis,
                           suffixSpan: [
                             WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
