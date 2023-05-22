@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/converters/icon_converter.dart';
+import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,7 @@ class TabSetting with _$TabSetting {
       tabType.timelineProvider(this);
 
   const factory TabSetting({
-    @IconDataConverter() required IconData icon,
+    @IconDataConverter() required TabIcon icon,
 
     /// タブ種別
     required TabType tabType,

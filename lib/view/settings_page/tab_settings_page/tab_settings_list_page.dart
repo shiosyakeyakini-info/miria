@@ -6,6 +6,8 @@ import 'package:miria/model/tab_setting.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/tab_icon_view.dart';
 
 @RoutePage()
 class TabSettingsListPage extends ConsumerStatefulWidget {
@@ -47,7 +49,9 @@ class TabSettingsListPageState extends ConsumerState<TabSettingsListPage> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     key: Key("$index"),
-                    leading: Icon(tabSettings[index].icon),
+                    leading: AccountScope(
+                        account: tabSettings[index].account,
+                        child: TabIconView(icon: tabSettings[index].icon)),
                     title: Text(tabSettings[index].name),
                     subtitle: Text(
                         "${tabSettings[index].tabType.displayName} / @${tabSettings[index].account.userId}@${tabSettings[index].account.host} "),

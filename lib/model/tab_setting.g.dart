@@ -8,7 +8,7 @@ part of 'tab_setting.dart';
 
 _$_TabSetting _$$_TabSettingFromJson(Map<String, dynamic> json) =>
     _$_TabSetting(
-      icon: const IconDataConverter().fromJson(json['icon'] as int),
+      icon: const IconDataConverter().fromJson(json['icon']),
       tabType: $enumDecode(_$TabTypeEnumMap, json['tabType']),
       channelId: json['channelId'] as String?,
       listId: json['listId'] as String?,

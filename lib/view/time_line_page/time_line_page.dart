@@ -13,6 +13,7 @@ import 'package:miria/view/common/common_drawer.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/notification_icon.dart';
+import 'package:miria/view/common/tab_icon_view.dart';
 import 'package:miria/view/common/timeline_listview.dart';
 import 'package:miria/view/time_line_page/misskey_time_line.dart';
 import 'package:miria/view/time_line_page/timeline_emoji.dart';
@@ -151,14 +152,17 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     color: tabSetting == widget.currentTabSetting
                         ? Colors.white
                         : Colors.transparent,
-                    child: IconButton(
-                      icon: Icon(
-                        tabSetting.icon,
-                        color: tabSetting == widget.currentTabSetting
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
+                    child: AccountScope(
+                      account: tabSetting.account,
+                      child: IconButton(
+                        icon: TabIconView(
+                          icon: tabSetting.icon,
+                          color: tabSetting == widget.currentTabSetting
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                        ),
+                        onPressed: () => changeTabOrReload(tabSetting),
                       ),
-                      onPressed: () => changeTabOrReload(tabSetting),
                     ),
                   )
               ]),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/model/tab_icon.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/reaction_picker_dialog/reaction_picker_content.dart';
 
 class IconSelectDialog extends StatelessWidget {
   final icons = [
@@ -68,24 +71,46 @@ class IconSelectDialog extends StatelessWidget {
     Icons.diamond_outlined,
   ];
 
-  IconSelectDialog({super.key});
+  final Account account;
+
+  IconSelectDialog({super.key, required this.account});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("アイコンを選択"),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: Wrap(
-          children: [
-            for (final icon in icons)
-              IconButton(
-                  onPressed: () => Navigator.of(context).pop(icon),
-                  icon: Icon(icon)),
-          ],
-        ),
-      ),
-    );
+        title: const Text("アイコンを選択"),
+        content: DefaultTabController(
+            length: 2,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.width * 0.8,
+              child: Column(
+                children: [
+                  const TabBar(tabs: [Tab(text: "標準"), Tab(text: "カスタム絵文字")]),
+                  Expanded(
+                    child: TabBarView(children: [
+                      SingleChildScrollView(
+                        child: Wrap(
+                          children: [
+                            for (final icon in icons)
+                              IconButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pop(TabIcon(codePoint: icon.codePoint)),
+                                  icon: Icon(icon)),
+                          ],
+                        ),
+                      ),
+                      AccountScope(
+                        account: account,
+                        child: ReactionPickerContent(
+                          onTap: (emoji) => Navigator.of(context)
+                              .pop(TabIcon(customEmojiName: emoji.name)),
+                        ),
+                      )
+                    ]),
+                  )
+                ],
+              ),
+            )));
   }
 }

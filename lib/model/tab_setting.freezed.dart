@@ -21,7 +21,7 @@ TabSetting _$TabSettingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TabSetting {
   @IconDataConverter()
-  IconData get icon => throw _privateConstructorUsedError;
+  TabIcon get icon => throw _privateConstructorUsedError;
 
   /// タブ種別
   TabType get tabType => throw _privateConstructorUsedError;
@@ -58,7 +58,7 @@ abstract class $TabSettingCopyWith<$Res> {
       _$TabSettingCopyWithImpl<$Res, TabSetting>;
   @useResult
   $Res call(
-      {@IconDataConverter() IconData icon,
+      {@IconDataConverter() TabIcon icon,
       TabType tabType,
       String? channelId,
       String? listId,
@@ -68,6 +68,7 @@ abstract class $TabSettingCopyWith<$Res> {
       Account account,
       bool renoteDisplay});
 
+  $TabIconCopyWith<$Res> get icon;
   $AccountCopyWith<$Res> get account;
 }
 
@@ -98,7 +99,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as TabIcon,
       tabType: null == tabType
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
@@ -136,6 +137,14 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
 
   @override
   @pragma('vm:prefer-inline')
+  $TabIconCopyWith<$Res> get icon {
+    return $TabIconCopyWith<$Res>(_value.icon, (value) {
+      return _then(_value.copyWith(icon: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $AccountCopyWith<$Res> get account {
     return $AccountCopyWith<$Res>(_value.account, (value) {
       return _then(_value.copyWith(account: value) as $Val);
@@ -152,7 +161,7 @@ abstract class _$$_TabSettingCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@IconDataConverter() IconData icon,
+      {@IconDataConverter() TabIcon icon,
       TabType tabType,
       String? channelId,
       String? listId,
@@ -162,6 +171,8 @@ abstract class _$$_TabSettingCopyWith<$Res>
       Account account,
       bool renoteDisplay});
 
+  @override
+  $TabIconCopyWith<$Res> get icon;
   @override
   $AccountCopyWith<$Res> get account;
 }
@@ -191,7 +202,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as TabIcon,
       tabType: null == tabType
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
@@ -245,7 +256,7 @@ class _$_TabSetting extends _TabSetting {
 
   @override
   @IconDataConverter()
-  final IconData icon;
+  final TabIcon icon;
 
   /// タブ種別
   @override
@@ -334,7 +345,7 @@ class _$_TabSetting extends _TabSetting {
 
 abstract class _TabSetting extends TabSetting {
   const factory _TabSetting(
-      {@IconDataConverter() required final IconData icon,
+      {@IconDataConverter() required final TabIcon icon,
       required final TabType tabType,
       final String? channelId,
       final String? listId,
@@ -350,7 +361,7 @@ abstract class _TabSetting extends TabSetting {
 
   @override
   @IconDataConverter()
-  IconData get icon;
+  TabIcon get icon;
   @override
 
   /// タブ種別

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
@@ -50,17 +51,17 @@ class AccountRepository {
       final account = _account.first;
       await tabSettingsRepository.save([
         TabSetting(
-            icon: Icons.home,
+            icon: TabIcon(codePoint: Icons.home.codePoint),
             tabType: TabType.homeTimeline,
             name: "ホームタイムライン",
             account: account),
         TabSetting(
-            icon: Icons.public,
+            icon: TabIcon(codePoint: Icons.public.codePoint),
             tabType: TabType.localTimeline,
             name: "ローカルタイムライン",
             account: account),
         TabSetting(
-            icon: Icons.rocket_launch,
+            icon: TabIcon(codePoint: Icons.rocket_launch.codePoint),
             tabType: TabType.globalTimeline,
             name: "グローバルタイムライン",
             account: account),

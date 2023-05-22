@@ -1,10 +1,13 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/simple_message_dialog.dart';
+import 'package:miria/view/common/tab_icon_view.dart';
 import 'package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
@@ -30,7 +33,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   UsersList? selectedUserList;
   Antenna? selectedAntenna;
   TextEditingController nameController = TextEditingController();
-  IconData? selectedIcon;
+  TabIcon? selectedIcon;
   bool renoteDisplay = true;
   bool isSubscribe = true;
 
@@ -123,6 +126,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 onChanged: (value) {
                   setState(() {
                     selectedAccount = value;
+                    selectedAntenna = null;
+                    selectedUserList = null;
+                    selectedChannel = null;
+                    if (selectedIcon?.customEmojiName != null) {
+                      selectedIcon = null;
+                    }
                   });
                 },
                 value: selectedAccount,
@@ -224,14 +233,21 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               Row(
                 children: [
                   Expanded(
-                      child: selectedIcon == null
+                      child: selectedAccount == null
                           ? Container()
-                          : Icon(selectedIcon!)),
+                          : AccountScope(
+                              account: selectedAccount!,
+                              child: TabIconView(
+                                icon: selectedIcon,
+                              ))),
                   IconButton(
                       onPressed: () async {
-                        selectedIcon = await showDialog<IconData>(
+                        if (selectedAccount == null) return;
+                        selectedIcon = await showDialog<TabIcon>(
                             context: context,
-                            builder: (context) => IconSelectDialog());
+                            builder: (context) => IconSelectDialog(
+                                  account: selectedAccount!,
+                                ));
                         setState(() {});
                       },
                       icon: const Icon(Icons.navigate_next))
