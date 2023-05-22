@@ -120,61 +120,68 @@ class NoteModalSheet extends ConsumerWidget {
                     builder: (context) => NotImplementationDialog());
               },
             ), //TODO: 未実装
-            ListTile(
-                title: const Text("削除する"),
-                onTap: () async {
-                  if (await showDialog(
-                          context: context,
-                          builder: (context) => const SimpleConfirmDialog(
-                              message: "ほんまに消してええな？",
-                              primary: "消す！",
-                              secondary: "消さへん")) ==
-                      true) {
-                    await ref
-                        .read(misskeyProvider(account))
-                        .notes
-                        .delete(NotesDeleteRequest(noteId: note.id));
-                    ref.read(notesProvider(account)).delete(note.id);
-                    Navigator.of(context).pop();
-                  }
-                }),
-            ListTile(
-                title: const Text("削除してなおす"),
-                onTap: () async {
-                  if (await showDialog(
-                          context: context,
-                          builder: (context) => const SimpleConfirmDialog(
-                              message:
-                                  "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
-                              primary: "消す！",
-                              secondary: "消さへん")) ==
-                      true) {
-                    await ref
-                        .read(misskeyProvider(account))
-                        .notes
-                        .delete(NotesDeleteRequest(noteId: note.id));
-                    ref.read(notesProvider(account)).delete(note.id);
-                    Navigator.of(context).pop();
-                    context.pushRoute(NoteCreateRoute(
-                      initialAccount: account,
-                      deletedNote: note,
-                    ));
-                  }
-                }),
-            ListTile(
-              title: const Text("通報する"),
-              onTap: () {
-                Navigator.of(context).pop();
-                showDialog(
-                    context: context,
-                    builder: (context) => AbuseDialog(
-                          account: account,
-                          targetUser: note.user,
-                          defaultText:
-                              "Note:\nhttps://${account.host}/notes/${note.id}\n-----",
-                        ));
-              },
-            )
+            if (note.user.host == null &&
+                note.user.username == account.userId) ...[
+              ListTile(
+                  title: const Text("削除する"),
+                  onTap: () async {
+                    if (await showDialog(
+                            context: context,
+                            builder: (context) => const SimpleConfirmDialog(
+                                message: "ほんまに消してええな？",
+                                primary: "消す！",
+                                secondary: "消さへん")) ==
+                        true) {
+                      await ref
+                          .read(misskeyProvider(account))
+                          .notes
+                          .delete(NotesDeleteRequest(noteId: note.id));
+                      ref.read(notesProvider(account)).delete(note.id);
+                      Navigator.of(context).pop();
+                    }
+                  }),
+              ListTile(
+                  title: const Text("削除してなおす"),
+                  onTap: () async {
+                    if (await showDialog(
+                            context: context,
+                            builder: (context) => const SimpleConfirmDialog(
+                                message:
+                                    "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
+                                primary: "消す！",
+                                secondary: "消さへん")) ==
+                        true) {
+                      await ref
+                          .read(misskeyProvider(account))
+                          .notes
+                          .delete(NotesDeleteRequest(noteId: note.id));
+                      ref.read(notesProvider(account)).delete(note.id);
+                      Navigator.of(context).pop();
+                      context.pushRoute(NoteCreateRoute(
+                        initialAccount: account,
+                        deletedNote: note,
+                      ));
+                    }
+                  }),
+            ],
+
+            if (note.user.host != null ||
+                (note.user.host == null &&
+                    note.user.username != account.userId))
+              ListTile(
+                title: const Text("通報する"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  showDialog(
+                      context: context,
+                      builder: (context) => AbuseDialog(
+                            account: account,
+                            targetUser: note.user,
+                            defaultText:
+                                "Note:\nhttps://${account.host}/notes/${note.id}\n-----",
+                          ));
+                },
+              )
           ],
         );
       },
