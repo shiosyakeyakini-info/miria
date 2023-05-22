@@ -61,7 +61,7 @@ final noteCreateEmojisProvider = StateProvider.autoDispose((ref) => <Emoji>[]);
 final filesProvider = StateProvider.autoDispose((ref) => <DriveFile>[]);
 final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
 final channelProvider =
-    StateProvider.autoDispose<CommunityChannel?>((ref) => null);
+    StateProvider.autoDispose<(String id, String name)?>((ref) => null);
 final replyProvider = StateProvider.autoDispose<Note?>((ref) => null);
 final renoteProvider = StateProvider.autoDispose<Note?>((ref) => null);
 
@@ -71,6 +71,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
   final CommunityChannel? channel;
   final Note? reply;
   final Note? renote;
+  final Note? deletedNote;
 
   const NoteCreatePage({
     super.key,
@@ -78,6 +79,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
     this.channel,
     this.reply,
     this.renote,
+    this.deletedNote,
   });
 
   @override
@@ -101,7 +103,24 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
     Future(() async {
       ref.read(selectedAccountProvider.notifier).state =
           widget.initialAccount ?? ref.read(accountRepository).account.first;
-      ref.read(channelProvider.notifier).state = widget.channel;
+      final channel = widget.channel;
+      ref.read(channelProvider.notifier).state =
+          channel != null ? (channel.id, channel.name) : null;
+
+      final deletedNote = widget.deletedNote;
+      if (deletedNote != null) {
+        ref.read(noteVisibilityProvider.notifier).state =
+            deletedNote.visibility;
+        ref.read(isLocalProvider.notifier).state = deletedNote.localOnly;
+        ref.read(filesProvider.notifier).state = deletedNote.files;
+        final deletedNoteChannel = deletedNote.channel;
+        ref.read(channelProvider.notifier).state = deletedNoteChannel != null
+            ? (deletedNoteChannel.id, deletedNoteChannel.name)
+            : null;
+        cwController.text = deletedNote.cw ?? "";
+        isCw = deletedNote.cw?.isNotEmpty == true;
+        ref.read(noteInputTextProvider).text = deletedNote.text ?? "";
+      }
 
       final renote = widget.renote;
       if (renote != null) {
@@ -142,9 +161,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           text: ref.read(noteInputTextProvider).text,
           cw: isCw ? cwController.text : null,
           localOnly: ref.read(isLocalProvider),
-          replyId: widget.reply?.id,
-          renoteId: widget.renote?.id,
-          channelId: widget.channel?.id,
+          replyId: ref.read(replyProvider)?.id,
+          renoteId: ref.read(renoteProvider)?.id,
+          channelId: ref.read(channelProvider)?.$1,
           fileIds: files.isNotEmpty ? files.map((e) => e.id).toList() : null,
         ));
     Navigator.of(context).pop();
@@ -357,7 +376,7 @@ class ChannelName extends ConsumerWidget {
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           Text(
-            channel.name,
+            channel.$2,
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],

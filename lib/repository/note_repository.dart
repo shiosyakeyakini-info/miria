@@ -44,4 +44,11 @@ class NoteRepository extends ChangeNotifier {
     final note = await misskey.notes.show(NotesShowRequest(noteId: noteId));
     registerNote(note);
   }
+
+  void delete(String noteId) {
+    _notes.remove(noteId);
+    Future(() {
+      notifyListeners();
+    });
+  }
 }

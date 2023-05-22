@@ -84,6 +84,7 @@ abstract class _$AppRouter extends RootStackRouter {
           channel: args.channel,
           reply: args.reply,
           renote: args.renote,
+          deletedNote: args.deletedNote,
         ),
       );
     },
@@ -511,6 +512,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     CommunityChannel? channel,
     Note? reply,
     Note? renote,
+    Note? deletedNote,
     List<PageRouteInfo>? children,
   }) : super(
           NoteCreateRoute.name,
@@ -520,6 +522,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
             channel: channel,
             reply: reply,
             renote: renote,
+            deletedNote: deletedNote,
           ),
           initialChildren: children,
         );
@@ -537,6 +540,7 @@ class NoteCreateRouteArgs {
     this.channel,
     this.reply,
     this.renote,
+    this.deletedNote,
   });
 
   final Key? key;
@@ -549,9 +553,11 @@ class NoteCreateRouteArgs {
 
   final Note? renote;
 
+  final Note? deletedNote;
+
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, channel: $channel, reply: $reply, renote: $renote}';
+    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, channel: $channel, reply: $reply, renote: $renote, deletedNote: $deletedNote}';
   }
 }
 
