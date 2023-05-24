@@ -18,11 +18,13 @@ enum UserControl {
 class UserControlDialog extends ConsumerStatefulWidget {
   final Account account;
   final UsersShowResponse response;
+  final bool isMe;
 
   const UserControlDialog({
     super.key,
     required this.account,
     required this.response,
+    required this.isMe,
   });
 
   @override
@@ -109,12 +111,12 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ListTile(
-          onTap: addToList,
-          title: const Text("リストに追加"),
-        ),
+    return ListView(children: [
+      ListTile(
+        onTap: addToList,
+        title: const Text("リストに追加"),
+      ),
+      if (!widget.isMe) ...[
         if (widget.response.isRenoteMuted ?? false)
           ListTile(
             onTap: renoteMuteDelete,
@@ -146,7 +148,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             title: const Text("ブロックする"),
           )
       ],
-    );
+    ]);
   }
 }
 
