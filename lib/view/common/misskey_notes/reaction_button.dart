@@ -44,12 +44,10 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
     final isMyReaction = widget.myReaction == widget.reactionKey;
     final isAnotherServer = widget.anotherServerUrl != null;
     final backgroundColor = isMyReaction
-        ? Theme.of(context).primaryColor
+        ? AppTheme.of(context).reactionButtonMeReactedColor
         : isAnotherServer
             ? Colors.transparent
-            : MediaQuery.of(context).platformBrightness == Brightness.light
-                ? Colors.grey.shade200
-                : Colors.grey.shade700;
+            : AppTheme.of(context).reactionButtonBackgroundColor;
 
     final computedLuminance = (backgroundColor == Colors.transparent
             ? Theme.of(context).scaffoldBackgroundColor

@@ -200,7 +200,7 @@ class MyApp extends ConsumerWidget {
     return themeData;
   }
 
-  AppThemeData buildAppThemeData(BuildContext context) {
+  AppThemeData buildLightAppThemeData(BuildContext context) {
     return AppThemeData(
       noteTextStyle: InputDecoration(
         border: OutlineInputBorder(
@@ -219,6 +219,32 @@ class MyApp extends ConsumerWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
       linkStyle: const TextStyle(color: Color.fromARGB(255, 255, 145, 86)),
+      reactionButtonBackgroundColor: Colors.grey.shade200,
+      reactionButtonMeReactedColor: Theme.of(context).primaryColor,
+    );
+  }
+
+  AppThemeData buildDarkAppThemeData(BuildContext context) {
+    return AppThemeData(
+      noteTextStyle: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black54),
+            borderRadius: BorderRadius.circular(10)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(10)),
+      ),
+      reactionButtonStyle: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).primaryColor,
+          padding: const EdgeInsets.all(5),
+          elevation: 0,
+          minimumSize: const Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+      linkStyle: const TextStyle(color: Color.fromARGB(255, 255, 145, 86)),
+      reactionButtonBackgroundColor: Colors.grey.shade700,
+      reactionButtonMeReactedColor: Theme.of(context).primaryColor,
     );
   }
 
@@ -242,7 +268,8 @@ class MyApp extends ConsumerWidget {
       ],
       builder: (context, widget) {
         return AppTheme(
-          themeData: buildAppThemeData(context),
+          lightThemeData: buildLightAppThemeData(context),
+          darkThemeData: buildDarkAppThemeData(context),
           child: MainStream(
             child: widget ?? Container(),
           ),
