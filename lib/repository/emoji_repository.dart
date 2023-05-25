@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:kana_kit/kana_kit.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/unicode_emoji.dart';
 import 'package:miria/repository/account_settings_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart' as p;
@@ -46,7 +49,19 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   Future<void> loadFromSource() async {
-    emoji = (await misskey.emojis()).emojis;
+    final unicodeEmojis =
+        (jsonDecode(await rootBundle.loadString("assets/emoji_list.json"))
+                as List)
+            .map((e) => UnicodeEmoji.fromJson(e))
+            .map((e) => Emoji(
+                aliases: e.keywords,
+                name: e.char,
+                category: e.category,
+                url: Uri() //TODO: あとでなおす
+                ));
+    print(unicodeEmojis);
+    emoji = (await misskey.emojis()).emojis.toList();
+    emoji!.addAll(unicodeEmojis);
 
     final toH = const KanaKit().toHiragana;
     _emojiWrap

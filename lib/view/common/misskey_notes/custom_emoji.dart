@@ -133,11 +133,33 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
       );
     }
     if (widget.naturalEmoji != null) {
-      return Text(widget.naturalEmoji!);
+      return SizedBox(
+          width: scopedFontSize,
+          height: scopedFontSize,
+          child: FittedBox(
+              fit: BoxFit.cover,
+              child: Text(
+                widget.naturalEmoji!,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+              )));
     }
 
     final emoji = widget.emoji;
     if (emoji == null) return Container();
+
+    if (!emoji.name.startsWith(RegExp("[a-zA-Z_0-9]"))) {
+      return SizedBox(
+        width: scopedFontSize,
+        height: scopedFontSize,
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: Text(emoji.name,
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color)),
+        ),
+      );
+    }
 
     cachedImage = ConditionalTooltip(
         isAttachTooltip: widget.isAttachTooltip,
