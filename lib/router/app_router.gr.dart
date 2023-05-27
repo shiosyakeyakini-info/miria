@@ -286,6 +286,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SeveralAccountGeneralSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<SeveralAccountGeneralSettingsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SeveralAccountGeneralSettingsPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
   };
 }
 
@@ -1271,5 +1281,44 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [SeveralAccountGeneralSettingsPage]
+class SeveralAccountGeneralSettingsRoute
+    extends PageRouteInfo<SeveralAccountGeneralSettingsRouteArgs> {
+  SeveralAccountGeneralSettingsRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SeveralAccountGeneralSettingsRoute.name,
+          args: SeveralAccountGeneralSettingsRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SeveralAccountGeneralSettingsRoute';
+
+  static const PageInfo<SeveralAccountGeneralSettingsRouteArgs> page =
+      PageInfo<SeveralAccountGeneralSettingsRouteArgs>(name);
+}
+
+class SeveralAccountGeneralSettingsRouteArgs {
+  const SeveralAccountGeneralSettingsRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'SeveralAccountGeneralSettingsRouteArgs{key: $key, account: $account}';
   }
 }

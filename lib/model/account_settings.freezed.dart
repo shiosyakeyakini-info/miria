@@ -23,6 +23,9 @@ mixin _$AccountSettings {
   String get userId => throw _privateConstructorUsedError;
   String get host => throw _privateConstructorUsedError;
   List<String> get reactions => throw _privateConstructorUsedError;
+  NoteVisibility get defaultNoteVisibility =>
+      throw _privateConstructorUsedError;
+  bool get defaultIsLocalOnly => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +39,12 @@ abstract class $AccountSettingsCopyWith<$Res> {
           AccountSettings value, $Res Function(AccountSettings) then) =
       _$AccountSettingsCopyWithImpl<$Res, AccountSettings>;
   @useResult
-  $Res call({String userId, String host, List<String> reactions});
+  $Res call(
+      {String userId,
+      String host,
+      List<String> reactions,
+      NoteVisibility defaultNoteVisibility,
+      bool defaultIsLocalOnly});
 }
 
 /// @nodoc
@@ -55,6 +63,8 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
     Object? userId = null,
     Object? host = null,
     Object? reactions = null,
+    Object? defaultNoteVisibility = null,
+    Object? defaultIsLocalOnly = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -69,6 +79,14 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
           ? _value.reactions
           : reactions // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      defaultNoteVisibility: null == defaultNoteVisibility
+          ? _value.defaultNoteVisibility
+          : defaultNoteVisibility // ignore: cast_nullable_to_non_nullable
+              as NoteVisibility,
+      defaultIsLocalOnly: null == defaultIsLocalOnly
+          ? _value.defaultIsLocalOnly
+          : defaultIsLocalOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -81,7 +99,12 @@ abstract class _$$_AccountSettingsCopyWith<$Res>
       __$$_AccountSettingsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userId, String host, List<String> reactions});
+  $Res call(
+      {String userId,
+      String host,
+      List<String> reactions,
+      NoteVisibility defaultNoteVisibility,
+      bool defaultIsLocalOnly});
 }
 
 /// @nodoc
@@ -98,6 +121,8 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
     Object? userId = null,
     Object? host = null,
     Object? reactions = null,
+    Object? defaultNoteVisibility = null,
+    Object? defaultIsLocalOnly = null,
   }) {
     return _then(_$_AccountSettings(
       userId: null == userId
@@ -112,6 +137,14 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
           ? _value._reactions
           : reactions // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      defaultNoteVisibility: null == defaultNoteVisibility
+          ? _value.defaultNoteVisibility
+          : defaultNoteVisibility // ignore: cast_nullable_to_non_nullable
+              as NoteVisibility,
+      defaultIsLocalOnly: null == defaultIsLocalOnly
+          ? _value.defaultIsLocalOnly
+          : defaultIsLocalOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -122,7 +155,9 @@ class _$_AccountSettings implements _AccountSettings {
   const _$_AccountSettings(
       {required this.userId,
       required this.host,
-      required final List<String> reactions})
+      final List<String> reactions = const [],
+      this.defaultNoteVisibility = NoteVisibility.public,
+      this.defaultIsLocalOnly = false})
       : _reactions = reactions;
 
   factory _$_AccountSettings.fromJson(Map<String, dynamic> json) =>
@@ -134,6 +169,7 @@ class _$_AccountSettings implements _AccountSettings {
   final String host;
   final List<String> _reactions;
   @override
+  @JsonKey()
   List<String> get reactions {
     if (_reactions is EqualUnmodifiableListView) return _reactions;
     // ignore: implicit_dynamic_type
@@ -141,8 +177,15 @@ class _$_AccountSettings implements _AccountSettings {
   }
 
   @override
+  @JsonKey()
+  final NoteVisibility defaultNoteVisibility;
+  @override
+  @JsonKey()
+  final bool defaultIsLocalOnly;
+
+  @override
   String toString() {
-    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions)';
+    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly)';
   }
 
   @override
@@ -153,13 +196,22 @@ class _$_AccountSettings implements _AccountSettings {
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.host, host) || other.host == host) &&
             const DeepCollectionEquality()
-                .equals(other._reactions, _reactions));
+                .equals(other._reactions, _reactions) &&
+            (identical(other.defaultNoteVisibility, defaultNoteVisibility) ||
+                other.defaultNoteVisibility == defaultNoteVisibility) &&
+            (identical(other.defaultIsLocalOnly, defaultIsLocalOnly) ||
+                other.defaultIsLocalOnly == defaultIsLocalOnly));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, host,
-      const DeepCollectionEquality().hash(_reactions));
+  int get hashCode => Object.hash(
+      runtimeType,
+      userId,
+      host,
+      const DeepCollectionEquality().hash(_reactions),
+      defaultNoteVisibility,
+      defaultIsLocalOnly);
 
   @JsonKey(ignore: true)
   @override
@@ -179,7 +231,9 @@ abstract class _AccountSettings implements AccountSettings {
   const factory _AccountSettings(
       {required final String userId,
       required final String host,
-      required final List<String> reactions}) = _$_AccountSettings;
+      final List<String> reactions,
+      final NoteVisibility defaultNoteVisibility,
+      final bool defaultIsLocalOnly}) = _$_AccountSettings;
 
   factory _AccountSettings.fromJson(Map<String, dynamic> json) =
       _$_AccountSettings.fromJson;
@@ -190,6 +244,10 @@ abstract class _AccountSettings implements AccountSettings {
   String get host;
   @override
   List<String> get reactions;
+  @override
+  NoteVisibility get defaultNoteVisibility;
+  @override
+  bool get defaultIsLocalOnly;
   @override
   @JsonKey(ignore: true)
   _$$_AccountSettingsCopyWith<_$_AccountSettings> get copyWith =>

@@ -103,16 +103,20 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
     super.didChangeDependencies();
 
     Future(() async {
+      final account =
+          widget.initialAccount ?? ref.read(accountRepository).account.first;
       ref.read(selectedAccountProvider.notifier).state =
           widget.initialAccount ?? ref.read(accountRepository).account.first;
       final channel = widget.channel;
       ref.read(channelProvider.notifier).state =
           channel != null ? (channel.id, channel.name) : null;
+      final accountSettings =
+          ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+      var noteVisibility = accountSettings.defaultNoteVisibility;
 
       final deletedNote = widget.deletedNote;
       if (deletedNote != null) {
-        ref.read(noteVisibilityProvider.notifier).state =
-            deletedNote.visibility;
+        noteVisibility = deletedNote.visibility;
         ref.read(isLocalProvider.notifier).state = deletedNote.localOnly;
         ref.read(filesProvider.notifier).state = deletedNote.files;
         final deletedNoteChannel = deletedNote.channel;
@@ -127,30 +131,33 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       final renote = widget.renote;
       if (renote != null) {
         ref.read(renoteProvider.notifier).state = renote;
-        ref.read(noteVisibilityProvider.notifier).state = renote.visibility;
+        noteVisibility = NoteVisibility.min(noteVisibility, renote.visibility);
       }
 
       final reply = widget.reply;
       ref.read(replyProvider.notifier).state = reply;
       if (reply != null) {
         // リプライの可視性はリノートより強くする
-        ref.read(noteVisibilityProvider.notifier).state = reply.visibility;
+        noteVisibility = NoteVisibility.min(noteVisibility, reply.visibility);
       }
 
-      // チャンネルのノートか、リプライまたはリノートが連合オフの場合、
+      // チャンネルのノートか、リプライまたはリノートが連合オフ、デフォルトで連合オフの場合、
       // 返信やRenoteも強制連合オフ
       if (widget.channel != null ||
           widget.reply?.localOnly == true ||
-          widget.renote?.localOnly == true) {
+          widget.renote?.localOnly == true ||
+          accountSettings.defaultIsLocalOnly) {
         ref.read(isLocalProvider.notifier).state = true;
       }
 
       // サイレンスの場合、ホーム以下に強制
       final isSilenced = ref.read(selectedAccountProvider)?.i.isSilenced;
-      if (isSilenced == true &&
-          ref.read(noteVisibilityProvider) == NoteVisibility.public) {
-        ref.read(noteVisibilityProvider.notifier).state = NoteVisibility.home;
+      if (isSilenced == true) {
+        noteVisibility =
+            NoteVisibility.min(noteVisibility, NoteVisibility.home);
       }
+
+      ref.read(noteVisibilityProvider.notifier).state = noteVisibility;
     });
   }
 

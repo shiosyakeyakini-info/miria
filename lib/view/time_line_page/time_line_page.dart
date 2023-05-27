@@ -72,10 +72,16 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   }
 
   void note() {
+    final accountSettings = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(widget.currentTabSetting.account);
+
     ref.read(misskeyProvider(widget.currentTabSetting.account)).notes.create(
           NotesCreateRequest(
             text: ref.read(timelineNoteProvider).value.text,
             channelId: widget.currentTabSetting.channelId,
+            visibility: accountSettings.defaultNoteVisibility,
+            localOnly: accountSettings.defaultIsLocalOnly,
           ),
         );
     ref.read(timelineNoteProvider).clear();

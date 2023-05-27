@@ -17,6 +17,13 @@ class SeveralAccountSettingsPage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
+            onTap: () {
+              context.pushRoute(
+                  SeveralAccountGeneralSettingsRoute(account: account));
+            },
+            title: const Text("全般設定"),
+          ),
+          ListTile(
               onTap: () {
                 context.pushRoute(ReactionDeckRoute(account: account));
               },

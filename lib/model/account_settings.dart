@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 
 part 'account_settings.freezed.dart';
 part 'account_settings.g.dart';
@@ -8,7 +9,9 @@ class AccountSettings with _$AccountSettings {
   const factory AccountSettings({
     required String userId,
     required String host,
-    required List<String> reactions,
+    @Default([]) List<String> reactions,
+    @Default(NoteVisibility.public) NoteVisibility defaultNoteVisibility,
+    @Default(false) bool defaultIsLocalOnly,
   }) = _AccountSettings;
 
   factory AccountSettings.fromJson(Map<String, dynamic> json) =>
