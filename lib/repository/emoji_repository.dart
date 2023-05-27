@@ -119,7 +119,10 @@ class EmojiRepositoryImpl extends EmojiRepository {
                 ...b.kanaAliases.where((e2) => e2.contains(converted))
               ].map((e) => e.length);
 
-              return aValue.min.compareTo(bValue.min);
+              var ret = aValue.min.compareTo(bValue.min);
+              if (ret != 0) return ret;
+              if (a.emoji is CustomEmojiData) return -1;
+              return 0;
             })
             .take(limit)
             .map((e) => e.emoji)
