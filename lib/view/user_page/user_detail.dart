@@ -59,11 +59,14 @@ class UserDetailState extends ConsumerState<UserDetail> {
     });
   }
 
-  Future<void> userControl() async {
+  Future<void> userControl(bool isMe) async {
     final result = await showModalBottomSheet<UserControl?>(
         context: context,
-        builder: (context) =>
-            UserControlDialog(account: widget.account, response: response));
+        builder: (context) => UserControlDialog(
+              account: widget.account,
+              response: response,
+              isMe: isMe,
+            ));
     if (result == null) return;
 
     switch (result) {
@@ -110,22 +113,24 @@ class UserDetailState extends ConsumerState<UserDetail> {
   Widget build(BuildContext context) {
     final userName =
         "${response.username}${response.host != null ? "@${response.host ?? ""}" : ""}";
+    final isMe = (widget.response.host == null &&
+        widget.response.username == AccountScope.of(context).userId);
+
     return BirthdayConfetti(
       response: widget.response,
       child: Column(
         children: [
           if (response.bannerUrl != null)
             Image.network(response.bannerUrl.toString()),
-          if ((widget.response.host == null &&
-                  widget.response.username !=
-                      AccountScope.of(context).userId) ||
-              widget.response.host != null)
-            Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+          Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (isMe)
+                    const Spacer()
+                  else
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -193,14 +198,14 @@ class UserDetailState extends ConsumerState<UserDetail> {
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: IconButton(
-                          onPressed: userControl,
-                          icon: const Icon(Icons.more_vert)),
-                    )
-                  ],
-                )),
+                  Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        onPressed: () => userControl(isMe),
+                        icon: const Icon(Icons.more_vert)),
+                  )
+                ],
+              )),
           const Divider(),
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 12),

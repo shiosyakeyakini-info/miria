@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/error_notification.dart';
+import 'package:miria/view/common/futurable.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 enum UserControl {
@@ -16,11 +18,13 @@ enum UserControl {
 class UserControlDialog extends ConsumerStatefulWidget {
   final Account account;
   final UsersShowResponse response;
+  final bool isMe;
 
   const UserControlDialog({
     super.key,
     required this.account,
     required this.response,
+    required this.isMe,
   });
 
   @override
@@ -29,6 +33,20 @@ class UserControlDialog extends ConsumerStatefulWidget {
 }
 
 class UserControlDialogState extends ConsumerState<UserControlDialog> {
+  Future<void> addToList() async {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => CommonFuture<Iterable<UsersList>>(
+        future: ref.read(misskeyProvider(widget.account)).users.list.list(),
+        complete: (context, userLists) => UserListControlDialog(
+          account: widget.account,
+          userLists: userLists.toList(),
+          userId: widget.response.id,
+        ),
+      ),
+    );
+  }
+
   Future<Expire?> getExpire() async {
     return await showDialog<Expire?>(
         context: context, builder: (context) => const ExpireSelectDialog());
@@ -93,8 +111,12 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
+    return ListView(children: [
+      ListTile(
+        onTap: addToList,
+        title: const Text("リストに追加"),
+      ),
+      if (!widget.isMe) ...[
         if (widget.response.isRenoteMuted ?? false)
           ListTile(
             onTap: renoteMuteDelete,
@@ -126,7 +148,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             title: const Text("ブロックする"),
           )
       ],
-    );
+    ]);
   }
 }
 
@@ -148,6 +170,90 @@ enum Expire {
   final String name;
 
   const Expire(this.expires, this.name);
+}
+
+class UserListControlDialog extends ConsumerStatefulWidget {
+  final Account account;
+  final List<UsersList> userLists;
+  final String userId;
+
+  const UserListControlDialog({
+    super.key,
+    required this.account,
+    required this.userLists,
+    required this.userId,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _UserListControlDialogState();
+}
+
+class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
+  late List<bool> isUserInList;
+
+  @override
+  void initState() {
+    super.initState();
+    isUserInList = widget.userLists
+        .map((userList) => userList.userIds.contains(widget.userId))
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.userLists.length,
+      itemBuilder: (context, i) {
+        final userList = widget.userLists[i];
+
+        return CheckboxListTile(
+          value: isUserInList[i],
+          onChanged: (value) async {
+            if (value == null) {
+              return;
+            }
+            try {
+              if (value) {
+                await ref
+                    .read(misskeyProvider(widget.account))
+                    .users
+                    .list
+                    .push(UsersListsPushRequest(
+                      listId: userList.id,
+                      userId: widget.userId,
+                    ));
+              } else {
+                await ref
+                    .read(misskeyProvider(widget.account))
+                    .users
+                    .list
+                    .pull(UsersListsPullRequest(
+                      listId: userList.id,
+                      userId: widget.userId,
+                    ));
+              }
+            } catch (e) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("エラー"),
+                  content: ErrorNotification(error: e),
+                ),
+              );
+              return;
+            }
+
+            setState(() {
+              isUserInList[i] = value;
+            });
+          },
+          title: Text(widget.userLists[i].name!),
+        );
+      },
+      shrinkWrap: true,
+    );
+  }
 }
 
 class ExpireSelectDialogState extends State<ExpireSelectDialog> {
