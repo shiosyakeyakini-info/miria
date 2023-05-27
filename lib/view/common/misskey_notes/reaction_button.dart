@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/app_theme.dart';
@@ -9,19 +10,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ReactionButton extends ConsumerStatefulWidget {
-  final String reactionKey;
+  final MisskeyEmojiData emojiData;
   final int reactionCount;
   final String? myReaction;
   final String noteId;
-  final String? anotherServerUrl;
 
   const ReactionButton({
     super.key,
-    required this.reactionKey,
+    required this.emojiData,
     required this.reactionCount,
     required this.myReaction,
     required this.noteId,
-    required this.anotherServerUrl,
   });
 
   @override
@@ -41,11 +40,14 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
   @override
   Widget build(BuildContext context) {
-    final isMyReaction = widget.myReaction == widget.reactionKey;
-    final isAnotherServer = widget.anotherServerUrl != null;
+    final emojiData = widget.emojiData;
+    final isMyReaction = (emojiData is CustomEmojiData &&
+            widget.myReaction == emojiData.hostedName) ||
+        (emojiData is UnicodeEmojiData && widget.myReaction == emojiData.char);
+
     final backgroundColor = isMyReaction
         ? AppTheme.of(context).reactionButtonMeReactedColor
-        : isAnotherServer
+        : (emojiData is CustomEmojiData && !emojiData.isCurrentServer)
             ? Colors.transparent
             : AppTheme.of(context).reactionButtonBackgroundColor;
 
@@ -69,19 +71,28 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
             return;
           }
-          final customEmojiRegExp =
-              RegExp(r"\:(.+?)@.\:").firstMatch(widget.reactionKey);
-          final String? found = customEmojiRegExp?.group(1);
 
           // すでに別のリアクションを行っている
           if (widget.myReaction != null) return;
 
-          if (found != null) {
-            await ref.read(misskeyProvider(account)).notes.reactions.create(
-                NotesReactionsCreateRequest(
-                    noteId: widget.noteId, reaction: ":$found:"));
-            await ref.read(notesProvider(account)).refresh(widget.noteId);
+          final String reactionString;
+          final emojiData = widget.emojiData;
+          switch (emojiData) {
+            case UnicodeEmojiData():
+              reactionString = emojiData.char;
+              break;
+            case CustomEmojiData():
+              if (!emojiData.isCurrentServer) return;
+              reactionString = ":${emojiData.baseName}:";
+              break;
+            case NotEmojiData():
+              return;
           }
+
+          await ref.read(misskeyProvider(account)).notes.reactions.create(
+              NotesReactionsCreateRequest(
+                  noteId: widget.noteId, reaction: reactionString));
+          await ref.read(notesProvider(account)).refresh(widget.noteId);
         },
         onLongPress: () {
           showDialog(
@@ -89,7 +100,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
               builder: (context2) {
                 return ReactionUserDialog(
                     account: AccountScope.of(context),
-                    reaction: widget.reactionKey,
+                    emojiData: widget.emojiData,
                     noteId: widget.noteId);
               });
         },
@@ -104,10 +115,8 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                   minHeight: 24 * MediaQuery.of(context).textScaleFactor,
                   maxHeight: 24 * MediaQuery.of(context).textScaleFactor,
                 ),
-                child: CustomEmoji.fromEmojiName(
-                  widget.reactionKey,
-                  ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-                  anotherServerUrl: widget.anotherServerUrl,
+                child: CustomEmoji(
+                  emojiData: widget.emojiData,
                   isAttachTooltip: false,
                 )),
             const Padding(padding: EdgeInsets.only(left: 5)),

@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/app_theme.dart';
@@ -57,7 +58,8 @@ final selectedAccountProvider =
 final noteVisibilityProvider =
     StateProvider.autoDispose<NoteVisibility>((ref) => NoteVisibility.public);
 final isLocalProvider = StateProvider.autoDispose((ref) => false);
-final noteCreateEmojisProvider = StateProvider.autoDispose((ref) => <Emoji>[]);
+final noteCreateEmojisProvider =
+    StateProvider.autoDispose((ref) => <MisskeyEmojiData>[]);
 final filesProvider = StateProvider.autoDispose((ref) => <DriveFile>[]);
 final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
 final channelProvider =
@@ -287,15 +289,16 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       onPressed: () async {
                         final account = ref.read(selectedAccountProvider);
                         if (account == null) return;
-                        final selectedEmoji = await showDialog<Emoji?>(
-                            context: context,
-                            builder: (context) => ReactionPickerDialog(
-                                  account: account,
-                                ));
+                        final selectedEmoji =
+                            await showDialog<MisskeyEmojiData?>(
+                                context: context,
+                                builder: (context) => ReactionPickerDialog(
+                                      account: account,
+                                    ));
                         if (selectedEmoji == null) return;
                         ref
                             .read(noteInputTextProvider)
-                            .insert(":${selectedEmoji.name}:");
+                            .insert(selectedEmoji.baseName);
                         ref.read(noteFocusProvider).requestFocus();
                       },
                       icon: const Icon(Icons.tag_faces))

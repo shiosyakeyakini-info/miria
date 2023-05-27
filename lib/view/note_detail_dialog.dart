@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
@@ -27,7 +29,7 @@ class NoteDetailDialog extends ConsumerStatefulWidget {
 class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
   final reactionTextField = TextEditingController();
 
-  final foundEmojis = <Emoji>[];
+  final foundEmojis = <MisskeyEmojiData>[];
 
   @override
   void initState() {
@@ -40,10 +42,11 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
                   .read(emojiRepositoryProvider(widget.account))
                   .emoji
                   ?.where((element) =>
-                      element.name.contains(reactionTextField.text) ||
+                      element.emoji.baseName.contains(reactionTextField.text) ||
                       element.aliases
                           .any((e) => e.contains(reactionTextField.text)))
-                  .take(10) ??
+                  .take(10)
+                  .map((e) => e.emoji) ??
               []);
         }
       });
@@ -70,7 +73,7 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
                     for (final emoji in foundEmojis)
                       SizedBox(
                         height: 42,
-                        child: CustomEmoji(emoji: emoji),
+                        child: CustomEmoji(emojiData: emoji),
                       ),
                   ],
                 ),

@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -11,7 +12,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ReactionPickerContent extends ConsumerStatefulWidget {
-  final FutureOr Function(Emoji emoji) onTap;
+  final FutureOr Function(MisskeyEmojiData emoji) onTap;
 
   const ReactionPickerContent({super.key, required this.onTap});
 
@@ -21,7 +22,7 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
 }
 
 class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
-  final emojis = <Emoji>[];
+  final emojis = <MisskeyEmojiData>[];
   final categoryList = <String>[];
   EmojiRepository get emojiRepository =>
       ref.read(emojiRepositoryProvider(AccountScope.of(context)));
@@ -96,7 +97,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                             (element) =>
                                 element.category == categoryList[index]))
                           EmojiButton(
-                            emoji: emoji,
+                            emoji: emoji.emoji,
                             onTap: widget.onTap,
                           )
                       ],
@@ -113,8 +114,8 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
 }
 
 class EmojiButton extends ConsumerWidget {
-  final Emoji emoji;
-  final FutureOr Function(Emoji emoji) onTap;
+  final MisskeyEmojiData emoji;
+  final FutureOr Function(MisskeyEmojiData emoji) onTap;
 
   const EmojiButton({super.key, required this.emoji, required this.onTap});
 
@@ -133,6 +134,6 @@ class EmojiButton extends ConsumerWidget {
         },
         child: SizedBox(
             height: 32 * MediaQuery.of(context).textScaleFactor,
-            child: CustomEmoji(emoji: emoji)));
+            child: CustomEmoji(emojiData: emoji)));
   }
 }

@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class InputComplement extends ConsumerStatefulWidget {
-  final AutoDisposeStateProvider<List<Emoji>> searchedEmojiProvider;
+  final AutoDisposeStateProvider<List<MisskeyEmojiData>> searchedEmojiProvider;
   final TextEditingController controller;
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
@@ -25,20 +26,31 @@ class InputComplement extends ConsumerStatefulWidget {
 class InputComplementState extends ConsumerState<InputComplement> {
   bool isClose = true;
 
-  void insertEmoji(Emoji emoji, WidgetRef ref) {
+  void insertEmoji(MisskeyEmojiData emoji, WidgetRef ref) {
     final currentPosition = widget.controller.selection.base.offset;
     final text = widget.controller.text;
-    final beforeSearchText =
-        text.substring(0, text.substring(0, currentPosition).lastIndexOf(":"));
+    switch (emoji) {
+      case CustomEmojiData():
+        final beforeSearchText = text.substring(
+            0, text.substring(0, currentPosition).lastIndexOf(":"));
 
-    final after = (currentPosition == text.length || currentPosition == -1)
-        ? ""
-        : text.substring(currentPosition, text.length);
+        final after = (currentPosition == text.length || currentPosition == -1)
+            ? ""
+            : text.substring(currentPosition, text.length);
 
-    widget.controller.value = TextEditingValue(
-        text: "$beforeSearchText:${emoji.name}:$after",
-        selection: TextSelection.collapsed(
-            offset: beforeSearchText.length + emoji.name.length + 2));
+        widget.controller.value = TextEditingValue(
+            text: "$beforeSearchText:${emoji.baseName}:$after",
+            selection: TextSelection.collapsed(
+                offset: beforeSearchText.length + emoji.baseName.length + 2));
+        break;
+      case UnicodeEmojiData():
+        // TODO あとで実装する
+
+        break;
+      default:
+        break;
+    }
+
     ref.read(widget.searchedEmojiProvider.notifier).state = [];
     ref.read(widget.focusNode).requestFocus();
   }
@@ -92,7 +104,7 @@ class InputComplementState extends ConsumerState<InputComplement> {
                         padding: const EdgeInsets.all(5),
                         child: SizedBox(
                             height: 32 * MediaQuery.of(context).textScaleFactor,
-                            child: CustomEmoji(emoji: emoji)),
+                            child: CustomEmoji(emojiData: emoji)),
                       ),
                     )
                 else

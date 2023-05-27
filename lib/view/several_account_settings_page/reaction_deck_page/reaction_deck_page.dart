@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/account_settings.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
@@ -22,13 +23,13 @@ class ReactionDeckPage extends ConsumerStatefulWidget {
 }
 
 class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
-  final List<Emoji> reactions = [];
+  final List<MisskeyEmojiData> reactions = [];
 
   void save() {
     ref.read(accountSettingsRepositoryProvider).save(AccountSettings(
         userId: widget.account.userId,
         host: widget.account.host,
-        reactions: reactions.map((e) => e.name).toList()));
+        reactions: reactions.map((e) => e.baseName).toList()));
   }
 
   @override
@@ -67,7 +68,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                               });
                             },
                             child: CustomEmoji(
-                              emoji: reaction,
+                              emojiData: reaction,
                               fontSizeRatio: 2,
                               isAttachTooltip: false,
                             ),
@@ -86,13 +87,13 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 children: [
                   IconButton(
                       onPressed: () async {
-                        final reaction = await showDialog<Emoji?>(
+                        final reaction = await showDialog<MisskeyEmojiData?>(
                             context: context,
                             builder: (context) =>
                                 ReactionPickerDialog(account: widget.account));
                         if (reaction == null) return;
-                        if (reactions
-                            .any((element) => element.name == reaction.name)) {
+                        if (reactions.any((element) =>
+                            element.baseName == reaction.baseName)) {
                           // already added.
                           return;
                         }

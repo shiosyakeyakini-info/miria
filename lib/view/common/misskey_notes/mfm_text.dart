@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -123,10 +124,12 @@ class MfmTextState extends ConsumerState<MfmText> {
   Widget build(BuildContext context) {
     return Mfm(
       widget.mfmText,
-      emojiBuilder: (context, emojiName) => CustomEmoji.fromEmojiName(
-        ":$emojiName:",
-        ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-        anotherServerUrl: widget.emoji[emojiName],
+      emojiBuilder: (context, emojiName) => CustomEmoji(
+        emojiData: MisskeyEmojiData.fromEmojiName(
+            emojiName: ":$emojiName:",
+            repository:
+                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            emojiInfo: widget.emoji),
         fontSizeRatio: 2,
       ),
       linkTap: onTapLink,
@@ -162,11 +165,14 @@ class SimpleMfmText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfm(
       text,
-      emojiBuilder: (context, emojiName) => CustomEmoji.fromEmojiName(
-        ":$emojiName:",
-        ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+      emojiBuilder: (context, emojiName) => CustomEmoji(
+        emojiData: MisskeyEmojiData.fromEmojiName(
+          emojiName: ":$emojiName:",
+          repository:
+              ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+          emojiInfo: emojis,
+        ),
         fontSizeRatio: 1,
-        anotherServerUrl: emojis[emojiName],
       ),
       style: style,
       suffixSpan: suffixSpan,

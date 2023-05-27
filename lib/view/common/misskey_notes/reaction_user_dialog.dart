@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/futable_list_builder.dart';
+import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ReactionUserDialog extends ConsumerWidget {
   final Account account;
-  final String reaction;
+  final MisskeyEmojiData emojiData;
   final String noteId;
 
   const ReactionUserDialog({
     super.key,
     required this.account,
-    required this.reaction,
+    required this.emojiData,
     required this.noteId,
   });
 
@@ -24,7 +26,20 @@ class ReactionUserDialog extends ConsumerWidget {
     return AccountScope(
       account: account,
       child: AlertDialog(
-        title: Text(reaction),
+        title: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomEmoji(
+              emojiData: emojiData,
+            ),
+            Text(
+              emojiData.baseName,
+              style: Theme.of(context).textTheme.bodySmall,
+            )
+          ],
+        ),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.width * 0.8,
@@ -32,46 +47,31 @@ class ReactionUserDialog extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: FutureListView(
                 future: () async {
+                  final String type;
+                  final handled = emojiData;
+                  switch (handled) {
+                    case CustomEmojiData():
+                      type = handled.hostedName;
+                      break;
+                    case UnicodeEmojiData():
+                      type = handled.char;
+                      break;
+                    default:
+                      type = "";
+                  }
+
                   final response = await ref
                       .read(misskeyProvider(account))
                       .notes
                       .reactions
                       .reactions(NotesReactionsRequest(
                         noteId: noteId,
-                        type: reaction,
+                        type: type,
                       ));
                   return response.toList();
                 }(),
                 builder: (context, item) => UserListItem(user: item.user),
-              )
-
-              /*PushableListView(
-              initializeFuture: () async {
-                final response = await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .reactions
-                    .reactions(NotesReactionsRequest(
-                      noteId: noteId,
-                      type: reaction,
-                    ));
-                return response.toList();
-              },
-              nextFuture: (lastItem) async {
-                final response = await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .reactions
-                    .reactions(NotesReactionsRequest(
-                      noteId: noteId,
-                      type: reaction,
-                      untilId: lastItem.id,
-                    ));
-                return response.toList();
-              },
-              itemBuilder: (context, item) => UserListItem(user: item.user),
-            ),*/
-              ),
+              )),
         ),
       ),
     );

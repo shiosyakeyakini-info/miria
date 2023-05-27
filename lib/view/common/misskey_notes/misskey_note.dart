@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -199,15 +200,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           for (final reaction in displayNote.reactions.entries
                               .sorted((a, b) => b.value.compareTo(a.value)))
                             ReactionButton(
-                              reactionKey: reaction.key,
+                              emojiData: MisskeyEmojiData.fromEmojiName(
+                                  emojiName: reaction.key,
+                                  repository: ref.read(emojiRepositoryProvider(
+                                      AccountScope.of(context))),
+                                  emojiInfo: displayNote.reactionEmojis),
                               reactionCount: reaction.value,
                               myReaction: displayNote.myReaction,
                               noteId: displayNote.id,
-                              anotherServerUrl: displayNote
-                                  .reactionEmojis.entries
-                                  .firstWhereOrNull((element) =>
-                                      ":${element.key}:" == reaction.key)
-                                  ?.value,
                             )
                         ],
                       ),
@@ -336,14 +336,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     }
     final misskey = ref.read(misskeyProvider(account));
     final note = ref.read(notesProvider(account));
-    final selectedEmoji = await showDialog<Emoji?>(
+    final selectedEmoji = await showDialog<MisskeyEmojiData?>(
         context: context,
         builder: (context) => ReactionPickerDialog(
               account: account,
             ));
     if (selectedEmoji == null) return;
     await misskey.notes.reactions.create(NotesReactionsCreateRequest(
-        noteId: displayNote.id, reaction: ":${selectedEmoji.name}:"));
+        noteId: displayNote.id, reaction: ":${selectedEmoji.baseName}:"));
     await note.refresh(displayNote.id);
   }
 }
