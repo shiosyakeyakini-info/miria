@@ -40,6 +40,8 @@ dependencies:
   package_info_plus: ^4.0.0
   reorderables: ^0.6.0
   confetti: ^0.7.0
+  flutter_highlighting: ^0.9.0+11.8.0
+  highlighting: ^0.9.0+11.8.0
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,11 @@ import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_highlighting/flutter_highlighting.dart';
+import 'package:flutter_highlighting/themes/github-dark.dart';
+import 'package:flutter_highlighting/themes/github.dart';
+import 'package:highlighting/highlighting.dart';
+import 'package:highlighting/languages/all.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -132,6 +137,10 @@ class MfmTextState extends ConsumerState<MfmText> {
             emojiInfo: widget.emoji),
         fontSizeRatio: 2,
       ),
+      codeBlockBuilder: (context, code, lang) => CodeBlock(
+        code: code,
+        language: lang,
+      ),
       linkTap: onTapLink,
       linkStyle: AppTheme.of(context).linkStyle,
       mentionTap: (userName, host, acct) => onMentionTap(acct),
@@ -142,6 +151,46 @@ class MfmTextState extends ConsumerState<MfmText> {
       suffixSpan: widget.suffixSpan,
       prefixSpan: widget.prefixSpan,
     );
+  }
+}
+
+class CodeBlock extends StatelessWidget {
+  final String? language;
+  final String code;
+
+  const CodeBlock({
+    super.key,
+    this.language,
+    required this.code,
+  });
+
+  String resolveLanguage(String language) {
+    if (language == "aiscript") return "javascript";
+    if (language == "js") return "javascript";
+    if (language == "c++") return "cpp";
+
+    return language;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedLanguage =
+        allLanguages[resolveLanguage(language ?? "text")]?.id ?? "plaintext";
+
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: HighlightView(
+          code,
+          languageId: resolvedLanguage,
+          theme:
+              WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+                      Brightness.light
+                  ? githubTheme
+                  : githubDarkTheme,
+          padding: const EdgeInsets.all(10),
+          textStyle: const TextStyle(
+              fontFamilyFallback: ["Monaco", "Menlo", "Consolas", "Noto Mono"]),
+        ));
   }
 }
 
