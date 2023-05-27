@@ -43,6 +43,7 @@ dependencies:
   flutter_highlighting: ^0.9.0+11.8.0
   highlighting: ^0.9.0+11.8.0
   dotted_border: ^2.0.0+3
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

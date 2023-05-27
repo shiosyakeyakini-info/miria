@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -9,7 +8,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class ReactionPickerContent extends ConsumerStatefulWidget {
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
@@ -113,27 +112,46 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
   }
 }
 
-class EmojiButton extends ConsumerWidget {
+class EmojiButton extends ConsumerStatefulWidget {
   final MisskeyEmojiData emoji;
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
 
   const EmojiButton({super.key, required this.emoji, required this.onTap});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ElevatedButton(
-        style: const ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-          padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-          elevation: MaterialStatePropertyAll(0),
-          minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-        onPressed: () async {
-          onTap.call(emoji);
-        },
-        child: SizedBox(
-            height: 32 * MediaQuery.of(context).textScaleFactor,
-            child: CustomEmoji(emojiData: emoji)));
+  ConsumerState<ConsumerStatefulWidget> createState() => EmojiButtonState();
+}
+
+class EmojiButtonState extends ConsumerState<EmojiButton> {
+  var isVisibility = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key(widget.emoji.baseName),
+      onVisibilityChanged: (visibilityInfo) {
+        if (visibilityInfo.visibleFraction != 0) {
+          setState(() {
+            isVisibility = true;
+          });
+        }
+      },
+      child: ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+            padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+            elevation: MaterialStatePropertyAll(0),
+            minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          onPressed: () async {
+            widget.onTap.call(widget.emoji);
+          },
+          child: SizedBox(
+              height: 32 * MediaQuery.of(context).textScaleFactor,
+              child: isVisibility
+                  ? CustomEmoji(emojiData: widget.emoji)
+                  : const SizedBox.shrink())),
+    );
   }
 }
