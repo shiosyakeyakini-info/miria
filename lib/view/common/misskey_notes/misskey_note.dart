@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -17,6 +18,7 @@ import 'package:miria/view/common/misskey_notes/reaction_button.dart';
 import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class MisskeyNote extends ConsumerStatefulWidget {
@@ -306,14 +308,20 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                 displayNote.renoteId != null &&
                 widget.recursive < 2)
               Container(
-                decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Theme.of(context).primaryColorDark)),
                 padding: const EdgeInsets.all(5),
-                child: MisskeyNote(
-                  note: displayNote.renote!,
-                  isDisplayBorder: false,
-                  recursive: widget.recursive + 1,
+                child: DottedBorder(
+                  color: AppTheme.of(context).renoteBorderColor,
+                  radius: AppTheme.of(context).renoteBorderRadius,
+                  strokeWidth: AppTheme.of(context).renoteStrokeWidth,
+                  dashPattern: AppTheme.of(context).renoteDashPattern,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: MisskeyNote(
+                      note: displayNote.renote!,
+                      isDisplayBorder: false,
+                      recursive: widget.recursive + 1,
+                    ),
+                  ),
                 ),
               )
           ],

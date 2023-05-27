@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:miria/extensions/color_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/reaction_user_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,10 +52,9 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             ? Colors.transparent
             : AppTheme.of(context).reactionButtonBackgroundColor;
 
-    final computedLuminance = (backgroundColor == Colors.transparent
-            ? Theme.of(context).scaffoldBackgroundColor
-            : backgroundColor)
-        .computeLuminance();
+    final foreground = isMyReaction
+        ? Colors.white
+        : Theme.of(context).textTheme.bodyMedium?.color;
 
     return ElevatedButton(
         onPressed: () async {
@@ -121,10 +121,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                 )),
             const Padding(padding: EdgeInsets.only(left: 5)),
             Text(widget.reactionCount.toString(),
-                style: TextStyle(
-                  color:
-                      computedLuminance < 0.5 ? Colors.white : Colors.black54,
-                )),
+                style: TextStyle(color: foreground)),
           ],
         ));
   }

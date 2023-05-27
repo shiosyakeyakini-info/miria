@@ -27,7 +27,7 @@ class ChannelDialog extends ConsumerWidget {
                     BoxDecoration(color: Theme.of(context).primaryColorDark),
                 child: Text(
                   "チャンネル情報",
-                  style: TextStyle(color: Theme.of(context).primaryColorLight),
+                  style: TextStyle(color: Colors.white),
                 )),
             content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,

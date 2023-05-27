@@ -6,6 +6,7 @@ import 'package:miria/repository/antenna_timeline_repository.dart';
 import 'package:miria/repository/channel_time_line_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/favorite_repository.dart';
+import 'package:miria/repository/general_settings_repository.dart';
 import 'package:miria/repository/hybrid_timeline_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/global_time_line_repository.dart';
@@ -113,3 +114,6 @@ final tabSettingsRepositoryProvider =
 
 final accountSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => AccountSettingsRepository());
+
+final generalSettingsRepositoryProvider =
+    ChangeNotifierProvider((ref) => GeneralSettingsRepository());

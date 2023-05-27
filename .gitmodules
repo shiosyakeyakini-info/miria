@@ -1,0 +1,3 @@
+[submodule "assets_builder/misskey"]
+	path = assets_builder/misskey
+	url = https://github.com/misskey-dev/misskey

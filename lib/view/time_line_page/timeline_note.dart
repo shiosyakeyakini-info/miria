@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final timelineNoteProvider = Provider((ref) => TextEditingController());

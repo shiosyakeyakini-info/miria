@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/licenses.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 
@@ -20,33 +21,15 @@ class SplashPageState extends ConsumerState<SplashPage> {
     await ref.read(accountRepository).load();
     await ref.read(tabSettingsRepositoryProvider).load();
     await ref.read(accountSettingsRepositoryProvider).load();
+    await ref.read(generalSettingsRepositoryProvider).load();
 
     for (final account in ref.read(accountRepository).account) {
       await ref.read(emojiRepositoryProvider(account)).loadFromSource();
     }
 
     if (_isFirst) {
-      LicenseRegistry.addLicense(() => Stream.fromIterable(<LicenseEntry>[
-            const LicenseEntryWithLineBreaks(["Blob Emoji"], """
-Copyright blob.gg
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-          """),
-            const LicenseEntryWithLineBreaks(["Meowmoji"], """
-Meowmoji is a derivative of Blob Emoji, licensed under Apache 2.0.
-The license follows the meowmoji official server community at  https://discord.gg/pFUhE5z.
-          """)
-          ]));
+      LicenseRegistry.addLicense(
+          () => Stream.fromIterable(miriaInheritedLicenses));
     }
 
     _isFirst = false;

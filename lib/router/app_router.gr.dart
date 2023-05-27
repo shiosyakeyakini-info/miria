@@ -138,6 +138,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
+    SeveralAccountGeneralSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<SeveralAccountGeneralSettingsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SeveralAccountGeneralSettingsPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     SeveralAccountSettingsRoute.name: (routeData) {
       final args = routeData.argsAs<SeveralAccountSettingsRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -231,6 +241,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    GeneralSettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const GeneralSettingsPage(),
+      );
+    },
     TabSettingsRoute.name: (routeData) {
       final args = routeData.argsAs<TabSettingsRouteArgs>(
           orElse: () => const TabSettingsRouteArgs());
@@ -281,16 +297,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    SeveralAccountGeneralSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<SeveralAccountGeneralSettingsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SeveralAccountGeneralSettingsPage(
           key: args.key,
           account: args.account,
         ),
@@ -757,6 +763,45 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SeveralAccountGeneralSettingsPage]
+class SeveralAccountGeneralSettingsRoute
+    extends PageRouteInfo<SeveralAccountGeneralSettingsRouteArgs> {
+  SeveralAccountGeneralSettingsRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SeveralAccountGeneralSettingsRoute.name,
+          args: SeveralAccountGeneralSettingsRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SeveralAccountGeneralSettingsRoute';
+
+  static const PageInfo<SeveralAccountGeneralSettingsRouteArgs> page =
+      PageInfo<SeveralAccountGeneralSettingsRouteArgs>(name);
+}
+
+class SeveralAccountGeneralSettingsRouteArgs {
+  const SeveralAccountGeneralSettingsRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'SeveralAccountGeneralSettingsRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
 /// [SeveralAccountSettingsPage]
 class SeveralAccountSettingsRoute
     extends PageRouteInfo<SeveralAccountSettingsRouteArgs> {
@@ -1115,6 +1160,20 @@ class NoteSearchRouteArgs {
 }
 
 /// generated route for
+/// [GeneralSettingsPage]
+class GeneralSettingsRoute extends PageRouteInfo<void> {
+  const GeneralSettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          GeneralSettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'GeneralSettingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [TabSettingsPage]
 class TabSettingsRoute extends PageRouteInfo<TabSettingsRouteArgs> {
   TabSettingsRoute({
@@ -1281,44 +1340,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [SeveralAccountGeneralSettingsPage]
-class SeveralAccountGeneralSettingsRoute
-    extends PageRouteInfo<SeveralAccountGeneralSettingsRouteArgs> {
-  SeveralAccountGeneralSettingsRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          SeveralAccountGeneralSettingsRoute.name,
-          args: SeveralAccountGeneralSettingsRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'SeveralAccountGeneralSettingsRoute';
-
-  static const PageInfo<SeveralAccountGeneralSettingsRouteArgs> page =
-      PageInfo<SeveralAccountGeneralSettingsRouteArgs>(name);
-}
-
-class SeveralAccountGeneralSettingsRouteArgs {
-  const SeveralAccountGeneralSettingsRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'SeveralAccountGeneralSettingsRouteArgs{key: $key, account: $account}';
   }
 }

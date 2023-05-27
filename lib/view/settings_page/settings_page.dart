@@ -13,6 +13,10 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
+            title: const Text("全般設定"),
+            onTap: () => context.pushRoute(const GeneralSettingsRoute()),
+          ),
+          ListTile(
             title: const Text("アカウント設定"),
             onTap: () => context.pushRoute(const AccountListRoute()),
           ),

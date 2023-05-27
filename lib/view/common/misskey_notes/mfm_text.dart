@@ -11,7 +11,7 @@ import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';

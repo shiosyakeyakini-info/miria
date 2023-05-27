@@ -1,4 +1,5 @@
 // Misskey絵文字JSONビルダー
+// サブモジュール misskey をクローンしている必要があります
 
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 import requestPromise from "request-promise-native";
@@ -10,7 +11,7 @@ async function main() {
     const kuroshiro = new Kuroshiro.default();
     await kuroshiro.init(new KuromojiAnalyzer());
 
-    let body = await requestPromise("https://raw.githubusercontent.com/misskey-dev/misskey/develop/packages/frontend/src/emojilist.json");
+    let body = fs.readFileSync("../misskey/packages/frontend/src/emojilist.json");
     const emojiList = JSON.parse(body);
 
     let body2 = await requestPromise("https://raw.githubusercontent.com/yagays/emoji-ja/master/data/emoji_ja.json");

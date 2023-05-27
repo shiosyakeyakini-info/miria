@@ -8,7 +8,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/channel_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/common_drawer.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
@@ -156,7 +156,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     in ref.read(tabSettingsRepositoryProvider).tabSettings)
                   Ink(
                     color: tabSetting == widget.currentTabSetting
-                        ? Colors.white
+                        ? AppTheme.of(context).currentDisplayTabColor
                         : Colors.transparent,
                     child: AccountScope(
                       account: tabSetting.account,
