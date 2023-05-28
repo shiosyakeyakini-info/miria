@@ -81,7 +81,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
         final emoji = value.emoji;
         final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-        if (emoji != null) {
+        if (emoji != null && !value.reaction.endsWith("@.:")) {
           reactionEmojis[emoji.name] = emoji.url;
         }
         noteRepository.registerNote(registeredNote.copyWith(
