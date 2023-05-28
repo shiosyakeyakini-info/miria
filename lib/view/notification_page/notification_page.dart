@@ -167,6 +167,21 @@ class NotificationItem extends ConsumerWidget {
                       ),
                     )
                   ],
+                  if (notification.type == NotificationType.quote) ...[
+                    SimpleMfmText(
+                      "${notification.user?.name ?? notification.user?.username} から引用Renote",
+                      emojis: notification.user?.emojis ?? {},
+                    ),
+                    MediaQuery(
+                      data: MediaQueryData(
+                          textScaleFactor:
+                              MediaQuery.of(context).textScaleFactor * 0.7),
+                      child: misskey_note.MisskeyNote(
+                        note: notification.note!,
+                        isDisplayBorder: false,
+                      ),
+                    )
+                  ],
                   if (notification.type == NotificationType.reply) ...[
                     mfm_text.MfmText(
                       "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",

@@ -25,6 +25,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   SocketController? controller;
   int? onlineUsers;
   int? totalMemories;
+  int? ping;
 
   List<StatsLogResponse> logged = [];
 
@@ -53,10 +54,14 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
           await ref.read(misskeyProvider(widget.account)).getOnlineUsersCount();
       final serverInfoResponse =
           await ref.read(misskeyProvider(widget.account)).serverInfo();
+      final sendDate = DateTime.now();
+      final pingResponse =
+          await ref.read(misskeyProvider(widget.account)).ping();
 
       setState(() {
         onlineUsers = onlineUserCountsResponse.count;
         totalMemories = serverInfoResponse.mem.total;
+        ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
       });
     });
   }
@@ -133,6 +138,33 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                     ],
                   ),
                 )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      const Text("応答時間"),
+                      if (ping != null)
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: ping!.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall),
+                              TextSpan(
+                                  text: " ミリ秒",
+                                  style: Theme.of(context).textTheme.bodyMedium)
+                            ],
+                          ),
+                        )
+                    ])),
+                Expanded(child: Container()),
               ],
             )
           ],
