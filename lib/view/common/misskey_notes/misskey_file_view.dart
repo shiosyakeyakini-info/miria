@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/general_settings.dart';
@@ -31,9 +32,10 @@ class MisskeyFileView extends ConsumerWidget {
                 BoxConstraints(maxHeight: height, maxWidth: double.infinity),
             child: MisskeyImage(
               isSensitive: targetFile.isSensitive,
-              url: targetFile.url.toString(),
               thumbnailUrl:
                   (targetFile.thumbnailUrl ?? targetFile.url).toString(),
+              targetFiles: [targetFile.url.toString()],
+              position: 0,
             )),
       );
     } else {
@@ -42,16 +44,18 @@ class MisskeyFileView extends ConsumerWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          for (final targetFile in targetFiles)
+          for (final targetFile in targetFiles
+              .mapIndexed((index, element) => (element: element, index: index)))
             SizedBox(
                 height: height,
                 width: double.infinity,
                 child: MisskeyImage(
-                  isSensitive: targetFile.isSensitive,
-                  url: targetFile.url.toString(),
-                  //mimeType: targetFile.type,
-                  thumbnailUrl:
-                      (targetFile.thumbnailUrl ?? targetFile.url).toString(),
+                  isSensitive: targetFile.element.isSensitive,
+                  thumbnailUrl: (targetFile.element.thumbnailUrl ??
+                          targetFile.element.url)
+                      .toString(),
+                  targetFiles: targetFiles.map((e) => e.url).toList(),
+                  position: targetFile.index,
                 ))
         ],
       );
@@ -62,15 +66,15 @@ class MisskeyFileView extends ConsumerWidget {
 class MisskeyImage extends ConsumerStatefulWidget {
   final bool isSensitive;
   final String thumbnailUrl;
-  final String url;
-  //final String mimeType;
+  final List<String> targetFiles;
+  final int position;
 
   const MisskeyImage({
     super.key,
     required this.isSensitive,
     required this.thumbnailUrl,
-    required this.url,
-    //required this.mimeType,
+    required this.targetFiles,
+    required this.position,
   });
 
   @override
@@ -121,7 +125,10 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
             } else {
               showDialog(
                   context: context,
-                  builder: (context) => ImageDialog(imageUrl: widget.url));
+                  builder: (context) => ImageDialog(
+                        imageUrlList: widget.targetFiles,
+                        initialPage: widget.position,
+                      ));
             }
           }, child: Builder(
             builder: (context) {
@@ -217,40 +224,69 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
 }
 
 class ImageDialog extends StatelessWidget {
-  final String imageUrl;
+  final List<String> imageUrlList;
+  final int initialPage;
 
-  const ImageDialog({super.key, required this.imageUrl});
+  const ImageDialog({
+    super.key,
+    required this.imageUrlList,
+    required this.initialPage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.transparent,
-      titlePadding: EdgeInsets.zero,
-      contentPadding: EdgeInsets.zero,
-      actionsPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.zero,
-      title: Container(
-        decoration:
-            BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.close))
-          ],
-        ),
-      ),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.95,
-        height: MediaQuery.of(context).size.height * 0.95,
-        child: InteractiveViewer(
-          child: Image.network(imageUrl),
-        ),
-      ),
-    );
+        backgroundColor: Colors.transparent,
+        titlePadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.zero,
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: PageView(
+                  controller: PageController(initialPage: initialPage),
+                  children: [
+                    for (final url in imageUrlList)
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        height: MediaQuery.of(context).size.height * 0.95,
+                        child: InteractiveViewer(
+                          child: Image.network(url),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 10,
+                top: 10,
+                child: RawMaterialButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    constraints:
+                        const BoxConstraints(minWidth: 0, minHeight: 0),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: EdgeInsets.zero,
+                    fillColor: Theme.of(context)
+                        .scaffoldBackgroundColor
+                        .withAlpha(200),
+                    shape: const CircleBorder(),
+                    child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Icon(Icons.close,
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.color
+                                ?.withAlpha(200)))),
+              ),
+            ],
+          ),
+        ));
   }
 }

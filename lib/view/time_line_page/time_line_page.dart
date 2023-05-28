@@ -8,9 +8,9 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/channel_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/server_detail_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/common_drawer.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/notification_icon.dart';
 import 'package:miria/view/common/tab_icon_view.dart';
@@ -18,7 +18,6 @@ import 'package:miria/view/common/timeline_listview.dart';
 import 'package:miria/view/time_line_page/misskey_time_line.dart';
 import 'package:miria/view/time_line_page/timeline_emoji.dart';
 import 'package:miria/view/time_line_page/timeline_note.dart';
-import 'package:miria/view/time_line_page/timeline_scroll_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -211,7 +210,24 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                                             widget.currentTabSetting.account,
                                       ));
                             },
-                            icon: const Icon(Icons.info_outline)),
+                            icon: const Icon(Icons.info_outline))
+                      else if (widget.currentTabSetting.tabType ==
+                              TabType.hybridTimeline ||
+                          widget.currentTabSetting.tabType ==
+                              TabType.localTimeline ||
+                          widget.currentTabSetting.tabType ==
+                              TabType.globalTimeline ||
+                          widget.currentTabSetting.tabType ==
+                              TabType.homeTimeline)
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => ServerDetailDialog(
+                                      account:
+                                          widget.currentTabSetting.account));
+                            },
+                            icon: const Icon(Icons.smart_toy_outlined)),
                       const Padding(
                         padding: EdgeInsets.only(right: 5),
                       ),

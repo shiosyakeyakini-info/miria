@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
-import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/main_stream.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme_scope.dart';
@@ -35,6 +33,7 @@ class MyApp extends ConsumerWidget {
       supportedLocales: const [
         Locale("ja", "JP"),
       ],
+      scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -46,4 +45,12 @@ class MyApp extends ConsumerWidget {
       routerConfig: _appRouter.config(),
     );
   }
+}
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
