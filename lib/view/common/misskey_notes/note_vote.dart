@@ -83,10 +83,11 @@ class NoteVoteState extends ConsumerState<NoteVote> {
   @override
   Widget build(BuildContext context) {
     final totalVotes = widget.poll.choices.map((e) => e.votes).sum;
-    final isAnyVoted = widget.poll.choices.any((e) => e.isVoted);
-    final differ = widget.poll.expiresAt?.difference(DateTime.now());
     final expiresAt = widget.poll.expiresAt;
     final isExpired = expiresAt != null && expiresAt < DateTime.now();
+    final differ = isExpired
+        ? null
+        : widget.poll.expiresAt?.difference(DateTime.now()).format;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -134,7 +135,9 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.transparent),
                           borderRadius: BorderRadius.circular(3),
-                          color: Theme.of(context).scaffoldBackgroundColor),
+                          color: Theme.of(context)
+                              .scaffoldBackgroundColor
+                              .withAlpha(215)),
                       child: Padding(
                         padding: EdgeInsets.only(left: 3, right: 3),
                         child: SimpleMfmText(
@@ -195,12 +198,11 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                       });
                     }),
             ),
-            WidgetSpan(
+            const WidgetSpan(
                 child: Padding(
               padding: EdgeInsets.only(left: 10),
             )),
-            //TODO: あとでかんがえる
-            TextSpan(text: "終了時間: ")
+            TextSpan(text: differ == null ? "" : "あと$differ"),
           ],
           style: Theme.of(context).textTheme.bodySmall,
         ))

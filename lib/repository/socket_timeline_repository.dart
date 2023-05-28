@@ -14,8 +14,12 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   Future<Iterable<Note>> requestNotes({String? untilId});
 
-  SocketController createSocketController(void Function(Note note) onReceived,
-      FutureOr<void> Function(String id, TimelineReacted reaction) onReacted);
+  SocketController createSocketController({
+    required void Function(Note note) onReceived,
+    required FutureOr<void> Function(String id, TimelineReacted reaction)
+        onReacted,
+    required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+  });
 
   void reloadLatestNotes() {
     moveToOlder();
@@ -64,25 +68,40 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       reloadLatestNotes();
     }
 
-    socketController = createSocketController((note) {
-      newerNotes.add(note);
+    socketController = createSocketController(
+      onReceived: (note) {
+        newerNotes.add(note);
 
-      notifyListeners();
-    }, (id, value) {
-      final registeredNote = noteRepository.notes[id];
-      if (registeredNote == null) return;
-      final reaction = Map.of(registeredNote.reactions);
-      reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
-      final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-      for (final emoji in value.emoji.entries) {
-        reactionEmojis[emoji.key] = emoji.value;
-      }
-      noteRepository.registerNote(registeredNote.copyWith(
-        reactions: reaction,
-        reactionEmojis: reactionEmojis,
-      ));
-    })
-      ..startStreaming();
+        notifyListeners();
+      },
+      onReacted: (id, value) {
+        final registeredNote = noteRepository.notes[id];
+        if (registeredNote == null) return;
+        final reaction = Map.of(registeredNote.reactions);
+        reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
+        final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+        for (final emoji in value.emoji.entries) {
+          reactionEmojis[emoji.key] = emoji.value;
+        }
+        noteRepository.registerNote(registeredNote.copyWith(
+          reactions: reaction,
+          reactionEmojis: reactionEmojis,
+        ));
+      },
+      onVoted: (id, value) {
+        final registeredNote = noteRepository.notes[id];
+        if (registeredNote == null) return;
+
+        final poll = registeredNote.poll;
+        if (poll == null) return;
+
+        final choices = poll.choices.toList();
+        choices[value.choice] = choices[value.choice]
+            .copyWith(votes: choices[value.choice].votes + 1);
+        noteRepository.registerNote(
+            registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
+      },
+    )..startStreaming();
   }
 
   @override

@@ -17,9 +17,13 @@ class HomeTimeLineRepository extends SocketTimelineRepository {
   );
 
   @override
-  SocketController createSocketController(void Function(Note note) onReceived,
-      FutureOr<void> Function(String id, TimelineReacted reaction) onReacted) {
-    return misskey.homeTimelineStream(onReceived, onReacted);
+  SocketController createSocketController({
+    required void Function(Note note) onReceived,
+    required FutureOr<void> Function(String id, TimelineReacted reaction)
+        onReacted,
+    required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+  }) {
+    return misskey.homeTimelineStream(onReceived, onReacted, onVoted);
   }
 
   @override

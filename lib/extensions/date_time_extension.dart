@@ -26,3 +26,17 @@ extension DateTimeExtension on DateTime {
     }
   }
 }
+
+extension DurationExtenion on Duration {
+  String get format {
+    if (this < const Duration(minutes: 1)) {
+      return "$inSeconds秒";
+    } else if (this < const Duration(hours: 1)) {
+      return "$inMinutes分";
+    } else if (this < const Duration(days: 1)) {
+      return "$inHours時間";
+    } else {
+      return "$inDays日";
+    }
+  }
+}

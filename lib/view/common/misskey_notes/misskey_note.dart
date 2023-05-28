@@ -193,6 +193,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           height:
                               200 * pow(0.5, widget.recursive - 1).toDouble(),
                         ),
+                        if (displayNote.poll != null)
+                          NoteVote(
+                              displayNote: displayNote,
+                              poll: displayNote.poll!),
                       ],
                       if (displayNote.reactions.isNotEmpty)
                         const Padding(padding: EdgeInsets.only(bottom: 5)),
@@ -300,9 +304,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               )),
                         ],
                       ),
-                      if (displayNote.poll != null)
-                        NoteVote(
-                            displayNote: displayNote, poll: displayNote.poll!),
                     ],
                   ),
                 ),
