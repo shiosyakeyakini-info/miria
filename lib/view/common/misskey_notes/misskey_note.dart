@@ -14,6 +14,7 @@ import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
 import 'package:miria/view/common/misskey_notes/note_modal_sheet.dart';
+import 'package:miria/view/common/misskey_notes/note_vote.dart';
 import 'package:miria/view/common/misskey_notes/reaction_button.dart';
 import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
@@ -299,6 +300,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               )),
                         ],
                       ),
+                      if (displayNote.poll != null)
+                        NoteVote(
+                            displayNote: displayNote, poll: displayNote.poll!),
                     ],
                   ),
                 ),

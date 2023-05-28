@@ -72,6 +72,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                   EmojiButton(
                     emoji: emoji,
                     onTap: widget.onTap,
+                    isForceVisible: true,
                   )
               ],
             ),
@@ -115,15 +116,22 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
 class EmojiButton extends ConsumerStatefulWidget {
   final MisskeyEmojiData emoji;
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
+  final bool isForceVisible;
 
-  const EmojiButton({super.key, required this.emoji, required this.onTap});
+  const EmojiButton({
+    super.key,
+    required this.emoji,
+    required this.onTap,
+    this.isForceVisible = false,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => EmojiButtonState();
 }
 
 class EmojiButtonState extends ConsumerState<EmojiButton> {
-  var isVisibility = false;
+  late var isVisibility = widget.isForceVisible;
+  late var isVisibilityOnceMore = widget.isForceVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +141,7 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
         if (visibilityInfo.visibleFraction != 0) {
           setState(() {
             isVisibility = true;
+            isVisibilityOnceMore = true;
           });
         }
       },

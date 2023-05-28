@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/themes/app_theme.dart';
 
 class CustomEmoji extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -62,7 +63,8 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
                 child: Text(
                   emojiData.char,
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium?.color),
+                          color: Theme.of(context).textTheme.bodyMedium?.color)
+                      .merge(AppTheme.of(context).unicodeEmojiStyle),
                 )));
         break;
       case NotEmojiData():

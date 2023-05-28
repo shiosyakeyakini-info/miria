@@ -21,33 +21,41 @@ class AppThemeScope extends ConsumerStatefulWidget {
 class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
     return AppThemeData(
-        noteTextStyle: InputDecoration(
-          border: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.black54),
-              borderRadius: BorderRadius.circular(10)),
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.circular(10)),
-        ),
-        reactionButtonStyle: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(5),
-            elevation: 0,
-            minimumSize: const Size(0, 0),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-        linkStyle: TextStyle(color: theme.link),
-        hashtagStyle: TextStyle(color: theme.hashtag),
-        mentionStyle: TextStyle(color: theme.mention),
-        reactionButtonBackgroundColor: theme.buttonBackground,
-        reactionButtonMeReactedColor: theme.primary,
-        renoteBorderColor: theme.renote,
-        renoteBorderRadius: const Radius.circular(20),
-        renoteStrokeWidth: 1.5,
-        renoteStrokePadding: 0.0,
-        renoteDashPattern: [10.0, 6.0],
-        currentDisplayTabColor:
-            theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten);
+      noteTextStyle: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black54),
+            borderRadius: BorderRadius.circular(10)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(10)),
+      ),
+      reactionButtonStyle: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(5),
+          elevation: 0,
+          minimumSize: const Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+      linkStyle: TextStyle(color: theme.link),
+      hashtagStyle: TextStyle(color: theme.hashtag),
+      mentionStyle: TextStyle(color: theme.mention),
+      reactionButtonBackgroundColor: theme.buttonBackground,
+      reactionButtonMeReactedColor: theme.primary,
+      renoteBorderColor: theme.renote,
+      renoteBorderRadius: const Radius.circular(20),
+      renoteStrokeWidth: 1.5,
+      renoteStrokePadding: 0.0,
+      renoteDashPattern: [10.0, 6.0],
+      currentDisplayTabColor:
+          theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+      voteColor1: theme.isDarkTheme
+          ? theme.primaryLighten.lighten()
+          : theme.primaryDarken.darken(),
+      voteColor2: theme.isDarkTheme
+          ? theme.primaryDarken.darken()
+          : theme.primaryLighten.lighten(),
+      unicodeEmojiStyle: resolveUnicodeEmojiStyle(),
+    );
   }
 
   String resolveFontFamilyName() {
@@ -66,12 +74,34 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return [
-        "Helvetica Neue",
+        "Hiragino Maru Gothic ProN",
         "Apple Color Emoji",
-        "Hiragino Maru Gothic ProN"
       ];
     }
     return [];
+  }
+
+  TextStyle resolveUnicodeEmojiStyle() {
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      return const TextStyle(
+          fontFamily: "Apple Color Emoji",
+          fontFamilyFallback: [
+            "Apple Color Emoji",
+            "Hiragino Maru Gothic ProN"
+          ]);
+    }
+    if (defaultTargetPlatform == TargetPlatform.windows) {
+      return const TextStyle(
+          fontFamily: "Segoe UI Emoji",
+          fontFamilyFallback: ["Segoe UI Emoji", "Noto Color Emoji", "Meiryo"]);
+    }
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return const TextStyle(
+          fontFamily: "Noto Color Emoji",
+          fontFamilyFallback: ["Noto Color Emoji", "Noto Sans JP"]);
+    }
+    return const TextStyle();
   }
 
   ThemeData buildTheme(BuildContext context, ColorTheme theme) {

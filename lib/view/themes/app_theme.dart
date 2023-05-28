@@ -29,6 +29,7 @@ class AppThemeData {
   final TextStyle linkStyle;
   final TextStyle mentionStyle;
   final TextStyle hashtagStyle;
+  final TextStyle unicodeEmojiStyle;
   final Color reactionButtonMeReactedColor;
   final Color reactionButtonBackgroundColor;
   final Color renoteBorderColor;
@@ -37,6 +38,8 @@ class AppThemeData {
   final Radius renoteBorderRadius;
   final List<double> renoteDashPattern;
   final Color currentDisplayTabColor;
+  final Color voteColor1;
+  final Color voteColor2;
 
   const AppThemeData({
     required this.noteTextStyle,
@@ -44,6 +47,7 @@ class AppThemeData {
     required this.linkStyle,
     required this.mentionStyle,
     required this.hashtagStyle,
+    required this.unicodeEmojiStyle,
     required this.reactionButtonMeReactedColor,
     required this.reactionButtonBackgroundColor,
     required this.renoteBorderColor,
@@ -52,5 +56,7 @@ class AppThemeData {
     required this.renoteBorderRadius,
     required this.renoteDashPattern,
     required this.currentDisplayTabColor,
+    required this.voteColor1,
+    required this.voteColor2,
   });
 }
