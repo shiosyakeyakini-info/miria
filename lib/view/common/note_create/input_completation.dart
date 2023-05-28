@@ -29,27 +29,30 @@ class InputComplementState extends ConsumerState<InputComplement> {
   void insertEmoji(MisskeyEmojiData emoji, WidgetRef ref) {
     final currentPosition = widget.controller.selection.base.offset;
     final text = widget.controller.text;
+
+    final beforeSearchText =
+        text.substring(0, text.substring(0, currentPosition).lastIndexOf(":"));
+
+    final after = (currentPosition == text.length || currentPosition == -1)
+        ? ""
+        : text.substring(currentPosition, text.length);
+
+    final String complementValue;
     switch (emoji) {
       case CustomEmojiData():
-        final beforeSearchText = text.substring(
-            0, text.substring(0, currentPosition).lastIndexOf(":"));
-
-        final after = (currentPosition == text.length || currentPosition == -1)
-            ? ""
-            : text.substring(currentPosition, text.length);
-
-        widget.controller.value = TextEditingValue(
-            text: "$beforeSearchText:${emoji.baseName}:$after",
-            selection: TextSelection.collapsed(
-                offset: beforeSearchText.length + emoji.baseName.length + 2));
+        complementValue = ":${emoji.baseName}:";
         break;
       case UnicodeEmojiData():
-        // TODO あとで実装する
-
+        complementValue = emoji.char;
         break;
       default:
-        break;
+        return;
     }
+
+    widget.controller.value = TextEditingValue(
+        text: "$beforeSearchText$complementValue$after",
+        selection: TextSelection.collapsed(
+            offset: beforeSearchText.length + emoji.baseName.length + 2));
 
     ref.read(widget.searchedEmojiProvider.notifier).state = [];
     ref.read(widget.focusNode).requestFocus();

@@ -8,6 +8,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
@@ -303,9 +304,20 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                                       account: account,
                                     ));
                         if (selectedEmoji == null) return;
-                        ref
-                            .read(noteInputTextProvider)
-                            .insert(selectedEmoji.baseName);
+                        switch (selectedEmoji) {
+                          case CustomEmojiData():
+                            ref
+                                .read(noteInputTextProvider)
+                                .insert(":${selectedEmoji.baseName}:");
+                            break;
+                          case UnicodeEmojiData():
+                            ref
+                                .read(noteInputTextProvider)
+                                .insert(selectedEmoji.char);
+                            break;
+                          default:
+                            break;
+                        }
                         ref.read(noteFocusProvider).requestFocus();
                       },
                       icon: const Icon(Icons.tag_faces))
