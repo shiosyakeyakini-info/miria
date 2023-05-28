@@ -256,9 +256,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
               child: SizedBox(
                   height: MediaQuery.of(context).textScaleFactor *
                       (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
-                  child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Image.network(badge.iconUrl.toString()))),
+                  child: Image.network(badge.iconUrl.toString())),
             ),
           )
       ],

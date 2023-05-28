@@ -228,6 +228,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                             MfmText(
                               response.name ?? response.username,
                               style: Theme.of(context).textTheme.headlineSmall,
+                              emoji: response.emojis ?? {},
                             ),
                             Text(
                               "@$userName",
@@ -256,7 +257,8 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 const Padding(padding: EdgeInsets.only(top: 5)),
                 Align(
                   alignment: Alignment.center,
-                  child: MfmText(response.description ?? ""),
+                  child: MfmText(response.description ?? "",
+                      emoji: response.emojis ?? {}),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 20)),
                 Table(
@@ -303,8 +305,14 @@ class UserDetailState extends ConsumerState<UserDetail> {
                     children: [
                       for (final field in response.fields ?? <UserField>[])
                         TableRow(children: [
-                          TableCell(child: MfmText(field.name)),
-                          TableCell(child: MfmText(field.value)),
+                          TableCell(
+                              child: MfmText(
+                            field.name,
+                            emoji: response.emojis ?? {},
+                          )),
+                          TableCell(
+                              child: MfmText(field.value,
+                                  emoji: response.emojis ?? {})),
                         ])
                     ],
                   ),
