@@ -18,6 +18,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   String lightModeTheme = "";
   String darkModeTheme = "";
   ThemeColorSystem colorSystem = ThemeColorSystem.system;
+  NSFWInherit nsfwInherit = NSFWInherit.inherit;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             builtInColorThemes.where((element) => element.isDarkTheme).first.id;
       }
       colorSystem = settings.themeColorSystem;
+      nsfwInherit = settings.nsfwInherit;
     });
   }
 
@@ -50,6 +52,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
           lightColorThemeId: lightModeTheme,
           darkColorThemeId: darkModeTheme,
           themeColorSystem: colorSystem,
+          nsfwInherit: nsfwInherit,
         ));
   }
 
@@ -76,6 +79,23 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           Text("全般",
                               style: Theme.of(context).textTheme.titleLarge),
                           const Padding(padding: EdgeInsets.only(top: 10)),
+                          const Text("注釈のついたノートの表示"),
+                          DropdownButton<NSFWInherit>(
+                            items: [
+                              for (final element in NSFWInherit.values)
+                                DropdownMenuItem(
+                                  value: element,
+                                  child: Text(element.displayName),
+                                )
+                            ],
+                            value: nsfwInherit,
+                            onChanged: (value) => setState(
+                              () {
+                                nsfwInherit = value ?? NSFWInherit.inherit;
+                                save();
+                              },
+                            ),
+                          ),
                         ],
                       ))),
               Card(

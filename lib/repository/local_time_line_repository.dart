@@ -10,6 +10,7 @@ class LocalTimeLineRepository extends SocketTimelineRepository {
     this.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
+    super.generalSettingsRepository,
     super.tabSetting,
   );
 

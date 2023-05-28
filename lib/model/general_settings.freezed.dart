@@ -23,6 +23,7 @@ mixin _$GeneralSettings {
   String get lightColorThemeId => throw _privateConstructorUsedError;
   String get darkColorThemeId => throw _privateConstructorUsedError;
   ThemeColorSystem get themeColorSystem => throw _privateConstructorUsedError;
+  NSFWInherit get nsfwInherit => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +40,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
   $Res call(
       {String lightColorThemeId,
       String darkColorThemeId,
-      ThemeColorSystem themeColorSystem});
+      ThemeColorSystem themeColorSystem,
+      NSFWInherit nsfwInherit});
 }
 
 /// @nodoc
@@ -58,6 +60,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? lightColorThemeId = null,
     Object? darkColorThemeId = null,
     Object? themeColorSystem = null,
+    Object? nsfwInherit = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -72,6 +75,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.themeColorSystem
           : themeColorSystem // ignore: cast_nullable_to_non_nullable
               as ThemeColorSystem,
+      nsfwInherit: null == nsfwInherit
+          ? _value.nsfwInherit
+          : nsfwInherit // ignore: cast_nullable_to_non_nullable
+              as NSFWInherit,
     ) as $Val);
   }
 }
@@ -87,7 +94,8 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
   $Res call(
       {String lightColorThemeId,
       String darkColorThemeId,
-      ThemeColorSystem themeColorSystem});
+      ThemeColorSystem themeColorSystem,
+      NSFWInherit nsfwInherit});
 }
 
 /// @nodoc
@@ -104,6 +112,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? lightColorThemeId = null,
     Object? darkColorThemeId = null,
     Object? themeColorSystem = null,
+    Object? nsfwInherit = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -118,6 +127,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.themeColorSystem
           : themeColorSystem // ignore: cast_nullable_to_non_nullable
               as ThemeColorSystem,
+      nsfwInherit: null == nsfwInherit
+          ? _value.nsfwInherit
+          : nsfwInherit // ignore: cast_nullable_to_non_nullable
+              as NSFWInherit,
     ));
   }
 }
@@ -128,7 +141,8 @@ class _$_GeneralSettings implements _GeneralSettings {
   const _$_GeneralSettings(
       {this.lightColorThemeId = "",
       this.darkColorThemeId = "",
-      this.themeColorSystem = ThemeColorSystem.system});
+      this.themeColorSystem = ThemeColorSystem.system,
+      this.nsfwInherit = NSFWInherit.inherit});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -142,10 +156,13 @@ class _$_GeneralSettings implements _GeneralSettings {
   @override
   @JsonKey()
   final ThemeColorSystem themeColorSystem;
+  @override
+  @JsonKey()
+  final NSFWInherit nsfwInherit;
 
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit)';
   }
 
   @override
@@ -158,13 +175,15 @@ class _$_GeneralSettings implements _GeneralSettings {
             (identical(other.darkColorThemeId, darkColorThemeId) ||
                 other.darkColorThemeId == darkColorThemeId) &&
             (identical(other.themeColorSystem, themeColorSystem) ||
-                other.themeColorSystem == themeColorSystem));
+                other.themeColorSystem == themeColorSystem) &&
+            (identical(other.nsfwInherit, nsfwInherit) ||
+                other.nsfwInherit == nsfwInherit));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, lightColorThemeId, darkColorThemeId, themeColorSystem);
+  int get hashCode => Object.hash(runtimeType, lightColorThemeId,
+      darkColorThemeId, themeColorSystem, nsfwInherit);
 
   @JsonKey(ignore: true)
   @override
@@ -184,7 +203,8 @@ abstract class _GeneralSettings implements GeneralSettings {
   const factory _GeneralSettings(
       {final String lightColorThemeId,
       final String darkColorThemeId,
-      final ThemeColorSystem themeColorSystem}) = _$_GeneralSettings;
+      final ThemeColorSystem themeColorSystem,
+      final NSFWInherit nsfwInherit}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -195,6 +215,8 @@ abstract class _GeneralSettings implements GeneralSettings {
   String get darkColorThemeId;
   @override
   ThemeColorSystem get themeColorSystem;
+  @override
+  NSFWInherit get nsfwInherit;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>

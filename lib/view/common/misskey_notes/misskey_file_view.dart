@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/model/general_settings.dart';
+import 'package:miria/providers.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 import 'network_image.dart';
 
-class MisskeyFileView extends StatelessWidget {
+class MisskeyFileView extends ConsumerWidget {
   final List<DriveFile> files;
 
   final double height;
@@ -15,7 +18,7 @@ class MisskeyFileView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final targetFiles = files.where((e) => e.thumbnailUrl != null);
 
     if (targetFiles.isEmpty) {
@@ -24,7 +27,8 @@ class MisskeyFileView extends StatelessWidget {
       final targetFile = targetFiles.first;
       return Center(
         child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: height),
+            constraints:
+                BoxConstraints(maxHeight: height, maxWidth: double.infinity),
             child: MisskeyImage(
               isSensitive: targetFile.isSensitive,
               url: targetFile.url.toString(),
@@ -40,22 +44,22 @@ class MisskeyFileView extends StatelessWidget {
         children: [
           for (final targetFile in targetFiles)
             SizedBox(
-              height: height,
-              child: MisskeyImage(
-                isSensitive: targetFile.isSensitive,
-                url: targetFile.url.toString(),
-                //mimeType: targetFile.type,
-                thumbnailUrl:
-                    (targetFile.thumbnailUrl ?? targetFile.url).toString(),
-              ),
-            ),
+                height: height,
+                width: double.infinity,
+                child: MisskeyImage(
+                  isSensitive: targetFile.isSensitive,
+                  url: targetFile.url.toString(),
+                  //mimeType: targetFile.type,
+                  thumbnailUrl:
+                      (targetFile.thumbnailUrl ?? targetFile.url).toString(),
+                ))
         ],
       );
     }
   }
 }
 
-class MisskeyImage extends StatefulWidget {
+class MisskeyImage extends ConsumerStatefulWidget {
   final bool isSensitive;
   final String thumbnailUrl;
   final String url;
@@ -70,91 +74,145 @@ class MisskeyImage extends StatefulWidget {
   });
 
   @override
-  State<MisskeyImage> createState() => MisskeyImageState();
+  ConsumerState<MisskeyImage> createState() => MisskeyImageState();
 }
 
-class MisskeyImageState extends State<MisskeyImage> {
+class MisskeyImageState extends ConsumerState<MisskeyImage> {
   var nsfwAccepted = false;
   Widget? cachedWidget;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final nsfwSetting = ref.read(generalSettingsRepositoryProvider
+        .select((repository) => repository.settings.nsfwInherit));
+    if (nsfwSetting == NSFWInherit.allHidden) {
+      // 強制的にNSFW表示
+      setState(() {
+        nsfwAccepted = false;
+      });
+    } else if (nsfwSetting == NSFWInherit.ignore) {
+      // 設定を無視
+      setState(() {
+        nsfwAccepted = true;
+      });
+    } else if (nsfwSetting == NSFWInherit.inherit && !widget.isSensitive) {
+      // 閲覧注意ではなく、継承する
+      setState(() {
+        nsfwAccepted = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: () {
-      if (widget.isSensitive && !nsfwAccepted) {
-        setState(() {
-          nsfwAccepted = true;
-        });
-        return;
-      } else {
-        showDialog(
-            context: context,
-            builder: (context) => ImageDialog(imageUrl: widget.url));
-      }
-    }, child: Builder(
-      builder: (context) {
-        if (widget.isSensitive && !nsfwAccepted) {
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              decoration: const BoxDecoration(color: Colors.black54),
-              width: double.infinity,
-              child: Center(
-                  child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.warning_rounded, color: Colors.white),
-                  const Padding(padding: EdgeInsets.only(left: 5)),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "閲覧注意",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        "タップして表示",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.fontSize),
-                      )
-                    ],
-                  ),
-                ],
-              )),
-            ),
-          );
-        }
-
-        if (cachedWidget != null) {
-          return cachedWidget!;
-        }
-
-        return FutureBuilder(
-          future: Future.delayed(Duration(milliseconds: 100)),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              cachedWidget = SizedBox(
-                height: 200,
-                child: NetworkImageView(
-                  url: widget.thumbnailUrl,
-                  type: ImageType.imageThumbnail,
-                  loadingBuilder: (context, widget, chunkEvent) => SizedBox(
+    final nsfwSetting = ref.watch(generalSettingsRepositoryProvider
+        .select((repository) => repository.settings.nsfwInherit));
+    return Stack(
+      children: [
+        Align(
+          child: GestureDetector(onTap: () {
+            if (!nsfwAccepted) {
+              setState(() {
+                nsfwAccepted = true;
+              });
+              return;
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (context) => ImageDialog(imageUrl: widget.url));
+            }
+          }, child: Builder(
+            builder: (context) {
+              if (!nsfwAccepted) {
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Container(
+                    decoration: const BoxDecoration(color: Colors.black54),
                     width: double.infinity,
-                    height: 200,
-                    child: widget,
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.warning_rounded,
+                              color: Colors.white),
+                          const Padding(padding: EdgeInsets.only(left: 5)),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                "閲覧注意",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "タップして表示",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.fontSize),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              if (cachedWidget != null) {
+                return cachedWidget!;
+              }
+
+              return FutureBuilder(
+                future: Future.delayed(Duration(milliseconds: 100)),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    cachedWidget = SizedBox(
+                      height: 200,
+                      child: NetworkImageView(
+                        url: widget.thumbnailUrl,
+                        type: ImageType.imageThumbnail,
+                        loadingBuilder: (context, widget, chunkEvent) =>
+                            SizedBox(
+                          width: double.infinity,
+                          height: 200,
+                          child: widget,
+                        ),
+                      ),
+                    );
+                    return cachedWidget!;
+                  }
+                  return Container();
+                },
+              );
+            },
+          )),
+        ),
+        if (widget.isSensitive &&
+            (nsfwSetting == NSFWInherit.ignore ||
+                nsfwSetting == NSFWInherit.allHidden))
+          Positioned(
+              left: 5,
+              top: 5,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withAlpha(140),
+                    border: Border.all(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(3)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 2, right: 2),
+                  child: Text(
+                    "NSFW",
+                    style: TextStyle(color: Colors.white.withAlpha(170)),
                   ),
                 ),
-              );
-              return cachedWidget!;
-            }
-            return Container();
-          },
-        );
-      },
-    ));
+              )),
+      ],
+    );
   }
 }
 

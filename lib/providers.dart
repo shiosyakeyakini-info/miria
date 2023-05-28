@@ -28,6 +28,7 @@ final localTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 final homeTimeLineProvider =
@@ -36,6 +37,7 @@ final homeTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 final globalTimeLineProvider =
@@ -44,6 +46,7 @@ final globalTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 
@@ -53,6 +56,7 @@ final hybridTimeLineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 
@@ -62,6 +66,7 @@ final channelTimelineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 
@@ -71,6 +76,7 @@ final userListTimelineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 
@@ -80,6 +86,7 @@ final antennaTimelineProvider =
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
               tabSetting,
             ));
 

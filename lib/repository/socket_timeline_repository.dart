@@ -9,8 +9,12 @@ import 'package:misskey_dart/misskey_dart.dart';
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
 
-  SocketTimelineRepository(super.noteRepository,
-      super.globalNotificationRepository, super.tabSetting);
+  SocketTimelineRepository(
+    super.noteRepository,
+    super.globalNotificationRepository,
+    super.generalSettingsRepository,
+    super.tabSetting,
+  );
 
   Future<Iterable<Note>> requestNotes({String? untilId});
 
