@@ -17,6 +17,7 @@ import 'package:miria/view/common/misskey_notes/note_modal_sheet.dart';
 import 'package:miria/view/common/misskey_notes/note_vote.dart';
 import 'package:miria/view/common/misskey_notes/reaction_button.dart';
 import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
+import 'package:miria/view/common/misskey_notes/renote_user_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
@@ -487,6 +488,10 @@ class RenoteButton extends StatelessWidget {
           context: context,
           builder: (innerContext) => RenoteModalSheet(
               note: displayNote, account: AccountScope.of(context))),
+      onLongPress: () => showDialog(
+          context: context,
+          builder: (context) =>
+              RenoteUserDialog(account: account, noteId: displayNote.id)),
       icon: Icon(
         Icons.repeat_rounded,
         size: 16 * MediaQuery.of(context).textScaleFactor,
