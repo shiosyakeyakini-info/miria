@@ -58,8 +58,8 @@ class EmojiRepositoryImpl extends EmojiRepository {
             .map((e) => UnicodeEmoji.fromJson(e))
             .map((e) => EmojiRepositoryData(
                   emoji: UnicodeEmojiData(char: e.char),
-                  kanaName: toH(e.char),
-                  kanaAliases: e.keywords.map((e2) => toH(e2)).toList(),
+                  kanaName: toH(format(e.char)),
+                  kanaAliases: e.keywords.map((e2) => toH(format(e2))).toList(),
                   aliases: e.keywords,
                   category: e.category,
                 ));
@@ -72,9 +72,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
                 url: e.url,
                 isCurrentServer: true),
             category: e.category ?? "",
-            kanaName: toH(e.name),
+            kanaName: toH(format(e.name)),
             aliases: e.aliases,
-            kanaAliases: e.aliases.map((e2) => toH(e2)).toList()))
+            kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList()))
         .toList();
     emoji!.addAll(unicodeEmojis);
   }

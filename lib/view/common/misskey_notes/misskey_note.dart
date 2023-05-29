@@ -205,14 +205,21 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         runSpacing: 5 * MediaQuery.of(context).textScaleFactor,
                         children: [
                           for (final reaction in displayNote.reactions.entries
-                              .sorted((a, b) => b.value.compareTo(a.value)))
+                              .mapIndexed((index, element) =>
+                                  (index: index, element: element))
+                              .sorted((a, b) {
+                            final primary =
+                                b.element.value.compareTo(a.element.value);
+                            if (primary != 0) return primary;
+                            return a.index.compareTo(b.index);
+                          }))
                             ReactionButton(
                               emojiData: MisskeyEmojiData.fromEmojiName(
-                                  emojiName: reaction.key,
+                                  emojiName: reaction.element.key,
                                   repository: ref.read(emojiRepositoryProvider(
                                       AccountScope.of(context))),
                                   emojiInfo: displayNote.reactionEmojis),
-                              reactionCount: reaction.value,
+                              reactionCount: reaction.element.value,
                               myReaction: displayNote.myReaction,
                               noteId: displayNote.id,
                             )
