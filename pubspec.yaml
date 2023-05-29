@@ -45,6 +45,7 @@ dependencies:
   dotted_border: ^2.0.0+3
   visibility_detector: ^0.4.0+2
   percent_indicator: ^4.2.3
+  fl_chart: ^0.62.0
 
 dev_dependencies:
   flutter_test:
