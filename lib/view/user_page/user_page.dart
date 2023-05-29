@@ -8,7 +8,11 @@ import 'package:miria/view/user_page/user_clips.dart';
 import 'package:miria/view/user_page/user_detail.dart';
 import 'package:miria/view/user_page/user_notes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/user_page/user_reactions.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+
+final userInfoProvider = StateProvider.family
+    .autoDispose<UsersShowResponse?, String>((ref, userId) => null);
 
 @RoutePage()
 class UserPage extends ConsumerStatefulWidget {
@@ -23,8 +27,11 @@ class UserPage extends ConsumerStatefulWidget {
 class UserPageState extends ConsumerState<UserPage> {
   @override
   Widget build(BuildContext context) {
+    final userInfo = ref.watch(userInfoProvider(widget.userId));
+    final isReactionAvailable = userInfo?.publicReactions == true ||
+        (userInfo?.host == null && userInfo?.username == widget.account.userId);
     return DefaultTabController(
-      length: 3,
+      length: 3 + (isReactionAvailable ? 1 : 0),
       child: Scaffold(
         appBar: AppBar(
           actions: [],
@@ -33,11 +40,12 @@ class UserPageState extends ConsumerState<UserPage> {
           account: widget.account,
           child: Column(
             children: [
-              const TabBar(
+              TabBar(
                 tabs: [
-                  Tab(text: "アカウント情報"),
-                  Tab(text: "ノート"),
-                  Tab(text: "クリップ")
+                  const Tab(text: "アカウント情報"),
+                  const Tab(text: "ノート"),
+                  const Tab(text: "クリップ"),
+                  if (isReactionAvailable) const Tab(text: "リアクション")
                 ],
                 isScrollable: true,
               ),
@@ -53,7 +61,11 @@ class UserPageState extends ConsumerState<UserPage> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: UserClips(
                           userId: widget.userId,
-                        ))
+                        )),
+                    if (isReactionAvailable)
+                      Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: UserReactions(userId: widget.userId)),
                   ],
                 ),
               )
@@ -84,6 +96,7 @@ class UserDetailTab extends ConsumerWidget {
             ref
                 .read(notesProvider(AccountScope.of(context)))
                 .registerAll(data.pinnedNotes ?? []);
+            ref.read(userInfoProvider(userId).notifier).state = data;
           });
           return SingleChildScrollView(
               child: UserDetail(
