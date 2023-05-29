@@ -36,8 +36,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
     final scopedFontSize = (DefaultTextStyle.of(context).style.fontSize ?? 22) *
-        widget.fontSizeRatio *
-        MediaQuery.of(context).textScaleFactor;
+        widget.fontSizeRatio;
 
     final emojiData = widget.emojiData;
     switch (emojiData) {
@@ -48,6 +47,12 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             child: NetworkImageView(
                 url: emojiData.url.toString(),
                 type: ImageType.customEmoji,
+                errorBuilder: (context, e, s) => Text(emojiData.baseName,
+                    style: TextStyle(
+                        height: 0,
+                        //TODO: あとでなおす
+                        fontSize: scopedFontSize / 1.5,
+                        color: Theme.of(context).textTheme.bodyMedium?.color)),
                 loadingBuilder: (context, widget, chunk) => SizedBox(
                       height: scopedFontSize,
                       width: scopedFontSize,
