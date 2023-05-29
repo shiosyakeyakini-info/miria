@@ -253,10 +253,10 @@ class UserInformationState extends ConsumerState<UserInformation> {
           WidgetSpan(
             child: Tooltip(
               message: badge.name,
-              child: SizedBox(
-                  height: MediaQuery.of(context).textScaleFactor *
-                      (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
-                  child: Image.network(badge.iconUrl.toString())),
+              child: Image.network(
+                badge.iconUrl.toString(),
+                height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+              ),
             ),
           )
       ],
