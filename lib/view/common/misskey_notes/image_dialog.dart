@@ -17,6 +17,7 @@ class ImageDialog extends StatefulWidget {
 
 class ImageDialogState extends State<ImageDialog> {
   var scale = 1.0;
+  late final pageController = PageController(initialPage: widget.initialPage);
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +34,16 @@ class ImageDialogState extends State<ImageDialog> {
             children: [
               Positioned.fill(
                 child: PageView(
-                  controller: PageController(initialPage: widget.initialPage),
+                  controller: pageController,
+                  physics: scale == 1.0
+                      ? const ScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
                   children: [
                     for (final url in widget.imageUrlList)
                       ScaleNotifierInteractiveViewer(
                         imageUrl: url,
                         onScaleChanged: (updatedScale) {
                           setState(() {
-                            print(scale);
                             scale = updatedScale;
                           });
                         },
@@ -98,30 +101,51 @@ class ScaleNotifierInteractiveViewerState
   var scale = 1.0;
   final TransformationController _transformationController =
       TransformationController();
+  var verticalDragX = 0.0;
+  var verticalDragY = 0.0;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+        onVerticalDragUpdate: scale != 1.0
+            ? null
+            : (details) => setState(() {
+                  verticalDragX += details.delta.dx;
+                  verticalDragY += details.delta.dy;
+                }),
         onVerticalDragEnd:
             scale != 1.0 ? null : (details) => Navigator.of(context).pop(),
-        onDoubleTap: () {
+        onDoubleTapDown: (details) {
           if (scale != 1.0) {
             _transformationController.value = Matrix4.identity();
+            scale = 1.0;
+            widget.onScaleChanged(scale);
+          } else {
+            final position = details.localPosition;
+            _transformationController.value = Matrix4.identity()
+              ..translate(-position.dx * 2, -position.dy * 2)
+              ..scale(3.0);
+            scale = 3.0;
+            widget.onScaleChanged(scale);
           }
         },
-        child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.95,
-            height: MediaQuery.of(context).size.height * 0.95,
-            child: InteractiveViewer(
-              // ピンチイン・ピンチアウト終了後の処理
-              transformationController: _transformationController,
-              onInteractionEnd: (details) {
-                scale = _transformationController.value.getMaxScaleOnAxis();
-              },
-              child: NetworkImageView(
-                url: widget.imageUrl,
-                type: ImageType.image,
-              ),
-            )));
+        child: Transform.translate(
+          offset: Offset(verticalDragX, verticalDragY),
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              height: MediaQuery.of(context).size.height * 0.95,
+              child: InteractiveViewer(
+                // ピンチイン・ピンチアウト終了後の処理
+                transformationController: _transformationController,
+                onInteractionEnd: (details) {
+                  scale = _transformationController.value.getMaxScaleOnAxis();
+                  widget.onScaleChanged(scale);
+                },
+                child: NetworkImageView(
+                  url: widget.imageUrl,
+                  type: ImageType.image,
+                ),
+              )),
+        ));
   }
 }
