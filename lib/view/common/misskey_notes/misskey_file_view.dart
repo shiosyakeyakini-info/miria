@@ -106,6 +106,11 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
       setState(() {
         nsfwAccepted = true;
       });
+    } else if (nsfwSetting == NSFWInherit.removeNsfw) {
+      // そもそも消えているので、残っているのは閲覧注意でないもの
+      setState(() {
+        nsfwAccepted = true;
+      });
     }
   }
 

@@ -251,6 +251,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
       suffixSpan: [
         for (final badge in widget.user.badgeRoles ?? [])
           WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
             child: Tooltip(
               message: badge.name,
               child: Image.network(
