@@ -34,6 +34,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           elevation: 0,
           minimumSize: const Size(0, 0),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
       linkStyle: TextStyle(color: theme.link),
@@ -145,18 +146,24 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         iconTheme: IconThemeData(color: theme.foreground),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-                textStyle: MaterialStatePropertyAll(textTheme.bodyMedium
-                    ?.copyWith(inherit: false, color: Colors.white)),
-                backgroundColor: MaterialStatePropertyAll(theme.primary),
-                foregroundColor: MaterialStatePropertyAll(Colors.white),
-                elevation: const MaterialStatePropertyAll(0),
-                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100))))),
+          textStyle: MaterialStatePropertyAll(textTheme.bodyMedium
+              ?.copyWith(inherit: false, color: Colors.white)),
+          backgroundColor: MaterialStatePropertyAll(theme.primary),
+          foregroundColor: MaterialStatePropertyAll(Colors.white),
+          elevation: const MaterialStatePropertyAll(0),
+          shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+          tapTargetSize: MaterialTapTargetSize.padded,
+        )),
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll(theme.primary),
-                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100))))),
+          foregroundColor: MaterialStatePropertyAll(theme.primary),
+          shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+          visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+          tapTargetSize: MaterialTapTargetSize.padded,
+        )),
         dividerTheme: DividerThemeData(color: theme.divider),
         progressIndicatorTheme:
             ProgressIndicatorThemeData(color: theme.primary),

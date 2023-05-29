@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/misskey_notes/image_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 import 'network_image.dart';
@@ -225,73 +226,5 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
               )),
       ],
     );
-  }
-}
-
-class ImageDialog extends StatelessWidget {
-  final List<String> imageUrlList;
-  final int initialPage;
-
-  const ImageDialog({
-    super.key,
-    required this.imageUrlList,
-    required this.initialPage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-        backgroundColor: Colors.transparent,
-        titlePadding: EdgeInsets.zero,
-        contentPadding: EdgeInsets.zero,
-        actionsPadding: EdgeInsets.zero,
-        insetPadding: EdgeInsets.zero,
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: PageView(
-                  controller: PageController(initialPage: initialPage),
-                  children: [
-                    for (final url in imageUrlList)
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        height: MediaQuery.of(context).size.height * 0.95,
-                        child: InteractiveViewer(
-                          child: Image.network(url),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 10,
-                top: 10,
-                child: RawMaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    constraints:
-                        const BoxConstraints(minWidth: 0, minHeight: 0),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: EdgeInsets.zero,
-                    fillColor: Theme.of(context)
-                        .scaffoldBackgroundColor
-                        .withAlpha(200),
-                    shape: const CircleBorder(),
-                    child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Icon(Icons.close,
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.color
-                                ?.withAlpha(200)))),
-              ),
-            ],
-          ),
-        ));
   }
 }
