@@ -153,7 +153,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     if (index == -1) {
       subscribedList.add(item);
       if (isSubscribed == -1) {
-        socketController?.send(ChannelDataType.subNote, item.noteId);
+        socketController?.subNote(item.noteId);
       }
     } else {
       subscribedList[index] = item;
@@ -167,19 +167,19 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           element.renoteId == renoteId ||
           element.replyId == renoteId);
       if (isRenoteSubscribed == -1) {
-        socketController?.send(ChannelDataType.subNote, renoteId);
+        socketController?.subNote(renoteId);
       }
     }
 
     final replyId = item.replyId;
     if (replyId != null) {
-      socketController?.send(ChannelDataType.subNote, replyId);
+      socketController?.subNote(replyId);
       final isRenoteSubscribed = subscribedList.indexWhere((element) =>
           element.noteId == replyId ||
           element.renoteId == replyId ||
           element.replyId == replyId);
       if (isRenoteSubscribed == -1) {
-        socketController?.send(ChannelDataType.subNote, replyId);
+        socketController?.subNote(replyId);
       }
     }
   }
@@ -187,6 +187,6 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   void describe(String id) {
     if (!tabSetting.isSubscribe) return;
-    socketController?.send(ChannelDataType.unsubNote, id);
+    socketController?.unsubNote(id);
   }
 }
