@@ -48,6 +48,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
       child: Column(
         children: [
           TextField(
+            decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
             autofocus: true,
             keyboardType: TextInputType.emailAddress,
             onChanged: (value) {
