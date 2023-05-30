@@ -25,7 +25,7 @@ class ChannelFollowed extends ConsumerWidget {
           final response = await ref
               .read(misskeyProvider(account))
               .channels
-              .followed(ChannelsFollowedRequest(sinceId: lastItem.id));
+              .followed(ChannelsFollowedRequest(untilId: lastItem.id));
           return response.toList();
         },
         itemBuilder: (context, item) => CommunityChannelView(channel: item));

@@ -17,14 +17,15 @@ class ChannelsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
+      initialIndex: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("チャンネル"),
         ),
         body: AccountScope(
             account: account,
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 TabBar(
                   tabs: [
                     Tab(text: "検索"),
@@ -37,7 +38,9 @@ class ChannelsPage extends StatelessWidget {
                 ),
                 Expanded(
                     child: TabBarView(children: [
-                  ChannelSearch(),
+                  Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: ChannelSearch()),
                   Padding(
                     padding: EdgeInsets.only(left: 10, right: 10),
                     child: ChannelTrend(),
