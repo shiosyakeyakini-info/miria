@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 
@@ -103,49 +105,73 @@ class ScaleNotifierInteractiveViewerState
       TransformationController();
   var verticalDragX = 0.0;
   var verticalDragY = 0.0;
+  int? listeningId;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onVerticalDragUpdate: scale != 1.0
-            ? null
-            : (details) => setState(() {
-                  verticalDragX += details.delta.dx;
-                  verticalDragY += details.delta.dy;
-                }),
-        onVerticalDragEnd:
-            scale != 1.0 ? null : (details) => Navigator.of(context).pop(),
-        onDoubleTapDown: (details) {
-          if (scale != 1.0) {
-            _transformationController.value = Matrix4.identity();
-            scale = 1.0;
-            widget.onScaleChanged(scale);
-          } else {
-            final position = details.localPosition;
-            _transformationController.value = Matrix4.identity()
-              ..translate(-position.dx * 2, -position.dy * 2)
-              ..scale(3.0);
-            scale = 3.0;
-            widget.onScaleChanged(scale);
-          }
-        },
-        child: Transform.translate(
-          offset: Offset(verticalDragX, verticalDragY),
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.95,
-              height: MediaQuery.of(context).size.height * 0.95,
-              child: InteractiveViewer(
-                // ピンチイン・ピンチアウト終了後の処理
-                transformationController: _transformationController,
-                onInteractionEnd: (details) {
-                  scale = _transformationController.value.getMaxScaleOnAxis();
-                  widget.onScaleChanged(scale);
-                },
-                child: NetworkImageView(
-                  url: widget.imageUrl,
-                  type: ImageType.image,
-                ),
-              )),
-        ));
+    return Listener(
+      onPointerDown: (event) {
+        print("event.pointer: ${event.pointer} listeningId: $listeningId");
+        if (listeningId != null) {
+          setState(() {
+            verticalDragX = 0;
+            verticalDragY = 0;
+          });
+          listeningId = null;
+          return;
+        }
+        if (scale != 1.0) return;
+        listeningId = event.pointer;
+      },
+      onPointerMove: (event) {
+        if (listeningId != null) {
+          setState(() {
+            verticalDragX += event.delta.dx;
+            verticalDragY += event.delta.dy;
+          });
+        }
+      },
+      onPointerUp: (event) {
+        final angle = (atan2(verticalDragY, verticalDragX).abs() / pi * 180);
+        if (listeningId != null &&
+            verticalDragY.abs() > 10 &&
+            (angle > 60 && angle < 120)) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: GestureDetector(
+          onDoubleTapDown: (details) {
+            if (scale != 1.0) {
+              _transformationController.value = Matrix4.identity();
+              scale = 1.0;
+              widget.onScaleChanged(scale);
+            } else {
+              final position = details.localPosition;
+              _transformationController.value = Matrix4.identity()
+                ..translate(-position.dx * 2, -position.dy * 2)
+                ..scale(3.0);
+              scale = 3.0;
+              widget.onScaleChanged(scale);
+            }
+          },
+          child: Transform.translate(
+            offset: Offset(verticalDragX, verticalDragY),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.95,
+                height: MediaQuery.of(context).size.height * 0.95,
+                child: InteractiveViewer(
+                  // ピンチイン・ピンチアウト終了後の処理
+                  transformationController: _transformationController,
+                  onInteractionEnd: (details) {
+                    scale = _transformationController.value.getMaxScaleOnAxis();
+                    widget.onScaleChanged(scale);
+                  },
+                  child: NetworkImageView(
+                    url: widget.imageUrl,
+                    type: ImageType.image,
+                  ),
+                )),
+          )),
+    );
   }
 }
