@@ -29,7 +29,7 @@ class UserReactions extends ConsumerWidget {
             .registerAll(response.map((e) => e.note));
         return response.toList();
       },
-      nextFuture: (lastItem) async {
+      nextFuture: (lastItem, _) async {
         final response = await ref
             .read(misskeyProvider(account))
             .users

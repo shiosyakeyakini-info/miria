@@ -188,10 +188,22 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           contentPadding: const EdgeInsets.all(5),
           hintStyle: textTheme.bodySmall
               ?.copyWith(fontSize: textTheme.titleMedium?.fontSize),
+          prefixIconColor: theme.primary,
           isDense: true,
         ),
         checkboxTheme: CheckboxThemeData(
-            fillColor: MaterialStatePropertyAll(theme.primary)));
+            fillColor: MaterialStatePropertyAll(theme.primary)),
+        expansionTileTheme: ExpansionTileThemeData(iconColor: theme.primary),
+        toggleButtonsTheme: ToggleButtonsThemeData(
+          color: theme.primary,
+          selectedColor: Colors.white,
+          borderColor: theme.divider,
+          borderWidth: 1.0,
+          highlightColor:
+              theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+          fillColor:
+              theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+        ));
 
     return themeData;
   }

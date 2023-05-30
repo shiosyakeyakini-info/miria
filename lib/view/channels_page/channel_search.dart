@@ -56,7 +56,7 @@ class ChannelSearchList extends ConsumerWidget {
               .search(ChannelsSearchRequest(query: searchValue));
           return channels.toList();
         },
-        nextFuture: (lastItem) async {
+        nextFuture: (lastItem, _) async {
           final channels = await ref
               .read(misskeyProvider(AccountScope.of(context)))
               .channels

@@ -33,7 +33,7 @@ class UserFolloweePage extends ConsumerWidget {
                 .following(UsersFollowingRequest(userId: userId));
             return response.toList();
           },
-          nextFuture: (lastItem) async {
+          nextFuture: (lastItem, _) async {
             final response = await ref
                 .read(misskeyProvider(account))
                 .users

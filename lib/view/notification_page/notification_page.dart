@@ -52,7 +52,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
             }
             return result.toList();
           },
-          nextFuture: (lastElement) async {
+          nextFuture: (lastElement, _) async {
             final result = await misskey.i.notifications(
                 INotificationsRequest(limit: 50, untilId: lastElement.id));
             ref

@@ -7,7 +7,7 @@ import 'package:miria/view/common/error_notification.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
-  final Future<List<T>> Function(T) nextFuture;
+  final Future<List<T>> Function(T, int) nextFuture;
   final Widget Function(BuildContext, T) itemBuilder;
   final Object listKey;
   final bool shrinkWrap;
@@ -97,8 +97,8 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                             setState(() {
                               isLoading = true;
                               Future(() async {
-                                final result =
-                                    await widget.nextFuture(items.last);
+                                final result = await widget.nextFuture(
+                                    items.last, items.length);
                                 if (result.isEmpty) isFinalPage = true;
                                 items.addAll(result);
                                 setState(() {

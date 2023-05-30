@@ -42,7 +42,7 @@ class RenoteUserDialog extends ConsumerWidget {
                           .registerAll(response.where((e) => e.text != null));
                       return response.toList();
                     },
-                    nextFuture: (lastItem) async {
+                    nextFuture: (lastItem, _) async {
                       final response = await ref
                           .read(misskeyProvider(account))
                           .notes

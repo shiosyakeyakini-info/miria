@@ -21,7 +21,7 @@ class ChannelFollowed extends ConsumerWidget {
               .followed(const ChannelsFollowedRequest());
           return response.toList();
         },
-        nextFuture: (lastItem) async {
+        nextFuture: (lastItem, _) async {
           final response = await ref
               .read(misskeyProvider(account))
               .channels

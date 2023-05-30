@@ -21,7 +21,7 @@ class ClipDetailNoteList extends ConsumerWidget {
           .notes(ClipsNotesRequest(clipId: id));
       ref.read(notesProvider(account)).registerAll(response);
       return response.toList();
-    }, nextFuture: (latestItem) async {
+    }, nextFuture: (latestItem, _) async {
       final account = AccountScope.of(context);
       final response = await ref
           .read(misskeyProvider(account))

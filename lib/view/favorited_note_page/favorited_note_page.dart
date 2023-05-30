@@ -35,7 +35,7 @@ class FavoritedNotePage extends ConsumerWidget {
                       .registerAll(response.map((e) => e.note));
                   return response.map((e) => e.note).toList();
                 },
-                nextFuture: (lastItem) async {
+                nextFuture: (lastItem, _) async {
                   final response = await ref
                       .read(misskeyProvider(account))
                       .i
