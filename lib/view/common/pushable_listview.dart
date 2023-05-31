@@ -32,6 +32,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
   var isLoading = false;
   Object? error;
   var isFinalPage = false;
+  final scrollController = ScrollController();
 
   final items = <T>[];
 
@@ -45,6 +46,8 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         setState(() {
           isLoading = false;
         });
+        scrollController.animateTo(-scrollController.position.pixels,
+            duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
       } catch (e) {
         if (kDebugMode) print(e);
         setState(() {
@@ -79,6 +82,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
       shrinkWrap: widget.shrinkWrap,
       physics: widget.physics,
       itemCount: items.length + 1,
+      controller: scrollController,
       itemBuilder: (context, index) {
         if (items.length == index) {
           if (isFinalPage) {

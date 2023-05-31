@@ -176,6 +176,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           displayNote.text ?? "",
                           host: displayNote.user.host,
                           emoji: displayNote.emojis,
+                          onEmojiTap: (emojiData) async =>
+                              await reactionControl(ref, context, displayNote,
+                                  requestEmoji: emojiData),
                           suffixSpan: [
                             if (!isEmptyRenote &&
                                 displayNote.renoteId != null &&
@@ -344,9 +347,25 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   }
 
   Future<void> reactionControl(
-      WidgetRef ref, BuildContext context, Note displayNote) async {
+    WidgetRef ref,
+    BuildContext context,
+    Note displayNote, {
+    MisskeyEmojiData? requestEmoji,
+  }) async {
     final account = AccountScope.of(context);
-    if (displayNote.myReaction != null) {
+    if (displayNote.myReaction != null && requestEmoji != null) {
+      // すでにリアクション済み
+      return;
+    }
+    if (requestEmoji != null &&
+        !ref
+            .read(generalSettingsRepositoryProvider)
+            .settings
+            .enableDirectReaction) {
+      // カスタム絵文字押下でのリアクション無効
+      return;
+    }
+    if (displayNote.myReaction != null && requestEmoji == null) {
       await ref
           .read(misskeyProvider(account))
           .notes
@@ -357,11 +376,17 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     }
     final misskey = ref.read(misskeyProvider(account));
     final note = ref.read(notesProvider(account));
-    final selectedEmoji = await showDialog<MisskeyEmojiData?>(
-        context: context,
-        builder: (context) => ReactionPickerDialog(
-              account: account,
-            ));
+    final MisskeyEmojiData? selectedEmoji;
+    if (requestEmoji == null) {
+      selectedEmoji = await showDialog<MisskeyEmojiData?>(
+          context: context,
+          builder: (context) => ReactionPickerDialog(
+                account: account,
+              ));
+    } else {
+      selectedEmoji = requestEmoji;
+    }
+
     if (selectedEmoji == null) return;
     await misskey.notes.reactions.create(NotesReactionsCreateRequest(
         noteId: displayNote.id, reaction: ":${selectedEmoji.baseName}:"));

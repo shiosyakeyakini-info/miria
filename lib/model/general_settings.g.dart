@@ -16,6 +16,7 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
       nsfwInherit:
           $enumDecodeNullable(_$NSFWInheritEnumMap, json['nsfwInherit']) ??
               NSFWInherit.inherit,
+      enableDirectReaction: json['enableDirectReaction'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
@@ -24,6 +25,7 @@ Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
       'darkColorThemeId': instance.darkColorThemeId,
       'themeColorSystem': _$ThemeColorSystemEnumMap[instance.themeColorSystem]!,
       'nsfwInherit': _$NSFWInheritEnumMap[instance.nsfwInherit]!,
+      'enableDirectReaction': instance.enableDirectReaction,
     };
 
 const _$ThemeColorSystemEnumMap = {

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_highlighting/flutter_highlighting.dart';
 import 'package:flutter_highlighting/themes/github-dark.dart';
@@ -26,6 +27,7 @@ class MfmText extends ConsumerStatefulWidget {
   final bool isNyaize;
   final List<InlineSpan> suffixSpan;
   final List<InlineSpan> prefixSpan;
+  final Function(MisskeyEmojiData)? onEmojiTap;
 
   const MfmText(
     this.mfmText, {
@@ -36,6 +38,7 @@ class MfmText extends ConsumerStatefulWidget {
     this.isNyaize = false,
     this.suffixSpan = const [],
     this.prefixSpan = const [],
+    this.onEmojiTap,
   });
 
   @override
@@ -129,14 +132,29 @@ class MfmTextState extends ConsumerState<MfmText> {
   Widget build(BuildContext context) {
     return Mfm(
       widget.mfmText,
-      emojiBuilder: (context, emojiName) => CustomEmoji(
-        emojiData: MisskeyEmojiData.fromEmojiName(
+      emojiBuilder: (context, emojiName) {
+        final emojiData = MisskeyEmojiData.fromEmojiName(
             emojiName: ":$emojiName:",
             repository:
                 ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-            emojiInfo: widget.emoji),
-        fontSizeRatio: 2,
-      ),
+            emojiInfo: widget.emoji);
+        return GestureDetector(
+          onTap: () => widget.onEmojiTap?.call(emojiData),
+          child: EmojiInk(
+            child: CustomEmoji(
+              emojiData: emojiData,
+              fontSizeRatio: 2,
+            ),
+          ),
+        );
+      },
+      unicodeEmojiBuilder:
+          (BuildContext context, String emoji, TextStyle? style) => TextSpan(
+              text: emoji,
+              style: style,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () =>
+                    widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji))),
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
         language: lang,
@@ -191,6 +209,23 @@ class CodeBlock extends StatelessWidget {
           textStyle: const TextStyle(
               fontFamilyFallback: ["Monaco", "Menlo", "Consolas", "Noto Mono"]),
         ));
+  }
+}
+
+class EmojiInk extends ConsumerWidget {
+  final Widget child;
+
+  const EmojiInk({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isEnabled = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.enableDirectReaction));
+    if (isEnabled) {
+      return InkWell(child: child);
+    } else {
+      return child;
+    }
   }
 }
 

@@ -87,6 +87,15 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
   Widget? cachedWidget;
 
   @override
+  void didUpdateWidget(covariant MisskeyImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!const ListEquality()
+        .equals(oldWidget.targetFiles, widget.targetFiles)) {
+      cachedWidget = null;
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 

@@ -31,6 +31,7 @@ class GeneralSettings with _$GeneralSettings {
     @Default("") String darkColorThemeId,
     @Default(ThemeColorSystem.system) ThemeColorSystem themeColorSystem,
     @Default(NSFWInherit.inherit) NSFWInherit nsfwInherit,
+    @Default(false) bool enableDirectReaction,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

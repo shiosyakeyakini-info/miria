@@ -19,6 +19,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   String darkModeTheme = "";
   ThemeColorSystem colorSystem = ThemeColorSystem.system;
   NSFWInherit nsfwInherit = NSFWInherit.inherit;
+  bool enableDirectReaction = false;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       }
       colorSystem = settings.themeColorSystem;
       nsfwInherit = settings.nsfwInherit;
+      enableDirectReaction = settings.enableDirectReaction;
     });
   }
 
@@ -53,6 +55,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
           darkColorThemeId: darkModeTheme,
           themeColorSystem: colorSystem,
           nsfwInherit: nsfwInherit,
+          enableDirectReaction: enableDirectReaction,
         ));
   }
 
@@ -79,7 +82,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           Text("全般",
                               style: Theme.of(context).textTheme.titleLarge),
                           const Padding(padding: EdgeInsets.only(top: 10)),
-                          const Text("注釈のついたノートの表示"),
+                          const Text("閲覧注意のついたノートの表示"),
                           DropdownButton<NSFWInherit>(
                             items: [
                               for (final element in NSFWInherit.values)
@@ -162,6 +165,31 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                   ),
                 ),
               ),
+              Card(
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("リアクション",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      CheckboxListTile(
+                          value: enableDirectReaction,
+                          title: Text("ノート内の絵文字タップでリアクションする"),
+                          subtitle: Text(
+                              "ノート内の絵文字をタップしてリアクションします。MFMや外部サーバーの絵文字の場合うまく機能しないことがあります。"),
+                          onChanged: (value) {
+                            setState(() {
+                              enableDirectReaction = !enableDirectReaction;
+                              save();
+                            });
+                          })
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
