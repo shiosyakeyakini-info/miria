@@ -10,29 +10,42 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 class TabIconView extends ConsumerWidget {
   final TabIcon? icon;
   final Color? color;
+  final double? size;
 
   const TabIconView({
     super.key,
     required this.icon,
     this.color,
+    this.size,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final codePoint = icon?.codePoint;
+    final iconSize = size ?? IconTheme.of(context).size;
     if (codePoint != null) {
       return Icon(
         IconData(codePoint, fontFamily: "MaterialIcons"),
         color: color,
+        size: iconSize,
       );
     }
     final customEmoji = icon?.customEmojiName;
     if (customEmoji != null) {
-      return CustomEmoji(
-          emojiData: MisskeyEmojiData.fromEmojiName(
+      return SizedBox(
+        width: iconSize,
+        height: iconSize,
+        child: Center(
+          child: CustomEmoji(
+            emojiData: MisskeyEmojiData.fromEmojiName(
               emojiName: ":$customEmoji:",
               repository:
-                  ref.read(emojiRepositoryProvider(AccountScope.of(context)))));
+                  ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            ),
+            size: iconSize,
+          ),
+        ),
+      );
     }
     return const SizedBox.shrink();
   }
