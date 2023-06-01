@@ -33,57 +33,64 @@ class UserNotesState extends ConsumerState<UserNotes> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Center(
-                child: ToggleButtons(
-                  isSelected: [
-                    withReply,
-                    isFileOnly,
-                    renote,
-                  ],
-                  onPressed: (value) {
-                    setState(() {
-                      switch (value) {
-                        case 0:
-                          withReply = !withReply;
-                        case 1:
-                          isFileOnly = !isFileOnly;
-                        case 2:
-                          renote = !renote;
-                      }
-                    });
-                  },
-                  children: const [
-                    Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("返信つき")),
-                    Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("ファイルつき")),
-                    Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("リノートも"))
-                  ],
+        Padding(
+          padding: const EdgeInsets.only(top: 3, bottom: 3),
+          child: Row(
+            children: [
+              Expanded(
+                child: Center(
+                  child: ToggleButtons(
+                    isSelected: [
+                      withReply,
+                      isFileOnly,
+                      renote,
+                    ],
+                    onPressed: (value) {
+                      setState(() {
+                        switch (value) {
+                          case 0:
+                            withReply = !withReply;
+                          case 1:
+                            isFileOnly = !isFileOnly;
+                          case 2:
+                            renote = !renote;
+                        }
+                      });
+                    },
+                    children: const [
+                      Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("返信つき")),
+                      Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("ファイルつき")),
+                      Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("リノートも"))
+                    ],
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-                onPressed: () async {
-                  untilDate = await showDatePicker(
-                      context: context,
-                      initialDate: untilDate ?? DateTime.now(),
-                      helpText: "この日までを表示",
-                      firstDate: ref
-                              .read(userInfoProvider(widget.userId))
-                              ?.createdAt ??
-                          DateTime(2012, 1, 1),
-                      lastDate: DateTime.now());
-                  setState(() {});
-                },
-                icon: Icon(Icons.date_range))
-          ],
+              IconButton(
+                  onPressed: () async {
+                    final result = await showDatePicker(
+                        context: context,
+                        initialDate: untilDate ?? DateTime.now(),
+                        helpText: "この日までを表示",
+                        firstDate: ref
+                                .read(userInfoProvider(widget.userId))
+                                ?.createdAt ??
+                            DateTime(2012, 1, 1),
+                        lastDate: DateTime.now());
+                    if (result != null) {
+                      untilDate = DateTime(result.year, result.month,
+                          result.day, 23, 59, 59, 999);
+                    }
+                    setState(() {});
+                  },
+                  icon: Icon(Icons.date_range))
+            ],
+          ),
         ),
         Expanded(
           child: PushableListView<Note>(
