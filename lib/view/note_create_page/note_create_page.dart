@@ -238,101 +238,114 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         title: const Text("ノート"),
         actions: [
           IconButton(
-              onPressed: () => note.expectFailure(context),
+              onPressed: note.expectFailure(context),
               icon: const Icon(Icons.send))
         ],
       ),
       resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const NoteCreateSettingTop(),
-              const ChannelName(),
-              const ReplyArea(),
-              if (isCw)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Theme.of(context).dividerColor))),
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: TextField(
-                      controller: cwController,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const NoteCreateSettingTop(),
+                    const ChannelName(),
+                    const ReplyArea(),
+                    if (isCw)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Theme.of(context).dividerColor))),
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: TextField(
+                            controller: cwController,
+                            keyboardType: TextInputType.multiline,
+                            decoration: AppTheme.of(context)
+                                .noteTextStyle
+                                .copyWith(
+                                    hintText: "注釈",
+                                    contentPadding: const EdgeInsets.all(5)),
+                          ),
+                        ),
+                      ),
+                    TextField(
+                      controller: ref.read(noteInputTextProvider),
+                      focusNode: focusNode,
+                      maxLines: null,
+                      minLines: 5,
                       keyboardType: TextInputType.multiline,
-                      decoration: AppTheme.of(context).noteTextStyle.copyWith(
-                          hintText: "注釈",
-                          contentPadding: const EdgeInsets.all(5)),
+                      decoration: noteDecoration,
+                      autofocus: true,
                     ),
-                  ),
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: driveConnect, icon: Icon(Icons.image)),
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.how_to_vote)),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isCw = !isCw;
+                              });
+                            },
+                            icon: Icon(isCw
+                                ? Icons.visibility_off
+                                : Icons.remove_red_eye)),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.mail_outline)),
+                        IconButton(
+                            onPressed: () async {
+                              final account = ref.read(selectedAccountProvider);
+                              if (account == null) return;
+                              final selectedEmoji =
+                                  await showDialog<MisskeyEmojiData?>(
+                                      context: context,
+                                      builder: (context) =>
+                                          ReactionPickerDialog(
+                                            account: account,
+                                          ));
+                              if (selectedEmoji == null) return;
+                              switch (selectedEmoji) {
+                                case CustomEmojiData():
+                                  ref
+                                      .read(noteInputTextProvider)
+                                      .insert(":${selectedEmoji.baseName}:");
+                                  break;
+                                case UnicodeEmojiData():
+                                  ref
+                                      .read(noteInputTextProvider)
+                                      .insert(selectedEmoji.char);
+                                  break;
+                                default:
+                                  break;
+                              }
+                              ref.read(noteFocusProvider).requestFocus();
+                            },
+                            icon: const Icon(Icons.tag_faces))
+                      ],
+                    ),
+                    const MfmPreview(),
+                    const FilePreview(),
+                    const RenoteArea(),
+                  ],
                 ),
-              TextField(
-                controller: ref.read(noteInputTextProvider),
-                focusNode: focusNode,
-                maxLines: null,
-                minLines: 5,
-                keyboardType: TextInputType.multiline,
-                decoration: noteDecoration,
-                autofocus: true,
               ),
-              const RenoteArea(),
-              Row(
-                children: [
-                  IconButton(onPressed: driveConnect, icon: Icon(Icons.image)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.how_to_vote)),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isCw = !isCw;
-                        });
-                      },
-                      icon: Icon(
-                          isCw ? Icons.visibility_off : Icons.remove_red_eye)),
-                  IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.mail_outline)),
-                  IconButton(
-                      onPressed: () async {
-                        final account = ref.read(selectedAccountProvider);
-                        if (account == null) return;
-                        final selectedEmoji =
-                            await showDialog<MisskeyEmojiData?>(
-                                context: context,
-                                builder: (context) => ReactionPickerDialog(
-                                      account: account,
-                                    ));
-                        if (selectedEmoji == null) return;
-                        switch (selectedEmoji) {
-                          case CustomEmojiData():
-                            ref
-                                .read(noteInputTextProvider)
-                                .insert(":${selectedEmoji.baseName}:");
-                            break;
-                          case UnicodeEmojiData():
-                            ref
-                                .read(noteInputTextProvider)
-                                .insert(selectedEmoji.char);
-                            break;
-                          default:
-                            break;
-                        }
-                        ref.read(noteFocusProvider).requestFocus();
-                      },
-                      icon: const Icon(Icons.tag_faces))
-                ],
-              ),
-              const MfmPreview(),
-              const FilePreview(),
-            ],
+            ),
           ),
-        ),
+          const NoteEmoji(),
+        ],
       ),
-      bottomSheet: const NoteEmoji(),
     );
   }
 }

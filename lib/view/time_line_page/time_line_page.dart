@@ -72,23 +72,29 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   }
 
   Future<void> note() async {
-    final accountSettings = ref
-        .read(accountSettingsRepositoryProvider)
-        .fromAccount(widget.currentTabSetting.account);
+    final text = ref.read(timelineNoteProvider).value.text;
+    try {
+      final accountSettings = ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(widget.currentTabSetting.account);
+      ref.read(timelineNoteProvider).clear();
+      FocusManager.instance.primaryFocus?.unfocus();
 
-    await ref
-        .read(misskeyProvider(widget.currentTabSetting.account))
-        .notes
-        .create(
-          NotesCreateRequest(
-            text: ref.read(timelineNoteProvider).value.text,
-            channelId: widget.currentTabSetting.channelId,
-            visibility: accountSettings.defaultNoteVisibility,
-            localOnly: accountSettings.defaultIsLocalOnly,
-          ),
-        );
-    ref.read(timelineNoteProvider).clear();
-    FocusManager.instance.primaryFocus?.unfocus();
+      await ref
+          .read(misskeyProvider(widget.currentTabSetting.account))
+          .notes
+          .create(
+            NotesCreateRequest(
+              text: text,
+              channelId: widget.currentTabSetting.channelId,
+              visibility: accountSettings.defaultNoteVisibility,
+              localOnly: accountSettings.defaultIsLocalOnly,
+            ),
+          );
+    } catch (e) {
+      ref.read(timelineNoteProvider).text = text;
+      rethrow;
+    }
   }
 
   @override
