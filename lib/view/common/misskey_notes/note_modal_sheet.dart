@@ -6,9 +6,10 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
+import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
 import 'package:miria/view/common/not_implements_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/simple_confirm_dialog.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -115,9 +116,13 @@ class NoteModalSheet extends ConsumerWidget {
             ListTile(
               title: const Text("クリップ"),
               onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => NotImplementationDialog());
+                Navigator.of(context).pop();
+
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context2) =>
+                      ClipModalSheet(account: account, noteId: note.id),
+                );
               },
             ), //TODO: 未実装
             if (note.user.host == null &&

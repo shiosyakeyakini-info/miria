@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/simple_message_dialog.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class AbuseDialog extends ConsumerStatefulWidget {
@@ -73,7 +74,11 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
             ],
           ),
         ),
-        actions: [ElevatedButton(onPressed: abuse, child: const Text("通報する"))],
+        actions: [
+          ElevatedButton(
+              onPressed: abuse.expectFailure(context),
+              child: const Text("通報する"))
+        ],
       ),
     );
   }

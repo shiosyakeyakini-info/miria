@@ -11,6 +11,24 @@ class SimpleConfirmDialog extends StatelessWidget {
   final bool isMfm;
   final Account? account;
 
+  static Future<bool?> show({
+    required BuildContext context,
+    required String message,
+    required String primary,
+    required String secondary,
+    bool isMfm = false,
+    Account? account,
+  }) async =>
+      await showDialog(
+          context: context,
+          builder: (context) => SimpleConfirmDialog(
+                message: message,
+                primary: primary,
+                secondary: secondary,
+                isMfm: isMfm,
+                account: account,
+              ));
+
   const SimpleConfirmDialog({
     super.key,
     required this.message,

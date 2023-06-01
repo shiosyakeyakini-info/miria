@@ -6,7 +6,7 @@ import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/simple_message_dialog.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/common/tab_icon_view.dart';
 import 'package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';

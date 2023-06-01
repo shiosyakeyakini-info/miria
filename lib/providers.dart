@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/repository/account_repository.dart';
@@ -124,3 +125,7 @@ final accountSettingsRepositoryProvider =
 
 final generalSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => GeneralSettingsRepository());
+
+final errorEventProvider =
+    StateProvider<(Object? error, BuildContext? context)>(
+        (ref) => (null, null));

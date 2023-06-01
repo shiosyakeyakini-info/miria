@@ -8,6 +8,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/channel_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/server_detail_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/common_drawer.dart';
@@ -70,12 +71,15 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     }
   }
 
-  void note() {
+  Future<void> note() async {
     final accountSettings = ref
         .read(accountSettingsRepositoryProvider)
         .fromAccount(widget.currentTabSetting.account);
 
-    ref.read(misskeyProvider(widget.currentTabSetting.account)).notes.create(
+    await ref
+        .read(misskeyProvider(widget.currentTabSetting.account))
+        .notes
+        .create(
           NotesCreateRequest(
             text: ref.read(timelineNoteProvider).value.text,
             channelId: widget.currentTabSetting.channelId,
@@ -260,7 +264,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       const Expanded(
                         child: TimelineNoteField(),
                       ),
-                      IconButton(onPressed: note, icon: const Icon(Icons.edit)),
+                      IconButton(
+                          onPressed: note.expectFailure(context),
+                          icon: const Icon(Icons.edit)),
                       if (defaultTargetPlatform == TargetPlatform.android ||
                           defaultTargetPlatform == TargetPlatform.iOS)
                         IconButton(

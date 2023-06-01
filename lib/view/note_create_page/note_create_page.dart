@@ -8,6 +8,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -236,7 +237,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       appBar: AppBar(
         title: const Text("ノート"),
         actions: [
-          IconButton(onPressed: () => note(), icon: const Icon(Icons.send))
+          IconButton(
+              onPressed: () => note.expectFailure(context),
+              icon: const Icon(Icons.send))
         ],
       ),
       resizeToAvoidBottomInset: true,

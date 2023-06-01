@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/simple_message_dialog.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 

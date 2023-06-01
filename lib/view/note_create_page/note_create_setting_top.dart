@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
-import 'package:miria/view/common/simple_message_dialog.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/note_create_page/note_visibility_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

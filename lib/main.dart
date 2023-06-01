@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/error_dialog_listener.dart';
 import 'package:miria/view/common/main_stream.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme_scope.dart';
@@ -40,7 +41,9 @@ class MyApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, widget) {
-        return AppThemeScope(child: MainStream(child: widget ?? Container()));
+        return AppThemeScope(
+            child: MainStream(
+                child: ErrorDialogListener(child: widget ?? Container())));
       },
       routerConfig: _appRouter.config(),
     );
