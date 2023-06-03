@@ -40,25 +40,30 @@ class MainStreamRepository extends ChangeNotifier {
   }
 
   void connect() {
-    socketController = misskey.mainStream(onReadAllNotifications: () {
-      hasUnreadNotification = false;
-      Future(() async {
-        final notifications = await misskey.i.notifications(
-            const INotificationsRequest(markAsRead: false, limit: 1));
+    socketController = misskey.mainStream(
+      onReadAllNotifications: () {
+        hasUnreadNotification = false;
+        Future(() async {
+          final notifications = await misskey.i.notifications(
+              const INotificationsRequest(markAsRead: false, limit: 1));
 
-        // 最後に読んだものとして記憶しておく
-        latestMarkAs(notifications.firstOrNull?.id ?? "");
-      });
+          // 最後に読んだものとして記憶しておく
+          latestMarkAs(notifications.firstOrNull?.id ?? "");
+        });
 
-      notifyListeners();
-    }, onUnreadNotification: () {
-      hasUnreadNotification = true;
-      notifyListeners();
-    }, onEmojiAdded: () {
-      emojiRepository.loadFromSource();
-    }, onEmojiUpdated: () {
-      emojiRepository.loadFromSource();
-    });
+        notifyListeners();
+      },
+      onUnreadNotification: (_) {
+        hasUnreadNotification = true;
+        notifyListeners();
+      },
+      onEmojiAdded: (_) {
+        emojiRepository.loadFromSource();
+      },
+      onEmojiUpdated: (_) {
+        emojiRepository.loadFromSource();
+      },
+    );
     socketController?.startStreaming();
     Future(() async {
       await confirmNotification();
