@@ -210,7 +210,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
               theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
           fillColor:
               theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
-        ));
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: theme.primary, unselectedItemColor: Colors.white));
 
     return themeData;
   }

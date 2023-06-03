@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/modal_indicator.dart';
@@ -512,25 +514,41 @@ class FilePreview extends ConsumerWidget {
   }
 }
 
-class CreateFileView extends StatelessWidget {
+class CreateFileView extends ConsumerWidget {
   final MisskeyPostFile file;
 
   const CreateFileView({super.key, required this.file});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final data = file;
 
     switch (data) {
       case ImageFile():
-        return SizedBox(
-          height: 200,
-          child: Image.memory(data.data),
+        return GestureDetector(
+          onTap: () {
+            final selectedAccount = ref.read(selectedAccountProvider);
+            if (selectedAccount == null) return;
+            context.pushRoute(
+                PhotoEditRoute(account: selectedAccount, file: file));
+          },
+          child: SizedBox(
+            height: 200,
+            child: Image.memory(data.data),
+          ),
         );
       case ImageFileAlreadyPostedFile():
-        return SizedBox(
-          height: 200,
-          child: Image.memory(data.data),
+        return GestureDetector(
+          onTap: () {
+            final selectedAccount = ref.read(selectedAccountProvider);
+            if (selectedAccount == null) return;
+            context.pushRoute(
+                PhotoEditRoute(account: selectedAccount, file: file));
+          },
+          child: SizedBox(
+            height: 200,
+            child: Image.memory(data.data),
+          ),
         );
       case UnknownFile():
         return Text(data.fileName);

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/image_file.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/channels_page/channels_page.dart';
@@ -11,6 +12,7 @@ import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/note_search_page/note_search_page.dart';
 import 'package:miria/view/notification_page/notification_page.dart';
+import 'package:miria/view/photo_edit_page/photo_edit_page.dart';
 import 'package:miria/view/settings_page/account_settings_page/account_list.dart';
 import 'package:miria/view/settings_page/app_info_page/app_info_page.dart';
 import 'package:miria/view/settings_page/general_settings_page/general_settings_page.dart';
@@ -52,6 +54,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: ClipListRoute.page),
     AutoRoute(page: ClipDetailRoute.page),
     AutoRoute(page: NoteCreateRoute.page),
+    AutoRoute(page: PhotoEditRoute.page),
     AutoRoute(page: UsersListRoute.page),
     AutoRoute(page: UsersListTimelineRoute.page),
     AutoRoute(page: UserFollowerRoute.page),

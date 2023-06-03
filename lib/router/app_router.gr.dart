@@ -134,6 +134,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    PhotoEditRoute.name: (routeData) {
+      final args = routeData.argsAs<PhotoEditRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: PhotoEditPage(
+          account: args.account,
+          file: args.file,
+          key: args.key,
+        ),
+      );
+    },
     SplashRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -243,6 +254,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SharingAccountSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<SharingAccountSelectRouteArgs>(
+          orElse: () => const SharingAccountSelectRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SharingAccountSelectPage(
+          key: args.key,
+          sharingText: args.sharingText,
+          filePath: args.filePath,
+        ),
+      );
+    },
     GeneralSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -301,18 +324,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: FavoritedNotePage(
           key: args.key,
           account: args.account,
-        ),
-      );
-    },
-    SharingAccountSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<SharingAccountSelectRouteArgs>(
-          orElse: () => const SharingAccountSelectRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SharingAccountSelectPage(
-          key: args.key,
-          sharingText: args.sharingText,
-          filePath: args.filePath,
         ),
       );
     },
@@ -773,6 +784,49 @@ class UserFollowerRouteArgs {
 }
 
 /// generated route for
+/// [PhotoEditPage]
+class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
+  PhotoEditRoute({
+    required Account account,
+    required MisskeyPostFile file,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          PhotoEditRoute.name,
+          args: PhotoEditRouteArgs(
+            account: account,
+            file: file,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'PhotoEditRoute';
+
+  static const PageInfo<PhotoEditRouteArgs> page =
+      PageInfo<PhotoEditRouteArgs>(name);
+}
+
+class PhotoEditRouteArgs {
+  const PhotoEditRouteArgs({
+    required this.account,
+    required this.file,
+    this.key,
+  });
+
+  final Account account;
+
+  final MisskeyPostFile file;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PhotoEditRouteArgs{account: $account, file: $file, key: $key}';
+  }
+}
+
+/// generated route for
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
@@ -1184,6 +1238,50 @@ class NoteSearchRouteArgs {
 }
 
 /// generated route for
+/// [SharingAccountSelectPage]
+class SharingAccountSelectRoute
+    extends PageRouteInfo<SharingAccountSelectRouteArgs> {
+  SharingAccountSelectRoute({
+    Key? key,
+    String? sharingText,
+    List<String>? filePath,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SharingAccountSelectRoute.name,
+          args: SharingAccountSelectRouteArgs(
+            key: key,
+            sharingText: sharingText,
+            filePath: filePath,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SharingAccountSelectRoute';
+
+  static const PageInfo<SharingAccountSelectRouteArgs> page =
+      PageInfo<SharingAccountSelectRouteArgs>(name);
+}
+
+class SharingAccountSelectRouteArgs {
+  const SharingAccountSelectRouteArgs({
+    this.key,
+    this.sharingText,
+    this.filePath,
+  });
+
+  final Key? key;
+
+  final String? sharingText;
+
+  final List<String>? filePath;
+
+  @override
+  String toString() {
+    return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
+  }
+}
+
+/// generated route for
 /// [GeneralSettingsPage]
 class GeneralSettingsRoute extends PageRouteInfo<void> {
   const GeneralSettingsRoute({List<PageRouteInfo>? children})
@@ -1364,49 +1462,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [SharingAccountSelectPage]
-class SharingAccountSelectRoute
-    extends PageRouteInfo<SharingAccountSelectRouteArgs> {
-  SharingAccountSelectRoute({
-    Key? key,
-    String? sharingText,
-    List<String>? filePath,
-    List<PageRouteInfo>? children,
-  }) : super(
-          SharingAccountSelectRoute.name,
-          args: SharingAccountSelectRouteArgs(
-            key: key,
-            sharingText: sharingText,
-            filePath: filePath,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'SharingAccountSelectRoute';
-
-  static const PageInfo<SharingAccountSelectRouteArgs> page =
-      PageInfo<SharingAccountSelectRouteArgs>(name);
-}
-
-class SharingAccountSelectRouteArgs {
-  const SharingAccountSelectRouteArgs({
-    this.key,
-    this.sharingText,
-    this.filePath,
-  });
-
-  final Key? key;
-
-  final String? sharingText;
-
-  final List<String>? filePath;
-
-  @override
-  String toString() {
-    return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
   }
 }
