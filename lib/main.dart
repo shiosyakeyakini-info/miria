@@ -28,32 +28,32 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      title: 'Miria',
-      debugShowCheckedModeBanner: false,
-      locale: const Locale("ja", "JP"),
-      supportedLocales: const [
-        Locale("ja", "JP"),
-      ],
-      scrollBehavior: AppScrollBehavior(),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      builder: (context, widget) {
-        return AppThemeScope(
-          child: MainStream(
+    return MainStream(
+      child: MaterialApp.router(
+        title: 'Miria',
+        debugShowCheckedModeBanner: false,
+        locale: const Locale("ja", "JP"),
+        supportedLocales: const [
+          Locale("ja", "JP"),
+        ],
+        scrollBehavior: AppScrollBehavior(),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        builder: (context, widget) {
+          return AppThemeScope(
             child: SharingIntentListener(
               router: _appRouter,
               child: ErrorDialogListener(
                 child: widget ?? Container(),
               ),
             ),
-          ),
-        );
-      },
-      routerConfig: _appRouter.config(),
+          );
+        },
+        routerConfig: _appRouter.config(),
+      ),
     );
   }
 }

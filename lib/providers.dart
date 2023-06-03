@@ -100,8 +100,10 @@ final antennaTimelineProvider =
 final mainStreamRepositoryProvider =
     ChangeNotifierProvider.family<MainStreamRepository, Account>(
         (ref, account) => MainStreamRepository(
-            ref.read(misskeyProvider(account)),
-            ref.read(emojiRepositoryProvider(account))));
+              ref.read(misskeyProvider(account)),
+              ref.read(emojiRepositoryProvider(account)),
+              account,
+            ));
 
 final favoriteProvider = ChangeNotifierProvider.autoDispose
     .family<FavoriteRepository, Account>((ref, account) => FavoriteRepository(
