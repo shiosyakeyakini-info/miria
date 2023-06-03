@@ -31,6 +31,7 @@ final localTimeLineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
             ));
 final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -40,6 +41,7 @@ final homeTimeLineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
             ));
 final globalTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -59,6 +61,7 @@ final hybridTimeLineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
             ));
 
 final channelTimelineProvider =
@@ -69,6 +72,7 @@ final channelTimelineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
             ));
 
 final userListTimelineProvider =
@@ -79,6 +83,7 @@ final userListTimelineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
             ));
 
 final antennaTimelineProvider =
@@ -89,6 +94,7 @@ final antennaTimelineProvider =
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
             ));
 
 final mainStreamRepositoryProvider =
@@ -113,7 +119,7 @@ final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
         accountSettingsRepository:
             ref.read(accountSettingsRepositoryProvider)));
 
-final accountRepository = Provider((ref) => AccountRepository(
+final accountRepository = ChangeNotifierProvider((ref) => AccountRepository(
     ref.read(tabSettingsRepositoryProvider),
     ref.read(accountSettingsRepositoryProvider),
     ref.read));

@@ -12,6 +12,7 @@ class AntennaTimelineRepository extends SocketTimelineRepository {
     super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
+    super.mainStreamRepository,
   );
 
   @override

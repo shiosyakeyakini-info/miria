@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
+  final MainStreamRepository mainStreamRepository;
 
   SocketTimelineRepository(
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
+    this.mainStreamRepository,
   );
 
   Future<Iterable<Note>> requestNotes({String? untilId});
@@ -58,6 +61,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   void startTimeLine() {
+    mainStreamRepository.reconnect();
     if (olderNotes.isEmpty) {
       requestNotes().then((resultNotes) {
         olderNotes.addAll(resultNotes);
@@ -118,6 +122,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   void reconnect() {
     super.reconnect();
     socketController?.reconnect();
+    mainStreamRepository.reconnect();
     reloadLatestNotes();
   }
 

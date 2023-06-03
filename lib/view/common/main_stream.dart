@@ -15,15 +15,25 @@ class MainStreamState extends ConsumerState<MainStream> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    ref.watch(accountRepository.select((value) => value.account));
-    for (final account in ref.read(accountRepository).account) {
-      ref.read(mainStreamRepositoryProvider(account)).connect();
-    }
   }
+
+  var isConnected = false;
 
   @override
   Widget build(BuildContext context) {
+    final accounts =
+        ref.watch(accountRepository.select((value) => value.account));
+
+    if (isConnected) {
+      for (final account in accounts) {
+        ref.read(mainStreamRepositoryProvider(account)).reconnect();
+      }
+    } else {
+      for (final account in accounts) {
+        ref.read(mainStreamRepositoryProvider(account)).connect();
+      }
+    }
+
     return widget.child;
   }
 }

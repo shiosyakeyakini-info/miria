@@ -71,7 +71,8 @@ class MainStreamRepository extends ChangeNotifier {
   }
 
   void reconnect() {
-    socketController?.reconnect();
+    socketController?.disconnect();
+    connect();
     Future(() async {
       await confirmNotification();
     });
