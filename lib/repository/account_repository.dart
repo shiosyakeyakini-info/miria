@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,8 @@ import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:miria/view/common/constants.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -103,6 +106,42 @@ class AccountRepository {
   String sessionId = "";
 
   Future<void> openMiAuth(String server) async {
+    //先にnodeInfoを取得する
+    final Response nodeInfo;
+
+    final Uri uri;
+    try {
+      uri = Uri(
+          scheme: "https",
+          host: server,
+          pathSegments: [".well-known", "nodeinfo"]);
+    } catch (e) {
+      throw SpecifiedException(
+          "$server はサーバーとして認識できませんでした。\nサーバーには、「misskey.io」などを入力してください。");
+    }
+
+    try {
+      nodeInfo = await Dio().getUri(uri);
+    } catch (e) {
+      throw SpecifiedException("$server はMisskeyサーバーとして認識できませんでした。");
+    }
+    final nodeInfoHref = nodeInfo.data["links"][0]["href"];
+    final nodeInfoHrefResponse = await Dio().get(nodeInfoHref);
+    final nodeInfoResult = nodeInfoHrefResponse.data;
+
+    final software = nodeInfoResult["software"]["name"];
+    // these software already known as unavailable this app
+    if (software == "calckey" ||
+        software == "dolphin" ||
+        software == "mastodon" ||
+        software == "fedibird") {
+      throw SpecifiedException("Miriaは$softwareに未対応です。");
+    }
+    final version = nodeInfoResult["software"]["version"];
+    if (availableServerVersion.allMatches(version).isEmpty) {
+      throw SpecifiedException("Miriaが認識できないバージョンです。\n$software $version");
+    }
+
     sessionId = const Uuid().v4();
     await launchUrl(
       MisskeyServer().buildMiAuthURL(server, sessionId,

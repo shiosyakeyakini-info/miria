@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 //TODO: 微妙な方法
 
+class SpecifiedException implements Exception {
+  final String message;
+  SpecifiedException(this.message);
+}
+
 extension FutureExtension<T> on Future<T> {
   Future<T> expectFailure(BuildContext context) {
     return catchError((e) {

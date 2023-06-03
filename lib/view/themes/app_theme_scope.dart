@@ -195,6 +195,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           hintStyle: textTheme.bodySmall
               ?.copyWith(fontSize: textTheme.titleMedium?.fontSize),
           prefixIconColor: theme.primary,
+          suffixIconColor: theme.primary,
           isDense: true,
         ),
         checkboxTheme: CheckboxThemeData(
