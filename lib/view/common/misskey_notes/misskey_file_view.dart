@@ -5,6 +5,7 @@ import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/image_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'network_image.dart';
 
@@ -21,7 +22,7 @@ class MisskeyFileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final targetFiles = files.where((e) => e.thumbnailUrl != null);
+    final targetFiles = files;
 
     if (targetFiles.isEmpty) {
       return Container();
@@ -36,6 +37,8 @@ class MisskeyFileView extends ConsumerWidget {
               thumbnailUrl:
                   (targetFile.thumbnailUrl ?? targetFile.url).toString(),
               targetFiles: [targetFile.url.toString()],
+              fileType: targetFile.type,
+              name: targetFile.name,
               position: 0,
             )),
       );
@@ -52,10 +55,10 @@ class MisskeyFileView extends ConsumerWidget {
                 width: double.infinity,
                 child: MisskeyImage(
                   isSensitive: targetFile.element.isSensitive,
-                  thumbnailUrl: (targetFile.element.thumbnailUrl ??
-                          targetFile.element.url)
-                      .toString(),
+                  thumbnailUrl: targetFile.element.thumbnailUrl?.toString(),
                   targetFiles: targetFiles.map((e) => e.url).toList(),
+                  fileType: targetFile.element.type,
+                  name: targetFile.element.name,
                   position: targetFile.index,
                 ))
         ],
@@ -66,9 +69,11 @@ class MisskeyFileView extends ConsumerWidget {
 
 class MisskeyImage extends ConsumerStatefulWidget {
   final bool isSensitive;
-  final String thumbnailUrl;
+  final String? thumbnailUrl;
   final List<String> targetFiles;
   final int position;
+  final String fileType;
+  final String name;
 
   const MisskeyImage({
     super.key,
@@ -76,6 +81,8 @@ class MisskeyImage extends ConsumerStatefulWidget {
     required this.thumbnailUrl,
     required this.targetFiles,
     required this.position,
+    required this.fileType,
+    required this.name,
   });
 
   @override
@@ -137,12 +144,17 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
               });
               return;
             } else {
-              showDialog(
-                  context: context,
-                  builder: (context) => ImageDialog(
-                        imageUrlList: widget.targetFiles,
-                        initialPage: widget.position,
-                      ));
+              if (widget.fileType.startsWith("image")) {
+                showDialog(
+                    context: context,
+                    builder: (context) => ImageDialog(
+                          imageUrlList: widget.targetFiles,
+                          initialPage: widget.position,
+                        ));
+              } else {
+                launchUrl(Uri.parse(widget.targetFiles[widget.position]),
+                    mode: LaunchMode.externalApplication);
+              }
             }
           }, child: Builder(
             builder: (context) {
@@ -192,19 +204,55 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                 future: Future.delayed(Duration(milliseconds: 100)),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    cachedWidget = SizedBox(
-                      height: 200,
-                      child: NetworkImageView(
-                        url: widget.thumbnailUrl,
-                        type: ImageType.imageThumbnail,
-                        loadingBuilder: (context, widget, chunkEvent) =>
-                            SizedBox(
-                          width: double.infinity,
-                          height: 200,
-                          child: widget,
+                    if (widget.fileType.startsWith("image")) {
+                      cachedWidget = SizedBox(
+                        height: 200,
+                        child: NetworkImageView(
+                          url: widget.thumbnailUrl ??
+                              widget.targetFiles[widget.position],
+                          type: ImageType.imageThumbnail,
+                          loadingBuilder: (context, widget, chunkEvent) =>
+                              SizedBox(
+                            width: double.infinity,
+                            height: 200,
+                            child: widget,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else if (widget.thumbnailUrl != null) {
+                      cachedWidget = Stack(
+                        children: [
+                          Positioned.fill(
+                            child: SizedBox(
+                              height: 200,
+                              child: NetworkImageView(
+                                url: widget.thumbnailUrl!,
+                                type: ImageType.imageThumbnail,
+                                loadingBuilder: (context, widget, chunkEvent) =>
+                                    SizedBox(
+                                  width: double.infinity,
+                                  height: 200,
+                                  child: widget,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Positioned.fill(
+                              child: Center(
+                                  child: Icon(Icons.play_circle, size: 60)))
+                        ],
+                      );
+                    } else {
+                      cachedWidget = TextButton.icon(
+                          onPressed: () {
+                            launchUrl(
+                                Uri.parse(widget.targetFiles[widget.position]),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          icon: Icon(Icons.file_download_outlined),
+                          label: Text(widget.name));
+                    }
+
                     return cachedWidget!;
                   }
                   return Container();

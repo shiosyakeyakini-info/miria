@@ -1,20 +1,21 @@
 import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/image_file.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/not_implements_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
 import 'package:miria/view/note_create_page/note_create_setting_top.dart';
@@ -62,7 +63,7 @@ final noteVisibilityProvider =
 final isLocalProvider = StateProvider.autoDispose((ref) => false);
 final noteCreateEmojisProvider =
     StateProvider.autoDispose((ref) => <MisskeyEmojiData>[]);
-final filesProvider = StateProvider.autoDispose((ref) => <DriveFile>[]);
+final filesProvider = StateProvider.autoDispose((ref) => <MisskeyPostFile>[]);
 final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
 final channelProvider =
     StateProvider.autoDispose<(String id, String name)?>((ref) => null);
@@ -72,6 +73,8 @@ final renoteProvider = StateProvider.autoDispose<Note?>((ref) => null);
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
   final Account? initialAccount;
+  final String? initialText;
+  final List<String>? initialMediaFiles;
   final CommunityChannel? channel;
   final Note? reply;
   final Note? renote;
@@ -80,6 +83,8 @@ class NoteCreatePage extends ConsumerStatefulWidget {
   const NoteCreatePage({
     super.key,
     this.initialAccount,
+    this.initialText,
+    this.initialMediaFiles,
     this.channel,
     this.reply,
     this.renote,
@@ -116,11 +121,53 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           ref.read(accountSettingsRepositoryProvider).fromAccount(account);
       var noteVisibility = accountSettings.defaultNoteVisibility;
 
+      // 共有からの反映
+      final initialText = widget.initialText;
+      if (initialText != null) {
+        ref.read(noteInputTextProvider).text = initialText;
+      }
+      final initialMedias = widget.initialMediaFiles;
+      if (initialMedias != null && initialMedias.isNotEmpty == true) {
+        ref.read(filesProvider.notifier).state = [
+          for (final media in initialMedias)
+            if (media.toLowerCase().endsWith("jpg") ||
+                media.toLowerCase().endsWith("png") ||
+                media.toLowerCase().endsWith("gif") ||
+                media.toLowerCase().endsWith("webp"))
+              ImageFile(
+                  data: await File(media).readAsBytes(),
+                  fileName: media.substring(
+                      media.lastIndexOf(Platform.pathSeparator) + 1,
+                      media.length))
+            else
+              UnknownFile(
+                  data: await File(media).readAsBytes(),
+                  fileName: media.substring(
+                      media.lastIndexOf(Platform.pathSeparator) + 1,
+                      media.length))
+        ];
+      }
+
+      // 削除されたノートの反映
       final deletedNote = widget.deletedNote;
       if (deletedNote != null) {
         noteVisibility = deletedNote.visibility;
         ref.read(isLocalProvider.notifier).state = deletedNote.localOnly;
-        ref.read(filesProvider.notifier).state = deletedNote.files;
+
+        final files = <MisskeyPostFile>[];
+        for (final file in deletedNote.files) {
+          if (file.type.startsWith("image")) {
+            final response = await Dio().get(file.url,
+                options: Options(responseType: ResponseType.bytes));
+            files.add(ImageFileAlreadyPostedFile(
+                fileName: file.name, data: response.data, id: file.id));
+          } else {
+            files.add(UnknownAlreadyPostedFile(
+                url: file.url, id: file.id, fileName: file.name));
+          }
+        }
+
+        ref.read(filesProvider.notifier).state = files;
         final deletedNoteChannel = deletedNote.channel;
         ref.read(channelProvider.notifier).state = deletedNoteChannel != null
             ? (deletedNoteChannel.id, deletedNoteChannel.name)
@@ -164,28 +211,82 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   }
 
   Future<void> note() async {
-    final account = ref.read(selectedAccountProvider);
-    final files = ref.read(filesProvider);
-    if (account == null) return;
-    ref.read(misskeyProvider(account)).notes.create(NotesCreateRequest(
-          visibility: ref.read(noteVisibilityProvider),
-          text: ref.read(noteInputTextProvider).text,
-          cw: isCw ? cwController.text : null,
-          localOnly: ref.read(isLocalProvider),
-          replyId: ref.read(replyProvider)?.id,
-          renoteId: ref.read(renoteProvider)?.id,
-          channelId: ref.read(channelProvider)?.$1,
-          fileIds: files.isNotEmpty ? files.map((e) => e.id).toList() : null,
-        ));
-    Navigator.of(context).pop();
+    setState(() {
+      IndicatorView.showIndicator(context);
+      final FocusScopeNode currentScope = FocusScope.of(context);
+      if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+        FocusManager.instance.primaryFocus!.unfocus();
+      }
+    });
+    try {
+      final account = ref.read(selectedAccountProvider);
+      final files = ref.read(filesProvider);
+      if (account == null) return;
+
+      final fileIds = <String>[];
+      final misskey = ref.read(misskeyProvider(account));
+
+      for (final file in files) {
+        switch (file) {
+          case ImageFile():
+            final response = await misskey.drive.files.createAsBinary(
+              DriveFilesCreateRequest(
+                force: true,
+                name: file.fileName,
+              ),
+              file.data,
+            );
+            fileIds.add(response.id);
+
+            break;
+          case UnknownFile():
+            final response = await misskey.drive.files.createAsBinary(
+              DriveFilesCreateRequest(
+                force: true,
+                name: file.fileName,
+              ),
+              file.data,
+            );
+            fileIds.add(response.id);
+
+            break;
+          case UnknownAlreadyPostedFile():
+            fileIds.add(file.id);
+            break;
+          case ImageFileAlreadyPostedFile():
+            fileIds.add(file.id);
+            break;
+        }
+      }
+
+      if (!mounted) return;
+
+      await ref.read(misskeyProvider(account)).notes.create(NotesCreateRequest(
+            visibility: ref.read(noteVisibilityProvider),
+            text: ref.read(noteInputTextProvider).text,
+            cw: isCw ? cwController.text : null,
+            localOnly: ref.read(isLocalProvider),
+            replyId: ref.read(replyProvider)?.id,
+            renoteId: ref.read(renoteProvider)?.id,
+            channelId: ref.read(channelProvider)?.$1,
+            fileIds: fileIds.isEmpty ? null : fileIds,
+          ));
+      if (!mounted) return;
+      IndicatorView.hideIndicator(context);
+      Navigator.of(context).pop();
+    } catch (e) {
+      setState(() {
+        IndicatorView.hideIndicator(context);
+      });
+      rethrow;
+    }
   }
 
-  Future<void> driveConnect() async {
+  Future<void> chooseFile() async {
     final result = await showModalBottomSheet<DriveModalSheetReturnValue?>(
         context: context, builder: (context) => const DriveModalSheet());
     final account = ref.read(selectedAccountProvider);
     if (account == null) return;
-    final misskey = ref.read(misskeyProvider(account));
 
     if (result == DriveModalSheetReturnValue.drive) {
       if (!mounted) return;
@@ -193,11 +294,25 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           context: context,
           builder: (context) => DriveFileSelectDialog(account: account));
       if (result == null) return;
+      if (result.type.startsWith("image")) {
+        final fileContentResponse = await Dio().get(result.url,
+            options: Options(responseType: ResponseType.bytes));
 
-      ref.read(filesProvider.notifier).state = [
-        ...ref.read(filesProvider),
-        result
-      ];
+        ref.read(filesProvider.notifier).state = [
+          ...ref.read(filesProvider),
+          ImageFileAlreadyPostedFile(
+            data: fileContentResponse.data,
+            fileName: result.name,
+            id: result.id,
+          )
+        ];
+      } else {
+        ref.read(filesProvider.notifier).state = [
+          ...ref.read(filesProvider),
+          UnknownAlreadyPostedFile(
+              url: result.url, id: result.id, fileName: result.name)
+        ];
+      }
     } else if (result == DriveModalSheetReturnValue.upload) {
       final result = await FilePicker.platform.pickFiles(type: FileType.image);
       if (result == null) return;
@@ -205,18 +320,12 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       final path = result.files.single.path;
       if (path == null) return;
       if (!mounted) return;
-      ref.read(progressFileUploadProvider.notifier).state = true;
-      final response = await misskey.drive.files.create(
-          DriveFilesCreateRequest(
-            force: true,
-            name: path.substring(
-                path.lastIndexOf(Platform.pathSeparator) + 1, path.length),
-          ),
-          File(path));
-      if (!mounted) return;
       ref.read(filesProvider.notifier).state = [
         ...ref.read(filesProvider),
-        response
+        ImageFile(
+            data: await File(path).readAsBytes(),
+            fileName: path.substring(
+                path.lastIndexOf(Platform.pathSeparator) + 1, path.length))
       ];
       ref.read(progressFileUploadProvider.notifier).state = false;
     }
@@ -289,7 +398,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                     Row(
                       children: [
                         IconButton(
-                            onPressed: driveConnect, icon: Icon(Icons.image)),
+                            onPressed: chooseFile, icon: Icon(Icons.image)),
                         IconButton(
                             onPressed: () {}, icon: Icon(Icons.how_to_vote)),
                         IconButton(
@@ -384,15 +493,50 @@ class FilePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final files = ref.watch(filesProvider);
-    final isUploading = ref.watch(progressFileUploadProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (isUploading)
-          const Padding(padding: EdgeInsets.all(10), child: Text("アップロード中...")),
-        MisskeyFileView(files: files),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final file in files)
+                Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: CreateFileView(file: file))
+            ],
+          ),
+        )
       ],
     );
+  }
+}
+
+class CreateFileView extends StatelessWidget {
+  final MisskeyPostFile file;
+
+  const CreateFileView({super.key, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    final data = file;
+
+    switch (data) {
+      case ImageFile():
+        return SizedBox(
+          height: 200,
+          child: Image.memory(data.data),
+        );
+      case ImageFileAlreadyPostedFile():
+        return SizedBox(
+          height: 200,
+          child: Image.memory(data.data),
+        );
+      case UnknownFile():
+        return Text(data.fileName);
+      case UnknownAlreadyPostedFile():
+        return Text(data.fileName);
+    }
   }
 }
 
@@ -403,6 +547,7 @@ class ChannelName extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(channelProvider);
     if (channel == null) return Container();
+
     return Align(
       alignment: Alignment.centerRight,
       child: Row(

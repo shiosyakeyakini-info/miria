@@ -164,6 +164,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           tapTargetSize: MaterialTapTargetSize.padded,
         )),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            iconColor: MaterialStatePropertyAll(theme.primary),
+            foregroundColor: MaterialStatePropertyAll(theme.primary),
+          ),
+        ),
         dividerTheme: DividerThemeData(color: theme.divider),
         progressIndicatorTheme:
             ProgressIndicatorThemeData(color: theme.primary),

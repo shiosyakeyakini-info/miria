@@ -5,6 +5,7 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/error_dialog_listener.dart';
 import 'package:miria/view/common/main_stream.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/common/sharing_intent_listener.dart';
 import 'package:miria/view/themes/app_theme_scope.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
@@ -42,8 +43,15 @@ class MyApp extends ConsumerWidget {
       ],
       builder: (context, widget) {
         return AppThemeScope(
-            child: MainStream(
-                child: ErrorDialogListener(child: widget ?? Container())));
+          child: MainStream(
+            child: SharingIntentListener(
+              router: _appRouter,
+              child: ErrorDialogListener(
+                child: widget ?? Container(),
+              ),
+            ),
+          ),
+        );
       },
       routerConfig: _appRouter.config(),
     );

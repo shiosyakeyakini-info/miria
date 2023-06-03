@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 extension TextEditingControllerExtension on TextEditingController {
   bool get isIncludeBeforeColon {
+    if (selection.base.offset == -1) return false;
     return text.substring(0, selection.base.offset).contains(":");
   }
 

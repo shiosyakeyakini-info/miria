@@ -81,6 +81,8 @@ abstract class _$AppRouter extends RootStackRouter {
         child: NoteCreatePage(
           key: args.key,
           initialAccount: args.initialAccount,
+          initialText: args.initialText,
+          initialMediaFiles: args.initialMediaFiles,
           channel: args.channel,
           reply: args.reply,
           renote: args.renote,
@@ -299,6 +301,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: FavoritedNotePage(
           key: args.key,
           account: args.account,
+        ),
+      );
+    },
+    SharingAccountSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<SharingAccountSelectRouteArgs>(
+          orElse: () => const SharingAccountSelectRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SharingAccountSelectPage(
+          key: args.key,
+          sharingText: args.sharingText,
+          filePath: args.filePath,
         ),
       );
     },
@@ -525,6 +539,8 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
   NoteCreateRoute({
     Key? key,
     Account? initialAccount,
+    String? initialText,
+    List<String>? initialMediaFiles,
     CommunityChannel? channel,
     Note? reply,
     Note? renote,
@@ -535,6 +551,8 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
           args: NoteCreateRouteArgs(
             key: key,
             initialAccount: initialAccount,
+            initialText: initialText,
+            initialMediaFiles: initialMediaFiles,
             channel: channel,
             reply: reply,
             renote: renote,
@@ -553,6 +571,8 @@ class NoteCreateRouteArgs {
   const NoteCreateRouteArgs({
     this.key,
     this.initialAccount,
+    this.initialText,
+    this.initialMediaFiles,
     this.channel,
     this.reply,
     this.renote,
@@ -562,6 +582,10 @@ class NoteCreateRouteArgs {
   final Key? key;
 
   final Account? initialAccount;
+
+  final String? initialText;
+
+  final List<String>? initialMediaFiles;
 
   final CommunityChannel? channel;
 
@@ -573,7 +597,7 @@ class NoteCreateRouteArgs {
 
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, channel: $channel, reply: $reply, renote: $renote, deletedNote: $deletedNote}';
+    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, channel: $channel, reply: $reply, renote: $renote, deletedNote: $deletedNote}';
   }
 }
 
@@ -1340,5 +1364,49 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [SharingAccountSelectPage]
+class SharingAccountSelectRoute
+    extends PageRouteInfo<SharingAccountSelectRouteArgs> {
+  SharingAccountSelectRoute({
+    Key? key,
+    String? sharingText,
+    List<String>? filePath,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SharingAccountSelectRoute.name,
+          args: SharingAccountSelectRouteArgs(
+            key: key,
+            sharingText: sharingText,
+            filePath: filePath,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SharingAccountSelectRoute';
+
+  static const PageInfo<SharingAccountSelectRouteArgs> page =
+      PageInfo<SharingAccountSelectRouteArgs>(name);
+}
+
+class SharingAccountSelectRouteArgs {
+  const SharingAccountSelectRouteArgs({
+    this.key,
+    this.sharingText,
+    this.filePath,
+  });
+
+  final Key? key;
+
+  final String? sharingText;
+
+  final List<String>? filePath;
+
+  @override
+  String toString() {
+    return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
   }
 }

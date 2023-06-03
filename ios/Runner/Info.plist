@@ -54,5 +54,22 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>AppGroupId</key>
+    <string>$(CUSTOM_GROUP_ID)</string>
+    <key>CFBundleURLTypes</key>
+    	<array>
+    		<dict>
+    			<key>CFBundleTypeRole</key>
+    			<string>Editor</string>
+    			<key>CFBundleURLSchemes</key>
+    			<array>
+    				<string>ShareMedia</string>
+    			</array>
+    		</dict>
+    		<dict/>
+    	</array>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>写真をアップロードするために、写真への権限を許可してください。</string>
 </dict>
 </plist>
