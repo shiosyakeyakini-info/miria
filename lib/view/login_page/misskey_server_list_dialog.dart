@@ -29,9 +29,8 @@ class MisskeyServerListDialogState
                   .compareTo((a.nodeInfo?.usage?.users?.total ?? 0)));
           }(),
           builder: (context, item) {
-            final description = item.description?.replaceAll(
-                    RegExp(r"""<("[^"]*"|'[^']*'|[^'">])*>"""), "") ??
-                "";
+            final description =
+                item.description?.replaceAll(htmlTagRemove, "") ?? "";
             final available = item.nodeInfo?.software?.name == "misskey" &&
                 availableServerVersion
                     .allMatches(item.nodeInfo?.software?.version ?? "")

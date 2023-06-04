@@ -6,7 +6,10 @@ import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/channels_page/channels_page.dart';
 import 'package:miria/view/clip_list_page/clip_detail_page.dart';
 import 'package:miria/view/clip_list_page/clip_list_page.dart';
+import 'package:miria/view/explore_page/explore_page.dart';
+import 'package:miria/view/explore_page/explore_role_users_page.dart';
 import 'package:miria/view/favorited_note_page/favorited_note_page.dart';
+import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/note_search_page/note_search_page.dart';
@@ -60,6 +63,9 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: ChannelDetailRoute.page),
     AutoRoute(page: NoteSearchRoute.page),
     AutoRoute(page: HashtagRoute.page),
+    AutoRoute(page: ExploreRoute.page),
+    AutoRoute(page: ExploreRoleUsersRoute.page),
+    AutoRoute(page: FederationRoute.page),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: SettingsRoute.page),
     AutoRoute(page: GeneralSettingsRoute.page),

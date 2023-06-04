@@ -232,6 +232,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    FederationRoute.name: (routeData) {
+      final args = routeData.argsAs<FederationRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: FederationPage(
+          key: args.key,
+          account: args.account,
+          host: args.host,
+        ),
+      );
+    },
     NoteSearchRoute.name: (routeData) {
       final args = routeData.argsAs<NoteSearchRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -240,6 +251,18 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           initialSearchText: args.initialSearchText,
           account: args.account,
+        ),
+      );
+    },
+    SharingAccountSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<SharingAccountSelectRouteArgs>(
+          orElse: () => const SharingAccountSelectRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SharingAccountSelectPage(
+          key: args.key,
+          sharingText: args.sharingText,
+          filePath: args.filePath,
         ),
       );
     },
@@ -304,15 +327,24 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    SharingAccountSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<SharingAccountSelectRouteArgs>(
-          orElse: () => const SharingAccountSelectRouteArgs());
+    ExploreRoute.name: (routeData) {
+      final args = routeData.argsAs<ExploreRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SharingAccountSelectPage(
+        child: ExplorePage(
           key: args.key,
-          sharingText: args.sharingText,
-          filePath: args.filePath,
+          account: args.account,
+        ),
+      );
+    },
+    ExploreRoleUsersRoute.name: (routeData) {
+      final args = routeData.argsAs<ExploreRoleUsersRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ExploreRoleUsersPage(
+          key: args.key,
+          item: args.item,
+          account: args.account,
         ),
       );
     },
@@ -1141,6 +1173,49 @@ class ChannelsRouteArgs {
 }
 
 /// generated route for
+/// [FederationPage]
+class FederationRoute extends PageRouteInfo<FederationRouteArgs> {
+  FederationRoute({
+    Key? key,
+    required Account account,
+    required String host,
+    List<PageRouteInfo>? children,
+  }) : super(
+          FederationRoute.name,
+          args: FederationRouteArgs(
+            key: key,
+            account: account,
+            host: host,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'FederationRoute';
+
+  static const PageInfo<FederationRouteArgs> page =
+      PageInfo<FederationRouteArgs>(name);
+}
+
+class FederationRouteArgs {
+  const FederationRouteArgs({
+    this.key,
+    required this.account,
+    required this.host,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final String host;
+
+  @override
+  String toString() {
+    return 'FederationRouteArgs{key: $key, account: $account, host: $host}';
+  }
+}
+
+/// generated route for
 /// [NoteSearchPage]
 class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
   NoteSearchRoute({
@@ -1180,6 +1255,50 @@ class NoteSearchRouteArgs {
   @override
   String toString() {
     return 'NoteSearchRouteArgs{key: $key, initialSearchText: $initialSearchText, account: $account}';
+  }
+}
+
+/// generated route for
+/// [SharingAccountSelectPage]
+class SharingAccountSelectRoute
+    extends PageRouteInfo<SharingAccountSelectRouteArgs> {
+  SharingAccountSelectRoute({
+    Key? key,
+    String? sharingText,
+    List<String>? filePath,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SharingAccountSelectRoute.name,
+          args: SharingAccountSelectRouteArgs(
+            key: key,
+            sharingText: sharingText,
+            filePath: filePath,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SharingAccountSelectRoute';
+
+  static const PageInfo<SharingAccountSelectRouteArgs> page =
+      PageInfo<SharingAccountSelectRouteArgs>(name);
+}
+
+class SharingAccountSelectRouteArgs {
+  const SharingAccountSelectRouteArgs({
+    this.key,
+    this.sharingText,
+    this.filePath,
+  });
+
+  final Key? key;
+
+  final String? sharingText;
+
+  final List<String>? filePath;
+
+  @override
+  String toString() {
+    return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
   }
 }
 
@@ -1368,45 +1487,82 @@ class FavoritedNoteRouteArgs {
 }
 
 /// generated route for
-/// [SharingAccountSelectPage]
-class SharingAccountSelectRoute
-    extends PageRouteInfo<SharingAccountSelectRouteArgs> {
-  SharingAccountSelectRoute({
+/// [ExplorePage]
+class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
+  ExploreRoute({
     Key? key,
-    String? sharingText,
-    List<String>? filePath,
+    required Account account,
     List<PageRouteInfo>? children,
   }) : super(
-          SharingAccountSelectRoute.name,
-          args: SharingAccountSelectRouteArgs(
+          ExploreRoute.name,
+          args: ExploreRouteArgs(
             key: key,
-            sharingText: sharingText,
-            filePath: filePath,
+            account: account,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'SharingAccountSelectRoute';
+  static const String name = 'ExploreRoute';
 
-  static const PageInfo<SharingAccountSelectRouteArgs> page =
-      PageInfo<SharingAccountSelectRouteArgs>(name);
+  static const PageInfo<ExploreRouteArgs> page =
+      PageInfo<ExploreRouteArgs>(name);
 }
 
-class SharingAccountSelectRouteArgs {
-  const SharingAccountSelectRouteArgs({
+class ExploreRouteArgs {
+  const ExploreRouteArgs({
     this.key,
-    this.sharingText,
-    this.filePath,
+    required this.account,
   });
 
   final Key? key;
 
-  final String? sharingText;
-
-  final List<String>? filePath;
+  final Account account;
 
   @override
   String toString() {
-    return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
+    return 'ExploreRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [ExploreRoleUsersPage]
+class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
+  ExploreRoleUsersRoute({
+    Key? key,
+    required RolesListResponse item,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ExploreRoleUsersRoute.name,
+          args: ExploreRoleUsersRouteArgs(
+            key: key,
+            item: item,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ExploreRoleUsersRoute';
+
+  static const PageInfo<ExploreRoleUsersRouteArgs> page =
+      PageInfo<ExploreRoleUsersRouteArgs>(name);
+}
+
+class ExploreRoleUsersRouteArgs {
+  const ExploreRoleUsersRouteArgs({
+    this.key,
+    required this.item,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final RolesListResponse item;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ExploreRoleUsersRouteArgs{key: $key, item: $item, account: $account}';
   }
 }

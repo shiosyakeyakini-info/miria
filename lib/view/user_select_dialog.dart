@@ -37,7 +37,7 @@ class UserSelectContent extends ConsumerStatefulWidget {
 
 final usersSelectDialogQueryProvider = StateProvider.autoDispose((ref) => "");
 final usersSelectDialogOriginProvider =
-    StateProvider.autoDispose((ref) => UsersSearchOrigin.combined);
+    StateProvider.autoDispose((ref) => Origin.combined);
 
 class UserSelectContentState extends ConsumerState<UserSelectContent> {
   final queryController = TextEditingController();
@@ -63,23 +63,21 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
           builder: (context, constraints) {
             return ToggleButtons(
               isSelected: [
-                for (final element in UsersSearchOrigin.values)
-                  element == origin
+                for (final element in Origin.values) element == origin
               ],
               constraints: BoxConstraints.expand(
-                  width:
-                      constraints.maxWidth / UsersSearchOrigin.values.length -
-                          Theme.of(context)
-                                  .toggleButtonsTheme
-                                  .borderWidth!
-                                  .toInt() *
-                              UsersSearchOrigin.values.length),
+                  width: constraints.maxWidth / Origin.values.length -
+                      Theme.of(context)
+                              .toggleButtonsTheme
+                              .borderWidth!
+                              .toInt() *
+                          Origin.values.length),
               onPressed: (index) {
                 ref.read(usersSelectDialogOriginProvider.notifier).state =
-                    UsersSearchOrigin.values[index];
+                    Origin.values[index];
               },
               children: [
-                for (final element in UsersSearchOrigin.values)
+                for (final element in Origin.values)
                   Padding(
                       padding: const EdgeInsets.only(top: 5, bottom: 5),
                       child: Text(element.displayName))

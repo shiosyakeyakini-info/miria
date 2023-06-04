@@ -132,8 +132,17 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             ),
                           ),
                           if (displayNote.user.instance != null)
-                            Text(displayNote.user.instance?.name ?? "",
-                                style: Theme.of(context).textTheme.bodySmall),
+                            GestureDetector(
+                              onTap: () => context.pushRoute(FederationRoute(
+                                  account: AccountScope.of(context),
+                                  host: displayNote.user.host!)),
+                              child: InkResponse(
+                                child: Text(
+                                    displayNote.user.instance?.name ?? "",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
+                              ),
+                            ),
                         ],
                       ),
                       if (displayNote.cw != null) ...[
