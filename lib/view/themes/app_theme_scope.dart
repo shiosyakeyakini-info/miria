@@ -133,11 +133,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
               theme.isDarkTheme ? theme.panelBackground : theme.primary,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
-        bottomAppBarTheme: BottomAppBarTheme(),
+        bottomAppBarTheme: BottomAppBarTheme(color: theme.primary),
         drawerTheme: DrawerThemeData(backgroundColor: theme.panel),
         listTileTheme: ListTileThemeData(iconColor: theme.foreground),
         scaffoldBackgroundColor: theme.panel,
         tabBarTheme: TabBarTheme(
+            overlayColor: MaterialStatePropertyAll(theme.primary),
             labelColor: Colors.white,
             labelStyle: textTheme.titleSmall,
             unselectedLabelStyle: textTheme.titleSmall

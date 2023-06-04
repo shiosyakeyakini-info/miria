@@ -6,6 +6,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/user_page/user_clips.dart';
 import 'package:miria/view/user_page/user_detail.dart';
 import 'package:miria/view/user_page/user_notes.dart';
@@ -32,25 +33,26 @@ class UserPageState extends ConsumerState<UserPage> {
     final userInfo = ref.watch(userInfoProvider(widget.userId));
     final isReactionAvailable = userInfo?.publicReactions == true ||
         (userInfo?.host == null && userInfo?.username == widget.account.userId);
-    return DefaultTabController(
-      length: 3 + (isReactionAvailable ? 1 : 0),
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [],
-        ),
-        body: AccountScope(
-          account: widget.account,
-          child: Column(
+    return AccountScope(
+      account: widget.account,
+      child: DefaultTabController(
+        length: 3 + (isReactionAvailable ? 1 : 0),
+        child: Scaffold(
+          appBar: AppBar(
+            title: SimpleMfmText(userInfo?.name ?? userInfo?.username ?? ""),
+            actions: [],
+            bottom: TabBar(
+              tabs: [
+                const Tab(text: "アカウント情報"),
+                const Tab(text: "ノート"),
+                const Tab(text: "クリップ"),
+                if (isReactionAvailable) const Tab(text: "リアクション")
+              ],
+              isScrollable: true,
+            ),
+          ),
+          body: Column(
             children: [
-              TabBar(
-                tabs: [
-                  const Tab(text: "アカウント情報"),
-                  const Tab(text: "ノート"),
-                  const Tab(text: "クリップ"),
-                  if (isReactionAvailable) const Tab(text: "リアクション")
-                ],
-                isScrollable: true,
-              ),
               Expanded(
                 child: TabBarView(
                   children: [
