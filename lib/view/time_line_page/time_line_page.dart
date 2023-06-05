@@ -146,8 +146,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         );
       }
     }
+    final sendText = ref.read(timelineNoteProvider).text;
+    ref.read(timelineNoteProvider).text = "";
     context.pushRoute(NoteCreateRoute(
       channel: channel,
+      initialText: sendText,
       initialAccount: widget.currentTabSetting.account,
     ));
   }
