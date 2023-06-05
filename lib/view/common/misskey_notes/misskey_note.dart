@@ -215,8 +215,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             NoteVote(
                                 displayNote: displayNote,
                                 poll: displayNote.poll!),
-                          if (!isEmptyRenote &&
-                              displayNote.renoteId != null &&
+                          if (displayNote.renoteId != null &&
                               widget.recursive < 2)
                             Container(
                               padding: const EdgeInsets.all(5),
