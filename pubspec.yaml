@@ -47,6 +47,7 @@ dependencies:
   percent_indicator: ^4.2.3
   fl_chart: ^0.62.0
   receive_sharing_intent: ^1.4.5
+  share_plus: ^7.0.2
 
 dev_dependencies:
   flutter_test:

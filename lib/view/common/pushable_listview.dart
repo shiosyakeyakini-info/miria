@@ -80,11 +80,11 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
 
   Future<void> nextLoad() async {
     if (isLoading) return;
-    setState(() {
-      isLoading = true;
-    });
     Future(() async {
       try {
+        setState(() {
+          isLoading = true;
+        });
         final result = await widget.nextFuture(items.last, items.length);
         if (result.isEmpty) isFinalPage = true;
         items.addAll(result);
