@@ -21,6 +21,7 @@ class AppThemeScope extends ConsumerStatefulWidget {
 class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
     return AppThemeData(
+      isDarkMode: theme.isDarkTheme,
       noteTextStyle: InputDecoration(
         border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black54),

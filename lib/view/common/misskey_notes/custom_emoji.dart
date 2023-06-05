@@ -47,11 +47,8 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             child: NetworkImageView(
                 url: emojiData.url.toString(),
                 type: ImageType.customEmoji,
-                errorBuilder: (context, e, s) => Text(emojiData.baseName,
+                errorBuilder: (context, e, s) => Text(emojiData.hostedName,
                     style: TextStyle(
-                        height: 0,
-                        //TODO: あとでなおす
-                        fontSize: scopedFontSize / 1.5,
                         color: Theme.of(context).textTheme.bodyMedium?.color)),
                 loadingBuilder: (context, widget, chunk) => SizedBox(
                       height: scopedFontSize,

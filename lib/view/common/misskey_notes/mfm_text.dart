@@ -133,18 +133,21 @@ class MfmTextState extends ConsumerState<MfmText> {
   Widget build(BuildContext context) {
     return Mfm(
       widget.mfmText,
-      emojiBuilder: (context, emojiName) {
+      emojiBuilder: (context, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
             emojiName: ":$emojiName:",
             repository:
                 ref.read(emojiRepositoryProvider(AccountScope.of(context))),
             emojiInfo: widget.emoji);
-        return GestureDetector(
-          onTap: () => widget.onEmojiTap?.call(emojiData),
-          child: EmojiInk(
-            child: CustomEmoji(
-              emojiData: emojiData,
-              fontSizeRatio: 2,
+        return DefaultTextStyle(
+          style: style ?? DefaultTextStyle.of(context).style,
+          child: GestureDetector(
+            onTap: () => widget.onEmojiTap?.call(emojiData),
+            child: EmojiInk(
+              child: CustomEmoji(
+                emojiData: emojiData,
+                fontSizeRatio: 2,
+              ),
             ),
           ),
         );
@@ -197,20 +200,24 @@ class CodeBlock extends StatelessWidget {
     final resolvedLanguage =
         allLanguages[resolveLanguage(language ?? "text")]?.id ?? "plaintext";
 
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: HighlightView(
-          code,
-          languageId: resolvedLanguage,
-          theme:
-              WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-                      Brightness.light
-                  ? githubTheme
-                  : githubDarkTheme,
-          padding: const EdgeInsets.all(10),
-          textStyle: const TextStyle(
-              fontFamilyFallback: ["Monaco", "Menlo", "Consolas", "Noto Mono"]),
-        ));
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: HighlightView(
+            code,
+            languageId: resolvedLanguage,
+            theme:
+                AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
+            padding: const EdgeInsets.all(10),
+            textStyle: const TextStyle(fontFamilyFallback: [
+              "Monaco",
+              "Menlo",
+              "Consolas",
+              "Noto Mono"
+            ]),
+          )),
+    );
   }
 }
 
@@ -251,14 +258,17 @@ class SimpleMfmText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfm(
       text,
-      emojiBuilder: (context, emojiName) => CustomEmoji(
-        emojiData: MisskeyEmojiData.fromEmojiName(
-          emojiName: ":$emojiName:",
-          repository:
-              ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-          emojiInfo: emojis,
+      emojiBuilder: (context, emojiName, style) => DefaultTextStyle.merge(
+        style: style ?? DefaultTextStyle.of(context).style,
+        child: CustomEmoji(
+          emojiData: MisskeyEmojiData.fromEmojiName(
+            emojiName: ":$emojiName:",
+            repository:
+                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            emojiInfo: emojis,
+          ),
+          fontSizeRatio: 1,
         ),
-        fontSizeRatio: 1,
       ),
       style: style,
       suffixSpan: suffixSpan,
@@ -283,7 +293,10 @@ class UserInformationState extends ConsumerState<UserInformation> {
   Widget build(BuildContext context) {
     return SimpleMfmText(
       widget.user.name ?? widget.user.username,
-      style: const TextStyle(fontWeight: FontWeight.bold),
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(fontWeight: FontWeight.bold),
       emojis: widget.user.emojis,
       suffixSpan: [
         for (final badge in widget.user.badgeRoles ?? [])
