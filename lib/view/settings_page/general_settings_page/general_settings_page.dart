@@ -19,6 +19,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   String darkModeTheme = "";
   ThemeColorSystem colorSystem = ThemeColorSystem.system;
   NSFWInherit nsfwInherit = NSFWInherit.inherit;
+  AutomaticPush automaticPush = AutomaticPush.none;
   bool enableDirectReaction = false;
 
   @override
@@ -46,6 +47,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       colorSystem = settings.themeColorSystem;
       nsfwInherit = settings.nsfwInherit;
       enableDirectReaction = settings.enableDirectReaction;
+      automaticPush = settings.automaticPush;
     });
   }
 
@@ -56,6 +58,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
           themeColorSystem: colorSystem,
           nsfwInherit: nsfwInherit,
           enableDirectReaction: enableDirectReaction,
+          automaticPush: automaticPush,
         ));
   }
 
@@ -95,6 +98,24 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             onChanged: (value) => setState(
                               () {
                                 nsfwInherit = value ?? NSFWInherit.inherit;
+                                save();
+                              },
+                            ),
+                          ),
+                          const Padding(padding: EdgeInsets.only(top: 10)),
+                          const Text("一覧の自動更新"),
+                          DropdownButton<AutomaticPush>(
+                            items: [
+                              for (final element in AutomaticPush.values)
+                                DropdownMenuItem(
+                                  value: element,
+                                  child: Text(element.displayName),
+                                )
+                            ],
+                            value: automaticPush,
+                            onChanged: (value) => setState(
+                              () {
+                                automaticPush = value ?? AutomaticPush.none;
                                 save();
                               },
                             ),

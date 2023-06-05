@@ -127,15 +127,16 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   }
 
   @override
-  Future<void> previousLoad() async {
+  Future<int> previousLoad() async {
     if (newerNotes.isEmpty && olderNotes.isEmpty) {
-      return;
+      return -1;
     }
     final resultNotes = await requestNotes(
       untilId: olderNotes.lastOrNull?.id ?? newerNotes.first.id,
     );
     olderNotes.addAll(resultNotes);
     notifyListeners();
+    return resultNotes.length;
   }
 
   @override
