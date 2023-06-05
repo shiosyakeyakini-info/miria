@@ -39,7 +39,10 @@ class UserPageState extends ConsumerState<UserPage> {
         length: 3 + (isReactionAvailable ? 1 : 0),
         child: Scaffold(
           appBar: AppBar(
-            title: SimpleMfmText(userInfo?.name ?? userInfo?.username ?? ""),
+            title: SimpleMfmText(
+              userInfo?.name ?? userInfo?.username ?? "",
+              emojis: userInfo?.emojis ?? {},
+            ),
             actions: [],
             bottom: TabBar(
               tabs: [
