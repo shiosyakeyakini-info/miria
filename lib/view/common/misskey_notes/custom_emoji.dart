@@ -8,12 +8,14 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
   final double fontSizeRatio;
   final bool isAttachTooltip;
+  final double? size;
 
   const CustomEmoji({
     super.key,
     required this.emojiData,
     this.fontSizeRatio = 1,
     this.isAttachTooltip = true,
+    this.size,
   });
 
   @override
@@ -35,8 +37,9 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   @override
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
-    final scopedFontSize = (DefaultTextStyle.of(context).style.fontSize ?? 22) *
-        widget.fontSizeRatio;
+    final scopedFontSize = widget.size ??
+        (DefaultTextStyle.of(context).style.fontSize ?? 22) *
+            widget.fontSizeRatio;
 
     final emojiData = widget.emojiData;
     switch (emojiData) {
