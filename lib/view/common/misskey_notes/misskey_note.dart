@@ -215,6 +215,28 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             NoteVote(
                                 displayNote: displayNote,
                                 poll: displayNote.poll!),
+                          if (!isEmptyRenote &&
+                              displayNote.renoteId != null &&
+                              widget.recursive < 2)
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              child: DottedBorder(
+                                color: AppTheme.of(context).renoteBorderColor,
+                                radius: AppTheme.of(context).renoteBorderRadius,
+                                strokeWidth:
+                                    AppTheme.of(context).renoteStrokeWidth,
+                                dashPattern:
+                                    AppTheme.of(context).renoteDashPattern,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: MisskeyNote(
+                                    note: displayNote.renote!,
+                                    isDisplayBorder: false,
+                                    recursive: widget.recursive + 1,
+                                  ),
+                                ),
+                              ),
+                            )
                         ],
                         if (displayNote.reactions.isNotEmpty)
                           const Padding(padding: EdgeInsets.only(bottom: 5)),
@@ -342,26 +364,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                   ),
                 ],
               ),
-              if (!isEmptyRenote &&
-                  displayNote.renoteId != null &&
-                  widget.recursive < 2)
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  child: DottedBorder(
-                    color: AppTheme.of(context).renoteBorderColor,
-                    radius: AppTheme.of(context).renoteBorderRadius,
-                    strokeWidth: AppTheme.of(context).renoteStrokeWidth,
-                    dashPattern: AppTheme.of(context).renoteDashPattern,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: MisskeyNote(
-                        note: displayNote.renote!,
-                        isDisplayBorder: false,
-                        recursive: widget.recursive + 1,
-                      ),
-                    ),
-                  ),
-                )
             ],
           ),
         ),
