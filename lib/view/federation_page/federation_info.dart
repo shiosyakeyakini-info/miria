@@ -63,8 +63,10 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
               .showInstance(FederationShowInstanceRequest(host: widget.host));
           final MetaResponse? misskeyMeta;
           // Misskeyサーバーなら追加の情報を取得
+
           if (federation.softwareName?.startsWith(RegExp("^(misskey)")) ==
-              true) {
+                  true &&
+              federation.softwareVersion?.startsWith("13") == true) {
             misskeyMeta = await MisskeyServer().meta(widget.host);
           } else {
             misskeyMeta = null;
