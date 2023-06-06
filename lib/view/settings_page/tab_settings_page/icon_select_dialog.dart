@@ -86,7 +86,14 @@ class IconSelectDialog extends StatelessWidget {
               height: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
-                  const TabBar(tabs: [Tab(text: "標準"), Tab(text: "カスタム絵文字")]),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor),
+                        child: const TabBar(
+                            tabs: [Tab(text: "標準"), Tab(text: "カスタム絵文字")])),
+                  ),
                   Expanded(
                     child: TabBarView(children: [
                       SingleChildScrollView(
