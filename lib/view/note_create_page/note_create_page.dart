@@ -99,6 +99,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   var isCw = false;
   final cwController = TextEditingController();
   late final focusNode = ref.read(noteFocusProvider);
+  var isFirstChangeDependenciesCalled = false;
 
   @override
   void initState() {
@@ -108,6 +109,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (isFirstChangeDependenciesCalled) return;
+    isFirstChangeDependenciesCalled = true;
 
     Future(() async {
       final account =
@@ -387,7 +390,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         ),
                       ),
                     TextField(
-                      controller: ref.read(noteInputTextProvider),
+                      controller: ref.watch(noteInputTextProvider),
                       focusNode: focusNode,
                       maxLines: null,
                       minLines: 5,
@@ -466,9 +469,6 @@ class MfmPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final previewText = ref.watch(noteInputTextProvider);
     final account = ref.watch(selectedAccountProvider);
-
-    //TODO: どこかが監視してないといけないので
-    ref.watch(noteFocusProvider);
 
     if (account == null) {
       return Container();
