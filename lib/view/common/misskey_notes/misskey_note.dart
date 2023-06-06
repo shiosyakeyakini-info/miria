@@ -86,11 +86,16 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
               bottom: 5 * MediaQuery.of(context).textScaleFactor),
           decoration: widget.isDisplayBorder
               ? BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: widget.recursive == 1
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : null,
                   border: Border(
                       bottom: BorderSide(
                           color: Theme.of(context).dividerColor, width: 0.5)))
-              : BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+              : BoxDecoration(
+                  color: widget.recursive == 1
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : null),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
