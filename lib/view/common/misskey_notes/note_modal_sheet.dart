@@ -99,7 +99,8 @@ class NoteModalSheet extends ConsumerWidget {
                 final box = context2.findRenderObject() as RenderBox?;
                 final boundary = noteBoundaryKey.currentContext
                     ?.findRenderObject() as RenderRepaintBoundary;
-                final image = await boundary.toImage();
+                final image = await boundary.toImage(
+                    pixelRatio: View.of(context).devicePixelRatio);
                 final byteData =
                     await image.toByteData(format: ImageByteFormat.png);
 
