@@ -76,6 +76,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       reloadLatestNotes();
     }
 
+    if (socketController != null) {
+      socketController?.disconnect();
+    }
+
     socketController = createSocketController(
       onReceived: (note) {
         newerNotes.add(note);
