@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,11 +55,11 @@ class ChannelDetailInfo extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "${data.usersCount}人が参加中",
+                      "${data.usersCount.format()}人が参加中",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
-                      "${data.notesCount}投稿",
+                      "${data.notesCount.format()}投稿",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     if (data.lastNotedAt != null)

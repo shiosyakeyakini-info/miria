@@ -383,7 +383,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(response.followersCount.toString(),
+                          Text(response.followersCount.format(),
                               style: Theme.of(context).textTheme.titleMedium),
                           Text(
                             "フォロワー",
