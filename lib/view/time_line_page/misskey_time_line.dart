@@ -107,14 +107,14 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
             final correctedNewer = [
               if (timelineRepository.olderNotes.isNotEmpty)
                 ...timelineRepository.olderNotes
-                    .slice(0, min(4, timelineRepository.olderNotes.length - 1))
+                    .slice(0, min(5, timelineRepository.olderNotes.length))
                     .reversed,
               ...timelineRepository.newerNotes,
             ];
             final correctedOlder = [
               if (timelineRepository.olderNotes.length > 5)
                 ...timelineRepository.olderNotes
-                    .slice(5, timelineRepository.olderNotes.length - 1)
+                    .slice(5, timelineRepository.olderNotes.length)
             ];
 
             if (index > 0) {
