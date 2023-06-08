@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/constants.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class CommunityChannelView extends StatelessWidget {
@@ -59,7 +60,7 @@ class CommunityChannelView extends StatelessWidget {
                               child: Padding(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
-                                    "${channel.notesCount} 投稿 / ${channel.usersCount} 人が参加 / ${channel.lastNotedAt?.differenceNow ?? channel.createdAt.differenceNow} に更新",
+                                    "${channel.notesCount.format()} 投稿 / ${channel.usersCount.format()} 人が参加 / ${channel.lastNotedAt?.differenceNow ?? channel.createdAt.differenceNow} に更新",
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
                                   ))),
