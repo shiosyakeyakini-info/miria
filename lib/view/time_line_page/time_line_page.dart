@@ -90,6 +90,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               channelId: widget.currentTabSetting.channelId,
               visibility: accountSettings.defaultNoteVisibility,
               localOnly: accountSettings.defaultIsLocalOnly,
+              reactionAcceptance: accountSettings.defaultReactionAcceptance,
             ),
           );
     } catch (e) {

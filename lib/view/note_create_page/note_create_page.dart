@@ -70,6 +70,8 @@ final channelProvider =
     StateProvider.autoDispose<(String id, String name)?>((ref) => null);
 final replyProvider = StateProvider.autoDispose<Note?>((ref) => null);
 final renoteProvider = StateProvider.autoDispose<Note?>((ref) => null);
+final reactionAcceptanceProvider =
+    StateProvider.autoDispose<ReactionAcceptance?>((ref) => null);
 
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
@@ -152,6 +154,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         ];
       }
 
+      // 設定の反映
+      ref.read(reactionAcceptanceProvider.notifier).state =
+          accountSettings.defaultReactionAcceptance;
+
       // 削除されたノートの反映
       final deletedNote = widget.deletedNote;
       if (deletedNote != null) {
@@ -179,6 +185,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         cwController.text = deletedNote.cw ?? "";
         isCw = deletedNote.cw?.isNotEmpty == true;
         ref.read(noteInputTextProvider).text = deletedNote.text ?? "";
+        ref.read(reactionAcceptanceProvider.notifier).state =
+            deletedNote.reactionAcceptance;
       }
 
       final renote = widget.renote;
@@ -279,6 +287,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
             renoteId: ref.read(renoteProvider)?.id,
             channelId: ref.read(channelProvider)?.$1,
             fileIds: fileIds.isEmpty ? null : fileIds,
+            reactionAcceptance: ref.read(reactionAcceptanceProvider),
           ));
       if (!mounted) return;
       IndicatorView.hideIndicator(context);

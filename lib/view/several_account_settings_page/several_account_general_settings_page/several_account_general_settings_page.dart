@@ -28,6 +28,7 @@ class SeveralAccountGeneralSettingsPageState
     extends ConsumerState<SeveralAccountGeneralSettingsPage> {
   var defaultIsLocalOnly = false;
   var defaultNoteVisibility = NoteVisibility.public;
+  ReactionAcceptance? defaultReactionAppearance;
   AccountSettings? accountSettings;
 
   @override
@@ -45,6 +46,7 @@ class SeveralAccountGeneralSettingsPageState
         setState(() {
           defaultIsLocalOnly = loadedSettings.defaultIsLocalOnly;
           defaultNoteVisibility = loadedSettings.defaultNoteVisibility;
+          defaultReactionAppearance = loadedSettings.defaultReactionAcceptance;
         });
       }
     });
@@ -57,6 +59,7 @@ class SeveralAccountGeneralSettingsPageState
           reactions: accountSettings?.reactions ?? [],
           defaultNoteVisibility: defaultNoteVisibility,
           defaultIsLocalOnly: defaultIsLocalOnly,
+          defaultReactionAcceptance: defaultReactionAppearance,
         ));
   }
 
@@ -114,6 +117,25 @@ class SeveralAccountGeneralSettingsPageState
                             onChanged: (value) {
                               setState(() {
                                 defaultIsLocalOnly = !defaultIsLocalOnly;
+                                save();
+                              });
+                            }),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        const Text("リアクションの受け入れ"),
+                        DropdownButton<ReactionAcceptance?>(
+                            items: [
+                              const DropdownMenuItem(
+                                  value: null, child: Text("全部")),
+                              for (final acceptance
+                                  in ReactionAcceptance.values)
+                                DropdownMenuItem(
+                                    value: acceptance,
+                                    child: Text(acceptance.displayName))
+                            ],
+                            value: defaultReactionAppearance,
+                            onChanged: (value) {
+                              setState(() {
+                                defaultReactionAppearance = value;
                                 save();
                               });
                             }),

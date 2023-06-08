@@ -317,30 +317,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             RenoteButton(
                               displayNote: displayNote,
                             ),
-                            IconButton(
-                                onPressed: () async => await reactionControl(
-                                    ref, context, displayNote),
-                                constraints: const BoxConstraints(),
-                                padding: EdgeInsets.zero,
-                                style: const ButtonStyle(
-                                  padding:
-                                      MaterialStatePropertyAll(EdgeInsets.zero),
-                                  minimumSize:
-                                      MaterialStatePropertyAll(Size(0, 0)),
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                icon: Icon(
-                                  displayNote.myReaction == null
-                                      ? Icons.add
-                                      : Icons.remove,
-                                  size: 16 *
-                                      MediaQuery.of(context).textScaleFactor,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.color,
-                                )),
+                            FooterReactionButton(
+                              onPressed: () async => await reactionControl(
+                                  ref, context, displayNote),
+                              displayNote: displayNote,
+                            ),
                             IconButton(
                                 onPressed: () {
                                   showModalBottomSheet(
@@ -393,6 +374,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     MisskeyEmojiData? requestEmoji,
   }) async {
     final account = AccountScope.of(context);
+    final isLikeOnly =
+        (displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
+            (displayNote.reactionAcceptance ==
+                    ReactionAcceptance.likeOnlyForRemote &&
+                displayNote.user.host != null));
     if (displayNote.myReaction != null && requestEmoji != null) {
       // すでにリアクション済み
       return;
@@ -403,6 +389,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             .settings
             .enableDirectReaction) {
       // カスタム絵文字押下でのリアクション無効
+      return;
+    }
+    if (requestEmoji != null && isLikeOnly) {
+      // いいねのみでカスタム絵文字押下
       return;
     }
     if (displayNote.myReaction != null && requestEmoji == null) {
@@ -417,7 +407,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     final misskey = ref.read(misskeyProvider(account));
     final note = ref.read(notesProvider(account));
     final MisskeyEmojiData? selectedEmoji;
-    if (requestEmoji == null) {
+    if (isLikeOnly) {
+      selectedEmoji = const UnicodeEmojiData(char: '❤️');
+    } else if (requestEmoji == null) {
       selectedEmoji = await showDialog<MisskeyEmojiData?>(
           context: context,
           builder: (context) => ReactionPickerDialog(
@@ -573,5 +565,47 @@ class RenoteButton extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
+  }
+}
+
+class FooterReactionButton extends StatelessWidget {
+  final Note displayNote;
+  final VoidCallback onPressed;
+
+  const FooterReactionButton({
+    super.key,
+    required this.displayNote,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final IconData icon;
+    if (displayNote.myReaction == null) {
+      if (displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
+          (displayNote.user.host != null &&
+              displayNote.reactionAcceptance ==
+                  ReactionAcceptance.likeOnlyForRemote)) {
+        icon = Icons.favorite_border;
+      } else {
+        icon = Icons.add;
+      }
+    } else {
+      icon = Icons.remove;
+    }
+    return IconButton(
+        onPressed: onPressed,
+        constraints: const BoxConstraints(),
+        padding: EdgeInsets.zero,
+        style: const ButtonStyle(
+          padding: MaterialStatePropertyAll(EdgeInsets.zero),
+          minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        icon: Icon(
+          icon,
+          size: 16 * MediaQuery.of(context).textScaleFactor,
+          color: Theme.of(context).textTheme.bodySmall?.color,
+        ));
   }
 }

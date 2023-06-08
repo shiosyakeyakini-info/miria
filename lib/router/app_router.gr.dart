@@ -307,6 +307,27 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AccountListPage(),
       );
     },
+    ExploreRoleUsersRoute.name: (routeData) {
+      final args = routeData.argsAs<ExploreRoleUsersRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ExploreRoleUsersPage(
+          key: args.key,
+          item: args.item,
+          account: args.account,
+        ),
+      );
+    },
+    ExploreRoute.name: (routeData) {
+      final args = routeData.argsAs<ExploreRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ExplorePage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     TimeLineRoute.name: (routeData) {
       final args = routeData.argsAs<TimeLineRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -323,27 +344,6 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: FavoritedNotePage(
           key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    ExploreRoute.name: (routeData) {
-      final args = routeData.argsAs<ExploreRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ExplorePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    ExploreRoleUsersRoute.name: (routeData) {
-      final args = routeData.argsAs<ExploreRoleUsersRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ExploreRoleUsersPage(
-          key: args.key,
-          item: args.item,
           account: args.account,
         ),
       );
@@ -1411,6 +1411,87 @@ class AccountListRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ExploreRoleUsersPage]
+class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
+  ExploreRoleUsersRoute({
+    Key? key,
+    required RolesListResponse item,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ExploreRoleUsersRoute.name,
+          args: ExploreRoleUsersRouteArgs(
+            key: key,
+            item: item,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ExploreRoleUsersRoute';
+
+  static const PageInfo<ExploreRoleUsersRouteArgs> page =
+      PageInfo<ExploreRoleUsersRouteArgs>(name);
+}
+
+class ExploreRoleUsersRouteArgs {
+  const ExploreRoleUsersRouteArgs({
+    this.key,
+    required this.item,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final RolesListResponse item;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ExploreRoleUsersRouteArgs{key: $key, item: $item, account: $account}';
+  }
+}
+
+/// generated route for
+/// [ExplorePage]
+class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
+  ExploreRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ExploreRoute.name,
+          args: ExploreRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ExploreRoute';
+
+  static const PageInfo<ExploreRouteArgs> page =
+      PageInfo<ExploreRouteArgs>(name);
+}
+
+class ExploreRouteArgs {
+  const ExploreRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ExploreRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
 /// [TimeLinePage]
 class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
   TimeLineRoute({
@@ -1483,86 +1564,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [ExplorePage]
-class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
-  ExploreRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ExploreRoute.name,
-          args: ExploreRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ExploreRoute';
-
-  static const PageInfo<ExploreRouteArgs> page =
-      PageInfo<ExploreRouteArgs>(name);
-}
-
-class ExploreRouteArgs {
-  const ExploreRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'ExploreRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [ExploreRoleUsersPage]
-class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
-  ExploreRoleUsersRoute({
-    Key? key,
-    required RolesListResponse item,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ExploreRoleUsersRoute.name,
-          args: ExploreRoleUsersRouteArgs(
-            key: key,
-            item: item,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ExploreRoleUsersRoute';
-
-  static const PageInfo<ExploreRoleUsersRouteArgs> page =
-      PageInfo<ExploreRoleUsersRouteArgs>(name);
-}
-
-class ExploreRoleUsersRouteArgs {
-  const ExploreRoleUsersRouteArgs({
-    this.key,
-    required this.item,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final RolesListResponse item;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'ExploreRoleUsersRouteArgs{key: $key, item: $item, account: $account}';
   }
 }
