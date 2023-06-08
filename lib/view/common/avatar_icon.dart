@@ -107,7 +107,7 @@ class AvatarIcon extends StatelessWidget {
                     width: height * MediaQuery.of(context).textScaleFactor,
                     height: height * MediaQuery.of(context).textScaleFactor,
                     child: NetworkImageView(
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.cover,
                       url: user.avatarUrl.toString(),
                       type: ImageType.avatarIcon,
                     )),
