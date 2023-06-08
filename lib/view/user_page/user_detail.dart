@@ -255,8 +255,15 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                            child: Text(
-                                memo.isNotEmpty ? memo : "なんかメモることあったら書いとき")),
+                          child: Text(
+                            memo.isNotEmpty ? memo : "なんかメモることあったら書いとき",
+                            style: memo.isNotEmpty
+                                ? null
+                                : Theme.of(context)
+                                    .inputDecorationTheme
+                                    .hintStyle,
+                          ),
+                        ),
                         IconButton(
                             onPressed: () async {
                               final result = await showDialog(

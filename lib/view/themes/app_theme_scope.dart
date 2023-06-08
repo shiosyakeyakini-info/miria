@@ -196,8 +196,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
             borderRadius: BorderRadius.circular(10),
           ),
           contentPadding: const EdgeInsets.all(5),
-          hintStyle: textTheme.bodySmall
-              ?.copyWith(fontSize: textTheme.titleMedium?.fontSize),
+          hintStyle: textTheme.bodySmall?.copyWith(
+            fontSize: textTheme.titleMedium?.fontSize,
+            color:
+                theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+          ),
           prefixIconColor: theme.primary,
           suffixIconColor: theme.primary,
           isDense: true,
