@@ -12,6 +12,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/modal_indicator.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
@@ -222,6 +223,11 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       }
     });
     try {
+      if (ref.read(noteInputTextProvider).text.isEmpty) {
+        await SimpleMessageDialog.show(context, "なんか入れてや");
+        return;
+      }
+
       final account = ref.read(selectedAccountProvider);
       final files = ref.read(filesProvider);
       if (account == null) return;

@@ -73,6 +73,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   Future<void> note() async {
     final text = ref.read(timelineNoteProvider).value.text;
+    if (text.isEmpty) return;
     try {
       final accountSettings = ref
           .read(accountSettingsRepositoryProvider)
@@ -276,13 +277,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       IconButton(
                           onPressed: note.expectFailure(context),
                           icon: const Icon(Icons.edit)),
-                      if (defaultTargetPlatform == TargetPlatform.android ||
-                          defaultTargetPlatform == TargetPlatform.iOS)
-                        IconButton(
-                            onPressed: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_down)),
                       IconButton(
                         onPressed: noteCreateRoute,
                         icon: const Icon(Icons.keyboard_arrow_right),
