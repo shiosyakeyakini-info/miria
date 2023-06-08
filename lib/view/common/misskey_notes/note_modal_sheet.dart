@@ -20,6 +20,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:share_plus/share_plus.dart';
 
+final noteModalSheetSharingModeProviding = StateProvider((ref) => false);
+
 class NoteModalSheet extends ConsumerWidget {
   final Note note;
   final Account account;
@@ -95,26 +97,35 @@ class NoteModalSheet extends ConsumerWidget {
                 }),
             ListTile(
               title: const Text("ノートを共有"),
-              onTap: () async {
-                final box = context2.findRenderObject() as RenderBox?;
-                final boundary = noteBoundaryKey.currentContext
-                    ?.findRenderObject() as RenderRepaintBoundary;
-                final image = await boundary.toImage(
-                    pixelRatio: View.of(context).devicePixelRatio);
-                final byteData =
-                    await image.toByteData(format: ImageByteFormat.png);
+              onTap: () {
+                ref.read(noteModalSheetSharingModeProviding.notifier).state =
+                    true;
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  Future(() async {
+                    final box = context2.findRenderObject() as RenderBox?;
+                    final boundary = noteBoundaryKey.currentContext
+                        ?.findRenderObject() as RenderRepaintBoundary;
+                    final image = await boundary.toImage(
+                        pixelRatio: View.of(context).devicePixelRatio);
+                    final byteData =
+                        await image.toByteData(format: ImageByteFormat.png);
+                    ref
+                        .read(noteModalSheetSharingModeProviding.notifier)
+                        .state = false;
 
-                final path =
-                    "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
-                final file = File(path);
-                await file.writeAsBytes(byteData!.buffer.asUint8List(
-                    byteData.offsetInBytes, byteData.lengthInBytes));
+                    final path =
+                        "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
+                    final file = File(path);
+                    await file.writeAsBytes(byteData!.buffer.asUint8List(
+                        byteData.offsetInBytes, byteData.lengthInBytes));
 
-                final xFile = XFile(path, mimeType: "image/png");
-                await Share.shareXFiles([xFile],
-                    text: "https://${account.host}/notes/${note.id}",
-                    sharePositionOrigin:
-                        box!.localToGlobal(Offset.zero) & box.size);
+                    final xFile = XFile(path, mimeType: "image/png");
+                    await Share.shareXFiles([xFile],
+                        text: "https://${account.host}/notes/${note.id}",
+                        sharePositionOrigin:
+                            box!.localToGlobal(Offset.zero) & box.size);
+                  });
+                });
               },
             ),
             ListTile(

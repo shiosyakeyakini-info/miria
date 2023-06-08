@@ -82,14 +82,23 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
         key: globalKey,
         child: Container(
           padding: EdgeInsets.only(
-              top: 5 * MediaQuery.of(context).textScaleFactor,
-              bottom: 5 * MediaQuery.of(context).textScaleFactor),
+            top: 5 * MediaQuery.of(context).textScaleFactor,
+            bottom: 5 * MediaQuery.of(context).textScaleFactor,
+            left: displayNote.channel?.color != null ? 4.0 : 0.0,
+          ),
           decoration: widget.isDisplayBorder
               ? BoxDecoration(
-                  color: widget.recursive == 1
+                  color: widget.recursive == 1 &&
+                          ref.read(noteModalSheetSharingModeProviding)
                       ? Theme.of(context).scaffoldBackgroundColor
                       : null,
                   border: Border(
+                      left: displayNote.channel?.color != null
+                          ? BorderSide(
+                              color: Color(
+                                  0xFF000000 | displayNote.channel!.color!),
+                              width: 4)
+                          : BorderSide.none,
                       bottom: BorderSide(
                           color: Theme.of(context).dividerColor, width: 0.5)))
               : BoxDecoration(
@@ -102,7 +111,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             children: [
               if (isEmptyRenote)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
+                  padding: EdgeInsets.only(
+                    bottom: 2,
+                  ),
                   child: SimpleMfmText(
                     "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
                     style: Theme.of(context).textTheme.bodySmall,
@@ -499,7 +510,9 @@ class NoteChannelView extends StatelessWidget {
           Icon(
             Icons.tv,
             size: Theme.of(context).textTheme.bodySmall?.fontSize,
-            color: Theme.of(context).textTheme.bodySmall?.color,
+            color: channel.color != null
+                ? Color(0xFF000000 | channel.color!)
+                : Theme.of(context).textTheme.bodySmall?.color,
           ),
           const Padding(
             padding: EdgeInsets.only(left: 5),
