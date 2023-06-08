@@ -79,7 +79,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
   }
 
   Future<void> nextLoad() async {
-    if (isLoading) return;
+    if (isLoading || items.isEmpty) return;
     Future(() async {
       try {
         setState(() {

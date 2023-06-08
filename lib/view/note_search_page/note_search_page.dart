@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:mfm_parser/mfm_parser.dart';
+import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -98,74 +100,93 @@ class NoteSearchPageState extends ConsumerState<NoteSearchPage> {
                       child: Card(
                         child: Padding(
                           padding: EdgeInsets.all(10),
-                          child: Table(
-                            columnWidths: {
-                              0: IntrinsicColumnWidth(),
-                              1: IntrinsicColumnWidth(),
-                            },
-                            defaultVerticalAlignment:
-                                TableCellVerticalAlignment.middle,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
-                              TableRow(children: [
-                                Text("ユーザー"),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                        child: selectedUser == null
-                                            ? Container()
-                                            : UserListItem(user: selectedUser)),
-                                    IconButton(
-                                        onPressed: () async {
-                                          final selected =
-                                              await showDialog<User?>(
+                              Text(
+                                "これらはハッシュタグでは機能しません。",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Table(
+                                columnWidths: {
+                                  0: IntrinsicColumnWidth(),
+                                  1: IntrinsicColumnWidth(),
+                                },
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                children: [
+                                  TableRow(children: [
+                                    Text("ユーザー"),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                            child: selectedUser == null
+                                                ? Container()
+                                                : UserListItem(
+                                                    user: selectedUser)),
+                                        IconButton(
+                                            onPressed: () async {
+                                              final selected =
+                                                  await showDialog<User?>(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          UserSelectDialog(
+                                                            account:
+                                                                widget.account,
+                                                          ));
+
+                                              ref
+                                                  .read(noteSearchUserProvider
+                                                      .notifier)
+                                                  .state = selected;
+                                            },
+                                            icon: const Icon(
+                                                Icons.keyboard_arrow_right))
+                                      ],
+                                    )
+                                  ]),
+                                  TableRow(children: [
+                                    Text("チャンネル"),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                            child: selectedChannel == null
+                                                ? Container()
+                                                : Text(selectedChannel.name)),
+                                        IconButton(
+                                            onPressed: () async {
+                                              final selected = await showDialog<
+                                                      CommunityChannel?>(
                                                   context: context,
                                                   builder: (context) =>
-                                                      UserSelectDialog(
+                                                      ChannelSelectDialog(
                                                         account: widget.account,
                                                       ));
-
-                                          ref
-                                              .read(noteSearchUserProvider
-                                                  .notifier)
-                                              .state = selected;
-                                        },
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_right))
-                                  ],
-                                )
-                              ]),
-                              TableRow(children: [
-                                Text("チャンネル"),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                        child: selectedChannel == null
-                                            ? Container()
-                                            : Text(selectedChannel.name)),
-                                    IconButton(
-                                        onPressed: () async {
-                                          final selected = await showDialog<
-                                                  CommunityChannel?>(
-                                              context: context,
-                                              builder: (context) =>
-                                                  ChannelSelectDialog(
-                                                    account: widget.account,
-                                                  ));
-                                          ref
-                                              .read(noteSearchChannelProvider
-                                                  .notifier)
-                                              .state = selected;
-                                        },
-                                        icon: Icon(Icons.keyboard_arrow_right))
-                                  ],
-                                )
-                              ])
+                                              ref
+                                                  .read(
+                                                      noteSearchChannelProvider
+                                                          .notifier)
+                                                  .state = selected;
+                                            },
+                                            icon: Icon(
+                                                Icons.keyboard_arrow_right))
+                                      ],
+                                    )
+                                  ])
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -190,6 +211,9 @@ class NoteSearchList extends ConsumerWidget {
     final channel = ref.watch(noteSearchChannelProvider);
     final user = ref.watch(noteSearchUserProvider);
     final account = AccountScope.of(context);
+    final parsedSearchValue = const MfmParser().parse(searchValue);
+    final isHashtagOnly =
+        parsedSearchValue.length == 1 && parsedSearchValue[0] is MfmHashTag;
 
     if (searchValue.isEmpty && channel == null && user == null) {
       return Container();
@@ -202,21 +226,39 @@ class NoteSearchList extends ConsumerWidget {
           channel?.id,
         ]),
         initializeFuture: () async {
-          final notes = await ref.read(misskeyProvider(account)).notes.search(
-              NotesSearchRequest(
-                  query: searchValue,
-                  userId: user?.id,
-                  channelId: channel?.id));
+          final Iterable<Note> notes;
+          if (isHashtagOnly) {
+            notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+                NotesSearchByTagRequest(
+                    tag: (parsedSearchValue[0] as MfmHashTag).hashTag));
+          } else {
+            notes = await ref.read(misskeyProvider(account)).notes.search(
+                NotesSearchRequest(
+                    query: searchValue,
+                    userId: user?.id,
+                    channelId: channel?.id));
+          }
+
           ref.read(notesProvider(account)).registerAll(notes);
           return notes.toList();
         },
         nextFuture: (lastItem, _) async {
-          final notes = await ref.read(misskeyProvider(account)).notes.search(
-              NotesSearchRequest(
-                  query: searchValue,
-                  userId: user?.id,
-                  channelId: channel?.id,
-                  untilId: lastItem.id));
+          final Iterable<Note> notes;
+          if (isHashtagOnly) {
+            notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+                  NotesSearchByTagRequest(
+                    tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
+                    untilId: lastItem.id,
+                  ),
+                );
+          } else {
+            notes = await ref.read(misskeyProvider(account)).notes.search(
+                NotesSearchRequest(
+                    query: searchValue,
+                    userId: user?.id,
+                    channelId: channel?.id,
+                    untilId: lastItem.id));
+          }
           ref.read(notesProvider(account)).registerAll(notes);
           return notes.toList();
         },
