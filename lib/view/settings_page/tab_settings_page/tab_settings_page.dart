@@ -226,6 +226,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               const Padding(padding: EdgeInsets.all(10)),
               const Text("タブの名前"),
               TextField(
+                decoration: const InputDecoration(prefixIcon: Icon(Icons.edit)),
                 controller: nameController,
               ),
               const Padding(padding: EdgeInsets.all(10)),

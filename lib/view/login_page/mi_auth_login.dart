@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/login_page/centraing_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
@@ -78,16 +79,23 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                 Container(),
                 ElevatedButton(
                   onPressed: () async {
-                    await ref
-                        .read(accountRepository)
-                        .validateMiAuth(serverController.text)
-                        .expectFailure(context);
-                    if (!mounted) return;
-                    context.pushRoute(TimeLineRoute(
-                        currentTabSetting: ref
-                            .read(tabSettingsRepositoryProvider)
-                            .tabSettings
-                            .first));
+                    try {
+                      IndicatorView.showIndicator(context);
+                      await ref
+                          .read(accountRepository)
+                          .validateMiAuth(serverController.text)
+                          .expectFailure(context);
+                      if (!mounted) return;
+                      context.pushRoute(TimeLineRoute(
+                          currentTabSetting: ref
+                              .read(tabSettingsRepositoryProvider)
+                              .tabSettings
+                              .first));
+                    } catch (e) {
+                      rethrow;
+                    } finally {
+                      IndicatorView.hideIndicator(context);
+                    }
                   },
                   child: Text("認証してきた"),
                 ),

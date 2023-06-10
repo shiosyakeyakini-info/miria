@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
@@ -84,39 +85,52 @@ class InputComplementState extends ConsumerState<InputComplement> {
       return Container();
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: Theme.of(context).primaryColor))),
-          padding: const EdgeInsets.all(5),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (filteredInputEmoji.isNotEmpty)
-                  for (final emoji in filteredInputEmoji)
-                    GestureDetector(
-                      onTap: () => insertEmoji(emoji, ref),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: SizedBox(
-                            height: 32 * MediaQuery.of(context).textScaleFactor,
-                            child: CustomEmoji(emojiData: emoji)),
-                      ),
-                    )
-                else
-                  CustomKeyboardList(
-                    controller: widget.controller,
-                    focusNode: ref.read(widget.focusNode),
-                  ),
-              ]),
-        ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+          border:
+              Border(top: BorderSide(color: Theme.of(context).primaryColor))),
+      child: Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (filteredInputEmoji.isNotEmpty)
+                        for (final emoji in filteredInputEmoji)
+                          GestureDetector(
+                            onTap: () => insertEmoji(emoji, ref),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: SizedBox(
+                                  height: 32 *
+                                      MediaQuery.of(context).textScaleFactor,
+                                  child: CustomEmoji(emojiData: emoji)),
+                            ),
+                          )
+                      else
+                        CustomKeyboardList(
+                          controller: widget.controller,
+                          focusNode: ref.read(widget.focusNode),
+                        ),
+                    ]),
+              ),
+            ),
+          ),
+          if (defaultTargetPlatform == TargetPlatform.android ||
+              defaultTargetPlatform == TargetPlatform.iOS)
+            IconButton(
+                onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                icon: const Icon(Icons.keyboard_arrow_down)),
+        ],
       ),
     );
   }

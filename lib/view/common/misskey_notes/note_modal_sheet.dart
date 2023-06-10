@@ -1,5 +1,9 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -11,16 +15,23 @@ import 'package:miria/view/common/not_implements_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:share_plus/share_plus.dart';
+
+final noteModalSheetSharingModeProviding = StateProvider((ref) => false);
 
 class NoteModalSheet extends ConsumerWidget {
   final Note note;
   final Account account;
+  final GlobalKey noteBoundaryKey;
 
   const NoteModalSheet({
     super.key,
     required this.note,
     required this.account,
+    required this.noteBoundaryKey,
   });
 
   @override
@@ -30,7 +41,7 @@ class NoteModalSheet extends ConsumerWidget {
           .read(misskeyProvider(account))
           .notes
           .state(NotesStateRequest(noteId: note.id)),
-      builder: (context, snapshot) {
+      builder: (context2, snapshot) {
         final data = snapshot.data;
         if (data == null) {
           return const Center(child: CircularProgressIndicator());
@@ -87,11 +98,36 @@ class NoteModalSheet extends ConsumerWidget {
             ListTile(
               title: const Text("ノートを共有"),
               onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => NotImplementationDialog());
+                ref.read(noteModalSheetSharingModeProviding.notifier).state =
+                    true;
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  Future(() async {
+                    final box = context2.findRenderObject() as RenderBox?;
+                    final boundary = noteBoundaryKey.currentContext
+                        ?.findRenderObject() as RenderRepaintBoundary;
+                    final image = await boundary.toImage(
+                        pixelRatio: View.of(context).devicePixelRatio);
+                    final byteData =
+                        await image.toByteData(format: ImageByteFormat.png);
+                    ref
+                        .read(noteModalSheetSharingModeProviding.notifier)
+                        .state = false;
+
+                    final path =
+                        "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
+                    final file = File(path);
+                    await file.writeAsBytes(byteData!.buffer.asUint8List(
+                        byteData.offsetInBytes, byteData.lengthInBytes));
+
+                    final xFile = XFile(path, mimeType: "image/png");
+                    await Share.shareXFiles([xFile],
+                        text: "https://${account.host}/notes/${note.id}",
+                        sharePositionOrigin:
+                            box!.localToGlobal(Offset.zero) & box.size);
+                  });
+                });
               },
-            ), //TODO: 未実装
+            ),
             ListTile(
                 onTap: () async {
                   if (data.isFavorited) {

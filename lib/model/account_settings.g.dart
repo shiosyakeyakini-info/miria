@@ -18,6 +18,9 @@ _$_AccountSettings _$$_AccountSettingsFromJson(Map<String, dynamic> json) =>
               _$NoteVisibilityEnumMap, json['defaultNoteVisibility']) ??
           NoteVisibility.public,
       defaultIsLocalOnly: json['defaultIsLocalOnly'] as bool? ?? false,
+      defaultReactionAcceptance: $enumDecodeNullable(
+              _$ReactionAcceptanceEnumMap, json['defaultReactionAcceptance']) ??
+          null,
     );
 
 Map<String, dynamic> _$$_AccountSettingsToJson(_$_AccountSettings instance) =>
@@ -28,6 +31,8 @@ Map<String, dynamic> _$$_AccountSettingsToJson(_$_AccountSettings instance) =>
       'defaultNoteVisibility':
           _$NoteVisibilityEnumMap[instance.defaultNoteVisibility]!,
       'defaultIsLocalOnly': instance.defaultIsLocalOnly,
+      'defaultReactionAcceptance':
+          _$ReactionAcceptanceEnumMap[instance.defaultReactionAcceptance],
     };
 
 const _$NoteVisibilityEnumMap = {
@@ -35,4 +40,12 @@ const _$NoteVisibilityEnumMap = {
   NoteVisibility.home: 'home',
   NoteVisibility.followers: 'followers',
   NoteVisibility.specified: 'specified',
+};
+
+const _$ReactionAcceptanceEnumMap = {
+  ReactionAcceptance.likeOnly: 'likeOnly',
+  ReactionAcceptance.likeOnlyForRemote: 'likeOnlyForRemote',
+  ReactionAcceptance.nonSensitiveOnly: 'nonSensitiveOnly',
+  ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote:
+      'nonSensitiveOnlyForLocalLikeOnlyForRemote',
 };

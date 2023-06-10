@@ -183,7 +183,9 @@ abstract class TimelineRepository extends ChangeNotifier {
     });
   }
 
-  Future<void> previousLoad() async {}
+  Future<int> previousLoad() async {
+    return 0;
+  }
 
   void subscribe(SubscribeItem item) {
     final index =

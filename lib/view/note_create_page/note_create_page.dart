@@ -14,6 +14,7 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/modal_indicator.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
@@ -71,6 +72,8 @@ final channelProvider =
     StateProvider.autoDispose<(String id, String name)?>((ref) => null);
 final replyProvider = StateProvider.autoDispose<Note?>((ref) => null);
 final renoteProvider = StateProvider.autoDispose<Note?>((ref) => null);
+final reactionAcceptanceProvider =
+    StateProvider.autoDispose<ReactionAcceptance?>((ref) => null);
 
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
@@ -101,6 +104,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   var isCw = false;
   final cwController = TextEditingController();
   late final focusNode = ref.read(noteFocusProvider);
+  var isFirstChangeDependenciesCalled = false;
 
   @override
   void initState() {
@@ -110,6 +114,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (isFirstChangeDependenciesCalled) return;
+    isFirstChangeDependenciesCalled = true;
 
     Future(() async {
       final account =
@@ -150,6 +156,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         ];
       }
 
+      // 設定の反映
+      ref.read(reactionAcceptanceProvider.notifier).state =
+          accountSettings.defaultReactionAcceptance;
+
       // 削除されたノートの反映
       final deletedNote = widget.deletedNote;
       if (deletedNote != null) {
@@ -177,6 +187,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         cwController.text = deletedNote.cw ?? "";
         isCw = deletedNote.cw?.isNotEmpty == true;
         ref.read(noteInputTextProvider).text = deletedNote.text ?? "";
+        ref.read(reactionAcceptanceProvider.notifier).state =
+            deletedNote.reactionAcceptance;
       }
 
       final renote = widget.renote;
@@ -221,6 +233,11 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       }
     });
     try {
+      if (ref.read(noteInputTextProvider).text.isEmpty) {
+        await SimpleMessageDialog.show(context, "なんか入れてや");
+        return;
+      }
+
       final account = ref.read(selectedAccountProvider);
       final files = ref.read(filesProvider);
       if (account == null) return;
@@ -272,6 +289,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
             renoteId: ref.read(renoteProvider)?.id,
             channelId: ref.read(channelProvider)?.$1,
             fileIds: fileIds.isEmpty ? null : fileIds,
+            reactionAcceptance: ref.read(reactionAcceptanceProvider),
           ));
       if (!mounted) return;
       IndicatorView.hideIndicator(context);
@@ -389,7 +407,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         ),
                       ),
                     TextField(
-                      controller: ref.read(noteInputTextProvider),
+                      controller: ref.watch(noteInputTextProvider),
                       focusNode: focusNode,
                       maxLines: null,
                       minLines: 5,
@@ -468,9 +486,6 @@ class MfmPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final previewText = ref.watch(noteInputTextProvider);
     final account = ref.watch(selectedAccountProvider);
-
-    //TODO: どこかが監視してないといけないので
-    ref.watch(noteFocusProvider);
 
     if (account == null) {
       return Container();

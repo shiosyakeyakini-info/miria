@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/constants.dart';
+import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ServerDetailDialog extends ConsumerStatefulWidget {
@@ -42,14 +46,15 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
     super.didChangeDependencies();
     controller?.disconnect();
     controller = ref.read(misskeyProvider(widget.account)).serverStatsLogStream(
-        (response) => {
-              //TODO
-            }, (response) {
-      setState(() {
-        logged.add(response);
-      });
-    })
-      ..startStreaming();
+      (response) => setState(() {
+        logged.insertAll(0, response);
+      }),
+      (response) {
+        setState(() {
+          logged.add(response);
+        });
+      },
+    )..startStreaming();
 
     Future(() async {
       try {
@@ -71,18 +76,22 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         //TODO
       }
 
-      try {
-        final sendDate = DateTime.now();
-        final pingResponse =
-            await ref.read(misskeyProvider(widget.account)).ping();
-
-        setState(() {
-          ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
-        });
-      } catch (e, s) {
-        //TODO
-      }
+      await refreshPing();
     });
+  }
+
+  Future<void> refreshPing() async {
+    try {
+      final sendDate = DateTime.now();
+      final pingResponse =
+          await ref.read(misskeyProvider(widget.account)).ping();
+
+      setState(() {
+        ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
+      });
+    } catch (e, s) {
+      //TODO
+    }
   }
 
   String format(double value) {
@@ -93,7 +102,18 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   Widget build(BuildContext context) {
     final currentStat = logged.lastOrNull;
     return AlertDialog(
-      title: Text(widget.account.host),
+      title: Row(
+        children: [
+          Expanded(child: Text(widget.account.host)),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                context.pushRoute(FederationRoute(
+                    account: widget.account, host: widget.account.host));
+              },
+              icon: const Icon(Icons.keyboard_arrow_right))
+        ],
+      ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.8,
@@ -106,7 +126,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
               if (onlineUsers != null)
                 Text.rich(TextSpan(children: [
                   TextSpan(
-                      text: onlineUsers.toString(),
+                      text: onlineUsers.format(),
                       style: Theme.of(context).textTheme.headlineSmall),
                   TextSpan(
                       text: " 人", style: Theme.of(context).textTheme.bodyMedium)
@@ -192,21 +212,26 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: ping!.toString(),
+                                    text: ping.format(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineSmall),
                                 TextSpan(
                                     text: " ミリ秒",
                                     style:
-                                        Theme.of(context).textTheme.bodyMedium)
+                                        Theme.of(context).textTheme.bodyMedium),
+                                WidgetSpan(
+                                    alignment: PlaceholderAlignment.middle,
+                                    child: IconButton(
+                                        onPressed: () => refreshPing(),
+                                        icon: Icon(Icons.refresh)))
                               ],
                             ),
                           )
                       ])),
                   Expanded(child: Container()),
                 ],
-              )
+              ),
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';

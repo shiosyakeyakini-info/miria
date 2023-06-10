@@ -21,40 +21,35 @@ class ChannelsPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("チャンネル"),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: "検索"),
+              Tab(text: "トレンド"),
+              Tab(text: "お気に入り"),
+              Tab(text: "フォロー中"),
+              Tab(text: "管理中")
+            ],
+            isScrollable: true,
+          ),
         ),
         body: AccountScope(
             account: account,
-            child: const Column(
-              children: [
-                TabBar(
-                  tabs: [
-                    Tab(text: "検索"),
-                    Tab(text: "トレンド"),
-                    Tab(text: "お気に入り"),
-                    Tab(text: "フォロー中"),
-                    Tab(text: "管理中")
-                  ],
-                  isScrollable: true,
-                ),
-                Expanded(
-                    child: TabBarView(children: [
-                  Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: ChannelSearch()),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: ChannelTrend(),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: ChannelFavorited()),
-                  Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: ChannelFollowed()),
-                  Text("作成中")
-                ]))
-              ],
-            )),
+            child: const TabBarView(children: [
+              Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: ChannelSearch()),
+              Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: ChannelTrend(),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: ChannelFavorited()),
+              Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: ChannelFollowed()),
+              Text("作成中")
+            ])),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miria/model/general_settings.dart';
 
 class AppTheme extends InheritedWidget {
   final AppThemeData themeData;
@@ -24,6 +25,7 @@ class AppTheme extends InheritedWidget {
 }
 
 class AppThemeData {
+  final bool isDarkMode;
   final InputDecoration noteTextStyle;
   final ButtonStyle reactionButtonStyle;
   final TextStyle linkStyle;
@@ -42,6 +44,7 @@ class AppThemeData {
   final Color voteColor2;
 
   const AppThemeData({
+    required this.isDarkMode,
     required this.noteTextStyle,
     required this.reactionButtonStyle,
     required this.linkStyle,

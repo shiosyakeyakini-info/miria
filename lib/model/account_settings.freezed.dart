@@ -26,6 +26,8 @@ mixin _$AccountSettings {
   NoteVisibility get defaultNoteVisibility =>
       throw _privateConstructorUsedError;
   bool get defaultIsLocalOnly => throw _privateConstructorUsedError;
+  ReactionAcceptance? get defaultReactionAcceptance =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,7 +46,8 @@ abstract class $AccountSettingsCopyWith<$Res> {
       String host,
       List<String> reactions,
       NoteVisibility defaultNoteVisibility,
-      bool defaultIsLocalOnly});
+      bool defaultIsLocalOnly,
+      ReactionAcceptance? defaultReactionAcceptance});
 }
 
 /// @nodoc
@@ -65,6 +68,7 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
     Object? reactions = null,
     Object? defaultNoteVisibility = null,
     Object? defaultIsLocalOnly = null,
+    Object? defaultReactionAcceptance = freezed,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -87,6 +91,10 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
           ? _value.defaultIsLocalOnly
           : defaultIsLocalOnly // ignore: cast_nullable_to_non_nullable
               as bool,
+      defaultReactionAcceptance: freezed == defaultReactionAcceptance
+          ? _value.defaultReactionAcceptance
+          : defaultReactionAcceptance // ignore: cast_nullable_to_non_nullable
+              as ReactionAcceptance?,
     ) as $Val);
   }
 }
@@ -104,7 +112,8 @@ abstract class _$$_AccountSettingsCopyWith<$Res>
       String host,
       List<String> reactions,
       NoteVisibility defaultNoteVisibility,
-      bool defaultIsLocalOnly});
+      bool defaultIsLocalOnly,
+      ReactionAcceptance? defaultReactionAcceptance});
 }
 
 /// @nodoc
@@ -123,6 +132,7 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
     Object? reactions = null,
     Object? defaultNoteVisibility = null,
     Object? defaultIsLocalOnly = null,
+    Object? defaultReactionAcceptance = freezed,
   }) {
     return _then(_$_AccountSettings(
       userId: null == userId
@@ -145,6 +155,10 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
           ? _value.defaultIsLocalOnly
           : defaultIsLocalOnly // ignore: cast_nullable_to_non_nullable
               as bool,
+      defaultReactionAcceptance: freezed == defaultReactionAcceptance
+          ? _value.defaultReactionAcceptance
+          : defaultReactionAcceptance // ignore: cast_nullable_to_non_nullable
+              as ReactionAcceptance?,
     ));
   }
 }
@@ -157,7 +171,8 @@ class _$_AccountSettings implements _AccountSettings {
       required this.host,
       final List<String> reactions = const [],
       this.defaultNoteVisibility = NoteVisibility.public,
-      this.defaultIsLocalOnly = false})
+      this.defaultIsLocalOnly = false,
+      this.defaultReactionAcceptance = null})
       : _reactions = reactions;
 
   factory _$_AccountSettings.fromJson(Map<String, dynamic> json) =>
@@ -182,10 +197,13 @@ class _$_AccountSettings implements _AccountSettings {
   @override
   @JsonKey()
   final bool defaultIsLocalOnly;
+  @override
+  @JsonKey()
+  final ReactionAcceptance? defaultReactionAcceptance;
 
   @override
   String toString() {
-    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly)';
+    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance)';
   }
 
   @override
@@ -200,7 +218,10 @@ class _$_AccountSettings implements _AccountSettings {
             (identical(other.defaultNoteVisibility, defaultNoteVisibility) ||
                 other.defaultNoteVisibility == defaultNoteVisibility) &&
             (identical(other.defaultIsLocalOnly, defaultIsLocalOnly) ||
-                other.defaultIsLocalOnly == defaultIsLocalOnly));
+                other.defaultIsLocalOnly == defaultIsLocalOnly) &&
+            (identical(other.defaultReactionAcceptance,
+                    defaultReactionAcceptance) ||
+                other.defaultReactionAcceptance == defaultReactionAcceptance));
   }
 
   @JsonKey(ignore: true)
@@ -211,7 +232,8 @@ class _$_AccountSettings implements _AccountSettings {
       host,
       const DeepCollectionEquality().hash(_reactions),
       defaultNoteVisibility,
-      defaultIsLocalOnly);
+      defaultIsLocalOnly,
+      defaultReactionAcceptance);
 
   @JsonKey(ignore: true)
   @override
@@ -229,11 +251,13 @@ class _$_AccountSettings implements _AccountSettings {
 
 abstract class _AccountSettings implements AccountSettings {
   const factory _AccountSettings(
-      {required final String userId,
-      required final String host,
-      final List<String> reactions,
-      final NoteVisibility defaultNoteVisibility,
-      final bool defaultIsLocalOnly}) = _$_AccountSettings;
+          {required final String userId,
+          required final String host,
+          final List<String> reactions,
+          final NoteVisibility defaultNoteVisibility,
+          final bool defaultIsLocalOnly,
+          final ReactionAcceptance? defaultReactionAcceptance}) =
+      _$_AccountSettings;
 
   factory _AccountSettings.fromJson(Map<String, dynamic> json) =
       _$_AccountSettings.fromJson;
@@ -248,6 +272,8 @@ abstract class _AccountSettings implements AccountSettings {
   NoteVisibility get defaultNoteVisibility;
   @override
   bool get defaultIsLocalOnly;
+  @override
+  ReactionAcceptance? get defaultReactionAcceptance;
   @override
   @JsonKey(ignore: true)
   _$$_AccountSettingsCopyWith<_$_AccountSettings> get copyWith =>

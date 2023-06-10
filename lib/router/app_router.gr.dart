@@ -243,6 +243,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    FederationRoute.name: (routeData) {
+      final args = routeData.argsAs<FederationRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: FederationPage(
+          key: args.key,
+          account: args.account,
+          host: args.host,
+        ),
+      );
+    },
     NoteSearchRoute.name: (routeData) {
       final args = routeData.argsAs<NoteSearchRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -305,6 +316,27 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const AccountListPage(),
+      );
+    },
+    ExploreRoleUsersRoute.name: (routeData) {
+      final args = routeData.argsAs<ExploreRoleUsersRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ExploreRoleUsersPage(
+          key: args.key,
+          item: args.item,
+          account: args.account,
+        ),
+      );
+    },
+    ExploreRoute.name: (routeData) {
+      final args = routeData.argsAs<ExploreRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ExplorePage(
+          key: args.key,
+          account: args.account,
+        ),
       );
     },
     TimeLineRoute.name: (routeData) {
@@ -1195,6 +1227,49 @@ class ChannelsRouteArgs {
 }
 
 /// generated route for
+/// [FederationPage]
+class FederationRoute extends PageRouteInfo<FederationRouteArgs> {
+  FederationRoute({
+    Key? key,
+    required Account account,
+    required String host,
+    List<PageRouteInfo>? children,
+  }) : super(
+          FederationRoute.name,
+          args: FederationRouteArgs(
+            key: key,
+            account: account,
+            host: host,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'FederationRoute';
+
+  static const PageInfo<FederationRouteArgs> page =
+      PageInfo<FederationRouteArgs>(name);
+}
+
+class FederationRouteArgs {
+  const FederationRouteArgs({
+    this.key,
+    required this.account,
+    required this.host,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final String host;
+
+  @override
+  String toString() {
+    return 'FederationRouteArgs{key: $key, account: $account, host: $host}';
+  }
+}
+
+/// generated route for
 /// [NoteSearchPage]
 class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
   NoteSearchRoute({
@@ -1387,6 +1462,87 @@ class AccountListRoute extends PageRouteInfo<void> {
   static const String name = 'AccountListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ExploreRoleUsersPage]
+class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
+  ExploreRoleUsersRoute({
+    Key? key,
+    required RolesListResponse item,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ExploreRoleUsersRoute.name,
+          args: ExploreRoleUsersRouteArgs(
+            key: key,
+            item: item,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ExploreRoleUsersRoute';
+
+  static const PageInfo<ExploreRoleUsersRouteArgs> page =
+      PageInfo<ExploreRoleUsersRouteArgs>(name);
+}
+
+class ExploreRoleUsersRouteArgs {
+  const ExploreRoleUsersRouteArgs({
+    this.key,
+    required this.item,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final RolesListResponse item;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ExploreRoleUsersRouteArgs{key: $key, item: $item, account: $account}';
+  }
+}
+
+/// generated route for
+/// [ExplorePage]
+class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
+  ExploreRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ExploreRoute.name,
+          args: ExploreRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ExploreRoute';
+
+  static const PageInfo<ExploreRouteArgs> page =
+      PageInfo<ExploreRouteArgs>(name);
+}
+
+class ExploreRouteArgs {
+  const ExploreRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'ExploreRouteArgs{key: $key, account: $account}';
+  }
 }
 
 /// generated route for

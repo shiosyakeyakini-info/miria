@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/general_settings.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/error_notification.dart';
@@ -76,6 +78,28 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
     }
   }
 
+  Future<void> nextLoad() async {
+    if (isLoading || items.isEmpty) return;
+    Future(() async {
+      try {
+        setState(() {
+          isLoading = true;
+        });
+        final result = await widget.nextFuture(items.last, items.length);
+        if (result.isEmpty) isFinalPage = true;
+        items.addAll(result);
+        setState(() {
+          isLoading = false;
+        });
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        rethrow;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -89,6 +113,12 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
             return Container();
           }
 
+          if (ref.read(generalSettingsRepositoryProvider
+                  .select((value) => value.settings.automaticPush)) ==
+              AutomaticPush.automatic) {
+            nextLoad();
+          }
+
           return Column(
             children: [
               if (error != null) ErrorNotification(error: error),
@@ -97,20 +127,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                     ? Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isLoading = true;
-                              Future(() async {
-                                final result = await widget.nextFuture(
-                                    items.last, items.length);
-                                if (result.isEmpty) isFinalPage = true;
-                                items.addAll(result);
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              });
-                            });
-                          },
+                          onPressed: nextLoad,
                           icon: const Icon(Icons.keyboard_arrow_down),
                         ),
                       )

@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
+  final MainStreamRepository mainStreamRepository;
 
   SocketTimelineRepository(
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
+    this.mainStreamRepository,
   );
 
   Future<Iterable<Note>> requestNotes({String? untilId});
@@ -58,6 +61,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   void startTimeLine() {
+    mainStreamRepository.reconnect();
     if (olderNotes.isEmpty) {
       requestNotes().then((resultNotes) {
         olderNotes.addAll(resultNotes);
@@ -70,6 +74,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       });
     } else {
       reloadLatestNotes();
+    }
+
+    if (socketController != null) {
+      socketController?.disconnect();
     }
 
     socketController = createSocketController(
@@ -118,19 +126,21 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   void reconnect() {
     super.reconnect();
     socketController?.reconnect();
+    mainStreamRepository.reconnect();
     reloadLatestNotes();
   }
 
   @override
-  Future<void> previousLoad() async {
+  Future<int> previousLoad() async {
     if (newerNotes.isEmpty && olderNotes.isEmpty) {
-      return;
+      return -1;
     }
     final resultNotes = await requestNotes(
       untilId: olderNotes.lastOrNull?.id ?? newerNotes.first.id,
     );
     olderNotes.addAll(resultNotes);
     notifyListeners();
+    return resultNotes.length;
   }
 
   @override
@@ -153,7 +163,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     if (index == -1) {
       subscribedList.add(item);
       if (isSubscribed == -1) {
-        socketController?.send(ChannelDataType.subNote, item.noteId);
+        socketController?.subNote(item.noteId);
       }
     } else {
       subscribedList[index] = item;
@@ -167,19 +177,19 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           element.renoteId == renoteId ||
           element.replyId == renoteId);
       if (isRenoteSubscribed == -1) {
-        socketController?.send(ChannelDataType.subNote, renoteId);
+        socketController?.subNote(renoteId);
       }
     }
 
     final replyId = item.replyId;
     if (replyId != null) {
-      socketController?.send(ChannelDataType.subNote, replyId);
+      socketController?.subNote(replyId);
       final isRenoteSubscribed = subscribedList.indexWhere((element) =>
           element.noteId == replyId ||
           element.renoteId == replyId ||
           element.replyId == replyId);
       if (isRenoteSubscribed == -1) {
-        socketController?.send(ChannelDataType.subNote, replyId);
+        socketController?.subNote(replyId);
       }
     }
   }
@@ -187,6 +197,6 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   void describe(String id) {
     if (!tabSetting.isSubscribe) return;
-    socketController?.send(ChannelDataType.unsubNote, id);
+    socketController?.unsubNote(id);
   }
 }

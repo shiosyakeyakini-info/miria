@@ -24,6 +24,15 @@ enum NSFWInherit {
   const NSFWInherit(this.displayName);
 }
 
+enum AutomaticPush {
+  automatic("自動で次を読み込む"),
+  none("自動で読み込まない");
+
+  final String displayName;
+
+  const AutomaticPush(this.displayName);
+}
+
 @freezed
 class GeneralSettings with _$GeneralSettings {
   const factory GeneralSettings({
@@ -32,6 +41,7 @@ class GeneralSettings with _$GeneralSettings {
     @Default(ThemeColorSystem.system) ThemeColorSystem themeColorSystem,
     @Default(NSFWInherit.inherit) NSFWInherit nsfwInherit,
     @Default(false) bool enableDirectReaction,
+    @Default(AutomaticPush.none) AutomaticPush automaticPush,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

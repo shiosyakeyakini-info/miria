@@ -21,6 +21,7 @@ class AppThemeScope extends ConsumerStatefulWidget {
 class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
     return AppThemeData(
+      isDarkMode: theme.isDarkTheme,
       noteTextStyle: InputDecoration(
         border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black54),
@@ -125,18 +126,21 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         primaryColorDark: theme.primaryDarken,
         primaryColorLight: theme.primaryLighten,
         appBarTheme: AppBarTheme(
-            elevation: 0,
-            titleSpacing: 0,
-            titleTextStyle:
-                textTheme.headlineSmall?.copyWith(color: Colors.white),
-            backgroundColor:
-                theme.isDarkTheme ? theme.panelBackground : theme.primary,
-            iconTheme: const IconThemeData(color: Colors.white)),
+          elevation: 0,
+          titleSpacing: 0,
+          titleTextStyle:
+              textTheme.headlineSmall?.copyWith(color: Colors.white),
+          backgroundColor:
+              theme.isDarkTheme ? theme.panelBackground : theme.primary,
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
+        bottomAppBarTheme: BottomAppBarTheme(color: theme.primary),
         drawerTheme: DrawerThemeData(backgroundColor: theme.panel),
         listTileTheme: ListTileThemeData(iconColor: theme.foreground),
         scaffoldBackgroundColor: theme.panel,
         tabBarTheme: TabBarTheme(
-            labelColor: theme.foreground,
+            overlayColor: MaterialStatePropertyAll(theme.primary),
+            labelColor: Colors.white,
             labelStyle: textTheme.titleSmall,
             unselectedLabelStyle: textTheme.titleSmall
                 ?.copyWith(color: textTheme.bodySmall?.color),
@@ -192,8 +196,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
             borderRadius: BorderRadius.circular(10),
           ),
           contentPadding: const EdgeInsets.all(5),
-          hintStyle: textTheme.bodySmall
-              ?.copyWith(fontSize: textTheme.titleMedium?.fontSize),
+          hintStyle: textTheme.bodySmall?.copyWith(
+            fontSize: textTheme.titleMedium?.fontSize,
+            color:
+                theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+          ),
           prefixIconColor: theme.primary,
           suffixIconColor: theme.primary,
           isDense: true,

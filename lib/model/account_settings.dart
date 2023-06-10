@@ -12,6 +12,7 @@ class AccountSettings with _$AccountSettings {
     @Default([]) List<String> reactions,
     @Default(NoteVisibility.public) NoteVisibility defaultNoteVisibility,
     @Default(false) bool defaultIsLocalOnly,
+    @Default(null) ReactionAcceptance? defaultReactionAcceptance,
   }) = _AccountSettings;
 
   factory AccountSettings.fromJson(Map<String, dynamic> json) =>

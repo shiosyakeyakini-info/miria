@@ -8,8 +8,13 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
+import 'package:miria/view/common/constants.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
+import 'package:miria/view/themes/app_theme.dart';
+import 'package:miria/view/user_page/update_memo_dialog.dart';
 import 'package:miria/view/user_page/user_control_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -26,6 +31,7 @@ class UserDetail extends ConsumerStatefulWidget {
 class UserDetailState extends ConsumerState<UserDetail> {
   late UsersShowResponse response;
   bool isFollowEditing = false;
+  String memo = "";
 
   Future<void> followCreate() async {
     if (isFollowEditing) return;
@@ -107,6 +113,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
   void initState() {
     super.initState();
     response = widget.response;
+    memo = response.memo ?? "";
   }
 
   @override
@@ -241,6 +248,43 @@ class UserDetailState extends ConsumerState<UserDetail> {
                   ],
                 ),
                 const Padding(padding: EdgeInsets.only(top: 5)),
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            memo.isNotEmpty ? memo : "なんかメモることあったら書いとき",
+                            style: memo.isNotEmpty
+                                ? null
+                                : Theme.of(context)
+                                    .inputDecorationTheme
+                                    .hintStyle,
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () async {
+                              final result = await showDialog(
+                                  context: context,
+                                  builder: (context) => UpdateMemoDialog(
+                                        account: widget.account,
+                                        initialMemo: memo,
+                                        userId: response.id,
+                                      ));
+                              if (result != null) {
+                                setState(() {
+                                  memo = result;
+                                });
+                              }
+                            },
+                            icon: Icon(Icons.edit)),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(top: 5)),
                 Wrap(
                   spacing: 5,
                   runSpacing: 5,
@@ -255,6 +299,34 @@ class UserDetailState extends ConsumerState<UserDetail> {
                   ],
                 ),
                 const Padding(padding: EdgeInsets.only(top: 5)),
+                if (response.host != null)
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.warning_amber_rounded),
+                              Text("リモートユーザーのため、情報が不完全です。")
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () => context.pushRoute(FederationRoute(
+                                account: AccountScope.of(context),
+                                host: response.host!)),
+                            child: Text(
+                              "サーバー情報を表示",
+                              style: AppTheme.of(context).linkStyle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 Align(
                   alignment: Alignment.center,
                   child: MfmText(response.description ?? "",
@@ -323,7 +395,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                   children: [
                     Column(
                       children: [
-                        Text(response.notesCount.toString(),
+                        Text(response.notesCount.format(),
                             style: Theme.of(context).textTheme.titleMedium),
                         Text(
                           "ノート",
@@ -337,7 +409,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                           account: AccountScope.of(context))),
                       child: Column(
                         children: [
-                          Text(response.followingCount.toString(),
+                          Text(response.followingCount.format(),
                               style: Theme.of(context).textTheme.titleMedium),
                           Text(
                             "フォロー",
@@ -353,7 +425,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(response.followersCount.toString(),
+                          Text(response.followersCount.format(),
                               style: Theme.of(context).textTheme.titleMedium),
                           Text(
                             "フォロワー",

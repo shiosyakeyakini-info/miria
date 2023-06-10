@@ -25,6 +25,7 @@ mixin _$GeneralSettings {
   ThemeColorSystem get themeColorSystem => throw _privateConstructorUsedError;
   NSFWInherit get nsfwInherit => throw _privateConstructorUsedError;
   bool get enableDirectReaction => throw _privateConstructorUsedError;
+  AutomaticPush get automaticPush => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       String darkColorThemeId,
       ThemeColorSystem themeColorSystem,
       NSFWInherit nsfwInherit,
-      bool enableDirectReaction});
+      bool enableDirectReaction,
+      AutomaticPush automaticPush});
 }
 
 /// @nodoc
@@ -64,6 +66,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? themeColorSystem = null,
     Object? nsfwInherit = null,
     Object? enableDirectReaction = null,
+    Object? automaticPush = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -86,6 +89,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.enableDirectReaction
           : enableDirectReaction // ignore: cast_nullable_to_non_nullable
               as bool,
+      automaticPush: null == automaticPush
+          ? _value.automaticPush
+          : automaticPush // ignore: cast_nullable_to_non_nullable
+              as AutomaticPush,
     ) as $Val);
   }
 }
@@ -103,7 +110,8 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       String darkColorThemeId,
       ThemeColorSystem themeColorSystem,
       NSFWInherit nsfwInherit,
-      bool enableDirectReaction});
+      bool enableDirectReaction,
+      AutomaticPush automaticPush});
 }
 
 /// @nodoc
@@ -122,6 +130,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? themeColorSystem = null,
     Object? nsfwInherit = null,
     Object? enableDirectReaction = null,
+    Object? automaticPush = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -144,6 +153,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.enableDirectReaction
           : enableDirectReaction // ignore: cast_nullable_to_non_nullable
               as bool,
+      automaticPush: null == automaticPush
+          ? _value.automaticPush
+          : automaticPush // ignore: cast_nullable_to_non_nullable
+              as AutomaticPush,
     ));
   }
 }
@@ -156,7 +169,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.darkColorThemeId = "",
       this.themeColorSystem = ThemeColorSystem.system,
       this.nsfwInherit = NSFWInherit.inherit,
-      this.enableDirectReaction = false});
+      this.enableDirectReaction = false,
+      this.automaticPush = AutomaticPush.none});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -176,10 +190,13 @@ class _$_GeneralSettings implements _GeneralSettings {
   @override
   @JsonKey()
   final bool enableDirectReaction;
+  @override
+  @JsonKey()
+  final AutomaticPush automaticPush;
 
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush)';
   }
 
   @override
@@ -196,13 +213,21 @@ class _$_GeneralSettings implements _GeneralSettings {
             (identical(other.nsfwInherit, nsfwInherit) ||
                 other.nsfwInherit == nsfwInherit) &&
             (identical(other.enableDirectReaction, enableDirectReaction) ||
-                other.enableDirectReaction == enableDirectReaction));
+                other.enableDirectReaction == enableDirectReaction) &&
+            (identical(other.automaticPush, automaticPush) ||
+                other.automaticPush == automaticPush));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, lightColorThemeId,
-      darkColorThemeId, themeColorSystem, nsfwInherit, enableDirectReaction);
+  int get hashCode => Object.hash(
+      runtimeType,
+      lightColorThemeId,
+      darkColorThemeId,
+      themeColorSystem,
+      nsfwInherit,
+      enableDirectReaction,
+      automaticPush);
 
   @JsonKey(ignore: true)
   @override
@@ -224,7 +249,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final String darkColorThemeId,
       final ThemeColorSystem themeColorSystem,
       final NSFWInherit nsfwInherit,
-      final bool enableDirectReaction}) = _$_GeneralSettings;
+      final bool enableDirectReaction,
+      final AutomaticPush automaticPush}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -239,6 +265,8 @@ abstract class _GeneralSettings implements GeneralSettings {
   NSFWInherit get nsfwInherit;
   @override
   bool get enableDirectReaction;
+  @override
+  AutomaticPush get automaticPush;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>
