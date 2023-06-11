@@ -43,9 +43,9 @@ const _$NoteVisibilityEnumMap = {
 };
 
 const _$ReactionAcceptanceEnumMap = {
-  ReactionAcceptance.likeOnly: 'likeOnly',
   ReactionAcceptance.likeOnlyForRemote: 'likeOnlyForRemote',
   ReactionAcceptance.nonSensitiveOnly: 'nonSensitiveOnly',
   ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote:
       'nonSensitiveOnlyForLocalLikeOnlyForRemote',
+  ReactionAcceptance.likeOnly: 'likeOnly',
 };

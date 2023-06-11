@@ -568,26 +568,29 @@ packages:
   image_editor:
     dependency: "direct main"
     description:
-      name: image_editor
-      sha256: "9877a057b0cd2fafcd9a3dce5279948bd850d53ce76231a83c9678a2c9f186e9"
-      url: "https://pub.dev"
-    source: hosted
+      path: image_editor
+      ref: HEAD
+      resolved-ref: "60962da79541c39314ae5fcfb4f39dc29bea7179"
+      url: "https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git"
+    source: git
     version: "1.3.0"
   image_editor_common:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: image_editor_common
-      sha256: "07fc9bcc16918a8230e132b9d9a9f66bb1cef3ac99f5e2939cf2ad7a6775b511"
-      url: "https://pub.dev"
-    source: hosted
+      path: image_editor_common
+      ref: HEAD
+      resolved-ref: "60962da79541c39314ae5fcfb4f39dc29bea7179"
+      url: "https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git"
+    source: git
     version: "1.0.1"
   image_editor_platform_interface:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: image_editor_platform_interface
-      sha256: ee01ec5e228e10c40f96d7f822c176d4140c15b6706e4a701866ee0cdd1c2b72
-      url: "https://pub.dev"
-    source: hosted
+      path: image_editor_platform_interface
+      ref: HEAD
+      resolved-ref: "60962da79541c39314ae5fcfb4f39dc29bea7179"
+      url: "https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git"
+    source: git
     version: "1.0.1"
   intl:
     dependency: "direct main"

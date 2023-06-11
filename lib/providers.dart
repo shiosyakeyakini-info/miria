@@ -18,6 +18,7 @@ import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/repository/user_list_time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/state_notifier/photo_edit_state_notifier/photo_edit_view_model.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 final misskeyProvider = Provider.family<Misskey, Account>(
@@ -137,3 +138,7 @@ final generalSettingsRepositoryProvider =
 final errorEventProvider =
     StateProvider<(Object? error, BuildContext? context)>(
         (ref) => (null, null));
+
+final photoEditProvider =
+    StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
+        (ref) => PhotoEditStateNotifier(const PhotoEdit()));
