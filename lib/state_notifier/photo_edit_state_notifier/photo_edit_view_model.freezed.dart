@@ -29,6 +29,7 @@ mixin _$PhotoEdit {
   Size get defaultSize => throw _privateConstructorUsedError;
   Size get actualSize => throw _privateConstructorUsedError;
   int get angle => throw _privateConstructorUsedError;
+  List<EditedEmojiData> get emojis => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PhotoEditCopyWith<PhotoEdit> get copyWith =>
@@ -52,7 +53,8 @@ abstract class $PhotoEditCopyWith<$Res> {
       Size cropSize,
       Size defaultSize,
       Size actualSize,
-      int angle});
+      int angle,
+      List<EditedEmojiData> emojis});
 }
 
 /// @nodoc
@@ -80,6 +82,7 @@ class _$PhotoEditCopyWithImpl<$Res, $Val extends PhotoEdit>
     Object? defaultSize = null,
     Object? actualSize = null,
     Object? angle = null,
+    Object? emojis = null,
   }) {
     return _then(_value.copyWith(
       clipMode: null == clipMode
@@ -130,6 +133,10 @@ class _$PhotoEditCopyWithImpl<$Res, $Val extends PhotoEdit>
           ? _value.angle
           : angle // ignore: cast_nullable_to_non_nullable
               as int,
+      emojis: null == emojis
+          ? _value.emojis
+          : emojis // ignore: cast_nullable_to_non_nullable
+              as List<EditedEmojiData>,
     ) as $Val);
   }
 }
@@ -153,7 +160,8 @@ abstract class _$$_PhotoEditCopyWith<$Res> implements $PhotoEditCopyWith<$Res> {
       Size cropSize,
       Size defaultSize,
       Size actualSize,
-      int angle});
+      int angle,
+      List<EditedEmojiData> emojis});
 }
 
 /// @nodoc
@@ -179,6 +187,7 @@ class __$$_PhotoEditCopyWithImpl<$Res>
     Object? defaultSize = null,
     Object? actualSize = null,
     Object? angle = null,
+    Object? emojis = null,
   }) {
     return _then(_$_PhotoEdit(
       clipMode: null == clipMode
@@ -229,6 +238,10 @@ class __$$_PhotoEditCopyWithImpl<$Res>
           ? _value.angle
           : angle // ignore: cast_nullable_to_non_nullable
               as int,
+      emojis: null == emojis
+          ? _value._emojis
+          : emojis // ignore: cast_nullable_to_non_nullable
+              as List<EditedEmojiData>,
     ));
   }
 }
@@ -248,9 +261,11 @@ class _$_PhotoEdit implements _PhotoEdit {
       this.cropSize = Size.zero,
       this.defaultSize = Size.zero,
       this.actualSize = Size.zero,
-      this.angle = 0})
+      this.angle = 0,
+      final List<EditedEmojiData> emojis = const []})
       : _colorFilterPreviewImages = colorFilterPreviewImages,
-        _adaptivePresets = adaptivePresets;
+        _adaptivePresets = adaptivePresets,
+        _emojis = emojis;
 
   @override
   @JsonKey()
@@ -299,10 +314,18 @@ class _$_PhotoEdit implements _PhotoEdit {
   @override
   @JsonKey()
   final int angle;
+  final List<EditedEmojiData> _emojis;
+  @override
+  @JsonKey()
+  List<EditedEmojiData> get emojis {
+    if (_emojis is EqualUnmodifiableListView) return _emojis;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_emojis);
+  }
 
   @override
   String toString() {
-    return 'PhotoEdit(clipMode: $clipMode, colorFilterMode: $colorFilterMode, colorFilterPreviewImages: $colorFilterPreviewImages, adaptivePresets: $adaptivePresets, isInitialized: $isInitialized, initialImage: $initialImage, editedImage: $editedImage, cropOffset: $cropOffset, cropSize: $cropSize, defaultSize: $defaultSize, actualSize: $actualSize, angle: $angle)';
+    return 'PhotoEdit(clipMode: $clipMode, colorFilterMode: $colorFilterMode, colorFilterPreviewImages: $colorFilterPreviewImages, adaptivePresets: $adaptivePresets, isInitialized: $isInitialized, initialImage: $initialImage, editedImage: $editedImage, cropOffset: $cropOffset, cropSize: $cropSize, defaultSize: $defaultSize, actualSize: $actualSize, angle: $angle, emojis: $emojis)';
   }
 
   @override
@@ -332,7 +355,8 @@ class _$_PhotoEdit implements _PhotoEdit {
                 other.defaultSize == defaultSize) &&
             (identical(other.actualSize, actualSize) ||
                 other.actualSize == actualSize) &&
-            (identical(other.angle, angle) || other.angle == angle));
+            (identical(other.angle, angle) || other.angle == angle) &&
+            const DeepCollectionEquality().equals(other._emojis, _emojis));
   }
 
   @override
@@ -349,7 +373,8 @@ class _$_PhotoEdit implements _PhotoEdit {
       cropSize,
       defaultSize,
       actualSize,
-      angle);
+      angle,
+      const DeepCollectionEquality().hash(_emojis));
 
   @JsonKey(ignore: true)
   @override
@@ -371,7 +396,8 @@ abstract class _PhotoEdit implements PhotoEdit {
       final Size cropSize,
       final Size defaultSize,
       final Size actualSize,
-      final int angle}) = _$_PhotoEdit;
+      final int angle,
+      final List<EditedEmojiData> emojis}) = _$_PhotoEdit;
 
   @override
   bool get clipMode;
@@ -397,6 +423,8 @@ abstract class _PhotoEdit implements PhotoEdit {
   Size get actualSize;
   @override
   int get angle;
+  @override
+  List<EditedEmojiData> get emojis;
   @override
   @JsonKey(ignore: true)
   _$$_PhotoEditCopyWith<_$_PhotoEdit> get copyWith =>
@@ -537,5 +565,179 @@ abstract class _ColorFilterPreview implements ColorFilterPreview {
   @override
   @JsonKey(ignore: true)
   _$$_ColorFilterPreviewCopyWith<_$_ColorFilterPreview> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$EditedEmojiData {
+  MisskeyEmojiData get emoji => throw _privateConstructorUsedError;
+  Size get size => throw _privateConstructorUsedError;
+  Offset get position => throw _privateConstructorUsedError;
+  double get angle => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $EditedEmojiDataCopyWith<EditedEmojiData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $EditedEmojiDataCopyWith<$Res> {
+  factory $EditedEmojiDataCopyWith(
+          EditedEmojiData value, $Res Function(EditedEmojiData) then) =
+      _$EditedEmojiDataCopyWithImpl<$Res, EditedEmojiData>;
+  @useResult
+  $Res call({MisskeyEmojiData emoji, Size size, Offset position, double angle});
+}
+
+/// @nodoc
+class _$EditedEmojiDataCopyWithImpl<$Res, $Val extends EditedEmojiData>
+    implements $EditedEmojiDataCopyWith<$Res> {
+  _$EditedEmojiDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? emoji = null,
+    Object? size = null,
+    Object? position = null,
+    Object? angle = null,
+  }) {
+    return _then(_value.copyWith(
+      emoji: null == emoji
+          ? _value.emoji
+          : emoji // ignore: cast_nullable_to_non_nullable
+              as MisskeyEmojiData,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as Size,
+      position: null == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      angle: null == angle
+          ? _value.angle
+          : angle // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_EditedEmojiDataCopyWith<$Res>
+    implements $EditedEmojiDataCopyWith<$Res> {
+  factory _$$_EditedEmojiDataCopyWith(
+          _$_EditedEmojiData value, $Res Function(_$_EditedEmojiData) then) =
+      __$$_EditedEmojiDataCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({MisskeyEmojiData emoji, Size size, Offset position, double angle});
+}
+
+/// @nodoc
+class __$$_EditedEmojiDataCopyWithImpl<$Res>
+    extends _$EditedEmojiDataCopyWithImpl<$Res, _$_EditedEmojiData>
+    implements _$$_EditedEmojiDataCopyWith<$Res> {
+  __$$_EditedEmojiDataCopyWithImpl(
+      _$_EditedEmojiData _value, $Res Function(_$_EditedEmojiData) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? emoji = null,
+    Object? size = null,
+    Object? position = null,
+    Object? angle = null,
+  }) {
+    return _then(_$_EditedEmojiData(
+      emoji: null == emoji
+          ? _value.emoji
+          : emoji // ignore: cast_nullable_to_non_nullable
+              as MisskeyEmojiData,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as Size,
+      position: null == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      angle: null == angle
+          ? _value.angle
+          : angle // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_EditedEmojiData implements _EditedEmojiData {
+  const _$_EditedEmojiData(
+      {required this.emoji,
+      required this.size,
+      required this.position,
+      required this.angle});
+
+  @override
+  final MisskeyEmojiData emoji;
+  @override
+  final Size size;
+  @override
+  final Offset position;
+  @override
+  final double angle;
+
+  @override
+  String toString() {
+    return 'EditedEmojiData(emoji: $emoji, size: $size, position: $position, angle: $angle)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_EditedEmojiData &&
+            (identical(other.emoji, emoji) || other.emoji == emoji) &&
+            (identical(other.size, size) || other.size == size) &&
+            (identical(other.position, position) ||
+                other.position == position) &&
+            (identical(other.angle, angle) || other.angle == angle));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, emoji, size, position, angle);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_EditedEmojiDataCopyWith<_$_EditedEmojiData> get copyWith =>
+      __$$_EditedEmojiDataCopyWithImpl<_$_EditedEmojiData>(this, _$identity);
+}
+
+abstract class _EditedEmojiData implements EditedEmojiData {
+  const factory _EditedEmojiData(
+      {required final MisskeyEmojiData emoji,
+      required final Size size,
+      required final Offset position,
+      required final double angle}) = _$_EditedEmojiData;
+
+  @override
+  MisskeyEmojiData get emoji;
+  @override
+  Size get size;
+  @override
+  Offset get position;
+  @override
+  double get angle;
+  @override
+  @JsonKey(ignore: true)
+  _$$_EditedEmojiDataCopyWith<_$_EditedEmojiData> get copyWith =>
       throw _privateConstructorUsedError;
 }

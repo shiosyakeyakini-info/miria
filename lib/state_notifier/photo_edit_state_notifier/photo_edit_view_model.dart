@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:miria/model/image_file.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/state_notifier/photo_edit_state_notifier/color_filter_preset.dart';
 
 part 'photo_edit_view_model.freezed.dart';
@@ -27,6 +28,7 @@ class PhotoEdit with _$PhotoEdit {
     @Default(Size.zero) Size defaultSize,
     @Default(Size.zero) Size actualSize,
     @Default(0) int angle,
+    @Default([]) List<EditedEmojiData> emojis,
   }) = _PhotoEdit;
 }
 
@@ -34,6 +36,16 @@ class PhotoEdit with _$PhotoEdit {
 class ColorFilterPreview with _$ColorFilterPreview {
   const factory ColorFilterPreview({required String name, Uint8List? image}) =
       _ColorFilterPreview;
+}
+
+@freezed
+class EditedEmojiData with _$EditedEmojiData {
+  const factory EditedEmojiData({
+    required MisskeyEmojiData emoji,
+    required Size size,
+    required Offset position,
+    required double angle,
+  }) = _EditedEmojiData;
 }
 
 class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
