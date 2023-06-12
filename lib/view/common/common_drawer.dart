@@ -84,8 +84,7 @@ class CommonDrawer extends ConsumerWidget {
                           title: const Text("検索"),
                           onTap: () {
                             Navigator.of(context).pop();
-                            context
-                                .pushRoute(NoteSearchRoute(account: account));
+                            context.pushRoute(SearchRoute(account: account));
                           }),
                       ListTile(
                         leading: const Icon(Icons.tag),

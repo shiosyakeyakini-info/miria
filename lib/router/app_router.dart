@@ -12,8 +12,8 @@ import 'package:miria/view/favorited_note_page/favorited_note_page.dart';
 import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
-import 'package:miria/view/note_search_page/note_search_page.dart';
 import 'package:miria/view/notification_page/notification_page.dart';
+import 'package:miria/view/search_page/search_page.dart';
 import 'package:miria/view/settings_page/account_settings_page/account_list.dart';
 import 'package:miria/view/settings_page/app_info_page/app_info_page.dart';
 import 'package:miria/view/settings_page/general_settings_page/general_settings_page.dart';
@@ -61,10 +61,10 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: UserFolloweeRoute.page),
     AutoRoute(page: ChannelsRoute.page),
     AutoRoute(page: ChannelDetailRoute.page),
-    AutoRoute(page: NoteSearchRoute.page),
     AutoRoute(page: HashtagRoute.page),
     AutoRoute(page: ExploreRoute.page),
     AutoRoute(page: ExploreRoleUsersRoute.page),
+    AutoRoute(page: SearchRoute.page),
     AutoRoute(page: FederationRoute.page),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: SettingsRoute.page),

@@ -243,11 +243,11 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    NoteSearchRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteSearchRouteArgs>();
+    SearchRoute.name: (routeData) {
+      final args = routeData.argsAs<SearchRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NoteSearchPage(
+        child: SearchPage(
           key: args.key,
           initialSearchText: args.initialSearchText,
           account: args.account,
@@ -1216,16 +1216,16 @@ class FederationRouteArgs {
 }
 
 /// generated route for
-/// [NoteSearchPage]
-class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
-  NoteSearchRoute({
+/// [SearchPage]
+class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
+  SearchRoute({
     Key? key,
     String? initialSearchText,
     required Account account,
     List<PageRouteInfo>? children,
   }) : super(
-          NoteSearchRoute.name,
-          args: NoteSearchRouteArgs(
+          SearchRoute.name,
+          args: SearchRouteArgs(
             key: key,
             initialSearchText: initialSearchText,
             account: account,
@@ -1233,14 +1233,13 @@ class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
           initialChildren: children,
         );
 
-  static const String name = 'NoteSearchRoute';
+  static const String name = 'SearchRoute';
 
-  static const PageInfo<NoteSearchRouteArgs> page =
-      PageInfo<NoteSearchRouteArgs>(name);
+  static const PageInfo<SearchRouteArgs> page = PageInfo<SearchRouteArgs>(name);
 }
 
-class NoteSearchRouteArgs {
-  const NoteSearchRouteArgs({
+class SearchRouteArgs {
+  const SearchRouteArgs({
     this.key,
     this.initialSearchText,
     required this.account,
@@ -1254,7 +1253,7 @@ class NoteSearchRouteArgs {
 
   @override
   String toString() {
-    return 'NoteSearchRouteArgs{key: $key, initialSearchText: $initialSearchText, account: $account}';
+    return 'SearchRouteArgs{key: $key, initialSearchText: $initialSearchText, account: $account}';
   }
 }
 
