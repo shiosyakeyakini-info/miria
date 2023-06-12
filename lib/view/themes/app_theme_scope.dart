@@ -22,14 +22,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
     return AppThemeData(
       isDarkMode: theme.isDarkTheme,
-      noteTextStyle: InputDecoration(
-        border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black54),
-            borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(10)),
-      ),
+      noteTextStyle: InputDecoration(),
       reactionButtonStyle: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(5),
           elevation: 0,
@@ -183,12 +176,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         inputDecorationTheme: InputDecorationTheme(
           fillColor: theme.panelBackground,
           filled: true,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.divider),
-            borderRadius: BorderRadius.circular(10),
-          ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.divider),
+            borderSide: BorderSide(
+                color: theme.isDarkTheme
+                    ? theme.primaryDarken
+                    : theme.primaryLighten,
+                width: 1.0),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
