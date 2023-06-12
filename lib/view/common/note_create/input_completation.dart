@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
+import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class InputComplement extends ConsumerStatefulWidget {
@@ -100,9 +102,9 @@ class InputComplementState extends ConsumerState<InputComplement> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (filteredInputEmoji.isNotEmpty)
+                      if (filteredInputEmoji.isNotEmpty) ...[
                         for (final emoji in filteredInputEmoji)
                           GestureDetector(
                             onTap: () => insertEmoji(emoji, ref),
@@ -113,8 +115,20 @@ class InputComplementState extends ConsumerState<InputComplement> {
                                       MediaQuery.of(context).textScaleFactor,
                                   child: CustomEmoji(emojiData: emoji)),
                             ),
-                          )
-                      else
+                          ),
+                        TextButton.icon(
+                            onPressed: () async {
+                              final selected = await showDialog(
+                                  context: context,
+                                  builder: (context2) => ReactionPickerDialog(
+                                      account: AccountScope.of(context)));
+                              if (selected != null) {
+                                insertEmoji(selected, ref);
+                              }
+                            },
+                            icon: const Icon(Icons.add_reaction_outlined),
+                            label: const Text("他のん"))
+                      ] else
                         CustomKeyboardList(
                           controller: widget.controller,
                           focusNode: ref.read(widget.focusNode),
