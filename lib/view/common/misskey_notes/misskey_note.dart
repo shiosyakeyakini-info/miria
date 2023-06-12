@@ -62,7 +62,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     }
     final displayNote = renoteNote ?? latestActualNote;
 
-    if (displayNote == null) {
+    if (displayNote == null || latestActualNote == null) {
       // 削除された？
       return Container();
     }
@@ -328,7 +328,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       context: context,
                                       builder: (builder) {
                                         return NoteModalSheet(
-                                          note: displayNote,
+                                          baseNote: widget.note,
+                                          targetNote: displayNote,
                                           account: AccountScope.of(context),
                                           noteBoundaryKey: globalKey,
                                         );
