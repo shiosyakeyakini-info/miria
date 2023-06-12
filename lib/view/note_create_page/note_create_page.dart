@@ -15,7 +15,6 @@ import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
@@ -233,6 +232,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
     try {
       if (ref.read(noteInputTextProvider).text.isEmpty) {
         await SimpleMessageDialog.show(context, "なんか入れてや");
+        if (!mounted) return;
+        IndicatorView.hideIndicator(context);
         return;
       }
 
