@@ -191,8 +191,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           contentPadding: const EdgeInsets.all(5),
           hintStyle: textTheme.bodySmall?.copyWith(
             fontSize: textTheme.titleMedium?.fontSize,
-            color:
-                theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+            color: theme.isDarkTheme
+                ? theme.foreground.darken(0.2)
+                : theme.foreground.lighten(0.2),
           ),
           prefixIconColor: theme.primary,
           suffixIconColor: theme.primary,
