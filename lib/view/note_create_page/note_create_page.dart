@@ -442,6 +442,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                                       builder: (context) =>
                                           ReactionPickerDialog(
                                             account: account,
+                                            isAcceptSensitive: true,
                                           ));
                               if (selectedEmoji == null) return;
                               switch (selectedEmoji) {

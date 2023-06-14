@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,18 @@ import 'package:miria/providers.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ReactionPickerContent extends ConsumerStatefulWidget {
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
+  final bool isAcceptSensitive;
 
-  const ReactionPickerContent({super.key, required this.onTap});
+  const ReactionPickerContent({
+    super.key,
+    required this.onTap,
+    required this.isAcceptSensitive,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -73,7 +80,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                   EmojiButton(
                     emoji: emoji,
                     onTap: widget.onTap,
-                    isForceVisible: true,
+                    isAcceptSensitive: widget.isAcceptSensitive,
                   )
               ],
             ),
@@ -100,6 +107,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                           EmojiButton(
                             emoji: emoji.emoji,
                             onTap: widget.onTap,
+                            isAcceptSensitive: widget.isAcceptSensitive,
                           )
                       ],
                     ),
@@ -118,12 +126,14 @@ class EmojiButton extends ConsumerStatefulWidget {
   final MisskeyEmojiData emoji;
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
   final bool isForceVisible;
+  final bool isAcceptSensitive;
 
   const EmojiButton({
     super.key,
     required this.emoji,
     required this.onTap,
     this.isForceVisible = false,
+    required this.isAcceptSensitive,
   });
 
   @override
@@ -136,6 +146,7 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
 
   @override
   Widget build(BuildContext context) {
+    final disabled = !widget.isAcceptSensitive && widget.emoji.isSensitive;
     return VisibilityDetector(
       key: Key(widget.emoji.baseName),
       onVisibilityChanged: (visibilityInfo) {
@@ -146,22 +157,31 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
           });
         }
       },
-      child: ElevatedButton(
-          style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-            padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-            elevation: MaterialStatePropertyAll(0),
-            minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-          onPressed: () async {
-            widget.onTap.call(widget.emoji);
-          },
-          child: SizedBox(
-              height: 32 * MediaQuery.of(context).textScaleFactor,
-              child: isVisibility
-                  ? CustomEmoji(emojiData: widget.emoji)
-                  : const SizedBox.shrink())),
+      child: DecoratedBox(
+        decoration: disabled
+            ? BoxDecoration(color: Theme.of(context).disabledColor)
+            : const BoxDecoration(),
+        child: ElevatedButton(
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+              padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+              elevation: MaterialStatePropertyAll(0),
+              minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () async {
+              if (disabled) {
+                SimpleMessageDialog.show(context, "ここでセンシティブなカスタム絵文字を使われへんねやわ");
+              } else {
+                widget.onTap.call(widget.emoji);
+              }
+            },
+            child: SizedBox(
+                height: 32 * MediaQuery.of(context).textScaleFactor,
+                child: isVisibility
+                    ? CustomEmoji(emojiData: widget.emoji)
+                    : const SizedBox.shrink())),
+      ),
     );
   }
 }

@@ -121,7 +121,9 @@ class InputComplementState extends ConsumerState<InputComplement> {
                               final selected = await showDialog(
                                   context: context,
                                   builder: (context2) => ReactionPickerDialog(
-                                      account: AccountScope.of(context)));
+                                        account: AccountScope.of(context),
+                                        isAcceptSensitive: true,
+                                      ));
                               if (selected != null) {
                                 insertEmoji(selected, ref);
                               }

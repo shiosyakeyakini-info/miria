@@ -69,10 +69,12 @@ class EmojiRepositoryImpl extends EmojiRepository {
         .emojis
         .map((e) => EmojiRepositoryData(
             emoji: CustomEmojiData(
-                baseName: e.name,
-                hostedName: ":${e.name}@.:",
-                url: e.url,
-                isCurrentServer: true),
+              baseName: e.name,
+              hostedName: ":${e.name}@.:",
+              url: e.url,
+              isCurrentServer: true,
+              isSensitive: e.isSensitive,
+            ),
             category: e.category ?? "",
             kanaName: toH(format(e.name)),
             aliases: e.aliases,

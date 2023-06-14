@@ -89,8 +89,10 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                       onPressed: () async {
                         final reaction = await showDialog<MisskeyEmojiData?>(
                             context: context,
-                            builder: (context) =>
-                                ReactionPickerDialog(account: widget.account));
+                            builder: (context) => ReactionPickerDialog(
+                                  account: widget.account,
+                                  isAcceptSensitive: true,
+                                ));
                         if (reaction == null) return;
                         if (reactions.any((element) =>
                             element.baseName == reaction.baseName)) {

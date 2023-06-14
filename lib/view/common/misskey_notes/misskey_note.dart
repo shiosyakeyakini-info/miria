@@ -415,6 +415,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           context: context,
           builder: (context) => ReactionPickerDialog(
                 account: account,
+                isAcceptSensitive: displayNote.reactionAcceptance !=
+                        ReactionAcceptance.nonSensitiveOnly &&
+                    displayNote.reactionAcceptance !=
+                        ReactionAcceptance
+                            .nonSensitiveOnlyForLocalLikeOnlyForRemote,
               ));
     } else {
       selectedEmoji = requestEmoji;
