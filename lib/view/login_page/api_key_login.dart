@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/login_page/centraing_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
 
 class ApiKeyLogin extends ConsumerStatefulWidget {
   const ApiKeyLogin({super.key});
@@ -18,14 +19,21 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
   final apiKeyController = TextEditingController();
 
   Future<void> login() async {
-    await ref
-        .read(accountRepository)
-        .loginAsToken(serverController.text, apiKeyController.text);
+    try {
+      IndicatorView.showIndicator(context);
+      await ref
+          .read(accountRepository)
+          .loginAsToken(serverController.text, apiKeyController.text);
 
-    if (!mounted) return;
-    context.pushRoute(TimeLineRoute(
-        currentTabSetting:
-            ref.read(tabSettingsRepositoryProvider).tabSettings.first));
+      if (!mounted) return;
+      context.pushRoute(TimeLineRoute(
+          currentTabSetting:
+              ref.read(tabSettingsRepositoryProvider).tabSettings.first));
+    } catch (e) {
+      rethrow;
+    } finally {
+      IndicatorView.hideIndicator(context);
+    }
   }
 
   @override
@@ -45,8 +53,19 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                 const Text("サーバー"),
                 TextField(
                   controller: serverController,
-                  decoration:
-                      const InputDecoration(prefixIcon: Icon(Icons.dns)),
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.dns),
+                      suffixIcon: IconButton(
+                          onPressed: () async {
+                            final url = await showDialog<String?>(
+                                context: context,
+                                builder: (context) =>
+                                    const MisskeyServerListDialog());
+                            if (url != null && url.isNotEmpty) {
+                              serverController.text = url;
+                            }
+                          },
+                          icon: Icon(Icons.search))),
                 ),
               ]),
               TableRow(children: [

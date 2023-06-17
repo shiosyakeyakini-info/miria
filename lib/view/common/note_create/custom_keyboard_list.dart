@@ -16,7 +16,10 @@ class CustomKeyboardList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(children: [
       CustomKeyboard(
-          keyboard: ":", controller: controller, focusNode: focusNode),
+          keyboard: ":",
+          displayText: "：",
+          controller: controller,
+          focusNode: focusNode),
       CustomKeyboard(
           keyboard: r"$[",
           afterInsert: "]",
@@ -35,6 +38,7 @@ class CustomKeyboardList extends StatelessWidget {
       CustomKeyboard(
           keyboard: "_",
           afterInsert: "_",
+          displayText: "＿",
           controller: controller,
           focusNode: focusNode),
       CustomKeyboard(
@@ -48,7 +52,11 @@ class CustomKeyboardList extends StatelessWidget {
           controller: controller,
           focusNode: focusNode),
       CustomKeyboard(
-          keyboard: "> ", controller: controller, focusNode: focusNode),
+        keyboard: "> ",
+        displayText: "＞",
+        controller: controller,
+        focusNode: focusNode,
+      ),
       CustomKeyboard(
           keyboard: "<center>",
           afterInsert: "</center>",
@@ -57,6 +65,7 @@ class CustomKeyboardList extends StatelessWidget {
       CustomKeyboard(
           keyboard: "`",
           afterInsert: "`",
+          displayText: "｀",
           controller: controller,
           focusNode: focusNode),
       CustomKeyboard(

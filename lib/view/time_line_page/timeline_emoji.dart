@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:miria/view/time_line_page/timeline_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 final filteredInputEmojiProvider =
-    StateProvider.autoDispose((ref) => <Emoji>[]);
+    StateProvider.autoDispose((ref) => <MisskeyEmojiData>[]);
 
 class TimelineEmoji extends ConsumerWidget {
   const TimelineEmoji({super.key});

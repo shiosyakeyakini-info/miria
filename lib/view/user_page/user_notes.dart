@@ -4,6 +4,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/user_page/user_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserNotes extends ConsumerStatefulWidget {
@@ -16,37 +17,119 @@ class UserNotes extends ConsumerStatefulWidget {
 }
 
 class UserNotesState extends ConsumerState<UserNotes> {
-  final notes = <Note>[];
-
   Misskey get misskey => ref.read(misskeyProvider(AccountScope.of(context)));
+
+  bool isFileOnly = false;
+  bool withReply = false;
+  bool renote = true;
+  DateTime? untilDate;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future(() async {
-      notes
-        ..clear()
-        ..addAll(await misskey.users
-            .notes(UsersNotesRequest(userId: widget.userId)));
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return PushableListView<Note>(initializeFuture: () async {
-      final notes =
-          await misskey.users.notes(UsersNotesRequest(userId: widget.userId));
-      if (!mounted) return [];
-      ref.read(notesProvider(AccountScope.of(context))).registerAll(notes);
-      return notes.toList();
-    }, nextFuture: (lastElement) async {
-      final notes = await misskey.users.notes(
-          UsersNotesRequest(userId: widget.userId, untilId: lastElement.id));
-      if (!mounted) return [];
-      ref.read(notesProvider(AccountScope.of(context))).registerAll(notes);
-      return notes.toList();
-    }, itemBuilder: (context, element) {
-      return MisskeyNote(note: element);
-    });
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 3, bottom: 3),
+          child: Row(
+            children: [
+              Expanded(
+                child: Center(
+                  child: ToggleButtons(
+                    isSelected: [
+                      withReply,
+                      isFileOnly,
+                      renote,
+                    ],
+                    onPressed: (value) {
+                      setState(() {
+                        switch (value) {
+                          case 0:
+                            withReply = !withReply;
+                          case 1:
+                            isFileOnly = !isFileOnly;
+                          case 2:
+                            renote = !renote;
+                        }
+                      });
+                    },
+                    children: const [
+                      Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("返信つき")),
+                      Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("ファイルつき")),
+                      Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("リノートも"))
+                    ],
+                  ),
+                ),
+              ),
+              IconButton(
+                  onPressed: () async {
+                    final result = await showDatePicker(
+                        context: context,
+                        initialDate: untilDate ?? DateTime.now(),
+                        helpText: "この日までを表示",
+                        firstDate: ref
+                                .read(userInfoProvider(widget.userId))
+                                ?.createdAt ??
+                            DateTime(2012, 1, 1),
+                        lastDate: DateTime.now());
+                    if (result != null) {
+                      untilDate = DateTime(result.year, result.month,
+                          result.day, 23, 59, 59, 999);
+                    }
+                    setState(() {});
+                  },
+                  icon: Icon(Icons.date_range))
+            ],
+          ),
+        ),
+        Expanded(
+          child: PushableListView<Note>(
+              listKey:
+                  Object.hashAll([isFileOnly, withReply, renote, untilDate]),
+              initializeFuture: () async {
+                final notes = await misskey.users.notes(UsersNotesRequest(
+                  userId: widget.userId,
+                  withFiles: isFileOnly,
+                  includeReplies: withReply,
+                  includeMyRenotes: renote,
+                  untilDate: untilDate?.millisecondsSinceEpoch,
+                ));
+                if (!mounted) return [];
+                ref
+                    .read(notesProvider(AccountScope.of(context)))
+                    .registerAll(notes);
+                return notes.toList();
+              },
+              nextFuture: (lastElement, _) async {
+                final notes = await misskey.users.notes(UsersNotesRequest(
+                  userId: widget.userId,
+                  untilId: lastElement.id,
+                  withFiles: isFileOnly,
+                  includeReplies: withReply,
+                  includeMyRenotes: renote,
+                  untilDate: untilDate?.millisecondsSinceEpoch,
+                ));
+                if (!mounted) return [];
+                ref
+                    .read(notesProvider(AccountScope.of(context)))
+                    .registerAll(notes);
+                return notes.toList();
+              },
+              itemBuilder: (context, element) {
+                return MisskeyNote(note: element);
+              }),
+        ),
+      ],
+    );
   }
 }

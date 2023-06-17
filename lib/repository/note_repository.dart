@@ -10,7 +10,10 @@ class NoteRepository extends ChangeNotifier {
   Map<String, Note> get notes => _notes;
 
   void _registerNote(Note note) {
-    _notes[note.id] = note;
+    _notes[note.id] = note.copyWith(
+      renote: note.renote ?? _notes[note.renoteId],
+      reply: note.reply ?? _notes[note.replyId],
+    );
     final renote = note.renote;
     final reply = note.reply;
     if (renote != null) {
@@ -23,18 +26,29 @@ class NoteRepository extends ChangeNotifier {
 
   void registerNote(Note note) {
     _registerNote(note);
-    notifyListeners();
+    Future(() {
+      notifyListeners();
+    });
   }
 
   void registerAll(Iterable<Note> notes) {
     for (final element in notes) {
       _registerNote(element);
     }
-    notifyListeners();
+    Future(() {
+      notifyListeners();
+    });
   }
 
   Future<void> refresh(String noteId) async {
     final note = await misskey.notes.show(NotesShowRequest(noteId: noteId));
     registerNote(note);
+  }
+
+  void delete(String noteId) {
+    _notes.remove(noteId);
+    Future(() {
+      notifyListeners();
+    });
   }
 }

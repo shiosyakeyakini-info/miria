@@ -22,7 +22,7 @@ class UserClips extends ConsumerWidget {
             .clips(UsersClipsRequest(userId: userId));
         return response.toList();
       },
-      nextFuture: (lastItem) async {
+      nextFuture: (lastItem, _) async {
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users

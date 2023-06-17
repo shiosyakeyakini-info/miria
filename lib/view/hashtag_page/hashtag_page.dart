@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
@@ -36,7 +40,7 @@ class HashtagPage extends ConsumerWidget {
                 ref.read(notesProvider(account)).registerAll(response);
                 return response.toList();
               },
-              nextFuture: (lastItem) async {
+              nextFuture: (lastItem, _) async {
                 final response = await ref
                     .read(misskeyProvider(account))
                     .notes
@@ -47,6 +51,12 @@ class HashtagPage extends ConsumerWidget {
               },
               itemBuilder: (context, item) => MisskeyNote(note: item),
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              context.pushRoute(NoteCreateRoute(initialText: "#$hashtag"));
+            },
+            child: const Icon(Icons.edit),
           ),
         ));
   }

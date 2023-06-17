@@ -21,10 +21,27 @@ TabSetting _$TabSettingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TabSetting {
   @IconDataConverter()
-  IconData get icon => throw _privateConstructorUsedError;
+  TabIcon get icon => throw _privateConstructorUsedError;
+
+  /// タブ種別
   TabType get tabType => throw _privateConstructorUsedError;
+
+  /// チャンネルのノートの場合、チャンネルID
   String? get channelId => throw _privateConstructorUsedError;
+
+  /// リストのノートの場合、リストID
+  String? get listId => throw _privateConstructorUsedError;
+
+  /// アンテナのノートの場合、アンテナID
+  String? get antennaId => throw _privateConstructorUsedError;
+
+  /// ノートの投稿のキャプチャをするかどうか
+  dynamic get isSubscribe => throw _privateConstructorUsedError;
+
+  /// タブ名
   String get name => throw _privateConstructorUsedError;
+
+  /// アカウント情報
   Account get account => throw _privateConstructorUsedError;
   bool get renoteDisplay => throw _privateConstructorUsedError;
 
@@ -41,13 +58,17 @@ abstract class $TabSettingCopyWith<$Res> {
       _$TabSettingCopyWithImpl<$Res, TabSetting>;
   @useResult
   $Res call(
-      {@IconDataConverter() IconData icon,
+      {@IconDataConverter() TabIcon icon,
       TabType tabType,
       String? channelId,
+      String? listId,
+      String? antennaId,
+      dynamic isSubscribe,
       String name,
       Account account,
       bool renoteDisplay});
 
+  $TabIconCopyWith<$Res> get icon;
   $AccountCopyWith<$Res> get account;
 }
 
@@ -67,6 +88,9 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? icon = null,
     Object? tabType = null,
     Object? channelId = freezed,
+    Object? listId = freezed,
+    Object? antennaId = freezed,
+    Object? isSubscribe = freezed,
     Object? name = null,
     Object? account = null,
     Object? renoteDisplay = null,
@@ -75,7 +99,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as TabIcon,
       tabType: null == tabType
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
@@ -84,6 +108,18 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
               as String?,
+      listId: freezed == listId
+          ? _value.listId
+          : listId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      antennaId: freezed == antennaId
+          ? _value.antennaId
+          : antennaId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isSubscribe: freezed == isSubscribe
+          ? _value.isSubscribe
+          : isSubscribe // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -97,6 +133,14 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           : renoteDisplay // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TabIconCopyWith<$Res> get icon {
+    return $TabIconCopyWith<$Res>(_value.icon, (value) {
+      return _then(_value.copyWith(icon: value) as $Val);
+    });
   }
 
   @override
@@ -117,13 +161,18 @@ abstract class _$$_TabSettingCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@IconDataConverter() IconData icon,
+      {@IconDataConverter() TabIcon icon,
       TabType tabType,
       String? channelId,
+      String? listId,
+      String? antennaId,
+      dynamic isSubscribe,
       String name,
       Account account,
       bool renoteDisplay});
 
+  @override
+  $TabIconCopyWith<$Res> get icon;
   @override
   $AccountCopyWith<$Res> get account;
 }
@@ -142,6 +191,9 @@ class __$$_TabSettingCopyWithImpl<$Res>
     Object? icon = null,
     Object? tabType = null,
     Object? channelId = freezed,
+    Object? listId = freezed,
+    Object? antennaId = freezed,
+    Object? isSubscribe = freezed,
     Object? name = null,
     Object? account = null,
     Object? renoteDisplay = null,
@@ -150,7 +202,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as IconData,
+              as TabIcon,
       tabType: null == tabType
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
@@ -159,6 +211,15 @@ class __$$_TabSettingCopyWithImpl<$Res>
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
               as String?,
+      listId: freezed == listId
+          ? _value.listId
+          : listId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      antennaId: freezed == antennaId
+          ? _value.antennaId
+          : antennaId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isSubscribe: freezed == isSubscribe ? _value.isSubscribe! : isSubscribe,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -182,6 +243,9 @@ class _$_TabSetting extends _TabSetting {
       {@IconDataConverter() required this.icon,
       required this.tabType,
       this.channelId,
+      this.listId,
+      this.antennaId,
+      this.isSubscribe = true,
       required this.name,
       required this.account,
       this.renoteDisplay = true})
@@ -192,13 +256,34 @@ class _$_TabSetting extends _TabSetting {
 
   @override
   @IconDataConverter()
-  final IconData icon;
+  final TabIcon icon;
+
+  /// タブ種別
   @override
   final TabType tabType;
+
+  /// チャンネルのノートの場合、チャンネルID
   @override
   final String? channelId;
+
+  /// リストのノートの場合、リストID
+  @override
+  final String? listId;
+
+  /// アンテナのノートの場合、アンテナID
+  @override
+  final String? antennaId;
+
+  /// ノートの投稿のキャプチャをするかどうか
+  @override
+  @JsonKey()
+  final dynamic isSubscribe;
+
+  /// タブ名
   @override
   final String name;
+
+  /// アカウント情報
   @override
   final Account account;
   @override
@@ -207,7 +292,7 @@ class _$_TabSetting extends _TabSetting {
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -219,6 +304,11 @@ class _$_TabSetting extends _TabSetting {
             (identical(other.tabType, tabType) || other.tabType == tabType) &&
             (identical(other.channelId, channelId) ||
                 other.channelId == channelId) &&
+            (identical(other.listId, listId) || other.listId == listId) &&
+            (identical(other.antennaId, antennaId) ||
+                other.antennaId == antennaId) &&
+            const DeepCollectionEquality()
+                .equals(other.isSubscribe, isSubscribe) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.account, account) || other.account == account) &&
             (identical(other.renoteDisplay, renoteDisplay) ||
@@ -228,7 +318,16 @@ class _$_TabSetting extends _TabSetting {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, icon, tabType, channelId, name, account, renoteDisplay);
+      runtimeType,
+      icon,
+      tabType,
+      channelId,
+      listId,
+      antennaId,
+      const DeepCollectionEquality().hash(isSubscribe),
+      name,
+      account,
+      renoteDisplay);
 
   @JsonKey(ignore: true)
   @override
@@ -246,9 +345,12 @@ class _$_TabSetting extends _TabSetting {
 
 abstract class _TabSetting extends TabSetting {
   const factory _TabSetting(
-      {@IconDataConverter() required final IconData icon,
+      {@IconDataConverter() required final TabIcon icon,
       required final TabType tabType,
       final String? channelId,
+      final String? listId,
+      final String? antennaId,
+      final dynamic isSubscribe,
       required final String name,
       required final Account account,
       final bool renoteDisplay}) = _$_TabSetting;
@@ -259,14 +361,34 @@ abstract class _TabSetting extends TabSetting {
 
   @override
   @IconDataConverter()
-  IconData get icon;
+  TabIcon get icon;
   @override
+
+  /// タブ種別
   TabType get tabType;
   @override
+
+  /// チャンネルのノートの場合、チャンネルID
   String? get channelId;
   @override
+
+  /// リストのノートの場合、リストID
+  String? get listId;
+  @override
+
+  /// アンテナのノートの場合、アンテナID
+  String? get antennaId;
+  @override
+
+  /// ノートの投稿のキャプチャをするかどうか
+  dynamic get isSubscribe;
+  @override
+
+  /// タブ名
   String get name;
   @override
+
+  /// アカウント情報
   Account get account;
   @override
   bool get renoteDisplay;

@@ -21,11 +21,11 @@ class ChannelFollowed extends ConsumerWidget {
               .followed(const ChannelsFollowedRequest());
           return response.toList();
         },
-        nextFuture: (lastItem) async {
+        nextFuture: (lastItem, _) async {
           final response = await ref
               .read(misskeyProvider(account))
               .channels
-              .followed(ChannelsFollowedRequest(sinceId: lastItem.id));
+              .followed(ChannelsFollowedRequest(untilId: lastItem.id));
           return response.toList();
         },
         itemBuilder: (context, item) => CommunityChannelView(channel: item));

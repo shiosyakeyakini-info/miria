@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart' as mfm_text;
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -49,7 +52,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
             }
             return result.toList();
           },
-          nextFuture: (lastElement) async {
+          nextFuture: (lastElement, _) async {
             final result = await misskey.i.notifications(
                 INotificationsRequest(limit: 50, untilId: lastElement.id));
             ref
@@ -76,7 +79,9 @@ class NotificationItem extends ConsumerWidget {
     if (notification.type != NotificationType.reaction &&
         notification.type != NotificationType.renote &&
         notification.type != NotificationType.reply) {
-      print(notification);
+      if (kDebugMode) {
+        print(notification);
+      }
     }
 
     return Container(
@@ -91,28 +96,37 @@ class NotificationItem extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (notification.user != null)
                     GestureDetector(
                       onTap: () => context.pushRoute(UserRoute(
                           userId: notification.user!.id,
                           account: AccountScope.of(context))),
-                      child: SizedBox(
-                          width: 32,
-                          child: Image.network(
-                              notification.user!.avatarUrl.toString())),
+                      child: AvatarIcon(
+                        user: notification.user!,
+                        height: (Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.fontSize ??
+                                22) *
+                            MediaQuery.of(context).textScaleFactor,
+                      ),
                     ),
                   if (notification.reaction != null) ...[
                     const Padding(padding: EdgeInsets.only(top: 10)),
                     SizedBox(
                       width: 32,
                       height: 32,
-                      child: CustomEmoji.fromEmojiName(
-                          notification.reaction!,
-                          ref.read(emojiRepositoryProvider(
-                              AccountScope.of(context)))),
+                      child: CustomEmoji(
+                        emojiData: MisskeyEmojiData.fromEmojiName(
+                          emojiName: notification.reaction!,
+                          repository: ref.read(emojiRepositoryProvider(
+                              AccountScope.of(context))),
+                          emojiInfo: notification.note?.reactionEmojis,
+                        ),
+                      ),
                     ),
                   ]
                 ],
@@ -153,6 +167,21 @@ class NotificationItem extends ConsumerWidget {
                       ),
                     )
                   ],
+                  if (notification.type == NotificationType.quote) ...[
+                    SimpleMfmText(
+                      "${notification.user?.name ?? notification.user?.username} から引用Renote",
+                      emojis: notification.user?.emojis ?? {},
+                    ),
+                    MediaQuery(
+                      data: MediaQueryData(
+                          textScaleFactor:
+                              MediaQuery.of(context).textScaleFactor * 0.7),
+                      child: misskey_note.MisskeyNote(
+                        note: notification.note!,
+                        isDisplayBorder: false,
+                      ),
+                    )
+                  ],
                   if (notification.type == NotificationType.reply) ...[
                     mfm_text.MfmText(
                       "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
@@ -178,7 +207,20 @@ class NotificationItem extends ConsumerWidget {
                         )),
                   ],
                   if (notification.type == NotificationType.achievementEarned)
-                    Text("実績を解除したで  [${notification.achievement}]")
+                    Text("実績を解除したで  [${notification.achievement}]"),
+                  if (notification.type == NotificationType.follow)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        SimpleMfmText(
+                          "${notification.user?.name ?? notification.user?.username} ",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text("からフォローされました")
+                      ],
+                    )
                 ],
               ),
             )

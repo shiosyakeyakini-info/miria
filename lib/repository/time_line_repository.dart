@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/tab_setting.dart';
+import 'package:miria/repository/general_settings_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -10,14 +12,26 @@ import 'package:misskey_dart/misskey_dart.dart';
 class NotifierQueueList extends QueueList<Note> {
   final NoteRepository noteRepository;
   final TabSetting tabSetting;
+  final GeneralSettingsRepository generalSettingsRepository;
 
-  NotifierQueueList(this.noteRepository, this.tabSetting);
+  NotifierQueueList(
+    this.noteRepository,
+    this.generalSettingsRepository,
+    this.tabSetting,
+  );
 
   bool filterAs(Note element) {
     if (tabSetting.renoteDisplay == false &&
         element.text == null &&
         element.cw == null &&
         element.renoteId != null) {
+      return false;
+    }
+    if (generalSettingsRepository.settings.nsfwInherit ==
+            NSFWInherit.removeNsfw &&
+        (element.files.any((e) => e.isSensitive) ||
+            element.renote?.files.any((e) => e.isSensitive) == true ||
+            element.reply?.files.any((e) => e.isSensitive) == true)) {
       return false;
     }
     return true;
@@ -73,15 +87,20 @@ class SubscribeItem {
   });
 }
 
-abstract class TimeLineRepository extends ChangeNotifier {
+abstract class TimelineRepository extends ChangeNotifier {
   final NoteRepository noteRepository;
   final MainStreamRepository globalNotificationRepository;
+  final GeneralSettingsRepository generalSettingsRepository;
   final TabSetting tabSetting;
 
   final List<SubscribeItem> subscribedList = [];
 
-  TimeLineRepository(
-      this.noteRepository, this.globalNotificationRepository, this.tabSetting) {
+  TimelineRepository(
+    this.noteRepository,
+    this.globalNotificationRepository,
+    this.generalSettingsRepository,
+    this.tabSetting,
+  ) {
     // describer
     Timer.periodic(const Duration(seconds: 10), (timer) {
       final now = DateTime.now();
@@ -124,9 +143,9 @@ abstract class TimeLineRepository extends ChangeNotifier {
   }
 
   late final QueueList<Note> newerNotes =
-      NotifierQueueList(noteRepository, tabSetting);
+      NotifierQueueList(noteRepository, generalSettingsRepository, tabSetting);
   late final QueueList<Note> olderNotes =
-      NotifierQueueList(noteRepository, tabSetting);
+      NotifierQueueList(noteRepository, generalSettingsRepository, tabSetting);
 
   void startTimeLine() {}
 
@@ -164,7 +183,9 @@ abstract class TimeLineRepository extends ChangeNotifier {
     });
   }
 
-  Future<void> previousLoad() async {}
+  Future<int> previousLoad() async {
+    return 0;
+  }
 
   void subscribe(SubscribeItem item) {
     final index =
@@ -180,6 +201,7 @@ abstract class TimeLineRepository extends ChangeNotifier {
     final index = subscribedList.indexWhere((element) => element.noteId == id);
     if (index == -1) {
       // already described?
+      return;
     }
     final item = subscribedList[index];
 

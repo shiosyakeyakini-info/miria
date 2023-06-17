@@ -2,16 +2,18 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/timeline_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
-  final ChangeNotifierProvider<TimeLineRepository> timeLineRepositoryProvider;
+  final ChangeNotifierProvider<TimelineRepository> timeLineRepositoryProvider;
   final TimelineScrollController controller;
 
   MisskeyTimeline({
@@ -28,11 +30,34 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   List<Note> showingNotes = [];
   late final TimelineScrollController scrollController = widget.controller;
   bool isScrolling = false;
-  late TimeLineRepository timelineRepository =
+  late TimelineRepository timelineRepository =
       ref.read(widget.timeLineRepositoryProvider);
   bool contextAccessed = false;
 
   bool isInitStated = false;
+  bool isDownDirectionLoading = false;
+  bool isLastLoaded = false;
+
+  Future<void> downDirectionLoad() async {
+    if (isDownDirectionLoading) return;
+    Future(() async {
+      try {
+        setState(() {
+          isDownDirectionLoading = true;
+        });
+        final result = await timelineRepository.previousLoad();
+        setState(() {
+          isDownDirectionLoading = false;
+          isLastLoaded = result == 0;
+        });
+      } catch (e) {
+        setState(() {
+          isDownDirectionLoading = false;
+        });
+        rethrow;
+      }
+    });
+  }
 
   @override
   void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
@@ -40,10 +65,11 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     contextAccessed = true;
     if (oldWidget.timeLineRepositoryProvider !=
         widget.timeLineRepositoryProvider) {
-      print("didUpdateWidget called. oldWidget=$oldWidget");
       ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
       ref.read(widget.timeLineRepositoryProvider).startTimeLine();
       timelineRepository = ref.read(widget.timeLineRepositoryProvider);
+      isDownDirectionLoading = false;
+      isLastLoaded = false;
     }
   }
 
@@ -81,14 +107,14 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
             final correctedNewer = [
               if (timelineRepository.olderNotes.isNotEmpty)
                 ...timelineRepository.olderNotes
-                    .slice(0, min(4, timelineRepository.olderNotes.length - 1))
+                    .slice(0, min(5, timelineRepository.olderNotes.length))
                     .reversed,
               ...timelineRepository.newerNotes,
             ];
             final correctedOlder = [
               if (timelineRepository.olderNotes.length > 5)
                 ...timelineRepository.olderNotes
-                    .slice(5, timelineRepository.olderNotes.length - 1)
+                    .slice(5, timelineRepository.olderNotes.length)
             ];
 
             if (index > 0) {
@@ -103,11 +129,27 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
             }
 
             if (-index == correctedOlder.length) {
+              if (isLastLoaded) {
+                return const SizedBox.shrink();
+              }
+
+              if (isDownDirectionLoading &&
+                  repository.newerNotes.length + repository.olderNotes.length !=
+                      0) {
+                return const Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Center(child: CircularProgressIndicator()));
+              }
+
+              if (ref.read(generalSettingsRepositoryProvider
+                      .select((value) => value.settings.automaticPush)) ==
+                  AutomaticPush.automatic) {
+                downDirectionLoad();
+              }
+
               return Center(
                   child: IconButton(
-                onPressed: () async {
-                  await timelineRepository.previousLoad();
-                },
+                onPressed: downDirectionLoad.expectFailure(context),
                 icon: const Icon(Icons.keyboard_arrow_down),
               ));
             }
@@ -127,7 +169,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
 class NoteWrapper extends ConsumerStatefulWidget {
   final Note targetNote;
-  final TimeLineRepository timeline;
+  final TimelineRepository timeline;
 
   const NoteWrapper({
     super.key,

@@ -1,13 +1,17 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
+import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class InputComplement extends ConsumerStatefulWidget {
-  final AutoDisposeStateProvider<List<Emoji>> searchedEmojiProvider;
+  final AutoDisposeStateProvider<List<MisskeyEmojiData>> searchedEmojiProvider;
   final TextEditingController controller;
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
@@ -25,9 +29,10 @@ class InputComplement extends ConsumerStatefulWidget {
 class InputComplementState extends ConsumerState<InputComplement> {
   bool isClose = true;
 
-  void insertEmoji(Emoji emoji, WidgetRef ref) {
+  void insertEmoji(MisskeyEmojiData emoji, WidgetRef ref) {
     final currentPosition = widget.controller.selection.base.offset;
     final text = widget.controller.text;
+
     final beforeSearchText =
         text.substring(0, text.substring(0, currentPosition).lastIndexOf(":"));
 
@@ -35,10 +40,23 @@ class InputComplementState extends ConsumerState<InputComplement> {
         ? ""
         : text.substring(currentPosition, text.length);
 
+    final String complementValue;
+    switch (emoji) {
+      case CustomEmojiData():
+        complementValue = ":${emoji.baseName}:";
+        break;
+      case UnicodeEmojiData():
+        complementValue = emoji.char;
+        break;
+      default:
+        return;
+    }
+
     widget.controller.value = TextEditingValue(
-        text: "$beforeSearchText:${emoji.name}:$after",
+        text: "$beforeSearchText$complementValue$after",
         selection: TextSelection.collapsed(
-            offset: beforeSearchText.length + emoji.name.length + 2));
+            offset: beforeSearchText.length + emoji.baseName.length + 2));
+
     ref.read(widget.searchedEmojiProvider.notifier).state = [];
     ref.read(widget.focusNode).requestFocus();
   }
@@ -69,39 +87,66 @@ class InputComplementState extends ConsumerState<InputComplement> {
       return Container();
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: Theme.of(context).primaryColor))),
-          padding: const EdgeInsets.all(5),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (filteredInputEmoji.isNotEmpty)
-                  for (final emoji in filteredInputEmoji)
-                    GestureDetector(
-                      onTap: () => insertEmoji(emoji, ref),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: SizedBox(
-                            height: 32 * MediaQuery.of(context).textScaleFactor,
-                            child: CustomEmoji(emoji: emoji)),
-                      ),
-                    )
-                else
-                  CustomKeyboardList(
-                    controller: widget.controller,
-                    focusNode: ref.read(widget.focusNode),
-                  ),
-              ]),
-        ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+          border:
+              Border(top: BorderSide(color: Theme.of(context).primaryColor))),
+      child: Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (filteredInputEmoji.isNotEmpty) ...[
+                        for (final emoji in filteredInputEmoji)
+                          GestureDetector(
+                            onTap: () => insertEmoji(emoji, ref),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: SizedBox(
+                                  height: 32 *
+                                      MediaQuery.of(context).textScaleFactor,
+                                  child: CustomEmoji(emojiData: emoji)),
+                            ),
+                          ),
+                        TextButton.icon(
+                            onPressed: () async {
+                              final selected = await showDialog(
+                                  context: context,
+                                  builder: (context2) => ReactionPickerDialog(
+                                        account: AccountScope.of(context),
+                                        isAcceptSensitive: true,
+                                      ));
+                              if (selected != null) {
+                                insertEmoji(selected, ref);
+                              }
+                            },
+                            icon: const Icon(Icons.add_reaction_outlined),
+                            label: const Text("他のん"))
+                      ] else
+                        CustomKeyboardList(
+                          controller: widget.controller,
+                          focusNode: ref.read(widget.focusNode),
+                        ),
+                    ]),
+              ),
+            ),
+          ),
+          if (defaultTargetPlatform == TargetPlatform.android ||
+              defaultTargetPlatform == TargetPlatform.iOS)
+            IconButton(
+                onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                icon: const Icon(Icons.keyboard_arrow_down)),
+        ],
       ),
     );
   }

@@ -1,11 +1,19 @@
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_highlighting/flutter_highlighting.dart';
+import 'package:flutter_highlighting/themes/github-dark.dart';
+import 'package:flutter_highlighting/themes/github.dart';
+import 'package:highlighting/highlighting.dart';
+import 'package:highlighting/languages/all.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/app_theme.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';
@@ -18,6 +26,9 @@ class MfmText extends ConsumerStatefulWidget {
   final TextStyle? style;
   final Map<String, String> emoji;
   final bool isNyaize;
+  final List<InlineSpan> suffixSpan;
+  final List<InlineSpan> prefixSpan;
+  final Function(MisskeyEmojiData)? onEmojiTap;
 
   const MfmText(
     this.mfmText, {
@@ -26,6 +37,9 @@ class MfmText extends ConsumerStatefulWidget {
     this.style,
     this.emoji = const {},
     this.isNyaize = false,
+    this.suffixSpan = const [],
+    this.prefixSpan = const [],
+    this.onEmojiTap,
   });
 
   @override
@@ -53,6 +67,10 @@ class MfmTextState extends ConsumerState<MfmText> {
       // クリップはクリップの画面で開く
       context.pushRoute(
           ClipDetailRoute(account: account, id: uri.pathSegments[1]));
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "channels") {
+      context.pushRoute(
+          ChannelDetailRoute(account: account, channelId: uri.pathSegments[1]));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(uri.pathSegments.first);
@@ -115,20 +133,108 @@ class MfmTextState extends ConsumerState<MfmText> {
   Widget build(BuildContext context) {
     return Mfm(
       widget.mfmText,
-      emojiBuilder: (context, emojiName) => CustomEmoji.fromEmojiName(
-        ":$emojiName:",
-        ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-        anotherServerUrl: widget.emoji[emojiName],
-        fontSizeRatio: 2,
+      emojiBuilder: (context, emojiName, style) {
+        final emojiData = MisskeyEmojiData.fromEmojiName(
+            emojiName: ":$emojiName:",
+            repository:
+                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            emojiInfo: widget.emoji);
+        return DefaultTextStyle(
+          style: style ?? DefaultTextStyle.of(context).style,
+          child: GestureDetector(
+            onTap: () => widget.onEmojiTap?.call(emojiData),
+            child: EmojiInk(
+              child: CustomEmoji(
+                emojiData: emojiData,
+                fontSizeRatio: 2,
+              ),
+            ),
+          ),
+        );
+      },
+      unicodeEmojiBuilder:
+          (BuildContext context, String emoji, TextStyle? style) => TextSpan(
+              text: emoji,
+              style: style,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () =>
+                    widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji))),
+      codeBlockBuilder: (context, code, lang) => CodeBlock(
+        code: code,
+        language: lang,
       ),
-      linkTap: onTapLink,
+      linkTap: (src) => onTapLink(src).expectFailure(context),
       linkStyle: AppTheme.of(context).linkStyle,
-      mentionTap: (userName, host, acct) => onMentionTap(acct),
+      mentionTap: (userName, host, acct) =>
+          onMentionTap(acct).expectFailure(context),
       hashtagTap: onHashtagTap,
       searchTap: onSearch,
       style: widget.style,
       isNyaize: widget.isNyaize,
+      suffixSpan: widget.suffixSpan,
+      prefixSpan: widget.prefixSpan,
     );
+  }
+}
+
+class CodeBlock extends StatelessWidget {
+  final String? language;
+  final String code;
+
+  const CodeBlock({
+    super.key,
+    this.language,
+    required this.code,
+  });
+
+  String resolveLanguage(String language) {
+    if (language == "aiscript") return "javascript";
+    if (language == "js") return "javascript";
+    if (language == "c++") return "cpp";
+
+    return language;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedLanguage =
+        allLanguages[resolveLanguage(language ?? "text")]?.id ?? "plaintext";
+
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: HighlightView(
+            code,
+            languageId: resolvedLanguage,
+            theme:
+                AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
+            padding: const EdgeInsets.all(10),
+            textStyle: const TextStyle(fontFamilyFallback: [
+              "Monaco",
+              "Menlo",
+              "Consolas",
+              "Noto Mono"
+            ]),
+          )),
+    );
+  }
+}
+
+class EmojiInk extends ConsumerWidget {
+  final Widget child;
+
+  const EmojiInk({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isEnabled = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.enableDirectReaction));
+    if (isEnabled) {
+      return InkWell(child: child);
+    } else {
+      return child;
+    }
   }
 }
 
@@ -136,25 +242,37 @@ class SimpleMfmText extends ConsumerWidget {
   final String text;
   final TextStyle? style;
   final Map<String, String> emojis;
+  final List<InlineSpan> suffixSpan;
+  final List<InlineSpan> prefixSpan;
 
   const SimpleMfmText(
     this.text, {
     super.key,
     this.style,
     this.emojis = const {},
+    this.suffixSpan = const [],
+    this.prefixSpan = const [],
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfm(
       text,
-      emojiBuilder: (context, emojiName) => CustomEmoji.fromEmojiName(
-        ":$emojiName:",
-        ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-        fontSizeRatio: 1,
-        anotherServerUrl: emojis[emojiName],
+      emojiBuilder: (context, emojiName, style) => DefaultTextStyle.merge(
+        style: style ?? DefaultTextStyle.of(context).style,
+        child: CustomEmoji(
+          emojiData: MisskeyEmojiData.fromEmojiName(
+            emojiName: ":$emojiName:",
+            repository:
+                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            emojiInfo: emojis,
+          ),
+          fontSizeRatio: 1,
+        ),
       ),
       style: style,
+      suffixSpan: suffixSpan,
+      prefixSpan: prefixSpan,
     );
   }
 }
@@ -173,23 +291,26 @@ class UserInformation extends ConsumerStatefulWidget {
 class UserInformationState extends ConsumerState<UserInformation> {
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        runAlignment: WrapAlignment.center,
-        children: [
-          SimpleMfmText(
-            widget.user.name ?? widget.user.username,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            emojis: widget.user.emojis,
-          ),
-          for (final badge in widget.user.badgeRoles ?? [])
-            Tooltip(
+    return SimpleMfmText(
+      widget.user.name ?? widget.user.username,
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(fontWeight: FontWeight.bold),
+      emojis: widget.user.emojis,
+      suffixSpan: [
+        for (final badge in widget.user.badgeRoles ?? [])
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Tooltip(
               message: badge.name,
-              child: SizedBox(
-                  height: MediaQuery.of(context).textScaleFactor *
-                      (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
-                  child: Image.network(badge.iconUrl.toString())),
-            )
-        ]);
+              child: Image.network(
+                badge.iconUrl.toString(),
+                height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+              ),
+            ),
+          )
+      ],
+    );
   }
 }

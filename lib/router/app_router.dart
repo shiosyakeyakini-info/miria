@@ -6,19 +6,31 @@ import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/channels_page/channels_page.dart';
 import 'package:miria/view/clip_list_page/clip_detail_page.dart';
 import 'package:miria/view/clip_list_page/clip_list_page.dart';
+import 'package:miria/view/explore_page/explore_page.dart';
+import 'package:miria/view/explore_page/explore_role_users_page.dart';
 import 'package:miria/view/favorited_note_page/favorited_note_page.dart';
+import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
-import 'package:miria/view/note_search_page/note_search_page.dart';
 import 'package:miria/view/notification_page/notification_page.dart';
+import 'package:miria/view/search_page/search_page.dart';
 import 'package:miria/view/settings_page/account_settings_page/account_list.dart';
+import 'package:miria/view/settings_page/app_info_page/app_info_page.dart';
+import 'package:miria/view/settings_page/general_settings_page/general_settings_page.dart';
 import 'package:miria/view/settings_page/tab_settings_page/tab_settings_list_page.dart';
+import 'package:miria/view/several_account_settings_page/hard_mute_page/hard_mute_page.dart';
+import 'package:miria/view/several_account_settings_page/instance_mute_page/instance_mute_page.dart';
+import 'package:miria/view/several_account_settings_page/reaction_deck_page/reaction_deck_page.dart';
+import 'package:miria/view/several_account_settings_page/several_account_general_settings_page/several_account_general_settings_page.dart';
+import 'package:miria/view/several_account_settings_page/several_account_settings_page.dart';
+import 'package:miria/view/sharing_account_select_page/account_select_page.dart';
 import 'package:miria/view/time_line_page/time_line_page.dart';
 import 'package:miria/view/user_page/user_followee.dart';
 import 'package:miria/view/user_page/user_follower.dart';
 import 'package:miria/view/user_page/user_page.dart';
 import 'package:miria/view/users_list_page/users_list_page.dart';
 import 'package:miria/view/users_list_page/users_list_timeline_page.dart';
+import 'package:miria/view/splash_page/splash_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 import '../view/antenna_page/antenna_notes_page.dart';
@@ -33,6 +45,7 @@ part 'app_router.gr.dart';
 class AppRouter extends _$AppRouter {
   @override
   final List<AutoRoute> routes = [
+    AutoRoute(page: SplashRoute.page, initial: true),
     AutoRoute(page: AntennaRoute.page),
     AutoRoute(page: AntennaNotesRoute.page),
     AutoRoute(page: TimeLineRoute.page),
@@ -48,12 +61,23 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: UserFolloweeRoute.page),
     AutoRoute(page: ChannelsRoute.page),
     AutoRoute(page: ChannelDetailRoute.page),
-    AutoRoute(page: NoteSearchRoute.page),
     AutoRoute(page: HashtagRoute.page),
+    AutoRoute(page: ExploreRoute.page),
+    AutoRoute(page: ExploreRoleUsersRoute.page),
+    AutoRoute(page: SearchRoute.page),
+    AutoRoute(page: FederationRoute.page),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: SettingsRoute.page),
+    AutoRoute(page: GeneralSettingsRoute.page),
     AutoRoute(page: TabSettingsListRoute.page),
     AutoRoute(page: TabSettingsRoute.page),
     AutoRoute(page: AccountListRoute.page),
+    AutoRoute(page: AppInfoRoute.page),
+    AutoRoute(page: SeveralAccountSettingsRoute.page),
+    AutoRoute(page: ReactionDeckRoute.page),
+    AutoRoute(page: HardMuteRoute.page),
+    AutoRoute(page: InstanceMuteRoute.page),
+    AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
+    AutoRoute(page: SharingAccountSelectRoute.page),
   ];
 }

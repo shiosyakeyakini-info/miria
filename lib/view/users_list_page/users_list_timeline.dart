@@ -23,7 +23,7 @@ class UsersListTimeline extends ConsumerWidget {
         ref.read(notesProvider(account)).registerAll(response);
         return response.toList();
       },
-      nextFuture: (lastItem) async {
+      nextFuture: (lastItem, _) async {
         final response = await ref
             .read(misskeyProvider(account))
             .notes

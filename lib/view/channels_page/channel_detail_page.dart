@@ -1,4 +1,3 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
@@ -30,25 +29,20 @@ class ChannelDetailPage extends ConsumerWidget {
         child: Scaffold(
           appBar: AppBar(
             title: const Text("チャンネル"),
+            bottom: const TabBar(tabs: [
+              Tab(child: Text("チャンネル情報")),
+              Tab(child: Text("タイムライン"))
+            ]),
           ),
-          body: Column(
+          body: TabBarView(
             children: [
-              const TabBar(tabs: [
-                Tab(child: Text("チャンネル情報")),
-                Tab(child: Text("タイムライン"))
-              ]),
-              Expanded(
-                  child: TabBarView(
-                children: [
-                  SingleChildScrollView(
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: ChannelDetailInfo(channelId: channelId))),
-                  Padding(
+              SingleChildScrollView(
+                  child: Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: ChannelTimeline(channelId: channelId)),
-                ],
-              )),
+                      child: ChannelDetailInfo(channelId: channelId))),
+              Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: ChannelTimeline(channelId: channelId)),
             ],
           ),
           floatingActionButton: FloatingActionButton(

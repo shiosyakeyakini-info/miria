@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class FutureListView<T> extends StatefulWidget {
@@ -25,6 +26,10 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
         if (snapshot.connectionState == ConnectionState.done) {
           final data = snapshot.data;
           if (data == null) {
+            if (kDebugMode) {
+              print(snapshot.error);
+              print(snapshot.stackTrace);
+            }
             return const Text("エラー： データなし");
           }
           final list = data.toList();
@@ -34,8 +39,10 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
               itemBuilder: (context, index) =>
                   widget.builder(context, list[index]));
         } else if (snapshot.hasError) {
-          print(snapshot.error);
-          print(snapshot.stackTrace);
+          if (kDebugMode) {
+            print(snapshot.error);
+            print(snapshot.stackTrace);
+          }
           return Text("エラー： ${snapshot.error}");
         } else {
           return const Center(child: CircularProgressIndicator());

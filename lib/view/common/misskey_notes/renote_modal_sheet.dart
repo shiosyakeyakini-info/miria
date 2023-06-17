@@ -36,12 +36,9 @@ class RenoteModalSheet extends ConsumerWidget {
         ),
         ListTile(
             onTap: () {
-              final scaffoldMessenger = ScaffoldMessenger.of(context);
               final navigator = Navigator.of(context);
               context.pushRoute(
                   NoteCreateRoute(renote: note, initialAccount: account));
-              scaffoldMessenger
-                  .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
               navigator.pop();
             },
             title: const Text("引用Renote")),

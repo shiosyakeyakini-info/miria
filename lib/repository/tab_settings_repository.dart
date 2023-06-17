@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
@@ -15,7 +16,7 @@ class TabSettingsRepository extends ChangeNotifier {
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
     final storedData = prefs.getString("tab_settings");
-    if (storedData == null) {
+    if (storedData == null || storedData.isEmpty) {
       return;
     }
     try {
@@ -24,7 +25,7 @@ class TabSettingsRepository extends ChangeNotifier {
         ..addAll((jsonDecode(storedData) as List)
             .map((e) => TabSetting.fromJson(e)));
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 

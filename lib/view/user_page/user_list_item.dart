@@ -10,13 +10,16 @@ import 'package:misskey_dart/misskey_dart.dart';
 class UserListItem extends ConsumerWidget {
   final User user;
 
-  const UserListItem({super.key, required this.user});
+  final void Function()? onTap;
+
+  const UserListItem({super.key, required this.user, this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: () => context.pushRoute(
-          UserRoute(userId: user.id, account: AccountScope.of(context))),
+      onTap: onTap ??
+          () => context.pushRoute(
+              UserRoute(userId: user.id, account: AccountScope.of(context))),
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(

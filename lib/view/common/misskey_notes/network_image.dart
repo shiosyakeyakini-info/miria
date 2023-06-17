@@ -1,7 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
-enum ImageType { avatarIcon, customEmoji, imageThumbnail, image, other }
+enum ImageType {
+  avatarIcon,
+  customEmoji,
+  imageThumbnail,
+  image,
+  serverIcon,
+  ad,
+  other
+}
 
 class NetworkImageView extends StatelessWidget {
   final String url;
@@ -25,7 +33,8 @@ class NetworkImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     if (type == ImageType.avatarIcon ||
         type == ImageType.customEmoji ||
-        type == ImageType.imageThumbnail) {
+        type == ImageType.imageThumbnail ||
+        type == ImageType.serverIcon) {
       return CachedNetworkImage(
         imageUrl: url,
         fit: fit,
