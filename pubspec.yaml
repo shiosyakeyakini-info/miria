@@ -50,6 +50,7 @@ dependencies:
   share_plus: ^7.0.2
   mfm_parser: ^1.0.3
   flutter_svg: ^2.0.6
+  json5: ^0.8.0
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +62,7 @@ dev_dependencies:
   freezed: ^2.3.2
   json_serializable: ^6.6.1
   flutter_launcher_icons: ^0.13.1
+  mockito: ^5.4.2
 
 flutter:
   uses-material-design: true
