@@ -122,12 +122,12 @@ class AccountRepository extends ChangeNotifier {
     }
 
     try {
-      nodeInfo = await Dio().getUri(uri);
+      nodeInfo = await reader(dioProvider).getUri(uri);
     } catch (e) {
       throw SpecifiedException("$server はMisskeyサーバーとして認識できませんでした。");
     }
     final nodeInfoHref = nodeInfo.data["links"][0]["href"];
-    final nodeInfoHrefResponse = await Dio().get(nodeInfoHref);
+    final nodeInfoHrefResponse = await reader(dioProvider).get(nodeInfoHref);
     final nodeInfoResult = nodeInfoHrefResponse.data;
 
     final software = nodeInfoResult["software"]["name"];

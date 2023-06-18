@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:miria/model/account.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:json5/json5.dart';
@@ -480,4 +481,10 @@ class TestData {
   '''));
   static String channel2ExpectId = "9b3chwrm7f";
   static String channel2ExpectName = "Misskeyアークナイツ部";
+
+  // Dio
+  static DioError response404 = DioError(
+      requestOptions: RequestOptions(),
+      response: Response(requestOptions: RequestOptions(), statusCode: 404),
+      type: DioErrorType.unknown);
 }
