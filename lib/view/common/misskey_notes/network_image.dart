@@ -39,7 +39,8 @@ class NetworkImageView extends StatelessWidget {
         height: height,
         fit: fit ?? BoxFit.contain,
         placeholderBuilder: (context) =>
-            loadingBuilder?.call(context, Container(), null) ?? Container(),
+            loadingBuilder?.call(context, Container(), null) ??
+            const SizedBox.shrink(),
       );
     }
 
@@ -56,7 +57,8 @@ class NetworkImageView extends StatelessWidget {
             Container(),
         height: height,
         placeholder: (context, url) =>
-            loadingBuilder?.call(context, Container(), null) ?? Container(),
+            loadingBuilder?.call(context, Container(), null) ??
+            const SizedBox.shrink(),
         fadeInDuration: Duration.zero,
       );
     } else {
