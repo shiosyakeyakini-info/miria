@@ -13,6 +13,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -305,8 +306,9 @@ class UserInformationState extends ConsumerState<UserInformation> {
               alignment: PlaceholderAlignment.middle,
               child: Tooltip(
                 message: badge.name,
-                child: Image.network(
-                  badge.iconUrl.toString(),
+                child: NetworkImageView(
+                  type: ImageType.role,
+                  url: badge.iconUrl.toString(),
                   height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
                 ),
               ),
