@@ -189,7 +189,6 @@ class CodeBlock extends StatelessWidget {
   });
 
   String resolveLanguage(String language) {
-    if (language == "aiscript") return "javascript";
     if (language == "js") return "javascript";
     if (language == "c++") return "cpp";
 
@@ -199,7 +198,7 @@ class CodeBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final resolvedLanguage =
-        allLanguages[resolveLanguage(language ?? "text")]?.id ?? "plaintext";
+        allLanguages[resolveLanguage(language ?? "text")]?.id ?? "javascript";
 
     return SizedBox(
       width: double.infinity,
