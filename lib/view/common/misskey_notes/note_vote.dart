@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -13,10 +14,16 @@ import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class NoteVote extends ConsumerStatefulWidget {
-  const NoteVote({super.key, required this.displayNote, required this.poll});
+  const NoteVote({
+    super.key,
+    required this.displayNote,
+    required this.poll,
+    required this.loginAs,
+  });
 
   final Note displayNote;
   final NotePoll poll;
+  final Account? loginAs;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => NoteVoteState();
@@ -26,6 +33,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
   var isOpened = false;
 
   bool isAnyVotable() {
+    if (widget.loginAs != null) return false;
     final expiresAt = widget.poll.expiresAt;
     return (expiresAt == null || expiresAt > DateTime.now()) &&
         ((widget.poll.multiple && widget.poll.choices.any((e) => !e.isVoted)) ||

@@ -15,6 +15,7 @@ class ReactionButton extends ConsumerStatefulWidget {
   final int reactionCount;
   final String? myReaction;
   final String noteId;
+  final Account? loginAs;
 
   const ReactionButton({
     super.key,
@@ -22,6 +23,7 @@ class ReactionButton extends ConsumerStatefulWidget {
     required this.reactionCount,
     required this.myReaction,
     required this.noteId,
+    required this.loginAs,
   });
 
   @override
@@ -58,6 +60,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
     return ElevatedButton(
         onPressed: () async {
+          if (widget.loginAs != null) return;
           // リアクション取り消し
           final account = AccountScope.of(context);
           if (isMyReaction) {

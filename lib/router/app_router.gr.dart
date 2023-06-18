@@ -243,6 +243,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    NoteDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<NoteDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: NoteDetailPage(
+          key: args.key,
+          note: args.note,
+          account: args.account,
+        ),
+      );
+    },
     SearchRoute.name: (routeData) {
       final args = routeData.argsAs<SearchRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -1212,6 +1223,49 @@ class FederationRouteArgs {
   @override
   String toString() {
     return 'FederationRouteArgs{key: $key, account: $account, host: $host}';
+  }
+}
+
+/// generated route for
+/// [NoteDetailPage]
+class NoteDetailRoute extends PageRouteInfo<NoteDetailRouteArgs> {
+  NoteDetailRoute({
+    Key? key,
+    required Note note,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NoteDetailRoute.name,
+          args: NoteDetailRouteArgs(
+            key: key,
+            note: note,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NoteDetailRoute';
+
+  static const PageInfo<NoteDetailRouteArgs> page =
+      PageInfo<NoteDetailRouteArgs>(name);
+}
+
+class NoteDetailRouteArgs {
+  const NoteDetailRouteArgs({
+    this.key,
+    required this.note,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Note note;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'NoteDetailRouteArgs{key: $key, note: $note, account: $account}';
   }
 }
 

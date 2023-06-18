@@ -300,16 +300,17 @@ class UserInformationState extends ConsumerState<UserInformation> {
       emojis: widget.user.emojis,
       suffixSpan: [
         for (final badge in widget.user.badgeRoles ?? [])
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Tooltip(
-              message: badge.name,
-              child: Image.network(
-                badge.iconUrl.toString(),
-                height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+          if (badge.iconUrl != null)
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Tooltip(
+                message: badge.name,
+                child: Image.network(
+                  badge.iconUrl.toString(),
+                  height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                ),
               ),
-            ),
-          )
+            )
       ],
     );
   }

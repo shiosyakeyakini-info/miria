@@ -7,6 +7,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/federation_page/federation_ads.dart';
 import 'package:miria/view/federation_page/federation_announcements.dart';
 import 'package:miria/view/federation_page/federation_info.dart';
+import 'package:miria/view/federation_page/federation_timeline.dart';
 import 'package:miria/view/federation_page/federation_users.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -35,13 +36,16 @@ class FederationPageState extends ConsumerState<FederationPage> {
     final adsAvailable = metaResponse?.ads.isNotEmpty == true;
     final isMisskey = metaResponse?.softwareName == "misskey";
     final isAnotherHost = widget.account.host != widget.host;
+    final isSupportedTimeline =
+        isMisskey && metaResponse?.softwareVersion.startsWith("13") == true;
     return AccountScope(
       account: widget.account,
       child: DefaultTabController(
         length: 1 +
             (isAnotherHost ? 1 : 0) +
             (adsAvailable ? 1 : 0) +
-            (isMisskey ? 1 : 0),
+            (isMisskey ? 1 : 0) +
+            (isSupportedTimeline ? 1 : 0),
         child: Scaffold(
           appBar: AppBar(
             title: Text(widget.host),
@@ -51,7 +55,8 @@ class FederationPageState extends ConsumerState<FederationPage> {
                 const Tab(text: "サーバー情報"),
                 if (isAnotherHost) const Tab(text: "ユーザー"),
                 if (adsAvailable) const Tab(text: "広告"),
-                if (isMisskey) const Tab(text: "お知らせ")
+                if (isMisskey) const Tab(text: "お知らせ"),
+                if (isSupportedTimeline) const Tab(text: "LTL")
               ],
             ),
           ),
@@ -61,6 +66,7 @@ class FederationPageState extends ConsumerState<FederationPage> {
               if (isAnotherHost) FederationUsers(host: widget.host),
               if (adsAvailable) const FederationAds(),
               if (isMisskey) FederationAnnouncements(host: widget.host),
+              if (isSupportedTimeline) FederationTimeline(host: widget.host),
             ],
           ),
         ),

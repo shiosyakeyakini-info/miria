@@ -11,7 +11,7 @@ class Account with _$Account {
   const factory Account({
     required String host,
     required String userId,
-    required String token,
+    String? token,
     required IResponse i,
   }) = _Account;
 
