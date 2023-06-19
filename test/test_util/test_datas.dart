@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/misskey_emoji_data.dart';
+import 'package:miria/repository/emoji_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:json5/json5.dart';
 
@@ -418,7 +420,7 @@ class TestData {
   static String note2ExpectText =
       "みにゃさん、数取りゲームしましょう！\n0~100の中で最も大きい数字を取った人が勝ちです。他の人と被ったらだめですよ～\n制限時間は10分です。数字はこの投稿にリプライで送ってくださいね！";
 
-  // user
+  // ユーザー情報
   static User user1 = User.fromJson(JSON5.parse(r'''
 {
   id: '7rkr3b1c1c',
@@ -434,6 +436,77 @@ class TestData {
   badgeRoles: [],
 }'''));
   static String user1ExpectId = "7rkr3b1c1c";
+
+  // カスタム絵文字
+  static UnicodeEmojiData emoji1 = const UnicodeEmojiData(char: "♥");
+  static CustomEmojiData emoji2 = CustomEmojiData(
+      baseName: "ai_yay",
+      hostedName: "misskey.io",
+      url: Uri.parse("https://s3.arkjp.net/emoji/ai_yay.apng"),
+      isCurrentServer: true,
+      isSensitive: false);
+
+  static EmojiRepositoryData emojiRepositoryData1 = EmojiRepositoryData(
+      emoji: emoji1,
+      category: "symbols",
+      kanaName: "へあt",
+      aliases: ["heart", "ハート"],
+      kanaAliases: ["へあt", "ハート"]);
+
+  static EmojiRepositoryData emojiRepositoryData2 = EmojiRepositoryData(
+      emoji: emoji2,
+      category: "02 Ai",
+      kanaName: "あいやy",
+      aliases: [
+        'yay_ai',
+        '藍',
+        'あい',
+        'ばんざい',
+        'バンザイ',
+        'ばんざーい',
+        'やった',
+        'やったぁ',
+        'わぁい',
+        'わーい',
+        'やったー',
+        'やったぁ',
+        'うれしい',
+        'ハッピー',
+        'たのしい',
+        'わーいわーい',
+        'よろこび',
+        'よろこぶ',
+        '',
+        'happy',
+        'yay',
+        'ai',
+        'praise',
+      ],
+      kanaAliases: [
+        'やyあい',
+        '藍',
+        'あい',
+        'ばんざい',
+        'バンザイ',
+        'ばんざーい',
+        'やった',
+        'やったぁ',
+        'わぁい',
+        'わーい',
+        'やったー',
+        'やったぁ',
+        'うれしい',
+        'ハッピー',
+        'たのしい',
+        'わーいわーい',
+        'よろこび',
+        'よろこぶ',
+        '',
+        'はppy',
+        'やy',
+        'あい',
+        'pらいせ',
+      ]);
 
   // チャンネル
   static CommunityChannel channel1 = CommunityChannel.fromJson(JSON5.parse(r'''

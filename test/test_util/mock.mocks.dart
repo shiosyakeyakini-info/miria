@@ -7,16 +7,18 @@ import 'dart:async' as _i14;
 import 'dart:ui' as _i16;
 
 import 'package:dio/src/adapter.dart' as _i8;
-import 'package:dio/src/cancel_token.dart' as _i19;
-import 'package:dio/src/dio.dart' as _i18;
+import 'package:dio/src/cancel_token.dart' as _i21;
+import 'package:dio/src/dio.dart' as _i20;
 import 'package:dio/src/dio_mixin.dart' as _i10;
 import 'package:dio/src/options.dart' as _i7;
 import 'package:dio/src/response.dart' as _i11;
 import 'package:dio/src/transformer.dart' as _i9;
 import 'package:miria/model/account.dart' as _i15;
 import 'package:miria/model/account_settings.dart' as _i2;
+import 'package:miria/model/misskey_emoji_data.dart' as _i19;
 import 'package:miria/model/tab_setting.dart' as _i13;
 import 'package:miria/repository/account_settings_repository.dart' as _i17;
+import 'package:miria/repository/emoji_repository.dart' as _i18;
 import 'package:miria/repository/tab_settings_repository.dart' as _i12;
 import 'package:misskey_dart/misskey_dart.dart' as _i4;
 import 'package:misskey_dart/src/data/ping_response.dart' as _i6;
@@ -612,6 +614,57 @@ class MockAccountSettingsRepository extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [EmojiRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockEmojiRepository extends _i1.Mock implements _i18.EmojiRepository {
+  @override
+  set emoji(List<_i18.EmojiRepositoryData>? _emoji) => super.noSuchMethod(
+        Invocation.setter(
+          #emoji,
+          _emoji,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i14.Future<void> loadFromSource() => (super.noSuchMethod(
+        Invocation.method(
+          #loadFromSource,
+          [],
+        ),
+        returnValue: _i14.Future<void>.value(),
+        returnValueForMissingStub: _i14.Future<void>.value(),
+      ) as _i14.Future<void>);
+  @override
+  _i14.Future<List<_i19.MisskeyEmojiData>> searchEmojis(
+    String? name, {
+    int? limit = 30,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchEmojis,
+          [name],
+          {#limit: limit},
+        ),
+        returnValue: _i14.Future<List<_i19.MisskeyEmojiData>>.value(
+            <_i19.MisskeyEmojiData>[]),
+        returnValueForMissingStub:
+            _i14.Future<List<_i19.MisskeyEmojiData>>.value(
+                <_i19.MisskeyEmojiData>[]),
+      ) as _i14.Future<List<_i19.MisskeyEmojiData>>);
+  @override
+  List<_i19.MisskeyEmojiData> defaultEmojis({int? limit}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #defaultEmojis,
+          [],
+          {#limit: limit},
+        ),
+        returnValue: <_i19.MisskeyEmojiData>[],
+        returnValueForMissingStub: <_i19.MisskeyEmojiData>[],
+      ) as List<_i19.MisskeyEmojiData>);
 }
 
 /// A class which mocks [Misskey].
@@ -2432,7 +2485,7 @@ class MockMisskeyChannels extends _i1.Mock implements _i4.MisskeyChannels {
 /// A class which mocks [Dio].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDio extends _i1.Mock implements _i18.Dio {
+class MockDio extends _i1.Mock implements _i20.Dio {
   @override
   _i7.BaseOptions get options => (super.noSuchMethod(
         Invocation.getter(#options),
@@ -2521,7 +2574,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
@@ -2571,7 +2624,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
@@ -2619,7 +2672,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2673,7 +2726,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2725,7 +2778,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2779,7 +2832,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2831,7 +2884,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2877,7 +2930,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2921,7 +2974,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2967,7 +3020,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3011,7 +3064,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -3065,7 +3118,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -3117,7 +3170,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     dynamic savePath, {
     _i7.ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? queryParameters,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     bool? deleteOnError = true,
     String? lengthHeader = r'content-length',
     Object? data,
@@ -3186,7 +3239,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     Uri? uri,
     dynamic savePath, {
     _i7.ProgressCallback? onReceiveProgress,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     bool? deleteOnError = true,
     String? lengthHeader = r'content-length',
     Object? data,
@@ -3252,7 +3305,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.Options? options,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
@@ -3306,7 +3359,7 @@ class MockDio extends _i1.Mock implements _i18.Dio {
   _i14.Future<_i11.Response<T>> requestUri<T>(
     Uri? uri, {
     Object? data,
-    _i19.CancelToken? cancelToken,
+    _i21.CancelToken? cancelToken,
     _i7.Options? options,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
