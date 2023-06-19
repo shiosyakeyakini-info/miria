@@ -34,7 +34,7 @@ Future<void> _navigateDetailPage(
     return;
   }
   final ref = ProviderScope.containerOf(context);
-  final host = AccountScope.of(context).host;
+  final host = note.user.host ?? AccountScope.of(context).host;
 
   try {
     // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
@@ -85,7 +85,7 @@ Future<void> _navigateUserDetailPage(
   }
 
   final ref = ProviderScope.containerOf(context);
-  final host = AccountScope.of(context).host;
+  final host = note.user.host ?? AccountScope.of(context).host;
 
   try {
     // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
