@@ -2,22 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+
+final inputComplementEmojiProvider =
+    StateProvider.autoDispose((ref) => <MisskeyEmojiData>[]);
+final inputComplementDelayedProvider = Provider((ref) => 300);
 
 class InputComplement extends ConsumerStatefulWidget {
-  final AutoDisposeStateProvider<List<MisskeyEmojiData>> searchedEmojiProvider;
   final TextEditingController controller;
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
   const InputComplement({
     super.key,
-    required this.searchedEmojiProvider,
     required this.controller,
     required this.focusNode,
   });
@@ -57,18 +60,55 @@ class InputComplementState extends ConsumerState<InputComplement> {
         selection: TextSelection.collapsed(
             offset: beforeSearchText.length + emoji.baseName.length + 2));
 
-    ref.read(widget.searchedEmojiProvider.notifier).state = [];
+    ref.read(inputComplementEmojiProvider.notifier).state = [];
     ref.read(widget.focusNode).requestFocus();
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    widget.controller.addListener(() {
+      if (widget.controller.isIncludeBeforeColon) {
+        if (widget.controller.isEmojiScope) {
+          if (ref.read(inputComplementEmojiProvider).isNotEmpty) {
+            ref.read(inputComplementEmojiProvider.notifier).state = [];
+          }
+          return;
+        }
+
+        Future(() async {
+          final initialAccount = AccountScope.of(context);
+          final searchedEmojis = await (ref
+              .read(emojiRepositoryProvider(initialAccount))
+              .searchEmojis(widget.controller.emojiSearchValue));
+          ref.read(inputComplementEmojiProvider.notifier).state =
+              searchedEmojis;
+        });
+      } else {
+        if (ref.read(inputComplementEmojiProvider).isNotEmpty) {
+          ref.read(inputComplementEmojiProvider.notifier).state = [];
+        }
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    isClose = !ref.read(widget.focusNode).hasFocus;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final filteredInputEmoji = ref.watch(widget.searchedEmojiProvider);
+    final filteredInputEmoji = ref.watch(inputComplementEmojiProvider);
 
     ref.listen(widget.focusNode, (previous, next) {
       if (!next.hasFocus) {
         Future(() async {
-          await Future.delayed(const Duration(milliseconds: 300));
+          await Future.delayed(
+              Duration(milliseconds: ref.read(inputComplementDelayedProvider)));
           if (!mounted) return;
           if (!ref.read(widget.focusNode).hasFocus) {
             setState(() {

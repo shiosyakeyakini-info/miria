@@ -35,42 +35,6 @@ class TimeLinePage extends ConsumerStatefulWidget {
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
   final scrollController = TimelineScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-
-    ref.read(timelineNoteProvider).addListener(inputListener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    ref.read(timelineNoteProvider).removeListener(inputListener);
-  }
-
-  void inputListener() {
-    if (ref.read(timelineNoteProvider).isIncludeBeforeColon) {
-      if (ref.read(timelineNoteProvider).isEmojiScope) {
-        if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-          ref.read(filteredInputEmojiProvider.notifier).state = [];
-        }
-        return;
-      }
-
-      Future(() async {
-        final searchedEmojis = await (ref
-            .read(emojiRepositoryProvider(widget.currentTabSetting.account))
-            .searchEmojis(ref.read(timelineNoteProvider).emojiSearchValue));
-        ref.read(filteredInputEmojiProvider.notifier).state = searchedEmojis;
-      });
-    } else {
-      if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-        ref.read(filteredInputEmojiProvider.notifier).state = [];
-      }
-    }
-  }
-
   Future<void> note() async {
     final text = ref.read(timelineNoteProvider).value.text;
     if (text.isEmpty) return;

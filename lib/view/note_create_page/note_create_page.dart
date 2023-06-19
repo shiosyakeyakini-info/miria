@@ -27,29 +27,6 @@ import 'package:misskey_dart/misskey_dart.dart';
 final noteInputTextProvider =
     ChangeNotifierProvider.autoDispose<TextEditingController>((ref) {
   final controller = TextEditingController();
-  controller.addListener(() {
-    if (controller.isIncludeBeforeColon) {
-      if (controller.isEmojiScope) {
-        if (ref.read(noteCreateEmojisProvider).isNotEmpty) {
-          ref.read(noteCreateEmojisProvider.notifier).state = [];
-        }
-        return;
-      }
-
-      Future(() async {
-        final initialAccount = ref.read(selectedAccountProvider);
-        if (initialAccount == null) return;
-        final searchedEmojis = await (ref
-            .read(emojiRepositoryProvider(initialAccount))
-            .searchEmojis(controller.emojiSearchValue));
-        ref.read(noteCreateEmojisProvider.notifier).state = searchedEmojis;
-      });
-    } else {
-      if (ref.read(noteCreateEmojisProvider).isNotEmpty) {
-        ref.read(noteCreateEmojisProvider.notifier).state = [];
-      }
-    }
-  });
 
   return controller;
 });
@@ -61,8 +38,6 @@ final selectedAccountProvider =
 final noteVisibilityProvider =
     StateProvider.autoDispose<NoteVisibility>((ref) => NoteVisibility.public);
 final isLocalProvider = StateProvider.autoDispose((ref) => false);
-final noteCreateEmojisProvider =
-    StateProvider.autoDispose((ref) => <MisskeyEmojiData>[]);
 final filesProvider = StateProvider.autoDispose((ref) => <MisskeyPostFile>[]);
 final progressFileUploadProvider = StateProvider.autoDispose((ref) => false);
 final channelProvider =
@@ -100,7 +75,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
 class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   var isCw = false;
   final cwController = TextEditingController();
-  late final focusNode = ref.read(noteFocusProvider);
+  late final focusNode = ref.watch(noteFocusProvider);
   var isFirstChangeDependenciesCalled = false;
 
   @override
