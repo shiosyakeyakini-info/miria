@@ -38,7 +38,7 @@ class NoteVisibilityDialog extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).pop(NoteVisibility.home);
           },
-          leading: const Icon(Icons.home_outlined),
+          leading: const Icon(Icons.home),
           title: const Text("ホーム"),
           subtitle: const Text("ホームタイムラインのみに公開"),
         ),
@@ -54,7 +54,7 @@ class NoteVisibilityDialog extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).pop(NoteVisibility.specified);
           },
-          leading: const Icon(Icons.mail_outline),
+          leading: const Icon(Icons.mail),
           title: const Text("ダイレクト"),
           subtitle: const Text("選択したユーザーのみに公開"),
         ),

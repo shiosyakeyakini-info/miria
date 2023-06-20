@@ -21,7 +21,7 @@ class NoteCreateSettingTop extends ConsumerWidget {
       case NoteVisibility.followers:
         return Icons.lock_outline;
       case NoteVisibility.specified:
-        return Icons.mail_outline;
+        return Icons.mail;
     }
   }
 

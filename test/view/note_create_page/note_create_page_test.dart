@@ -1,12 +1,16 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miria/model/account_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/mockito.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -20,10 +24,12 @@ void main() {
   group("入力補完", () {
     testWidgets("カスタム絵文字の入力補完が可能なこと", (tester) async {
       final emojiRepository = MockEmojiRepository();
-      when(emojiRepository.emoji).thenReturn(
-          [TestData.emojiRepositoryData1, TestData.emojiRepositoryData2]);
-      when(emojiRepository.searchEmojis(any))
-          .thenAnswer((_) async => [TestData.emoji1, TestData.emoji2]);
+      when(emojiRepository.emoji).thenReturn([
+        TestData.unicodeEmojiRepositoryData1,
+        TestData.customEmojiRepositoryData1
+      ]);
+      when(emojiRepository.searchEmojis(any)).thenAnswer(
+          (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
 
       await tester.pumpWidget(ProviderScope(
           overrides: [
@@ -40,16 +46,16 @@ void main() {
       expect(
           find.byWidgetPredicate((widget) =>
               widget is NetworkImageView &&
-              widget.url == TestData.emoji2.url.toString()),
+              widget.url == TestData.customEmoji1.url.toString()),
           findsOneWidget);
-      expect(find.text(TestData.emoji1.char), findsOneWidget);
+      expect(find.text(TestData.unicodeEmoji1.char), findsOneWidget);
 
       await tester.tap(find.byType(NetworkImageView).at(1));
       expect(
           tester
               .textEditingController(find.byType(TextField).hitTestable())
               .text,
-          ":${TestData.emoji2.baseName}:");
+          ":${TestData.customEmoji1.baseName}:");
     });
 
     testWidgets(
@@ -58,12 +64,14 @@ void main() {
       VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
       final emojiRepository = MockEmojiRepository();
-      when(emojiRepository.emoji).thenReturn(
-          [TestData.emojiRepositoryData1, TestData.emojiRepositoryData2]);
-      when(emojiRepository.searchEmojis(any))
-          .thenAnswer((_) async => [TestData.emoji1, TestData.emoji2]);
+      when(emojiRepository.emoji).thenReturn([
+        TestData.unicodeEmojiRepositoryData1,
+        TestData.customEmojiRepositoryData1
+      ]);
+      when(emojiRepository.searchEmojis(any)).thenAnswer(
+          (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
       when(emojiRepository.defaultEmojis())
-          .thenReturn([TestData.emoji1, TestData.emoji2]);
+          .thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
 
       await tester.pumpWidget(ProviderScope(
           overrides: [
@@ -84,7 +92,7 @@ void main() {
           tester
               .textEditingController(find.byType(TextField).hitTestable())
               .text,
-          ":${TestData.emoji2.baseName}:");
+          ":${TestData.customEmoji1.baseName}:");
     });
   });
 
@@ -179,7 +187,37 @@ void main() {
             (arg) => arg.channelId == TestData.channel1ExpectId)))));
       });
 
-      // 引用リノートはどうなんだっけ
+      testWidgets("チャンネルのノートに引用リノートをする場合、引数のチャンネル先が選択されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1)
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  channel: TestData.channel2,
+                  renote: TestData.note1.copyWith(
+                      channelId: TestData.channel1.id,
+                      channel: NoteChannelInfo(
+                          id: TestData.channel1.id,
+                          name: TestData.channel1.name))),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(find.text(TestData.channel2ExpectName), findsOneWidget);
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.channelId == TestData.channel2ExpectId)))));
+      });
     });
 
     group("公開範囲", () {
@@ -314,6 +352,39 @@ void main() {
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
             (arg) => arg.visibility == NoteVisibility.home)))));
       });
+
+      testWidgets("ユーザーがサイレンスの場合、デフォルトの公開範囲設定がフォロワーのみの場合、デフォルトの公開範囲設定が反映されること",
+          (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        final accountSettings = MockAccountSettingsRepository();
+        when(accountSettings.fromAccount(any)).thenReturn(AccountSettings(
+            userId: TestData.account.userId,
+            host: TestData.account.host,
+            defaultNoteVisibility: NoteVisibility.followers));
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+              accountSettingsRepositoryProvider
+                  .overrideWith((ref) => accountSettings)
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account.copyWith(
+                      i: TestData.account.i.copyWith(isSilenced: true))),
+            )));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.visibility == NoteVisibility.followers)))));
+      });
     });
 
     group("連合オン・オフ", () {
@@ -415,12 +486,703 @@ void main() {
         verify(mockNote.create(argThat(equals(
             predicate<NotesCreateRequest>((arg) => arg.localOnly == true)))));
       });
+
+      group("チャンネル", () {
+        testWidgets("チャンネルへのノートの場合、連合オフになること", (tester) async {
+          final mockMisskey = MockMisskey();
+          final mockNote = MockMisskeyNotes();
+          when(mockMisskey.notes).thenReturn(mockNote);
+          final accountSettings = MockAccountSettingsRepository();
+          when(accountSettings.fromAccount(any)).thenReturn(AccountSettings(
+              userId: TestData.account.userId, host: TestData.account.host));
+          await tester.pumpWidget(ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+                inputComplementDelayedProvider.overrideWithValue(1),
+                accountSettingsRepositoryProvider
+                    .overrideWith((ref) => accountSettings)
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account,
+                    channel: TestData.channel1),
+              )));
+          await tester.pumpAndSettle();
+
+          await tester.enterText(
+              find.byType(TextField).hitTestable(), ":ai_yay:");
+          await tester.tap(find.byIcon(Icons.send));
+          await tester.pumpAndSettle();
+
+          verify(mockNote.create(argThat(equals(
+              predicate<NotesCreateRequest>((arg) => arg.localOnly == true)))));
+        });
+      });
     });
 
-    group("リアクションの受け入れ", () {});
+    group("リアクションの受け入れ", () {
+      testWidgets("デフォルトのリアクション受け入れ設定が適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        final accountSettings = MockAccountSettingsRepository();
+        when(accountSettings.fromAccount(any)).thenReturn(AccountSettings(
+            userId: TestData.account.userId,
+            host: TestData.account.host,
+            defaultReactionAcceptance: ReactionAcceptance.nonSensitiveOnly));
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+              accountSettingsRepositoryProvider
+                  .overrideWith((ref) => accountSettings)
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+        await tester.pumpAndSettle();
 
-    group("注釈", () {});
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
 
-    group("ノートのテキスト", () {});
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.reactionAcceptance ==
+                ReactionAcceptance.nonSensitiveOnly)))));
+      });
+
+      testWidgets("削除されたノートを直す場合、削除されたノートのリアクション受け入れ設定が適用されること",
+          (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        final accountSettings = MockAccountSettingsRepository();
+        when(accountSettings.fromAccount(any)).thenReturn(AccountSettings(
+            userId: TestData.account.userId, host: TestData.account.host));
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+              accountSettingsRepositoryProvider
+                  .overrideWith((ref) => accountSettings)
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  deletedNote: TestData.note1.copyWith(
+                      reactionAcceptance: ReactionAcceptance.likeOnly)),
+            )));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.reactionAcceptance == ReactionAcceptance.likeOnly)))));
+      });
+
+      testWidgets("引用リノートの場合、リノート元のリアクション受け入れ設定が反映され**ない**こと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  renote: TestData.note1.copyWith(
+                      reactionAcceptance: ReactionAcceptance.likeOnly)),
+            )));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.reactionAcceptance == null)))));
+      });
+
+      testWidgets("リプライの場合、リプライ元のリアクション受け入れ設定が反映され**ない**こと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  reply: TestData.note1.copyWith(
+                      reactionAcceptance: ReactionAcceptance.likeOnly)),
+            )));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.reactionAcceptance == null)))));
+      });
+    });
+
+    group("注釈", () {
+      testWidgets("初期値は空であること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField).at(0)).text,
+            "");
+      });
+
+      testWidgets("削除したノートを直す場合、削除したノートの注釈が適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  deletedNote: TestData.note1.copyWith(cw: "えっちなやつ")),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField).at(0)).text,
+            "えっちなやつ");
+      });
+
+      testWidgets("リプライを送る場合で、リプライ元が注釈ありの場合、その注釈が適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  reply: TestData.note1.copyWith(cw: "えっちなやつ")),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField).at(0)).text,
+            "えっちなやつ");
+      });
+
+      testWidgets("引用リノートをする場合で、リノート元が注釈ありの場合、その注釈が適用され**ない**こと",
+          (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  renote: TestData.note1.copyWith(cw: "えっちなやつ")),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField).at(0)).text,
+            "");
+      });
+    });
+
+    group("ノートのテキスト", () {
+      testWidgets("初期値は空であること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField)).text, "");
+      });
+
+      testWidgets("削除したノートを直す場合、削除したノートのテキストが適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  deletedNote: TestData.note1),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField)).text,
+            TestData.note1.text);
+      });
+
+      testWidgets("テキスト共有からノート投稿をする場合、共有のテキストが適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  initialText: ":ai_yaysuperfast:"),
+            )));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField)).text,
+            ":ai_yaysuperfast:");
+      });
+    });
+
+    group("メディア", () {
+      testWidgets("初期値は空であること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(
+                predicate<NotesCreateRequest>((arg) => arg.mediaIds == null)))))
+            .called(1);
+      });
+
+      testWidgets("削除したノートを直す場合、削除したノートのメディアが適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        final mockDio = MockDio();
+        when(mockDio.get(any, options: anyNamed("options")))
+            .thenAnswer((_) async => await TestData.binaryImageResponse);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              dioProvider.overrideWith((ref) => mockDio),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  deletedNote: TestData.note1.copyWith(
+                      files: [TestData.drive1], fileIds: [TestData.drive1.id])),
+            )));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => const DeepCollectionEquality()
+                .equals(arg.fileIds, [TestData.drive1.id])))))).called(1);
+      });
+
+      testWidgets("画像共有からノートを投稿する場合、共有の画像が適用されること", (tester) async {
+        //TODO
+        throw UnimplementedError();
+      });
+    });
+
+    // TODO
+    group("リプライ先", () {});
+
+    // TODO
+    group("投票", () {});
+  });
+
+  group("入力・バリデーション", () {
+    group("テキスト", () {
+      testWidgets("ノートの内容を編集して投稿できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+            ))));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), ":ai_bonk:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.text == ":ai_bonk:"))))).called(1);
+      });
+
+      testWidgets("ノートの内容が空で投稿することができないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+            ))));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pump();
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expect(find.byType(TextField).hitTestable(), findsOneWidget);
+      });
+
+      testWidgets("画像が添付されている場合、ノートの内容が空でも投稿できること", (tester) async {
+        throw UnimplementedError();
+      });
+    });
+
+    group("注釈", () {
+      testWidgets("注釈のアイコンのタップで表示が切り替わること", (tester) async {
+        await tester.pumpWidget(ProviderScope(
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+          initialAccount: TestData.account,
+        ))));
+        await tester.pumpAndSettle();
+        expect(find.byType(TextField), findsOneWidget);
+
+        await tester.tap(find.byIcon(Icons.remove_red_eye));
+        await tester.pumpAndSettle();
+        expect(find.byType(TextField), findsNWidgets(2));
+
+        await tester.tap(find.byIcon(Icons.visibility_off));
+        await tester.pumpAndSettle();
+        expect(find.byType(TextField), findsOneWidget);
+      });
+
+      testWidgets("注釈つきのノートが投稿できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+            ))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.remove_red_eye));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).at(0), ":nsfw:");
+        await tester.enterText(find.byType(TextField).at(1), "えっちなやつ");
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(
+                predicate<NotesCreateRequest>((arg) => arg.cw == ":nsfw:")))))
+            .called(1);
+      });
+
+      testWidgets("内容を入力している状態で注釈を非表示にした場合、注釈なしで投稿されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+            ))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.remove_red_eye));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).at(0), ":nsfw:");
+        await tester.enterText(find.byType(TextField).at(1), "えっちなやつ");
+        await tester.tap(find.byIcon(Icons.visibility_off));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(
+                predicate<NotesCreateRequest>((arg) => arg.cw == null)))))
+            .called(1);
+      });
+    });
+
+    group("公開範囲", () {
+      final testCases = {
+        "パブリック": (Icons.public, NoteVisibility.public),
+        "ホーム": (Icons.home, NoteVisibility.home),
+        "フォロワー": (Icons.lock_outline, NoteVisibility.followers),
+        "ダイレクト": (Icons.mail, NoteVisibility.specified)
+      };
+
+      for (final testCase in testCases.entries) {
+        testWidgets("公開範囲を${testCase.key}に変更して投稿できること", (tester) async {
+          final mockMisskey = MockMisskey();
+          final mockNote = MockMisskeyNotes();
+          when(mockMisskey.notes).thenReturn(mockNote);
+
+          await tester.pumpWidget(ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                  initialRoute:
+                      NoteCreateRoute(initialAccount: TestData.account))));
+          await tester.pumpAndSettle();
+
+          await tester.enterText(find.byType(TextField).at(0), ":ai_yay:");
+
+          await tester.tap(find.byIcon(Icons.public));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byIcon(testCase.value.$1).hitTestable());
+          await tester.pumpAndSettle();
+          expect(find.byIcon(testCase.value.$1).hitTestable(), findsOneWidget);
+
+          await tester.tap(find.byIcon(Icons.send));
+          await tester.pumpAndSettle();
+
+          verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+              (arg) => arg.visibility == testCase.value.$2))))).called(1);
+        });
+      }
+
+      testWidgets("サイレンスユーザーがパブリック投稿にできないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account.copyWith(
+                        i: TestData.account.i.copyWith(isSilenced: true))))));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(0), ":ai_yay:");
+
+        await tester.tap(find.byIcon(Icons.home));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.public).hitTestable());
+        await tester.pumpAndSettle();
+
+        // エラーメッセージが表示されること
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        // 入力可能な状態に戻っていること
+        await tester.tap(find.byIcon(Icons.home).hitTestable());
+        await tester.pumpAndSettle();
+        expect(find.byType(TextField).hitTestable(), findsOneWidget);
+      });
+
+      testWidgets("公開範囲がパブリックでないノートに対するリプライを、パブリック投稿にできないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  reply: TestData.note1
+                      .copyWith(visibility: NoteVisibility.followers)),
+            )));
+
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(0), ":ai_yay:");
+
+        await tester.tap(find.byIcon(Icons.lock_outline));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.public).hitTestable());
+        await tester.pumpAndSettle();
+
+        // エラーメッセージが表示されること
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        // 入力可能な状態に戻っていること
+        await tester.tap(find.byIcon(Icons.home).hitTestable());
+        await tester.pumpAndSettle();
+        expect(find.byType(TextField).hitTestable(), findsOneWidget);
+      });
+
+      // ホームのリノートは何が正解なんだろう
+    });
+
+    group("連合", () {
+      testWidgets("連合の表示が切り替わること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute:
+                    NoteCreateRoute(initialAccount: TestData.account))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.rocket));
+        await tester.pumpAndSettle();
+        expect(find.byType(LocalOnlyIcon), findsOneWidget);
+
+        await tester.tap(find.byType(LocalOnlyIcon));
+        await tester.pumpAndSettle();
+        expect(find.byIcon(Icons.rocket), findsOneWidget);
+      });
+
+      testWidgets("連合がオンの場合、連合ありで投稿されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute:
+                    NoteCreateRoute(initialAccount: TestData.account))));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.localOnly == false))))).called(1);
+      });
+
+      testWidgets("連合がオフに設定した場合、連合なしで投稿されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute:
+                    NoteCreateRoute(initialAccount: TestData.account))));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.rocket));
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.localOnly == true))))).called(1);
+      });
+
+      testWidgets("チャンネルのノートを連合オンに設定できないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account,
+                    channel: TestData.channel1))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(LocalOnlyIcon));
+        await tester.pumpAndSettle();
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(LocalOnlyIcon), findsOneWidget);
+      });
+    });
   });
 }

@@ -141,7 +141,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         final files = <MisskeyPostFile>[];
         for (final file in deletedNote.files) {
           if (file.type.startsWith("image")) {
-            final response = await Dio().get(file.url,
+            final response = await ref.read(dioProvider).get(file.url,
                 options: Options(responseType: ResponseType.bytes));
             files.add(ImageFileAlreadyPostedFile(
                 fileName: file.name, data: response.data, id: file.id));

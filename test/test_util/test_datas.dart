@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/repository/emoji_repository.dart';
@@ -420,6 +423,59 @@ class TestData {
   static String note2ExpectText =
       "みにゃさん、数取りゲームしましょう！\n0~100の中で最も大きい数字を取った人が勝ちです。他の人と被ったらだめですよ～\n制限時間は10分です。数字はこの投稿にリプライで送ってくださいね！";
 
+  // メディア
+  static DriveFile drive1 = DriveFile.fromJson(JSON5.parse(r'''
+{
+    id: '9g6yuyisp3',
+    createdAt: '2023-06-19T22:02:22.660Z',
+    name: 'maze.png',
+    type: 'image/png',
+    md5: 'c2585a2f9c286c3ee1cb07b6a1041b58',
+    size: 85317,
+    isSensitive: false,
+    blurhash: 'e172_xti05ti05t$kAV]azaz05ag%]afyStiazazfjV]05azylagy8',
+    properties: {
+      width: 4096,
+      height: 4096,
+    },
+    url: 'https://s3.arkjp.net/misskey/webpublic-5efa067b-f0f6-4e9c-afbf-25a6140b6c6a.png',
+    thumbnailUrl: 'https://s3.arkjp.net/misskey/thumbnail-db8c0a1d-ba8c-4ea2-bbf1-be1e8f021605.webp',
+    comment: null,
+    folderId: null,
+    folder: null,
+    userId: null,
+    user: null,
+  }  
+  '''));
+
+  static DriveFile drive2AsVideo = DriveFile.fromJson(JSON5.parse(r'''
+{
+  id: '9g0kvlw8d3',
+  createdAt: '2023-06-15T10:44:21.272Z',
+  name: 'RPReplay_Final1686825395.mp4',
+  type: 'video/mp4',
+  md5: '9e1df6b1e79796e4e4b58fbf804a9f40',
+  size: 11400289,
+  isSensitive: false,
+  blurhash: null,
+  properties: {},
+  url: 'https://s3.arkjp.net/misskey/e5d2aaea-6c64-4d07-b8c2-2708a955a606.mp4',
+  thumbnailUrl: 'https://s3.arkjp.net/misskey/thumbnail-be640464-688f-46ef-90b6-8bbba80e73cb.webp',
+  comment: null,
+  folderId: null,
+  folder: null,
+  userId: null,
+  user: null,
+}
+  '''));
+
+  static Future<Response<Uint8List>> get binaryImageResponse async => Response(
+      requestOptions: RequestOptions(),
+      statusCode: 200,
+      data: Uint8List.fromList((await rootBundle.load("assets/images/icon.png"))
+          .buffer
+          .asUint8List()));
+
   // ユーザー情報
   static User user1 = User.fromJson(JSON5.parse(r'''
 {
@@ -438,23 +494,23 @@ class TestData {
   static String user1ExpectId = "7rkr3b1c1c";
 
   // カスタム絵文字
-  static UnicodeEmojiData emoji1 = const UnicodeEmojiData(char: "♥");
-  static CustomEmojiData emoji2 = CustomEmojiData(
+  static UnicodeEmojiData unicodeEmoji1 = const UnicodeEmojiData(char: "♥");
+  static CustomEmojiData customEmoji1 = CustomEmojiData(
       baseName: "ai_yay",
       hostedName: "misskey.io",
       url: Uri.parse("https://s3.arkjp.net/emoji/ai_yay.apng"),
       isCurrentServer: true,
       isSensitive: false);
 
-  static EmojiRepositoryData emojiRepositoryData1 = EmojiRepositoryData(
-      emoji: emoji1,
+  static EmojiRepositoryData unicodeEmojiRepositoryData1 = EmojiRepositoryData(
+      emoji: unicodeEmoji1,
       category: "symbols",
       kanaName: "へあt",
       aliases: ["heart", "ハート"],
       kanaAliases: ["へあt", "ハート"]);
 
-  static EmojiRepositoryData emojiRepositoryData2 = EmojiRepositoryData(
-      emoji: emoji2,
+  static EmojiRepositoryData customEmojiRepositoryData1 = EmojiRepositoryData(
+      emoji: customEmoji1,
       category: "02 Ai",
       kanaName: "あいやy",
       aliases: [
