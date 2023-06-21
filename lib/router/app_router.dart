@@ -16,6 +16,7 @@ import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/note_detail_page/note_detail_page.dart';
+import 'package:miria/view/notes_after_renote_page/notes_after_renote_page.dart';
 import 'package:miria/view/notification_page/notification_page.dart';
 import 'package:miria/view/search_page/search_page.dart';
 import 'package:miria/view/photo_edit_page/photo_edit_page.dart';
@@ -55,6 +56,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: AntennaNotesRoute.page),
     AutoRoute(page: TimeLineRoute.page),
     AutoRoute(page: NoteDetailRoute.page),
+    AutoRoute(page: NotesAfterRenoteRoute.page),
     AutoRoute(page: UserRoute.page),
     AutoRoute(page: NotificationRoute.page),
     AutoRoute(page: FavoritedNoteRoute.page),

@@ -157,6 +157,17 @@ class NoteModalSheet extends ConsumerWidget {
                 );
               },
             ),
+            ListTile(
+              title: const Text("リノートの直後のノート"),
+              onTap: () {
+                context.pushRoute(
+                  NotesAfterRenoteRoute(
+                    note: targetNote,
+                    account: account,
+                  ),
+                );
+              },
+            ),
             if (baseNote.user.host == null &&
                 baseNote.user.username == account.userId &&
                 baseNote.text?.isNotEmpty == true) ...[
