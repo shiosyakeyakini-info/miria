@@ -672,9 +672,11 @@ packages:
   mfm_renderer:
     dependency: "direct main"
     description:
-      path: "../mfm_renderer"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "3f5bbe0e5cbe15d604aaac36d59a3c82983b64b3"
+      url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
+    source: git
     version: "0.0.1"
   mime:
     dependency: transitive
@@ -687,9 +689,11 @@ packages:
   misskey_dart:
     dependency: "direct main"
     description:
-      path: "../misskey_dart"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "2ff04698edbc2ac205400659268330a2b5a0ef32"
+      url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
+    source: git
     version: "1.0.0"
   mockito:
     dependency: "direct dev"
