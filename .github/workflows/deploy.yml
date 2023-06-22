@@ -28,17 +28,15 @@ jobs:
         - name: Run flutter pub get
           run: flutter pub get
 
-
-
         - name: Initialize git config
           run: |
             git config --local user.name $GIT_USER_NAME
             git config --local user.email $GIT_USER_EMAIL
         
-          - name: Bump up version
-            run: |
-              flutter pub run cider bump patch --bump-build
-              echo "BUMP_VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV
+        - name: Bump up version
+          run: |
+            flutter pub run cider bump patch --bump-build
+            echo "BUMP_VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV
     
         - name: Commit and push pubspec.yaml
           run: |
