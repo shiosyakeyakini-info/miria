@@ -75,24 +75,8 @@ jobs:
         - name: Create ipa file
           run: flutter build ipa --export-options-plist=ios/ExportOptions.plist --no-tree-shake-icons  --release --no-codesign
 
-        - name: Archive by xcodebuild
-          env:
-              APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
-              APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          run: xcodebuild archive CODE_SIGNING_ALLOWED=NO -workspace ./ios/Runner.xcworkspace -scheme Runner -configuration Release -archivePath ./build/ios/Runner.xcarchive
-
-        - name: Export by xcodebuild
-          env:
-            APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
-            APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          run: xcodebuild -exportArchive -archivePath ./build/ios/Runner.xcarchive -exportPath ./build/ios/ipa -exportOptionsPlist ./ios/ExportOptions.plist -allowProvisioningUpdates -authenticationKeyIssuerID $APPLE_API_ISSUER_ID -authenticationKeyID $APPLE_API_KEY_ID -authenticationKeyPath `pwd`/private_keys/AuthKey_$APPLE_API_KEY_ID.p8
-
-        - name: Detect path for ipa file
+        - name: Fastlane release
           run: |
-            echo "IPA_PATH=$(find build/ios/ipa -type f -name '*.ipa')" >> $GITHUB_ENV
-  
-        - name: Upload to App Store Connect
-          env:
-            APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
-            APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          run: xcrun altool --upload-app --type ios -f $IPA_PATH --apiKey $APPLE_API_KEY_ID --apiIssuer $APPLE_API_ISSUER_ID
+            cd ios
+            bundle install
+            fastlane release --api_key "{\"key_id\": \"${{ secrets.APPLE_API_KEY_ID }}\", \"issuer_id\": \"${{ secrets.APPLE_API_ISSUER_ID }}\", \"key_filepath\": \"../private_keys/AuthKey_$APPLE_API_KEY_ID.p8\"}"
