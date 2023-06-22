@@ -1,0 +1,77 @@
+name: デプロイ
+
+on: [workflow_dispatch]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  GIT_USER_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com'
+  GIT_USER_NAME: 'github-actions[bot]'
+
+jobs:
+  build_for_iOS:
+    name: iOS用ビルド
+    runs-on: macos-latest
+
+    steps:
+        - uses: actions/checkout@v2
+        - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+
+        - name: Install flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: 'stable'
+            cache: true
+
+        - name: Run flutter pub get
+          run: flutter pub get
+
+
+
+        - name: Initialize git config
+          run: |
+            git config --local user.name $GIT_USER_NAME
+            git config --local user.email $GIT_USER_EMAIL
+        
+          - name: Bump up version
+            run: |
+              flutter pub run cider bump patch --bump-build
+              echo "BUMP_VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV
+    
+        - name: Commit and push pubspec.yaml
+          run: |
+              git add -u pubspec.yaml
+              echo "Bumped version number to $BUMP_VERSION" | git commit --file=-
+              git push
+    
+        - name: Create tag and release note
+          env:
+              GH_TOKEN: ${{ secrets.GH_PAT }}
+            run: |
+              gh release create v$BUMP_VERSION --generate-notes          
+
+        - name: Run flutter test with coverage
+          run: flutter test --coverage --coverage-path=~/coverage/lcov.info
+          
+        - name: Import Provisioning Profile
+          run: |
+              mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+              echo -n ${{ secrets.PROVISIONING_PROFILE }} | base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/distribution.mobileprovision
+        
+        - name: Import Provisioning Profile (Share Extension)
+          run: |
+              echo -n ${{ secrets.PROVISIONING_PROFILE_SHARE_EXTENSION }} | base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/distribution.mobileprovision
+
+        - name: Import Code-Signing Certificates
+          uses: Apple-Actions/import-codesign-certs@v1
+          with:
+            p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+            p12-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+        
+        - name: Create ipa file
+          run: flutter build ipa --export-options-plist=ios/ExportOptions.plist -no-tree-shake-icons --export-method=app-store
+        
+        - name: Upload to AppStoreConnect
+          run: xcrun altool --upload-app -f "./build/ios/ipa/miria.ipa" -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_APP_PASS }}"
