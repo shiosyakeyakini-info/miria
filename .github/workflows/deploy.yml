@@ -16,7 +16,6 @@ jobs:
 
     steps:
         - uses: actions/checkout@v2
-        - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
         - name: Install flutter
           uses: subosito/flutter-action@v2
@@ -24,7 +23,20 @@ jobs:
             channel: 'stable'
             cache: true
 
-        - name: Run flutter pub get
+        - name: Cache pubspec dependencies
+          uses: actions/cache@v2
+          with:
+            path: |
+              ${{ env.FLUTTER_HOME }}/.pub-cache
+              **/.packages
+              **/.flutter-plugins
+              **/.flutter-plugin-dependencies
+              **/.dart_tool/package_config.json
+            key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+            restore-keys: |
+              build-pubspec-
+
+        - name: Flutter pub get
           run: flutter pub get
 
         # - name: Initialize git config
