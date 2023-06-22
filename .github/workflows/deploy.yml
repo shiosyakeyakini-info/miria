@@ -3,8 +3,7 @@ name: デプロイ
 on: [workflow_dispatch]
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write
 
 env:
   GIT_USER_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com'
