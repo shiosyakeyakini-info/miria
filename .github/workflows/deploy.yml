@@ -59,7 +59,7 @@ jobs:
         
         - name: Import Provisioning Profile (Share Extension)
           run: |
-              echo -n ${{ secrets.PROVISIONING_PROFILE_SHARE_EXTENSION }} | base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/for\ github\ action\ (share\ extension).mobileprovision
+              echo -n ${{ secrets.PROVISIONING_PROFILE_SHARE_EXTENSION }} | base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/for\ github\ action\ \(share\ extension\).mobileprovision
 
         - name: Import Code-Signing Certificates
           uses: Apple-Actions/import-codesign-certs@v1
