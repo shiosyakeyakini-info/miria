@@ -232,9 +232,11 @@
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
 					};
 					B6E32F942A29F16500F51621 = {
 						CreatedOnToolsVersion = 14.3;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};

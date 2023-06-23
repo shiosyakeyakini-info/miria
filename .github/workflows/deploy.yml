@@ -79,6 +79,7 @@ jobs:
           env:
             APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
             APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+            MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           run: |
             cd ios
             bundle install

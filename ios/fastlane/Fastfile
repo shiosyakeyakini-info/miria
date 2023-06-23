@@ -23,7 +23,8 @@ platform :ios do
       issuer_id: ENV['APPLE_API_ISSUER_ID'],
       key_filepath: "../private_keys/AuthKey_" + ENV["APPLE_API_KEY_ID"] + ".p8",
     )
-
+    setup_ci if ENV['CI']
+    match(type: 'appstore')
     build_app(
       skip_build_archive: true,
       archive_path: "../build/ios/archive/Runner.xcarchive",
