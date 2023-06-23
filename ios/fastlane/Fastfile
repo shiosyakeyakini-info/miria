@@ -24,7 +24,18 @@ platform :ios do
       key_filepath: "../private_keys/AuthKey_" + ENV["APPLE_API_KEY_ID"] + ".p8",
     )
     setup_ci if ENV['CI']
-    match(type: 'appstore')
+
+
+    username = ENV['USERNAME']
+    personal_github_access_token = ENV["PERSONAL_GITHUB_ACCESS_TOKEN"]
+    authorization_token_str = "#{username}:#{personal_github_access_token}"
+    basic_authorization_token = Base64.strict_encode64(authorization_token_str)  
+    match(
+      type: 'appstore',
+      api_key: api_key,
+      git_basic_authorization:basic_authorization_token,
+    )
+
     build_app(
       skip_build_archive: true,
       archive_path: "../build/ios/archive/Runner.xcarchive",

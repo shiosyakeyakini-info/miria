@@ -80,6 +80,8 @@ jobs:
             APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
             APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
             MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_USERNAME: ${{ secrets.MATCH_REPOSITORY_USERNAME }}
           run: |
             cd ios
             bundle install
