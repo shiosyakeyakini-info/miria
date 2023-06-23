@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highlighting/flutter_highlighting.dart';
 import 'package:flutter_highlighting/themes/github-dark.dart';
 import 'package:flutter_highlighting/themes/github.dart';
-import 'package:highlighting/highlighting.dart';
 import 'package:highlighting/languages/all.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';

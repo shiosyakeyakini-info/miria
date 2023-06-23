@@ -74,10 +74,10 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
           SizedBox(
             width: double.infinity,
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Card(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +96,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                             TableCellVerticalAlignment.middle,
                         children: [
                           TableRow(children: [
-                            Text("ユーザー"),
+                            const Text("ユーザー"),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,

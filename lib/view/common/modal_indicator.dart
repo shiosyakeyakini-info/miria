@@ -40,7 +40,7 @@ class ModalOverlay extends ModalRoute<void> {
   ModalOverlay(this.contents, {this.isAndroidBackEnable = true}) : super();
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 100);
+  Duration get transitionDuration => const Duration(milliseconds: 100);
   @override
   bool get opaque => false;
   @override
@@ -86,7 +86,7 @@ class ModalOverlay extends ModalRoute<void> {
 
   Widget dialogContent(BuildContext context) {
     return WillPopScope(
-      child: this.contents,
+      child: contents,
       onWillPop: () {
         return Future(() => isAndroidBackEnable);
       },

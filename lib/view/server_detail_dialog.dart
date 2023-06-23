@@ -4,13 +4,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/constants.dart';
-import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ServerDetailDialog extends ConsumerStatefulWidget {
@@ -65,14 +63,14 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         setState(() {
           onlineUsers = onlineUserCountsResponse.count;
         });
-      } catch (e, s) {
+      } catch (e) {
         //TODO
       }
       try {
         final serverInfoResponse =
             await ref.read(misskeyProvider(widget.account)).serverInfo();
         totalMemories = serverInfoResponse.mem.total;
-      } catch (e, s) {
+      } catch (e) {
         //TODO
       }
 
@@ -89,7 +87,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
       setState(() {
         ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
       });
-    } catch (e, s) {
+    } catch (e) {
       //TODO
     }
   }
@@ -122,7 +120,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("サーバーオンライン人数"),
+              const Text("サーバーオンライン人数"),
               if (onlineUsers != null)
                 Text.rich(TextSpan(children: [
                   TextSpan(
@@ -139,7 +137,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("CPU使用率"),
+                        const Text("CPU使用率"),
                         if (currentStat != null)
                           Text.rich(TextSpan(children: [
                             TextSpan(
@@ -224,7 +222,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                                     alignment: PlaceholderAlignment.middle,
                                     child: IconButton(
                                         onPressed: () => refreshPing(),
-                                        icon: Icon(Icons.refresh)))
+                                        icon: const Icon(Icons.refresh)))
                               ],
                             ),
                           )

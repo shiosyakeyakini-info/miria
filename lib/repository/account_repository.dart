@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/repository/account_settings_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miria/view/common/constants.dart';

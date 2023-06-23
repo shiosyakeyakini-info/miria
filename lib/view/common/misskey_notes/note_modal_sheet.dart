@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
 import 'package:miria/view/common/not_implements_dialog.dart';

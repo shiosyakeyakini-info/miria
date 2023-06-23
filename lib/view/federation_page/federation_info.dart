@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/federation_data.dart';
@@ -11,7 +9,6 @@ import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/themes/app_theme_scope.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 

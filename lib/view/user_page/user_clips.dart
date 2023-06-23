@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/clip_item.dart';

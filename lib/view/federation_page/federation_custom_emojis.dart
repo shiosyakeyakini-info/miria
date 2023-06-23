@@ -6,7 +6,6 @@ import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class FederationCustomEmojis extends ConsumerStatefulWidget {
@@ -93,7 +92,7 @@ class FederationCustomEmojisState
                                 decoration: BoxDecoration(
                                     color: Theme.of(context).primaryColor),
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 3, right: 3),
+                                  padding: const EdgeInsets.only(left: 3, right: 3),
                                   child: Text(
                                     "センシティブ",
                                     style: Theme.of(context)

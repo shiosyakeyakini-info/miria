@@ -54,14 +54,14 @@ class RoleListItem extends StatelessWidget {
             WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Padding(
-                  padding: EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(right: 10),
                   child: NetworkImageView(
                       height: iconHeight,
                       loadingBuilder: (context, _, __) => SizedBox(
                             width: iconHeight,
                             height: iconHeight,
                           ),
-                      errorBuilder: (context, e, s) => Container(
+                      errorBuilder: (context, e, s) => const SizedBox(
                             width: 1,
                             height: 1,
                           ),

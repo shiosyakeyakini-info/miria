@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/futurable.dart';
 
 class SoftMutePage extends ConsumerStatefulWidget {
+  const SoftMutePage({super.key});
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => SoftMuteState();
 }

@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 sealed class MisskeyPostFile {
   const MisskeyPostFile._();
 }

@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
@@ -26,11 +23,11 @@ class ExploreHighlightState extends ConsumerState<ExploreHighlight> {
   Widget build(BuildContext context) {
     final account = AccountScope.of(context);
     return Padding(
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 3, bottom: 3),
+            padding: const EdgeInsets.only(top: 3, bottom: 3),
             child: LayoutBuilder(
               builder: (context, constraints) => ToggleButtons(
                   constraints: BoxConstraints.expand(

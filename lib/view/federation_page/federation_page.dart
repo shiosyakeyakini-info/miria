@@ -10,7 +10,6 @@ import 'package:miria/view/federation_page/federation_custom_emojis.dart';
 import 'package:miria/view/federation_page/federation_info.dart';
 import 'package:miria/view/federation_page/federation_timeline.dart';
 import 'package:miria/view/federation_page/federation_users.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
 class FederationPage extends ConsumerStatefulWidget {

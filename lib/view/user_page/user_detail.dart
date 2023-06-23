@@ -9,10 +9,8 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/constants.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/user_page/update_memo_dialog.dart';
 import 'package:miria/view/user_page/user_control_dialog.dart';
@@ -142,7 +140,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
-                          padding: EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 5),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
@@ -166,7 +164,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                 )),
                               if ((response.isFollowed ?? false))
                                 const Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
+                                  padding: EdgeInsets.only(right: 8.0),
                                   child: Card(
                                       child: Padding(
                                     padding: EdgeInsets.all(10),
@@ -197,8 +195,8 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                                   .bodyMedium
                                                   ?.fontSize ??
                                               22,
-                                          child: CircularProgressIndicator()),
-                                      label: Text("更新中")),
+                                          child: const CircularProgressIndicator()),
+                                      label: const Text("更新中")),
                                 ),
                             ],
                           ),
@@ -250,7 +248,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 const Padding(padding: EdgeInsets.only(top: 5)),
                 Card(
                   child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -279,12 +277,12 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                 });
                               }
                             },
-                            icon: Icon(Icons.edit)),
+                            icon: const Icon(Icons.edit)),
                       ],
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: 5)),
+                const Padding(padding: EdgeInsets.only(top: 5)),
                 Wrap(
                   spacing: 5,
                   runSpacing: 5,

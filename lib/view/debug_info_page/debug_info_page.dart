@@ -13,7 +13,7 @@ class DebugInfoPageState extends State<DebugInfoPage> {
     return Scaffold(
         appBar: AppBar(title: const Text("デバッグ")),
         body: ListView(
-          children: [ListTile()],
+          children: const [ListTile()],
         ));
   }
 }

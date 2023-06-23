@@ -392,9 +392,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                     Row(
                       children: [
                         IconButton(
-                            onPressed: chooseFile, icon: Icon(Icons.image)),
+                            onPressed: chooseFile, icon: const Icon(Icons.image)),
                         IconButton(
-                            onPressed: () {}, icon: Icon(Icons.how_to_vote)),
+                            onPressed: () {}, icon: const Icon(Icons.how_to_vote)),
                         IconButton(
                             onPressed: () {
                               setState(() {
@@ -494,7 +494,7 @@ class FilePreview extends ConsumerWidget {
             children: [
               for (final file in files)
                 Padding(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(right: 10),
                     child: CreateFileView(file: file))
             ],
           ),

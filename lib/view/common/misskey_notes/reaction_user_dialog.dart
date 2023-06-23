@@ -3,7 +3,6 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/futable_list_builder.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/user_page/user_list_item.dart';

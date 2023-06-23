@@ -23,7 +23,6 @@ import 'package:miria/view/common/misskey_notes/renote_user_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/user_page/user_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 Future<void> _navigateDetailPage(

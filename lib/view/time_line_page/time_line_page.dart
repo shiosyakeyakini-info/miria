@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
@@ -151,7 +149,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   )
               ]),
             ),
-            actions: [const NotificationIcon()],
+            actions: const [NotificationIcon()],
           ),
           body: SafeArea(
             child: Column(

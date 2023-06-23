@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +75,7 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
           Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: ElevatedButton(
                   onPressed: () {
                     context.router

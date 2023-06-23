@@ -60,7 +60,7 @@ class CommonDrawer extends ConsumerWidget {
                           }),
                       ListTile(
                           leading: const Icon(Icons.settings_input_antenna),
-                          title: Text("アンテナ"),
+                          title: const Text("アンテナ"),
                           onTap: () {
                             Navigator.of(context).pop();
                             context.pushRoute(AntennaRoute(account: account));

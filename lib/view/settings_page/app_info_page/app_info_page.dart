@@ -60,7 +60,7 @@ class AppInfoPageState extends ConsumerState<AppInfoPage> {
                           "${packageInfo?.version ?? ""}+${packageInfo?.buildNumber.toString() ?? ""}",
                     );
                   },
-                  child: Text("ライセンスを表示する"),
+                  child: const Text("ライセンスを表示する"),
                 )
               ],
             ),

@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -138,7 +136,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                     vote(choice.index);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.transparent),
@@ -147,7 +145,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                               .scaffoldBackgroundColor
                               .withAlpha(215)),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 3, right: 3),
+                        padding: const EdgeInsets.only(left: 3, right: 3),
                         child: SimpleMfmText(
                           choice.element.text,
                           style: Theme.of(context).textTheme.bodyMedium,
