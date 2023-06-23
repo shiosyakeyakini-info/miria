@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
@@ -21,27 +6,31 @@ platform :ios do
     api_key = app_store_connect_api_key(
       key_id: ENV['APPLE_API_KEY_ID'],
       issuer_id: ENV['APPLE_API_ISSUER_ID'],
-      key_filepath: "../private_keys/AuthKey_" + ENV["APPLE_API_KEY_ID"] + ".p8",
+      key_filepath: "../private_keys/AuthKey_#{ENV["APPLE_API_KEY_ID"]}.p8",
     )
     setup_ci if ENV['CI']
 
 
-    username = ENV['USERNAME']
-    personal_github_access_token = ENV["PERSONAL_GITHUB_ACCESS_TOKEN"]
+    username = ENV['MATCH_REPOSITORY_USERNAME']
+    personal_github_access_token = ENV["GITHUB_TOKEN"]
     authorization_token_str = "#{username}:#{personal_github_access_token}"
-    basic_authorization_token = Base64.strict_encode64(authorization_token_str)  
+    basic_authorization_token = Base64.strict_encode64(authorization_token_str)
     match(
       type: 'appstore',
       api_key: api_key,
       git_basic_authorization:basic_authorization_token,
     )
+    get_certificates
+    get_provisioning_profile
 
     build_app(
       skip_build_archive: true,
       archive_path: "../build/ios/archive/Runner.xcarchive",
+      export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
     upload_to_testflight(
       api_key: api_key
+      skip_waiting_for_build_processing: true
     )
   end
 end
