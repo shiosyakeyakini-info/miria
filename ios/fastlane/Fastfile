@@ -12,7 +12,7 @@ platform :ios do
 
 
     username = ENV['MATCH_REPOSITORY_USERNAME']
-    personal_github_access_token = ENV["GITHUB_TOKEN"]
+    personal_github_access_token = ENV["MATCH_REPOSITORY_ACCESS_TOKEN"]
     authorization_token_str = "#{username}:#{personal_github_access_token}"
     basic_authorization_token = Base64.strict_encode64(authorization_token_str)
     match(
@@ -29,8 +29,8 @@ platform :ios do
       export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
     upload_to_testflight(
-      api_key: api_key
-      skip_waiting_for_build_processing: true
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
     )
   end
 end
