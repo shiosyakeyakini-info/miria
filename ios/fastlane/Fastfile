@@ -8,7 +8,7 @@ platform :ios do
       issuer_id: ENV['APPLE_API_ISSUER_ID'],
       key_filepath: "../private_keys/AuthKey_#{ENV["APPLE_API_KEY_ID"]}.p8",
     )
-    setup_ci if ENV['CI']
+    setup_ci(provider: "travis") if ENV['CI']
 
 
     username = ENV['MATCH_REPOSITORY_USERNAME']
@@ -19,9 +19,8 @@ platform :ios do
       type: 'appstore',
       api_key: api_key,
       git_basic_authorization:basic_authorization_token,
+      readonly: is_ci
     )
-    get_certificates
-    get_provisioning_profile
 
     build_app(
       skip_build_archive: true,
