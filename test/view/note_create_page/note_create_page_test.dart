@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/account_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -16,6 +17,8 @@ import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
+import 'package:miria/view/note_create_page/mfm_preview.dart';
+import 'package:miria/view/note_create_page/reply_to_area.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/mockito.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -859,8 +862,39 @@ void main() {
       });
     });
 
-    // TODO
-    group("リプライ先", () {});
+    group("リプライ先", () {
+      testWidgets("リプライの場合、返信先が表示されていること", (tester) async {
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
+                  reply: TestData.note3AsAnotherUser),
+            )));
+        await tester.pumpAndSettle();
+        expect(find.text("返信先："), findsOneWidget);
+        expect(
+            find.descendant(
+                of: find.byType(ReplyToArea),
+                matching: find.text(TestData.note3ExpectUserName,
+                    findRichText: true)),
+            findsOneWidget);
+      });
+
+      testWidgets("リプライでない場合、返信先が表示されていないこと", (tester) async {
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+        await tester.pumpAndSettle();
+        expect(find.text("返信先："), findsNothing);
+      });
+    });
 
     // TODO
     group("投票", () {});
@@ -1078,20 +1112,58 @@ void main() {
       });
 
       group("プレビュー", () {
-        testWidgets("プレビューのテキストはnyaizeされること", (tester) async {
+        testWidgets("プレビューのテキストはisCatの場合nyaizeされること", (tester) async {
           await tester.pumpWidget(ProviderScope(
               overrides: [
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
                   initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
+                initialAccount: TestData.account
+                    .copyWith(i: TestData.account.i.copyWith(isCat: true)),
               ))));
           await tester.pumpAndSettle();
           await tester.enterText(
               find.byType(TextField).hitTestable(), "は？なんなん？");
           await tester.pumpAndSettle();
           expect(find.text("は？にゃんにゃん？"), findsOneWidget);
+        });
+
+        testWidgets("プレビューのテキストはisCatでない場合nyaizeされないこと", (tester) async {
+          await tester.pumpWidget(ProviderScope(
+              overrides: [
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                  initialRoute: NoteCreateRoute(
+                initialAccount: TestData.account
+                    .copyWith(i: TestData.account.i.copyWith(isCat: false)),
+              ))));
+          await tester.pumpAndSettle();
+          await tester.enterText(
+              find.byType(TextField).hitTestable(), "は？なんなん？");
+          await tester.pumpAndSettle();
+          // 入力テキストとプレビューで2つになる
+          expect(find.text("は？なんなん？"), findsNWidgets(2));
+        });
+
+        testWidgets("リプライ先がプレビューには反映されていること", (tester) async {
+          await tester.pumpWidget(ProviderScope(
+              overrides: [
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account,
+                    reply: TestData.note3AsAnotherUser),
+              )));
+          await tester.pumpAndSettle();
+          expect(
+              find.descendant(
+                  of: find.byType(MfmPreview),
+                  matching: find.text("${TestData.note3ExpectUserName.tight} ",
+                      findRichText: true)),
+              findsOneWidget);
         });
       });
     });
@@ -1346,13 +1418,8 @@ void main() {
 
     group("連合", () {
       testWidgets("連合の表示が切り替わること", (tester) async {
-        final mockMisskey = MockMisskey();
-        final mockNote = MockMisskeyNotes();
-        when(mockMisskey.notes).thenReturn(mockNote);
-
         await tester.pumpWidget(ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1570,6 +1637,146 @@ void main() {
                 text: TestData.unicodeEmoji1.char,
                 selection: TextSelection.collapsed(
                     offset: TestData.unicodeEmoji1.char.length)));
+      });
+    });
+
+    group("返信先", () {
+      testWidgets("返信先の追加できること", (tester) async {
+        final misskey = MockMisskey();
+        final note = MockMisskeyNotes();
+        final users = MockMisskeyUsers();
+        when(misskey.notes).thenReturn(note);
+        when(misskey.users).thenReturn(users);
+
+        when(users.search(any))
+            .thenAnswer((_) async => [TestData.detailedUser1]);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute:
+                    NoteCreateRoute(initialAccount: TestData.account))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+
+        await tester
+            .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+
+        verify(note.create(argThat(equals(predicate<NotesCreateRequest>((arg) =>
+            arg.text == "@${TestData.detailedUser1.username} :ai_yay:")))));
+      });
+
+      testWidgets("複数の返信先を追加できること", (tester) async {
+        final misskey = MockMisskey();
+        final note = MockMisskeyNotes();
+        final users = MockMisskeyUsers();
+        when(misskey.notes).thenReturn(note);
+        when(misskey.users).thenReturn(users);
+
+        var count = 0;
+        when(users.search(any)).thenAnswer((_) async {
+          count++;
+          if (count == 1) return [TestData.detailedUser1];
+          return [TestData.detailedUser2];
+        });
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute:
+                    NoteCreateRoute(initialAccount: TestData.account))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
+
+        // 1人目
+        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+
+        await tester
+            .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
+        await tester.pumpAndSettle();
+
+        // 2人目
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).hitTestable(), "藍");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+
+        await tester
+            .tap(find.text(TestData.detailedUser2.name!, findRichText: true));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+
+        verify(note.create(argThat(equals(predicate<NotesCreateRequest>((arg) =>
+            arg.text ==
+            "@${TestData.detailedUser1.username} @${TestData.detailedUser2.username}@${TestData.detailedUser2.host} :ai_yay:")))));
+      });
+
+      testWidgets("追加した返信先を削除できること", (tester) async {
+        final misskey = MockMisskey();
+        final note = MockMisskeyNotes();
+        final users = MockMisskeyUsers();
+        when(misskey.notes).thenReturn(note);
+        when(misskey.users).thenReturn(users);
+
+        when(users.search(any))
+            .thenAnswer((_) async => [TestData.detailedUser1]);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute:
+                    NoteCreateRoute(initialAccount: TestData.account))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+
+        await tester
+            .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+
+        verify(note.create(argThat(equals(
+            predicate<NotesCreateRequest>((arg) => arg.text == ":ai_yay:")))));
       });
     });
 

@@ -19,6 +19,7 @@ mixin _$NoteCreate {
   Account get account => throw _privateConstructorUsedError;
   NoteVisibility get noteVisibility => throw _privateConstructorUsedError;
   bool get localOnly => throw _privateConstructorUsedError;
+  List<User> get replyTo => throw _privateConstructorUsedError;
   List<MisskeyPostFile> get files => throw _privateConstructorUsedError;
   NoteCreateChannel? get channel => throw _privateConstructorUsedError;
   Note? get reply => throw _privateConstructorUsedError;
@@ -29,7 +30,7 @@ mixin _$NoteCreate {
   String get cwText => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
   bool get isTextFocused => throw _privateConstructorUsedError;
-  bool get isNoteSending => throw _privateConstructorUsedError;
+  NoteSendStatus? get isNoteSending => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NoteCreateCopyWith<NoteCreate> get copyWith =>
@@ -46,6 +47,7 @@ abstract class $NoteCreateCopyWith<$Res> {
       {Account account,
       NoteVisibility noteVisibility,
       bool localOnly,
+      List<User> replyTo,
       List<MisskeyPostFile> files,
       NoteCreateChannel? channel,
       Note? reply,
@@ -55,7 +57,7 @@ abstract class $NoteCreateCopyWith<$Res> {
       String cwText,
       String text,
       bool isTextFocused,
-      bool isNoteSending});
+      NoteSendStatus? isNoteSending});
 
   $AccountCopyWith<$Res> get account;
   $NoteCreateChannelCopyWith<$Res>? get channel;
@@ -79,6 +81,7 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? account = null,
     Object? noteVisibility = null,
     Object? localOnly = null,
+    Object? replyTo = null,
     Object? files = null,
     Object? channel = freezed,
     Object? reply = freezed,
@@ -88,7 +91,7 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? cwText = null,
     Object? text = null,
     Object? isTextFocused = null,
-    Object? isNoteSending = null,
+    Object? isNoteSending = freezed,
   }) {
     return _then(_value.copyWith(
       account: null == account
@@ -103,6 +106,10 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.localOnly
           : localOnly // ignore: cast_nullable_to_non_nullable
               as bool,
+      replyTo: null == replyTo
+          ? _value.replyTo
+          : replyTo // ignore: cast_nullable_to_non_nullable
+              as List<User>,
       files: null == files
           ? _value.files
           : files // ignore: cast_nullable_to_non_nullable
@@ -139,10 +146,10 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.isTextFocused
           : isTextFocused // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNoteSending: null == isNoteSending
+      isNoteSending: freezed == isNoteSending
           ? _value.isNoteSending
           : isNoteSending // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as NoteSendStatus?,
     ) as $Val);
   }
 
@@ -203,6 +210,7 @@ abstract class _$$_NoteCreateCopyWith<$Res>
       {Account account,
       NoteVisibility noteVisibility,
       bool localOnly,
+      List<User> replyTo,
       List<MisskeyPostFile> files,
       NoteCreateChannel? channel,
       Note? reply,
@@ -212,7 +220,7 @@ abstract class _$$_NoteCreateCopyWith<$Res>
       String cwText,
       String text,
       bool isTextFocused,
-      bool isNoteSending});
+      NoteSendStatus? isNoteSending});
 
   @override
   $AccountCopyWith<$Res> get account;
@@ -238,6 +246,7 @@ class __$$_NoteCreateCopyWithImpl<$Res>
     Object? account = null,
     Object? noteVisibility = null,
     Object? localOnly = null,
+    Object? replyTo = null,
     Object? files = null,
     Object? channel = freezed,
     Object? reply = freezed,
@@ -247,7 +256,7 @@ class __$$_NoteCreateCopyWithImpl<$Res>
     Object? cwText = null,
     Object? text = null,
     Object? isTextFocused = null,
-    Object? isNoteSending = null,
+    Object? isNoteSending = freezed,
   }) {
     return _then(_$_NoteCreate(
       account: null == account
@@ -262,6 +271,10 @@ class __$$_NoteCreateCopyWithImpl<$Res>
           ? _value.localOnly
           : localOnly // ignore: cast_nullable_to_non_nullable
               as bool,
+      replyTo: null == replyTo
+          ? _value._replyTo
+          : replyTo // ignore: cast_nullable_to_non_nullable
+              as List<User>,
       files: null == files
           ? _value._files
           : files // ignore: cast_nullable_to_non_nullable
@@ -298,10 +311,10 @@ class __$$_NoteCreateCopyWithImpl<$Res>
           ? _value.isTextFocused
           : isTextFocused // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNoteSending: null == isNoteSending
+      isNoteSending: freezed == isNoteSending
           ? _value.isNoteSending
           : isNoteSending // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as NoteSendStatus?,
     ));
   }
 }
@@ -313,6 +326,7 @@ class _$_NoteCreate implements _NoteCreate {
       {required this.account,
       required this.noteVisibility,
       required this.localOnly,
+      final List<User> replyTo = const [],
       final List<MisskeyPostFile> files = const [],
       this.channel,
       this.reply,
@@ -322,8 +336,9 @@ class _$_NoteCreate implements _NoteCreate {
       this.cwText = "",
       this.text = "",
       this.isTextFocused = false,
-      this.isNoteSending = false})
-      : _files = files;
+      this.isNoteSending})
+      : _replyTo = replyTo,
+        _files = files;
 
   @override
   final Account account;
@@ -331,6 +346,15 @@ class _$_NoteCreate implements _NoteCreate {
   final NoteVisibility noteVisibility;
   @override
   final bool localOnly;
+  final List<User> _replyTo;
+  @override
+  @JsonKey()
+  List<User> get replyTo {
+    if (_replyTo is EqualUnmodifiableListView) return _replyTo;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_replyTo);
+  }
+
   final List<MisskeyPostFile> _files;
   @override
   @JsonKey()
@@ -361,12 +385,11 @@ class _$_NoteCreate implements _NoteCreate {
   @JsonKey()
   final bool isTextFocused;
   @override
-  @JsonKey()
-  final bool isNoteSending;
+  final NoteSendStatus? isNoteSending;
 
   @override
   String toString() {
-    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending)';
+    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending)';
   }
 
   @override
@@ -379,6 +402,7 @@ class _$_NoteCreate implements _NoteCreate {
                 other.noteVisibility == noteVisibility) &&
             (identical(other.localOnly, localOnly) ||
                 other.localOnly == localOnly) &&
+            const DeepCollectionEquality().equals(other._replyTo, _replyTo) &&
             const DeepCollectionEquality().equals(other._files, _files) &&
             (identical(other.channel, channel) || other.channel == channel) &&
             (identical(other.reply, reply) || other.reply == reply) &&
@@ -400,6 +424,7 @@ class _$_NoteCreate implements _NoteCreate {
       account,
       noteVisibility,
       localOnly,
+      const DeepCollectionEquality().hash(_replyTo),
       const DeepCollectionEquality().hash(_files),
       channel,
       reply,
@@ -423,6 +448,7 @@ abstract class _NoteCreate implements NoteCreate {
       {required final Account account,
       required final NoteVisibility noteVisibility,
       required final bool localOnly,
+      final List<User> replyTo,
       final List<MisskeyPostFile> files,
       final NoteCreateChannel? channel,
       final Note? reply,
@@ -432,7 +458,7 @@ abstract class _NoteCreate implements NoteCreate {
       final String cwText,
       final String text,
       final bool isTextFocused,
-      final bool isNoteSending}) = _$_NoteCreate;
+      final NoteSendStatus? isNoteSending}) = _$_NoteCreate;
 
   @override
   Account get account;
@@ -440,6 +466,8 @@ abstract class _NoteCreate implements NoteCreate {
   NoteVisibility get noteVisibility;
   @override
   bool get localOnly;
+  @override
+  List<User> get replyTo;
   @override
   List<MisskeyPostFile> get files;
   @override
@@ -459,7 +487,7 @@ abstract class _NoteCreate implements NoteCreate {
   @override
   bool get isTextFocused;
   @override
-  bool get isNoteSending;
+  NoteSendStatus? get isNoteSending;
   @override
   @JsonKey(ignore: true)
   _$$_NoteCreateCopyWith<_$_NoteCreate> get copyWith =>

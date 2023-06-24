@@ -12,9 +12,12 @@ import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
+import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 part 'note_create_state_notifier.freezed.dart';
+
+enum NoteSendStatus { sending, finished, error }
 
 @freezed
 class NoteCreate with _$NoteCreate {
@@ -22,6 +25,7 @@ class NoteCreate with _$NoteCreate {
     required Account account,
     required NoteVisibility noteVisibility,
     required bool localOnly,
+    @Default([]) List<User> replyTo,
     @Default([]) List<MisskeyPostFile> files,
     NoteCreateChannel? channel,
     Note? reply,
@@ -31,7 +35,7 @@ class NoteCreate with _$NoteCreate {
     @Default("") String cwText,
     @Default("") String text,
     @Default(false) bool isTextFocused,
-    @Default(false) bool isNoteSending,
+    NoteSendStatus? isNoteSending,
   }) = _NoteCreate;
 }
 
@@ -133,6 +137,11 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         isCw: deletedNote.cw?.isNotEmpty == true,
         text: deletedNote.text ?? "",
         reactionAcceptance: deletedNote.reactionAcceptance,
+        replyTo: [
+          for (final userId in deletedNote.mentions)
+            (await misskey.users.show(UsersShowRequest(userId: userId)))
+                .toUser()
+        ],
       );
       state = resultState;
       return;
@@ -147,11 +156,18 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     if (reply != null) {
       resultState = resultState.copyWith(
-          reply: reply,
-          noteVisibility:
-              NoteVisibility.min(resultState.noteVisibility, reply.visibility),
-          cwText: reply.cw ?? "",
-          isCw: reply.cw?.isNotEmpty == true);
+        reply: reply,
+        noteVisibility:
+            NoteVisibility.min(resultState.noteVisibility, reply.visibility),
+        cwText: reply.cw ?? "",
+        isCw: reply.cw?.isNotEmpty == true,
+        replyTo: [
+          reply.user,
+          for (final userId in reply.mentions)
+            (await misskey.users.show(UsersShowRequest(userId: userId)))
+                .toUser()
+        ]..removeWhere((element) => element.id == state.account.i.id),
+      );
     }
 
     // チャンネルのノートか、リプライまたはリノートが連合オフ、デフォルトで連合オフの場合、
@@ -180,7 +196,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     }
 
     try {
-      state = state.copyWith(isNoteSending: true);
+      state = state.copyWith(isNoteSending: NoteSendStatus.sending);
 
       final fileIds = <String>[];
 
@@ -221,7 +237,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
       await misskey.notes.create(NotesCreateRequest(
         visibility: state.noteVisibility,
-        text: state.text,
+        text:
+            "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}",
         cw: state.isCw ? state.cwText : null,
         localOnly: state.localOnly,
         replyId: state.reply?.id,
@@ -231,9 +248,9 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         reactionAcceptance: state.reactionAcceptance,
       ));
       if (!mounted) return;
-      state = state.copyWith(isNoteSending: false);
+      state = state.copyWith(isNoteSending: NoteSendStatus.finished);
     } catch (e) {
-      state = state.copyWith(isNoteSending: false);
+      state = state.copyWith(isNoteSending: NoteSendStatus.error);
       rethrow;
     }
   }
@@ -283,6 +300,21 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
                 path.lastIndexOf(Platform.pathSeparator) + 1, path.length))
       ]);
     }
+  }
+
+  /// リプライ先ユーザーを追加する
+  Future<void> addReplyUser(BuildContext context) async {
+    final user = await showDialog<User?>(
+        context: context,
+        builder: (context) => UserSelectDialog(account: state.account));
+    if (user != null) {
+      state = state.copyWith(replyTo: [...state.replyTo, user]);
+    }
+  }
+
+  void deleteReplyUser(User user) async {
+    final list = state.replyTo.toList();
+    state = state.copyWith(replyTo: list..remove(user));
   }
 
   /// CWの表示を入れ替える
