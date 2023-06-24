@@ -141,7 +141,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
     bool isEmptyRenote = renoteId != null &&
         latestActualNote?.text == null &&
-        latestActualNote?.cw == null;
+        latestActualNote?.cw == null &&
+        (latestActualNote?.files.isEmpty ?? true) &&
+        latestActualNote?.poll == null;
 
     if (isEmptyRenote) {
       renoteNote = ref.watch(notesProvider(AccountScope.of(context))
