@@ -9,7 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/state_notifier/photo_edit_state_notifier/color_filter_preset.dart';
+import 'package:miria/state_notifier/photo_edit_page/color_filter_preset.dart';
 
 part 'photo_edit_view_model.freezed.dart';
 

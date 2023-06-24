@@ -22,7 +22,7 @@ import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/repository/user_list_time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
-import 'package:miria/state_notifier/photo_edit_state_notifier/photo_edit_view_model.dart';
+import 'package:miria/state_notifier/photo_edit_page/photo_edit_view_model.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 final dioProvider = Provider((ref) => Dio());

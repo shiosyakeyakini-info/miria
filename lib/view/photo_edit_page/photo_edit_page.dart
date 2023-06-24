@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/state_notifier/photo_edit_state_notifier/photo_edit_view_model.dart';
+import 'package:miria/state_notifier/photo_edit_page/photo_edit_view_model.dart';
 import 'package:miria/view/photo_edit_page/clip_mode.dart';
 import 'package:miria/view/photo_edit_page/color_filter_image_preview.dart';
 
