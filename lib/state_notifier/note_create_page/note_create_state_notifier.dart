@@ -149,7 +149,9 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       resultState = resultState.copyWith(
           reply: reply,
           noteVisibility:
-              NoteVisibility.min(resultState.noteVisibility, reply.visibility));
+              NoteVisibility.min(resultState.noteVisibility, reply.visibility),
+          cwText: reply.cw ?? "",
+          isCw: reply.cw?.isNotEmpty == true);
     }
 
     // チャンネルのノートか、リプライまたはリノートが連合オフ、デフォルトで連合オフの場合、
@@ -329,6 +331,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         SpecifiedException("リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
         context
       );
+      return;
     }
     state = state.copyWith(localOnly: !state.localOnly);
   }
@@ -338,14 +341,17 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     state = state.copyWith(reactionAcceptance: reactionAcceptance);
   }
 
+  /// 注釈のテキストを設定する
   void setCwText(String text) {
     state = state.copyWith(cwText: text);
   }
 
+  /// 本文を設定する
   void setContentText(String text) {
     state = state.copyWith(text: text);
   }
 
+  /// 本文へのフォーカスを設定する
   void setContentTextFocused(bool isFocus) {
     state = state.copyWith(isTextFocused: isFocus);
   }
