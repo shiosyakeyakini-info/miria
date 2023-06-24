@@ -14,16 +14,11 @@ class NoteEmoji extends ConsumerWidget {
         (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) *
             MediaQuery.of(context).textScaleFactor *
             1.35;
-    final account = ref.watch(selectedAccountProvider);
-    if (account == null) return const SizedBox.shrink();
-    return AccountScope(
-      account: account,
-      child: SizedBox(
-          height: baseHeight + 40,
-          child: InputComplement(
-            controller: ref.read(noteInputTextProvider),
-            focusNode: noteFocusProvider,
-          )),
-    );
+    return SizedBox(
+        height: baseHeight + 40,
+        child: InputComplement(
+          controller: ref.read(noteInputTextProvider),
+          focusNode: noteFocusProvider,
+        ));
   }
 }

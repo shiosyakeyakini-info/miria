@@ -74,8 +74,7 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     NoteCreateRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteCreateRouteArgs>(
-          orElse: () => const NoteCreateRouteArgs());
+      final args = routeData.argsAs<NoteCreateRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: NoteCreatePage(
@@ -581,7 +580,7 @@ class ClipListRouteArgs {
 class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
   NoteCreateRoute({
     Key? key,
-    Account? initialAccount,
+    required Account initialAccount,
     String? initialText,
     List<String>? initialMediaFiles,
     CommunityChannel? channel,
@@ -613,7 +612,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
 class NoteCreateRouteArgs {
   const NoteCreateRouteArgs({
     this.key,
-    this.initialAccount,
+    required this.initialAccount,
     this.initialText,
     this.initialMediaFiles,
     this.channel,
@@ -624,7 +623,7 @@ class NoteCreateRouteArgs {
 
   final Key? key;
 
-  final Account? initialAccount;
+  final Account initialAccount;
 
   final String? initialText;
 

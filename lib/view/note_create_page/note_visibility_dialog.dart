@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class NoteVisibilityDialog extends ConsumerWidget {
-  const NoteVisibilityDialog({super.key});
+  final Account account;
+
+  const NoteVisibilityDialog({
+    super.key,
+    required this.account,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,22 +20,11 @@ class NoteVisibilityDialog extends ConsumerWidget {
       children: [
         ListTile(
           onTap: () {
-            final replyVisibility = ref.read(replyProvider)?.visibility;
-            if (replyVisibility == NoteVisibility.specified ||
-                replyVisibility == NoteVisibility.followers ||
-                replyVisibility == NoteVisibility.home) {
-              SimpleMessageDialog.show(context,
-                  "リプライが${replyVisibility!.displayName}やから、パブリックにでけへん");
-              return;
+            if (ref
+                .read(noteCreateProvider(account).notifier)
+                .validateNoteVisibility(NoteVisibility.public, context)) {
+              Navigator.of(context).pop(NoteVisibility.public);
             }
-
-            if (ref.read(selectedAccountProvider)?.i.isSilenced == true) {
-              SimpleMessageDialog.show(
-                  context, "サイレンスロールになっているため、パブリックで投稿することはできません。");
-              return;
-            }
-
-            Navigator.of(context).pop(NoteVisibility.public);
           },
           leading: const Icon(Icons.public),
           title: const Text("パブリック"),

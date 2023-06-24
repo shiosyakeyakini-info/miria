@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
@@ -52,7 +51,8 @@ class HashtagPage extends ConsumerWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              context.pushRoute(NoteCreateRoute(initialText: "#$hashtag"));
+              context.pushRoute(NoteCreateRoute(
+                  initialAccount: account, initialText: "#$hashtag"));
             },
             child: const Icon(Icons.edit),
           ),
