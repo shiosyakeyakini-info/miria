@@ -1161,7 +1161,8 @@ void main() {
           expect(
               find.descendant(
                   of: find.byType(MfmPreview),
-                  matching: find.text("${TestData.note3ExpectUserName.tight} ",
+                  matching: find.textContaining(
+                      TestData.note3ExpectUserName.tight,
                       findRichText: true)),
               findsOneWidget);
         });
