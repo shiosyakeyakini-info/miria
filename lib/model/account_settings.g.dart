@@ -19,7 +19,8 @@ _$_AccountSettings _$$_AccountSettingsFromJson(Map<String, dynamic> json) =>
           NoteVisibility.public,
       defaultIsLocalOnly: json['defaultIsLocalOnly'] as bool? ?? false,
       defaultReactionAcceptance: $enumDecodeNullable(
-              _$ReactionAcceptanceEnumMap, json['defaultReactionAcceptance']),
+              _$ReactionAcceptanceEnumMap, json['defaultReactionAcceptance']) ??
+          null,
     );
 
 Map<String, dynamic> _$$_AccountSettingsToJson(_$_AccountSettings instance) =>

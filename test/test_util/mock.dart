@@ -13,6 +13,9 @@ import 'package:mockito/annotations.dart';
   MockSpec<MisskeyNotes>(),
   MockSpec<MisskeyUsers>(),
   MockSpec<MisskeyChannels>(),
+  MockSpec<MisskeyDrive>(),
+  MockSpec<MisskeyDriveFolders>(),
+  MockSpec<MisskeyDriveFiles>(),
   MockSpec<Dio>()
 ])
 // ignore: unused_import

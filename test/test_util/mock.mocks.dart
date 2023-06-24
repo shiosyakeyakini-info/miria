@@ -4,11 +4,13 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i14;
+import 'dart:io' as _i20;
+import 'dart:typed_data' as _i21;
 import 'dart:ui' as _i16;
 
 import 'package:dio/src/adapter.dart' as _i8;
-import 'package:dio/src/cancel_token.dart' as _i21;
-import 'package:dio/src/dio.dart' as _i20;
+import 'package:dio/src/cancel_token.dart' as _i23;
+import 'package:dio/src/dio.dart' as _i22;
 import 'package:dio/src/dio_mixin.dart' as _i10;
 import 'package:dio/src/options.dart' as _i7;
 import 'package:dio/src/response.dart' as _i11;
@@ -387,8 +389,9 @@ class _FakeCommunityChannel_32 extends _i1.SmartFake
         );
 }
 
-class _FakeBaseOptions_33 extends _i1.SmartFake implements _i7.BaseOptions {
-  _FakeBaseOptions_33(
+class _FakeMisskeyDriveFiles_33 extends _i1.SmartFake
+    implements _i4.MisskeyDriveFiles {
+  _FakeMisskeyDriveFiles_33(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -397,9 +400,40 @@ class _FakeBaseOptions_33 extends _i1.SmartFake implements _i7.BaseOptions {
         );
 }
 
-class _FakeHttpClientAdapter_34 extends _i1.SmartFake
+class _FakeMisskeyDriveFolders_34 extends _i1.SmartFake
+    implements _i4.MisskeyDriveFolders {
+  _FakeMisskeyDriveFolders_34(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDriveFile_35 extends _i1.SmartFake implements _i4.DriveFile {
+  _FakeDriveFile_35(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeBaseOptions_36 extends _i1.SmartFake implements _i7.BaseOptions {
+  _FakeBaseOptions_36(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeHttpClientAdapter_37 extends _i1.SmartFake
     implements _i8.HttpClientAdapter {
-  _FakeHttpClientAdapter_34(
+  _FakeHttpClientAdapter_37(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -408,8 +442,8 @@ class _FakeHttpClientAdapter_34 extends _i1.SmartFake
         );
 }
 
-class _FakeTransformer_35 extends _i1.SmartFake implements _i9.Transformer {
-  _FakeTransformer_35(
+class _FakeTransformer_38 extends _i1.SmartFake implements _i9.Transformer {
+  _FakeTransformer_38(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -418,8 +452,8 @@ class _FakeTransformer_35 extends _i1.SmartFake implements _i9.Transformer {
         );
 }
 
-class _FakeInterceptors_36 extends _i1.SmartFake implements _i10.Interceptors {
-  _FakeInterceptors_36(
+class _FakeInterceptors_39 extends _i1.SmartFake implements _i10.Interceptors {
+  _FakeInterceptors_39(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -428,8 +462,8 @@ class _FakeInterceptors_36 extends _i1.SmartFake implements _i10.Interceptors {
         );
 }
 
-class _FakeResponse_37<T1> extends _i1.SmartFake implements _i11.Response<T1> {
-  _FakeResponse_37(
+class _FakeResponse_40<T1> extends _i1.SmartFake implements _i11.Response<T1> {
+  _FakeResponse_40(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -2482,18 +2516,156 @@ class MockMisskeyChannels extends _i1.Mock implements _i4.MisskeyChannels {
       ) as _i14.Future<void>);
 }
 
+/// A class which mocks [MisskeyDrive].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMisskeyDrive extends _i1.Mock implements _i4.MisskeyDrive {
+  @override
+  _i4.MisskeyDriveFiles get files => (super.noSuchMethod(
+        Invocation.getter(#files),
+        returnValue: _FakeMisskeyDriveFiles_33(
+          this,
+          Invocation.getter(#files),
+        ),
+        returnValueForMissingStub: _FakeMisskeyDriveFiles_33(
+          this,
+          Invocation.getter(#files),
+        ),
+      ) as _i4.MisskeyDriveFiles);
+  @override
+  _i4.MisskeyDriveFolders get folders => (super.noSuchMethod(
+        Invocation.getter(#folders),
+        returnValue: _FakeMisskeyDriveFolders_34(
+          this,
+          Invocation.getter(#folders),
+        ),
+        returnValueForMissingStub: _FakeMisskeyDriveFolders_34(
+          this,
+          Invocation.getter(#folders),
+        ),
+      ) as _i4.MisskeyDriveFolders);
+}
+
+/// A class which mocks [MisskeyDriveFolders].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMisskeyDriveFolders extends _i1.Mock
+    implements _i4.MisskeyDriveFolders {
+  @override
+  _i14.Future<Iterable<_i4.DriveFolder>> folders(
+          _i4.DriveFoldersRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #folders,
+          [request],
+        ),
+        returnValue:
+            _i14.Future<Iterable<_i4.DriveFolder>>.value(<_i4.DriveFolder>[]),
+        returnValueForMissingStub:
+            _i14.Future<Iterable<_i4.DriveFolder>>.value(<_i4.DriveFolder>[]),
+      ) as _i14.Future<Iterable<_i4.DriveFolder>>);
+}
+
+/// A class which mocks [MisskeyDriveFiles].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMisskeyDriveFiles extends _i1.Mock implements _i4.MisskeyDriveFiles {
+  @override
+  _i14.Future<_i4.DriveFile> create(
+    _i4.DriveFilesCreateRequest? request,
+    _i20.File? fileContent,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [
+            request,
+            fileContent,
+          ],
+        ),
+        returnValue: _i14.Future<_i4.DriveFile>.value(_FakeDriveFile_35(
+          this,
+          Invocation.method(
+            #create,
+            [
+              request,
+              fileContent,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i14.Future<_i4.DriveFile>.value(_FakeDriveFile_35(
+          this,
+          Invocation.method(
+            #create,
+            [
+              request,
+              fileContent,
+            ],
+          ),
+        )),
+      ) as _i14.Future<_i4.DriveFile>);
+  @override
+  _i14.Future<_i4.DriveFile> createAsBinary(
+    _i4.DriveFilesCreateRequest? request,
+    _i21.Uint8List? fileContent,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createAsBinary,
+          [
+            request,
+            fileContent,
+          ],
+        ),
+        returnValue: _i14.Future<_i4.DriveFile>.value(_FakeDriveFile_35(
+          this,
+          Invocation.method(
+            #createAsBinary,
+            [
+              request,
+              fileContent,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i14.Future<_i4.DriveFile>.value(_FakeDriveFile_35(
+          this,
+          Invocation.method(
+            #createAsBinary,
+            [
+              request,
+              fileContent,
+            ],
+          ),
+        )),
+      ) as _i14.Future<_i4.DriveFile>);
+  @override
+  _i14.Future<Iterable<_i4.DriveFile>> files(_i4.DriveFilesRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #files,
+          [request],
+        ),
+        returnValue:
+            _i14.Future<Iterable<_i4.DriveFile>>.value(<_i4.DriveFile>[]),
+        returnValueForMissingStub:
+            _i14.Future<Iterable<_i4.DriveFile>>.value(<_i4.DriveFile>[]),
+      ) as _i14.Future<Iterable<_i4.DriveFile>>);
+}
+
 /// A class which mocks [Dio].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDio extends _i1.Mock implements _i20.Dio {
+class MockDio extends _i1.Mock implements _i22.Dio {
   @override
   _i7.BaseOptions get options => (super.noSuchMethod(
         Invocation.getter(#options),
-        returnValue: _FakeBaseOptions_33(
+        returnValue: _FakeBaseOptions_36(
           this,
           Invocation.getter(#options),
         ),
-        returnValueForMissingStub: _FakeBaseOptions_33(
+        returnValueForMissingStub: _FakeBaseOptions_36(
           this,
           Invocation.getter(#options),
         ),
@@ -2509,11 +2681,11 @@ class MockDio extends _i1.Mock implements _i20.Dio {
   @override
   _i8.HttpClientAdapter get httpClientAdapter => (super.noSuchMethod(
         Invocation.getter(#httpClientAdapter),
-        returnValue: _FakeHttpClientAdapter_34(
+        returnValue: _FakeHttpClientAdapter_37(
           this,
           Invocation.getter(#httpClientAdapter),
         ),
-        returnValueForMissingStub: _FakeHttpClientAdapter_34(
+        returnValueForMissingStub: _FakeHttpClientAdapter_37(
           this,
           Invocation.getter(#httpClientAdapter),
         ),
@@ -2530,11 +2702,11 @@ class MockDio extends _i1.Mock implements _i20.Dio {
   @override
   _i9.Transformer get transformer => (super.noSuchMethod(
         Invocation.getter(#transformer),
-        returnValue: _FakeTransformer_35(
+        returnValue: _FakeTransformer_38(
           this,
           Invocation.getter(#transformer),
         ),
-        returnValueForMissingStub: _FakeTransformer_35(
+        returnValueForMissingStub: _FakeTransformer_38(
           this,
           Invocation.getter(#transformer),
         ),
@@ -2550,11 +2722,11 @@ class MockDio extends _i1.Mock implements _i20.Dio {
   @override
   _i10.Interceptors get interceptors => (super.noSuchMethod(
         Invocation.getter(#interceptors),
-        returnValue: _FakeInterceptors_36(
+        returnValue: _FakeInterceptors_39(
           this,
           Invocation.getter(#interceptors),
         ),
-        returnValueForMissingStub: _FakeInterceptors_36(
+        returnValueForMissingStub: _FakeInterceptors_39(
           this,
           Invocation.getter(#interceptors),
         ),
@@ -2574,7 +2746,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
@@ -2589,7 +2761,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #get,
@@ -2604,7 +2776,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #get,
@@ -2624,7 +2796,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
@@ -2638,7 +2810,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #getUri,
@@ -2652,7 +2824,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #getUri,
@@ -2672,7 +2844,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2689,7 +2861,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #post,
@@ -2705,7 +2877,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #post,
@@ -2726,7 +2898,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2742,7 +2914,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #postUri,
@@ -2757,7 +2929,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #postUri,
@@ -2778,7 +2950,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2795,7 +2967,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #put,
@@ -2811,7 +2983,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #put,
@@ -2832,7 +3004,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -2848,7 +3020,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #putUri,
@@ -2863,7 +3035,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #putUri,
@@ -2884,7 +3056,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2897,7 +3069,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #head,
@@ -2911,7 +3083,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #head,
@@ -2930,7 +3102,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2942,7 +3114,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #headUri,
@@ -2955,7 +3127,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #headUri,
@@ -2974,7 +3146,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2987,7 +3159,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #delete,
@@ -3001,7 +3173,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #delete,
@@ -3020,7 +3192,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3032,7 +3204,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #deleteUri,
@@ -3045,7 +3217,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #deleteUri,
@@ -3064,7 +3236,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Object? data,
     Map<String, dynamic>? queryParameters,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -3081,7 +3253,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #patch,
@@ -3097,7 +3269,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #patch,
@@ -3118,7 +3290,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri, {
     Object? data,
     _i7.Options? options,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
   }) =>
@@ -3134,7 +3306,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #patchUri,
@@ -3149,7 +3321,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #patchUri,
@@ -3170,7 +3342,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     dynamic savePath, {
     _i7.ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? queryParameters,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     bool? deleteOnError = true,
     String? lengthHeader = r'content-length',
     Object? data,
@@ -3194,7 +3366,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           },
         ),
         returnValue:
-            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_37<dynamic>(
+            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_40<dynamic>(
           this,
           Invocation.method(
             #download,
@@ -3214,7 +3386,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_37<dynamic>(
+            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_40<dynamic>(
           this,
           Invocation.method(
             #download,
@@ -3239,7 +3411,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     Uri? uri,
     dynamic savePath, {
     _i7.ProgressCallback? onReceiveProgress,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     bool? deleteOnError = true,
     String? lengthHeader = r'content-length',
     Object? data,
@@ -3262,7 +3434,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           },
         ),
         returnValue:
-            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_37<dynamic>(
+            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_40<dynamic>(
           this,
           Invocation.method(
             #downloadUri,
@@ -3281,7 +3453,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_37<dynamic>(
+            _i14.Future<_i11.Response<dynamic>>.value(_FakeResponse_40<dynamic>(
           this,
           Invocation.method(
             #downloadUri,
@@ -3305,7 +3477,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.Options? options,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
@@ -3323,7 +3495,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #request,
@@ -3339,7 +3511,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #request,
@@ -3359,7 +3531,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
   _i14.Future<_i11.Response<T>> requestUri<T>(
     Uri? uri, {
     Object? data,
-    _i21.CancelToken? cancelToken,
+    _i23.CancelToken? cancelToken,
     _i7.Options? options,
     _i7.ProgressCallback? onSendProgress,
     _i7.ProgressCallback? onReceiveProgress,
@@ -3376,7 +3548,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #requestUri,
@@ -3391,7 +3563,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #requestUri,
@@ -3413,7 +3585,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           #fetch,
           [requestOptions],
         ),
-        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+        returnValue: _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #fetch,
@@ -3421,7 +3593,7 @@ class MockDio extends _i1.Mock implements _i20.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i14.Future<_i11.Response<T>>.value(_FakeResponse_37<T>(
+            _i14.Future<_i11.Response<T>>.value(_FakeResponse_40<T>(
           this,
           Invocation.method(
             #fetch,

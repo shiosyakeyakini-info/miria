@@ -115,13 +115,19 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                 media.toLowerCase().endsWith("gif") ||
                 media.toLowerCase().endsWith("webp"))
               ImageFile(
-                  data: await File(media).readAsBytes(),
+                  data: await ref
+                      .read(fileSystemProvider)
+                      .file(media)
+                      .readAsBytes(),
                   fileName: media.substring(
                       media.lastIndexOf(Platform.pathSeparator) + 1,
                       media.length))
             else
               UnknownFile(
-                  data: await File(media).readAsBytes(),
+                  data: await ref
+                      .read(fileSystemProvider)
+                      .file(media)
+                      .readAsBytes(),
                   fileName: media.substring(
                       media.lastIndexOf(Platform.pathSeparator) + 1,
                       media.length))
@@ -289,7 +295,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           builder: (context) => DriveFileSelectDialog(account: account));
       if (result == null) return;
       if (result.type.startsWith("image")) {
-        final fileContentResponse = await Dio().get(result.url,
+        final fileContentResponse = await ref.read(dioProvider).get(result.url,
             options: Options(responseType: ResponseType.bytes));
 
         ref.read(filesProvider.notifier).state = [
@@ -392,9 +398,11 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                     Row(
                       children: [
                         IconButton(
-                            onPressed: chooseFile, icon: const Icon(Icons.image)),
+                            onPressed: chooseFile,
+                            icon: const Icon(Icons.image)),
                         IconButton(
-                            onPressed: () {}, icon: const Icon(Icons.how_to_vote)),
+                            onPressed: () {},
+                            icon: const Icon(Icons.how_to_vote)),
                         IconButton(
                             onPressed: () {
                               setState(() {

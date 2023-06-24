@@ -51,6 +51,7 @@ dependencies:
   mfm_parser: ^1.0.3
   flutter_svg: ^2.0.6
   json5: ^0.8.0
+  file: ^6.1.4
 
 dev_dependencies:
   flutter_test:

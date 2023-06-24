@@ -43,22 +43,22 @@ class InputComplementState extends ConsumerState<InputComplement> {
         ? ""
         : text.substring(currentPosition, text.length);
 
-    final String complementValue;
     switch (emoji) {
       case CustomEmojiData():
-        complementValue = ":${emoji.baseName}:";
+        widget.controller.value = TextEditingValue(
+            text: "$beforeSearchText:${emoji.baseName}:$after",
+            selection: TextSelection.collapsed(
+                offset: beforeSearchText.length + emoji.baseName.length + 2));
         break;
       case UnicodeEmojiData():
-        complementValue = emoji.char;
+        widget.controller.value = TextEditingValue(
+            text: "$beforeSearchText${emoji.char}$after",
+            selection: TextSelection.collapsed(offset: emoji.char.length));
+
         break;
       default:
         return;
     }
-
-    widget.controller.value = TextEditingValue(
-        text: "$beforeSearchText$complementValue$after",
-        selection: TextSelection.collapsed(
-            offset: beforeSearchText.length + emoji.baseName.length + 2));
 
     ref.read(inputComplementEmojiProvider.notifier).state = [];
     ref.read(widget.focusNode).requestFocus();

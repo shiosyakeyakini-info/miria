@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:miria/model/account.dart';
@@ -422,7 +421,24 @@ class TestData {
   static String note2ExpectText =
       "みにゃさん、数取りゲームしましょう！\n0~100の中で最も大きい数字を取った人が勝ちです。他の人と被ったらだめですよ～\n制限時間は10分です。数字はこの投稿にリプライで送ってくださいね！";
 
-  // メディア
+  // ドライブ（フォルダ）
+  static DriveFolder folder1 = DriveFolder.fromJson(JSON5.parse(r'''
+  {
+    id: '9ettn0mv95',
+    createdAt: '2023-05-16T12:35:31.447Z',
+    name: '秘蔵の藍ちゃんフォルダ',
+    parentId: null,
+  }'''));
+
+  static DriveFolder folder1Child = DriveFolder.fromJson(JSON5.parse(r'''
+  {
+    id: '9ettn0mv95',
+    createdAt: '2023-05-16T12:35:31.447Z',
+    name: 'えっちなやつ',
+    parentId: '9ettn0mv95',
+  }'''));
+
+  // ドライブ（ファイル）
   static DriveFile drive1 = DriveFile.fromJson(JSON5.parse(r'''
 {
     id: '9g6yuyisp3',
@@ -468,12 +484,13 @@ class TestData {
 }
   '''));
 
+  static Future<Uint8List> get binaryImage async => Uint8List.fromList(
+      (await rootBundle.load("assets/images/icon.png")).buffer.asUint8List());
+
   static Future<Response<Uint8List>> get binaryImageResponse async => Response(
       requestOptions: RequestOptions(),
       statusCode: 200,
-      data: Uint8List.fromList((await rootBundle.load("assets/images/icon.png"))
-          .buffer
-          .asUint8List()));
+      data: await binaryImage);
 
   // ユーザー情報
   static User user1 = User.fromJson(JSON5.parse(r'''

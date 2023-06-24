@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:file/file.dart';
+import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
@@ -22,6 +24,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 final dioProvider = Provider((ref) => Dio());
+final fileSystemProvider =
+    Provider<FileSystem>((ref) => const LocalFileSystem());
 
 final misskeyProvider = Provider.family<Misskey, Account>(
     (ref, account) => Misskey(token: account.token, host: account.host));
