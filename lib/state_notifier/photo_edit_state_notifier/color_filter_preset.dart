@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:image_editor/image_editor.dart';
-import 'package:miria/extensions/color_option_extension.dart';
 
 class ColorFilterPresets {
   final List<ColorFilterPreset> presets;

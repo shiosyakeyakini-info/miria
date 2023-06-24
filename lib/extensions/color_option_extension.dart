@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:image_editor/image_editor.dart';
 
 // inspired colorfilter_generator

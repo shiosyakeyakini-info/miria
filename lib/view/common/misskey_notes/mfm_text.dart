@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -297,7 +296,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
           ?.copyWith(fontWeight: FontWeight.bold),
       emojis: widget.user.emojis,
       suffixSpan: [
-        for (final badge in widget.user.badgeRoles ?? [])
+        for (final badge in widget.user.badgeRoles)
           if (badge.iconUrl != null)
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
