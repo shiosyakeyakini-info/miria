@@ -237,8 +237,9 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
       await misskey.notes.create(NotesCreateRequest(
         visibility: state.noteVisibility,
-        text:
-            "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}",
+        text: state.text.isEmpty
+            ? null
+            : "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}",
         cw: state.isCw ? state.cwText : null,
         localOnly: state.localOnly,
         replyId: state.reply?.id,
