@@ -10,11 +10,13 @@ import 'package:misskey_dart/misskey_dart.dart';
 class AvatarIcon extends StatelessWidget {
   final User user;
   final double height;
+  final VoidCallback? onTap;
 
   const AvatarIcon({
     super.key,
     required this.user,
     this.height = 48,
+    this.onTap,
   });
 
   factory AvatarIcon.fromIResponse(IResponse response, {double height = 48}) {
@@ -47,10 +49,11 @@ class AvatarIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          context.pushRoute(
-              UserRoute(userId: user.id, account: AccountScope.of(context)));
-        },
+        onTap: onTap ??
+            () {
+              context.pushRoute(UserRoute(
+                  userId: user.id, account: AccountScope.of(context)));
+            },
         child: Padding(
             padding: const EdgeInsets.only(top: 3),
             child: Stack(children: [

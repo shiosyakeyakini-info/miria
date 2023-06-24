@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/model/account.dart';
@@ -78,10 +77,10 @@ class SeveralAccountGeneralSettingsPageState
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Card(
                   child: Padding(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +88,7 @@ class SeveralAccountGeneralSettingsPageState
                       children: [
                         Text("プライバシー",
                             style: Theme.of(context).textTheme.titleLarge),
-                        Text("デフォルトの公開範囲を設定します。"),
+                        const Text("デフォルトの公開範囲を設定します。"),
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         const Text("ノート公開範囲"),
                         DropdownButton<NoteVisibility>(

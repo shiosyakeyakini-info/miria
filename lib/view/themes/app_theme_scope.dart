@@ -22,14 +22,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
     return AppThemeData(
       isDarkMode: theme.isDarkTheme,
-      noteTextStyle: InputDecoration(
-        border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black54),
-            borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(10)),
-      ),
+      noteTextStyle: const InputDecoration(),
       reactionButtonStyle: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(5),
           elevation: 0,
@@ -153,7 +146,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           textStyle: MaterialStatePropertyAll(textTheme.bodyMedium
               ?.copyWith(inherit: false, color: Colors.white)),
           backgroundColor: MaterialStatePropertyAll(theme.primary),
-          foregroundColor: MaterialStatePropertyAll(Colors.white),
+          foregroundColor: const MaterialStatePropertyAll(Colors.white),
           elevation: const MaterialStatePropertyAll(0),
           shape: MaterialStatePropertyAll(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
@@ -183,12 +176,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         inputDecorationTheme: InputDecorationTheme(
           fillColor: theme.panelBackground,
           filled: true,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.divider),
-            borderRadius: BorderRadius.circular(10),
-          ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.divider),
+            borderSide: BorderSide(
+                color: theme.isDarkTheme
+                    ? theme.primaryDarken
+                    : theme.primaryLighten,
+                width: 1.0),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
@@ -198,8 +191,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           contentPadding: const EdgeInsets.all(5),
           hintStyle: textTheme.bodySmall?.copyWith(
             fontSize: textTheme.titleMedium?.fontSize,
-            color:
-                theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+            color: theme.isDarkTheme
+                ? theme.foreground.darken(0.2)
+                : theme.foreground.lighten(0.2),
           ),
           prefixIconColor: theme.primary,
           suffixIconColor: theme.primary,

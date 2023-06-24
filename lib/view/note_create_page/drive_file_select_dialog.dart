@@ -5,7 +5,6 @@ import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
-import 'dart:ui' as ui;
 
 class DriveFileSelectDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -35,7 +34,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                     path.removeLast();
                   });
                 },
-                icon: Icon(Icons.arrow_back)),
+                icon: const Icon(Icons.arrow_back)),
           Expanded(child: Text(path.map((e) => e.name).join("/"))),
         ],
       ),
@@ -100,7 +99,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                         Navigator.of(context).pop(item);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,

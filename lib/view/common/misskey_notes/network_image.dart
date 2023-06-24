@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum ImageType {
   avatarIcon,
@@ -7,6 +8,7 @@ enum ImageType {
   imageThumbnail,
   image,
   serverIcon,
+  role,
   ad,
   other
 }
@@ -31,10 +33,22 @@ class NetworkImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (url.endsWith(".svg")) {
+      return SvgPicture.network(
+        url,
+        height: height,
+        fit: fit ?? BoxFit.contain,
+        placeholderBuilder: (context) =>
+            loadingBuilder?.call(context, Container(), null) ??
+            const SizedBox.shrink(),
+      );
+    }
+
     if (type == ImageType.avatarIcon ||
         type == ImageType.customEmoji ||
         type == ImageType.imageThumbnail ||
-        type == ImageType.serverIcon) {
+        type == ImageType.serverIcon ||
+        type == ImageType.role) {
       return CachedNetworkImage(
         imageUrl: url,
         fit: fit,
@@ -43,7 +57,8 @@ class NetworkImageView extends StatelessWidget {
             Container(),
         height: height,
         placeholder: (context, url) =>
-            loadingBuilder?.call(context, Container(), null) ?? Container(),
+            loadingBuilder?.call(context, Container(), null) ??
+            const SizedBox.shrink(),
         fadeInDuration: Duration.zero,
       );
     } else {

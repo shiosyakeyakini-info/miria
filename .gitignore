@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+/coverage/
 
 # IntelliJ related
 *.iml
@@ -45,3 +46,6 @@ app.*.map.json
 
 # builder
 **/node_modules/
+
+# Release
+/private_keys/

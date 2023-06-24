@@ -5,11 +5,13 @@ import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
@@ -23,16 +25,103 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
+Future<void> _navigateDetailPage(
+    BuildContext context, Note note, Account? loginAs) async {
+  final pushRoute = context.pushRoute;
+  if (loginAs == null) {
+    pushRoute(NoteDetailRoute(note: note, account: AccountScope.of(context)));
+    return;
+  }
+  final ref = ProviderScope.containerOf(context);
+  final host = note.user.host ?? AccountScope.of(context).host;
+
+  try {
+    // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
+    final myHostUserData = await ref
+        .read(misskeyProvider(loginAs))
+        .users
+        .showByName(UsersShowByUserNameRequest(
+            userName: note.user.username, host: host));
+
+    final myHostUserNotes =
+        await ref.read(misskeyProvider(loginAs)).users.notes(UsersNotesRequest(
+              userId: myHostUserData.id,
+              untilDate: note.createdAt.millisecondsSinceEpoch + 1,
+            ));
+
+    final foundMyHostNote = myHostUserNotes
+        .firstWhereOrNull((e) => e.uri?.pathSegments.lastOrNull == note.id);
+    if (foundMyHostNote != null) {
+      pushRoute(NoteDetailRoute(note: foundMyHostNote, account: loginAs));
+      return;
+    }
+    throw Exception();
+  } catch (e) {
+    // 最終手段として、連合で照会する
+    final result = await ref.read(misskeyProvider(loginAs)).ap.show(
+        ApShowRequest(
+            uri: note.uri ??
+                Uri(
+                    scheme: "https",
+                    host: host,
+                    pathSegments: ["notes", note.id])));
+    // よくかんがえたら無駄
+    final resultNote = await ref
+        .read(misskeyProvider(loginAs))
+        .notes
+        .show(NotesShowRequest(noteId: result.object["id"]));
+    pushRoute(NoteDetailRoute(note: resultNote, account: loginAs));
+  }
+}
+
+Future<void> _navigateUserDetailPage(
+    BuildContext context, Note note, Account? loginAs) async {
+  final pushRoute = context.pushRoute;
+  if (loginAs == null) {
+    pushRoute(
+        UserRoute(userId: note.user.id, account: AccountScope.of(context)));
+    return;
+  }
+
+  final ref = ProviderScope.containerOf(context);
+  final host = note.user.host ?? AccountScope.of(context).host;
+
+  try {
+    // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
+    final myHostUserData = await ref
+        .read(misskeyProvider(loginAs))
+        .users
+        .showByName(UsersShowByUserNameRequest(
+            userName: note.user.username, host: host));
+    pushRoute(UserRoute(userId: myHostUserData.id, account: loginAs));
+  } catch (e) {
+    // 最終手段として、連合で照会する
+    final result = await ref.read(misskeyProvider(loginAs)).ap.show(
+        ApShowRequest(
+            uri: note.uri ??
+                Uri(
+                    scheme: "https",
+                    host: host,
+                    pathSegments: ["@${note.id}"])));
+    // よくかんがえたら無駄
+    pushRoute(UserRoute(userId: result.object["id"], account: loginAs));
+  }
+}
+
 class MisskeyNote extends ConsumerStatefulWidget {
   final Note note;
   final bool isDisplayBorder;
   final int recursive;
+  final Account? loginAs;
+  final bool isForceUnvisibleChild;
 
   const MisskeyNote({
     super.key,
     required this.note,
     this.isDisplayBorder = true,
     this.recursive = 1,
+    this.loginAs,
+    this.isForceUnvisibleChild = false,
   });
 
   @override
@@ -62,7 +151,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     }
     final displayNote = renoteNote ?? latestActualNote;
 
-    if (displayNote == null) {
+    if (displayNote == null || latestActualNote == null) {
       // 削除された？
       return Container();
     }
@@ -111,16 +200,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             children: [
               if (isEmptyRenote)
                 Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 2,
-                  ),
+                  padding: const EdgeInsets.only(bottom: 2),
                   child: SimpleMfmText(
                     "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
                     style: Theme.of(context).textTheme.bodySmall,
                     emojis: widget.note.user.emojis,
                   ),
                 ),
-              if (displayNote.reply != null)
+              if (displayNote.reply != null && !widget.isForceUnvisibleChild)
                 MisskeyNote(
                   note: displayNote.reply!,
                   isDisplayBorder: false,
@@ -129,10 +216,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AvatarIcon(user: displayNote.user),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10),
+                  AvatarIcon(
+                    user: displayNote.user,
+                    onTap: () async => await _navigateUserDetailPage(
+                            context, displayNote, widget.loginAs)
+                        .expectFailure(context),
                   ),
+                  const Padding(padding: EdgeInsets.only(left: 10)),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -140,6 +230,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       children: [
                         NoteHeader1(
                           displayNote: displayNote,
+                          loginAs: widget.loginAs,
                         ),
                         Row(
                           children: [
@@ -154,7 +245,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             if (displayNote.user.instance != null)
                               GestureDetector(
                                 onTap: () => context.pushRoute(FederationRoute(
-                                    account: AccountScope.of(context),
+                                    account: widget.loginAs ??
+                                        AccountScope.of(context),
                                     host: displayNote.user.host!)),
                                 child: InkResponse(
                                   child: Text(
@@ -212,7 +304,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             suffixSpan: [
                               if (!isEmptyRenote &&
                                   displayNote.renoteId != null &&
-                                  widget.recursive == 2)
+                                  (widget.recursive == 2 ||
+                                      widget.isForceUnvisibleChild))
                                 TextSpan(
                                   text: "  RN:...",
                                   style: TextStyle(
@@ -229,10 +322,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           ),
                           if (displayNote.poll != null)
                             NoteVote(
-                                displayNote: displayNote,
-                                poll: displayNote.poll!),
+                              displayNote: displayNote,
+                              poll: displayNote.poll!,
+                              loginAs: widget.loginAs,
+                            ),
                           if (displayNote.renoteId != null &&
-                              widget.recursive < 2)
+                              (widget.recursive < 2 &&
+                                  !widget.isForceUnvisibleChild))
                             Container(
                               padding: const EdgeInsets.all(5),
                               child: DottedBorder(
@@ -248,6 +344,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     note: displayNote.renote!,
                                     isDisplayBorder: false,
                                     recursive: widget.recursive + 1,
+                                    loginAs: widget.loginAs,
                                   ),
                                 ),
                               ),
@@ -279,80 +376,111 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                 reactionCount: reaction.element.value,
                                 myReaction: displayNote.myReaction,
                                 noteId: displayNote.id,
+                                loginAs: widget.loginAs,
                               )
                           ],
                         ),
                         if (displayNote.channel != null)
                           NoteChannelView(channel: displayNote.channel!),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: widget.loginAs != null
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.spaceAround,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            IconButton(
-                                onPressed: () {
-                                  context.pushRoute(NoteCreateRoute(
-                                      reply: displayNote,
-                                      initialAccount:
-                                          AccountScope.of(context)));
-                                },
-                                constraints: const BoxConstraints(),
-                                padding: EdgeInsets.zero,
-                                style: const ButtonStyle(
-                                  padding:
-                                      MaterialStatePropertyAll(EdgeInsets.zero),
-                                  minimumSize:
-                                      MaterialStatePropertyAll(Size(0, 0)),
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                icon: Icon(
-                                  Icons.reply,
-                                  size: 16 *
-                                      MediaQuery.of(context).textScaleFactor,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.color,
-                                )),
-                            RenoteButton(
-                              displayNote: displayNote,
-                            ),
-                            FooterReactionButton(
-                              onPressed: () async => await reactionControl(
-                                  ref, context, displayNote),
-                              displayNote: displayNote,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (builder) {
-                                        return NoteModalSheet(
-                                          note: displayNote,
-                                          account: AccountScope.of(context),
-                                          noteBoundaryKey: globalKey,
-                                        );
-                                      });
-                                },
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                style: const ButtonStyle(
-                                  padding:
-                                      MaterialStatePropertyAll(EdgeInsets.zero),
-                                  minimumSize:
-                                      MaterialStatePropertyAll(Size(0, 0)),
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                icon: Icon(
-                                  Icons.more_horiz,
-                                  size: 16 *
-                                      MediaQuery.of(context).textScaleFactor,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.color,
-                                )),
+                            if (widget.loginAs != null) ...[
+                              IconButton(
+                                  constraints: const BoxConstraints(),
+                                  padding: EdgeInsets.zero,
+                                  style: const ButtonStyle(
+                                    padding: MaterialStatePropertyAll(
+                                        EdgeInsets.zero),
+                                    minimumSize:
+                                        MaterialStatePropertyAll(Size(0, 0)),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  onPressed: () async =>
+                                      await _navigateDetailPage(context,
+                                              displayNote, widget.loginAs)
+                                          .expectFailure(context),
+                                  icon: Icon(
+                                    Icons.u_turn_left,
+                                    size: 16 *
+                                        MediaQuery.of(context).textScaleFactor,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ))
+                            ] else ...[
+                              IconButton(
+                                  onPressed: () {
+                                    context.pushRoute(NoteCreateRoute(
+                                        reply: displayNote,
+                                        initialAccount:
+                                            AccountScope.of(context)));
+                                  },
+                                  constraints: const BoxConstraints(),
+                                  padding: EdgeInsets.zero,
+                                  style: const ButtonStyle(
+                                    padding: MaterialStatePropertyAll(
+                                        EdgeInsets.zero),
+                                    minimumSize:
+                                        MaterialStatePropertyAll(Size(0, 0)),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  icon: Icon(
+                                    Icons.reply,
+                                    size: 16 *
+                                        MediaQuery.of(context).textScaleFactor,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  )),
+                              RenoteButton(
+                                displayNote: displayNote,
+                              ),
+                              FooterReactionButton(
+                                onPressed: () async => await reactionControl(
+                                    ref, context, displayNote),
+                                displayNote: displayNote,
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (builder) {
+                                          return NoteModalSheet(
+                                            baseNote: widget.note,
+                                            targetNote: displayNote,
+                                            account: AccountScope.of(context),
+                                            noteBoundaryKey: globalKey,
+                                          );
+                                        });
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  style: const ButtonStyle(
+                                    padding: MaterialStatePropertyAll(
+                                        EdgeInsets.zero),
+                                    minimumSize:
+                                        MaterialStatePropertyAll(Size(0, 0)),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  icon: Icon(
+                                    Icons.more_horiz,
+                                    size: 16 *
+                                        MediaQuery.of(context).textScaleFactor,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  )),
+                            ]
                           ],
                         ),
                       ],
@@ -373,6 +501,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     Note displayNote, {
     MisskeyEmojiData? requestEmoji,
   }) async {
+    // 他のサーバーからログインしている場合は不可
+    if (widget.loginAs != null) return;
+
     final account = AccountScope.of(context);
     final isLikeOnly =
         (displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
@@ -414,6 +545,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           context: context,
           builder: (context) => ReactionPickerDialog(
                 account: account,
+                isAcceptSensitive: displayNote.reactionAcceptance !=
+                        ReactionAcceptance.nonSensitiveOnly &&
+                    displayNote.reactionAcceptance !=
+                        ReactionAcceptance
+                            .nonSensitiveOnlyForLocalLikeOnlyForRemote,
               ));
     } else {
       selectedEmoji = requestEmoji;
@@ -428,8 +564,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
 class NoteHeader1 extends StatelessWidget {
   final Note displayNote;
+  final Account? loginAs;
 
-  const NoteHeader1({super.key, required this.displayNote});
+  const NoteHeader1({
+    super.key,
+    required this.displayNote,
+    required this.loginAs,
+  });
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -438,10 +579,15 @@ class NoteHeader1 extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.only(top: 2),
                 child: UserInformation(user: displayNote.user))),
-        Text(
-          displayNote.createdAt.differenceNow,
-          textAlign: TextAlign.right,
-          style: Theme.of(context).textTheme.bodySmall,
+        GestureDetector(
+          onTap: () async =>
+              await _navigateDetailPage(context, displayNote, loginAs)
+                  .expectFailure(context),
+          child: Text(
+            displayNote.createdAt.differenceNow,
+            textAlign: TextAlign.right,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ),
         if (displayNote.visibility == NoteVisibility.followers)
           Padding(

@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
@@ -34,42 +32,6 @@ class TimeLinePage extends ConsumerStatefulWidget {
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
   final scrollController = TimelineScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    ref.read(timelineNoteProvider).addListener(inputListener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    ref.read(timelineNoteProvider).removeListener(inputListener);
-  }
-
-  void inputListener() {
-    if (ref.read(timelineNoteProvider).isIncludeBeforeColon) {
-      if (ref.read(timelineNoteProvider).isEmojiScope) {
-        if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-          ref.read(filteredInputEmojiProvider.notifier).state = [];
-        }
-        return;
-      }
-
-      Future(() async {
-        final searchedEmojis = await (ref
-            .read(emojiRepositoryProvider(widget.currentTabSetting.account))
-            .searchEmojis(ref.read(timelineNoteProvider).emojiSearchValue));
-        ref.read(filteredInputEmojiProvider.notifier).state = searchedEmojis;
-      });
-    } else {
-      if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-        ref.read(filteredInputEmojiProvider.notifier).state = [];
-      }
-    }
-  }
 
   Future<void> note() async {
     final text = ref.read(timelineNoteProvider).value.text;
@@ -187,7 +149,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   )
               ]),
             ),
-            actions: [const NotificationIcon()],
+            actions: const [NotificationIcon()],
           ),
           body: SafeArea(
             child: Column(

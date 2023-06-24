@@ -12,15 +12,15 @@ class ErrorDetail extends StatelessWidget {
     if (e is DioError) {
       final response = e.response;
       if (e.type == DioErrorType.connectionError) {
-        return Text("通信に失敗しました。");
+        return const Text("通信に失敗しました。");
       } else if (e.type == DioErrorType.connectionTimeout ||
           e.type == DioErrorType.receiveTimeout ||
           e.type == DioErrorType.sendTimeout) {
-        return Text("タイムアウトしました。");
+        return const Text("タイムアウトしました。");
       } else if (response != null) {
         return Text("[${response.statusCode}] ${response.data}");
       }
     }
-    return Text("不明なエラー：${error}");
+    return Text("不明なエラー：$error");
   }
 }

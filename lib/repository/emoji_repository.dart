@@ -59,18 +59,22 @@ class EmojiRepositoryImpl extends EmojiRepository {
             .map((e) => EmojiRepositoryData(
                   emoji: UnicodeEmojiData(char: e.char),
                   kanaName: toH(format(e.char)),
-                  kanaAliases: e.keywords.map((e2) => toH(format(e2))).toList(),
-                  aliases: e.keywords,
+                  kanaAliases: [e.name, ...e.keywords]
+                      .map((e2) => toH(format(e2)))
+                      .toList(),
+                  aliases: [e.name, ...e.keywords],
                   category: e.category,
                 ));
     emoji = (await misskey.emojis())
         .emojis
         .map((e) => EmojiRepositoryData(
             emoji: CustomEmojiData(
-                baseName: e.name,
-                hostedName: ":${e.name}@.:",
-                url: e.url,
-                isCurrentServer: true),
+              baseName: e.name,
+              hostedName: ":${e.name}@.:",
+              url: e.url,
+              isCurrentServer: true,
+              isSensitive: e.isSensitive,
+            ),
             category: e.category ?? "",
             kanaName: toH(format(e.name)),
             aliases: e.aliases,

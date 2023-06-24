@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:miria/model/general_settings.dart';
 
 class AppTheme extends InheritedWidget {
   final AppThemeData themeData;

@@ -88,7 +88,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     }
                     setState(() {});
                   },
-                  icon: Icon(Icons.date_range))
+                  icon: const Icon(Icons.date_range))
             ],
           ),
         ),

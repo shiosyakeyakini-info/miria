@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
-import 'package:miria/view/time_line_page/timeline_note.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomKeyboard extends StatelessWidget {
   final String keyboard;
+  final String displayText;
   final String? afterInsert;
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -14,8 +13,9 @@ class CustomKeyboard extends StatelessWidget {
     required this.keyboard,
     required this.controller,
     required this.focusNode,
+    String? displayText,
     this.afterInsert,
-  });
+  }) : displayText = displayText ?? keyboard;
 
   void insert() {
     controller.insert(keyboard, afterText: afterInsert);

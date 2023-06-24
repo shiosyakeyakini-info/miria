@@ -34,7 +34,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-          Text("この機能はめいどるふぃんなどを想定していますが、現状機能しません。"),
+          const Text("この機能はめいどるふぃんなどを想定していますが、現状機能しません。"),
           Table(
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               columnWidths: const {
@@ -52,7 +52,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                   ),
                 ]),
                 TableRow(children: [
-                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                  const Padding(padding: EdgeInsets.only(bottom: 10)),
                   Container()
                 ]),
                 TableRow(children: [
@@ -64,7 +64,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                           prefixIcon: Icon(Icons.account_circle)))
                 ]),
                 TableRow(children: [
-                  Padding(padding: EdgeInsets.only(bottom: 10)),
+                  const Padding(padding: EdgeInsets.only(bottom: 10)),
                   Container()
                 ]),
                 TableRow(children: [
@@ -82,7 +82,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                 TableRow(children: [
                   Container(),
                   Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
                         onPressed: () {
                           login();

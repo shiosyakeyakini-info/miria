@@ -76,7 +76,7 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
                     child: Text(
                         "指定した条件のノートをタイムラインに追加しないようにします。追加されなかったノートは、条件を変更しても除外されたままになります。反映されるまでに時間がかかる場合があります。"),
                   )),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
                   TextField(

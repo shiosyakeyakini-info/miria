@@ -6,8 +6,13 @@ import 'package:miria/view/reaction_picker_dialog/reaction_picker_content.dart';
 
 class ReactionPickerDialog extends ConsumerStatefulWidget {
   final Account account;
+  final bool isAcceptSensitive;
 
-  const ReactionPickerDialog({super.key, required this.account});
+  const ReactionPickerDialog({
+    super.key,
+    required this.account,
+    required this.isAcceptSensitive,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -30,6 +35,7 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.9,
             child: ReactionPickerContent(
+              isAcceptSensitive: widget.isAcceptSensitive,
               onTap: (emoji) => Navigator.of(context).pop(emoji),
             )),
       ),

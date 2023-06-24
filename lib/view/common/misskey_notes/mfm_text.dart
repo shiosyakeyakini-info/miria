@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
@@ -6,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highlighting/flutter_highlighting.dart';
 import 'package:flutter_highlighting/themes/github-dark.dart';
 import 'package:flutter_highlighting/themes/github.dart';
-import 'package:highlighting/highlighting.dart';
 import 'package:highlighting/languages/all.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -188,7 +187,6 @@ class CodeBlock extends StatelessWidget {
   });
 
   String resolveLanguage(String language) {
-    if (language == "aiscript") return "javascript";
     if (language == "js") return "javascript";
     if (language == "c++") return "cpp";
 
@@ -198,7 +196,7 @@ class CodeBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final resolvedLanguage =
-        allLanguages[resolveLanguage(language ?? "text")]?.id ?? "plaintext";
+        allLanguages[resolveLanguage(language ?? "text")]?.id ?? "javascript";
 
     return SizedBox(
       width: double.infinity,
@@ -300,16 +298,18 @@ class UserInformationState extends ConsumerState<UserInformation> {
       emojis: widget.user.emojis,
       suffixSpan: [
         for (final badge in widget.user.badgeRoles ?? [])
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Tooltip(
-              message: badge.name,
-              child: Image.network(
-                badge.iconUrl.toString(),
-                height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+          if (badge.iconUrl != null)
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Tooltip(
+                message: badge.name,
+                child: NetworkImageView(
+                  type: ImageType.role,
+                  url: badge.iconUrl.toString(),
+                  height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                ),
               ),
-            ),
-          )
+            )
       ],
     );
   }

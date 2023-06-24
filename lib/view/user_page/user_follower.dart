@@ -24,7 +24,7 @@ class UserFollowerPage extends ConsumerWidget {
     return AccountScope(
       account: account,
       child: Scaffold(
-        appBar: AppBar(title: Text("フォロワー")),
+        appBar: AppBar(title: const Text("フォロワー")),
         body: PushableListView<Following>(
           initializeFuture: () async {
             final response = await ref

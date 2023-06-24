@@ -11,7 +11,7 @@ class DriveModalSheet extends StatelessWidget {
       children: [
         ListTile(
           title: const Text("アップロード"),
-          leading: Icon(Icons.upload),
+          leading: const Icon(Icons.upload),
           onTap: () {
             Navigator.of(context).pop(DriveModalSheetReturnValue.upload);
           },

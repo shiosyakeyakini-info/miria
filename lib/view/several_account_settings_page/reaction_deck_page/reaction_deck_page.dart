@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
@@ -8,7 +7,6 @@ import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 import 'package:reorderables/reorderables.dart';
 
 @RoutePage()
@@ -53,7 +51,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: ReorderableWrap(
                       scrollPhysics: const NeverScrollableScrollPhysics(),
                       spacing: 5,
@@ -89,8 +87,10 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                       onPressed: () async {
                         final reaction = await showDialog<MisskeyEmojiData?>(
                             context: context,
-                            builder: (context) =>
-                                ReactionPickerDialog(account: widget.account));
+                            builder: (context) => ReactionPickerDialog(
+                                  account: widget.account,
+                                  isAcceptSensitive: true,
+                                ));
                         if (reaction == null) return;
                         if (reactions.any((element) =>
                             element.baseName == reaction.baseName)) {

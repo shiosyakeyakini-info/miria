@@ -1,8 +1,5 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -33,7 +30,7 @@ class ExploreHashtagsState extends ConsumerState<ExploreHashtags> {
     return Column(
       children: [
         Padding(
-            padding: EdgeInsets.only(top: 3, bottom: 3),
+            padding: const EdgeInsets.only(top: 3, bottom: 3),
             child: LayoutBuilder(
                 builder: (context, constraints) => ToggleButtons(
                         constraints: BoxConstraints.expand(

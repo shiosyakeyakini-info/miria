@@ -20,7 +20,9 @@ class UserSelectDialog extends StatelessWidget {
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
-          child: const UserSelectContent(),
+          child: UserSelectContent(
+            onSelected: (item) => Navigator.of(context).pop(item),
+          ),
         ),
       ),
     );
@@ -28,7 +30,8 @@ class UserSelectDialog extends StatelessWidget {
 }
 
 class UserSelectContent extends ConsumerStatefulWidget {
-  const UserSelectContent({super.key});
+  final void Function(User) onSelected;
+  const UserSelectContent({super.key, required this.onSelected});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -58,7 +61,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
             ref.read(usersSelectDialogQueryProvider.notifier).state = value;
           },
         ),
-        Padding(padding: EdgeInsets.only(bottom: 10)),
+        const Padding(padding: EdgeInsets.only(bottom: 10)),
         LayoutBuilder(
           builder: (context, constraints) {
             return ToggleButtons(
@@ -85,8 +88,10 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
             );
           },
         ),
-        const Expanded(
-          child: UsersSelectContentList(),
+        Expanded(
+          child: UsersSelectContentList(
+            onSelected: widget.onSelected,
+          ),
         )
       ],
     );
@@ -94,7 +99,8 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
 }
 
 class UsersSelectContentList extends ConsumerWidget {
-  const UsersSelectContentList({super.key});
+  const UsersSelectContentList({super.key, required this.onSelected});
+  final void Function(User) onSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -130,7 +136,7 @@ class UsersSelectContentList extends ConsumerWidget {
       },
       itemBuilder: (context2, item) => UserListItem(
         user: item,
-        onTap: () => Navigator.of(context).pop(item),
+        onTap: () => onSelected.call(item),
       ),
     );
   }

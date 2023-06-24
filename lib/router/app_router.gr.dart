@@ -74,8 +74,7 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     NoteCreateRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteCreateRouteArgs>(
-          orElse: () => const NoteCreateRouteArgs());
+      final args = routeData.argsAs<NoteCreateRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: NoteCreatePage(
@@ -254,11 +253,22 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    NoteSearchRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteSearchRouteArgs>();
+    NoteDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<NoteDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NoteSearchPage(
+        child: NoteDetailPage(
+          key: args.key,
+          note: args.note,
+          account: args.account,
+        ),
+      );
+    },
+    SearchRoute.name: (routeData) {
+      final args = routeData.argsAs<SearchRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SearchPage(
           key: args.key,
           initialSearchText: args.initialSearchText,
           account: args.account,
@@ -581,7 +591,7 @@ class ClipListRouteArgs {
 class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
   NoteCreateRoute({
     Key? key,
-    Account? initialAccount,
+    required Account initialAccount,
     String? initialText,
     List<String>? initialMediaFiles,
     CommunityChannel? channel,
@@ -613,7 +623,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
 class NoteCreateRouteArgs {
   const NoteCreateRouteArgs({
     this.key,
-    this.initialAccount,
+    required this.initialAccount,
     this.initialText,
     this.initialMediaFiles,
     this.channel,
@@ -624,7 +634,7 @@ class NoteCreateRouteArgs {
 
   final Key? key;
 
-  final Account? initialAccount;
+  final Account initialAccount;
 
   final String? initialText;
 
@@ -1270,16 +1280,59 @@ class FederationRouteArgs {
 }
 
 /// generated route for
-/// [NoteSearchPage]
-class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
-  NoteSearchRoute({
+/// [NoteDetailPage]
+class NoteDetailRoute extends PageRouteInfo<NoteDetailRouteArgs> {
+  NoteDetailRoute({
+    Key? key,
+    required Note note,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NoteDetailRoute.name,
+          args: NoteDetailRouteArgs(
+            key: key,
+            note: note,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NoteDetailRoute';
+
+  static const PageInfo<NoteDetailRouteArgs> page =
+      PageInfo<NoteDetailRouteArgs>(name);
+}
+
+class NoteDetailRouteArgs {
+  const NoteDetailRouteArgs({
+    this.key,
+    required this.note,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Note note;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'NoteDetailRouteArgs{key: $key, note: $note, account: $account}';
+  }
+}
+
+/// generated route for
+/// [SearchPage]
+class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
+  SearchRoute({
     Key? key,
     String? initialSearchText,
     required Account account,
     List<PageRouteInfo>? children,
   }) : super(
-          NoteSearchRoute.name,
-          args: NoteSearchRouteArgs(
+          SearchRoute.name,
+          args: SearchRouteArgs(
             key: key,
             initialSearchText: initialSearchText,
             account: account,
@@ -1287,14 +1340,13 @@ class NoteSearchRoute extends PageRouteInfo<NoteSearchRouteArgs> {
           initialChildren: children,
         );
 
-  static const String name = 'NoteSearchRoute';
+  static const String name = 'SearchRoute';
 
-  static const PageInfo<NoteSearchRouteArgs> page =
-      PageInfo<NoteSearchRouteArgs>(name);
+  static const PageInfo<SearchRouteArgs> page = PageInfo<SearchRouteArgs>(name);
 }
 
-class NoteSearchRouteArgs {
-  const NoteSearchRouteArgs({
+class SearchRouteArgs {
+  const SearchRouteArgs({
     this.key,
     this.initialSearchText,
     required this.account,
@@ -1308,7 +1360,7 @@ class NoteSearchRouteArgs {
 
   @override
   String toString() {
-    return 'NoteSearchRouteArgs{key: $key, initialSearchText: $initialSearchText, account: $account}';
+    return 'SearchRouteArgs{key: $key, initialSearchText: $initialSearchText, account: $account}';
   }
 }
 

@@ -48,11 +48,11 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                             serverController.text = url;
                           }
                         },
-                        icon: Icon(Icons.search))),
+                        icon: const Icon(Icons.search))),
               ),
             ]),
             TableRow(children: [
-              Padding(padding: EdgeInsets.only(bottom: 10)),
+              const Padding(padding: EdgeInsets.only(bottom: 10)),
               Container()
             ]),
             TableRow(children: [
@@ -71,7 +71,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
               ),
             ]),
             TableRow(children: [
-              Padding(padding: EdgeInsets.only(bottom: 10)),
+              const Padding(padding: EdgeInsets.only(bottom: 10)),
               Container()
             ]),
             if (isAuthed)
@@ -97,7 +97,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                       IndicatorView.hideIndicator(context);
                     }
                   },
-                  child: Text("認証してきた"),
+                  child: const Text("認証してきた"),
                 ),
               ]),
           ],

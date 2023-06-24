@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';

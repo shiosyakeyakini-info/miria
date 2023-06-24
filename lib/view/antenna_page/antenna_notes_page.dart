@@ -23,7 +23,7 @@ class AntennaNotesPage extends ConsumerWidget {
             title: Text(antenna.name),
           ),
           body: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: AntennaNotes(
               antennaId: antenna.id,
             ),

@@ -1,10 +1,13 @@
 import 'package:miria/repository/emoji_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 import 'package:collection/collection.dart';
 
 sealed class MisskeyEmojiData {
   final String baseName;
-  const MisskeyEmojiData(this.baseName);
+  final bool isSensitive;
+  const MisskeyEmojiData(
+    this.baseName,
+    this.isSensitive,
+  );
 
   factory MisskeyEmojiData.fromEmojiName({
     required String emojiName,
@@ -29,11 +32,12 @@ sealed class MisskeyEmojiData {
       final found = emojiInfo[hostIncludedBaseName];
       if (found != null) {
         return CustomEmojiData(
-          baseName: baseName,
-          hostedName: emojiName,
-          url: Uri.parse(found),
-          isCurrentServer: false,
-        );
+            baseName: baseName,
+            hostedName: emojiName,
+            url: Uri.parse(found),
+            isCurrentServer: false,
+            isSensitive: false //TODO: 要検証
+            );
       }
     }
 
@@ -74,7 +78,7 @@ sealed class MisskeyEmojiData {
 
 /// 絵文字に見せかけた単なるテキスト
 class NotEmojiData extends MisskeyEmojiData {
-  const NotEmojiData({required this.name}) : super(name);
+  const NotEmojiData({required this.name}) : super(name, false);
   final String name;
 }
 
@@ -85,7 +89,8 @@ class CustomEmojiData extends MisskeyEmojiData {
     required this.hostedName,
     required this.url,
     required this.isCurrentServer,
-  }) : super(baseName);
+    required bool isSensitive,
+  }) : super(baseName, isSensitive);
 
   final String hostedName;
   final Uri url;
@@ -96,7 +101,7 @@ class CustomEmojiData extends MisskeyEmojiData {
 class UnicodeEmojiData extends MisskeyEmojiData {
   const UnicodeEmojiData({
     required this.char,
-  }) : super(char);
+  }) : super(char, false);
 
   final String char;
 }

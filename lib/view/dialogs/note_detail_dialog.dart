@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';

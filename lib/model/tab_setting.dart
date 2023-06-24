@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/converters/icon_converter.dart';
 import 'package:miria/model/tab_icon.dart';

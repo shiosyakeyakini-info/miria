@@ -110,6 +110,7 @@ class IconSelectDialog extends StatelessWidget {
                       AccountScope(
                         account: account,
                         child: ReactionPickerContent(
+                          isAcceptSensitive: true,
                           onTap: (emoji) => Navigator.of(context)
                               .pop(TabIcon(customEmojiName: emoji.baseName)),
                         ),

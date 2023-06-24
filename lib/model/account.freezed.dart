@@ -22,7 +22,7 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
 mixin _$Account {
   String get host => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  String get token => throw _privateConstructorUsedError;
+  String? get token => throw _privateConstructorUsedError;
   IResponse get i => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $AccountCopyWith<$Res> {
   factory $AccountCopyWith(Account value, $Res Function(Account) then) =
       _$AccountCopyWithImpl<$Res, Account>;
   @useResult
-  $Res call({String host, String userId, String token, IResponse i});
+  $Res call({String host, String userId, String? token, IResponse i});
 
   $IResponseCopyWith<$Res> get i;
 }
@@ -55,7 +55,7 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
   $Res call({
     Object? host = null,
     Object? userId = null,
-    Object? token = null,
+    Object? token = freezed,
     Object? i = null,
   }) {
     return _then(_value.copyWith(
@@ -67,10 +67,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      token: null == token
+      token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
       __$$_AccountCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String host, String userId, String token, IResponse i});
+  $Res call({String host, String userId, String? token, IResponse i});
 
   @override
   $IResponseCopyWith<$Res> get i;
@@ -112,7 +112,7 @@ class __$$_AccountCopyWithImpl<$Res>
   $Res call({
     Object? host = null,
     Object? userId = null,
-    Object? token = null,
+    Object? token = freezed,
     Object? i = null,
   }) {
     return _then(_$_Account(
@@ -124,10 +124,10 @@ class __$$_AccountCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      token: null == token
+      token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
@@ -140,10 +140,7 @@ class __$$_AccountCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Account extends _Account {
   const _$_Account(
-      {required this.host,
-      required this.userId,
-      required this.token,
-      required this.i})
+      {required this.host, required this.userId, this.token, required this.i})
       : super._();
 
   factory _$_Account.fromJson(Map<String, dynamic> json) =>
@@ -154,7 +151,7 @@ class _$_Account extends _Account {
   @override
   final String userId;
   @override
-  final String token;
+  final String? token;
   @override
   final IResponse i;
 
@@ -181,7 +178,7 @@ abstract class _Account extends Account {
   const factory _Account(
       {required final String host,
       required final String userId,
-      required final String token,
+      final String? token,
       required final IResponse i}) = _$_Account;
   const _Account._() : super._();
 
@@ -192,7 +189,7 @@ abstract class _Account extends Account {
   @override
   String get userId;
   @override
-  String get token;
+  String? get token;
   @override
   IResponse get i;
   @override
