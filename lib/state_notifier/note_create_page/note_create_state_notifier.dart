@@ -68,10 +68,17 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   ) async {
     var resultState = state;
 
-    resultState = resultState.copyWith(
-        channel: channel != null
-            ? NoteCreateChannel(id: channel.id, name: channel.name)
-            : null);
+    final NoteCreateChannel? channelData;
+    if (channel != null) {
+      channelData = NoteCreateChannel(id: channel.id, name: channel.name);
+    } else if (reply?.channel != null) {
+      channelData =
+          NoteCreateChannel(id: reply!.channel!.id, name: reply.channel!.name);
+    } else {
+      channelData = null;
+    }
+
+    resultState = resultState.copyWith(channel: channelData);
 
     // 共有からの反映
     if (initialText != null) {
@@ -310,14 +317,14 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           (SpecifiedException("チャンネルのノートを連合にすることはでけへんねん。"), context);
       return;
     }
-    if (state.reply != null) {
+    if (state.reply?.localOnly == true) {
       errorNotifier.state = (
         SpecifiedException("リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
         context
       );
       return;
     }
-    if (state.reply != null) {
+    if (state.renote?.localOnly == true) {
       errorNotifier.state = (
         SpecifiedException("リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
         context
