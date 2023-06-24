@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:file/memory.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -1622,6 +1623,126 @@ void main() {
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
             (arg) => const DeepCollectionEquality()
                 .equals([TestData.drive1.id], arg.fileIds))))));
+      });
+
+      testWidgets("単一の画像のアップロードができること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        final mockDrive = MockMisskeyDrive();
+        final mockDriveFiles = MockMisskeyDriveFiles();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        when(mockMisskey.drive).thenReturn(mockDrive);
+        when(mockDrive.files).thenReturn(mockDriveFiles);
+
+        when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
+            (_) async => TestData.drive1.copyWith(name: "test.png"));
+
+        final binaryImage = await TestData.binaryImage;
+        final filePicker = MockFilePickerPlatform();
+        FilePicker.platform = filePicker;
+        when(filePicker.pickFiles(
+          dialogTitle: anyNamed("dialogTitle"),
+          initialDirectory: anyNamed("initialDirectory"),
+          type: anyNamed("type"),
+          allowedExtensions: anyNamed("allowedExtensions"),
+          onFileLoading: anyNamed("onFileLoading"),
+          allowCompression: anyNamed("allowCompression"),
+          allowMultiple: anyNamed("allowMultiple"),
+          withData: anyNamed("withData"),
+          withReadStream: anyNamed("withReadStream"),
+          lockParentWindow: anyNamed("lockParentWindow"),
+        )).thenAnswer(
+          (_) async => FilePickerResult([
+            PlatformFile(
+                path: "/test.png",
+                name: "test.png",
+                size: binaryImage.length,
+                bytes: binaryImage)
+          ]),
+        );
+        final fileSystem = MemoryFileSystem();
+        await fileSystem.file("/test.png").writeAsBytes(binaryImage);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              fileSystemProvider.overrideWith((ref) => fileSystem),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                initialAccount: TestData.account,
+              ),
+            )));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.image));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("アップロード"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => const DeepCollectionEquality()
+                .equals([TestData.drive1.id], arg.fileIds))))));
+
+        verify(mockDriveFiles.createAsBinary(
+            argThat(equals(
+                const DriveFilesCreateRequest(name: "test.png", force: true))),
+            argThat(equals(predicate<Uint8List>((value) =>
+                const DeepCollectionEquality().equals(value, binaryImage))))));
+      });
+
+      testWidgets("画像を何も選択しなかった場合、何もアップロードされないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        final filePicker = MockFilePickerPlatform();
+        FilePicker.platform = filePicker;
+        when(filePicker.pickFiles(
+          dialogTitle: anyNamed("dialogTitle"),
+          initialDirectory: anyNamed("initialDirectory"),
+          type: anyNamed("type"),
+          allowedExtensions: anyNamed("allowedExtensions"),
+          onFileLoading: anyNamed("onFileLoading"),
+          allowCompression: anyNamed("allowCompression"),
+          allowMultiple: anyNamed("allowMultiple"),
+          withData: anyNamed("withData"),
+          withReadStream: anyNamed("withReadStream"),
+          lockParentWindow: anyNamed("lockParentWindow"),
+        )).thenAnswer((_) async => null);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                initialAccount: TestData.account,
+              ),
+            )));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.image));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("アップロード"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(
+            predicate<NotesCreateRequest>((arg) => arg.fileIds == null)))));
       });
     });
   });

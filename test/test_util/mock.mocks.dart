@@ -8,13 +8,14 @@ import 'dart:io' as _i20;
 import 'dart:typed_data' as _i21;
 import 'dart:ui' as _i16;
 
+import 'package:dio/dio.dart' as _i22;
 import 'package:dio/src/adapter.dart' as _i8;
 import 'package:dio/src/cancel_token.dart' as _i23;
-import 'package:dio/src/dio.dart' as _i22;
 import 'package:dio/src/dio_mixin.dart' as _i10;
 import 'package:dio/src/options.dart' as _i7;
 import 'package:dio/src/response.dart' as _i11;
 import 'package:dio/src/transformer.dart' as _i9;
+import 'package:file_picker/file_picker.dart' as _i25;
 import 'package:miria/model/account.dart' as _i15;
 import 'package:miria/model/account_settings.dart' as _i2;
 import 'package:miria/model/misskey_emoji_data.dart' as _i19;
@@ -27,6 +28,8 @@ import 'package:misskey_dart/src/data/ping_response.dart' as _i6;
 import 'package:misskey_dart/src/data/stats_response.dart' as _i5;
 import 'package:misskey_dart/src/services/api_service.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
+
+import 'mock.dart' as _i24;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -3601,4 +3604,97 @@ class MockDio extends _i1.Mock implements _i22.Dio {
           ),
         )),
       ) as _i14.Future<_i11.Response<T>>);
+}
+
+/// A class which mocks [FakeFilePickerPlatform].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFilePickerPlatform extends _i1.Mock
+    implements _i24.FakeFilePickerPlatform {
+  @override
+  _i14.Future<_i25.FilePickerResult?> pickFiles({
+    String? dialogTitle,
+    String? initialDirectory,
+    _i25.FileType? type = _i25.FileType.any,
+    List<String>? allowedExtensions,
+    dynamic Function(_i25.FilePickerStatus)? onFileLoading,
+    bool? allowCompression = true,
+    bool? allowMultiple = false,
+    bool? withData = false,
+    bool? withReadStream = false,
+    bool? lockParentWindow = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #pickFiles,
+          [],
+          {
+            #dialogTitle: dialogTitle,
+            #initialDirectory: initialDirectory,
+            #type: type,
+            #allowedExtensions: allowedExtensions,
+            #onFileLoading: onFileLoading,
+            #allowCompression: allowCompression,
+            #allowMultiple: allowMultiple,
+            #withData: withData,
+            #withReadStream: withReadStream,
+            #lockParentWindow: lockParentWindow,
+          },
+        ),
+        returnValue: _i14.Future<_i25.FilePickerResult?>.value(),
+        returnValueForMissingStub: _i14.Future<_i25.FilePickerResult?>.value(),
+      ) as _i14.Future<_i25.FilePickerResult?>);
+  @override
+  _i14.Future<bool?> clearTemporaryFiles() => (super.noSuchMethod(
+        Invocation.method(
+          #clearTemporaryFiles,
+          [],
+        ),
+        returnValue: _i14.Future<bool?>.value(),
+        returnValueForMissingStub: _i14.Future<bool?>.value(),
+      ) as _i14.Future<bool?>);
+  @override
+  _i14.Future<String?> getDirectoryPath({
+    String? dialogTitle,
+    bool? lockParentWindow = false,
+    String? initialDirectory,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getDirectoryPath,
+          [],
+          {
+            #dialogTitle: dialogTitle,
+            #lockParentWindow: lockParentWindow,
+            #initialDirectory: initialDirectory,
+          },
+        ),
+        returnValue: _i14.Future<String?>.value(),
+        returnValueForMissingStub: _i14.Future<String?>.value(),
+      ) as _i14.Future<String?>);
+  @override
+  _i14.Future<String?> saveFile({
+    String? dialogTitle,
+    String? fileName,
+    String? initialDirectory,
+    _i25.FileType? type = _i25.FileType.any,
+    List<String>? allowedExtensions,
+    bool? lockParentWindow = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveFile,
+          [],
+          {
+            #dialogTitle: dialogTitle,
+            #fileName: fileName,
+            #initialDirectory: initialDirectory,
+            #type: type,
+            #allowedExtensions: allowedExtensions,
+            #lockParentWindow: lockParentWindow,
+          },
+        ),
+        returnValue: _i14.Future<String?>.value(),
+        returnValueForMissingStub: _i14.Future<String?>.value(),
+      ) as _i14.Future<String?>);
 }

@@ -323,7 +323,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       ref.read(filesProvider.notifier).state = [
         ...ref.read(filesProvider),
         ImageFile(
-            data: await File(path).readAsBytes(),
+            data: await ref.read(fileSystemProvider).file(path).readAsBytes(),
             fileName: path.substring(
                 path.lastIndexOf(Platform.pathSeparator) + 1, path.length))
       ];
