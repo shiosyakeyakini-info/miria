@@ -149,7 +149,8 @@ final errorEventProvider =
 
 final photoEditProvider =
     StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
-        (ref) => PhotoEditStateNotifier(const PhotoEdit()));
+        (ref) =>
+            PhotoEditStateNotifier(const PhotoEdit(), ref.read(dioProvider)));
 
 // TODO: 下書きの機能かんがえるときにfamilyの引数みなおす
 final noteCreateProvider = StateNotifierProvider.family

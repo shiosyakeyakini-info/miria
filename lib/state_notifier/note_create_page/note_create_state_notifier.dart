@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:file/file.dart';
@@ -300,6 +301,32 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
                 path.lastIndexOf(Platform.pathSeparator) + 1, path.length))
       ]);
     }
+  }
+
+  void setFileContent(MisskeyPostFile file, Uint8List? content) {
+    if (content == null) return;
+    final files = state.files.toList();
+
+    switch (file) {
+      case ImageFile():
+        files[files.indexOf(file)] =
+            ImageFile(data: content, fileName: file.fileName);
+        break;
+      case ImageFileAlreadyPostedFile():
+        files[files.indexOf(file)] =
+            ImageFile(data: content, fileName: file.fileName);
+        break;
+      case UnknownFile():
+        files[files.indexOf(file)] =
+            ImageFile(data: content, fileName: file.fileName);
+        break;
+      case UnknownAlreadyPostedFile():
+        files[files.indexOf(file)] =
+            ImageFile(data: content, fileName: file.fileName);
+        break;
+    }
+
+    state = state.copyWith(files: files);
   }
 
   /// リプライ先ユーザーを追加する

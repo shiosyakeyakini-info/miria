@@ -135,11 +135,12 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     PhotoEditRoute.name: (routeData) {
       final args = routeData.argsAs<PhotoEditRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<Uint8List?>(
         routeData: routeData,
         child: PhotoEditPage(
           account: args.account,
           file: args.file,
+          onSubmit: args.onSubmit,
           key: args.key,
         ),
       );
@@ -831,6 +832,7 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
   PhotoEditRoute({
     required Account account,
     required MisskeyPostFile file,
+    required void Function(Uint8List) onSubmit,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -838,6 +840,7 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
           args: PhotoEditRouteArgs(
             account: account,
             file: file,
+            onSubmit: onSubmit,
             key: key,
           ),
           initialChildren: children,
@@ -853,6 +856,7 @@ class PhotoEditRouteArgs {
   const PhotoEditRouteArgs({
     required this.account,
     required this.file,
+    required this.onSubmit,
     this.key,
   });
 
@@ -860,11 +864,13 @@ class PhotoEditRouteArgs {
 
   final MisskeyPostFile file;
 
+  final void Function(Uint8List) onSubmit;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'PhotoEditRouteArgs{account: $account, file: $file, key: $key}';
+    return 'PhotoEditRouteArgs{account: $account, file: $file, onSubmit: $onSubmit, key: $key}';
   }
 }
 

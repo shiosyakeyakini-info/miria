@@ -30,6 +30,7 @@ mixin _$PhotoEdit {
   Size get actualSize => throw _privateConstructorUsedError;
   int get angle => throw _privateConstructorUsedError;
   List<EditedEmojiData> get emojis => throw _privateConstructorUsedError;
+  int? get selectedEmojiIndex => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PhotoEditCopyWith<PhotoEdit> get copyWith =>
@@ -54,7 +55,8 @@ abstract class $PhotoEditCopyWith<$Res> {
       Size defaultSize,
       Size actualSize,
       int angle,
-      List<EditedEmojiData> emojis});
+      List<EditedEmojiData> emojis,
+      int? selectedEmojiIndex});
 }
 
 /// @nodoc
@@ -83,6 +85,7 @@ class _$PhotoEditCopyWithImpl<$Res, $Val extends PhotoEdit>
     Object? actualSize = null,
     Object? angle = null,
     Object? emojis = null,
+    Object? selectedEmojiIndex = freezed,
   }) {
     return _then(_value.copyWith(
       clipMode: null == clipMode
@@ -137,6 +140,10 @@ class _$PhotoEditCopyWithImpl<$Res, $Val extends PhotoEdit>
           ? _value.emojis
           : emojis // ignore: cast_nullable_to_non_nullable
               as List<EditedEmojiData>,
+      selectedEmojiIndex: freezed == selectedEmojiIndex
+          ? _value.selectedEmojiIndex
+          : selectedEmojiIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -161,7 +168,8 @@ abstract class _$$_PhotoEditCopyWith<$Res> implements $PhotoEditCopyWith<$Res> {
       Size defaultSize,
       Size actualSize,
       int angle,
-      List<EditedEmojiData> emojis});
+      List<EditedEmojiData> emojis,
+      int? selectedEmojiIndex});
 }
 
 /// @nodoc
@@ -188,6 +196,7 @@ class __$$_PhotoEditCopyWithImpl<$Res>
     Object? actualSize = null,
     Object? angle = null,
     Object? emojis = null,
+    Object? selectedEmojiIndex = freezed,
   }) {
     return _then(_$_PhotoEdit(
       clipMode: null == clipMode
@@ -242,6 +251,10 @@ class __$$_PhotoEditCopyWithImpl<$Res>
           ? _value._emojis
           : emojis // ignore: cast_nullable_to_non_nullable
               as List<EditedEmojiData>,
+      selectedEmojiIndex: freezed == selectedEmojiIndex
+          ? _value.selectedEmojiIndex
+          : selectedEmojiIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -262,7 +275,8 @@ class _$_PhotoEdit implements _PhotoEdit {
       this.defaultSize = Size.zero,
       this.actualSize = Size.zero,
       this.angle = 0,
-      final List<EditedEmojiData> emojis = const []})
+      final List<EditedEmojiData> emojis = const [],
+      this.selectedEmojiIndex})
       : _colorFilterPreviewImages = colorFilterPreviewImages,
         _adaptivePresets = adaptivePresets,
         _emojis = emojis;
@@ -324,8 +338,11 @@ class _$_PhotoEdit implements _PhotoEdit {
   }
 
   @override
+  final int? selectedEmojiIndex;
+
+  @override
   String toString() {
-    return 'PhotoEdit(clipMode: $clipMode, colorFilterMode: $colorFilterMode, colorFilterPreviewImages: $colorFilterPreviewImages, adaptivePresets: $adaptivePresets, isInitialized: $isInitialized, initialImage: $initialImage, editedImage: $editedImage, cropOffset: $cropOffset, cropSize: $cropSize, defaultSize: $defaultSize, actualSize: $actualSize, angle: $angle, emojis: $emojis)';
+    return 'PhotoEdit(clipMode: $clipMode, colorFilterMode: $colorFilterMode, colorFilterPreviewImages: $colorFilterPreviewImages, adaptivePresets: $adaptivePresets, isInitialized: $isInitialized, initialImage: $initialImage, editedImage: $editedImage, cropOffset: $cropOffset, cropSize: $cropSize, defaultSize: $defaultSize, actualSize: $actualSize, angle: $angle, emojis: $emojis, selectedEmojiIndex: $selectedEmojiIndex)';
   }
 
   @override
@@ -356,7 +373,9 @@ class _$_PhotoEdit implements _PhotoEdit {
             (identical(other.actualSize, actualSize) ||
                 other.actualSize == actualSize) &&
             (identical(other.angle, angle) || other.angle == angle) &&
-            const DeepCollectionEquality().equals(other._emojis, _emojis));
+            const DeepCollectionEquality().equals(other._emojis, _emojis) &&
+            (identical(other.selectedEmojiIndex, selectedEmojiIndex) ||
+                other.selectedEmojiIndex == selectedEmojiIndex));
   }
 
   @override
@@ -374,7 +393,8 @@ class _$_PhotoEdit implements _PhotoEdit {
       defaultSize,
       actualSize,
       angle,
-      const DeepCollectionEquality().hash(_emojis));
+      const DeepCollectionEquality().hash(_emojis),
+      selectedEmojiIndex);
 
   @JsonKey(ignore: true)
   @override
@@ -397,7 +417,8 @@ abstract class _PhotoEdit implements PhotoEdit {
       final Size defaultSize,
       final Size actualSize,
       final int angle,
-      final List<EditedEmojiData> emojis}) = _$_PhotoEdit;
+      final List<EditedEmojiData> emojis,
+      final int? selectedEmojiIndex}) = _$_PhotoEdit;
 
   @override
   bool get clipMode;
@@ -425,6 +446,8 @@ abstract class _PhotoEdit implements PhotoEdit {
   int get angle;
   @override
   List<EditedEmojiData> get emojis;
+  @override
+  int? get selectedEmojiIndex;
   @override
   @JsonKey(ignore: true)
   _$$_PhotoEditCopyWith<_$_PhotoEdit> get copyWith =>
@@ -571,7 +594,7 @@ abstract class _ColorFilterPreview implements ColorFilterPreview {
 /// @nodoc
 mixin _$EditedEmojiData {
   MisskeyEmojiData get emoji => throw _privateConstructorUsedError;
-  Size get size => throw _privateConstructorUsedError;
+  double get scale => throw _privateConstructorUsedError;
   Offset get position => throw _privateConstructorUsedError;
   double get angle => throw _privateConstructorUsedError;
 
@@ -586,7 +609,8 @@ abstract class $EditedEmojiDataCopyWith<$Res> {
           EditedEmojiData value, $Res Function(EditedEmojiData) then) =
       _$EditedEmojiDataCopyWithImpl<$Res, EditedEmojiData>;
   @useResult
-  $Res call({MisskeyEmojiData emoji, Size size, Offset position, double angle});
+  $Res call(
+      {MisskeyEmojiData emoji, double scale, Offset position, double angle});
 }
 
 /// @nodoc
@@ -603,7 +627,7 @@ class _$EditedEmojiDataCopyWithImpl<$Res, $Val extends EditedEmojiData>
   @override
   $Res call({
     Object? emoji = null,
-    Object? size = null,
+    Object? scale = null,
     Object? position = null,
     Object? angle = null,
   }) {
@@ -612,10 +636,10 @@ class _$EditedEmojiDataCopyWithImpl<$Res, $Val extends EditedEmojiData>
           ? _value.emoji
           : emoji // ignore: cast_nullable_to_non_nullable
               as MisskeyEmojiData,
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as Size,
+      scale: null == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -636,7 +660,8 @@ abstract class _$$_EditedEmojiDataCopyWith<$Res>
       __$$_EditedEmojiDataCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({MisskeyEmojiData emoji, Size size, Offset position, double angle});
+  $Res call(
+      {MisskeyEmojiData emoji, double scale, Offset position, double angle});
 }
 
 /// @nodoc
@@ -651,7 +676,7 @@ class __$$_EditedEmojiDataCopyWithImpl<$Res>
   @override
   $Res call({
     Object? emoji = null,
-    Object? size = null,
+    Object? scale = null,
     Object? position = null,
     Object? angle = null,
   }) {
@@ -660,10 +685,10 @@ class __$$_EditedEmojiDataCopyWithImpl<$Res>
           ? _value.emoji
           : emoji // ignore: cast_nullable_to_non_nullable
               as MisskeyEmojiData,
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as Size,
+      scale: null == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -681,14 +706,14 @@ class __$$_EditedEmojiDataCopyWithImpl<$Res>
 class _$_EditedEmojiData implements _EditedEmojiData {
   const _$_EditedEmojiData(
       {required this.emoji,
-      required this.size,
+      required this.scale,
       required this.position,
       required this.angle});
 
   @override
   final MisskeyEmojiData emoji;
   @override
-  final Size size;
+  final double scale;
   @override
   final Offset position;
   @override
@@ -696,7 +721,7 @@ class _$_EditedEmojiData implements _EditedEmojiData {
 
   @override
   String toString() {
-    return 'EditedEmojiData(emoji: $emoji, size: $size, position: $position, angle: $angle)';
+    return 'EditedEmojiData(emoji: $emoji, scale: $scale, position: $position, angle: $angle)';
   }
 
   @override
@@ -705,14 +730,14 @@ class _$_EditedEmojiData implements _EditedEmojiData {
         (other.runtimeType == runtimeType &&
             other is _$_EditedEmojiData &&
             (identical(other.emoji, emoji) || other.emoji == emoji) &&
-            (identical(other.size, size) || other.size == size) &&
+            (identical(other.scale, scale) || other.scale == scale) &&
             (identical(other.position, position) ||
                 other.position == position) &&
             (identical(other.angle, angle) || other.angle == angle));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, emoji, size, position, angle);
+  int get hashCode => Object.hash(runtimeType, emoji, scale, position, angle);
 
   @JsonKey(ignore: true)
   @override
@@ -724,14 +749,14 @@ class _$_EditedEmojiData implements _EditedEmojiData {
 abstract class _EditedEmojiData implements EditedEmojiData {
   const factory _EditedEmojiData(
       {required final MisskeyEmojiData emoji,
-      required final Size size,
+      required final double scale,
       required final Offset position,
       required final double angle}) = _$_EditedEmojiData;
 
   @override
   MisskeyEmojiData get emoji;
   @override
-  Size get size;
+  double get scale;
   @override
   Offset get position;
   @override
