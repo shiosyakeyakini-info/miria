@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -69,6 +70,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
@@ -85,7 +87,14 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                         note: actualShow!,
                         recursive: 1,
                         isForceUnvisibleReply: true,
+                        isDisplayBorder: false,
                       ),
+                      const Padding(padding: EdgeInsets.only(top: 5)),
+                      Text(
+                          "投稿時間: ${actualShow!.createdAt.formatUntilMilliSeconds}"),
+                      const Padding(padding: EdgeInsets.only(top: 5)),
+                      Divider(),
+                      const Padding(padding: EdgeInsets.only(top: 5)),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: PushableListView(

@@ -7,7 +7,10 @@ extension DateTimeExtension on DateTime {
   operator >(DateTime other) => compareTo(other) > 0;
   operator >=(DateTime other) => compareTo(other) >= 0;
 
-  String get format => DateFormat("yyyy 年 M 月 d 日").format(this);
+  String get format => DateFormat("yyyy 年 M 月 d 日").format(toUtc().toLocal());
+
+  String get formatUntilMilliSeconds =>
+      "${DateFormat("yyyy/MM/dd HH:mm:ss", "ja_jp").format(toUtc().toLocal())}.${millisecond.toString().padLeft(3, '0')}";
 
   String get differenceNow {
     final differ = DateTime.now() - this;
