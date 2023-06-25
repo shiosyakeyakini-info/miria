@@ -6,17 +6,18 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
 import 'package:miria/state_notifier/photo_edit_page/color_filter_preset.dart';
+import 'package:miria/view/photo_edit_page/license_confirm_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 
-part 'photo_edit_view_model.freezed.dart';
+part 'photo_edit_state_notifier.freezed.dart';
 
 @freezed
 class PhotoEdit with _$PhotoEdit {
@@ -55,9 +56,13 @@ class EditedEmojiData with _$EditedEmojiData {
 }
 
 class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
-  final Dio dio;
+  static List<String> _acceptReactions = [];
 
-  PhotoEditStateNotifier(super.state, this.dio);
+  final Dio dio;
+  PhotoEditStateNotifier(
+    super.state,
+    this.dio,
+  );
 
   /// 状態を初期化する
   Future<void> initialize(MisskeyPostFile file) async {
@@ -111,42 +116,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
 
     final result = await ImageEditor.editImage(
         image: initialImage, imageEditorOption: editorOption);
-    if (!isReactionMarge) return result;
-    if (result == null) return null;
-
-    final option = ImageMergeOption(
-        canvasSize: state.cropSize, format: const OutputFormat.png());
-
-    option.addImage(MergeImageConfig(
-        image: MemoryImageSource(result),
-        position: ImagePosition(Offset.zero, attemptState.cropSize)));
-
-    for (final reaction in attemptState.emojis) {
-      final emoji = reaction.emoji;
-      switch (emoji) {
-        case CustomEmojiData():
-          final result = (await dio.getUri<Uint8List>(emoji.url,
-                  options: Options(responseType: ResponseType.bytes)))
-              .data;
-          if (result == null) break;
-          option.addImage(MergeImageConfig(
-              image: MemoryImageSource(result),
-              position: ImagePosition(
-                Offset(
-                  reaction.position.dx,
-                  reaction.position.dy,
-                ),
-                Size(reaction.scale, reaction.scale),
-              )));
-          break;
-        case UnicodeEmojiData():
-          break;
-        default:
-          break;
-      }
-    }
-    final mergedResult = await ImageMerger.mergeToMemory(option: option);
-    return mergedResult;
+    return result;
   }
 
   /// 画像の描画を反映する
@@ -156,9 +126,31 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     state = attemptState.copyWith(editedImage: editedImage);
   }
 
-  Future<Uint8List?> createSaveData() async {
-    final editedImage = await _drawImage(state, true);
-    return editedImage;
+  Future<Uint8List?> createSaveData(GlobalKey renderingAreaKey) async {
+    // RenderObjectを取得
+    final boundary = renderingAreaKey.currentContext?.findRenderObject()
+        as RenderRepaintBoundary?;
+    if (boundary == null) return null;
+    final image = await boundary.toImage();
+    final byteData = await image.toByteData(format: ImageByteFormat.png);
+    final resultImage = byteData?.buffer.asUint8List();
+    if (resultImage == null) return null;
+
+    final padding = 20 * state.defaultSize.width / state.actualSize.width;
+
+    final removedPaddingImage = await ImageEditor.editImage(
+        image: resultImage,
+        imageEditorOption: ImageEditorOption()
+          ..addOptions([
+            ClipOption(
+                x: padding +
+                    (state.defaultSize.width - state.cropSize.width) / 2,
+                y: padding +
+                    (state.defaultSize.height - state.cropSize.height) / 2,
+                width: state.cropSize.width,
+                height: state.cropSize.height)
+          ]));
+    return removedPaddingImage;
   }
 
   Offset resolveRotatedOffset(
@@ -176,6 +168,13 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
       cropSize: Size(state.cropSize.height, state.cropSize.width),
       cropOffset: resolveRotatedOffset(
           state.cropOffset, state.cropSize, state.defaultSize, angle),
+      emojis: [
+        for (final emoji in state.emojis)
+          emoji.copyWith(
+              angle: emoji.angle - pi / 2,
+              position: Offset(emoji.position.dy,
+                  state.defaultSize.width - emoji.scale - emoji.position.dx))
+      ],
       selectedEmojiIndex: null,
     ));
   }
@@ -248,10 +247,14 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   Future<void> colorFilter() async {
     state = state.copyWith(
       clipMode: false,
+      selectedEmojiIndex: null,
       colorFilterMode: !state.colorFilterMode,
     );
     if (!state.colorFilterMode) return;
+    createPreviewImage();
+  }
 
+  Future<void> createPreviewImage() async {
     final editedImage = state.editedImage;
     if (editedImage == null) return;
     final previewImage = await ImageEditor.editImage(
@@ -273,14 +276,16 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   }
 
   /// 画像の色調補正を設定する
-  void selectColorFilter(String name) {
+  Future<void> selectColorFilter(String name) async {
     if (state.adaptivePresets.any((element) => element == name)) {
       final list = state.adaptivePresets.toList();
       list.removeWhere((element) => element == name);
-      draw(state.copyWith(adaptivePresets: list));
+      await draw(state.copyWith(adaptivePresets: list));
     } else {
-      draw(state.copyWith(adaptivePresets: [...state.adaptivePresets, name]));
+      await draw(
+          state.copyWith(adaptivePresets: [...state.adaptivePresets, name]));
     }
+    await createPreviewImage();
   }
 
   /// リアクションを追加する
@@ -291,13 +296,24 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
             ReactionPickerDialog(account: account, isAcceptSensitive: true));
     if (reaction == null) return;
 
+    if (_acceptReactions.none((e) => e == reaction.baseName)) {
+      if (!mounted) return;
+      final dialogResult = await showDialog<bool?>(
+          context: context,
+          builder: (context) =>
+              LicenseConfirmDialog(emoji: reaction.baseName, account: account));
+      if (dialogResult != true) return;
+      _acceptReactions.add(reaction.baseName);
+    }
+
     state = state.copyWith(emojis: [
       ...state.emojis,
       EditedEmojiData(
           emoji: reaction,
           scale: 100,
-          position: Offset(state.defaultSize.width / 2 - 50,
-              state.defaultSize.height / 2 - 50),
+          position: Offset(
+              state.cropOffset.dx + (state.cropSize.width) / 2 - 50,
+              state.cropOffset.dy + (state.cropSize.height) / 2 - 50),
           angle: 0),
     ], selectedEmojiIndex: state.emojis.length, clipMode: false);
   }
@@ -315,8 +331,6 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
 
   /// リアクションを拡大・縮小・回転する　イベントの実施中
   void reactionScaleUpdate(ScaleUpdateDetails detail) {
-    print(detail.rotation);
-
     final selectedIndex = state.selectedEmojiIndex;
     if (selectedIndex == null) return;
     final emojis = state.emojis.toList();
@@ -344,5 +358,10 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   void selectReaction(int index) {
     state = state.copyWith(
         clipMode: false, colorFilterMode: false, selectedEmojiIndex: index);
+  }
+
+  void clearSelectMode() {
+    state = state.copyWith(
+        selectedEmojiIndex: null, colorFilterMode: false, clipMode: false);
   }
 }

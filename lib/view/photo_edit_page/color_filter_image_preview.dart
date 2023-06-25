@@ -26,6 +26,7 @@ class ColorFilterImagePreview extends ConsumerWidget {
       width: double.infinity,
       height: 100,
       child: ListView.builder(
+        key: const PageStorageKey<String>('colorFilterImagePreview'),
         scrollDirection: Axis.horizontal,
         itemCount: previewImages.length,
         itemBuilder: (context, index) {

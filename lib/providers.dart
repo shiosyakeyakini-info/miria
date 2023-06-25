@@ -22,13 +22,12 @@ import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/repository/user_list_time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
-import 'package:miria/state_notifier/photo_edit_page/photo_edit_view_model.dart';
+import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 final dioProvider = Provider((ref) => Dio());
 final fileSystemProvider =
     Provider<FileSystem>((ref) => const LocalFileSystem());
-
 final misskeyProvider = Provider.family<Misskey, Account>(
     (ref, account) => Misskey(token: account.token, host: account.host));
 
@@ -149,8 +148,11 @@ final errorEventProvider =
 
 final photoEditProvider =
     StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
-        (ref) =>
-            PhotoEditStateNotifier(const PhotoEdit(), ref.read(dioProvider)));
+  (ref) => PhotoEditStateNotifier(
+    const PhotoEdit(),
+    ref.read(dioProvider),
+  ),
+);
 
 // TODO: 下書きの機能かんがえるときにfamilyの引数みなおす
 final noteCreateProvider = StateNotifierProvider.family

@@ -8,14 +8,21 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/photo_edit_page/edited_photo_image.dart';
 
-class ClipMode extends ConsumerWidget {
-  const ClipMode({super.key});
+class ClipMode extends ConsumerStatefulWidget {
+  final GlobalKey renderingGlobalKey;
 
+  const ClipMode({super.key, required this.renderingGlobalKey});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => ClipModeState();
+}
+
+class ClipModeState extends ConsumerState<ClipMode> {
   final basePadding = 20;
   final iconSize = 40;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final clipMode =
         ref.watch(photoEditProvider.select((value) => value.clipMode));
     final defaultSize =
@@ -53,162 +60,170 @@ class ClipMode extends ConsumerWidget {
               : (detail) => ref
                   .read(photoEditProvider.notifier)
                   .reactionScaleUpdate(detail),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const EditedPhotoImage(),
-              if (clipMode) ...[
-                // mask
-                Positioned(
-                    left: cropOffset.dx + basePadding * ratio,
-                    top: cropOffset.dy + basePadding * ratio,
-                    width: cropSize.width,
-                    height: cropSize.height,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white.withAlpha(150),
-                              width: 2 * ratio)),
-                    )),
-
-                //left top-down
-                Positioned(
-                    left: basePadding * ratio,
-                    top: basePadding * ratio,
-                    width: cropOffset.dx,
-                    height: defaultSize.height,
-                    child: DecoratedBox(
-                      decoration:
-                          BoxDecoration(color: Colors.black87.withAlpha(150)),
-                    )),
-                //right top-down
-                Positioned(
-                    left: cropOffset.dx + basePadding * ratio + cropSize.width,
-                    top: basePadding * ratio,
-                    width: defaultSize.width - cropSize.width - cropOffset.dx,
-                    height: defaultSize.height,
-                    child: DecoratedBox(
+          child: RepaintBoundary(
+            key: widget.renderingGlobalKey,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                const EditedPhotoImage(),
+                if (clipMode) ...[
+                  // mask
+                  Positioned(
+                      left: cropOffset.dx + basePadding * ratio,
+                      top: cropOffset.dy + basePadding * ratio,
+                      width: cropSize.width,
+                      height: cropSize.height,
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
-                            color: Colors.black87.withAlpha(150)))),
-                //left over crop
-                Positioned(
-                    left: basePadding * ratio + cropOffset.dx,
-                    top: basePadding * ratio,
-                    width: cropSize.width,
-                    height: cropOffset.dy,
-                    child: DecoratedBox(
+                            border: Border.all(
+                                color: Colors.white.withAlpha(150),
+                                width: 2 * ratio)),
+                      )),
+
+                  //left top-down
+                  Positioned(
+                      left: basePadding * ratio,
+                      top: basePadding * ratio,
+                      width: cropOffset.dx,
+                      height: defaultSize.height,
+                      child: DecoratedBox(
+                        decoration:
+                            BoxDecoration(color: Colors.black87.withAlpha(150)),
+                      )),
+                  //right top-down
+                  Positioned(
+                      left:
+                          cropOffset.dx + basePadding * ratio + cropSize.width,
+                      top: basePadding * ratio,
+                      width: defaultSize.width - cropSize.width - cropOffset.dx,
+                      height: defaultSize.height,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.black87.withAlpha(150)))),
+                  //left over crop
+                  Positioned(
+                      left: basePadding * ratio + cropOffset.dx,
+                      top: basePadding * ratio,
+                      width: cropSize.width,
+                      height: cropOffset.dy,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.black87.withAlpha(150)))),
+
+                  //left under crop
+                  Positioned(
+                      left: basePadding * ratio + cropOffset.dx,
+                      top:
+                          basePadding * ratio + cropSize.height + cropOffset.dy,
+                      width: cropSize.width,
+                      height:
+                          defaultSize.height - cropSize.height - cropOffset.dy,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.black87.withAlpha(150)))),
+
+                  Positioned(
+                    left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
+                    top: cropOffset.dy - (iconSize / 2 - basePadding) * ratio,
+                    width: iconSize * ratio,
+                    height: iconSize * ratio,
+                    child: Listener(
+                      behavior: HitTestBehavior.translucent,
+                      onPointerMove: (detail) => ref
+                          .read(photoEditProvider.notifier)
+                          .cropMoveLeftTop(detail),
+                      child: Icon(Icons.add, size: iconSize * ratio),
+                    ),
+                  ),
+                  Positioned(
+                    left: cropOffset.dx +
+                        cropSize.width -
+                        (iconSize / 2 - basePadding) * ratio,
+                    top: cropOffset.dy - (iconSize / 2 - basePadding) * ratio,
+                    child: Listener(
+                      behavior: HitTestBehavior.translucent,
+                      onPointerMove: (detail) => ref
+                          .read(photoEditProvider.notifier)
+                          .cropMoveRightTop(detail),
+                      child: Icon(Icons.add, size: 40 * ratio),
+                    ),
+                  ),
+                  Positioned(
+                    left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
+                    top: cropOffset.dy +
+                        cropSize.height -
+                        (iconSize / 2 - basePadding) / 2 * ratio,
+                    child: Listener(
+                      behavior: HitTestBehavior.translucent,
+                      onPointerMove: (detail) => ref
+                          .read(photoEditProvider.notifier)
+                          .cropMoveLeftBottom(detail),
+                      child: Icon(Icons.add, size: 40 * ratio),
+                    ),
+                  ),
+                  Positioned(
+                    left: cropOffset.dx +
+                        cropSize.width -
+                        (iconSize / 2 - basePadding) * ratio,
+                    top: cropOffset.dy +
+                        cropSize.height -
+                        (iconSize / 2 - basePadding) * ratio,
+                    child: Listener(
+                      behavior: HitTestBehavior.translucent,
+                      onPointerMove: (detail) => ref
+                          .read(photoEditProvider.notifier)
+                          .cropMoveRightBottom(detail),
+                      child: Icon(Icons.add, size: 40 * ratio),
+                    ),
+                  ),
+                ],
+
+                // Reactions
+                for (final reaction
+                    in reactions.mapIndexed((index, e) => (index, e)))
+                  Positioned(
+                    left: reaction.$2.position.dx +
+                        basePadding * ratio +
+                        (clipMode
+                            ? 0
+                            : (defaultSize.width - cropSize.width) / 2 -
+                                cropOffset.dx),
+                    top: reaction.$2.position.dy +
+                        basePadding * ratio +
+                        (clipMode
+                            ? 0
+                            : (defaultSize.height - cropSize.height) / 2 -
+                                cropOffset.dy),
+                    width: reaction.$2.scale,
+                    height: reaction.$2.scale,
+                    child: GestureDetector(
+                      onTap: () => ref
+                          .read(photoEditProvider.notifier)
+                          .selectReaction(reaction.$1),
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
-                            color: Colors.black87.withAlpha(150)))),
-
-                //left under crop
-                Positioned(
-                    left: basePadding * ratio + cropOffset.dx,
-                    top: basePadding * ratio + cropSize.height + cropOffset.dy,
-                    width: cropSize.width,
-                    height:
-                        defaultSize.height - cropSize.height - cropOffset.dy,
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            color: Colors.black87.withAlpha(150)))),
-
-                Positioned(
-                  left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
-                  top: cropOffset.dy - (iconSize / 2 - basePadding) * ratio,
-                  width: iconSize * ratio,
-                  height: iconSize * ratio,
-                  child: Listener(
-                    behavior: HitTestBehavior.translucent,
-                    onPointerMove: (detail) => ref
-                        .read(photoEditProvider.notifier)
-                        .cropMoveLeftTop(detail),
-                    child: Icon(Icons.add, size: iconSize * ratio),
-                  ),
-                ),
-                Positioned(
-                  left: cropOffset.dx +
-                      cropSize.width -
-                      (iconSize / 2 - basePadding) * ratio,
-                  top: cropOffset.dy - (iconSize / 2 - basePadding) * ratio,
-                  child: Listener(
-                    behavior: HitTestBehavior.translucent,
-                    onPointerMove: (detail) => ref
-                        .read(photoEditProvider.notifier)
-                        .cropMoveRightTop(detail),
-                    child: Icon(Icons.add, size: 40 * ratio),
-                  ),
-                ),
-                Positioned(
-                  left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
-                  top: cropOffset.dy +
-                      cropSize.height -
-                      (iconSize / 2 - basePadding) / 2 * ratio,
-                  child: Listener(
-                    behavior: HitTestBehavior.translucent,
-                    onPointerMove: (detail) => ref
-                        .read(photoEditProvider.notifier)
-                        .cropMoveLeftBottom(detail),
-                    child: Icon(Icons.add, size: 40 * ratio),
-                  ),
-                ),
-                Positioned(
-                  left: cropOffset.dx +
-                      cropSize.width -
-                      (iconSize / 2 - basePadding) * ratio,
-                  top: cropOffset.dy +
-                      cropSize.height -
-                      (iconSize / 2 - basePadding) * ratio,
-                  child: Listener(
-                    behavior: HitTestBehavior.translucent,
-                    onPointerMove: (detail) => ref
-                        .read(photoEditProvider.notifier)
-                        .cropMoveRightBottom(detail),
-                    child: Icon(Icons.add, size: 40 * ratio),
-                  ),
-                ),
-              ],
-
-              // Reactions
-              for (final reaction
-                  in reactions.mapIndexed((index, e) => (index, e)))
-                Positioned(
-                  left: reaction.$2.position.dx +
-                      basePadding * ratio +
-                      (clipMode
-                          ? 0
-                          : (defaultSize.width - cropSize.width) / 2 -
-                              cropOffset.dx),
-                  top: reaction.$2.position.dy +
-                      basePadding * ratio +
-                      (clipMode
-                          ? 0
-                          : (defaultSize.height - cropSize.height) / 2 -
-                              cropOffset.dy),
-                  width: reaction.$2.scale,
-                  height: reaction.$2.scale,
-                  child: GestureDetector(
-                    onTap: () => ref
-                        .read(photoEditProvider.notifier)
-                        .selectReaction(reaction.$1),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          border: reaction.$1 == selectedReaction
-                              ? Border.all(color: Colors.white)
-                              : null),
-                      child: Transform.rotate(
-                        angle: reaction.$2.angle,
-                        child: Transform.scale(
-                          scale: reaction.$2.scale / 100,
-                          child: CustomEmoji(
-                            emojiData: reaction.$2.emoji,
-                            isAttachTooltip: false,
-                            size: 100,
+                            border: reaction.$1 == selectedReaction
+                                ? Border.all(color: Colors.white)
+                                : null),
+                        child: SizedBox(
+                          width: reaction.$2.scale,
+                          height: reaction.$2.scale,
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Transform.rotate(
+                              angle: reaction.$2.angle,
+                              child: CustomEmoji(
+                                emojiData: reaction.$2.emoji,
+                                isAttachTooltip: false,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )
-            ],
+                  )
+              ],
+            ),
           ),
         ),
       ),

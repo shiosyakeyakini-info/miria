@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/state_notifier/photo_edit_page/photo_edit_view_model.dart';
+import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/photo_edit_page/clip_mode.dart';
@@ -32,6 +32,8 @@ class PhotoEditPage extends ConsumerStatefulWidget {
 class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
   PhotoEditStateNotifier get photoEdit => ref.read(photoEditProvider.notifier);
 
+  final renderingAreaKey = GlobalKey();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -54,14 +56,17 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
             actions: [
               IconButton(
                   onPressed: () async {
-                    final result = await photoEdit.createSaveData();
-                    if (result == null) return;
-                    if (!mounted) return;
+                    photoEdit.clearSelectMode();
                     final confirm = await SimpleConfirmDialog.show(
                         context: context,
-                        message: "保存しよる？一度保存してもうたらな、もっぺん編集でけへんねん。",
+                        message: "保存しよる？",
                         primary: "保存する",
                         secondary: "もうちょっと続ける");
+
+                    final result =
+                        await photoEdit.createSaveData(renderingAreaKey);
+                    if (result == null) return;
+                    if (!mounted) return;
                     if (!mounted) return;
                     if (confirm == true) {
                       widget.onSubmit(result);
@@ -85,8 +90,11 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                   return SizedBox(
                       width: constraints.maxWidth,
                       height: constraints.maxHeight,
-                      child: const FittedBox(
-                          fit: BoxFit.contain, child: ClipMode()));
+                      child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: ClipMode(
+                            renderingGlobalKey: renderingAreaKey,
+                          )));
                 }),
               ),
               const ColorFilterImagePreview(),
