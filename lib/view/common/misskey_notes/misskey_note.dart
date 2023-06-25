@@ -11,6 +11,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
+import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -418,15 +419,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                         ?.color,
                                   ))
                             ] else ...[
-                              IconButton(
+                              TextButton.icon(
                                   onPressed: () {
                                     context.pushRoute(NoteCreateRoute(
                                         reply: displayNote,
                                         initialAccount:
                                             AccountScope.of(context)));
                                   },
-                                  constraints: const BoxConstraints(),
-                                  padding: EdgeInsets.zero,
                                   style: const ButtonStyle(
                                     padding: MaterialStatePropertyAll(
                                         EdgeInsets.zero),
@@ -435,6 +434,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                   ),
+                                  label: Text(displayNote.repliesCount == 0
+                                      ? ""
+                                      : displayNote.repliesCount.format()),
                                   icon: Icon(
                                     Icons.reply,
                                     size: 16 *
