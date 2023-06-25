@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mfm_parser/mfm_parser.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
@@ -275,6 +276,28 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
       if (!mounted) return;
 
+      final nodes = const MfmParser().parse(state.text);
+      final userList = <MfmMention>[];
+
+      void findMfmMentions(List<MfmNode> nodes) {
+        for (final node in nodes) {
+          if (node is MfmMention) {
+            userList.add(node);
+          }
+          findMfmMentions(node.children ?? []);
+        }
+      }
+
+      findMfmMentions(nodes);
+
+      final mentionTargetUsers = [
+        for (final user in userList)
+          await misskey.users.showByName(UsersShowByUserNameRequest(
+              userName: user.username, host: user.host))
+      ];
+      final visibleUserIds = state.replyTo.map((e) => e.id).toList();
+      visibleUserIds.addAll(mentionTargetUsers.map((e) => e.id));
+
       await misskey.notes.create(NotesCreateRequest(
         visibility: state.noteVisibility,
         text:
@@ -285,6 +308,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         renoteId: state.renote?.id,
         channelId: state.channel?.id,
         fileIds: fileIds.isEmpty ? null : fileIds,
+        visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
         reactionAcceptance: state.reactionAcceptance,
       ));
       if (!mounted) return;
