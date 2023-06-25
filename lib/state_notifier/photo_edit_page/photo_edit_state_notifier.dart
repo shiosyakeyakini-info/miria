@@ -371,7 +371,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   }
 
   void clearSelectMode() {
-    state = state.copyWith(
-        selectedEmojiIndex: null, colorFilterMode: false, clipMode: false);
+    draw(state.copyWith(
+        selectedEmojiIndex: null, colorFilterMode: false, clipMode: false));
   }
 }
