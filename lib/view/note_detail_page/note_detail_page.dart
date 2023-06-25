@@ -77,13 +77,14 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                           itemBuilder: (context, index) {
                             return MisskeyNote(
                               note: conversations[index],
-                              isForceUnvisibleChild: true,
+                              isForceUnvisibleRenote: true,
+                              isForceUnvisibleReply: true,
                             );
                           }),
                       MisskeyNote(
                         note: actualShow!,
                         recursive: 1,
-                        isForceUnvisibleChild: true,
+                        isForceUnvisibleReply: true,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
@@ -117,7 +118,8 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                               return MisskeyNote(
                                 note: item,
                                 recursive: 1,
-                                isForceUnvisibleChild: true,
+                                isForceUnvisibleRenote: true,
+                                isForceUnvisibleReply: true,
                               );
                             }),
                       ),

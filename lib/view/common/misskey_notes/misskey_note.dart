@@ -113,7 +113,8 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final bool isDisplayBorder;
   final int recursive;
   final Account? loginAs;
-  final bool isForceUnvisibleChild;
+  final bool isForceUnvisibleReply;
+  final bool isForceUnvisibleRenote;
 
   const MisskeyNote({
     super.key,
@@ -121,7 +122,8 @@ class MisskeyNote extends ConsumerStatefulWidget {
     this.isDisplayBorder = true,
     this.recursive = 1,
     this.loginAs,
-    this.isForceUnvisibleChild = false,
+    this.isForceUnvisibleReply = false,
+    this.isForceUnvisibleRenote = false,
   });
 
   @override
@@ -207,7 +209,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                     emojis: widget.note.user.emojis,
                   ),
                 ),
-              if (displayNote.reply != null && !widget.isForceUnvisibleChild)
+              if (displayNote.reply != null && !widget.isForceUnvisibleReply)
                 MisskeyNote(
                   note: displayNote.reply!,
                   isDisplayBorder: false,
@@ -305,7 +307,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               if (!isEmptyRenote &&
                                   displayNote.renoteId != null &&
                                   (widget.recursive == 2 ||
-                                      widget.isForceUnvisibleChild))
+                                      widget.isForceUnvisibleRenote))
                                 TextSpan(
                                   text: "  RN:...",
                                   style: TextStyle(
@@ -328,7 +330,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             ),
                           if (displayNote.renoteId != null &&
                               (widget.recursive < 2 &&
-                                  !widget.isForceUnvisibleChild))
+                                  !widget.isForceUnvisibleRenote))
                             Container(
                               padding: const EdgeInsets.all(5),
                               child: DottedBorder(
