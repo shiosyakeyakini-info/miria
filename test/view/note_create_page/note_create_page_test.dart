@@ -801,8 +801,11 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(
-                const DriveFilesCreateRequest(name: "test.png", force: true))),
+            argThat(equals(const DriveFilesCreateRequest(
+                name: "test.png",
+                force: true,
+                comment: "",
+                isSensitive: false))),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryImage))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
@@ -852,8 +855,11 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(
-                const DriveFilesCreateRequest(name: "test.txt", force: true))),
+            argThat(equals(const DriveFilesCreateRequest(
+                name: "test.txt",
+                force: true,
+                comment: "",
+                isSensitive: false))),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryData))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
@@ -989,8 +995,11 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(
-                const DriveFilesCreateRequest(name: "test.txt", force: true))),
+            argThat(equals(const DriveFilesCreateRequest(
+                name: "test.txt",
+                force: true,
+                comment: "",
+                isSensitive: false))),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryData))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
@@ -1900,8 +1909,11 @@ void main() {
                 .equals([TestData.drive1.id], arg.fileIds))))));
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(
-                const DriveFilesCreateRequest(name: "test.png", force: true))),
+            argThat(equals(const DriveFilesCreateRequest(
+                name: "test.png",
+                force: true,
+                comment: "",
+                isSensitive: false))),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryImage))))));
       });

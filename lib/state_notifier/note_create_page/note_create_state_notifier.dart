@@ -13,6 +13,7 @@ import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
+import 'package:miria/view/note_create_page/file_settings_dialog.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -97,16 +98,22 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               media.toLowerCase().endsWith("gif") ||
               media.toLowerCase().endsWith("webp"))
             ImageFile(
-                data: await fileSystem.file(media).readAsBytes(),
-                fileName: media.substring(
-                    media.lastIndexOf(Platform.pathSeparator) + 1,
-                    media.length))
+              data: await fileSystem.file(media).readAsBytes(),
+              fileName: media.substring(
+                  media.lastIndexOf(Platform.pathSeparator) + 1, media.length),
+              isNsfw: false,
+              caption: "",
+            )
           else
             UnknownFile(
-                data: await fileSystem.file(media).readAsBytes(),
-                fileName: media.substring(
-                    media.lastIndexOf(Platform.pathSeparator) + 1,
-                    media.length))
+              data: await fileSystem.file(media).readAsBytes(),
+              fileName: media.substring(
+                media.lastIndexOf(Platform.pathSeparator) + 1,
+                media.length,
+              ),
+              isNsfw: false,
+              caption: "",
+            )
       ]);
     }
 
@@ -118,10 +125,21 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           final response = await dio.get(file.url,
               options: Options(responseType: ResponseType.bytes));
           files.add(ImageFileAlreadyPostedFile(
-              fileName: file.name, data: response.data, id: file.id));
+              fileName: file.name,
+              data: response.data,
+              id: file.id,
+              isNsfw: file.isSensitive,
+              caption: file.comment ?? "",
+              isEdited: false));
         } else {
           files.add(UnknownAlreadyPostedFile(
-              url: file.url, id: file.id, fileName: file.name));
+            url: file.url,
+            id: file.id,
+            fileName: file.name,
+            isNsfw: file.isSensitive,
+            caption: file.comment ?? "",
+            isEdited: false,
+          ));
         }
       }
       final deletedNoteChannel = deletedNote.channel;
@@ -208,6 +226,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
+                isSensitive: file.isNsfw,
+                comment: file.caption,
               ),
               file.data,
             );
@@ -219,6 +239,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
+                isSensitive: file.isNsfw,
+                comment: file.caption,
               ),
               file.data,
             );
@@ -226,9 +248,26 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
             break;
           case UnknownAlreadyPostedFile():
+            if (file.isEdited) {
+              await misskey.drive.files.update(DriveFilesUpdateRequest(
+                fileId: file.id,
+                name: file.fileName,
+                isSensitive: file.isNsfw,
+                comment: file.caption,
+              ));
+            }
             fileIds.add(file.id);
             break;
           case ImageFileAlreadyPostedFile():
+            if (file.isEdited) {
+              await misskey.drive.files.update(DriveFilesUpdateRequest(
+                fileId: file.id,
+                name: file.fileName,
+                isSensitive: file.isNsfw,
+                comment: file.caption,
+              ));
+            }
+
             fileIds.add(file.id);
             break;
         }
@@ -277,13 +316,21 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             data: fileContentResponse.data,
             fileName: result.name,
             id: result.id,
+            isEdited: false,
+            isNsfw: result.isSensitive,
+            caption: result.comment ?? "",
           )
         ]);
       } else {
         state = state.copyWith(files: [
           ...state.files,
           UnknownAlreadyPostedFile(
-              url: result.url, id: result.id, fileName: result.name)
+              url: result.url,
+              id: result.id,
+              isEdited: false,
+              fileName: result.name,
+              isNsfw: result.isSensitive,
+              caption: result.comment ?? "")
         ]);
       }
     } else if (result == DriveModalSheetReturnValue.upload) {
@@ -298,35 +345,104 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         ImageFile(
             data: await fileSystem.file(path).readAsBytes(),
             fileName: path.substring(
-                path.lastIndexOf(Platform.pathSeparator) + 1, path.length))
+                path.lastIndexOf(Platform.pathSeparator) + 1, path.length),
+            isNsfw: false,
+            caption: "")
       ]);
     }
   }
 
+  /// メディアの内容を変更する
   void setFileContent(MisskeyPostFile file, Uint8List? content) {
     if (content == null) return;
     final files = state.files.toList();
 
     switch (file) {
       case ImageFile():
-        files[files.indexOf(file)] =
-            ImageFile(data: content, fileName: file.fileName);
+        files[files.indexOf(file)] = ImageFile(
+            data: content,
+            fileName: file.fileName,
+            caption: file.caption,
+            isNsfw: file.isNsfw);
         break;
       case ImageFileAlreadyPostedFile():
-        files[files.indexOf(file)] =
-            ImageFile(data: content, fileName: file.fileName);
+        files[files.indexOf(file)] = ImageFile(
+            data: content,
+            fileName: file.fileName,
+            caption: file.caption,
+            isNsfw: file.isNsfw);
         break;
       case UnknownFile():
-        files[files.indexOf(file)] =
-            ImageFile(data: content, fileName: file.fileName);
+        files[files.indexOf(file)] = ImageFile(
+            data: content,
+            fileName: file.fileName,
+            caption: file.caption,
+            isNsfw: file.isNsfw);
         break;
       case UnknownAlreadyPostedFile():
-        files[files.indexOf(file)] =
-            ImageFile(data: content, fileName: file.fileName);
+        files[files.indexOf(file)] = ImageFile(
+            data: content,
+            fileName: file.fileName,
+            caption: file.caption,
+            isNsfw: file.isNsfw);
         break;
     }
 
     state = state.copyWith(files: files);
+  }
+
+  /// ファイルのメタデータを変更する
+  void setFileMetaData(int index, FileSettingsDialogResult result) {
+    final files = state.files.toList();
+    final file = state.files[index];
+
+    switch (file) {
+      case ImageFile():
+        files[index] = ImageFile(
+          data: file.data,
+          fileName: result.fileName,
+          caption: result.caption,
+          isNsfw: result.isNsfw,
+        );
+        break;
+      case ImageFileAlreadyPostedFile():
+        files[index] = ImageFileAlreadyPostedFile(
+          data: file.data,
+          id: file.id,
+          fileName: result.fileName,
+          isNsfw: result.isNsfw,
+          caption: result.caption,
+          isEdited: true,
+        );
+        break;
+      case UnknownFile():
+        files[index] = UnknownFile(
+            data: file.data,
+            fileName: result.fileName,
+            isNsfw: result.isNsfw,
+            caption: result.caption);
+        break;
+      case UnknownAlreadyPostedFile():
+        files[index] = UnknownAlreadyPostedFile(
+          url: file.url,
+          id: file.id,
+          fileName: result.fileName,
+          isNsfw: result.isNsfw,
+          caption: result.caption,
+          isEdited: true,
+        );
+        break;
+    }
+
+    state = state.copyWith(files: files);
+  }
+
+  /// メディアを削除する
+  void deleteFile(int index) {
+    final list = state.files.toList();
+    list.removeAt(index);
+
+    state = state.copyWith(files: list);
   }
 
   /// リプライ先ユーザーを追加する
