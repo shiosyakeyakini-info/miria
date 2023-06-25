@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

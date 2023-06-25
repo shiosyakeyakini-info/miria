@@ -133,6 +133,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    PhotoEditRoute.name: (routeData) {
+      final args = routeData.argsAs<PhotoEditRouteArgs>();
+      return AutoRoutePage<Uint8List?>(
+        routeData: routeData,
+        child: PhotoEditPage(
+          account: args.account,
+          file: args.file,
+          onSubmit: args.onSubmit,
+          key: args.key,
+        ),
+      );
+    },
     SplashRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -811,6 +823,54 @@ class UserFollowerRouteArgs {
   @override
   String toString() {
     return 'UserFollowerRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [PhotoEditPage]
+class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
+  PhotoEditRoute({
+    required Account account,
+    required MisskeyPostFile file,
+    required void Function(Uint8List) onSubmit,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          PhotoEditRoute.name,
+          args: PhotoEditRouteArgs(
+            account: account,
+            file: file,
+            onSubmit: onSubmit,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'PhotoEditRoute';
+
+  static const PageInfo<PhotoEditRouteArgs> page =
+      PageInfo<PhotoEditRouteArgs>(name);
+}
+
+class PhotoEditRouteArgs {
+  const PhotoEditRouteArgs({
+    required this.account,
+    required this.file,
+    required this.onSubmit,
+    this.key,
+  });
+
+  final Account account;
+
+  final MisskeyPostFile file;
+
+  final void Function(Uint8List) onSubmit;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'PhotoEditRouteArgs{account: $account, file: $file, onSubmit: $onSubmit, key: $key}';
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
@@ -11,21 +12,16 @@ class FilePreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final files = ref.watch(noteCreateProvider(AccountScope.of(context))
         .select((value) => value.files));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (final file in files)
-                Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: CreateFileView(file: file))
-            ],
-          ),
-        )
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (final file in files.mapIndexed((index, e) => (index, e)))
+            Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: CreateFileView(file: file.$2, index: file.$1))
+        ],
+      ),
     );
   }
 }

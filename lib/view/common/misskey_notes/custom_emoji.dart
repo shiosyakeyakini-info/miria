@@ -29,7 +29,8 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   void didUpdateWidget(covariant CustomEmoji oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.emojiData != widget.emojiData) {
+    if (oldWidget.emojiData != widget.emojiData ||
+        oldWidget.size != widget.size) {
       cachedImage = null;
     }
   }

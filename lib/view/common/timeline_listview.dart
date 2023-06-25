@@ -210,12 +210,8 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   List<Widget> _buildSlivers(BuildContext context, {bool negative = false}) {
     final itemExtent = widget.itemExtent;
-    final padding = widget.padding ?? EdgeInsets.zero;
     return <Widget>[
       SliverPadding(
-        // padding: negative
-        //     ? padding - EdgeInsets.only(bottom: padding.bottom)
-        //     : padding - EdgeInsets.only(top: padding.top),
         sliver: (itemExtent != null)
             ? SliverFixedExtentList(
                 delegate: negative
