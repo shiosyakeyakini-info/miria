@@ -24,9 +24,9 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   final List<MisskeyEmojiData> reactions = [];
 
   void save() {
-    ref.read(accountSettingsRepositoryProvider).save(AccountSettings(
-        userId: widget.account.userId,
-        host: widget.account.host,
+    final currentData =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
+    ref.read(accountSettingsRepositoryProvider).save(currentData.copyWith(
         reactions: reactions.map((e) => e.baseName).toList()));
   }
 
