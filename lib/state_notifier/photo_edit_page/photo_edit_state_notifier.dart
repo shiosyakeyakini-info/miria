@@ -296,14 +296,24 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
             ReactionPickerDialog(account: account, isAcceptSensitive: true));
     if (reaction == null) return;
 
-    if (_acceptReactions.none((e) => e == reaction.baseName)) {
-      if (!mounted) return;
-      final dialogResult = await showDialog<bool?>(
-          context: context,
-          builder: (context) =>
-              LicenseConfirmDialog(emoji: reaction.baseName, account: account));
-      if (dialogResult != true) return;
-      _acceptReactions.add(reaction.baseName);
+    switch (reaction) {
+      case CustomEmojiData():
+        // カスタム絵文字の場合、ライセンスを確認する
+        if (_acceptReactions.none((e) => e == reaction.baseName)) {
+          if (!mounted) return;
+          final dialogResult = await showDialog<bool?>(
+              context: context,
+              builder: (context) => LicenseConfirmDialog(
+                  emoji: reaction.baseName, account: account));
+          if (dialogResult != true) return;
+          _acceptReactions.add(reaction.baseName);
+        }
+
+        break;
+      case UnicodeEmojiData():
+        break;
+      default:
+        return;
     }
 
     state = state.copyWith(emojis: [

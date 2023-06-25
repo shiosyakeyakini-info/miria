@@ -11,6 +11,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/photo_edit_page/clip_mode.dart';
 import 'package:miria/view/photo_edit_page/color_filter_image_preview.dart';
+import 'package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart';
 
 @RoutePage<Uint8List?>()
 class PhotoEditPage extends ConsumerStatefulWidget {
@@ -100,29 +101,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
               const ColorFilterImagePreview(),
             ],
           ),
-          bottomNavigationBar: BottomAppBar(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                    onPressed: () => photoEdit.crop(),
-                    icon: const Icon(Icons.crop)),
-                IconButton(
-                    onPressed: () => photoEdit.rotate(),
-                    icon: const Icon(Icons.refresh)),
-                IconButton(
-                    onPressed: () => photoEdit.colorFilter(),
-                    icon: const Icon(Icons.palette_outlined)),
-                IconButton(
-                    onPressed: () =>
-                        photoEdit.addReaction(widget.account, context),
-                    icon: const Icon(Icons.add_reaction_outlined)),
-                IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.info_outline))
-              ],
-            ),
-          ),
+          bottomNavigationBar: const PhotoEditBottomBar(),
         ),
       ),
     );
