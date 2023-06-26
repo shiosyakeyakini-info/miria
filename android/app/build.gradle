@@ -53,6 +53,12 @@ android {
         versionName flutterVersionName
     }
 
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
     signingConfigs {
         release {
             storeFile rootProject.file('release.keystore')
