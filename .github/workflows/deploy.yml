@@ -92,9 +92,9 @@ jobs:
         - name: Create apk file
           run: |
             echo -n "$ANDROID_KEYSTORE_BASE64" | base64 --decode --output ./android/release.keystore
-            export KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
-            export KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
-            export KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
+            export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+            export ANDROID_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
+            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
             flutter build apk --no-tree-shake-icons --release
 
         - name: Create tag and release note
