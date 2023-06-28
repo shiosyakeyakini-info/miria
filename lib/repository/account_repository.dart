@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -293,10 +294,15 @@ class AccountRepository extends Notifier<List<Account>> {
         server,
         _sessionId,
         name: "Miria",
+        callback: Platform.isAndroid ? "miria://miria/miauth" : null,
         permission: Permission.values,
       ),
       mode: LaunchMode.externalApplication,
     );
+  }
+
+  bool verifySessionId(String id) {
+    return id == _sessionId;
   }
 
   Future<void> validateMiAuth(String server) async {

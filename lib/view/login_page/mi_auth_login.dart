@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/providers.dart';
@@ -48,6 +50,22 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
 
   @override
   Widget build(BuildContext context) {
+    if (isAuthed) {
+      if (Platform.isAndroid) {
+        ref.listen(miAuthCallbackProvider, (_, uri) async {
+          final sessionId = uri?.queryParameters["session"];
+          if (sessionId != null) {
+            final isSameId = ref
+                .read(accountRepositoryProvider.notifier)
+                .verifySessionId(sessionId);
+            if (isSameId) {
+              await login().expectFailure(context);
+            }
+          }
+        });
+      }
+    }
+
     return CenteringWidget(
         child: Column(
       mainAxisSize: MainAxisSize.min,
