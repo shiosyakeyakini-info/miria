@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -143,8 +144,13 @@ class AccountRepository extends ChangeNotifier {
 
     sessionId = const Uuid().v4();
     await launchUrl(
-      MisskeyServer().buildMiAuthURL(server, sessionId,
-          name: "Miria", permission: Permission.values),
+      MisskeyServer().buildMiAuthURL(
+        server,
+        sessionId,
+        name: "Miria",
+        callback: Platform.isAndroid ? "miria://miria/miauth" : null,
+        permission: Permission.values,
+      ),
       mode: LaunchMode.externalApplication,
     );
   }
