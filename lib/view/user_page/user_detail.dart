@@ -49,7 +49,10 @@ class UserDetailState extends ConsumerState<UserDetail> {
     if (!mounted) return;
     setState(() {
       isFollowEditing = false;
-      response = response.copyWith(isFollowing: true);
+      response = response.copyWith(
+        isFollowing: !response.requiresFollowRequest,
+        hasPendingFollowRequestFromYou: response.requiresFollowRequest,
+      );
     });
   }
 
@@ -66,6 +69,23 @@ class UserDetailState extends ConsumerState<UserDetail> {
     setState(() {
       isFollowEditing = false;
       response = response.copyWith(isFollowing: false);
+    });
+  }
+
+  Future<void> followRequestCancel() async {
+    if (isFollowEditing) return;
+    setState(() {
+      isFollowEditing = true;
+    });
+    await ref
+        .read(misskeyProvider(AccountScope.of(context)))
+        .following
+        .requests
+        .cancel(FollowingRequestsCancelRequest(userId: response.id));
+    if (!mounted) return;
+    setState(() {
+      isFollowEditing = false;
+      response = response.copyWith(hasPendingFollowRequestFromYou: false);
     });
   }
 
@@ -176,10 +196,22 @@ class UserDetailState extends ConsumerState<UserDetail> {
                               (response.isFollowing ?? false)
                                   ? ElevatedButton(
                                       onPressed: followDelete,
-                                      child: const Text("フォロー解除"))
-                                  : OutlinedButton(
-                                      onPressed: followCreate,
-                                      child: const Text("フォローする"))
+                                      child: const Text("フォロー解除"),
+                                    )
+                                  : (response.hasPendingFollowRequestFromYou ??
+                                          false)
+                                      ? ElevatedButton(
+                                          onPressed: followRequestCancel,
+                                          child: const Text("フォロー許可待ち"),
+                                        )
+                                      : OutlinedButton(
+                                          onPressed: followCreate,
+                                          child: Text(
+                                            (response.requiresFollowRequest)
+                                                ? "フォロー申請"
+                                                : "フォローする",
+                                          ),
+                                        )
                             else
                               Align(
                                 alignment: Alignment.centerRight,
@@ -509,5 +541,12 @@ class BirthdayConfettiState extends State<BirthdayConfetti> {
     }
 
     return widget.child;
+  }
+}
+
+extension on UsersShowResponse {
+  bool get requiresFollowRequest {
+    return isLocked &&
+        !((isFollowed ?? false) && (autoAcceptFollowed ?? false));
   }
 }
