@@ -10,6 +10,7 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/notification_page/notification_page_data.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart' as mfm_text;
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -68,6 +69,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
               constraints: const BoxConstraints(maxWidth: 800),
               child: NotificationItem(
                 notification: notification,
+                account: widget.account,
               ),
             ),
           ),
@@ -77,14 +79,34 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
   }
 }
 
+final showActionsProvider =
+    StateProvider.autoDispose.family<bool, NotificationData>((ref, _) => true);
+
+final followRequestsProvider = FutureProvider.autoDispose
+    .family<List<FollowRequest>, Account>((ref, account) async {
+  final response = await ref
+      .watch(misskeyProvider(account))
+      .following
+      .requests
+      .list(const FollowingRequestsListRequest());
+  return response.toList();
+});
+
 class NotificationItem extends ConsumerWidget {
   final NotificationData notification;
+  final Account account;
 
-  const NotificationItem({super.key, required this.notification});
+  const NotificationItem({
+    super.key,
+    required this.notification,
+    required this.account,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notification = this.notification;
+    final showActions = ref.watch(showActionsProvider(notification));
+    final followRequests = ref.watch(followRequestsProvider(account));
 
     switch (notification) {
       case RenoteReactionNotificationData():
@@ -218,6 +240,8 @@ class NotificationItem extends ConsumerWidget {
           ),
         );
       case FollowNotificationData():
+        final user = notification.user;
+
         return Padding(
           padding:
               const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
@@ -229,15 +253,61 @@ class NotificationItem extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: SimpleMfmText(
-                      "${notification.user?.name ?? notification.user?.username}から${notification.type.name}",
-                      emojis: notification.user?.emojis ?? {},
+                      "${user?.name ?? user?.username}から${notification.type.name}",
+                      emojis: user?.emojis ?? {},
                     ),
                   ),
                   Text(notification.createdAt.differenceNow),
                 ],
               ),
-              if (notification.user != null)
-                UserListItem(user: notification.user!),
+              if (user != null) UserListItem(user: user),
+              if (showActions && user != null)
+                if (notification.type ==
+                    FollowNotificationDataType.receiveFollowRequest)
+                  followRequests.maybeWhen(
+                    data: (requests) {
+                      final isPending = requests
+                          .any((request) => request.follower.id == user.id);
+                      if (isPending) {
+                        return Row(
+                          children: [
+                            const Spacer(flex: 3),
+                            Flexible(
+                              flex: 5,
+                              fit: FlexFit.tight,
+                              child: ElevatedButton(
+                                onPressed: () => handleFollowRequest(
+                                  ref,
+                                  account: account,
+                                  accept: true,
+                                  userId: user.id,
+                                ).expectFailure(context),
+                                child: const Text("許可"),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Flexible(
+                              flex: 5,
+                              fit: FlexFit.tight,
+                              child: OutlinedButton(
+                                onPressed: () => handleFollowRequest(
+                                  ref,
+                                  account: account,
+                                  accept: false,
+                                  userId: user.id,
+                                ).expectFailure(context),
+                                child: const Text("拒否"),
+                              ),
+                            ),
+                            const Spacer(flex: 3),
+                          ],
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                    orElse: () => Container(),
+                  ),
             ],
           ),
         );
@@ -272,5 +342,25 @@ class NotificationItem extends ConsumerWidget {
           ),
         );
     }
+  }
+
+  Future<void> handleFollowRequest(
+    WidgetRef ref, {
+    required Account account,
+    required bool accept,
+    required String userId,
+  }) async {
+    final misskey = ref.watch(misskeyProvider(account));
+
+    if (accept) {
+      await misskey.following.requests
+          .accept(FollowingRequestsAcceptRequest(userId: userId));
+    } else {
+      await misskey.following.requests
+          .reject(FollowingRequestsRejectRequest(userId: userId));
+    }
+
+    ref.invalidate(followRequestsProvider(account));
+    ref.read(showActionsProvider(notification).notifier).state = false;
   }
 }
