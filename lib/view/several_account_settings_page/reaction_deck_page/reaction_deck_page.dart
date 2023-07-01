@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json5/json5.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';

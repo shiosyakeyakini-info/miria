@@ -47,11 +47,6 @@ class AccountRepository extends ChangeNotifier {
         ..clear()
         ..addAll(Iterable.generate(_account.length, (index) => false));
 
-      // 起動時にアカウント情報を取得する
-      for (int i = 0; i < _account.length; i++) {
-        _account[i] = _account[i]
-            .copyWith(i: await reader(misskeyProvider(_account[i])).i.i());
-      }
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {
