@@ -40,6 +40,8 @@ final localTimeLineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -50,6 +52,8 @@ final homeTimeLineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 final globalTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -70,6 +74,8 @@ final hybridTimeLineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final channelTimelineProvider =
@@ -81,6 +87,8 @@ final channelTimelineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final userListTimelineProvider =
@@ -92,6 +100,8 @@ final userListTimelineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final antennaTimelineProvider =
@@ -103,6 +113,8 @@ final antennaTimelineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final mainStreamRepositoryProvider =

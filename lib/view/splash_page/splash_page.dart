@@ -28,7 +28,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
     await ref.read(generalSettingsRepositoryProvider).load();
 
     for (final account in ref.read(accountRepository).account) {
-      await ref.read(emojiRepositoryProvider(account)).loadFromSource();
+      await ref.read(emojiRepositoryProvider(account)).loadFromLocalCache();
     }
 
     if (_isFirst) {

@@ -20,6 +20,7 @@ import 'package:uuid/uuid.dart';
 
 class AccountRepository extends ChangeNotifier {
   final List<Account> _account = [];
+  final accountDataValidated = <bool>[];
 
   Iterable<Account> get account => _account;
 
@@ -42,6 +43,10 @@ class AccountRepository extends ChangeNotifier {
         ..addAll(
             (jsonDecode(storedData) as List).map((e) => Account.fromJson(e)));
 
+      accountDataValidated
+        ..clear()
+        ..addAll(Iterable.generate(_account.length, (index) => false));
+
       // 起動時にアカウント情報を取得する
       for (int i = 0; i < _account.length; i++) {
         _account[i] = _account[i]
@@ -53,6 +58,16 @@ class AccountRepository extends ChangeNotifier {
         print(e);
       }
     }
+  }
+
+  Future<void> loadFromSourceIfNeed(Account account) async {
+    final index = _account.indexOf(account);
+    if (index == -1) return;
+    if (accountDataValidated[index]) return;
+    _account[index] = _account[index]
+        .copyWith(i: await reader(misskeyProvider(_account[index])).i.i());
+    accountDataValidated[index] = true;
+    notifyListeners();
   }
 
   Future<void> _addIfTabSettingNothing() async {
@@ -99,7 +114,6 @@ class AccountRepository extends ChangeNotifier {
     final i = await Misskey(token: token, host: server).i.i();
     addAccount(Account(host: server, userId: i.username, token: token, i: i));
     await _addIfTabSettingNothing();
-    await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
   String sessionId = "";
@@ -155,7 +169,6 @@ class AccountRepository extends ChangeNotifier {
     await addAccount(
         Account(host: server, userId: i.username, token: token, i: i));
     await _addIfTabSettingNothing();
-    await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
   Future<void> addAccount(Account account) async {

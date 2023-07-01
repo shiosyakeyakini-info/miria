@@ -30,7 +30,7 @@ class FederationTimelineState extends ConsumerState<FederationTimeline> {
           initializeFuture: () async {
             await ref
                 .read(emojiRepositoryProvider(demoAccount))
-                .loadFromSource();
+                .loadFromSourceIfNeed();
             final result = await ref
                 .read(misskeyProvider(demoAccount))
                 .notes
