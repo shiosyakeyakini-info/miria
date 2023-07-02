@@ -15,6 +15,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   final AccountRepository accountRepository;
   final EmojiRepository emojiRepository;
 
+  bool isLoading = true;
+  Object? error;
+
   SocketTimelineRepository(
     super.noteRepository,
     super.globalNotificationRepository,
@@ -68,22 +71,17 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   void startTimeLine() {
     Future(() async {
-      await emojiRepository.loadFromSourceIfNeed();
-      await accountRepository.loadFromSourceIfNeed(tabSetting.account);
-      mainStreamRepository.reconnect();
-      if (olderNotes.isEmpty) {
-        try {
-          final resultNotes = await requestNotes();
-          olderNotes.addAll(resultNotes);
-          notifyListeners();
-        } catch (e, s) {
-          if (kDebugMode) {
-            print(e);
-            print(s);
-          }
-        }
-      } else {
-        reloadLatestNotes();
+      try {
+        await emojiRepository.loadFromSourceIfNeed();
+        await accountRepository.loadFromSourceIfNeed(tabSetting.account);
+        mainStreamRepository.reconnect();
+        isLoading = false;
+        error = null;
+        notifyListeners();
+      } catch (e) {
+        error = e;
+        isLoading = false;
+        notifyListeners();
       }
 
       if (socketController != null) {
@@ -125,6 +123,21 @@ abstract class SocketTimelineRepository extends TimelineRepository {
               registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
         },
       )..startStreaming();
+
+      if (olderNotes.isEmpty) {
+        try {
+          final resultNotes = await requestNotes();
+          olderNotes.addAll(resultNotes);
+          notifyListeners();
+        } catch (e, s) {
+          if (kDebugMode) {
+            print(e);
+            print(s);
+          }
+        }
+      } else {
+        reloadLatestNotes();
+      }
     });
   }
 

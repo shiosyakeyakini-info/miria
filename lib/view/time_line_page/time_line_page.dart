@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/channel_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/server_detail_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
@@ -121,6 +123,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   Widget build(BuildContext context) {
+    final socketTimeline = ref.watch(widget.currentTabSetting.timelineProvider)
+        as SocketTimelineRepository?;
+
     return AccountScope(
       account: widget.currentTabSetting.account,
       child: Scaffold(
@@ -217,6 +222,12 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     ],
                   ),
                 ),
+                if (socketTimeline?.isLoading == true)
+                  const Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Center(child: CircularProgressIndicator())),
+                if (socketTimeline?.error != null)
+                  ErrorDetail(error: socketTimeline?.error!),
                 Expanded(
                   child: MisskeyTimeline(
                       controller: scrollController,
