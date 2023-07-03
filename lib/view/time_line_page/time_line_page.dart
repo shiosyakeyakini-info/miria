@@ -123,8 +123,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   Widget build(BuildContext context) {
-    final socketTimeline = ref.watch(widget.currentTabSetting.timelineProvider)
-        as SocketTimelineRepository?;
+    final socketTimelineBase =
+        ref.watch(widget.currentTabSetting.timelineProvider);
+    final socketTimeline = socketTimelineBase is SocketTimelineRepository
+        ? socketTimelineBase
+        : null;
 
     return AccountScope(
       account: widget.currentTabSetting.account,
