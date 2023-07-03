@@ -1,8 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';

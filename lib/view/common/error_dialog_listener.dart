@@ -20,7 +20,7 @@ class ErrorDialogListener extends ConsumerWidget {
           SimpleMessageDialog.show(next.$2!,
               "エラーが起きたみたいや\n${error.type} [${error.response?.statusCode ?? "---"}] ${error.response?.data ?? ""}");
         } else if (error is SpecifiedException) {
-          SimpleMessageDialog.show(next.$2!, "${error.message}");
+          SimpleMessageDialog.show(next.$2!, error.message);
         } else {
           SimpleMessageDialog.show(next.$2!, "エラーが起きたみたいや\n$next");
         }

@@ -54,7 +54,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                 TextField(
                   controller: serverController,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.dns),
+                      prefixIcon: const Icon(Icons.dns),
                       suffixIcon: IconButton(
                           onPressed: () async {
                             final url = await showDialog<String?>(
@@ -65,11 +65,11 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                               serverController.text = url;
                             }
                           },
-                          icon: Icon(Icons.search))),
+                          icon: const Icon(Icons.search))),
                 ),
               ]),
               TableRow(children: [
-                Padding(padding: EdgeInsets.only(bottom: 10)),
+                const Padding(padding: EdgeInsets.only(bottom: 10)),
                 Container()
               ]),
               TableRow(children: [
@@ -79,14 +79,14 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                 ),
                 TextField(
                   controller: apiKeyController,
-                  decoration: InputDecoration(prefixIcon: Icon(Icons.key)),
+                  decoration: const InputDecoration(prefixIcon: Icon(Icons.key)),
                 )
               ]),
               // ],
               TableRow(children: [
                 Container(),
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButton(
                       onPressed: () {
                         login();

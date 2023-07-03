@@ -13,11 +13,9 @@ class NoteEmoji extends ConsumerWidget {
         (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) *
             MediaQuery.of(context).textScaleFactor *
             1.35;
-
     return SizedBox(
         height: baseHeight + 40,
         child: InputComplement(
-          searchedEmojiProvider: noteCreateEmojisProvider,
           controller: ref.read(noteInputTextProvider),
           focusNode: noteFocusProvider,
         ));

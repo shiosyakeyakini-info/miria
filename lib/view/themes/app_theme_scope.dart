@@ -22,7 +22,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
     return AppThemeData(
       isDarkMode: theme.isDarkTheme,
-      noteTextStyle: InputDecoration(),
+      noteTextStyle: const InputDecoration(),
       reactionButtonStyle: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(5),
           elevation: 0,
@@ -146,7 +146,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           textStyle: MaterialStatePropertyAll(textTheme.bodyMedium
               ?.copyWith(inherit: false, color: Colors.white)),
           backgroundColor: MaterialStatePropertyAll(theme.primary),
-          foregroundColor: MaterialStatePropertyAll(Colors.white),
+          foregroundColor: const MaterialStatePropertyAll(Colors.white),
           elevation: const MaterialStatePropertyAll(0),
           shape: MaterialStatePropertyAll(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
@@ -211,7 +211,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
               theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
           fillColor:
               theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
-        ));
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: theme.primary, unselectedItemColor: Colors.white));
 
     return themeData;
   }

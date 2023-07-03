@@ -29,8 +29,24 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   void didUpdateWidget(covariant CustomEmoji oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.emojiData != widget.emojiData) {
+    if (oldWidget.emojiData != widget.emojiData ||
+        oldWidget.size != widget.size) {
       cachedImage = null;
+    }
+  }
+
+  /// カスタム絵文字のURLを解決する
+  Uri resolveCustomEmojiUrl(Uri uri) {
+    //　特例としてにじみすのみ、URLの変換をかける
+    if (uri.host == "media.nijimiss.app") {
+      return Uri(
+        scheme: "https",
+        host: "nijimiss.moe",
+        pathSegments: ["proxy", "image.webp"],
+        queryParameters: {"url": Uri.encodeFull(uri.toString()), "emoji": "1"},
+      );
+    } else {
+      return uri;
     }
   }
 
@@ -48,7 +64,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             isAttachTooltip: widget.isAttachTooltip,
             message: emojiData.hostedName,
             child: NetworkImageView(
-                url: emojiData.url.toString(),
+                url: resolveCustomEmojiUrl(emojiData.url).toString(),
                 type: ImageType.customEmoji,
                 errorBuilder: (context, e, s) => Text(emojiData.hostedName,
                     style: TextStyle(

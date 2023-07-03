@@ -21,7 +21,7 @@ class UserListItem extends ConsumerWidget {
           () => context.pushRoute(
               UserRoute(userId: user.id, account: AccountScope.of(context))),
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -30,7 +30,7 @@ class UserListItem extends ConsumerWidget {
             AvatarIcon(user: user),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,

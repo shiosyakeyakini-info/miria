@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:file/file.dart';
+import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
@@ -18,8 +21,13 @@ import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:miria/repository/user_list_time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
+import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
+final dioProvider = Provider((ref) => Dio());
+final fileSystemProvider =
+    Provider<FileSystem>((ref) => const LocalFileSystem());
 final misskeyProvider = Provider.family<Misskey, Account>(
     (ref, account) => Misskey(token: account.token, host: account.host));
 
@@ -32,6 +40,8 @@ final localTimeLineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -42,6 +52,8 @@ final homeTimeLineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 final globalTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -62,6 +74,8 @@ final hybridTimeLineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final channelTimelineProvider =
@@ -73,6 +87,8 @@ final channelTimelineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final userListTimelineProvider =
@@ -84,6 +100,8 @@ final userListTimelineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final antennaTimelineProvider =
@@ -95,6 +113,8 @@ final antennaTimelineProvider =
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final mainStreamRepositoryProvider =
@@ -137,3 +157,35 @@ final generalSettingsRepositoryProvider =
 final errorEventProvider =
     StateProvider<(Object? error, BuildContext? context)>(
         (ref) => (null, null));
+
+final photoEditProvider =
+    StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
+  (ref) => PhotoEditStateNotifier(
+    const PhotoEdit(),
+    ref.read(dioProvider),
+  ),
+);
+
+// TODO: 下書きの機能かんがえるときにfamilyの引数みなおす
+final noteCreateProvider = StateNotifierProvider.family
+    .autoDispose<NoteCreateNotifier, NoteCreate, Account>(
+  (ref, account) => NoteCreateNotifier(
+      NoteCreate(
+          account: account,
+          noteVisibility: ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(account)
+              .defaultNoteVisibility,
+          localOnly: ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(account)
+              .defaultIsLocalOnly,
+          reactionAcceptance: ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(account)
+              .defaultReactionAcceptance),
+      ref.read(fileSystemProvider),
+      ref.read(dioProvider),
+      ref.read(misskeyProvider(account)),
+      ref.read(errorEventProvider.notifier)),
+);

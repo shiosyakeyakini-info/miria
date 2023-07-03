@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/clip_item.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
@@ -56,7 +54,7 @@ class UserReaction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(color: Theme.of(context).primaryColor),
@@ -89,7 +87,7 @@ class UserReaction extends ConsumerWidget {
               ),
             ),
             Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: MisskeyNote(note: response.note)),
             const Padding(padding: EdgeInsets.all(5)),
           ],

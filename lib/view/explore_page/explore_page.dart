@@ -1,12 +1,12 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/explore_page/explore_hashtags.dart';
 import 'package:miria/view/explore_page/explore_highlight.dart';
 import 'package:miria/view/explore_page/explore_role.dart';
+import 'package:miria/view/explore_page/explore_server.dart';
 import 'package:miria/view/explore_page/explore_users.dart';
 
 @RoutePage()
@@ -28,16 +28,18 @@ class ExplorePageState extends ConsumerState<ExplorePage> {
     return AccountScope(
         account: widget.account,
         child: DefaultTabController(
-          length: 4,
+          length: 5,
           child: Scaffold(
             appBar: AppBar(
               title: const Text("みつける"),
               bottom: const TabBar(
+                isScrollable: true,
                 tabs: [
                   Tab(text: "ハイライト"),
                   Tab(text: "ユーザー"),
                   Tab(text: "ロール"),
                   Tab(text: "ハッシュタグ"),
+                  Tab(text: "よそのサーバー"),
                 ],
               ),
             ),
@@ -46,7 +48,8 @@ class ExplorePageState extends ConsumerState<ExplorePage> {
                 ExploreHighlight(),
                 ExploreUsers(),
                 ExploreRole(),
-                ExploreHashtags()
+                ExploreHashtags(),
+                ExploreServer(),
               ],
             ),
           ),

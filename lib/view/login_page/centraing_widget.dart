@@ -9,8 +9,8 @@ class CenteringWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 600),
+            constraints: const BoxConstraints(maxWidth: 600),
             child: Padding(
-                padding: EdgeInsets.only(left: 10, right: 10), child: child)));
+                padding: const EdgeInsets.only(left: 10, right: 10), child: child)));
   }
 }

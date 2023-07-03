@@ -1,10 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -13,10 +12,16 @@ import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class NoteVote extends ConsumerStatefulWidget {
-  const NoteVote({super.key, required this.displayNote, required this.poll});
+  const NoteVote({
+    super.key,
+    required this.displayNote,
+    required this.poll,
+    required this.loginAs,
+  });
 
   final Note displayNote;
   final NotePoll poll;
+  final Account? loginAs;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => NoteVoteState();
@@ -26,6 +31,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
   var isOpened = false;
 
   bool isAnyVotable() {
+    if (widget.loginAs != null) return false;
     final expiresAt = widget.poll.expiresAt;
     return (expiresAt == null || expiresAt > DateTime.now()) &&
         ((widget.poll.multiple && widget.poll.choices.any((e) => !e.isVoted)) ||
@@ -130,7 +136,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                     vote(choice.index);
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.transparent),
@@ -139,7 +145,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                               .scaffoldBackgroundColor
                               .withAlpha(215)),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 3, right: 3),
+                        padding: const EdgeInsets.only(left: 3, right: 3),
                         child: SimpleMfmText(
                           choice.element.text,
                           style: Theme.of(context).textTheme.bodyMedium,

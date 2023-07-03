@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/repository/account_repository.dart';
+import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -10,6 +12,11 @@ import 'package:misskey_dart/misskey_dart.dart';
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
   final MainStreamRepository mainStreamRepository;
+  final AccountRepository accountRepository;
+  final EmojiRepository emojiRepository;
+
+  bool isLoading = true;
+  Object? error;
 
   SocketTimelineRepository(
     super.noteRepository,
@@ -17,6 +24,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     super.generalSettingsRepository,
     super.tabSetting,
     this.mainStreamRepository,
+    this.accountRepository,
+    this.emojiRepository,
   );
 
   Future<Iterable<Note>> requestNotes({String? untilId});
@@ -61,60 +70,75 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   void startTimeLine() {
-    mainStreamRepository.reconnect();
-    if (olderNotes.isEmpty) {
-      requestNotes().then((resultNotes) {
-        olderNotes.addAll(resultNotes);
+    Future(() async {
+      try {
+        await emojiRepository.loadFromSourceIfNeed();
+        await accountRepository.loadFromSourceIfNeed(tabSetting.account);
+        mainStreamRepository.reconnect();
+        isLoading = false;
+        error = null;
         notifyListeners();
-      }, onError: (e, s) {
-        if (kDebugMode) {
-          print(e);
-          print(s);
-        }
-      });
-    } else {
-      reloadLatestNotes();
-    }
-
-    if (socketController != null) {
-      socketController?.disconnect();
-    }
-
-    socketController = createSocketController(
-      onReceived: (note) {
-        newerNotes.add(note);
-
+      } catch (e) {
+        error = e;
+        isLoading = false;
         notifyListeners();
-      },
-      onReacted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-        final reaction = Map.of(registeredNote.reactions);
-        reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
-        final emoji = value.emoji;
-        final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-        if (emoji != null && !value.reaction.endsWith("@.:")) {
-          reactionEmojis[emoji.name] = emoji.url;
+      }
+
+      if (socketController != null) {
+        socketController?.disconnect();
+      }
+
+      socketController = createSocketController(
+        onReceived: (note) {
+          newerNotes.add(note);
+
+          notifyListeners();
+        },
+        onReacted: (id, value) {
+          final registeredNote = noteRepository.notes[id];
+          if (registeredNote == null) return;
+          final reaction = Map.of(registeredNote.reactions);
+          reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
+          final emoji = value.emoji;
+          final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+          if (emoji != null && !value.reaction.endsWith("@.:")) {
+            reactionEmojis[emoji.name] = emoji.url;
+          }
+          noteRepository.registerNote(registeredNote.copyWith(
+            reactions: reaction,
+            reactionEmojis: reactionEmojis,
+          ));
+        },
+        onVoted: (id, value) {
+          final registeredNote = noteRepository.notes[id];
+          if (registeredNote == null) return;
+
+          final poll = registeredNote.poll;
+          if (poll == null) return;
+
+          final choices = poll.choices.toList();
+          choices[value.choice] = choices[value.choice]
+              .copyWith(votes: choices[value.choice].votes + 1);
+          noteRepository.registerNote(
+              registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
+        },
+      )..startStreaming();
+
+      if (olderNotes.isEmpty) {
+        try {
+          final resultNotes = await requestNotes();
+          olderNotes.addAll(resultNotes);
+          notifyListeners();
+        } catch (e, s) {
+          if (kDebugMode) {
+            print(e);
+            print(s);
+          }
         }
-        noteRepository.registerNote(registeredNote.copyWith(
-          reactions: reaction,
-          reactionEmojis: reactionEmojis,
-        ));
-      },
-      onVoted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-
-        final poll = registeredNote.poll;
-        if (poll == null) return;
-
-        final choices = poll.choices.toList();
-        choices[value.choice] = choices[value.choice]
-            .copyWith(votes: choices[value.choice].votes + 1);
-        noteRepository.registerNote(
-            registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
-      },
-    )..startStreaming();
+      } else {
+        reloadLatestNotes();
+      }
+    });
   }
 
   @override

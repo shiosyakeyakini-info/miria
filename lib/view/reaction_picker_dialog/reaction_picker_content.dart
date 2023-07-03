@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +79,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                   EmojiButton(
                     emoji: emoji,
                     onTap: widget.onTap,
+                    isForceVisible: true,
                     isAcceptSensitive: widget.isAcceptSensitive,
                   )
               ],
@@ -148,40 +148,42 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
   Widget build(BuildContext context) {
     final disabled = !widget.isAcceptSensitive && widget.emoji.isSensitive;
     return VisibilityDetector(
-      key: Key(widget.emoji.baseName),
-      onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction != 0) {
-          setState(() {
-            isVisibility = true;
-            isVisibilityOnceMore = true;
-          });
-        }
-      },
-      child: DecoratedBox(
-        decoration: disabled
-            ? BoxDecoration(color: Theme.of(context).disabledColor)
-            : const BoxDecoration(),
-        child: ElevatedButton(
-            style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-              padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-              elevation: MaterialStatePropertyAll(0),
-              minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () async {
-              if (disabled) {
-                SimpleMessageDialog.show(context, "ここでセンシティブなカスタム絵文字を使われへんねやわ");
-              } else {
-                widget.onTap.call(widget.emoji);
-              }
-            },
-            child: SizedBox(
-                height: 32 * MediaQuery.of(context).textScaleFactor,
+        key: Key(widget.emoji.baseName),
+        onVisibilityChanged: (visibilityInfo) {
+          if (visibilityInfo.visibleFraction != 0) {
+            setState(() {
+              isVisibility = true;
+              isVisibilityOnceMore = true;
+            });
+          }
+        },
+        child: DecoratedBox(
+            decoration: disabled && isVisibility
+                ? BoxDecoration(color: Theme.of(context).disabledColor)
+                : const BoxDecoration(),
+            child: ElevatedButton(
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+                  padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+                  elevation: MaterialStatePropertyAll(0),
+                  minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed: () async {
+                  if (!isVisibility) return;
+                  if (disabled) {
+                    SimpleMessageDialog.show(
+                        context, "ここでセンシティブなカスタム絵文字を使われへんねやわ");
+                  } else {
+                    widget.onTap.call(widget.emoji);
+                  }
+                },
                 child: isVisibility
-                    ? CustomEmoji(emojiData: widget.emoji)
-                    : const SizedBox.shrink())),
-      ),
-    );
+                    ? SizedBox(
+                        height: 32 * MediaQuery.of(context).textScaleFactor,
+                        child: CustomEmoji(emojiData: widget.emoji))
+                    : SizedBox(
+                        width: 32 * MediaQuery.of(context).textScaleFactor,
+                        height: 32 * MediaQuery.of(context).textScaleFactor))));
   }
 }

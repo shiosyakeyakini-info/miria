@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';

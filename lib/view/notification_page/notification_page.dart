@@ -14,7 +14,6 @@ import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
 import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/user_page/user_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -213,12 +212,12 @@ class NotificationItem extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Padding(padding: EdgeInsets.only(top: 10)),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
                         SimpleMfmText(
                           "${notification.user?.name ?? notification.user?.username} ",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        Text("からフォローされました")
+                        const Text("からフォローされました")
                       ],
                     )
                 ],

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/federation_page/federation_page.dart';
@@ -22,7 +21,7 @@ class FederationAdsState extends ConsumerState<FederationAds> {
       itemBuilder: (context, index) {
         final ad = ads[index];
         return Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: GestureDetector(
               onTap: () => launchUrl(ad.url),
               child: NetworkImageView(

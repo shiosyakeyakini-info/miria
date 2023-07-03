@@ -24,7 +24,7 @@ class ClipDetailPageState extends ConsumerState<ClipDetailPage> {
       child: Scaffold(
         appBar: AppBar(),
         body: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: ClipDetailNoteList(id: widget.id)),
       ),
     );

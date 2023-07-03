@@ -1,47 +1,58 @@
 import 'dart:typed_data';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 sealed class MisskeyPostFile {
-  const MisskeyPostFile._();
+  final String fileName;
+  final bool isNsfw;
+  final String caption;
+
+  const MisskeyPostFile(
+      {required this.fileName, required this.isNsfw, required this.caption});
 }
 
-class ImageFile implements MisskeyPostFile {
+class ImageFile extends MisskeyPostFile {
   final Uint8List data;
-  final String fileName;
   const ImageFile({
     required this.data,
-    required this.fileName,
+    required super.fileName,
+    required super.isNsfw,
+    required super.caption,
   });
 }
 
-class ImageFileAlreadyPostedFile implements MisskeyPostFile {
+class ImageFileAlreadyPostedFile extends MisskeyPostFile {
   final Uint8List data;
-  final String fileName;
   final String id;
+  final bool isEdited;
   const ImageFileAlreadyPostedFile({
     required this.data,
-    required this.fileName,
     required this.id,
+    required this.isEdited,
+    required super.fileName,
+    required super.isNsfw,
+    required super.caption,
   });
 }
 
-class UnknownFile implements MisskeyPostFile {
+class UnknownFile extends MisskeyPostFile {
   final Uint8List data;
-  final String fileName;
   const UnknownFile({
     required this.data,
-    required this.fileName,
+    required super.fileName,
+    required super.isNsfw,
+    required super.caption,
   });
 }
 
-class UnknownAlreadyPostedFile implements MisskeyPostFile {
+class UnknownAlreadyPostedFile extends MisskeyPostFile {
   final String url;
   final String id;
-  final String fileName;
+  final bool isEdited;
   const UnknownAlreadyPostedFile({
     required this.url,
     required this.id,
-    required this.fileName,
+    required this.isEdited,
+    required super.fileName,
+    required super.isNsfw,
+    required super.caption,
   });
 }

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -45,7 +43,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +54,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 3, bottom: 3),
+                      padding: const EdgeInsets.only(top: 3, bottom: 3),
                       child: LayoutBuilder(
                         builder: (context, constraints) => ToggleButtons(
                             constraints: BoxConstraints.expand(
@@ -98,7 +96,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
               if (isDetailOpen) ...[
                 Row(
                   children: [
-                    Expanded(child: Text("並び順", textAlign: TextAlign.center)),
+                    const Expanded(child: Text("並び順", textAlign: TextAlign.center)),
                     Expanded(
                       child: DropdownButton<UsersSortType>(
                           items: [

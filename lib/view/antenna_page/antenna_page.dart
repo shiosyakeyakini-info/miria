@@ -4,7 +4,6 @@ import 'package:miria/model/account.dart';
 import 'package:miria/view/antenna_page/antenna_list.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
 class AntennaPage extends ConsumerWidget {

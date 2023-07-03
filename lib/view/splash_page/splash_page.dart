@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:highlighting/languages/ini.dart';
 import 'package:miria/licenses.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -29,7 +28,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
     await ref.read(generalSettingsRepositoryProvider).load();
 
     for (final account in ref.read(accountRepository).account) {
-      await ref.read(emojiRepositoryProvider(account)).loadFromSource();
+      await ref.read(emojiRepositoryProvider(account)).loadFromLocalCache();
     }
 
     if (_isFirst) {

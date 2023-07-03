@@ -13,6 +13,8 @@ class UserListTimelineRepository extends SocketTimelineRepository {
     super.generalSettingsRepository,
     super.tabSetting,
     super.mainStreamRepository,
+    super.accountRepository,
+    super.emojiRepository,
   );
 
   @override

@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
@@ -67,7 +66,7 @@ class InstanceMutePageState extends ConsumerState<InstanceMutePage> {
                           child: Text("設定したサーバーのノートを隠します。")),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
                   TextField(

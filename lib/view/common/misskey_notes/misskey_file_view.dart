@@ -201,7 +201,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
               }
 
               return FutureBuilder(
-                future: Future.delayed(Duration(milliseconds: 100)),
+                future: Future.delayed(const Duration(milliseconds: 100)),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (widget.fileType.startsWith("image")) {
@@ -249,7 +249,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                                 Uri.parse(widget.targetFiles[widget.position]),
                                 mode: LaunchMode.externalApplication);
                           },
-                          icon: Icon(Icons.file_download_outlined),
+                          icon: const Icon(Icons.file_download_outlined),
                           label: Text(widget.name));
                     }
 

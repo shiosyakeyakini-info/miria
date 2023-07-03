@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/channel_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/server_detail_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
@@ -34,42 +34,6 @@ class TimeLinePage extends ConsumerStatefulWidget {
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
   final scrollController = TimelineScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    ref.read(timelineNoteProvider).addListener(inputListener);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    ref.read(timelineNoteProvider).removeListener(inputListener);
-  }
-
-  void inputListener() {
-    if (ref.read(timelineNoteProvider).isIncludeBeforeColon) {
-      if (ref.read(timelineNoteProvider).isEmojiScope) {
-        if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-          ref.read(filteredInputEmojiProvider.notifier).state = [];
-        }
-        return;
-      }
-
-      Future(() async {
-        final searchedEmojis = await (ref
-            .read(emojiRepositoryProvider(widget.currentTabSetting.account))
-            .searchEmojis(ref.read(timelineNoteProvider).emojiSearchValue));
-        ref.read(filteredInputEmojiProvider.notifier).state = searchedEmojis;
-      });
-    } else {
-      if (ref.read(filteredInputEmojiProvider).isNotEmpty) {
-        ref.read(filteredInputEmojiProvider.notifier).state = [];
-      }
-    }
-  }
 
   Future<void> note() async {
     final text = ref.read(timelineNoteProvider).value.text;
@@ -159,6 +123,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   Widget build(BuildContext context) {
+    final socketTimeline = ref.watch(widget.currentTabSetting.timelineProvider)
+        as SocketTimelineRepository?;
+
     return AccountScope(
       account: widget.currentTabSetting.account,
       child: Scaffold(
@@ -187,7 +154,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   )
               ]),
             ),
-            actions: [const NotificationIcon()],
+            actions: const [NotificationIcon()],
           ),
           body: SafeArea(
             child: Column(
@@ -255,6 +222,12 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     ],
                   ),
                 ),
+                if (socketTimeline?.isLoading == true)
+                  const Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Center(child: CircularProgressIndicator())),
+                if (socketTimeline?.error != null)
+                  ErrorDetail(error: socketTimeline?.error!),
                 Expanded(
                   child: MisskeyTimeline(
                       controller: scrollController,

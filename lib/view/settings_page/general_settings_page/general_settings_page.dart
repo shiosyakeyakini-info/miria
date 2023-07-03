@@ -76,7 +76,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             children: [
               Card(
                   child: Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -188,7 +188,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               ),
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -198,8 +198,8 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           style: Theme.of(context).textTheme.titleLarge),
                       CheckboxListTile(
                           value: enableDirectReaction,
-                          title: Text("ノート内の絵文字タップでリアクションする"),
-                          subtitle: Text(
+                          title: const Text("ノート内の絵文字タップでリアクションする"),
+                          subtitle: const Text(
                               "ノート内の絵文字をタップしてリアクションします。MFMや外部サーバーの絵文字の場合うまく機能しないことがあります。"),
                           onChanged: (value) {
                             setState(() {

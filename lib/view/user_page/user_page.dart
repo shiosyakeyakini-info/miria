@@ -1,11 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/user_page/user_clips.dart';
 import 'package:miria/view/user_page/user_detail.dart';
@@ -43,7 +41,7 @@ class UserPageState extends ConsumerState<UserPage> {
               userInfo?.name ?? userInfo?.username ?? "",
               emojis: userInfo?.emojis ?? {},
             ),
-            actions: [],
+            actions: const [],
             bottom: TabBar(
               tabs: [
                 const Tab(text: "アカウント情報"),

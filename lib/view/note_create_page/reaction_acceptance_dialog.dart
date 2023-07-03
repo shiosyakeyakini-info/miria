@@ -17,32 +17,32 @@ class ReactionAcceptanceDialog extends StatelessWidget {
             width: 28,
             height: 28,
           ),
-          title: Text("すべて"),
+          title: const Text("すべて"),
         ),
         ListTile(
           onTap: () => Navigator.of(context).pop(ReactionAcceptance.likeOnly),
-          leading: Icon(Icons.favorite_border),
-          title: Text("いいねのみ"),
+          leading: const Icon(Icons.favorite_border),
+          title: const Text("いいねのみ"),
         ),
         ListTile(
           onTap: () =>
               Navigator.of(context).pop(ReactionAcceptance.likeOnlyForRemote),
-          leading: Icon(Icons.add_reaction_outlined),
-          title: Text("リモートからはいいねのみ"),
+          leading: const Icon(Icons.add_reaction_outlined),
+          title: const Text("リモートからはいいねのみ"),
         ),
         ListTile(
           onTap: () =>
               Navigator.of(context).pop(ReactionAcceptance.nonSensitiveOnly),
-          leading: Icon(Icons.shield_outlined),
-          title: Text("非センシティブのみ"),
-          subtitle: Text("Misskey v13.13.1からの機能です。サーバーによっては使用できないことがあります。"),
+          leading: const Icon(Icons.shield_outlined),
+          title: const Text("非センシティブのみ"),
+          subtitle: const Text("Misskey v13.13.1からの機能です。サーバーによっては使用できないことがあります。"),
         ),
         ListTile(
           onTap: () => Navigator.of(context).pop(
               ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote),
-          leading: Icon(Icons.add_moderator_outlined),
-          title: Text("非センシティブのみ（リモートからはいいねのみ）"),
-          subtitle: Text("Misskey v13.13.1からの機能です。サーバーによっては使用できないことがあります。"),
+          leading: const Icon(Icons.add_moderator_outlined),
+          title: const Text("非センシティブのみ（リモートからはいいねのみ）"),
+          subtitle: const Text("Misskey v13.13.1からの機能です。サーバーによっては使用できないことがあります。"),
         )
       ],
     );

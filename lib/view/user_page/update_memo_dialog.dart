@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -42,7 +41,7 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("メモ"),
+      title: const Text("メモ"),
       content: TextField(
         controller: controller,
         maxLines: null,
@@ -55,9 +54,9 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text("やめる")),
+            child: const Text("やめる")),
         ElevatedButton(
-            onPressed: memoSave.expectFailure(context), child: Text("保存する"))
+            onPressed: memoSave.expectFailure(context), child: const Text("保存する"))
       ],
     );
   }

@@ -74,10 +74,10 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
           SizedBox(
             width: double.infinity,
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Card(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Table(
-                        columnWidths: {
+                        columnWidths: const {
                           0: IntrinsicColumnWidth(),
                           1: IntrinsicColumnWidth(),
                         },
@@ -96,7 +96,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                             TableCellVerticalAlignment.middle,
                         children: [
                           TableRow(children: [
-                            Text("ユーザー"),
+                            const Text("ユーザー"),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +110,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                     onPressed: () async {
                                       final selected = await showDialog<User?>(
                                           context: context,
-                                          builder: (context) =>
+                                          builder: (context2) =>
                                               UserSelectDialog(
                                                 account:
                                                     AccountScope.of(context),
@@ -141,7 +141,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                       final selected =
                                           await showDialog<CommunityChannel?>(
                                               context: context,
-                                              builder: (context) =>
+                                              builder: (context2) =>
                                                   ChannelSelectDialog(
                                                     account: AccountScope.of(
                                                         context),

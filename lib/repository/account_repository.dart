@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/repository/account_settings_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miria/view/common/constants.dart';
@@ -22,6 +20,7 @@ import 'package:uuid/uuid.dart';
 
 class AccountRepository extends ChangeNotifier {
   final List<Account> _account = [];
+  final accountDataValidated = <bool>[];
 
   Iterable<Account> get account => _account;
 
@@ -44,17 +43,26 @@ class AccountRepository extends ChangeNotifier {
         ..addAll(
             (jsonDecode(storedData) as List).map((e) => Account.fromJson(e)));
 
-      // 起動時にアカウント情報を取得する
-      for (int i = 0; i < _account.length; i++) {
-        _account[i] = _account[i]
-            .copyWith(i: await reader(misskeyProvider(_account[i])).i.i());
-      }
+      accountDataValidated
+        ..clear()
+        ..addAll(Iterable.generate(_account.length, (index) => false));
+
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
     }
+  }
+
+  Future<void> loadFromSourceIfNeed(Account account) async {
+    final index = _account.indexOf(account);
+    if (index == -1) return;
+    if (accountDataValidated[index]) return;
+    _account[index] = _account[index]
+        .copyWith(i: await reader(misskeyProvider(_account[index])).i.i());
+    accountDataValidated[index] = true;
+    notifyListeners();
   }
 
   Future<void> _addIfTabSettingNothing() async {
@@ -101,7 +109,6 @@ class AccountRepository extends ChangeNotifier {
     final i = await Misskey(token: token, host: server).i.i();
     addAccount(Account(host: server, userId: i.username, token: token, i: i));
     await _addIfTabSettingNothing();
-    await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
   String sessionId = "";
@@ -122,12 +129,12 @@ class AccountRepository extends ChangeNotifier {
     }
 
     try {
-      nodeInfo = await Dio().getUri(uri);
+      nodeInfo = await reader(dioProvider).getUri(uri);
     } catch (e) {
       throw SpecifiedException("$server はMisskeyサーバーとして認識できませんでした。");
     }
     final nodeInfoHref = nodeInfo.data["links"][0]["href"];
-    final nodeInfoHrefResponse = await Dio().get(nodeInfoHref);
+    final nodeInfoHrefResponse = await reader(dioProvider).get(nodeInfoHref);
     final nodeInfoResult = nodeInfoHrefResponse.data;
 
     final software = nodeInfoResult["software"]["name"];
@@ -157,7 +164,6 @@ class AccountRepository extends ChangeNotifier {
     await addAccount(
         Account(host: server, userId: i.username, token: token, i: i));
     await _addIfTabSettingNothing();
-    await reader(emojiRepositoryProvider(account.last)).loadFromSource();
   }
 
   Future<void> addAccount(Account account) async {

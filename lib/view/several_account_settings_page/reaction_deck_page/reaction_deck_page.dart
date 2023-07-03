@@ -1,15 +1,18 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json5/json5.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import 'package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart';
 import 'package:reorderables/reorderables.dart';
+
+enum ReactionDeckPageMenuType { addMany, copy }
 
 @RoutePage()
 class ReactionDeckPage extends ConsumerStatefulWidget {
@@ -26,10 +29,13 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   final List<MisskeyEmojiData> reactions = [];
 
   void save() {
-    ref.read(accountSettingsRepositoryProvider).save(AccountSettings(
-        userId: widget.account.userId,
-        host: widget.account.host,
-        reactions: reactions.map((e) => e.baseName).toList()));
+    final currentData =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
+    ref.read(accountSettingsRepositoryProvider).save(
+          currentData.copyWith(
+            reactions: reactions.map((e) => e.baseName).toList(),
+          ),
+        );
   }
 
   @override
@@ -44,7 +50,28 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("リアクションデッキ")),
+      appBar: AppBar(
+        title: const Text("リアクションデッキ"),
+        actions: [
+          PopupMenuButton(
+            onSelected: (type) => switch (type) {
+              ReactionDeckPageMenuType.addMany =>
+                showAddReactionsDialog(context: context),
+              ReactionDeckPageMenuType.copy => copyReactions(context: context),
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: ReactionDeckPageMenuType.addMany,
+                child: Text("一括追加"),
+              ),
+              PopupMenuItem(
+                value: ReactionDeckPageMenuType.copy,
+                child: Text("コピー"),
+              ),
+            ],
+          )
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
@@ -53,7 +80,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: ReorderableWrap(
                       scrollPhysics: const NeverScrollableScrollPhysics(),
                       spacing: 5,
@@ -88,14 +115,16 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                   IconButton(
                       onPressed: () async {
                         final reaction = await showDialog<MisskeyEmojiData?>(
-                            context: context,
-                            builder: (context) => ReactionPickerDialog(
-                                  account: widget.account,
-                                  isAcceptSensitive: true,
-                                ));
+                          context: context,
+                          builder: (context) => ReactionPickerDialog(
+                            account: widget.account,
+                            isAcceptSensitive: true,
+                          ),
+                        );
                         if (reaction == null) return;
-                        if (reactions.any((element) =>
-                            element.baseName == reaction.baseName)) {
+                        if (reactions.any(
+                          (element) => element.baseName == reaction.baseName,
+                        )) {
                           // already added.
                           return;
                         }
@@ -112,6 +141,55 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> showAddReactionsDialog({required BuildContext context}) async {
+    final emojiNames = await showDialog<List<String>>(
+      context: context,
+      builder: (context) => AddReactionsDialog(account: widget.account),
+    );
+    if (emojiNames == null) {
+      return;
+    }
+    final emojis = emojiNames
+        .map(
+          (emojiName) => MisskeyEmojiData.fromEmojiName(
+            emojiName: emojiName,
+            repository: ref.watch(emojiRepositoryProvider(widget.account)),
+          ),
+        )
+        .where((emoji) => emoji.runtimeType != NotEmojiData)
+        .where(
+          (emoji) => !reactions.any(
+            (element) => element.baseName == emoji.baseName,
+          ),
+        );
+    setState(() {
+      reactions.addAll(emojis);
+      save();
+    });
+  }
+
+  void copyReactions({required BuildContext context}) {
+    Clipboard.setData(
+      ClipboardData(
+        text: JSON5.stringify(
+          reactions
+              .map(
+                (reaction) => switch (reaction) {
+                  UnicodeEmojiData(char: final char) => char,
+                  CustomEmojiData(hostedName: final name) => name,
+                  NotEmojiData() => null,
+                },
+              )
+              .whereNotNull()
+              .toList(),
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("コピーしました")),
     );
   }
 }

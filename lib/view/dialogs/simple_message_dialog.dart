@@ -22,7 +22,7 @@ class SimpleMessageDialog extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text("ほい"))
+            child: const Text("ほい"))
       ],
     );
   }
