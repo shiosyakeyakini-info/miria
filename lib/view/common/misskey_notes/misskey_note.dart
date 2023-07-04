@@ -264,7 +264,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           ],
                         ),
                         if (displayNote.cw != null) ...[
-                          MacchoFloridaMokomokoText(
+                          MfmText(
                             displayNote.cw ?? "",
                             host: displayNote.user.host,
                             emoji: displayNote.emojis,
@@ -299,7 +299,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         ],
                         if (displayNote.cw == null ||
                             displayNote.cw != null && isCwOpened) ...[
-                          MacchoFloridaMokomokoText(
+                          MfmText(
                             displayNote.text ?? "",
                             host: displayNote.user.host,
                             emoji: displayNote.emojis,

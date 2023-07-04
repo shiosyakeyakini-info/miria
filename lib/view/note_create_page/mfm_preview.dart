@@ -20,7 +20,7 @@ class MfmPreview extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.all(5),
-      child: MacchoFloridaMokomokoText(
+      child: MfmText(
         "$replyTo$previewText",
         isNyaize: AccountScope.of(context).i.isCat,
       ),

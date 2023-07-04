@@ -68,8 +68,7 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
                 const Text(
                   "このカスタム絵文字はこのようにライセンスされています。",
                 ),
-                MacchoFloridaMokomokoText(
-                    data.license ?? "※このカスタム絵文字に対してライセンスは設定されていません。")
+                MfmText(data.license ?? "※このカスタム絵文字に対してライセンスは設定されていません。")
               ],
             ),
           ),

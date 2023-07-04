@@ -195,8 +195,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                                   .bodyMedium
                                                   ?.fontSize ??
                                               22,
-                                          child:
-                                              const CircularProgressIndicator()),
+                                          child: const CircularProgressIndicator()),
                                       label: const Text("更新中")),
                                 ),
                             ],
@@ -231,7 +230,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            MacchoFloridaMokomokoText(
+                            MfmText(
                               response.name ?? response.username,
                               style: Theme.of(context).textTheme.headlineSmall,
                               emoji: response.emojis ?? {},
@@ -328,7 +327,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                   ),
                 Align(
                   alignment: Alignment.center,
-                  child: MacchoFloridaMokomokoText(response.description ?? "",
+                  child: MfmText(response.description ?? "",
                       emoji: response.emojis ?? {}),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 20)),
@@ -377,12 +376,12 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       for (final field in response.fields ?? <UserField>[])
                         TableRow(children: [
                           TableCell(
-                              child: MacchoFloridaMokomokoText(
+                              child: MfmText(
                             field.name,
                             emoji: response.emojis ?? {},
                           )),
                           TableCell(
-                              child: MacchoFloridaMokomokoText(field.value,
+                              child: MfmText(field.value,
                                   emoji: response.emojis ?? {})),
                         ])
                     ],
