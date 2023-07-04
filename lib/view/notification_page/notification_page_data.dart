@@ -114,7 +114,7 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           var isSummarize = false;
           resultList
               .whereType<RenoteReactionNotificationData>()
-              .where((e) => element.note?.id == e.note?.id)
+              .where((e) => element.note?.renote?.id == e.note?.id)
               .forEach((e) {
             isSummarize = true;
             e.renoteUsers.add(element.user);
@@ -122,7 +122,7 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
 
           if (!isSummarize) {
             resultList.add(RenoteReactionNotificationData(
-                note: element.note,
+                note: element.note?.renote,
                 reactionUsers: [],
                 renoteUsers: [element.user],
                 createdAt: element.createdAt,

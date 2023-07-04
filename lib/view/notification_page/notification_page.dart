@@ -97,15 +97,13 @@ class NotificationItem extends ConsumerWidget {
                   if (hasReaction && hasRenote)
                     Expanded(
                       child: SimpleMfmText(
-                        "${notification.reactionUsers.first.$2?.name ?? notification.reactionUsers.first.$2?.username}さんたちがリアクションしはって、${notification.renoteUsers.first?.name ?? notification.renoteUsers.first?.username}さんたちがリノートしはったで",
-                        emojis: (notification.reactionUsers.first.$2?.emojis
-                              ?..addAll(
-                                  notification.renoteUsers.first?.emojis ??
-                                      {})) ??
-                            {},
-                      ),
+                          "${notification.reactionUsers.first.$2?.name ?? notification.reactionUsers.first.$2?.username}さんたちがリアクションしはって、${notification.renoteUsers.first?.name ?? notification.renoteUsers.first?.username}さんたちがリノートしはったで",
+                          emojis: Map.of(
+                              notification.reactionUsers.first.$2?.emojis ?? {})
+                            ..addAll(
+                                notification.renoteUsers.first?.emojis ?? {})),
                     ),
-                  if (hasReaction)
+                  if (hasReaction && !hasRenote)
                     Expanded(
                       child: SimpleMfmText(
                         "${notification.reactionUsers.first.$2?.name ?? notification.reactionUsers.first.$2?.username}さんたちがリアクションしはったで",
@@ -113,7 +111,7 @@ class NotificationItem extends ConsumerWidget {
                             notification.reactionUsers.first.$2?.emojis ?? {},
                       ),
                     ),
-                  if (hasRenote)
+                  if (hasRenote && !hasReaction)
                     Expanded(
                       child: SimpleMfmText(
                           "${notification.renoteUsers.first?.name ?? notification.renoteUsers.first?.username}さんたちがリノートしはったで",
@@ -153,6 +151,8 @@ class NotificationItem extends ConsumerWidget {
                           ],
                         ),
                       ),
+                    if (hasReaction && hasRenote)
+                      const Padding(padding: EdgeInsets.only(bottom: 10)),
                     if (hasReaction)
                       Container(
                         decoration: BoxDecoration(
@@ -223,7 +223,9 @@ class NotificationItem extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: SimpleMfmText(
-                        "${notification.user?.name ?? notification.user?.username}から${notification.type.name}"),
+                      "${notification.user?.name ?? notification.user?.username}から${notification.type.name}",
+                      emojis: notification.user?.emojis ?? {},
+                    ),
                   ),
                   Text(notification.createdAt.differenceNow),
                 ],
