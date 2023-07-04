@@ -76,7 +76,7 @@ class Announcement extends StatelessWidget {
                   child: Text(data.createdAt.format),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
-                MfmText(
+                MacchoFloridaMokomokoText(
                   data.text,
                   host: AccountScope.of(context).host == host ? null : host,
                 )

@@ -182,7 +182,7 @@ class NotificationItem extends ConsumerWidget {
                     )
                   ],
                   if (notification.type == NotificationType.reply) ...[
-                    mfm_text.MfmText(
+                    mfm_text.MacchoFloridaMokomokoText(
                       "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
                     ),
                     MediaQuery(

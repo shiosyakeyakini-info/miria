@@ -18,7 +18,7 @@ import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MfmText extends ConsumerStatefulWidget {
+class MacchoFloridaMokomokoText extends ConsumerStatefulWidget {
   final String mfmText;
   final String? host;
   final TextStyle? style;
@@ -28,7 +28,7 @@ class MfmText extends ConsumerStatefulWidget {
   final List<InlineSpan> prefixSpan;
   final Function(MisskeyEmojiData)? onEmojiTap;
 
-  const MfmText(
+  const MacchoFloridaMokomokoText(
     this.mfmText, {
     super.key,
     this.host,
@@ -44,7 +44,7 @@ class MfmText extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => MfmTextState();
 }
 
-class MfmTextState extends ConsumerState<MfmText> {
+class MfmTextState extends ConsumerState<MacchoFloridaMokomokoText> {
   Future<void> onTapLink(String url) async {
     final uri = Uri.tryParse(url);
     if (uri == null) {
