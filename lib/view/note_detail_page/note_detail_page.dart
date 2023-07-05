@@ -6,6 +6,7 @@ import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/common_drawer.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -93,7 +94,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                       Text(
                           "投稿時間: ${actualShow!.createdAt.formatUntilMilliSeconds}"),
                       const Padding(padding: EdgeInsets.only(top: 5)),
-                      Divider(),
+                      const Divider(),
                       const Padding(padding: EdgeInsets.only(top: 5)),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),

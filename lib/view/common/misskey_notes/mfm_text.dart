@@ -53,6 +53,7 @@ class MfmTextState extends ConsumerState<MfmText> {
     final account = AccountScope.of(context);
 
     // 他サーバーや外部サイトは別アプリで起動する
+    //TODO: nodeinfoから相手先サーバーがMisskeyの場合はそこで解決する
     if (uri.host != AccountScope.of(context).host) {
       if (await canLaunchUrl(uri)) {
         if (!await launchUrl(uri,
@@ -69,6 +70,14 @@ class MfmTextState extends ConsumerState<MfmText> {
         uri.pathSegments.first == "channels") {
       context.pushRoute(
           ChannelDetailRoute(account: account, channelId: uri.pathSegments[1]));
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "notes") {
+      final note = await ref
+          .read(misskeyProvider(account))
+          .notes
+          .show(NotesShowRequest(noteId: uri.pathSegments[1]));
+      if (!mounted) return;
+      context.pushRoute(NoteDetailRoute(account: account, note: note));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(uri.pathSegments.first);
@@ -286,6 +295,15 @@ class UserInformation extends ConsumerStatefulWidget {
 }
 
 class UserInformationState extends ConsumerState<UserInformation> {
+  String resolveIconUrl(Uri uri) {
+    final baseUrl = uri.toString();
+    if (baseUrl.startsWith("/")) {
+      return "https://${widget.user.host ?? AccountScope.of(context).host}$baseUrl";
+    } else {
+      return baseUrl;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SimpleMfmText(
@@ -304,7 +322,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
                 message: badge.name,
                 child: NetworkImageView(
                   type: ImageType.role,
-                  url: badge.iconUrl.toString(),
+                  url: resolveIconUrl(badge.iconUrl!),
                   height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
                 ),
               ),

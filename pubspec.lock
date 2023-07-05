@@ -608,6 +608,14 @@ packages:
       url: "https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git"
     source: git
     version: "1.0.1"
+  image_gallery_saver:
+    dependency: "direct main"
+    description:
+      name: image_gallery_saver
+      sha256: "0aba74216a4d9b0561510cb968015d56b701ba1bd94aace26aacdd8ae5761816"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   intl:
     dependency: "direct main"
     description:
@@ -733,7 +741,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "2423681d5dd094f2da7f1bf18a22b3b6ab80f9cf"
+      resolved-ref: "1079937ea2e478928015425a498a2a56dc197b8e"
       url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
     source: git
     version: "0.0.1"

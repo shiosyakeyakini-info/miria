@@ -43,7 +43,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>写真をアップロードするために、写真への権限を許可してください。</string>
+	<string>画像をアップロードするために、アルバムへの権限を許可してください。</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>画像を保存するために、アルバムへの権限を許可してください。</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

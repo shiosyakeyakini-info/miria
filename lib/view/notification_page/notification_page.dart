@@ -2,10 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
+import 'package:miria/view/notification_page/notification_page_data.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
@@ -15,6 +17,7 @@ import 'package:miria/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
@@ -35,7 +38,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
       appBar: AppBar(title: const Text("通知")),
       body: AccountScope(
         account: widget.account,
-        child: PushableListView<INotificationsResponse>(
+        child: PushableListView<NotificationData>(
           initializeFuture: () async {
             final result =
                 await misskey.i.notifications(const INotificationsRequest(
@@ -49,7 +52,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                   .read(mainStreamRepositoryProvider(widget.account))
                   .latestMarkAs(result.first.id);
             }
-            return result.toList();
+            return result.toNotificationData();
           },
           nextFuture: (lastElement, _) async {
             final result = await misskey.i.notifications(
@@ -57,7 +60,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
             ref
                 .read(notesProvider(widget.account))
                 .registerAll(result.map((e) => e.note).whereNotNull());
-            return result.toList();
+            return result.toNotificationData();
           },
           itemBuilder: (context, notification) => NotificationItem(
             notification: notification,
@@ -69,161 +72,199 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
 }
 
 class NotificationItem extends ConsumerWidget {
-  final INotificationsResponse notification;
+  final NotificationData notification;
 
   const NotificationItem({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (notification.type != NotificationType.reaction &&
-        notification.type != NotificationType.renote &&
-        notification.type != NotificationType.reply) {
-      if (kDebugMode) {
-        print(notification);
-      }
-    }
+    final notification = this.notification;
 
-    return Container(
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor))),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+    switch (notification) {
+      case RenoteReactionNotificationData():
+        final hasRenote = notification.renoteUsers.isNotEmpty;
+        final hasReaction = notification.reactionUsers.isNotEmpty;
+        return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, top: 10, bottom: 30, right: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  if (notification.user != null)
-                    GestureDetector(
-                      onTap: () => context.pushRoute(UserRoute(
-                          userId: notification.user!.id,
-                          account: AccountScope.of(context))),
-                      child: AvatarIcon(
-                        user: notification.user!,
-                        height: (Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.fontSize ??
-                                22) *
-                            MediaQuery.of(context).textScaleFactor,
+                  if (hasReaction && hasRenote)
+                    Expanded(
+                      child: SimpleMfmText(
+                          "${notification.reactionUsers.first.$2?.name ?? notification.reactionUsers.first.$2?.username}さんたちがリアクションしはって、${notification.renoteUsers.first?.name ?? notification.renoteUsers.first?.username}さんたちがリノートしはったで",
+                          emojis: Map.of(
+                              notification.reactionUsers.first.$2?.emojis ?? {})
+                            ..addAll(
+                                notification.renoteUsers.first?.emojis ?? {})),
+                    ),
+                  if (hasReaction && !hasRenote)
+                    Expanded(
+                      child: SimpleMfmText(
+                        "${notification.reactionUsers.first.$2?.name ?? notification.reactionUsers.first.$2?.username}さんたちがリアクションしはったで",
+                        emojis:
+                            notification.reactionUsers.first.$2?.emojis ?? {},
                       ),
                     ),
-                  if (notification.reaction != null) ...[
-                    const Padding(padding: EdgeInsets.only(top: 10)),
-                    SizedBox(
-                      width: 32,
-                      height: 32,
-                      child: CustomEmoji(
-                        emojiData: MisskeyEmojiData.fromEmojiName(
-                          emojiName: notification.reaction!,
-                          repository: ref.read(emojiRepositoryProvider(
-                              AccountScope.of(context))),
-                          emojiInfo: notification.note?.reactionEmojis,
-                        ),
-                      ),
+                  if (hasRenote && !hasReaction)
+                    Expanded(
+                      child: SimpleMfmText(
+                          "${notification.renoteUsers.first?.name ?? notification.renoteUsers.first?.username}さんたちがリノートしはったで",
+                          emojis: notification.renoteUsers.first?.emojis ?? {}),
                     ),
-                  ]
+                  Text(notification.createdAt.differenceNow)
                 ],
               ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (notification.type == NotificationType.reaction) ...[
-                    SimpleMfmText(
-                      "${notification.user?.name ?? notification.user?.username} からリアクション",
-                      emojis: notification.user?.emojis ?? {},
-                    ),
-                    MediaQuery(
-                        data: MediaQueryData(
-                            textScaleFactor:
-                                MediaQuery.of(context).textScaleFactor * 0.7),
-                        child: misskey_note.MisskeyNote(
-                          note: notification.note!,
-                          isDisplayBorder: false,
-                        )),
-                  ],
-                  if (notification.type == NotificationType.renote) ...[
-                    SimpleMfmText(
-                      "${notification.user?.name ?? notification.user?.username} からRenote",
-                      emojis: notification.user?.emojis ?? {},
-                    ),
-                    MediaQuery(
-                      data: MediaQueryData(
-                          textScaleFactor:
-                              MediaQuery.of(context).textScaleFactor * 0.7),
-                      child: misskey_note.MisskeyNote(
-                        note: notification.note!,
-                        isDisplayBorder: false,
-                      ),
-                    )
-                  ],
-                  if (notification.type == NotificationType.quote) ...[
-                    SimpleMfmText(
-                      "${notification.user?.name ?? notification.user?.username} から引用Renote",
-                      emojis: notification.user?.emojis ?? {},
-                    ),
-                    MediaQuery(
-                      data: MediaQueryData(
-                          textScaleFactor:
-                              MediaQuery.of(context).textScaleFactor * 0.7),
-                      child: misskey_note.MisskeyNote(
-                        note: notification.note!,
-                        isDisplayBorder: false,
-                      ),
-                    )
-                  ],
-                  if (notification.type == NotificationType.reply) ...[
-                    mfm_text.MfmText(
-                      "${notification.user?.name ?? notification.user?.username} <small>からリプライ</small>",
-                    ),
-                    MediaQuery(
-                        data: MediaQueryData(
-                            textScaleFactor:
-                                MediaQuery.of(context).textScaleFactor * 0.7),
-                        child: misskey_note.MisskeyNote(
-                          note: notification.note!,
-                          isDisplayBorder: false,
-                        ))
-                  ],
-                  if (notification.type == NotificationType.pollEnded) ...[
-                    const Text("投票が終わりました。"),
-                    MediaQuery(
-                        data: MediaQueryData(
-                            textScaleFactor:
-                                MediaQuery.of(context).textScaleFactor * 0.7),
-                        child: misskey_note.MisskeyNote(
-                          note: notification.note!,
-                          isDisplayBorder: false,
-                        )),
-                  ],
-                  if (notification.type == NotificationType.achievementEarned)
-                    Text("実績を解除したで  [${notification.achievement}]"),
-                  if (notification.type == NotificationType.follow)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Padding(padding: EdgeInsets.only(top: 10)),
-                        SimpleMfmText(
-                          "${notification.user?.name ?? notification.user?.username} ",
-                          style: Theme.of(context).textTheme.titleLarge,
+              if (notification.note != null)
+                misskey_note.MisskeyNote(
+                  note: notification.note!,
+                  recursive: 2,
+                  isDisplayBorder: false,
+                ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Column(
+                  children: [
+                    if (hasRenote)
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor)),
+                        padding: const EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("リノートしてくれはった人"),
+                            Column(
+                              children: [
+                                for (final user
+                                    in notification.renoteUsers.whereNotNull())
+                                  UserListItem(user: user)
+                              ],
+                            ),
+                          ],
                         ),
-                        const Text("からフォローされました")
-                      ],
-                    )
+                      ),
+                    if (hasReaction && hasRenote)
+                      const Padding(padding: EdgeInsets.only(bottom: 10)),
+                    if (hasReaction)
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor)),
+                        padding: const EdgeInsets.all(5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("リアクションしてくれはった人"),
+                            for (final reaction in notification.reactionUsers
+                                .mapIndexed(
+                                    (index, element) => (index, element))) ...[
+                              if (reaction.$2.$1 != null &&
+                                      (reaction.$1 > 0 &&
+                                          notification
+                                                  .reactionUsers[
+                                                      reaction.$1 - 1]
+                                                  .$1 !=
+                                              reaction.$2.$1) ||
+                                  reaction.$1 == 0)
+                                CustomEmoji(
+                                  emojiData: MisskeyEmojiData.fromEmojiName(
+                                    emojiName: reaction.$2.$1!,
+                                    repository: ref.read(
+                                        emojiRepositoryProvider(
+                                            AccountScope.of(context))),
+                                    emojiInfo:
+                                        notification.note?.reactionEmojis,
+                                  ),
+                                  fontSizeRatio: 2,
+                                ),
+                              if (reaction.$2.$2 != null)
+                                Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: UserListItem(user: reaction.$2.$2!)),
+                            ]
+                          ],
+                        ),
+                      )
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+
+      case MentionQuoteNotificationData():
+        return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          child: Column(
+            children: [
+              if (notification.note != null)
+                misskey_note.MisskeyNote(note: notification.note!)
+            ],
+          ),
+        );
+      case FollowNotificationData():
+        return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: SimpleMfmText(
+                      "${notification.user?.name ?? notification.user?.username}から${notification.type.name}",
+                      emojis: notification.user?.emojis ?? {},
+                    ),
+                  ),
+                  Text(notification.createdAt.differenceNow),
                 ],
               ),
-            )
-          ],
-        ));
+              if (notification.user != null)
+                UserListItem(user: notification.user!),
+            ],
+          ),
+        );
+      case SimpleNotificationData():
+        return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          child: Row(
+            children: [
+              Expanded(child: Text(notification.text)),
+              Text(notification.createdAt.differenceNow),
+            ],
+          ),
+        );
+      case PollNotification():
+        return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Expanded(child: Text("投票が終わったみたいや")),
+                  Text(notification.createdAt.differenceNow),
+                ],
+              ),
+              misskey_note.MisskeyNote(
+                note: notification.note!,
+                isDisplayBorder: false,
+              ),
+            ],
+          ),
+        );
+    }
   }
 }

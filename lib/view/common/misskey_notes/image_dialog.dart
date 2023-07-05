@@ -1,9 +1,14 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 
-class ImageDialog extends StatefulWidget {
+class ImageDialog extends ConsumerStatefulWidget {
   final List<String> imageUrlList;
   final int initialPage;
 
@@ -14,10 +19,10 @@ class ImageDialog extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => ImageDialogState();
+  ConsumerState<ConsumerStatefulWidget> createState() => ImageDialogState();
 }
 
-class ImageDialogState extends State<ImageDialog> {
+class ImageDialogState extends ConsumerState<ImageDialog> {
   var scale = 1.0;
   late final pageController = PageController(initialPage: widget.initialPage);
   var verticalDragX = 0.0;
@@ -123,7 +128,7 @@ class ImageDialogState extends State<ImageDialog> {
                             ),
                           )))),
               Positioned(
-                right: 10,
+                left: 10,
                 top: 10,
                 child: RawMaterialButton(
                     onPressed: () {
@@ -146,6 +151,40 @@ class ImageDialogState extends State<ImageDialog> {
                                 ?.color
                                 ?.withAlpha(200)))),
               ),
+              if (defaultTargetPlatform == TargetPlatform.android ||
+                  defaultTargetPlatform == TargetPlatform.iOS)
+                Positioned(
+                    right: 10,
+                    top: 10,
+                    child: RawMaterialButton(
+                        onPressed: () async {
+                          final page = pageController.page?.toInt();
+                          if (page == null) return;
+                          final response = await ref.read(dioProvider).get(
+                              widget.imageUrlList[page],
+                              options:
+                                  Options(responseType: ResponseType.bytes));
+                          await ImageGallerySaver.saveImage(response.data);
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("画像保存したで")));
+                        },
+                        constraints:
+                            const BoxConstraints(minWidth: 0, minHeight: 0),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.zero,
+                        fillColor: Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withAlpha(200),
+                        shape: const CircleBorder(),
+                        child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Icon(Icons.save,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color
+                                    ?.withAlpha(200))))),
             ],
           ),
         ));
