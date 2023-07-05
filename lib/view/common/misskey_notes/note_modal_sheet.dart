@@ -10,12 +10,14 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
+import 'package:miria/view/common/misskey_notes/open_another_account.dart';
 import 'package:miria/view/common/not_implements_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -97,6 +99,18 @@ class NoteModalSheet extends ConsumerWidget {
 
                   Navigator.of(context).pop();
                 }),
+            if (targetNote.user.host != null)
+              ListTile(
+                  title: const Text("ブラウザでリモート先を開く"),
+                  onTap: () async {
+                    final uri = targetNote.url ?? targetNote.uri;
+                    if (uri == null) return;
+                    launchUrl(uri, mode: LaunchMode.inAppWebView);
+
+                    Navigator.of(context).pop();
+                  }),
+            if (!targetNote.localOnly)
+              OpenAnotherAccount(note: targetNote, beforeOpenAccount: account),
             ListTile(
               title: const Text("ノートを共有"),
               onTap: () {

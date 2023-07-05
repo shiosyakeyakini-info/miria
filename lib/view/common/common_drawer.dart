@@ -6,6 +6,7 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 
 class CommonDrawer extends ConsumerWidget {
   final Account initialOpenAccount;
@@ -27,7 +28,7 @@ class CommonDrawer extends ConsumerWidget {
                     initiallyExpanded:
                         account.userId == initialOpenAccount.userId &&
                             account.host == initialOpenAccount.host,
-                    title: Text(account.i.name ?? account.i.username,
+                    title: SimpleMfmText(account.i.name ?? account.i.username,
                         style: Theme.of(context).textTheme.titleMedium),
                     subtitle: Text(
                       "@${account.userId}@${account.host}",
