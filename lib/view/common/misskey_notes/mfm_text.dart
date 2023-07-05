@@ -295,6 +295,15 @@ class UserInformation extends ConsumerStatefulWidget {
 }
 
 class UserInformationState extends ConsumerState<UserInformation> {
+  String resolveIconUrl(Uri uri) {
+    final baseUrl = uri.toString();
+    if (baseUrl.startsWith("/")) {
+      return "https://${widget.user.host ?? AccountScope.of(context).host}$baseUrl";
+    } else {
+      return baseUrl;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SimpleMfmText(
@@ -313,7 +322,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
                 message: badge.name,
                 child: NetworkImageView(
                   type: ImageType.role,
-                  url: badge.iconUrl.toString(),
+                  url: resolveIconUrl(badge.iconUrl!),
                   height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
                 ),
               ),
