@@ -53,6 +53,7 @@ class MfmTextState extends ConsumerState<MfmText> {
     final account = AccountScope.of(context);
 
     // 他サーバーや外部サイトは別アプリで起動する
+    //TODO: nodeinfoから相手先サーバーがMisskeyの場合はそこで解決する
     if (uri.host != AccountScope.of(context).host) {
       if (await canLaunchUrl(uri)) {
         if (!await launchUrl(uri,
@@ -69,6 +70,14 @@ class MfmTextState extends ConsumerState<MfmText> {
         uri.pathSegments.first == "channels") {
       context.pushRoute(
           ChannelDetailRoute(account: account, channelId: uri.pathSegments[1]));
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "notes") {
+      final note = await ref
+          .read(misskeyProvider(account))
+          .notes
+          .show(NotesShowRequest(noteId: uri.pathSegments[1]));
+      if (!mounted) return;
+      context.pushRoute(NoteDetailRoute(account: account, note: note));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(uri.pathSegments.first);

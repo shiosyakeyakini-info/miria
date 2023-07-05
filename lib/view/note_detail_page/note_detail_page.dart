@@ -94,7 +94,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                       Text(
                           "投稿時間: ${actualShow!.createdAt.formatUntilMilliSeconds}"),
                       const Padding(padding: EdgeInsets.only(top: 5)),
-                      Divider(),
+                      const Divider(),
                       const Padding(padding: EdgeInsets.only(top: 5)),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
