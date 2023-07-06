@@ -183,7 +183,7 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
 
           ref
               .read(notesProvider(Account.demoAccount(remoteHost)))
-              .registerAll(response?.pinnedNotes ?? []);
+              .registerAll(remoteResponse.pinnedNotes ?? []);
           ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
               userId: widget.userId,
               response: response,
