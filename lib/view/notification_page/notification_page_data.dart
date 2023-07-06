@@ -97,7 +97,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .where((e) => element.note?.id == e.note?.id)
               .forEach((e) {
             isSummarize = true;
-            e.reactionUsers.add((element.reaction!, element.user!));
+            if (element.user != null) {
+              e.reactionUsers.add((element.reaction!, element.user!));
+            }
           });
 
           if (!isSummarize) {
