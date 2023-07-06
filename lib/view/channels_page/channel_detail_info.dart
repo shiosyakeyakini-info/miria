@@ -132,9 +132,7 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
         const Padding(padding: EdgeInsets.only(top: 10)),
         Align(
             alignment: Alignment.centerRight,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Wrap(
               children: [
                 data.isFavorited
                     ? ElevatedButton.icon(
