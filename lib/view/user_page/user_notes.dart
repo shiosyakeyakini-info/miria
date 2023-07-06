@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
@@ -10,7 +11,10 @@ import 'package:misskey_dart/misskey_dart.dart';
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
 
-  const UserNotes({super.key, required this.userId});
+  final Account? actualAccount;
+
+  const UserNotes(
+      {super.key, required this.userId, required this.actualAccount});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserNotesState();
@@ -73,14 +77,21 @@ class UserNotesState extends ConsumerState<UserNotes> {
               ),
               IconButton(
                   onPressed: () async {
+                    final firstDate = widget.actualAccount == null
+                        ? ref
+                            .read(userInfoProvider(widget.userId))
+                            ?.response
+                            ?.createdAt
+                        : ref
+                            .read(userInfoProvider(widget.userId))
+                            ?.remoteResponse
+                            ?.createdAt;
+
                     final result = await showDatePicker(
                         context: context,
                         initialDate: untilDate ?? DateTime.now(),
                         helpText: "この日までを表示",
-                        firstDate: ref
-                                .read(userInfoProvider(widget.userId))
-                                ?.createdAt ??
-                            DateTime(2012, 1, 1),
+                        firstDate: firstDate ?? DateTime.now(),
                         lastDate: DateTime.now());
                     if (result != null) {
                       untilDate = DateTime(result.year, result.month,
@@ -126,7 +137,10 @@ class UserNotesState extends ConsumerState<UserNotes> {
                 return notes.toList();
               },
               itemBuilder: (context, element) {
-                return MisskeyNote(note: element);
+                return MisskeyNote(
+                  note: element,
+                  loginAs: widget.actualAccount,
+                );
               }),
         ),
       ],

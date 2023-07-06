@@ -12,8 +12,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/user_page/user_reactions.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-final userInfoProvider = StateProvider.family
-    .autoDispose<UsersShowResponse?, String>((ref, userId) => null);
+class UserInfo {
+  final String userId;
+  final UsersShowResponse? response;
+  final String? remoteUserId;
+  final UsersShowResponse? remoteResponse;
+
+  const UserInfo({
+    required this.userId,
+    required this.response,
+    required this.remoteUserId,
+    required this.remoteResponse,
+  });
+}
+
+final userInfoProvider =
+    StateProvider.family.autoDispose<UserInfo?, String>((ref, userId) => null);
 
 @RoutePage()
 class UserPage extends ConsumerStatefulWidget {
@@ -29,23 +43,32 @@ class UserPageState extends ConsumerState<UserPage> {
   @override
   Widget build(BuildContext context) {
     final userInfo = ref.watch(userInfoProvider(widget.userId));
-    final isReactionAvailable = userInfo?.publicReactions == true ||
-        (userInfo?.host == null && userInfo?.username == widget.account.userId);
+    final isReactionAvailable = userInfo?.response?.publicReactions == true ||
+        (userInfo?.response?.host == null &&
+            userInfo?.response?.username == widget.account.userId);
+    final isRemoteUser =
+        userInfo?.response?.host != null && userInfo?.remoteResponse != null;
     return AccountScope(
       account: widget.account,
       child: DefaultTabController(
-        length: 3 + (isReactionAvailable ? 1 : 0),
+        length: 3 + (isReactionAvailable ? 1 : 0) + (isRemoteUser ? 2 : 0),
         child: Scaffold(
           appBar: AppBar(
             title: SimpleMfmText(
-              userInfo?.name ?? userInfo?.username ?? "",
-              emojis: userInfo?.emojis ?? {},
+              userInfo?.response?.name ?? userInfo?.response?.username ?? "",
+              emojis: userInfo?.response?.emojis ?? {},
             ),
             actions: const [],
             bottom: TabBar(
               tabs: [
-                const Tab(text: "アカウント情報"),
-                const Tab(text: "ノート"),
+                Tab(
+                    text:
+                        "アカウント情報${userInfo?.remoteResponse != null ? "（ローカル）" : ""}"),
+                if (isRemoteUser) const Tab(text: "アカウント情報（リモート）"),
+                Tab(
+                    text:
+                        "ノート${userInfo?.remoteResponse != null ? "（ローカル）" : ""}"),
+                if (isRemoteUser) const Tab(text: "ノート（リモート）"),
                 const Tab(text: "クリップ"),
                 if (isReactionAvailable) const Tab(text: "リアクション")
               ],
@@ -58,10 +81,36 @@ class UserPageState extends ConsumerState<UserPage> {
                 child: TabBarView(
                   children: [
                     UserDetailTab(userId: widget.userId),
+                    if (isRemoteUser)
+                      AccountScope(
+                        account: Account.demoAccount(userInfo!.response!.host!),
+                        child: SingleChildScrollView(
+                          child: UserDetail(
+                            response: userInfo.remoteResponse!,
+                            account:
+                                Account.demoAccount(userInfo.response!.host!),
+                            controlAccount: widget.account,
+                          ),
+                        ),
+                      ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: UserNotes(userId: widget.userId),
+                      child: UserNotes(
+                        userId: widget.userId,
+                        actualAccount: null,
+                      ),
                     ),
+                    if (isRemoteUser)
+                      AccountScope(
+                        account: Account.demoAccount(userInfo!.response!.host!),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: UserNotes(
+                            userId: userInfo.remoteResponse!.id,
+                            actualAccount: widget.account,
+                          ),
+                        ),
+                      ),
                     Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: UserClips(
@@ -93,6 +142,7 @@ class UserDetailTab extends ConsumerStatefulWidget {
 
 class UserDetailTabState extends ConsumerState<UserDetailTab> {
   UsersShowResponse? response;
+  UsersShowResponse? remoteResponse;
   Object? error;
 
   @override
@@ -113,7 +163,33 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
         ref
             .read(notesProvider(account))
             .registerAll(response?.pinnedNotes ?? []);
-        ref.read(userInfoProvider(widget.userId).notifier).state = response;
+        ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
+            userId: widget.userId,
+            response: response,
+            remoteUserId: null,
+            remoteResponse: null);
+
+        final remoteHost = response?.host;
+        if (remoteHost != null) {
+          final remoteResponse = await ref
+              .read(misskeyProvider(Account.demoAccount(remoteHost)))
+              .users
+              .showByName(
+                  UsersShowByUserNameRequest(userName: response!.username));
+
+          await ref
+              .read(emojiRepositoryProvider(Account.demoAccount(remoteHost)))
+              .loadFromSourceIfNeed();
+
+          ref
+              .read(notesProvider(Account.demoAccount(remoteHost)))
+              .registerAll(response?.pinnedNotes ?? []);
+          ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
+              userId: widget.userId,
+              response: response,
+              remoteUserId: remoteResponse.id,
+              remoteResponse: remoteResponse);
+        }
       } catch (e) {
         setState(() {
           error = e;
@@ -126,10 +202,12 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
   Widget build(BuildContext context) {
     if (response != null) {
       return SingleChildScrollView(
-          child: UserDetail(
-        response: response!,
-        account: AccountScope.of(context),
-      ));
+        child: UserDetail(
+          response: response!,
+          account: AccountScope.of(context),
+          controlAccount: null,
+        ),
+      );
     }
     if (error != null) {
       return ErrorDetail(error: error);
