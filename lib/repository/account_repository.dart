@@ -58,7 +58,7 @@ class AccountRepository extends ChangeNotifier {
   Future<void> loadFromSourceIfNeed(Account account) async {
     final index = _account.indexOf(account);
     if (index == -1) return;
-    if (accountDataValidated[index]) return;
+    if (accountDataValidated.isNotEmpty && accountDataValidated[index]) return;
     _account[index] = _account[index]
         .copyWith(i: await reader(misskeyProvider(_account[index])).i.i());
     accountDataValidated[index] = true;
@@ -168,6 +168,7 @@ class AccountRepository extends ChangeNotifier {
 
   Future<void> addAccount(Account account) async {
     _account.add(account);
+    accountDataValidated.add(true);
     await save();
   }
 
