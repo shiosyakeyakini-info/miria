@@ -169,6 +169,8 @@ class AccountRepository extends ChangeNotifier {
   Future<void> addAccount(Account account) async {
     _account.add(account);
     accountDataValidated.add(true);
+    await reader(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
+
     await save();
   }
 
