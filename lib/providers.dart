@@ -189,3 +189,7 @@ final noteCreateProvider = StateNotifierProvider.family
       ref.read(misskeyProvider(account)),
       ref.read(errorEventProvider.notifier)),
 );
+
+final miAuthCallbackProvider = StateProvider.autoDispose<Uri?>(
+  (ref) => null,
+);

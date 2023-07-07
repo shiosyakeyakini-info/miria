@@ -47,6 +47,16 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
     });
     intentDataTextStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((event) {
+      final uri = Uri.tryParse(event);
+      if (uri != null) {
+        if (uri.scheme == "miria" && uri.host == "miria") {
+          if (uri.path == "/miauth") {
+            ref.read(miAuthCallbackProvider.notifier).state = uri;
+            return;
+          }
+        }
+      }
+
       if (account.length == 1) {
         widget.router.push(NoteCreateRoute(
           initialText: event,
