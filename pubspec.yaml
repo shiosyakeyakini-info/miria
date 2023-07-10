@@ -54,6 +54,8 @@ dependencies:
   json5: ^0.8.0
   file: ^6.1.4
   image_gallery_saver: ^2.0.3
+  permission_handler: ^10.4.2
+  device_info_plus: ^9.0.2
 
 dependency_overrides:
   image_editor:

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
+import 'package:miria/view/dialogs/simple_message_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ImageDialog extends ConsumerStatefulWidget {
   final List<String> imageUrlList;
@@ -164,6 +167,23 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                               widget.imageUrlList[page],
                               options:
                                   Options(responseType: ResponseType.bytes));
+
+                          if(defaultTargetPlatform == TargetPlatform.android) {
+
+                            final androidInfo = await DeviceInfoPlugin().androidInfo;
+                              if (androidInfo.version.sdkInt <= 32) {
+                                final permissionStatus = await Permission.storage.status;
+                                if(permissionStatus.isDenied) {
+                                  await Permission.storage.request();
+                                }
+                              }  else {
+                                final permissionStatus = await Permission.photos.status;
+                                if(permissionStatus.isDenied) {
+                                  await Permission.photos.request();
+                                }
+                              }
+                          }
+
                           await ImageGallerySaver.saveImage(response.data);
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
