@@ -27,16 +27,19 @@ class ServerDetailDialog extends ConsumerStatefulWidget {
 
 class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   SocketController? controller;
+  SocketController? queueController;
   int? onlineUsers;
   int? totalMemories;
   int? ping;
 
   List<StatsLogResponse> logged = [];
+  List<QueueStatsLogResponse> queueLogged = [];
 
   @override
   void dispose() {
     super.dispose();
     controller?.disconnect();
+    queueController?.disconnect();
   }
 
   @override
@@ -50,6 +53,18 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
       (response) {
         setState(() {
           logged.add(response);
+        });
+      },
+    )..startStreaming();
+    queueController?.disconnect();
+    queueController =
+        ref.read(misskeyProvider(widget.account)).queueStatsLogStream(
+      (response) => setState(() {
+        queueLogged.insertAll(0, response);
+      }),
+      (response) {
+        setState(() {
+          queueLogged.add(response);
         });
       },
     )..startStreaming();
@@ -99,6 +114,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   @override
   Widget build(BuildContext context) {
     final currentStat = logged.lastOrNull;
+    final currentQueueStats = queueLogged.lastOrNull;
     return AlertDialog(
       title: Row(
         children: [
@@ -230,6 +246,92 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                   Expanded(child: Container()),
                 ],
               ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
+              const Text("ジョブキュー (Inbox queue)"),
+              if (currentQueueStats != null) ...[
+                const Row(
+                  children: [
+                    Expanded(child: Text("Process")),
+                    Expanded(child: Text("Active")),
+                    Expanded(child: Text("Delayed")),
+                    Expanded(child: Text("Waiting")),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.inbox.activeSincePrevTick.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.inbox.active.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.inbox.delayed.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.inbox.waiting.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+              const Padding(padding: EdgeInsets.only(top: 10)),
+              const Text("ジョブキュー(Deliver queue)"),
+              if (currentQueueStats != null) ...[
+                const Row(
+                  children: [
+                    Expanded(child: Text("Process")),
+                    Expanded(child: Text("Active")),
+                    Expanded(child: Text("Delayed")),
+                    Expanded(child: Text("Waiting")),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.deliver.activeSincePrevTick.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.deliver.active.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.deliver.delayed.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
+                    Expanded(
+                      child: Text(
+                        currentQueueStats.deliver.waiting.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ],
           ),
         ),
