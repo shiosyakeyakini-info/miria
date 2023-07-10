@@ -253,8 +253,6 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                   children: [
                     Expanded(child: Text("Process")),
                     Expanded(child: Text("Active")),
-                    Expanded(child: Text("Delayed")),
-                    Expanded(child: Text("Waiting")),
                   ],
                 ),
                 Row(
@@ -272,7 +270,16 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(left: 10)),
+                  ],
+                ),
+                const Row(
+                  children: [
+                    Expanded(child: Text("Delayed")),
+                    Expanded(child: Text("Waiting")),
+                  ],
+                ),
+                Row(
+                  children: [
                     Expanded(
                       child: Text(
                         currentQueueStats.inbox.delayed.format(),
@@ -296,8 +303,6 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                   children: [
                     Expanded(child: Text("Process")),
                     Expanded(child: Text("Active")),
-                    Expanded(child: Text("Delayed")),
-                    Expanded(child: Text("Waiting")),
                   ],
                 ),
                 Row(
@@ -315,7 +320,16 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(left: 10)),
+                  ],
+                ),
+                const Row(
+                  children: [
+                    Expanded(child: Text("Delayed")),
+                    Expanded(child: Text("Waiting")),
+                  ],
+                ),
+                Row(
+                  children: [
                     Expanded(
                       child: Text(
                         currentQueueStats.deliver.delayed.format(),
