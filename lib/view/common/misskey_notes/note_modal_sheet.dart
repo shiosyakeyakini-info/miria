@@ -54,9 +54,8 @@ class NoteModalSheet extends ConsumerWidget {
             ListTile(
               title: const Text("詳細"),
               onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => const NotImplementationDialog());
+                context.pushRoute(
+                    NoteDetailRoute(note: targetNote, account: account));
               },
             ),
             ListTile(
