@@ -240,8 +240,25 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
   /// ノートを投稿する
   Future<void> note() async {
-    if (state.text.isEmpty && state.files.isEmpty) {
+    if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
       throw SpecifiedException("なんか入れてや");
+    }
+
+    if (state.isVote &&
+        state.voteContent.where((e) => e.isNotEmpty).length < 2) {
+      throw SpecifiedException("投票の選択肢を2つ以上入れてや");
+    }
+
+    if (state.isVote &&
+        state.voteExpireType == VoteExpireType.date &&
+        state.voteDate == null) {
+      throw SpecifiedException("投票がいつまでか入れてや");
+    }
+
+    if (state.isVote &&
+        state.voteExpireType == VoteExpireType.duration &&
+        state.voteDuration == null) {
+      throw SpecifiedException("投票期間を入れてや");
     }
 
     try {
@@ -327,10 +344,39 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final visibleUserIds = state.replyTo.map((e) => e.id).toList();
       visibleUserIds.addAll(mentionTargetUsers.map((e) => e.id));
 
+      final baseText =
+          "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}";
+      final postText = baseText.isNotEmpty ? baseText : null;
+
+      final durationType = state.voteDurationType;
+      final voteDuration = Duration(
+        days: durationType == VoteExpireDurationType.day
+            ? state.voteDuration ?? 0
+            : 0,
+        hours: durationType == VoteExpireDurationType.hours
+            ? state.voteDuration ?? 0
+            : 0,
+        minutes: durationType == VoteExpireDurationType.minutes
+            ? state.voteDuration ?? 0
+            : 0,
+        seconds: durationType == VoteExpireDurationType.seconds
+            ? state.voteDuration ?? 0
+            : 0,
+      );
+
+      final poll = NotesCreatePollRequest(
+          choices: state.voteContent,
+          multiple: state.isVoteMultiple,
+          expiresAt: state.voteExpireType == VoteExpireType.date
+              ? state.voteDate
+              : null,
+          expiredAfter: state.voteExpireType == VoteExpireType.duration
+              ? voteDuration
+              : null);
+
       await misskey.notes.create(NotesCreateRequest(
         visibility: state.noteVisibility,
-        text:
-            "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}",
+        text: postText,
         cw: state.isCw ? state.cwText : null,
         localOnly: state.localOnly,
         replyId: state.reply?.id,
@@ -339,6 +385,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         fileIds: fileIds.isEmpty ? null : fileIds,
         visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
         reactionAcceptance: state.reactionAcceptance,
+        poll: state.isVote ? poll : null,
       ));
       if (!mounted) return;
       state = state.copyWith(isNoteSending: NoteSendStatus.finished);

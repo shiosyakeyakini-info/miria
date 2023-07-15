@@ -52,7 +52,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
           .registerAll(conversationResult.map((e) => e.reply).whereNotNull());
       conversations
         ..clear()
-        ..addAll(conversationResult);
+        ..addAll(conversationResult.toList().reversed);
       setState(() {
         isLoading = false;
       });
