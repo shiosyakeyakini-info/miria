@@ -22,6 +22,26 @@ part 'note_create_state_notifier.freezed.dart';
 
 enum NoteSendStatus { sending, finished, error }
 
+enum VoteExpireType {
+  unlimited("無期限"),
+  date("日時指定"),
+  duration("期間指定");
+
+  final String displayText;
+
+  const VoteExpireType(this.displayText);
+}
+
+enum VoteExpireDurationType {
+  seconds("秒"),
+  minutes("分"),
+  hours("時間"),
+  day("日");
+
+  final String displayText;
+  const VoteExpireDurationType(this.displayText);
+}
+
 @freezed
 class NoteCreate with _$NoteCreate {
   const factory NoteCreate({
@@ -39,6 +59,15 @@ class NoteCreate with _$NoteCreate {
     @Default("") String text,
     @Default(false) bool isTextFocused,
     NoteSendStatus? isNoteSending,
+    @Default(false) bool isVote,
+    @Default(["", ""]) List<String> voteContent,
+    @Default(2) voteContentCount,
+    @Default(VoteExpireType.unlimited) VoteExpireType voteExpireType,
+    @Default(false) bool isVoteMultiple,
+    DateTime? voteDate,
+    int? voteDuration,
+    @Default(VoteExpireDurationType.seconds)
+    VoteExpireDurationType voteDurationType,
   }) = _NoteCreate;
 }
 
@@ -553,5 +582,55 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// 本文へのフォーカスを設定する
   void setContentTextFocused(bool isFocus) {
     state = state.copyWith(isTextFocused: isFocus);
+  }
+
+  /// 投票をトグルする
+  void toggleVote() {
+    state = state.copyWith(isVote: !state.isVote);
+  }
+
+  void toggleVoteMultiple() {
+    state = state.copyWith(isVoteMultiple: !state.isVoteMultiple);
+  }
+
+  /// 投票を追加する
+  void addVoteContent() {
+    if (state.voteContentCount == 10) return;
+    final list = state.voteContent.toList();
+    list.add("");
+    state = state.copyWith(
+        voteContentCount: state.voteContentCount + 1, voteContent: list);
+  }
+
+  /// 投票の行を削除する
+  void deleteVoteContent(int index) {
+    if (state.voteContentCount == 2) return;
+    final list = state.voteContent.toList();
+    list.removeAt(index);
+    state = state.copyWith(
+        voteContentCount: state.voteContentCount - 1, voteContent: list);
+  }
+
+  /// 投票の内容を設定する
+  void setVoteContent(int index, String text) {
+    final list = state.voteContent.toList();
+    list[index] = text;
+    state = state.copyWith(voteContent: list);
+  }
+
+  void setVoteExpireDate(DateTime date) {
+    state = state.copyWith(voteDate: date);
+  }
+
+  void setVoteExpireType(VoteExpireType type) {
+    state = state.copyWith(voteExpireType: type);
+  }
+
+  void setVoteDuration(int time) {
+    state = state.copyWith(voteDuration: time);
+  }
+
+  void setVoteDurationType(VoteExpireDurationType type) {
+    state = state.copyWith(voteDurationType: type);
   }
 }
