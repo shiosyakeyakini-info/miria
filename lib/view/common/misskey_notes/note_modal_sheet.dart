@@ -183,7 +183,8 @@ class NoteModalSheet extends ConsumerWidget {
             ),
             if (baseNote.user.host == null &&
                 baseNote.user.username == account.userId &&
-                baseNote.text?.isNotEmpty == true) ...[
+                !(baseNote.text?.isNotEmpty == true &&
+                    baseNote.renote == null)) ...[
               ListTile(
                   title: const Text("削除する"),
                   onTap: () async {
