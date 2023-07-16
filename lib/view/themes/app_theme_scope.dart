@@ -247,7 +247,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       data: buildTheme(context, foundColorTheme),
       child: AppTheme(
           themeData: buildDarkAppThemeData(context, foundColorTheme),
-          child: widget.child),
+          child: MediaQuery(
+              data:
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+              child: widget.child)),
     );
   }
 }

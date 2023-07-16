@@ -2405,7 +2405,7 @@ void main() {
                 NotesCreatePollRequest(
                     choices: [":ai_yay:", ":ai_yay_superfast:"],
                     multiple: false,
-                    expiresAt: DateTime(2099, 12, 31, 15, 34, 0, 0),
+                    expiresAt: DateTime(2099, 12, 31, 3, 34, 0, 0),
                     expiredAfter: null)))))).called(1);
       });
 
@@ -2474,7 +2474,7 @@ void main() {
                 NotesCreatePollRequest(
                     choices: [":ai_yay:", ":ai_yay_superfast:"],
                     multiple: false,
-                    expiresAt: DateTime(2099, 12, 31, 15, 34, 0, 0),
+                    expiresAt: DateTime(2099, 12, 31, 3, 34, 0, 0),
                     expiredAfter: null)))))).called(1);
       });
 
