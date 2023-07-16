@@ -120,343 +120,345 @@ class UserDetailState extends ConsumerState<UserDetail> {
     memo = response.memo ?? "";
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildContent() {
     final userName =
         "${response.username}${response.host != null ? "@${response.host ?? ""}" : ""}";
     final isMe = (widget.response.host == null &&
         widget.response.username == AccountScope.of(context).userId);
 
+    return Column(children: [
+      if (widget.controlAccount == null)
+        Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isMe)
+                  const Spacer()
+                else
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            if (response.isRenoteMuted ?? false)
+                              const Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text("Renoteのミュート中"),
+                              )),
+                            if (response.isMuted ?? false)
+                              const Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text("ミュート中"),
+                              )),
+                            if (response.isBlocked ?? false)
+                              const Card(
+                                  child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text("ブロック中"),
+                              )),
+                            if ((response.isFollowed ?? false))
+                              const Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Card(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text("フォローされています"),
+                                )),
+                              ),
+                            if (!isFollowEditing)
+                              (response.isFollowing ?? false)
+                                  ? ElevatedButton(
+                                      onPressed: followDelete,
+                                      child: const Text("フォロー解除"))
+                                  : OutlinedButton(
+                                      onPressed: followCreate,
+                                      child: const Text("フォローする"))
+                            else
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton.icon(
+                                    onPressed: () {},
+                                    icon: SizedBox(
+                                        width: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.fontSize ??
+                                            22,
+                                        height: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.fontSize ??
+                                            22,
+                                        child:
+                                            const CircularProgressIndicator()),
+                                    label: const Text("更新中")),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                Align(
+                  alignment: Alignment.center,
+                  child: IconButton(
+                      onPressed: () => userControl(isMe),
+                      icon: const Icon(Icons.more_vert)),
+                )
+              ],
+            )),
+      const Divider(),
+      Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
+        child: Column(children: [
+          Row(
+            children: [
+              AvatarIcon.fromUserResponse(
+                response,
+                height: 80,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MfmText(
+                        response.name ?? response.username,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                        emoji: response.emojis ?? {},
+                      ),
+                      Text(
+                        "@$userName",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          const Padding(padding: EdgeInsets.only(top: 5)),
+          if (widget.controlAccount == null)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        memo.isNotEmpty ? memo : "なんかメモることあったら書いとき",
+                        style: memo.isNotEmpty
+                            ? null
+                            : Theme.of(context).inputDecorationTheme.hintStyle,
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () async {
+                          final result = await showDialog(
+                              context: context,
+                              builder: (context) => UpdateMemoDialog(
+                                    account: widget.account,
+                                    initialMemo: memo,
+                                    userId: response.id,
+                                  ));
+                          if (result != null) {
+                            setState(() {
+                              memo = result;
+                            });
+                          }
+                        },
+                        icon: const Icon(Icons.edit)),
+                  ],
+                ),
+              ),
+            ),
+          const Padding(padding: EdgeInsets.only(top: 5)),
+          Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: [
+              for (final role in response.roles ?? [])
+                Container(
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Theme.of(context).dividerColor)),
+                    padding: const EdgeInsets.all(5),
+                    child: Text(role.name)),
+            ],
+          ),
+          const Padding(padding: EdgeInsets.only(top: 5)),
+          if (response.host != null)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded),
+                        Text("リモートユーザーのため、情報が不完全です。")
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () => context.pushRoute(FederationRoute(
+                          account: AccountScope.of(context),
+                          host: response.host!)),
+                      child: Text(
+                        "サーバー情報を表示",
+                        style: AppTheme.of(context).linkStyle,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          Align(
+            alignment: Alignment.center,
+            child: MfmText(response.description ?? "",
+                emoji: response.emojis ?? {}),
+          ),
+          const Padding(padding: EdgeInsets.only(top: 20)),
+          Table(
+            columnWidths: const {
+              1: FlexColumnWidth(1),
+              2: FlexColumnWidth(1),
+            },
+            children: [
+              TableRow(children: [
+                const TableCell(
+                  child: Text(
+                    "場所",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                TableCell(child: Text(response.location ?? ""))
+              ]),
+              TableRow(children: [
+                const TableCell(
+                  child: Text(
+                    "登録日",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                TableCell(child: Text(response.createdAt.format)), //FIXME
+              ]),
+              TableRow(children: [
+                const TableCell(
+                    child: Text(
+                  "誕生日",
+                  textAlign: TextAlign.center,
+                )),
+                TableCell(child: Text(response.birthday?.format ?? ""))
+              ])
+            ],
+          ),
+          const Padding(padding: EdgeInsets.only(top: 20)),
+          if (response.fields?.isNotEmpty == true) ...[
+            Table(
+              columnWidths: const {
+                1: FlexColumnWidth(2),
+                2: FlexColumnWidth(3),
+              },
+              children: [
+                for (final field in response.fields ?? <UserField>[])
+                  TableRow(children: [
+                    TableCell(
+                        child: MfmText(
+                      field.name,
+                      emoji: response.emojis ?? {},
+                    )),
+                    TableCell(
+                        child:
+                            MfmText(field.value, emoji: response.emojis ?? {})),
+                  ])
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 20)),
+          ],
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Column(
+              children: [
+                Text(response.notesCount.format(),
+                    style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  "ノート",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )
+              ],
+            ),
+            InkWell(
+              onTap: () => context.pushRoute(UserFolloweeRoute(
+                  userId: response.id, account: AccountScope.of(context))),
+              child: Column(
+                children: [
+                  Text(response.followingCount.format(),
+                      style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    "フォロー",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                ],
+              ),
+            ),
+            InkWell(
+              onTap: () => context.pushRoute(UserFollowerRoute(
+                  userId: response.id, account: AccountScope.of(context))),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(response.followersCount.format(),
+                      style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    "フォロワー",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                ],
+              ),
+            ),
+          ]),
+        ]),
+      ),
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BirthdayConfetti(
       response: widget.response,
       child: Column(
         children: [
           if (response.bannerUrl != null)
             Image.network(response.bannerUrl.toString()),
-          if (widget.controlAccount == null)
-            Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (isMe)
-                      const Spacer()
-                    else
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                if (response.isRenoteMuted ?? false)
-                                  const Card(
-                                      child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text("Renoteのミュート中"),
-                                  )),
-                                if (response.isMuted ?? false)
-                                  const Card(
-                                      child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text("ミュート中"),
-                                  )),
-                                if (response.isBlocked ?? false)
-                                  const Card(
-                                      child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text("ブロック中"),
-                                  )),
-                                if ((response.isFollowed ?? false))
-                                  const Padding(
-                                    padding: EdgeInsets.only(right: 8.0),
-                                    child: Card(
-                                        child: Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Text("フォローされています"),
-                                    )),
-                                  ),
-                                if (!isFollowEditing)
-                                  (response.isFollowing ?? false)
-                                      ? ElevatedButton(
-                                          onPressed: followDelete,
-                                          child: const Text("フォロー解除"))
-                                      : OutlinedButton(
-                                          onPressed: followCreate,
-                                          child: const Text("フォローする"))
-                                else
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton.icon(
-                                        onPressed: () {},
-                                        icon: SizedBox(
-                                            width: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.fontSize ??
-                                                22,
-                                            height: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.fontSize ??
-                                                22,
-                                            child:
-                                                const CircularProgressIndicator()),
-                                        label: const Text("更新中")),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: IconButton(
-                          onPressed: () => userControl(isMe),
-                          icon: const Icon(Icons.more_vert)),
-                    )
-                  ],
-                )),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    AvatarIcon.fromUserResponse(
-                      response,
-                      height: 80,
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            MfmText(
-                              response.name ?? response.username,
-                              style: Theme.of(context).textTheme.headlineSmall,
-                              emoji: response.emojis ?? {},
-                            ),
-                            Text(
-                              "@$userName",
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
+          Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: buildContent()),
+          ),
+          const Padding(padding: EdgeInsets.only(top: 20)),
+          ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              for (final note in response.pinnedNotes ?? [])
+                MisskeyNote(
+                  note: note,
+                  loginAs: widget.controlAccount,
                 ),
-                const Padding(padding: EdgeInsets.only(top: 5)),
-                if (widget.controlAccount == null)
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              memo.isNotEmpty ? memo : "なんかメモることあったら書いとき",
-                              style: memo.isNotEmpty
-                                  ? null
-                                  : Theme.of(context)
-                                      .inputDecorationTheme
-                                      .hintStyle,
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () async {
-                                final result = await showDialog(
-                                    context: context,
-                                    builder: (context) => UpdateMemoDialog(
-                                          account: widget.account,
-                                          initialMemo: memo,
-                                          userId: response.id,
-                                        ));
-                                if (result != null) {
-                                  setState(() {
-                                    memo = result;
-                                  });
-                                }
-                              },
-                              icon: const Icon(Icons.edit)),
-                        ],
-                      ),
-                    ),
-                  ),
-                const Padding(padding: EdgeInsets.only(top: 5)),
-                Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  children: [
-                    for (final role in response.roles ?? [])
-                      Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Theme.of(context).dividerColor)),
-                          padding: const EdgeInsets.all(5),
-                          child: Text(role.name)),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 5)),
-                if (response.host != null)
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Row(
-                            children: [
-                              Icon(Icons.warning_amber_rounded),
-                              Text("リモートユーザーのため、情報が不完全です。")
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () => context.pushRoute(FederationRoute(
-                                account: AccountScope.of(context),
-                                host: response.host!)),
-                            child: Text(
-                              "サーバー情報を表示",
-                              style: AppTheme.of(context).linkStyle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                Align(
-                  alignment: Alignment.center,
-                  child: MfmText(response.description ?? "",
-                      emoji: response.emojis ?? {}),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 20)),
-                Table(
-                  columnWidths: const {
-                    1: FlexColumnWidth(1),
-                    2: FlexColumnWidth(1),
-                  },
-                  children: [
-                    TableRow(children: [
-                      const TableCell(
-                        child: Text(
-                          "場所",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      TableCell(child: Text(response.location ?? ""))
-                    ]),
-                    TableRow(children: [
-                      const TableCell(
-                        child: Text(
-                          "登録日",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      TableCell(child: Text(response.createdAt.format)), //FIXME
-                    ]),
-                    TableRow(children: [
-                      const TableCell(
-                          child: Text(
-                        "誕生日",
-                        textAlign: TextAlign.center,
-                      )),
-                      TableCell(child: Text(response.birthday?.format ?? ""))
-                    ])
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 20)),
-                if (response.fields?.isNotEmpty == true) ...[
-                  Table(
-                    columnWidths: const {
-                      1: FlexColumnWidth(2),
-                      2: FlexColumnWidth(3),
-                    },
-                    children: [
-                      for (final field in response.fields ?? <UserField>[])
-                        TableRow(children: [
-                          TableCell(
-                              child: MfmText(
-                            field.name,
-                            emoji: response.emojis ?? {},
-                          )),
-                          TableCell(
-                              child: MfmText(field.value,
-                                  emoji: response.emojis ?? {})),
-                        ])
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 20)),
-                ],
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Text(response.notesCount.format(),
-                            style: Theme.of(context).textTheme.titleMedium),
-                        Text(
-                          "ノート",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        )
-                      ],
-                    ),
-                    InkWell(
-                      onTap: () => context.pushRoute(UserFolloweeRoute(
-                          userId: response.id,
-                          account: AccountScope.of(context))),
-                      child: Column(
-                        children: [
-                          Text(response.followingCount.format(),
-                              style: Theme.of(context).textTheme.titleMedium),
-                          Text(
-                            "フォロー",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => context.pushRoute(UserFollowerRoute(
-                          userId: response.id,
-                          account: AccountScope.of(context))),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(response.followersCount.format(),
-                              style: Theme.of(context).textTheme.titleMedium),
-                          Text(
-                            "フォロワー",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 20)),
-                ListView(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    for (final note in response.pinnedNotes ?? [])
-                      MisskeyNote(
-                        note: note,
-                        loginAs: widget.controlAccount,
-                      ),
-                  ],
-                )
-              ],
-            ),
+            ],
           )
         ],
       ),
