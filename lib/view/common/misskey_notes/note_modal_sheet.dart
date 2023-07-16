@@ -161,7 +161,7 @@ class NoteModalSheet extends ConsumerWidget {
                     },
                     title: Text(data.isFavorited ? "お気に入り解除" : "お気に入り"));
           },
-        ), //TODO: 未実装
+        ),
         ListTile(
           title: const Text("クリップ"),
           onTap: () {
@@ -206,6 +206,7 @@ class NoteModalSheet extends ConsumerWidget {
                       .notes
                       .delete(NotesDeleteRequest(noteId: baseNote.id));
                   ref.read(notesProvider(account)).delete(baseNote.id);
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 }
               }),
@@ -225,6 +226,7 @@ class NoteModalSheet extends ConsumerWidget {
                       .notes
                       .delete(NotesDeleteRequest(noteId: targetNote.id));
                   ref.read(notesProvider(account)).delete(targetNote.id);
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                   context.pushRoute(NoteCreateRoute(
                     initialAccount: account,
@@ -247,10 +249,10 @@ class NoteModalSheet extends ConsumerWidget {
                     // unrenote ではないらしい
                     .delete(NotesDeleteRequest(noteId: baseNote.id));
                 ref.read(notesProvider(account)).delete(baseNote.id);
+                if (!context.mounted) return;
                 Navigator.of(context).pop();
               }),
         ],
-
         if (baseNote.user.host != null ||
             (baseNote.user.host == null &&
                 baseNote.user.username != account.userId))
