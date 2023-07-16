@@ -63,41 +63,76 @@ class VoteContentListState extends ConsumerState<VoteContentList> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        for (int i = 0; i < contentCount; i++)
-          Builder(builder: (context2) {
-            final controller = TextEditingController();
-            controller.addListener(() {
-              ref
-                  .read(noteCreateProvider(AccountScope.of(context)).notifier)
-                  .setVoteContent(i, controller.text);
-            });
-            controller.text = ref
-                .read(noteCreateProvider(AccountScope.of(context)))
-                .voteContent[i];
-
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controller,
-                      decoration: InputDecoration(hintText: "回答${i + 1}"),
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ref
-                            .read(noteCreateProvider(AccountScope.of(context))
-                                .notifier)
-                            .deleteVoteContent(i);
-                      },
-                      icon: const Icon(Icons.close)),
-                ],
-              ),
-            );
-          }),
+        for (int i = 0; i < contentCount; i++) VoteContentListItem(index: i),
       ],
+    );
+  }
+}
+
+class VoteContentListItem extends ConsumerStatefulWidget {
+  final int index;
+
+  const VoteContentListItem({super.key, required this.index});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      VoteContentListItemState();
+}
+
+class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
+  final controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(() {
+      ref
+          .read(noteCreateProvider(AccountScope.of(context)).notifier)
+          .setVoteContent(widget.index, controller.text);
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant VoteContentListItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.text = ref
+          .read(noteCreateProvider(AccountScope.of(context)))
+          .voteContent[widget.index];
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.text = ref
+          .read(noteCreateProvider(AccountScope.of(context)))
+          .voteContent[widget.index];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(hintText: "回答${widget.index + 1}"),
+            ),
+          ),
+          IconButton(
+              onPressed: () {
+                ref
+                    .read(noteCreateProvider(AccountScope.of(context)).notifier)
+                    .deleteVoteContent(widget.index);
+              },
+              icon: const Icon(Icons.close)),
+        ],
+      ),
     );
   }
 }
@@ -179,14 +214,14 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
 
           ref.read(noteCreateProvider(account).notifier).setVoteExpireDate(
               DateTime(resultDate.year, resultDate.month, resultDate.day,
-                  resultTime.hour, resultTime.minute, 59));
+                  resultTime.hour, resultTime.minute, 0));
         },
         child: DecoratedBox(
             decoration: BoxDecoration(
                 border: Border.all(color: Theme.of(context).primaryColor),
                 borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -257,7 +292,7 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
               keyboardType: const TextInputType.numberWithOptions(),
               inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(left: 10),
         ),
         DropdownButton(

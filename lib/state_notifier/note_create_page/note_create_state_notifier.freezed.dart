@@ -33,7 +33,7 @@ mixin _$NoteCreate {
   NoteSendStatus? get isNoteSending => throw _privateConstructorUsedError;
   bool get isVote => throw _privateConstructorUsedError;
   List<String> get voteContent => throw _privateConstructorUsedError;
-  dynamic get voteContentCount => throw _privateConstructorUsedError;
+  int get voteContentCount => throw _privateConstructorUsedError;
   VoteExpireType get voteExpireType => throw _privateConstructorUsedError;
   bool get isVoteMultiple => throw _privateConstructorUsedError;
   DateTime? get voteDate => throw _privateConstructorUsedError;
@@ -69,7 +69,7 @@ abstract class $NoteCreateCopyWith<$Res> {
       NoteSendStatus? isNoteSending,
       bool isVote,
       List<String> voteContent,
-      dynamic voteContentCount,
+      int voteContentCount,
       VoteExpireType voteExpireType,
       bool isVoteMultiple,
       DateTime? voteDate,
@@ -111,7 +111,7 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? isNoteSending = freezed,
     Object? isVote = null,
     Object? voteContent = null,
-    Object? voteContentCount = freezed,
+    Object? voteContentCount = null,
     Object? voteExpireType = null,
     Object? isVoteMultiple = null,
     Object? voteDate = freezed,
@@ -183,10 +183,10 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.voteContent
           : voteContent // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      voteContentCount: freezed == voteContentCount
+      voteContentCount: null == voteContentCount
           ? _value.voteContentCount
           : voteContentCount // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int,
       voteExpireType: null == voteExpireType
           ? _value.voteExpireType
           : voteExpireType // ignore: cast_nullable_to_non_nullable
@@ -280,7 +280,7 @@ abstract class _$$_NoteCreateCopyWith<$Res>
       NoteSendStatus? isNoteSending,
       bool isVote,
       List<String> voteContent,
-      dynamic voteContentCount,
+      int voteContentCount,
       VoteExpireType voteExpireType,
       bool isVoteMultiple,
       DateTime? voteDate,
@@ -324,7 +324,7 @@ class __$$_NoteCreateCopyWithImpl<$Res>
     Object? isNoteSending = freezed,
     Object? isVote = null,
     Object? voteContent = null,
-    Object? voteContentCount = freezed,
+    Object? voteContentCount = null,
     Object? voteExpireType = null,
     Object? isVoteMultiple = null,
     Object? voteDate = freezed,
@@ -396,9 +396,10 @@ class __$$_NoteCreateCopyWithImpl<$Res>
           ? _value._voteContent
           : voteContent // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      voteContentCount: freezed == voteContentCount
-          ? _value.voteContentCount!
-          : voteContentCount,
+      voteContentCount: null == voteContentCount
+          ? _value.voteContentCount
+          : voteContentCount // ignore: cast_nullable_to_non_nullable
+              as int,
       voteExpireType: null == voteExpireType
           ? _value.voteExpireType
           : voteExpireType // ignore: cast_nullable_to_non_nullable
@@ -513,7 +514,7 @@ class _$_NoteCreate implements _NoteCreate {
 
   @override
   @JsonKey()
-  final dynamic voteContentCount;
+  final int voteContentCount;
   @override
   @JsonKey()
   final VoteExpireType voteExpireType;
@@ -560,8 +561,8 @@ class _$_NoteCreate implements _NoteCreate {
             (identical(other.isVote, isVote) || other.isVote == isVote) &&
             const DeepCollectionEquality()
                 .equals(other._voteContent, _voteContent) &&
-            const DeepCollectionEquality()
-                .equals(other.voteContentCount, voteContentCount) &&
+            (identical(other.voteContentCount, voteContentCount) ||
+                other.voteContentCount == voteContentCount) &&
             (identical(other.voteExpireType, voteExpireType) ||
                 other.voteExpireType == voteExpireType) &&
             (identical(other.isVoteMultiple, isVoteMultiple) ||
@@ -593,7 +594,7 @@ class _$_NoteCreate implements _NoteCreate {
         isNoteSending,
         isVote,
         const DeepCollectionEquality().hash(_voteContent),
-        const DeepCollectionEquality().hash(voteContentCount),
+        voteContentCount,
         voteExpireType,
         isVoteMultiple,
         voteDate,
@@ -626,7 +627,7 @@ abstract class _NoteCreate implements NoteCreate {
       final NoteSendStatus? isNoteSending,
       final bool isVote,
       final List<String> voteContent,
-      final dynamic voteContentCount,
+      final int voteContentCount,
       final VoteExpireType voteExpireType,
       final bool isVoteMultiple,
       final DateTime? voteDate,
@@ -666,7 +667,7 @@ abstract class _NoteCreate implements NoteCreate {
   @override
   List<String> get voteContent;
   @override
-  dynamic get voteContentCount;
+  int get voteContentCount;
   @override
   VoteExpireType get voteExpireType;
   @override

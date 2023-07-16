@@ -15,6 +15,7 @@ import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
 import 'package:miria/view/note_create_page/file_settings_dialog.dart';
+import 'package:miria/view/note_create_page/vote_area.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -61,7 +62,7 @@ class NoteCreate with _$NoteCreate {
     NoteSendStatus? isNoteSending,
     @Default(false) bool isVote,
     @Default(["", ""]) List<String> voteContent,
-    @Default(2) voteContentCount,
+    @Default(2) int voteContentCount,
     @Default(VoteExpireType.unlimited) VoteExpireType voteExpireType,
     @Default(false) bool isVoteMultiple,
     DateTime? voteDate,
@@ -191,6 +192,14 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             (await misskey.users.show(UsersShowRequest(userId: userId)))
                 .toUser()
         ],
+        isVote: deletedNote.poll != null,
+        isVoteMultiple: deletedNote.poll?.multiple ?? false,
+        voteExpireType: VoteExpireType.date,
+        voteContentCount:
+            deletedNote.poll?.choices.map((e) => e.text).length ?? 2,
+        voteContent:
+            deletedNote.poll?.choices.map((e) => e.text).toList() ?? [],
+        voteDate: deletedNote.poll?.expiresAt,
       );
       state = resultState;
       return;
