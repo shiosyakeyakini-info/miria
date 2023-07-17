@@ -62,8 +62,14 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                 .registerAll(result.map((e) => e.note).whereNotNull());
             return result.toNotificationData();
           },
-          itemBuilder: (context, notification) => NotificationItem(
-            notification: notification,
+          itemBuilder: (context, notification) => Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: NotificationItem(
+                notification: notification,
+              ),
+            ),
           ),
         ),
       ),

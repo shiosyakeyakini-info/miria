@@ -54,9 +54,8 @@ class NoteModalSheet extends ConsumerWidget {
             ListTile(
               title: const Text("詳細"),
               onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => const NotImplementationDialog());
+                context.pushRoute(
+                    NoteDetailRoute(note: targetNote, account: account));
               },
             ),
             ListTile(
@@ -184,7 +183,8 @@ class NoteModalSheet extends ConsumerWidget {
             ),
             if (baseNote.user.host == null &&
                 baseNote.user.username == account.userId &&
-                baseNote.text?.isNotEmpty == true) ...[
+                !(baseNote.text?.isNotEmpty == true &&
+                    baseNote.renote == null)) ...[
               ListTile(
                   title: const Text("削除する"),
                   onTap: () async {

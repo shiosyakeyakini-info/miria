@@ -748,10 +748,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm_parser
-      sha256: "72f88aaef806c3961492e00a563eb93f5a6f0fed93ec5f15ade3cd4cca815c15"
+      sha256: "16504680809b655c3ee4c53fea68d3d39ff21be5952b6008ef58eb803b86bf71"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   mfm_renderer:
     dependency: "direct main"
     description:

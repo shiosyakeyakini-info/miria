@@ -19,6 +19,7 @@ import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/mfm_preview.dart';
 import 'package:miria/view/note_create_page/reply_to_area.dart';
+import 'package:miria/view/note_create_page/vote_area.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/mockito.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -876,8 +877,9 @@ void main() {
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
-                  initialAccount: TestData.account,
-                  reply: TestData.note3AsAnotherUser),
+                initialAccount: TestData.account,
+                reply: TestData.note3AsAnotherUser,
+              ),
             )));
         await tester.pumpAndSettle();
         expect(find.text("返信先："), findsOneWidget);
@@ -887,6 +889,80 @@ void main() {
                 matching: find.text(TestData.note3ExpectUserName,
                     findRichText: true)),
             findsOneWidget);
+      });
+
+      testWidgets("リプライにメンションが含まれている場合、両方の返信先が表示されていること", (tester) async {
+        final misskey = MockMisskey();
+        final users = MockMisskeyUsers();
+        when(misskey.users).thenReturn(users);
+        when(users.show(any))
+            .thenAnswer((_) async => TestData.usersShowResponse2);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(
+                initialAccount: TestData.account,
+                reply: TestData.note5AsAnotherUser.copyWith(
+                  mentions: [TestData.detailedUser1.username],
+                ),
+              ),
+            )));
+        await tester.pumpAndSettle();
+        expect(find.text("返信先："), findsOneWidget);
+        expect(
+            find.descendant(
+                of: find.byType(ReplyToArea),
+                matching: find.text(
+                    "@${TestData.note5AsAnotherUser.user.username}",
+                    findRichText: true)),
+            findsOneWidget);
+        expect(
+            find.descendant(
+                of: find.byType(ReplyToArea),
+                matching: find.text("@${TestData.usersShowResponse2.username}",
+                    findRichText: true)),
+            findsOneWidget);
+      });
+
+      testWidgets("削除したノートがリプライの場合、そのユーザーの情報が表示されていること", (tester) async {
+        final misskey = MockMisskey();
+        final users = MockMisskeyUsers();
+        when(misskey.users).thenReturn(users);
+        when(users.show(any))
+            .thenAnswer((_) async => TestData.usersShowResponse1);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+              deletedNote: TestData.note1.copyWith(mentions: ["@ai"]),
+            ))));
+        await tester.pumpAndSettle();
+        expect(find.text("返信先："), findsOneWidget);
+        expect(
+            find.descendant(
+                of: find.byType(ReplyToArea),
+                matching: find.text("@ai", findRichText: true)),
+            findsOneWidget);
+      });
+
+      testWidgets("自分自身はリプライの返信先に含まれていないこと", (tester) async {
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account, reply: TestData.note1))));
+        await tester.pumpAndSettle();
+        expect(find.text("返信先："), findsNothing);
       });
 
       testWidgets("リプライでない場合、返信先が表示されていないこと", (tester) async {
@@ -902,8 +978,83 @@ void main() {
       });
     });
 
-    // TODO
-    group("投票", () {});
+    group("投票", () {
+      testWidgets("初期値はノートの投票なしであること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(
+                predicate<NotesCreateRequest>((arg) => arg.poll == null)))))
+            .called(1);
+      });
+
+      testWidgets("削除したノートを直す場合、削除したノートの投票が適用されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+              deletedNote: TestData.note4AsVote.copyWith(
+                  poll: TestData.note4AsVote.poll?.copyWith(multiple: false)),
+            ))));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                const DeepCollectionEquality().equals(
+                    TestData.note4AsVote.poll!.choices.map((e) => e.text),
+                    arg.poll!.choices) &&
+                TestData.note4AsVote.poll!.expiresAt == arg.poll!.expiresAt &&
+                arg.poll!.expiredAfter == null &&
+                TestData.note4AsVote.poll!.multiple == arg.poll!.multiple)))));
+      });
+
+      testWidgets("削除したノートが複数選択可能な場合、複数選択可能な状態が引き継がれていること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+              initialAccount: TestData.account,
+              deletedNote: TestData.note4AsVote.copyWith(
+                  poll: TestData.note4AsVote.poll?.copyWith(multiple: true)),
+            ))));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) => arg.poll!.multiple == true)))));
+      });
+    });
   });
 
   group("入力・バリデーション", () {
@@ -1003,8 +1154,10 @@ void main() {
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryData))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => const DeepCollectionEquality()
-                .equals([TestData.drive1.id], arg.fileIds))))));
+            (arg) =>
+                arg.text == null &&
+                const DeepCollectionEquality()
+                    .equals([TestData.drive1.id], arg.fileIds))))));
       });
 
       group("入力補完", () {
@@ -1963,6 +2116,606 @@ void main() {
 
         verify(mockNote.create(argThat(equals(
             predicate<NotesCreateRequest>((arg) => arg.fileIds == null)))));
+      });
+    });
+
+    group("投票", () {
+      testWidgets("投票つきノートを投稿できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).at(1), "純金製ぬいぐるみ");
+        await tester.enterText(find.byType(TextField).at(2), "動くゼロ幅スペース");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: ["純金製ぬいぐるみ", "動くゼロ幅スペース"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("投票は10個まで追加できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        for (var i = 0; i < 8; i++) {
+          await tester.tap(find.text("増やす"));
+        }
+        for (var i = 0; i < 10; i++) {
+          await tester.enterText(find.byType(TextField).at(i + 1), "投票$i");
+        }
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [
+                      "投票0",
+                      "投票1",
+                      "投票2",
+                      "投票3",
+                      "投票4",
+                      "投票5",
+                      "投票6",
+                      "投票7",
+                      "投票8",
+                      "投票9"
+                    ],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("追加した投票の項目を削除できること、2つ以上削除することはできないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), "投票0");
+        await tester.enterText(find.byType(TextField).at(2), "投票1");
+        await tester.tap(find.text("増やす"));
+        await tester.tap(find.text("増やす"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(3), "投票2");
+        await tester.enterText(find.byType(TextField).at(4), "投票3");
+
+        // 投票2を削除
+        await tester.tap(find.byIcon(Icons.close).at(2));
+        await tester.pumpAndSettle();
+
+        // 投票2が削除されていること
+        expect(tester.textEditingController(find.byType(TextField).at(1)).text,
+            "投票0");
+        expect(tester.textEditingController(find.byType(TextField).at(2)).text,
+            "投票1");
+        expect(tester.textEditingController(find.byType(TextField).at(3)).text,
+            "投票3");
+
+        // 投票0を削除
+        await tester.tap(find.byIcon(Icons.close).at(0));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.close).at(0));
+        await tester.pumpAndSettle();
+
+        expect(tester.textEditingController(find.byType(TextField).at(1)).text,
+            "投票1");
+        expect(tester.textEditingController(find.byType(TextField).at(2)).text,
+            "投票3");
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: ["投票1", "投票3"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("2つ以上の投票がないと投稿できないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton).hitTestable());
+
+        // 1個だけではエラーになること
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton).hitTestable());
+
+        // 2個でエラーにならないこと
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("複数回答の投票をもとに戻せること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(Switch));
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.byType(Switch));
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("日時指定の投票を作成できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("日時指定"));
+        await tester.pumpAndSettle();
+
+        await tester.ensureVisible(find.byType(VoteUntilDate));
+
+        await tester.tap(find.byType(VoteUntilDate));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), "2099/12/31");
+        await tester.tap(find.text("OK"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_outlined));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).hitTestable().at(0), "3");
+        await tester.enterText(
+            find.byType(TextField).hitTestable().at(1), "34");
+        await tester.tap(find.text("OK"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: DateTime(2099, 12, 31, 3, 34, 0, 0),
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("日時指定の投票で日時を未入力時、投稿ができないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("日時指定"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton).hitTestable());
+        await tester.pumpAndSettle();
+
+        await tester.ensureVisible(find.byType(VoteUntilDate));
+
+        await tester.tap(find.byType(VoteUntilDate));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField).hitTestable(), "2099/12/31");
+        await tester.tap(find.text("OK"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_outlined));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).hitTestable().at(0), "3");
+        await tester.enterText(
+            find.byType(TextField).hitTestable().at(1), "34");
+        await tester.tap(find.text("OK"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: DateTime(2099, 12, 31, 3, 34, 0, 0),
+                    expiredAfter: null)))))).called(1);
+      });
+
+      testWidgets("経過指定の投票を「秒」で作成できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("期間指定"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(3), "100");
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: Duration(seconds: 100))))))).called(1);
+      });
+
+      testWidgets("経過指定の投票を「分」で作成できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("期間指定"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(3), "100");
+
+        await tester.ensureVisible(find.text("秒"));
+        await tester.tap(find.text("秒"));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text("分"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: Duration(minutes: 100))))))).called(1);
+      });
+
+      testWidgets("経過指定の投票を「時」で作成できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("期間指定"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(3), "100");
+
+        await tester.ensureVisible(find.text("秒"));
+        await tester.tap(find.text("秒"));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text("時間"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: Duration(hours: 100))))))).called(1);
+      });
+
+      testWidgets("経過指定の投票を「日」で作成できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("期間指定"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(3), "100");
+
+        await tester.ensureVisible(find.text("秒"));
+        await tester.tap(find.text("秒"));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text("日"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: Duration(days: 100))))))).called(1);
+      });
+
+      testWidgets("経過指定の投票の作成時、投票期間を未入力で投稿を作成できないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            )));
+
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.how_to_vote));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
+        await tester.enterText(
+            find.byType(TextField).at(2), ":ai_yay_superfast:");
+
+        await tester.tap(find.text("無期限"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("期間指定"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        await tester.tap(find.byType(ElevatedButton).hitTestable());
+
+        await tester.enterText(find.byType(TextField).at(3), "100");
+
+        await tester.ensureVisible(find.text("秒"));
+        await tester.tap(find.text("秒"));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text("日"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
+            (arg) =>
+                arg.poll ==
+                const NotesCreatePollRequest(
+                    choices: [":ai_yay:", ":ai_yay_superfast:"],
+                    multiple: false,
+                    expiresAt: null,
+                    expiredAfter: Duration(days: 100))))))).called(1);
       });
     });
   });

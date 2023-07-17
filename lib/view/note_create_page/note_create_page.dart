@@ -12,6 +12,7 @@ import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/note_create_page/renote_area.dart';
 import 'package:miria/view/note_create_page/reply_area.dart';
 import 'package:miria/view/note_create_page/reply_to_area.dart';
+import 'package:miria/view/note_create_page/vote_area.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/note_create_page/note_create_setting_top.dart';
 import 'package:miria/view/note_create_page/note_emoji.dart';
@@ -176,7 +177,13 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                                   await notifier.chooseFile(context),
                               icon: const Icon(Icons.image)),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                ref
+                                    .read(noteCreateProvider(
+                                            widget.initialAccount)
+                                        .notifier)
+                                    .toggleVote();
+                              },
                               icon: const Icon(Icons.how_to_vote)),
                           const CwToggleButton(),
                           IconButton(
@@ -215,6 +222,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       const MfmPreview(),
                       const FilePreview(),
                       const RenoteArea(),
+                      const VoteArea(),
                     ],
                   ),
                 ),

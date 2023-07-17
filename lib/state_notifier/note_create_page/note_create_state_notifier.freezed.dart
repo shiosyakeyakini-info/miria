@@ -31,6 +31,15 @@ mixin _$NoteCreate {
   String get text => throw _privateConstructorUsedError;
   bool get isTextFocused => throw _privateConstructorUsedError;
   NoteSendStatus? get isNoteSending => throw _privateConstructorUsedError;
+  bool get isVote => throw _privateConstructorUsedError;
+  List<String> get voteContent => throw _privateConstructorUsedError;
+  int get voteContentCount => throw _privateConstructorUsedError;
+  VoteExpireType get voteExpireType => throw _privateConstructorUsedError;
+  bool get isVoteMultiple => throw _privateConstructorUsedError;
+  DateTime? get voteDate => throw _privateConstructorUsedError;
+  int? get voteDuration => throw _privateConstructorUsedError;
+  VoteExpireDurationType get voteDurationType =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NoteCreateCopyWith<NoteCreate> get copyWith =>
@@ -57,7 +66,15 @@ abstract class $NoteCreateCopyWith<$Res> {
       String cwText,
       String text,
       bool isTextFocused,
-      NoteSendStatus? isNoteSending});
+      NoteSendStatus? isNoteSending,
+      bool isVote,
+      List<String> voteContent,
+      int voteContentCount,
+      VoteExpireType voteExpireType,
+      bool isVoteMultiple,
+      DateTime? voteDate,
+      int? voteDuration,
+      VoteExpireDurationType voteDurationType});
 
   $AccountCopyWith<$Res> get account;
   $NoteCreateChannelCopyWith<$Res>? get channel;
@@ -92,6 +109,14 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? text = null,
     Object? isTextFocused = null,
     Object? isNoteSending = freezed,
+    Object? isVote = null,
+    Object? voteContent = null,
+    Object? voteContentCount = null,
+    Object? voteExpireType = null,
+    Object? isVoteMultiple = null,
+    Object? voteDate = freezed,
+    Object? voteDuration = freezed,
+    Object? voteDurationType = null,
   }) {
     return _then(_value.copyWith(
       account: null == account
@@ -150,6 +175,38 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.isNoteSending
           : isNoteSending // ignore: cast_nullable_to_non_nullable
               as NoteSendStatus?,
+      isVote: null == isVote
+          ? _value.isVote
+          : isVote // ignore: cast_nullable_to_non_nullable
+              as bool,
+      voteContent: null == voteContent
+          ? _value.voteContent
+          : voteContent // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      voteContentCount: null == voteContentCount
+          ? _value.voteContentCount
+          : voteContentCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      voteExpireType: null == voteExpireType
+          ? _value.voteExpireType
+          : voteExpireType // ignore: cast_nullable_to_non_nullable
+              as VoteExpireType,
+      isVoteMultiple: null == isVoteMultiple
+          ? _value.isVoteMultiple
+          : isVoteMultiple // ignore: cast_nullable_to_non_nullable
+              as bool,
+      voteDate: freezed == voteDate
+          ? _value.voteDate
+          : voteDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      voteDuration: freezed == voteDuration
+          ? _value.voteDuration
+          : voteDuration // ignore: cast_nullable_to_non_nullable
+              as int?,
+      voteDurationType: null == voteDurationType
+          ? _value.voteDurationType
+          : voteDurationType // ignore: cast_nullable_to_non_nullable
+              as VoteExpireDurationType,
     ) as $Val);
   }
 
@@ -220,7 +277,15 @@ abstract class _$$_NoteCreateCopyWith<$Res>
       String cwText,
       String text,
       bool isTextFocused,
-      NoteSendStatus? isNoteSending});
+      NoteSendStatus? isNoteSending,
+      bool isVote,
+      List<String> voteContent,
+      int voteContentCount,
+      VoteExpireType voteExpireType,
+      bool isVoteMultiple,
+      DateTime? voteDate,
+      int? voteDuration,
+      VoteExpireDurationType voteDurationType});
 
   @override
   $AccountCopyWith<$Res> get account;
@@ -257,6 +322,14 @@ class __$$_NoteCreateCopyWithImpl<$Res>
     Object? text = null,
     Object? isTextFocused = null,
     Object? isNoteSending = freezed,
+    Object? isVote = null,
+    Object? voteContent = null,
+    Object? voteContentCount = null,
+    Object? voteExpireType = null,
+    Object? isVoteMultiple = null,
+    Object? voteDate = freezed,
+    Object? voteDuration = freezed,
+    Object? voteDurationType = null,
   }) {
     return _then(_$_NoteCreate(
       account: null == account
@@ -315,6 +388,38 @@ class __$$_NoteCreateCopyWithImpl<$Res>
           ? _value.isNoteSending
           : isNoteSending // ignore: cast_nullable_to_non_nullable
               as NoteSendStatus?,
+      isVote: null == isVote
+          ? _value.isVote
+          : isVote // ignore: cast_nullable_to_non_nullable
+              as bool,
+      voteContent: null == voteContent
+          ? _value._voteContent
+          : voteContent // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      voteContentCount: null == voteContentCount
+          ? _value.voteContentCount
+          : voteContentCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      voteExpireType: null == voteExpireType
+          ? _value.voteExpireType
+          : voteExpireType // ignore: cast_nullable_to_non_nullable
+              as VoteExpireType,
+      isVoteMultiple: null == isVoteMultiple
+          ? _value.isVoteMultiple
+          : isVoteMultiple // ignore: cast_nullable_to_non_nullable
+              as bool,
+      voteDate: freezed == voteDate
+          ? _value.voteDate
+          : voteDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      voteDuration: freezed == voteDuration
+          ? _value.voteDuration
+          : voteDuration // ignore: cast_nullable_to_non_nullable
+              as int?,
+      voteDurationType: null == voteDurationType
+          ? _value.voteDurationType
+          : voteDurationType // ignore: cast_nullable_to_non_nullable
+              as VoteExpireDurationType,
     ));
   }
 }
@@ -336,9 +441,18 @@ class _$_NoteCreate implements _NoteCreate {
       this.cwText = "",
       this.text = "",
       this.isTextFocused = false,
-      this.isNoteSending})
+      this.isNoteSending,
+      this.isVote = false,
+      final List<String> voteContent = const ["", ""],
+      this.voteContentCount = 2,
+      this.voteExpireType = VoteExpireType.unlimited,
+      this.isVoteMultiple = false,
+      this.voteDate,
+      this.voteDuration,
+      this.voteDurationType = VoteExpireDurationType.seconds})
       : _replyTo = replyTo,
-        _files = files;
+        _files = files,
+        _voteContent = voteContent;
 
   @override
   final Account account;
@@ -386,10 +500,38 @@ class _$_NoteCreate implements _NoteCreate {
   final bool isTextFocused;
   @override
   final NoteSendStatus? isNoteSending;
+  @override
+  @JsonKey()
+  final bool isVote;
+  final List<String> _voteContent;
+  @override
+  @JsonKey()
+  List<String> get voteContent {
+    if (_voteContent is EqualUnmodifiableListView) return _voteContent;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_voteContent);
+  }
+
+  @override
+  @JsonKey()
+  final int voteContentCount;
+  @override
+  @JsonKey()
+  final VoteExpireType voteExpireType;
+  @override
+  @JsonKey()
+  final bool isVoteMultiple;
+  @override
+  final DateTime? voteDate;
+  @override
+  final int? voteDuration;
+  @override
+  @JsonKey()
+  final VoteExpireDurationType voteDurationType;
 
   @override
   String toString() {
-    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending)';
+    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType)';
   }
 
   @override
@@ -415,26 +557,50 @@ class _$_NoteCreate implements _NoteCreate {
             (identical(other.isTextFocused, isTextFocused) ||
                 other.isTextFocused == isTextFocused) &&
             (identical(other.isNoteSending, isNoteSending) ||
-                other.isNoteSending == isNoteSending));
+                other.isNoteSending == isNoteSending) &&
+            (identical(other.isVote, isVote) || other.isVote == isVote) &&
+            const DeepCollectionEquality()
+                .equals(other._voteContent, _voteContent) &&
+            (identical(other.voteContentCount, voteContentCount) ||
+                other.voteContentCount == voteContentCount) &&
+            (identical(other.voteExpireType, voteExpireType) ||
+                other.voteExpireType == voteExpireType) &&
+            (identical(other.isVoteMultiple, isVoteMultiple) ||
+                other.isVoteMultiple == isVoteMultiple) &&
+            (identical(other.voteDate, voteDate) ||
+                other.voteDate == voteDate) &&
+            (identical(other.voteDuration, voteDuration) ||
+                other.voteDuration == voteDuration) &&
+            (identical(other.voteDurationType, voteDurationType) ||
+                other.voteDurationType == voteDurationType));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      account,
-      noteVisibility,
-      localOnly,
-      const DeepCollectionEquality().hash(_replyTo),
-      const DeepCollectionEquality().hash(_files),
-      channel,
-      reply,
-      renote,
-      reactionAcceptance,
-      isCw,
-      cwText,
-      text,
-      isTextFocused,
-      isNoteSending);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        account,
+        noteVisibility,
+        localOnly,
+        const DeepCollectionEquality().hash(_replyTo),
+        const DeepCollectionEquality().hash(_files),
+        channel,
+        reply,
+        renote,
+        reactionAcceptance,
+        isCw,
+        cwText,
+        text,
+        isTextFocused,
+        isNoteSending,
+        isVote,
+        const DeepCollectionEquality().hash(_voteContent),
+        voteContentCount,
+        voteExpireType,
+        isVoteMultiple,
+        voteDate,
+        voteDuration,
+        voteDurationType
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -458,7 +624,15 @@ abstract class _NoteCreate implements NoteCreate {
       final String cwText,
       final String text,
       final bool isTextFocused,
-      final NoteSendStatus? isNoteSending}) = _$_NoteCreate;
+      final NoteSendStatus? isNoteSending,
+      final bool isVote,
+      final List<String> voteContent,
+      final int voteContentCount,
+      final VoteExpireType voteExpireType,
+      final bool isVoteMultiple,
+      final DateTime? voteDate,
+      final int? voteDuration,
+      final VoteExpireDurationType voteDurationType}) = _$_NoteCreate;
 
   @override
   Account get account;
@@ -488,6 +662,22 @@ abstract class _NoteCreate implements NoteCreate {
   bool get isTextFocused;
   @override
   NoteSendStatus? get isNoteSending;
+  @override
+  bool get isVote;
+  @override
+  List<String> get voteContent;
+  @override
+  int get voteContentCount;
+  @override
+  VoteExpireType get voteExpireType;
+  @override
+  bool get isVoteMultiple;
+  @override
+  DateTime? get voteDate;
+  @override
+  int? get voteDuration;
+  @override
+  VoteExpireDurationType get voteDurationType;
   @override
   @JsonKey(ignore: true)
   _$$_NoteCreateCopyWith<_$_NoteCreate> get copyWith =>

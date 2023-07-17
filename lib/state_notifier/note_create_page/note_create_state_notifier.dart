@@ -15,12 +15,33 @@ import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
 import 'package:miria/view/note_create_page/file_settings_dialog.dart';
+import 'package:miria/view/note_create_page/vote_area.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 part 'note_create_state_notifier.freezed.dart';
 
 enum NoteSendStatus { sending, finished, error }
+
+enum VoteExpireType {
+  unlimited("無期限"),
+  date("日時指定"),
+  duration("期間指定");
+
+  final String displayText;
+
+  const VoteExpireType(this.displayText);
+}
+
+enum VoteExpireDurationType {
+  seconds("秒"),
+  minutes("分"),
+  hours("時間"),
+  day("日");
+
+  final String displayText;
+  const VoteExpireDurationType(this.displayText);
+}
 
 @freezed
 class NoteCreate with _$NoteCreate {
@@ -39,6 +60,15 @@ class NoteCreate with _$NoteCreate {
     @Default("") String text,
     @Default(false) bool isTextFocused,
     NoteSendStatus? isNoteSending,
+    @Default(false) bool isVote,
+    @Default(["", ""]) List<String> voteContent,
+    @Default(2) int voteContentCount,
+    @Default(VoteExpireType.unlimited) VoteExpireType voteExpireType,
+    @Default(false) bool isVoteMultiple,
+    DateTime? voteDate,
+    int? voteDuration,
+    @Default(VoteExpireDurationType.seconds)
+    VoteExpireDurationType voteDurationType,
   }) = _NoteCreate;
 }
 
@@ -162,6 +192,14 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             (await misskey.users.show(UsersShowRequest(userId: userId)))
                 .toUser()
         ],
+        isVote: deletedNote.poll != null,
+        isVoteMultiple: deletedNote.poll?.multiple ?? false,
+        voteExpireType: VoteExpireType.date,
+        voteContentCount:
+            deletedNote.poll?.choices.map((e) => e.text).length ?? 2,
+        voteContent:
+            deletedNote.poll?.choices.map((e) => e.text).toList() ?? [],
+        voteDate: deletedNote.poll?.expiresAt,
       );
       state = resultState;
       return;
@@ -211,8 +249,25 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
   /// ノートを投稿する
   Future<void> note() async {
-    if (state.text.isEmpty && state.files.isEmpty) {
+    if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
       throw SpecifiedException("なんか入れてや");
+    }
+
+    if (state.isVote &&
+        state.voteContent.where((e) => e.isNotEmpty).length < 2) {
+      throw SpecifiedException("投票の選択肢を2つ以上入れてや");
+    }
+
+    if (state.isVote &&
+        state.voteExpireType == VoteExpireType.date &&
+        state.voteDate == null) {
+      throw SpecifiedException("投票がいつまでか入れてや");
+    }
+
+    if (state.isVote &&
+        state.voteExpireType == VoteExpireType.duration &&
+        state.voteDuration == null) {
+      throw SpecifiedException("投票期間を入れてや");
     }
 
     try {
@@ -298,10 +353,39 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final visibleUserIds = state.replyTo.map((e) => e.id).toList();
       visibleUserIds.addAll(mentionTargetUsers.map((e) => e.id));
 
+      final baseText =
+          "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}";
+      final postText = baseText.isNotEmpty ? baseText : null;
+
+      final durationType = state.voteDurationType;
+      final voteDuration = Duration(
+        days: durationType == VoteExpireDurationType.day
+            ? state.voteDuration ?? 0
+            : 0,
+        hours: durationType == VoteExpireDurationType.hours
+            ? state.voteDuration ?? 0
+            : 0,
+        minutes: durationType == VoteExpireDurationType.minutes
+            ? state.voteDuration ?? 0
+            : 0,
+        seconds: durationType == VoteExpireDurationType.seconds
+            ? state.voteDuration ?? 0
+            : 0,
+      );
+
+      final poll = NotesCreatePollRequest(
+          choices: state.voteContent,
+          multiple: state.isVoteMultiple,
+          expiresAt: state.voteExpireType == VoteExpireType.date
+              ? state.voteDate
+              : null,
+          expiredAfter: state.voteExpireType == VoteExpireType.duration
+              ? voteDuration
+              : null);
+
       await misskey.notes.create(NotesCreateRequest(
         visibility: state.noteVisibility,
-        text:
-            "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}",
+        text: postText,
         cw: state.isCw ? state.cwText : null,
         localOnly: state.localOnly,
         replyId: state.reply?.id,
@@ -310,6 +394,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         fileIds: fileIds.isEmpty ? null : fileIds,
         visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
         reactionAcceptance: state.reactionAcceptance,
+        poll: state.isVote ? poll : null,
       ));
       if (!mounted) return;
       state = state.copyWith(isNoteSending: NoteSendStatus.finished);
@@ -553,5 +638,55 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// 本文へのフォーカスを設定する
   void setContentTextFocused(bool isFocus) {
     state = state.copyWith(isTextFocused: isFocus);
+  }
+
+  /// 投票をトグルする
+  void toggleVote() {
+    state = state.copyWith(isVote: !state.isVote);
+  }
+
+  void toggleVoteMultiple() {
+    state = state.copyWith(isVoteMultiple: !state.isVoteMultiple);
+  }
+
+  /// 投票を追加する
+  void addVoteContent() {
+    if (state.voteContentCount == 10) return;
+    final list = state.voteContent.toList();
+    list.add("");
+    state = state.copyWith(
+        voteContentCount: state.voteContentCount + 1, voteContent: list);
+  }
+
+  /// 投票の行を削除する
+  void deleteVoteContent(int index) {
+    if (state.voteContentCount == 2) return;
+    final list = state.voteContent.toList();
+    list.removeAt(index);
+    state = state.copyWith(
+        voteContentCount: state.voteContentCount - 1, voteContent: list);
+  }
+
+  /// 投票の内容を設定する
+  void setVoteContent(int index, String text) {
+    final list = state.voteContent.toList();
+    list[index] = text;
+    state = state.copyWith(voteContent: list);
+  }
+
+  void setVoteExpireDate(DateTime date) {
+    state = state.copyWith(voteDate: date);
+  }
+
+  void setVoteExpireType(VoteExpireType type) {
+    state = state.copyWith(voteExpireType: type);
+  }
+
+  void setVoteDuration(int time) {
+    state = state.copyWith(voteDuration: time);
+  }
+
+  void setVoteDurationType(VoteExpireDurationType type) {
+    state = state.copyWith(voteDurationType: type);
   }
 }

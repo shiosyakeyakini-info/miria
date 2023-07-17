@@ -335,6 +335,8 @@ class TestData {
 """));
 
   // note
+
+  /// 自身のノート（藍ちゃん）１
   static Note note1 = Note.fromJson(JSON5.parse(r'''
 {
   id: '9g3rcngj3e',
@@ -417,9 +419,12 @@ class TestData {
   renoteId: null,
 }  
   '''));
+
+  /// 自身のノート（藍ちゃん）２
   static String note2ExpectText =
       "みにゃさん、数取りゲームしましょう！\n0~100の中で最も大きい数字を取った人が勝ちです。他の人と被ったらだめですよ～\n制限時間は10分です。数字はこの投稿にリプライで送ってくださいね！";
 
+  /// 自身でないノート１
   static Note note3AsAnotherUser = Note.fromJson(JSON5.parse(r'''
 {
   id: '9g2ja0y8ix',
@@ -461,6 +466,187 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
+}  
+  '''));
+
+  /// 自身のノート（投票込みのノート）
+  static Note note4AsVote = Note.fromJson(JSON5.parse('''
+{
+  id: '9h7cbiu7ab',
+  createdAt: '2023-07-15T08:58:52.831Z',
+  userId: '7rkr3b1c1c',
+  user: {
+    id: '7rkr3b1c1c',
+    name: '藍',
+    username: 'ai',
+    host: null,
+    avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-ecc1008f-3e2e-4206-ae7e-5093221f08be.png&avatar=1',
+    avatarBlurhash: null,
+    isBot: true,
+    isCat: true,
+    emojis: {},
+    onlineStatus: 'online',
+    badgeRoles: [],
+  },
+  text: 'みにゃさんは、どれが空から降ってきてほしいですか？',
+  cw: null,
+  visibility: 'public',
+  localOnly: false,
+  reactionAcceptance: null,
+  renoteCount: 7,
+  repliesCount: 0,
+  reactions: {
+    ':gaming@.:': 1,
+    ':kirakira@.:': 3,
+    ':5000t_hosii@.:': 4,
+    ':twinsparrot@.:': 1,
+    ':_question_mark@.:': 7,
+    ':role_bisyouzyo@.:': 1,
+  },
+  reactionEmojis: {},
+  fileIds: [],
+  files: [],
+  replyId: null,
+  renoteId: null,
+  poll: {
+    multiple: false,
+    expiresAt: '2023-07-15T09:13:52.831Z',
+    choices: [
+      {
+        text: '光る国民の基本的な権利',
+        votes: 17,
+        isVoted: false,
+      },
+      {
+        text: 'ぷるぷる自動販売機',
+        votes: 9,
+        isVoted: false,
+      },
+      {
+        text: '抗菌仕様金髪碧眼の美少女',
+        votes: 27,
+        isVoted: false,
+      },
+      {
+        text: '養殖null',
+        votes: 8,
+        isVoted: false,
+      },
+    ],
+  },
+}
+
+'''));
+
+  /// 自身でないノート２
+  static Note note5AsAnotherUser = Note.fromJson(JSON5.parse(r'''
+{
+  id: '9gdpe2xkeo',
+  createdAt: '2023-06-24T15:11:41.912Z',
+  userId: '7rkr4nmz19',
+  user: {
+    id: '7rkr4nmz19',
+    name: 'お知らせ',
+    username: 'notify',
+    host: null,
+    avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2F3c08aa80-6a94-4417-a435-ed04cf270734.png&avatar=1',
+    avatarBlurhash: null,
+    isBot: false,
+    isCat: false,
+    emojis: {},
+    onlineStatus: 'active',
+    badgeRoles: [
+      {
+        name: 'Official',
+        iconUrl: 'https://s3.arkjp.net/misskey/8df80984-86f9-4cc5-a289-1f6ab59c74b8.png',
+        displayOrder: 1000,
+      },
+    ],
+  },
+  text: '【お知らせ】\nhttps://Misskey.io の総投稿数が2000万投稿を超えました！',
+  cw: null,
+  visibility: 'public',
+  localOnly: false,
+  reactionAcceptance: 'nonSensitiveOnly',
+  renoteCount: 164,
+  repliesCount: 0,
+  reactions: {
+    '❤': 8,
+    '🎉': 17,
+    '💾': 1,
+    ':igyo@.:': 14,
+    ':deltu@.:': 1,
+    ':sugoi@.:': 11,
+    ':igyofes@.:': 1,
+    ':misuhai@.:': 7,
+    ':16777216@.:': 1,
+    ':kusodeka@.:': 1,
+    ':nyanners@.:': 1,
+    ':omedetou@.:': 1,
+    ':199000man@.:': 14,
+    ':supertada@.:': 6,
+    ':resonyance@.:': 9,
+    ':super_igyo@.:': 71,
+    ':ultra_igyo@.:': 406,
+    ':peroro_sama@.:': 1,
+    ':score_65535@.:': 2,
+    ':ultra_igyo2@.:': 20,
+    ':hashtag_igyo@.:': 34,
+    ':igyo_omurice@.:': 1,
+    ':sugoihanashi@.:': 8,
+    ':kiwamete_igyo@.:': 6,
+    ':saikou_sugiru@.:': 1,
+    ':ultimate_igyo@.:': 93,
+    ':stack_overflow@.:': 1,
+    ':igyo_no_tatuzin@.:': 1,
+    ':nobel_igyo_syou@.:': 1,
+    ':igyo2@misskey.04.si:': 2,
+    ':sungee@nijimiss.moe:': 1,
+    ':super_chat_10000yen@.:': 1,
+    ':supertada@nekomiya.net:': 1,
+    ':sugoi@ikaskey.bktsk.com:': 1,
+    ':igyo@misskey.yukineko.me:': 1,
+    ':master_igyo@nijimiss.moe:': 1,
+    ':super_igyo@misskey.yukineko.me:': 1,
+  },
+  reactionEmojis: {
+    'igyo2@misskey.04.si': 'https://misskey.04.si/files/3a484c36-65b0-4677-98d2-a165f72fd25c',
+    'sungee@nijimiss.moe': 'https://media.nijimiss.app/null/db7ad2be-a29f-4e14-b873-50125850086d.gif',
+    'supertada@nekomiya.net': 'https://nekomiya.net/storage/30b1bcb9-9b80-48e0-baf4-f38bf1f18210',
+    'sugoi@ikaskey.bktsk.com': 'https://ikaskey-s3.bktsk.com/ikaskey/7205d272-ee8a-49a0-b64f-1515e2b9c970.png',
+    'igyo@misskey.yukineko.me': 'https://s3.yukineko.me/static/misskey/e09da08c-f603-4032-a19d-c90b7c440265.png',
+    'master_igyo@nijimiss.moe': 'https://media.nijimiss.app/null/69f7a9f9-f857-4001-9400-d8e0d36ddb56.png',
+    'super_igyo@misskey.yukineko.me': 'https://s3.yukineko.me/static/misskey/1902ee5b-3655-483b-938a-efc361bb3eaa.png',
+  },
+  fileIds: [
+    '9gdpdb8wp2',
+  ],
+  files: [
+    {
+      id: '9gdpdb8wp2',
+      createdAt: '2023-06-24T15:11:06.032Z',
+      name: '2023-06-25 00-11-05 1.png',
+      type: 'image/png',
+      md5: 'cf8cc78629e6fb6e8b4a624a0ded3c29',
+      size: 24108,
+      isSensitive: false,
+      blurhash: 'e384l69XD~xuxc~pD%Rjt7oM00%4%3RjWT00_2%LM{WU9GxuxtayRj',
+      properties: {
+        width: 646,
+        height: 236,
+      },
+      url: 'https://s3.arkjp.net/misskey/5da55bce-9b22-4a01-97ec-6e8c180aed00.png',
+      thumbnailUrl: 'https://s3.arkjp.net/misskey/thumbnail-813f78ab-0622-4a6e-817c-67bbbb9a7597.webp',
+      comment: null,
+      folderId: null,
+      folder: null,
+      userId: null,
+      user: null,
+    },
+  ],
+  replyId: null,
+  renoteId: null,
+  myReaction: ':ultra_igyo@.:',
 }  
   '''));
 
@@ -833,6 +1019,293 @@ class TestData {
 }'''));
 
   static String detailedUser2ExpectedId = "9gbzuv2cze";
+
+  // ユーザー情報
+  static UsersShowResponse usersShowResponse1 =
+      UsersShowResponse.fromJson(JSON5.parse(r'''
+{
+  id: '7rkr3b1c1c',
+  name: '藍',
+  username: 'ai',
+  host: null,
+  avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-ecc1008f-3e2e-4206-ae7e-5093221f08be.png&avatar=1',
+  avatarBlurhash: null,
+  isBot: true,
+  isCat: true,
+  emojis: {},
+  onlineStatus: 'online',
+  badgeRoles: [],
+  url: null,
+  uri: null,
+  movedTo: null,
+  alsoKnownAs: null,
+  createdAt: '2019-04-14T17:11:39.168Z',
+  updatedAt: '2023-07-16T09:06:10.691Z',
+  lastFetchedAt: null,
+  bannerUrl: null,
+  bannerBlurhash: null,
+  isLocked: false,
+  isSilenced: false,
+  isSuspended: false,
+  description: 'Misskey常駐AIの藍です！\nよろしくお願いします♪\n\n[私のサイト](https://xn--931a.moe/) | [説明書](https://github.com/syuilo/ai/blob/master/torisetu.md)\n\nRepository: [Public](https://github.com/syuilo/ai)',
+  location: 'Misskey',
+  birthday: '2018-03-12',
+  lang: null,
+  fields: [],
+  followersCount: 14276,
+  followingCount: 996,
+  notesCount: 74078,
+  pinnedNoteIds: [],
+  pinnedNotes: [],
+  pinnedPageId: '7uz2kemwz7',
+  pinnedPage: {
+    id: '7uz2kemwz7',
+    createdAt: '2019-07-09T07:40:46.232Z',
+    updatedAt: '2019-07-09T08:13:21.048Z',
+    userId: '7rkr3b1c1c',
+    user: {
+      id: '7rkr3b1c1c',
+      name: '藍',
+      username: 'ai',
+      host: null,
+      avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-ecc1008f-3e2e-4206-ae7e-5093221f08be.png&avatar=1',
+      avatarBlurhash: null,
+      isBot: true,
+      isCat: true,
+      emojis: {},
+      onlineStatus: 'online',
+      badgeRoles: [],
+    },
+    content: [
+      {
+        id: 'b6faa1ad-c38a-41df-b8fb-c1c486c40b6c',
+        var: null,
+        text: '私とリバーシで遊ぶ',
+        type: 'button',
+        event: 'inviteReversi',
+        action: 'pushEvent',
+        content: null,
+        message: '招待を送信しましたよ～',
+        primary: true,
+      },
+    ],
+    variables: [],
+    title: 'コントロールパネル',
+    name: 'cp',
+    summary: null,
+    hideTitleWhenPinned: true,
+    alignCenter: true,
+    font: 'sans-serif',
+    script: '',
+    eyeCatchingImageId: null,
+    eyeCatchingImage: null,
+    attachedFiles: [],
+    likedCount: 11,
+    isLiked: false,
+  },
+  publicReactions: true,
+  ffVisibility: 'public',
+  twoFactorEnabled: false,
+  usePasswordLessLogin: false,
+  securityKeys: false,
+  roles: [
+    {
+      id: '9ablrt3x4q',
+      name: '5年生',
+      color: null,
+      iconUrl: null,
+      description: 'Misskey.ioを使い始めて4年経過\nドライブの容量が18GBに',
+      isModerator: false,
+      isAdministrator: false,
+      displayOrder: 0,
+    },
+  ],
+  memo: null,
+  isFollowing: true,
+  isFollowed: true,
+  hasPendingFollowRequestFromYou: false,
+  hasPendingFollowRequestToYou: false,
+  isBlocking: false,
+  isBlocked: false,
+  isMuted: false,
+  isRenoteMuted: false,
+}  
+  
+  '''));
+
+  static UsersShowResponse usersShowResponse2 =
+      UsersShowResponse.fromJson(JSON5.parse(r'''
+{
+  id: '7z9zua5kyv',
+  name: 'おいしいBot',
+  username: 'oishiibot',
+  host: null,
+  avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-d67529a5-4b8b-4e76-b827-7fcbb57956b6.png&avatar=1',
+  avatarBlurhash: null,
+  isBot: true,
+  isCat: false,
+  emojis: {},
+  onlineStatus: 'online',
+  badgeRoles: [],
+  url: null,
+  uri: null,
+  movedTo: null,
+  alsoKnownAs: [
+    '9guzhm5p6f',
+  ],
+  createdAt: '2019-10-25T17:48:45.416Z',
+  updatedAt: '2023-07-16T08:35:54.004Z',
+  lastFetchedAt: null,
+  bannerUrl: null,
+  bannerBlurhash: null,
+  isLocked: false,
+  isSilenced: false,
+  isSuspended: false,
+  description: 'このアカウントはホームTLを見て、美味しそうなものを記憶します。\n\nTLから覚えさせる場合、このアカウントをフォローしてください。\nフォローが返ってきたら、解除しても構いません。\n\nBot属性がついたアカウントに反応しません。\nチャットも反応しません。\n\n消してほしいものがあれば @kabo まで\nお別れは /unfollow で\n\nお知らせまとめ https://misskey.io/clips/8hknysdjeu\n\n編集:2022/08/27',
+  location: null,
+  birthday: null,
+  lang: null,
+  fields: [
+    {
+      name: 'オーナー',
+      value: '@kabo@misskey.io , @AureoleArk@misskey.io',
+    },
+    {
+      name: '詳しい使い方',
+      value: 'https://misskey.io/@oishiibot/pages/about',
+    },
+    {
+      name: 'Hosted by',
+      value: '@AureoleArk@misskey.io',
+    },
+    {
+      name: 'リポジトリ',
+      value: 'https://github.com/kabo2468/oishii-bot',
+    },
+  ],
+  followersCount: 7200,
+  followingCount: 7003,
+  notesCount: 60536,
+  pinnedNoteIds: [],
+  pinnedNotes: [],
+  pinnedPageId: '7zcd5e96mp',
+  pinnedPage: {
+    id: '7zcd5e96mp',
+    createdAt: '2019-10-27T09:36:51.306Z',
+    updatedAt: '2020-02-15T07:13:58.312Z',
+    userId: '7z9zua5kyv',
+    user: {
+      id: '7z9zua5kyv',
+      name: 'おいしいBot',
+      username: 'oishiibot',
+      host: null,
+      avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-d67529a5-4b8b-4e76-b827-7fcbb57956b6.png&avatar=1',
+      avatarBlurhash: null,
+      isBot: true,
+      isCat: false,
+      emojis: {},
+      onlineStatus: 'online',
+      badgeRoles: [],
+    },
+    content: [
+      {
+        id: 'b493be43-4e13-4080-90fb-f2fb1a02abfa',
+        text: 'このアカウントに`美味しいものは何？`とリプライを送ると、返事が帰ってきます。\n他には、`〇〇は美味しいよ`を送ると学習させることが出来ます。\n`〇〇って美味しい？`と聞くと美味しいかどうか判断します。\n\n`お腹空いた`とリプライを送ると、おすすめの食べ物を教えます。\n\n`みんなの美味しいものは何？`とリプライを送ると、ユーザーが教えたものから美味しいものを返します。\n\n`@ピザ`とリプライを送ると、ピザのサイトを返します。\nTLに`@ピザ`と投稿しても返します。\nTLの場合、他のインスタンスのユーザーは、このアカウントをフォローしてください。\n\n`お寿司握って`とリプライを送ると、お寿司を握ってくれます。\n\n`食べ物頂戴`とリプライを送ると、食べ物を作ってくれます。\n\n// バレンタインデーを過ぎたので、チョコをあげたり受け取ったりすることはできません\nバレンタインデーの機能で、\n`チョコちょうだい！`や`チョコあげる！`でチョコをあげたり受け取ったりすることができます。',
+        type: 'text',
+      },
+      {
+        id: '4a1562d1-6a05-4735-8e98-620d543d8886',
+        type: 'section',
+        title: '正規表現',
+        children: [
+          {
+            id: 'ccbb7bd8-fe1e-44fa-a190-5124122b5624',
+            text: '```\n[Adjective] = ((おい|美味)し|(まず|マズ|不味)く(な|にゃ)|うま|旨)い|(まず|マズ|不味|(おい|美味)しく(な|にゃ)|(うま|旨)く(な|にゃ))い\n検索\n/(みん(な|にゃ)の)?([Adjective])(もの|物|の)は?(何|(な|にゃ)に)?[？?]*/\n判断\n/(.+)(は|って)([Adjective])[？?]+/\n学習\n/(.+)[はも]([Adjective])よ?[！!]*/\n```',
+            type: 'text',
+          },
+          {
+            id: 'fc97974e-64d4-4d1b-b4f8-68450e4644bc',
+            text: 'お腹空いた機能\n```\n/お?(腹|(な|にゃ)か|はら)([空すあ]い|([減へ][っり]))た?[！!]*/\n```',
+            type: 'text',
+          },
+          {
+            id: '4d79791e-ced6-4f51-836d-54700861b03b',
+            text: '@ピザ機能\n```\nリプライ時\n/\\s*[@＠]?(ピザ|ぴざ)\\s*/\nTL時　\n/^[@＠](ピザ|ぴざ)$/\n```',
+            type: 'text',
+          },
+          {
+            id: '6dd37515-6f69-4396-b33f-1d3d59dacde9',
+            text: '寿司機能\n```\n/^\\s*お?(寿司|すし)を?(握|にぎ)(って|れ)/\n```',
+            type: 'text',
+          },
+          {
+            id: '7c9c11ae-6907-4ecf-9295-9e58423bbe2e',
+            text: '食べ物機能\n```\n/^\\s*((何|(な|にゃ)に|(な|にゃ)ん)か)?[食た]べる?(物|もの)(くれ|ちょうだい|頂戴|ください)/\n```',
+            type: 'text',
+          },
+        ],
+      },
+      {
+        id: '1ca26baa-4ea5-449a-afe8-a06df802bf8f',
+        type: 'section',
+        title: 'コマンド',
+        children: [
+          {
+            id: 'b0c92622-d725-4c93-8e4a-329818ee6752',
+            text: '```\n/help: コマンドリストを表示する。\n/ping: 生存確認する。\n/info: (今のところは)DBのレコード数を表示する。\n/say: なにか言わせる。(オーナーのみ)\n/follow: フォローする。\n/unfollow: フォローを解除する。\n/delete: 削除する。（オーナーのみ）\n/chart: DBのレコード数をチャートにする。（オーナーのみ）\n```',
+            type: 'text',
+          },
+        ],
+      },
+      {
+        id: '170cb06a-1dc7-4939-bafe-3dc2ce4baf31',
+        text: '最終更新: 2020/02/15',
+        type: 'text',
+      },
+    ],
+    variables: [],
+    title: '説明',
+    name: 'about',
+    summary: null,
+    hideTitleWhenPinned: false,
+    alignCenter: false,
+    font: 'sans-serif',
+    script: '',
+    eyeCatchingImageId: null,
+    eyeCatchingImage: null,
+    attachedFiles: [],
+    likedCount: 8,
+    isLiked: false,
+  },
+  publicReactions: false,
+  ffVisibility: 'public',
+  twoFactorEnabled: false,
+  usePasswordLessLogin: false,
+  securityKeys: false,
+  roles: [
+    {
+      id: '9ablrbdi3h',
+      name: '4年生',
+      color: null,
+      iconUrl: null,
+      description: 'Misskey.ioを使い始めて3年経過\nドライブの容量が16GBに',
+      isModerator: false,
+      isAdministrator: false,
+      displayOrder: 0,
+    },
+  ],
+  memo: null,
+  isFollowing: false,
+  isFollowed: false,
+  hasPendingFollowRequestFromYou: false,
+  hasPendingFollowRequestToYou: false,
+  isBlocking: false,
+  isBlocked: false,
+  isMuted: false,
+  isRenoteMuted: false,
+}  
+  
+  '''));
 
   // カスタム絵文字
   static UnicodeEmojiData unicodeEmoji1 = const UnicodeEmojiData(char: "♥");
