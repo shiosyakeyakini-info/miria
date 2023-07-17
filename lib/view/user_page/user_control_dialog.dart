@@ -51,6 +51,20 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
     );
   }
 
+  Future<void> addToAntenna() async {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => CommonFuture<Iterable<Antenna>>(
+        future: ref.read(misskeyProvider(widget.account)).antennas.list(),
+        complete: (context, antennas) => AntennaControlDialog(
+          account: widget.account,
+          antennas: antennas.toList(),
+          acct: widget.response.acct,
+        ),
+      ),
+    );
+  }
+
   Future<Expire?> getExpire() async {
     return await showDialog<Expire?>(
         context: context, builder: (context) => const ExpireSelectDialog());
@@ -183,6 +197,10 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
       ListTile(
         onTap: addToList,
         title: const Text("リストに追加"),
+      ),
+      ListTile(
+        onTap: addToAntenna,
+        title: const Text("アンテナに追加"),
       ),
       if (!widget.isMe) ...[
         if (widget.response.isRenoteMuted ?? false)
@@ -323,6 +341,93 @@ class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
         );
       },
       shrinkWrap: true,
+    );
+  }
+}
+
+class AntennaControlDialog extends ConsumerStatefulWidget {
+  const AntennaControlDialog({
+    super.key,
+    required this.account,
+    required this.antennas,
+    required this.acct,
+  });
+
+  final Account account;
+  final List<Antenna> antennas;
+  final String acct;
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AntennaControlDialogState();
+}
+
+class _AntennaControlDialogState extends ConsumerState<AntennaControlDialog> {
+  late final List<Antenna> userAntennas;
+  late List<bool> isUserInAntenna;
+
+  @override
+  void initState() {
+    super.initState();
+    userAntennas = widget.antennas
+        .where((antenna) => antenna.src == AntennaSource.users)
+        .toList();
+    isUserInAntenna = userAntennas
+        .map((userAntenna) => userAntenna.users.contains(widget.acct))
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: userAntennas.length,
+      itemBuilder: (context, i) {
+        final antenna = userAntennas[i];
+
+        return CheckboxListTile(
+          value: isUserInAntenna[i],
+          onChanged: (value) async {
+            if (value == null) {
+              return;
+            }
+            try {
+              final users = value
+                  ? [...antenna.users, widget.acct]
+                  : antenna.users.where((user) => user != widget.acct).toList();
+
+              await ref.read(misskeyProvider(widget.account)).antennas.update(
+                    AntennasUpdateRequest(
+                      antennaId: antenna.id,
+                      name: antenna.name,
+                      src: antenna.src,
+                      keywords: antenna.keywords,
+                      excludeKeywords: antenna.excludeKeywords,
+                      users: users,
+                      caseSensitive: antenna.caseSensitive,
+                      withReplies: antenna.withReplies,
+                      withFile: antenna.withFile,
+                      notify: antenna.notify,
+                    ),
+                  );
+            } catch (e) {
+              if (!mounted) return;
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("エラー"),
+                  content: ErrorNotification(error: e),
+                ),
+              );
+              return;
+            }
+
+            setState(() {
+              isUserInAntenna[i] = value;
+            });
+          },
+          title: Text(antenna.name),
+        );
+      },
     );
   }
 }
