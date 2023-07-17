@@ -6,11 +6,15 @@ import 'package:flutter/material.dart';
 class FutureListView<T> extends StatefulWidget {
   final Future<Iterable<T>> future;
   final Widget Function(BuildContext, T) builder;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
 
   const FutureListView({
     super.key,
     required this.future,
     required this.builder,
+    this.shrinkWrap = false,
+    this.physics,
   });
 
   @override
@@ -35,6 +39,8 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
           final list = data.toList();
 
           return ListView.builder(
+              shrinkWrap: widget.shrinkWrap,
+              physics: widget.physics,
               itemCount: data.length,
               itemBuilder: (context, index) =>
                   widget.builder(context, list[index]));

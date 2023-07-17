@@ -12,6 +12,7 @@ import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/favorite_repository.dart';
 import 'package:miria/repository/general_settings_repository.dart';
 import 'package:miria/repository/hybrid_timeline_repository.dart';
+import 'package:miria/repository/import_export_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/global_time_line_repository.dart';
 import 'package:miria/repository/home_time_line_repository.dart';
@@ -165,6 +166,9 @@ final photoEditProvider =
     ref.read(dioProvider),
   ),
 );
+
+final importExportRepository =
+    ChangeNotifierProvider((ref) => ImportExportRepository(ref.read));
 
 // TODO: 下書きの機能かんがえるときにfamilyの引数みなおす
 final noteCreateProvider = StateNotifierProvider.family

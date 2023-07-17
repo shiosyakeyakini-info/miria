@@ -25,6 +25,10 @@ class SettingsPage extends StatelessWidget {
             onTap: () => context.pushRoute(const TabSettingsListRoute()),
           ),
           ListTile(
+            title: const Text("設定のインポート・エクスポート"),
+            onTap: () => context.pushRoute(const ImportExportRoute()),
+          ),
+          ListTile(
             title: const Text("このアプリについて"),
             onTap: () => context.pushRoute(const AppInfoRoute()),
           )

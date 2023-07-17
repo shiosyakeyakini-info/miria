@@ -18,5 +18,5 @@ Map<String, dynamic> _$$_AccountToJson(_$_Account instance) =>
       'host': instance.host,
       'userId': instance.userId,
       'token': instance.token,
-      'i': instance.i,
+      'i': instance.i.toJson(),
     };

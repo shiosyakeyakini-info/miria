@@ -28,7 +28,7 @@ Map<String, dynamic> _$$_TabSettingToJson(_$_TabSetting instance) =>
       'antennaId': instance.antennaId,
       'isSubscribe': instance.isSubscribe,
       'name': instance.name,
-      'account': instance.account,
+      'account': instance.account.toJson(),
       'renoteDisplay': instance.renoteDisplay,
     };
 

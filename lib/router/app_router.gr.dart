@@ -381,6 +381,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ImportExportRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ImportExportPage(),
+      );
+    },
   };
 }
 
@@ -1731,4 +1737,18 @@ class FavoritedNoteRouteArgs {
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
   }
+}
+
+/// generated route for
+/// [ImportExportPage]
+class ImportExportRoute extends PageRouteInfo<void> {
+  const ImportExportRoute({List<PageRouteInfo>? children})
+      : super(
+          ImportExportRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ImportExportRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }

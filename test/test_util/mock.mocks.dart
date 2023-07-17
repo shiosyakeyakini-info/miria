@@ -2764,6 +2764,19 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i4.MisskeyDriveFiles {
         returnValueForMissingStub:
             _i14.Future<Iterable<_i4.DriveFile>>.value(<_i4.DriveFile>[]),
       ) as _i14.Future<Iterable<_i4.DriveFile>>);
+  @override
+  _i14.Future<Iterable<_i4.DriveFile>> find(
+          _i4.DriveFilesFindRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #find,
+          [request],
+        ),
+        returnValue:
+            _i14.Future<Iterable<_i4.DriveFile>>.value(<_i4.DriveFile>[]),
+        returnValueForMissingStub:
+            _i14.Future<Iterable<_i4.DriveFile>>.value(<_i4.DriveFile>[]),
+      ) as _i14.Future<Iterable<_i4.DriveFile>>);
 }
 
 /// A class which mocks [Dio].
