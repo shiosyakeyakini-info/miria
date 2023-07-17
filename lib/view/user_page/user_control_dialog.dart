@@ -238,26 +238,6 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
   }
 }
 
-class ExpireSelectDialog extends StatefulWidget {
-  const ExpireSelectDialog({super.key});
-
-  @override
-  State<StatefulWidget> createState() => ExpireSelectDialogState();
-}
-
-enum Expire {
-  indefinite(null, "無期限"),
-  minutes_10(Duration(minutes: 10), "10分間"),
-  hours_1(Duration(hours: 1), "1時間"),
-  day_1(Duration(days: 1), "1日"),
-  week_1(Duration(days: 7), "1週間");
-
-  final Duration? expires;
-  final String name;
-
-  const Expire(this.expires, this.name);
-}
-
 class UserListControlDialog extends ConsumerStatefulWidget {
   final Account account;
   final List<UsersList> userLists;
@@ -301,25 +281,22 @@ class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
             }
             try {
               if (value) {
-                await ref
-                    .read(misskeyProvider(widget.account))
-                    .users
-                    .list
-                    .push(UsersListsPushRequest(
-                      listId: userList.id,
-                      userId: widget.userId,
-                    ));
+                await ref.read(misskeyProvider(widget.account)).users.list.push(
+                      UsersListsPushRequest(
+                        listId: userList.id,
+                        userId: widget.userId,
+                      ),
+                    );
               } else {
-                await ref
-                    .read(misskeyProvider(widget.account))
-                    .users
-                    .list
-                    .pull(UsersListsPullRequest(
-                      listId: userList.id,
-                      userId: widget.userId,
-                    ));
+                await ref.read(misskeyProvider(widget.account)).users.list.pull(
+                      UsersListsPullRequest(
+                        listId: userList.id,
+                        userId: widget.userId,
+                      ),
+                    );
               }
             } catch (e, s) {
+              if (!mounted) return;
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -340,7 +317,6 @@ class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
           title: Text(widget.userLists[i].name!),
         );
       },
-      shrinkWrap: true,
     );
   }
 }
@@ -409,13 +385,16 @@ class _AntennaControlDialogState extends ConsumerState<AntennaControlDialog> {
                       notify: antenna.notify,
                     ),
                   );
-            } catch (e) {
+            } catch (e, s) {
               if (!mounted) return;
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text("エラー"),
-                  content: ErrorNotification(error: e),
+                  content: ErrorNotification(
+                    error: e,
+                    stackTrace: s,
+                  ),
                 ),
               );
               return;
@@ -430,6 +409,26 @@ class _AntennaControlDialogState extends ConsumerState<AntennaControlDialog> {
       },
     );
   }
+}
+
+class ExpireSelectDialog extends StatefulWidget {
+  const ExpireSelectDialog({super.key});
+
+  @override
+  State<StatefulWidget> createState() => ExpireSelectDialogState();
+}
+
+enum Expire {
+  indefinite(null, "無期限"),
+  minutes_10(Duration(minutes: 10), "10分間"),
+  hours_1(Duration(hours: 1), "1時間"),
+  day_1(Duration(days: 1), "1日"),
+  week_1(Duration(days: 7), "1週間");
+
+  final Duration? expires;
+  final String name;
+
+  const Expire(this.expires, this.name);
 }
 
 class ExpireSelectDialogState extends State<ExpireSelectDialog> {
