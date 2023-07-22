@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/view/login_page/api_key_login.dart';
@@ -25,11 +24,10 @@ class LoginPageState extends ConsumerState<LoginPage> {
             bottom: const TabBar(isScrollable: true, tabs: [
               Tab(text: "MiAuthでログイン"),
               Tab(text: "APIキーでログイン"),
-              Tab(text: "パスワードでログイン")
             ]),
           ),
           body: const TabBarView(
-            children: [MiAuthLogin(), ApiKeyLogin(), PasswordLogin()],
+            children: [MiAuthLogin(), ApiKeyLogin()],
           )),
     );
   }

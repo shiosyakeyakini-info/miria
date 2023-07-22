@@ -95,25 +95,7 @@ class AccountRepository extends ChangeNotifier {
     await save();
   }
 
-  Future<void> loginAsPassword(
-      String server, String userId, String password) async {
-    final token =
-        await MisskeyServer().loginAsPassword(server, userId, password);
-    final i = await Misskey(token: token, host: server).i.i();
-    final account = Account(host: server, token: token, userId: userId, i: i);
-    addAccount(account);
-    await _addIfTabSettingNothing();
-  }
-
-  Future<void> loginAsToken(String server, String token) async {
-    final i = await Misskey(token: token, host: server).i.i();
-    addAccount(Account(host: server, userId: i.username, token: token, i: i));
-    await _addIfTabSettingNothing();
-  }
-
-  String sessionId = "";
-
-  Future<void> openMiAuth(String server) async {
+  Future<void> validateMisskey(String server) async {
     //先にnodeInfoを取得する
     final Response nodeInfo;
 
@@ -142,13 +124,37 @@ class AccountRepository extends ChangeNotifier {
     if (software == "calckey" ||
         software == "dolphin" ||
         software == "mastodon" ||
-        software == "fedibird") {
+        software == "fedibird" ||
+        software == "firefish") {
       throw SpecifiedException("Miriaは$softwareに未対応です。");
     }
     final version = nodeInfoResult["software"]["version"];
     if (availableServerVersion.allMatches(version).isEmpty) {
       throw SpecifiedException("Miriaが認識できないバージョンです。\n$software $version");
     }
+  }
+
+  Future<void> loginAsPassword(
+      String server, String userId, String password) async {
+    final token =
+        await MisskeyServer().loginAsPassword(server, userId, password);
+    final i = await Misskey(token: token, host: server).i.i();
+    final account = Account(host: server, token: token, userId: userId, i: i);
+    addAccount(account);
+    await _addIfTabSettingNothing();
+  }
+
+  Future<void> loginAsToken(String server, String token) async {
+    await validateMisskey(server);
+    final i = await Misskey(token: token, host: server).i.i();
+    addAccount(Account(host: server, userId: i.username, token: token, i: i));
+    await _addIfTabSettingNothing();
+  }
+
+  String sessionId = "";
+
+  Future<void> openMiAuth(String server) async {
+    await validateMisskey(server);
 
     sessionId = const Uuid().v4();
     await launchUrl(
