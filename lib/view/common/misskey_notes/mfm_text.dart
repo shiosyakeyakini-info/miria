@@ -172,6 +172,7 @@ class MfmTextState extends ConsumerState<MfmText> {
       ),
       linkTap: (src) => onTapLink(src).expectFailure(context),
       linkStyle: AppTheme.of(context).linkStyle,
+      hashtagStyle: AppTheme.of(context).hashtagStyle,
       mentionTap: (userName, host, acct) =>
           onMentionTap(acct).expectFailure(context),
       hashtagTap: onHashtagTap,
