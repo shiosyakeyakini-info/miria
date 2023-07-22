@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/users_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_notification.dart';
 import 'package:miria/view/common/futurable.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum UserControl {
   createMute,
@@ -112,6 +115,61 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
+      ListTile(
+        onTap: () {
+          Clipboard.setData(
+            ClipboardData(
+              text: Uri(
+                scheme: "https",
+                host: widget.account.host,
+                path: widget.response.acct,
+              ).toString(),
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("コピーしました")),
+          );
+          Navigator.of(context).pop();
+        },
+        title: const Text("リンクをコピー"),
+      ),
+      ListTile(
+        onTap: () {
+          Clipboard.setData(
+            ClipboardData(
+              text: widget.response.name ?? widget.response.username,
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("コピーしました")),
+          );
+          Navigator.of(context).pop();
+        },
+        title: const Text("ユーザー名をコピー"),
+      ),
+      ListTile(
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: widget.response.acct));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("コピーしました")),
+          );
+          Navigator.of(context).pop();
+        },
+        title: const Text("ユーザースクリーン名をコピー"),
+      ),
+      ListTile(
+        title: const Text("ブラウザで開く"),
+        onTap: () {
+          launchUrl(
+            Uri(
+              scheme: "https",
+              host: widget.account.host,
+              path: widget.response.acct,
+            ),
+          );
+          Navigator.of(context).pop();
+        },
+      ),
       ListTile(
         onTap: addToList,
         title: const Text("リストに追加"),
