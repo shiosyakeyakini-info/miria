@@ -119,10 +119,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
               category: e.category ?? "",
               kanaName: toH(format(e.name)),
               aliases: e.aliases,
-              kanaAliases: e.aliases.map((e2) {
-                print(e);
-                return format(toH(e2));
-              }).toList(),
+              kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList(),
             ))
         .toList();
     emoji!.addAll(unicodeEmojis);
