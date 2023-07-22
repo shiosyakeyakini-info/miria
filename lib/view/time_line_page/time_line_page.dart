@@ -174,11 +174,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                                   ? Theme.of(context).primaryColor
                                   : Colors.white,
                             ),
-                            onPressed: () => pageController.animateToPage(
-                              index,
-                              duration: const Duration(milliseconds: 100),
-                              curve: Curves.easeIn,
-                            ),
+                            onPressed: () => tabSetting == currentTabSetting
+                                ? changeTabOrReload(tabSetting)
+                                : pageController.jumpToPage(index),
                           ),
                         ),
                       ),
