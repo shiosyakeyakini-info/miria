@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/users_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_notification.dart';
@@ -341,11 +342,5 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
             child: const Text("ほい"))
       ],
     );
-  }
-}
-
-extension on UsersShowResponse {
-  String get acct {
-    return "@$username${host != null ? "@$host" : ""}";
   }
 }
