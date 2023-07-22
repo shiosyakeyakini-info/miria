@@ -233,7 +233,9 @@ class _TimelineListViewState extends State<TimelineListView> {
     return SliverChildBuilderDelegate(
       (BuildContext context, int index) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          final extent = _negativeOffset?.maxScrollExtent;
+          final extent = (_negativeOffset?.hasContentDimensions ?? false)
+              ? _negativeOffset?.maxScrollExtent
+              : null;
           if (extent != null) {
             minMaxExtent = -extent;
           } else {

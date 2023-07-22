@@ -87,7 +87,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                           .expectFailure(context);
                       if (!mounted) return;
                       context.pushRoute(TimeLineRoute(
-                          currentTabSetting: ref
+                          initialTabSetting: ref
                               .read(tabSettingsRepositoryProvider)
                               .tabSettings
                               .first));
