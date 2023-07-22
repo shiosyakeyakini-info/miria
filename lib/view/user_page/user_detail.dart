@@ -481,16 +481,19 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 child: buildContent()),
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
-          ListView(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              for (final note in response.pinnedNotes ?? [])
-                MisskeyNote(
-                  note: note,
-                  loginAs: widget.controlAccount,
-                ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                for (final note in response.pinnedNotes ?? [])
+                  MisskeyNote(
+                    note: note,
+                    loginAs: widget.controlAccount,
+                  ),
+              ],
+            ),
           )
         ],
       ),
