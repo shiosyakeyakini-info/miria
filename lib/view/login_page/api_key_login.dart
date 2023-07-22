@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/login_page/centraing_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,7 +80,8 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                 ),
                 TextField(
                   controller: apiKeyController,
-                  decoration: const InputDecoration(prefixIcon: Icon(Icons.key)),
+                  decoration:
+                      const InputDecoration(prefixIcon: Icon(Icons.key)),
                 )
               ]),
               // ],
@@ -89,7 +91,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                   padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButton(
                       onPressed: () {
-                        login();
+                        login().expectFailure(context);
                       },
                       child: const Text("ログイン")),
                 )
