@@ -82,8 +82,16 @@ class EmojiRepositoryImpl extends EmojiRepository {
     await loadFromSource();
   }
 
+  String toHiraganaSafe(String text) {
+    try {
+      return const KanaKit().toHiragana(text);
+    } catch (e) {
+      return text;
+    }
+  }
+
   Future<void> _setEmojiData(EmojisResponse response) async {
-    final toH = const KanaKit().toHiragana;
+    final toH = toHiraganaSafe;
 
     final unicodeEmojis =
         (jsonDecode(await rootBundle.loadString("assets/emoji_list.json"))
@@ -101,17 +109,21 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
     emoji = response.emojis
         .map((e) => EmojiRepositoryData(
-            emoji: CustomEmojiData(
-              baseName: e.name,
-              hostedName: ":${e.name}@.:",
-              url: e.url,
-              isCurrentServer: true,
-              isSensitive: e.isSensitive,
-            ),
-            category: e.category ?? "",
-            kanaName: toH(format(e.name)),
-            aliases: e.aliases,
-            kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList()))
+              emoji: CustomEmojiData(
+                baseName: e.name,
+                hostedName: ":${e.name}@.:",
+                url: e.url,
+                isCurrentServer: true,
+                isSensitive: e.isSensitive,
+              ),
+              category: e.category ?? "",
+              kanaName: toH(format(e.name)),
+              aliases: e.aliases,
+              kanaAliases: e.aliases.map((e2) {
+                print(e);
+                return format(toH(e2));
+              }).toList(),
+            ))
         .toList();
     emoji!.addAll(unicodeEmojis);
   }
