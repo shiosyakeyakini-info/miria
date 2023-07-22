@@ -56,3 +56,33 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
     );
   }
 }
+
+class DefaultRootNoRouterWidget extends StatelessWidget {
+  final Widget child;
+
+  const DefaultRootNoRouterWidget({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      locale: const Locale("ja", "JP"),
+      supportedLocales: const [
+        Locale("ja", "JP"),
+      ],
+      home: child,
+      scrollBehavior: AppScrollBehavior(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      builder: (context, widget) {
+        return AppThemeScope(
+          child: ErrorDialogListener(
+            child: widget ?? Container(),
+          ),
+        );
+      },
+    );
+  }
+}

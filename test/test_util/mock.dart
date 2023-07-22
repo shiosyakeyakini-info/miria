@@ -17,6 +17,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
   // API
   MockSpec<Misskey>(),
   MockSpec<MisskeyNotes>(),
+  MockSpec<MisskeyNotesFavorites>(),
   MockSpec<MisskeyUsers>(),
   MockSpec<MisskeyChannels>(),
   MockSpec<MisskeyDrive>(),

@@ -182,8 +182,10 @@ class NoteModalSheet extends ConsumerWidget {
             ),
             if (baseNote.user.host == null &&
                 baseNote.user.username == account.userId &&
-                !(baseNote.text?.isNotEmpty == true &&
-                    baseNote.renote == null)) ...[
+                !(baseNote.text == null &&
+                    baseNote.renote != null &&
+                    baseNote.poll == null &&
+                    baseNote.files.isEmpty)) ...[
               ListTile(
                   title: const Text("削除する"),
                   onTap: () async {
@@ -228,7 +230,9 @@ class NoteModalSheet extends ConsumerWidget {
             ],
             if (baseNote.user.host == null &&
                 baseNote.user.username == account.userId &&
-                baseNote.renote != null) ...[
+                baseNote.renote != null &&
+                baseNote.files.isEmpty &&
+                baseNote.poll == null) ...[
               ListTile(
                   title: const Text("リノートを解除する"),
                   onTap: () async {

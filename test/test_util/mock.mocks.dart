@@ -2189,6 +2189,33 @@ class MockMisskeyNotes extends _i1.Mock implements _i4.MisskeyNotes {
       ) as _i14.Future<void>);
 }
 
+/// A class which mocks [MisskeyNotesFavorites].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMisskeyNotesFavorites extends _i1.Mock
+    implements _i4.MisskeyNotesFavorites {
+  @override
+  _i14.Future<void> create(_i4.NotesFavoritesCreateRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [request],
+        ),
+        returnValue: _i14.Future<void>.value(),
+        returnValueForMissingStub: _i14.Future<void>.value(),
+      ) as _i14.Future<void>);
+  @override
+  _i14.Future<void> delete(_i4.NotesFavoritesDeleteRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #delete,
+          [request],
+        ),
+        returnValue: _i14.Future<void>.value(),
+        returnValueForMissingStub: _i14.Future<void>.value(),
+      ) as _i14.Future<void>);
+}
+
 /// A class which mocks [MisskeyUsers].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -2752,6 +2779,16 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i4.MisskeyDriveFiles {
           ),
         )),
       ) as _i14.Future<_i4.DriveFile>);
+  @override
+  _i14.Future<void> delete(_i4.DriveFilesDeleteRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #delete,
+          [request],
+        ),
+        returnValue: _i14.Future<void>.value(),
+        returnValueForMissingStub: _i14.Future<void>.value(),
+      ) as _i14.Future<void>);
   @override
   _i14.Future<Iterable<_i4.DriveFile>> files(_i4.DriveFilesRequest? request) =>
       (super.noSuchMethod(
