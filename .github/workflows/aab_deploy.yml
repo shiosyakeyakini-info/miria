@@ -67,6 +67,6 @@ jobs:
           with:
             name: 
             # 保存するファイル
-            path: ./build/app/outputs/flutter-apk/app-release.aab
+            path: ./build/app/outputs/bundle/release/app-release.aab
             # 保存期間（日）
             retention-days: 3
