@@ -65,7 +65,7 @@ jobs:
         - name: Upload artifact
           uses: actions/upload-artifact@v2.2.0
           with:
-            name: 
+            name: app-release.aab
             # 保存するファイル
             path: ./build/app/outputs/bundle/release/app-release.aab
             # 保存期間（日）
