@@ -57,7 +57,7 @@ jobs:
 
         - name: Create aab file
           run: |
-            echo -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --d ./android/release.keystore
+            echo -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d | ./android/release.keystore
             export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
             export ANDROID_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
             export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
