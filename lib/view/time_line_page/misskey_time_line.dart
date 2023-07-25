@@ -46,14 +46,18 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
           isDownDirectionLoading = true;
         });
         final result = await timelineRepository.previousLoad();
-        setState(() {
-          isDownDirectionLoading = false;
-          isLastLoaded = result == 0;
-        });
+        if (mounted) {
+          setState(() {
+            isDownDirectionLoading = false;
+            isLastLoaded = result == 0;
+          });
+        }
       } catch (e) {
-        setState(() {
-          isDownDirectionLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isDownDirectionLoading = false;
+          });
+        }
         rethrow;
       }
     });
