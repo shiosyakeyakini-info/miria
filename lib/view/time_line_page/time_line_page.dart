@@ -152,157 +152,173 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         ? socketTimelineBase
         : null;
 
-    return AccountScope(
-      account: currentTabSetting.account,
-      child: Scaffold(
-          appBar: AppBar(
-            title: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: tabSettings
-                    .mapIndexed(
-                      (index, tabSetting) => Ink(
-                        color: tabSetting == currentTabSetting
-                            ? AppTheme.of(context).currentDisplayTabColor
-                            : Colors.transparent,
-                        child: AccountScope(
-                          account: tabSetting.account,
-                          child: IconButton(
-                            icon: TabIconView(
-                              icon: tabSetting.icon,
-                              color: tabSetting == currentTabSetting
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.white,
-                            ),
-                            onPressed: () => tabSetting == currentTabSetting
-                                ? changeTabOrReload(tabSetting)
-                                : pageController.jumpToPage(index),
-                          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: tabSettings
+                .mapIndexed(
+                  (index, tabSetting) => Ink(
+                    color: tabSetting == currentTabSetting
+                        ? AppTheme.of(context).currentDisplayTabColor
+                        : Colors.transparent,
+                    child: AccountScope(
+                      account: tabSetting.account,
+                      child: IconButton(
+                        icon: TabIconView(
+                          icon: tabSetting.icon,
+                          color: tabSetting == currentTabSetting
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
                         ),
+                        onPressed: () => tabSetting == currentTabSetting
+                            ? changeTabOrReload(tabSetting)
+                            : pageController.jumpToPage(index),
                       ),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        actions: [
+          AccountScope(
+            account: currentTabSetting.account,
+            child: const NotificationIcon(),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 5,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      child: Text(currentTabSetting.name),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                    child: NetworkImageView(
+                      url:
+                          "https://nos3.arkjp.net/image.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fc8a26f2b-7541-4fc6-bebb-036482b53cec.gif&emoji=1",
+                      type: ImageType.customEmoji,
+                    ),
+                  ),
+                  if (currentTabSetting.tabType == TabType.channel)
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ChannelDialog(
+                            channelId: currentTabSetting.channelId ?? "",
+                            account: currentTabSetting.account,
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.info_outline),
                     )
-                    .toList(),
+                  else if ([
+                    TabType.hybridTimeline,
+                    TabType.localTimeline,
+                    TabType.globalTimeline,
+                    TabType.homeTimeline,
+                  ].contains(currentTabSetting.tabType))
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ServerDetailDialog(
+                            account: currentTabSetting.account,
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.smart_toy_outlined),
+                    ),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 5),
+                  ),
+                  IconButton(
+                    onPressed: () => ref
+                        .read(
+                          currentTabSetting.tabType
+                              .timelineProvider(currentTabSetting),
+                        )
+                        .reconnect(),
+                    icon: const Icon(Icons.refresh),
+                  )
+                ],
               ),
             ),
-            actions: const [NotificationIcon()],
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Theme.of(context).primaryColor))),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 5, top: 5, bottom: 5),
-                              child: Text(currentTabSetting.name))),
-                      const SizedBox(
-                        height: 24,
-                        child: NetworkImageView(
-                          url:
-                              "https://nos3.arkjp.net/image.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fc8a26f2b-7541-4fc6-bebb-036482b53cec.gif&emoji=1",
-                          type: ImageType.customEmoji,
-                        ),
-                      ),
-                      if (currentTabSetting.tabType == TabType.channel)
-                        IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => ChannelDialog(
-                                        channelId:
-                                            currentTabSetting.channelId ?? "",
-                                        account: currentTabSetting.account,
-                                      ));
-                            },
-                            icon: const Icon(Icons.info_outline))
-                      else if ([
-                        TabType.hybridTimeline,
-                        TabType.localTimeline,
-                        TabType.globalTimeline,
-                        TabType.homeTimeline,
-                      ].contains(currentTabSetting.tabType))
-                        IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ServerDetailDialog(
-                                  account: currentTabSetting.account,
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.smart_toy_outlined)),
-                      const Padding(
-                        padding: EdgeInsets.only(right: 5),
-                      ),
-                      IconButton(
-                          onPressed: () => ref
-                              .read(
-                                currentTabSetting.tabType
-                                    .timelineProvider(currentTabSetting),
-                              )
-                              .reconnect(),
-                          icon: const Icon(Icons.refresh))
-                    ],
-                  ),
-                ),
-                if (socketTimeline?.isLoading == true)
-                  const Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Center(child: CircularProgressIndicator())),
-                if (socketTimeline?.error != null)
-                  ErrorDetail(error: socketTimeline?.error!),
-                Expanded(
-                  child: PageView.builder(
-                    controller: pageController,
-                    itemCount: tabSettings.length,
-                    onPageChanged: (index) =>
-                        changeTabOrReload(tabSettings[index]),
-                    itemBuilder: (_, index) {
-                      final tabSetting = tabSettings[index];
-                      return MisskeyTimeline(
-                        controller: scrollControllers[index],
-                        timeLineRepositoryProvider:
-                            tabSetting.tabType.timelineProvider(tabSetting),
-                      );
-                    },
-                  ),
-                ),
-                const TimelineEmoji(),
-                Container(
-                  // decoration: filteringInputEmoji.isEmpty
-                  //     ? BoxDecoration(
-                  //         border: Border(
-                  //             top: BorderSide(
-                  //                 color: Theme.of(context).primaryColor)))
-                  //     : null,
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: TimelineNoteField(),
-                      ),
-                      IconButton(
-                          onPressed: note.expectFailure(context),
-                          icon: const Icon(Icons.edit)),
-                      IconButton(
-                        onPressed: noteCreateRoute,
-                        icon: const Icon(Icons.keyboard_arrow_right),
-                      )
-                    ],
-                  ),
-                ),
-              ],
+            if (socketTimeline?.isLoading == true)
+              const Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            if (socketTimeline?.error != null)
+              ErrorDetail(error: socketTimeline?.error!),
+            Expanded(
+              child: PageView.builder(
+                controller: pageController,
+                itemCount: tabSettings.length,
+                onPageChanged: (index) => changeTabOrReload(tabSettings[index]),
+                itemBuilder: (_, index) {
+                  final tabSetting = tabSettings[index];
+                  return AccountScope(
+                    account: tabSetting.account,
+                    child: MisskeyTimeline(
+                      controller: scrollControllers[index],
+                      timeLineRepositoryProvider:
+                          tabSetting.tabType.timelineProvider(tabSetting),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          resizeToAvoidBottomInset: true,
-          drawer: CommonDrawer(
-            initialOpenAccount: currentTabSetting.account,
-          )),
+            const TimelineEmoji(),
+            Container(
+              // decoration: filteringInputEmoji.isEmpty
+              //     ? BoxDecoration(
+              //         border: Border(
+              //             top: BorderSide(
+              //                 color: Theme.of(context).primaryColor)))
+              //     : null,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: TimelineNoteField(),
+                  ),
+                  IconButton(
+                    onPressed: note.expectFailure(context),
+                    icon: const Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: noteCreateRoute,
+                    icon: const Icon(Icons.keyboard_arrow_right),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      resizeToAvoidBottomInset: true,
+      drawer: CommonDrawer(
+        initialOpenAccount: currentTabSetting.account,
+      ),
     );
   }
 }
