@@ -179,7 +179,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               .where((element) => !element.isDarkTheme))
                             DropdownMenuItem(
                               value: element.id,
-                              child: Text(element.name),
+                              child: Text("${element.name}っぽいの"),
                             )
                         ],
                         value: lightModeTheme,
@@ -198,7 +198,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 .where((element) => element.isDarkTheme))
                               DropdownMenuItem(
                                 value: element.id,
-                                child: Text(element.name),
+                                child: Text("${element.name}っぽいの"),
                               )
                           ],
                           value: darkModeTheme,
