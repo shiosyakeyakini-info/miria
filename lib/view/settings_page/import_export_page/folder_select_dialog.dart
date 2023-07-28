@@ -15,11 +15,13 @@ class FolderResult {
 class FolderSelectDialog extends ConsumerStatefulWidget {
   final Account account;
   final List<String>? fileShowTarget;
+  final String confirmationText;
 
   const FolderSelectDialog({
     super.key,
     required this.account,
     required this.fileShowTarget,
+    required this.confirmationText,
   });
 
   @override
@@ -35,7 +37,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
     return AlertDialog(
       title: Column(
         children: [
-          const Text("フォルダ選択"),
+          const Text("フォルダー選択"),
           Row(
             children: [
               if (path.isNotEmpty)
@@ -131,7 +133,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
           onPressed: () {
             Navigator.of(context).pop(FolderResult(path.lastOrNull));
           },
-          child: const Text("このフォルダーに保存する"),
+          child: Text(widget.confirmationText),
         )
       ],
     );
