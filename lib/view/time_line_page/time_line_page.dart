@@ -91,19 +91,20 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     super.didChangeDependencies();
   }
 
-  void changeTabOrReload(TabSetting tabSetting) {
-    if (tabSetting == currentTabSetting) {
+  void reload() {
+    ref.read(currentTabSetting.timelineProvider).moveToOlder();
+    scrollControllers[currentIndex].forceScrollToTop();
+  }
+
+  void changeTab(int index) {
+    final tabSetting = tabSettings[index];
+    if ([TabType.globalTimeline, TabType.homeTimeline, TabType.hybridTimeline]
+        .contains(tabSetting.tabType)) {
       ref.read(tabSetting.timelineProvider).moveToOlder();
-      scrollControllers[currentIndex].forceScrollToTop();
-    } else {
-      if ([TabType.globalTimeline, TabType.homeTimeline, TabType.hybridTimeline]
-          .contains(tabSetting.tabType)) {
-        ref.read(tabSetting.timelineProvider).moveToOlder();
-      }
-      setState(() {
-        currentIndex = tabSettings.indexOf(tabSetting);
-      });
     }
+    setState(() {
+      currentIndex = index;
+    });
   }
 
   void noteCreateRoute() {
@@ -173,7 +174,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                               : Colors.white,
                         ),
                         onPressed: () => tabSetting == currentTabSetting
-                            ? changeTabOrReload(tabSetting)
+                            ? reload()
                             : pageController.jumpToPage(index),
                       ),
                     ),
@@ -274,7 +275,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               child: PageView.builder(
                 controller: pageController,
                 itemCount: tabSettings.length,
-                onPageChanged: (index) => changeTabOrReload(tabSettings[index]),
+                onPageChanged: (index) => changeTab(index),
                 itemBuilder: (_, index) {
                   final tabSetting = tabSettings[index];
                   return AccountScope(
