@@ -6,6 +6,12 @@ import 'package:miria/view/common/futable_list_builder.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
+class FolderResult {
+  const FolderResult(this.folder);
+
+  final DriveFolder? folder;
+}
+
 class FolderSelectDialog extends ConsumerStatefulWidget {
   final Account account;
   final List<String>? fileShowTarget;
@@ -123,7 +129,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
       actions: [
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop(path.lastOrNull);
+            Navigator.of(context).pop(FolderResult(path.lastOrNull));
           },
           child: const Text("このフォルダーに保存する"),
         )
