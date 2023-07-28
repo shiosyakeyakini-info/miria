@@ -34,12 +34,13 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
             children: [
               if (path.isNotEmpty)
                 IconButton(
-                    onPressed: () {
-                      setState(() {
-                        path.removeLast();
-                      });
-                    },
-                    icon: const Icon(Icons.arrow_back)),
+                  onPressed: () {
+                    setState(() {
+                      path.removeLast();
+                    });
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                ),
               Expanded(child: Text(path.map((e) => e.name).join("/"))),
             ],
           )
@@ -52,35 +53,40 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
           child: Column(
             children: [
               PushableListView(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  initializeFuture: () async {
-                    final misskey = ref.read(misskeyProvider(widget.account));
-                    final response = await misskey.drive.folders.folders(
-                        DriveFoldersRequest(
-                            folderId: path.isEmpty ? null : path.last.id));
-                    return response.toList();
-                  },
-                  nextFuture: (lastItem, _) async {
-                    final misskey = ref.read(misskeyProvider(widget.account));
-                    final response = await misskey.drive.folders.folders(
-                        DriveFoldersRequest(
-                            untilId: lastItem.id,
-                            folderId: path.isEmpty ? null : path.last.id));
-                    return response.toList();
-                  },
-                  listKey: path.map((e) => e.id).join("/"),
-                  itemBuilder: (context, item) {
-                    return ListTile(
-                      leading: const Icon(Icons.folder),
-                      title: Text(item.name ?? ""),
-                      onTap: () {
-                        setState(() {
-                          path.add(item);
-                        });
-                      },
-                    );
-                  }),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                initializeFuture: () async {
+                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final response = await misskey.drive.folders.folders(
+                    DriveFoldersRequest(
+                      folderId: path.isEmpty ? null : path.last.id,
+                    ),
+                  );
+                  return response.toList();
+                },
+                nextFuture: (lastItem, _) async {
+                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final response = await misskey.drive.folders.folders(
+                    DriveFoldersRequest(
+                      untilId: lastItem.id,
+                      folderId: path.isEmpty ? null : path.last.id,
+                    ),
+                  );
+                  return response.toList();
+                },
+                listKey: path.map((e) => e.id).join("/"),
+                itemBuilder: (context, item) {
+                  return ListTile(
+                    leading: const Icon(Icons.folder),
+                    title: Text(item.name ?? ""),
+                    onTap: () {
+                      setState(() {
+                        path.add(item);
+                      });
+                    },
+                  );
+                },
+              ),
               if (widget.fileShowTarget != null)
                 FutureListView(
                   shrinkWrap: true,
@@ -88,18 +94,24 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                   future: () async {
                     final list = [];
                     for (final element in widget.fileShowTarget!) {
-                      list.addAll(await ref
-                          .read(misskeyProvider(widget.account))
-                          .drive
-                          .files
-                          .find(DriveFilesFindRequest(
-                              folderId: path.lastOrNull?.id, name: element)));
+                      list.addAll(
+                        await ref
+                            .read(misskeyProvider(widget.account))
+                            .drive
+                            .files
+                            .find(
+                              DriveFilesFindRequest(
+                                folderId: path.lastOrNull?.id,
+                                name: element,
+                              ),
+                            ),
+                      );
                     }
                     return list.toList();
                   }(),
                   builder: (context, item) => Row(
                     children: [
-                      Icon(Icons.description),
+                      const Icon(Icons.description),
                       Expanded(child: Text(item.name)),
                     ],
                   ),
@@ -110,10 +122,11 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
       ),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop(path.lastOrNull);
-            },
-            child: const Text("このフォルダーに保存する"))
+          onPressed: () {
+            Navigator.of(context).pop(path.lastOrNull);
+          },
+          child: const Text("このフォルダーに保存する"),
+        )
       ],
     );
   }

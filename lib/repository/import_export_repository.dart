@@ -36,15 +36,22 @@ class ImportExportRepository extends ChangeNotifier {
       ),
     );
 
-    var alreadyExists = await reader(misskeyProvider(account))
-        .drive
-        .files
-        .find(DriveFilesFindRequest(name: "miria.json", folderId: folder?.id));
+    Iterable<DriveFile> alreadyExists =
+        await reader(misskeyProvider(account)).drive.files.find(
+              DriveFilesFindRequest(
+                name: "miria.json",
+                folderId: folder?.id,
+              ),
+            );
 
+    if (!context.mounted) return;
     if (alreadyExists.isEmpty) {
       alreadyExists = await reader(misskeyProvider(account)).drive.files.find(
-          DriveFilesFindRequest(
-              name: "miria.json.unknown", folderId: folder?.id));
+            DriveFilesFindRequest(
+              name: "miria.json.unknown",
+              folderId: folder?.id,
+            ),
+          );
 
       if (alreadyExists.isEmpty) {
         await SimpleMessageDialog.show(context, "ここにMiriaの設定ファイルあれへんかったわ");
@@ -82,9 +89,11 @@ class ImportExportRepository extends ChangeNotifier {
     final tabSettings = <TabSetting>[];
 
     for (final tabSetting in json["tabSettings"]) {
-      final account = accounts.firstWhereOrNull((element) =>
-          tabSetting["account"]["host"] == element.host &&
-          tabSetting["account"]["userId"] == element.userId);
+      final account = accounts.firstWhereOrNull(
+        (element) =>
+            tabSetting["account"]["host"] == element.host &&
+            tabSetting["account"]["userId"] == element.userId,
+      );
 
       if (account == null) {
         continue;
@@ -95,13 +104,17 @@ class ImportExportRepository extends ChangeNotifier {
       (tabSetting as Map<String, dynamic>)
         ..remove("account")
         ..addEntries(
-            [MapEntry("account", jsonDecode(jsonEncode(account.toJson())))]);
+          [MapEntry("account", jsonDecode(jsonEncode(account.toJson())))],
+        );
 
       tabSettings.add(TabSetting.fromJson(tabSetting));
     }
     reader(tabSettingsRepositoryProvider).save(tabSettings);
 
+    if (!context.mounted) return;
     await SimpleMessageDialog.show(context, "インポート終わったで。");
+
+    if (!context.mounted) return;
     context.router
       ..removeWhere((route) => true)
       ..push(const SplashRoute());
@@ -120,18 +133,22 @@ class ImportExportRepository extends ChangeNotifier {
       ),
     );
 
-    final alreadyExists = await reader(misskeyProvider(account))
-        .drive
-        .files
-        .find(DriveFilesFindRequest(
-            name: "miria.json.unknown", folderId: folder?.id));
+    final alreadyExists =
+        await reader(misskeyProvider(account)).drive.files.find(
+              DriveFilesFindRequest(
+                name: "miria.json.unknown",
+                folderId: folder?.id,
+              ),
+            );
 
+    if (!context.mounted) return;
     if (alreadyExists.isNotEmpty) {
       final alreadyConfirm = await SimpleConfirmDialog.show(
-          context: context,
-          message: "ここにもうあるけど上書きするか？",
-          primary: "上書きする",
-          secondary: "やっぱやめた");
+        context: context,
+        message: "ここにもうあるけど上書きするか？",
+        primary: "上書きする",
+        secondary: "やっぱやめた",
+      );
       if (alreadyConfirm != true) return;
 
       for (final element in alreadyExists) {
@@ -143,13 +160,11 @@ class ImportExportRepository extends ChangeNotifier {
     }
 
     final data = ExportedSetting(
-            generalSettings: reader(generalSettingsRepositoryProvider).settings,
-            tabSettings:
-                reader(tabSettingsRepositoryProvider).tabSettings.toList(),
-            accountSettings: reader(accountSettingsRepositoryProvider)
-                .accountSettings
-                .toList())
-        .toJson();
+      generalSettings: reader(generalSettingsRepositoryProvider).settings,
+      tabSettings: reader(tabSettingsRepositoryProvider).tabSettings.toList(),
+      accountSettings:
+          reader(accountSettingsRepositoryProvider).accountSettings.toList(),
+    ).toJson();
 
     // 外に漏れると困るので
     for (final element in data["tabSettings"] as List) {
@@ -159,13 +174,16 @@ class ImportExportRepository extends ChangeNotifier {
     }
 
     await reader(misskeyProvider(account)).drive.files.createAsBinary(
-        DriveFilesCreateRequest(
+          DriveFilesCreateRequest(
             folderId: folder?.id,
             name: "miria.json",
             comment: "Miria設定ファイル",
-            force: true),
-        Uint8List.fromList(utf8.encode(jsonEncode(data))));
+            force: true,
+          ),
+          Uint8List.fromList(utf8.encode(jsonEncode(data))),
+        );
 
+    if (!context.mounted) return;
     await SimpleMessageDialog.show(context, "エクスポート終わったで");
   }
 }
