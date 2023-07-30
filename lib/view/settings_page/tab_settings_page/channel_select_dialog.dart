@@ -38,6 +38,7 @@ class ChannelSelectDialogState extends ConsumerState<ChannelSelectDialog> {
       followedChannels
         ..clear()
         ..addAll(followed);
+      if (!mounted) return;
       setState(() {});
     });
   }

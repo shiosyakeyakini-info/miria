@@ -60,6 +60,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
             onChanged: (value) {
               Future(() async {
                 final result = await emojiRepository.searchEmojis(value);
+                if (!mounted) return;
                 setState(() {
                   emojis.clear();
                   emojis.addAll(result);

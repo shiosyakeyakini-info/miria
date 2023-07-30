@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +32,7 @@ class ClipModalSheetState extends ConsumerState<ClipModalSheet> {
     super.didChangeDependencies();
 
     Future(() async {
+      if (!mounted) return;
       setState(() {
         isLoading = true;
       });
@@ -45,6 +45,7 @@ class ClipModalSheetState extends ConsumerState<ClipModalSheet> {
               .clips(NotesClipsRequest(noteId: widget.noteId)))
           .toList();
 
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });

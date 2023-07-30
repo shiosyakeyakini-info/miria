@@ -22,6 +22,7 @@ class AppInfoPageState extends ConsumerState<AppInfoPage> {
     super.didChangeDependencies();
     Future(() async {
       packageInfo = await PackageInfo.fromPlatform();
+      if (!mounted) return;
       setState(() {});
     });
   }

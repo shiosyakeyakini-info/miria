@@ -73,6 +73,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .read(misskeyProvider(tabSetting.account))
               .channels
               .show(ChannelsShowRequest(channelId: channelId));
+          if (!mounted) return;
           setState(() {});
         });
       }
@@ -84,6 +85,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .list
               .show(UsersListsShowRequest(listId: listId));
           selectedUserList = response.toUsersList();
+          if (!mounted) return;
           setState(() {});
         });
       }
@@ -93,6 +95,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .read(misskeyProvider(tabSetting.account))
               .antennas
               .show(AntennasShowRequest(antennaId: antennaId));
+          if (!mounted) return;
           setState(() {});
         });
       }

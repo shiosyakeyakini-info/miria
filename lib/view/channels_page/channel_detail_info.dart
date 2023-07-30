@@ -76,10 +76,12 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
             .show(ChannelsShowRequest(channelId: widget.channelId));
 
         ref.read(notesProvider(account)).registerAll(result.pinnedNotes ?? []);
+        if (!mounted) return;
         setState(() {
           data = result;
         });
       } catch (e, s) {
+        if (!mounted) return;
         setState(() {
           error = (e, s);
         });

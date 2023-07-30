@@ -36,6 +36,7 @@ class FederationCustomEmojisState
       emojis
         ..clear()
         ..addAll(result.emojis.groupListsBy((e) => e.category ?? ""));
+      if (!mounted) return;
       setState(() {});
     });
   }

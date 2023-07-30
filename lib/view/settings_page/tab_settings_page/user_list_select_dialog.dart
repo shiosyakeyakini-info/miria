@@ -27,6 +27,7 @@ class UserListSelectDialogState extends ConsumerState<UserListSelectDialog> {
       userLists
         ..clear()
         ..addAll(myLists);
+      if (!mounted) return;
       setState(() {});
     });
   }

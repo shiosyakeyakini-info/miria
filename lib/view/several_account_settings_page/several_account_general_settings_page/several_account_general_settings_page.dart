@@ -42,6 +42,7 @@ class SeveralAccountGeneralSettingsPageState
               element.host == widget.account.host);
       if (loadedSettings != null) {
         accountSettings = loadedSettings;
+        if (!mounted) return;
         setState(() {
           defaultIsLocalOnly = loadedSettings.defaultIsLocalOnly;
           defaultNoteVisibility = loadedSettings.defaultNoteVisibility;

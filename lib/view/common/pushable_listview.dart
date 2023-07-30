@@ -45,6 +45,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         items
           ..clear()
           ..addAll(await widget.initializeFuture());
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
@@ -52,10 +53,12 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
             duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
       } catch (e, s) {
         if (kDebugMode) print(e);
-        setState(() {
-          error = (e, s);
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            error = (e, s);
+            isLoading = false;
+          });
+        }
         rethrow;
       }
     });
@@ -85,19 +88,23 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
     if (isLoading || items.isEmpty) return;
     Future(() async {
       try {
+        if (!mounted) return;
         setState(() {
           isLoading = true;
         });
         final result = await widget.nextFuture(items.last, items.length);
         if (result.isEmpty) isFinalPage = true;
         items.addAll(result);
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
       } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
         rethrow;
       }
     });

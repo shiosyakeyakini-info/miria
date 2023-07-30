@@ -27,6 +27,7 @@ class AntennaSelectDialogState extends ConsumerState<AntennaSelectDialog> {
       antennas
         ..clear()
         ..addAll(myAntennas);
+      if (!mounted) return;
       setState(() {});
     });
   }
