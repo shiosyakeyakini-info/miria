@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/users_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_notification.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/futurable.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -266,53 +266,46 @@ class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
         .toList();
   }
 
+  Future<void> pushTo(int index) async {
+    await ref.read(misskeyProvider(widget.account)).users.list.push(
+          UsersListsPushRequest(
+            listId: widget.userLists[index].id,
+            userId: widget.userId,
+          ),
+        );
+    setState(() {
+      isUserInList[index] = true;
+    });
+  }
+
+  Future<void> pullFrom(int index) async {
+    await ref.read(misskeyProvider(widget.account)).users.list.pull(
+          UsersListsPullRequest(
+            listId: widget.userLists[index].id,
+            userId: widget.userId,
+          ),
+        );
+    setState(() {
+      isUserInList[index] = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: widget.userLists.length,
       itemBuilder: (context, i) {
-        final userList = widget.userLists[i];
-
         return CheckboxListTile(
           value: isUserInList[i],
           onChanged: (value) async {
             if (value == null) {
               return;
             }
-            try {
-              if (value) {
-                await ref.read(misskeyProvider(widget.account)).users.list.push(
-                      UsersListsPushRequest(
-                        listId: userList.id,
-                        userId: widget.userId,
-                      ),
-                    );
-              } else {
-                await ref.read(misskeyProvider(widget.account)).users.list.pull(
-                      UsersListsPullRequest(
-                        listId: userList.id,
-                        userId: widget.userId,
-                      ),
-                    );
-              }
-            } catch (e, s) {
-              if (!mounted) return;
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("エラー"),
-                  content: ErrorNotification(
-                    error: e,
-                    stackTrace: s,
-                  ),
-                ),
-              );
-              return;
+            if (value) {
+              await pushTo(i).expectFailure(context);
+            } else {
+              await pullFrom(i).expectFailure(context);
             }
-
-            setState(() {
-              isUserInList[i] = value;
-            });
           },
           title: Text(widget.userLists[i].name!),
         );
@@ -353,58 +346,59 @@ class _AntennaControlDialogState extends ConsumerState<AntennaControlDialog> {
         .toList();
   }
 
+  Future<void> updateUsers(Antenna antenna, List<String> users) async {
+    await ref.read(misskeyProvider(widget.account)).antennas.update(
+          AntennasUpdateRequest(
+            antennaId: antenna.id,
+            name: antenna.name,
+            src: antenna.src,
+            keywords: antenna.keywords,
+            excludeKeywords: antenna.excludeKeywords,
+            users: users,
+            caseSensitive: antenna.caseSensitive,
+            withReplies: antenna.withReplies,
+            withFile: antenna.withFile,
+            notify: antenna.notify,
+          ),
+        );
+  }
+
+  Future<void> pushTo(int index) async {
+    final antenna = userAntennas[index];
+    final users = [...antenna.users, widget.acct];
+    await updateUsers(antenna, users);
+    setState(() {
+      isUserInAntenna[index] = true;
+    });
+  }
+
+  Future<void> pullFrom(int index) async {
+    final antenna = userAntennas[index];
+    final users = antenna.users.where((user) => user != widget.acct).toList();
+    await updateUsers(antenna, users);
+    setState(() {
+      isUserInAntenna[index] = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: userAntennas.length,
       itemBuilder: (context, i) {
-        final antenna = userAntennas[i];
-
         return CheckboxListTile(
           value: isUserInAntenna[i],
           onChanged: (value) async {
             if (value == null) {
               return;
             }
-            try {
-              final users = value
-                  ? [...antenna.users, widget.acct]
-                  : antenna.users.where((user) => user != widget.acct).toList();
-
-              await ref.read(misskeyProvider(widget.account)).antennas.update(
-                    AntennasUpdateRequest(
-                      antennaId: antenna.id,
-                      name: antenna.name,
-                      src: antenna.src,
-                      keywords: antenna.keywords,
-                      excludeKeywords: antenna.excludeKeywords,
-                      users: users,
-                      caseSensitive: antenna.caseSensitive,
-                      withReplies: antenna.withReplies,
-                      withFile: antenna.withFile,
-                      notify: antenna.notify,
-                    ),
-                  );
-            } catch (e, s) {
-              if (!mounted) return;
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("エラー"),
-                  content: ErrorNotification(
-                    error: e,
-                    stackTrace: s,
-                  ),
-                ),
-              );
-              return;
+            if (value) {
+              await pushTo(i).expectFailure(context);
+            } else {
+              await pullFrom(i).expectFailure(context);
             }
-
-            setState(() {
-              isUserInAntenna[i] = value;
-            });
           },
-          title: Text(antenna.name),
+          title: Text(userAntennas[i].name),
         );
       },
     );
