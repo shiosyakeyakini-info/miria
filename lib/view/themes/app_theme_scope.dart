@@ -124,106 +124,126 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
                 : theme.foreground.lighten(0.1)));
 
     final themeData = ThemeData(
-        brightness: theme.isDarkTheme ? Brightness.dark : Brightness.light,
-        primaryColor: theme.primary,
-        primaryColorDark: theme.primaryDarken,
-        primaryColorLight: theme.primaryLighten,
-        appBarTheme: AppBarTheme(
-          elevation: 0,
-          titleSpacing: 0,
-          titleTextStyle:
-              textTheme.headlineSmall?.copyWith(color: Colors.white),
-          backgroundColor:
-              theme.isDarkTheme ? theme.panelBackground : theme.primary,
-          iconTheme: const IconThemeData(color: Colors.white),
+      brightness: theme.isDarkTheme ? Brightness.dark : Brightness.light,
+      primaryColor: theme.primary,
+      primaryColorDark: theme.primaryDarken,
+      primaryColorLight: theme.primaryLighten,
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        titleSpacing: 0,
+        titleTextStyle: textTheme.headlineSmall?.copyWith(color: Colors.white),
+        backgroundColor:
+            theme.isDarkTheme ? theme.panelBackground : theme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      bottomAppBarTheme: BottomAppBarTheme(color: theme.primary),
+      drawerTheme: DrawerThemeData(backgroundColor: theme.panel),
+      listTileTheme: ListTileThemeData(iconColor: theme.foreground),
+      scaffoldBackgroundColor: theme.panel,
+      tabBarTheme: TabBarTheme(
+        overlayColor: MaterialStatePropertyAll(theme.primary),
+        labelColor: Colors.white,
+        labelStyle: textTheme.titleSmall,
+        unselectedLabelStyle:
+            textTheme.titleSmall?.copyWith(color: textTheme.bodySmall?.color),
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(color: theme.primary),
         ),
-        bottomAppBarTheme: BottomAppBarTheme(color: theme.primary),
-        drawerTheme: DrawerThemeData(backgroundColor: theme.panel),
-        listTileTheme: ListTileThemeData(iconColor: theme.foreground),
-        scaffoldBackgroundColor: theme.panel,
-        tabBarTheme: TabBarTheme(
-            overlayColor: MaterialStatePropertyAll(theme.primary),
-            labelColor: Colors.white,
-            labelStyle: textTheme.titleSmall,
-            unselectedLabelStyle: textTheme.titleSmall
-                ?.copyWith(color: textTheme.bodySmall?.color),
-            indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: theme.primary))),
-        textTheme: textTheme,
-        iconTheme: IconThemeData(color: theme.foreground),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(textTheme.bodyMedium
-              ?.copyWith(inherit: false, color: Colors.white)),
+      ),
+      textTheme: textTheme,
+      iconTheme: IconThemeData(color: theme.foreground),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            textTheme.bodyMedium?.copyWith(
+              inherit: false,
+              color: Colors.white,
+            ),
+          ),
           backgroundColor: MaterialStatePropertyAll(theme.primary),
           foregroundColor: const MaterialStatePropertyAll(Colors.white),
           elevation: const MaterialStatePropertyAll(0),
           shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+          ),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           tapTargetSize: MaterialTapTargetSize.padded,
-        )),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-            style: ButtonStyle(
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
           foregroundColor: MaterialStatePropertyAll(theme.primary),
           shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+          ),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           tapTargetSize: MaterialTapTargetSize.padded,
-        )),
-        textButtonTheme: TextButtonThemeData(
-          style: ButtonStyle(
-            iconColor: MaterialStatePropertyAll(theme.primary),
-            foregroundColor: MaterialStatePropertyAll(theme.primary),
-          ),
         ),
-        dividerTheme: DividerThemeData(color: theme.divider),
-        progressIndicatorTheme:
-            ProgressIndicatorThemeData(color: theme.primary),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: theme.primary,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          iconColor: MaterialStatePropertyAll(theme.primary),
+          foregroundColor: MaterialStatePropertyAll(theme.primary),
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          fillColor: theme.panelBackground,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: theme.isDarkTheme
-                    ? theme.primaryDarken
-                    : theme.primaryLighten,
-                width: 1.0),
-            borderRadius: BorderRadius.circular(10),
+      ),
+      dividerTheme: DividerThemeData(color: theme.divider),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: theme.primary),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: theme.primary,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: theme.panelBackground,
+        filled: true,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color:
+                theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+            width: 1.0,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.primary),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          contentPadding: const EdgeInsets.all(5),
-          hintStyle: textTheme.bodySmall?.copyWith(
-            fontSize: textTheme.titleMedium?.fontSize,
-            color: theme.isDarkTheme
-                ? theme.foreground.darken(0.2)
-                : theme.foreground.lighten(0.2),
-          ),
-          prefixIconColor: theme.primary,
-          suffixIconColor: theme.primary,
-          isDense: true,
+          borderRadius: BorderRadius.circular(10),
         ),
-        checkboxTheme: CheckboxThemeData(
-            fillColor: MaterialStatePropertyAll(theme.primary)),
-        expansionTileTheme: ExpansionTileThemeData(iconColor: theme.primary),
-        toggleButtonsTheme: ToggleButtonsThemeData(
-          color: theme.primary,
-          selectedColor: Colors.white,
-          borderColor: theme.divider,
-          borderWidth: 1.0,
-          highlightColor:
-              theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
-          fillColor:
-              theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: theme.primary),
+          borderRadius: BorderRadius.circular(10),
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor: theme.primary, unselectedItemColor: Colors.white));
+        contentPadding: const EdgeInsets.all(5),
+        hintStyle: textTheme.bodySmall?.copyWith(
+          fontSize: textTheme.titleMedium?.fontSize,
+          color: theme.isDarkTheme
+              ? theme.foreground.darken(0.2)
+              : theme.foreground.lighten(0.2),
+        ),
+        prefixIconColor: theme.primary,
+        suffixIconColor: theme.primary,
+        isDense: true,
+      ),
+      checkboxTheme:
+          CheckboxThemeData(fillColor: MaterialStatePropertyAll(theme.primary)),
+      expansionTileTheme: ExpansionTileThemeData(iconColor: theme.primary),
+      toggleButtonsTheme: ToggleButtonsThemeData(
+        color: theme.primary,
+        selectedColor: Colors.white,
+        borderColor: theme.divider,
+        borderWidth: 1.0,
+        highlightColor:
+            theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+        fillColor:
+            theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: theme.primary,
+        unselectedItemColor: Colors.white,
+      ),
+      sliderTheme: SliderThemeData.fromPrimaryColors(
+        primaryColor: theme.primary,
+        primaryColorDark: theme.primaryDarken,
+        primaryColorLight: theme.primaryLighten,
+        valueIndicatorTextStyle: textTheme.bodySmall ?? const TextStyle(),
+      ).copyWith(
+        valueIndicatorColor: theme.panel,
+        valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+      ),
+    );
 
     return themeData;
   }
@@ -236,6 +256,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         .select((value) => value.settings.lightColorThemeId));
     final darkTheme = ref.watch(generalSettingsRepositoryProvider
         .select((value) => value.settings.darkColorThemeId));
+    final textScaleFactor = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.textScaleFactor),
+    );
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -256,11 +280,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     return Theme(
       data: buildTheme(context, foundColorTheme),
       child: AppTheme(
-          themeData: buildDarkAppThemeData(context, foundColorTheme),
-          child: MediaQuery(
-              data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-              child: widget.child)),
+        themeData: buildDarkAppThemeData(context, foundColorTheme),
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+            textScaleFactor:
+                MediaQuery.textScaleFactorOf(context) * textScaleFactor,
+          ),
+          child: widget.child,
+        ),
+      ),
     );
   }
 }

@@ -45,6 +45,9 @@ mixin _$GeneralSettings {
   /// タブの位置
   TabPosition get tabPosition => throw _privateConstructorUsedError;
 
+  /// 文字の大きさの倍率
+  double get textScaleFactor => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
@@ -67,7 +70,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       bool enableAnimatedMFM,
       bool enableLongTextElipsed,
       bool enableFavoritedRenoteElipsed,
-      TabPosition tabPosition});
+      TabPosition tabPosition,
+      double textScaleFactor});
 }
 
 /// @nodoc
@@ -93,6 +97,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
     Object? tabPosition = null,
+    Object? textScaleFactor = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -135,6 +140,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.tabPosition
           : tabPosition // ignore: cast_nullable_to_non_nullable
               as TabPosition,
+      textScaleFactor: null == textScaleFactor
+          ? _value.textScaleFactor
+          : textScaleFactor // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -157,7 +166,8 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       bool enableAnimatedMFM,
       bool enableLongTextElipsed,
       bool enableFavoritedRenoteElipsed,
-      TabPosition tabPosition});
+      TabPosition tabPosition,
+      double textScaleFactor});
 }
 
 /// @nodoc
@@ -181,6 +191,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
     Object? tabPosition = null,
+    Object? textScaleFactor = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -223,6 +234,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.tabPosition
           : tabPosition // ignore: cast_nullable_to_non_nullable
               as TabPosition,
+      textScaleFactor: null == textScaleFactor
+          ? _value.textScaleFactor
+          : textScaleFactor // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -240,7 +255,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.enableAnimatedMFM = true,
       this.enableLongTextElipsed = false,
       this.enableFavoritedRenoteElipsed = true,
-      this.tabPosition = TabPosition.top});
+      this.tabPosition = TabPosition.top,
+      this.textScaleFactor = 1.0});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -290,9 +306,14 @@ class _$_GeneralSettings implements _GeneralSettings {
   @JsonKey()
   final TabPosition tabPosition;
 
+  /// 文字の大きさの倍率
+  @override
+  @JsonKey()
+  final double textScaleFactor;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor)';
   }
 
   @override
@@ -321,7 +342,9 @@ class _$_GeneralSettings implements _GeneralSettings {
                 other.enableFavoritedRenoteElipsed ==
                     enableFavoritedRenoteElipsed) &&
             (identical(other.tabPosition, tabPosition) ||
-                other.tabPosition == tabPosition));
+                other.tabPosition == tabPosition) &&
+            (identical(other.textScaleFactor, textScaleFactor) ||
+                other.textScaleFactor == textScaleFactor));
   }
 
   @JsonKey(ignore: true)
@@ -337,7 +360,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       enableAnimatedMFM,
       enableLongTextElipsed,
       enableFavoritedRenoteElipsed,
-      tabPosition);
+      tabPosition,
+      textScaleFactor);
 
   @JsonKey(ignore: true)
   @override
@@ -364,7 +388,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final bool enableAnimatedMFM,
       final bool enableLongTextElipsed,
       final bool enableFavoritedRenoteElipsed,
-      final TabPosition tabPosition}) = _$_GeneralSettings;
+      final TabPosition tabPosition,
+      final double textScaleFactor}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -403,6 +428,10 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// タブの位置
   TabPosition get tabPosition;
+  @override
+
+  /// 文字の大きさの倍率
+  double get textScaleFactor;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>
