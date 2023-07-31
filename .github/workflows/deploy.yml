@@ -96,9 +96,10 @@ jobs:
             export ANDROID_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
             export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
             flutter build apk --no-tree-shake-icons --release
+            mv ./build/app/outputs/flutter-apk/app-release.apk ./build/app/outputs/flutter-apk/miria-$BUMP_VERSION.apk
 
         - name: Create tag and release note
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            gh release create v$BUMP_VERSION --generate-notes --draft ./build/app/outputs/flutter-apk/app-release.apk
+            gh release create v$BUMP_VERSION --generate-notes --draft ./build/app/outputs/flutter-apk/miria-$BUMP_VERSION.apk
