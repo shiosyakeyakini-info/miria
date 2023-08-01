@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +34,12 @@ class SplashPageState extends ConsumerState<SplashPage> {
     }
 
     if (_isFirst) {
-      initialSharingMedias = (await ReceiveSharingIntent.getInitialMedia())
-          .map((e) => e.path)
-          .toList();
-      initialSharingText = await ReceiveSharingIntent.getInitialText() ?? "";
+      if (Platform.isAndroid || Platform.isIOS) {
+        initialSharingMedias = (await ReceiveSharingIntent.getInitialMedia())
+            .map((e) => e.path)
+            .toList();
+        initialSharingText = await ReceiveSharingIntent.getInitialText() ?? "";
+      }
 
       LicenseRegistry.addLicense(
           () => Stream.fromIterable(miriaInheritedLicenses));
