@@ -56,6 +56,8 @@ dependencies:
   image_gallery_saver: ^2.0.3
   permission_handler: ^10.4.2
   device_info_plus: ^9.0.2
+  colorfilter_generator: ^0.0.8
+  matrix2d: ^1.0.4
 
 dependency_overrides:
   image_editor:

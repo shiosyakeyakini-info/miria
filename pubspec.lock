@@ -226,7 +226,7 @@ packages:
     source: hosted
     version: "1.17.1"
   colorfilter_generator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: colorfilter_generator
       sha256: ccc2995e440b1d828d55d99150e7cad64624f3cb4a1e235000de3f93cf10d35c
@@ -745,7 +745,7 @@ packages:
     source: hosted
     version: "0.2.0"
   matrix2d:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: matrix2d
       sha256: "188718dd3bc2a31e372cfd0791b0f77f4f13ea76164147342cc378d9132949e7"
