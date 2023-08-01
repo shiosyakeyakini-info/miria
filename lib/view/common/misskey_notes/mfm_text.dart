@@ -170,6 +170,7 @@ class MfmTextState extends ConsumerState<MfmText> {
         code: code,
         language: lang,
       ),
+      serifStyle: AppTheme.of(context).serifStyle,
       linkTap: (src) => onTapLink(src).expectFailure(context),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
