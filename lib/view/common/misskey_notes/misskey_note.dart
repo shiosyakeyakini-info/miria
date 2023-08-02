@@ -272,6 +272,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               displayNote.cw ?? "",
                               host: displayNote.user.host,
                               emoji: displayNote.emojis,
+                              isEnableAnimatedMFM: ref
+                                  .read(generalSettingsRepositoryProvider)
+                                  .settings
+                                  .enableAnimatedMFM,
                               suffixSpan: [
                                 WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
@@ -307,6 +311,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               displayNote.text ?? "",
                               host: displayNote.user.host,
                               emoji: displayNote.emojis,
+                              isEnableAnimatedMFM: ref
+                                  .read(generalSettingsRepositoryProvider)
+                                  .settings
+                                  .enableAnimatedMFM,
                               onEmojiTap: (emojiData) async =>
                                   await reactionControl(
                                       ref, context, displayNote,

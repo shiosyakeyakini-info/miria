@@ -20,6 +20,7 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
       automaticPush:
           $enumDecodeNullable(_$AutomaticPushEnumMap, json['automaticPush']) ??
               AutomaticPush.none,
+      enableAnimatedMFM: json['enableAnimatedMFM'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
@@ -30,6 +31,7 @@ Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
       'nsfwInherit': _$NSFWInheritEnumMap[instance.nsfwInherit]!,
       'enableDirectReaction': instance.enableDirectReaction,
       'automaticPush': _$AutomaticPushEnumMap[instance.automaticPush]!,
+      'enableAnimatedMFM': instance.enableAnimatedMFM,
     };
 
 const _$ThemeColorSystemEnumMap = {

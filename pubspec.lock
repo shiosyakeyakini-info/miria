@@ -773,7 +773,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: a3361240ba481553fd550e8481d41736128dbef4
+      resolved-ref: "864e30194775acf00dfc8c5d131e98ce3ce8a852"
       url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
     source: git
     version: "0.0.1"
