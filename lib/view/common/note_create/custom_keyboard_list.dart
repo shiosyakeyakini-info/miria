@@ -36,9 +36,8 @@ class CustomKeyboardList extends StatelessWidget {
           controller: controller,
           focusNode: focusNode),
       CustomKeyboard(
-          keyboard: "_",
-          afterInsert: "_",
-          displayText: "＿",
+          keyboard: "<i>",
+          afterInsert: "</i>",
           controller: controller,
           focusNode: focusNode),
       CustomKeyboard(
