@@ -19,6 +19,24 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
   final serverController = TextEditingController();
   bool isAuthed = false;
 
+  Future<void> login() async {
+    try {
+      IndicatorView.showIndicator(context);
+      await ref.read(accountRepository).validateMiAuth(serverController.text);
+      if (!mounted) return;
+      context.pushRoute(
+        TimeLineRoute(
+          currentTabSetting:
+              ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+        ),
+      );
+    } catch (e) {
+      rethrow;
+    } finally {
+      IndicatorView.hideIndicator(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CenteringWidget(
@@ -78,25 +96,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
               TableRow(children: [
                 Container(),
                 ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      IndicatorView.showIndicator(context);
-                      await ref
-                          .read(accountRepository)
-                          .validateMiAuth(serverController.text)
-                          .expectFailure(context);
-                      if (!mounted) return;
-                      context.pushRoute(TimeLineRoute(
-                          currentTabSetting: ref
-                              .read(tabSettingsRepositoryProvider)
-                              .tabSettings
-                              .first));
-                    } catch (e) {
-                      rethrow;
-                    } finally {
-                      IndicatorView.hideIndicator(context);
-                    }
-                  },
+                  onPressed: () => login().expectFailure(context),
                   child: const Text("認証してきた"),
                 ),
               ]),
