@@ -1721,6 +1721,70 @@ void main() {
 
         expect(find.byType(LocalOnlyIcon), findsOneWidget);
       });
+
+      testWidgets("メンション先がローカルユーザーのみの場合、連合オフで投稿できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        final mockUser = MockMisskeyUsers();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        when(mockMisskey.users).thenReturn(mockUser);
+        when(mockUser.showByName(any))
+            .thenAnswer((_) async => TestData.usersShowResponse2);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account, reply: TestData.note1))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.rocket));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+            find.byType(TextField), "@oishiibot :ai_yaysuperfast:");
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(mockNote.create(argThat(
+            predicate<NotesCreateRequest>((arg) => arg.localOnly == true))));
+      });
+
+      testWidgets("メンション先がリモートユーザーを含む場合、連合オフで投稿できないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
+
+        await tester.pumpWidget(ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account, reply: TestData.note1))));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.rocket));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField),
+            "@shiosyakeyakini@mi.taichan.site :ai_yaysuperfast:");
+
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        verifyNever(mockNote.notes(any));
+      });
     });
 
     group("リアクションピッカー", () {
