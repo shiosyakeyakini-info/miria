@@ -116,6 +116,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final Account? loginAs;
   final bool isForceUnvisibleReply;
   final bool isForceUnvisibleRenote;
+  final bool isVisibleAllReactions;
 
   const MisskeyNote({
     super.key,
@@ -125,6 +126,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
     this.loginAs,
     this.isForceUnvisibleReply = false,
     this.isForceUnvisibleRenote = false,
+    this.isVisibleAllReactions = false,
   });
 
   @override
@@ -134,6 +136,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
 class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   var isCwOpened = false;
   final globalKey = GlobalKey();
+  late var isAllReactionVisible = widget.isVisibleAllReactions;
 
   @override
   Widget build(BuildContext context) {
@@ -378,6 +381,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             children: [
                               for (final reaction in displayNote
                                   .reactions.entries
+                                  .take(isAllReactionVisible
+                                      ? displayNote.reactions.length
+                                      : 16)
                                   .mapIndexed((index, element) =>
                                       (index: index, element: element))
                                   .sorted((a, b) {
@@ -397,7 +403,17 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   myReaction: displayNote.myReaction,
                                   noteId: displayNote.id,
                                   loginAs: widget.loginAs,
-                                )
+                                ),
+                              if (!isAllReactionVisible &&
+                                  displayNote.reactions.length > 16)
+                                OutlinedButton(
+                                    style: AppTheme.of(context)
+                                        .reactionButtonStyle,
+                                    onPressed: () => setState(() {
+                                          isAllReactionVisible = true;
+                                        }),
+                                    child: Text(
+                                        "ほか${displayNote.reactions.length - 16}個")),
                             ],
                           ),
                           if (displayNote.channel != null)
