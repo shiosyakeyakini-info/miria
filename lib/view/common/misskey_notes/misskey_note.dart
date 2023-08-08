@@ -4,6 +4,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:mfm_parser/mfm_parser.dart' as parser;
+import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -117,6 +119,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final bool isForceUnvisibleReply;
   final bool isForceUnvisibleRenote;
   final bool isVisibleAllReactions;
+  final bool isForceVisibleLong;
 
   const MisskeyNote({
     super.key,
@@ -127,6 +130,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
     this.isForceUnvisibleReply = false,
     this.isForceUnvisibleRenote = false,
     this.isVisibleAllReactions = false,
+    this.isForceVisibleLong = false,
   });
 
   @override
@@ -137,6 +141,34 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   var isCwOpened = false;
   final globalKey = GlobalKey();
   late var isAllReactionVisible = widget.isVisibleAllReactions;
+  late bool isLongVisible;
+  bool isLongVisibleInitialized = false;
+
+  bool shouldCollaposed(Note displayNote) {
+    final text = displayNote.text;
+    if (text == null) return false;
+    final parseResult = const parser.MfmParser().parse(text);
+    return nodeMaxTextLength(parseResult) >= 500;
+  }
+
+  int nodeMaxTextLength(List<parser.MfmNode> nodes) {
+    var thisNodeCount = 0;
+    for (final node in nodes) {
+      if (node is parser.MfmText) {
+        thisNodeCount += node.text.length;
+      } else if (node is parser.MfmEmojiCode ||
+          node is parser.MfmUnicodeEmoji) {
+        thisNodeCount += 1;
+      } else if (node is parser.MfmFn) {
+        thisNodeCount =
+            max(thisNodeCount, nodeMaxTextLength(node.children ?? []));
+      } else if (node is parser.MfmBlock) {
+        thisNodeCount =
+            max(thisNodeCount, nodeMaxTextLength(node.children ?? []));
+      }
+    }
+    return thisNodeCount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +199,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     if (widget.recursive == 3) {
       return Container();
     }
+    if (!isLongVisibleInitialized) {
+      isLongVisible = widget.isForceVisibleLong ||
+          displayNote.cw?.isNotEmpty == true ||
+          !shouldCollaposed(displayNote);
+
+      isLongVisibleInitialized = true;
+    }
 
     final userId =
         "@${displayNote.user.username}${displayNote.user.host == null ? "" : "@${displayNote.user.host}"}";
@@ -180,7 +219,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 800),
+            constraints: const BoxConstraints(
+              maxWidth: 800,
+            ),
             padding: EdgeInsets.only(
               top: 5 * MediaQuery.of(context).textScaleFactor,
               bottom: 5 * MediaQuery.of(context).textScaleFactor,
@@ -310,32 +351,58 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           ],
                           if (displayNote.cw == null ||
                               displayNote.cw != null && isCwOpened) ...[
-                            MfmText(
-                              displayNote.text ?? "",
-                              host: displayNote.user.host,
-                              emoji: displayNote.emojis,
-                              isEnableAnimatedMFM: ref
-                                  .read(generalSettingsRepositoryProvider)
-                                  .settings
-                                  .enableAnimatedMFM,
-                              onEmojiTap: (emojiData) async =>
-                                  await reactionControl(
-                                      ref, context, displayNote,
-                                      requestEmoji: emojiData),
-                              suffixSpan: [
-                                if (!isEmptyRenote &&
-                                    displayNote.renoteId != null &&
-                                    (widget.recursive == 2 ||
-                                        widget.isForceUnvisibleRenote))
-                                  TextSpan(
-                                    text: "  RN:...",
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontStyle: FontStyle.italic,
+                            if (isLongVisible)
+                              MfmText(
+                                displayNote.text ?? "",
+                                host: displayNote.user.host,
+                                emoji: displayNote.emojis,
+                                isEnableAnimatedMFM: ref
+                                    .read(generalSettingsRepositoryProvider)
+                                    .settings
+                                    .enableAnimatedMFM,
+                                onEmojiTap: (emojiData) async =>
+                                    await reactionControl(
+                                        ref, context, displayNote,
+                                        requestEmoji: emojiData),
+                                suffixSpan: [
+                                  if (!isEmptyRenote &&
+                                      displayNote.renoteId != null &&
+                                      (widget.recursive == 2 ||
+                                          widget.isForceUnvisibleRenote))
+                                    TextSpan(
+                                      text: "  RN:...",
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontStyle: FontStyle.italic,
+                                      ),
                                     ),
-                                  ),
-                              ],
-                            ),
+                                ],
+                              )
+                            else
+                              SimpleMfm(
+                                "${(displayNote.text ?? "").substring(0, 150)}...",
+                                suffixSpan: [
+                                  WidgetSpan(
+                                      child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      padding: const EdgeInsets.all(5),
+                                      textStyle: TextStyle(
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.fontSize),
+                                      minimumSize: const Size(0, 0),
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    onPressed: () => setState(() {
+                                      isLongVisible = true;
+                                    }),
+                                    child: const Text("続きを表示"),
+                                  ))
+                                ],
+                              ),
                             MisskeyFileView(
                               files: displayNote.files,
                               height: 200 *
