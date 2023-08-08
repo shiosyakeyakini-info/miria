@@ -213,7 +213,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2),
                     child: SimpleMfmText(
-                      "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.username == widget.note.renote?.user.username ? "セルフRenote" : "Renote"}",
+                      "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.acct == widget.note.renote?.user.acct ? "セルフRenote" : "Renote"}",
                       style: Theme.of(context).textTheme.bodySmall,
                       emojis: widget.note.user.emojis,
                     ),
