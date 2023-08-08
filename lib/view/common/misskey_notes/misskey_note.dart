@@ -630,29 +630,11 @@ class NoteHeader1 extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),
-        if (displayNote.visibility == NoteVisibility.followers)
+        if (displayNote.visibility != NoteVisibility.public)
           Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Icon(
-              Icons.lock,
-              size: Theme.of(context).textTheme.bodySmall?.fontSize,
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-        if (displayNote.visibility == NoteVisibility.home)
-          Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: Icon(
-              Icons.home,
-              size: Theme.of(context).textTheme.bodySmall?.fontSize,
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-        if (displayNote.visibility == NoteVisibility.specified)
-          Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: Icon(
-              Icons.mail,
+              displayNote.visibility.icon,
               size: Theme.of(context).textTheme.bodySmall?.fontSize,
               color: Theme.of(context).textTheme.bodySmall?.color,
             ),
