@@ -5,6 +5,8 @@ import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/extensions/note_visibility_extension.dart';
+import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
@@ -212,10 +214,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                 if (isEmptyRenote)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2),
-                    child: SimpleMfmText(
-                      "${widget.note.user.name ?? widget.note.user.username} が ${widget.note.user.acct == widget.note.renote?.user.acct ? "セルフRenote" : "Renote"}",
-                      style: Theme.of(context).textTheme.bodySmall,
-                      emojis: widget.note.user.emojis,
+                    child: RenoteHeader(
+                      note: widget.note,
+                      loginAs: widget.loginAs,
                     ),
                   ),
                 if (displayNote.reply != null && !widget.isForceUnvisibleReply)
@@ -645,6 +646,74 @@ class NoteHeader1 extends StatelessWidget {
             child: LocalOnlyIcon(
               size: Theme.of(context).textTheme.bodySmall?.fontSize,
               color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
+          )
+      ],
+    );
+  }
+}
+
+class RenoteHeader extends StatelessWidget {
+  final Note note;
+  final Account? loginAs;
+
+  const RenoteHeader({
+    super.key,
+    required this.note,
+    this.loginAs,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final renoteTextStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppTheme.of(context).renoteBorderColor,
+        );
+
+    return Row(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () async => await _navigateUserDetailPage(
+              context,
+              note,
+              loginAs,
+            ).expectFailure(context),
+            child: SimpleMfmText(
+              note.user.name ?? note.user.username,
+              style: renoteTextStyle?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              emojis: note.user.emojis,
+              suffixSpan: [
+                TextSpan(
+                  text:
+                      " が ${note.user.acct == note.renote?.user.acct ? "セルフRenote" : "Renote"}",
+                  style: renoteTextStyle,
+                )
+              ],
+            ),
+          ),
+        ),
+        Text(
+          note.createdAt.differenceNow,
+          textAlign: TextAlign.right,
+          style: renoteTextStyle,
+        ),
+        if (note.visibility != NoteVisibility.public)
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Icon(
+              note.visibility.icon,
+              size: renoteTextStyle?.fontSize,
+              color: renoteTextStyle?.color,
+            ),
+          ),
+        if (note.localOnly)
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: LocalOnlyIcon(
+              size: renoteTextStyle?.fontSize,
+              color: renoteTextStyle?.color,
             ),
           )
       ],
