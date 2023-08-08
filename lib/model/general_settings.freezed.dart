@@ -26,6 +26,7 @@ mixin _$GeneralSettings {
   NSFWInherit get nsfwInherit => throw _privateConstructorUsedError;
   bool get enableDirectReaction => throw _privateConstructorUsedError;
   AutomaticPush get automaticPush => throw _privateConstructorUsedError;
+  bool get enableAnimatedMFM => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +46,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       ThemeColorSystem themeColorSystem,
       NSFWInherit nsfwInherit,
       bool enableDirectReaction,
-      AutomaticPush automaticPush});
+      AutomaticPush automaticPush,
+      bool enableAnimatedMFM});
 }
 
 /// @nodoc
@@ -67,6 +69,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? nsfwInherit = null,
     Object? enableDirectReaction = null,
     Object? automaticPush = null,
+    Object? enableAnimatedMFM = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -93,6 +96,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.automaticPush
           : automaticPush // ignore: cast_nullable_to_non_nullable
               as AutomaticPush,
+      enableAnimatedMFM: null == enableAnimatedMFM
+          ? _value.enableAnimatedMFM
+          : enableAnimatedMFM // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -111,7 +118,8 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       ThemeColorSystem themeColorSystem,
       NSFWInherit nsfwInherit,
       bool enableDirectReaction,
-      AutomaticPush automaticPush});
+      AutomaticPush automaticPush,
+      bool enableAnimatedMFM});
 }
 
 /// @nodoc
@@ -131,6 +139,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? nsfwInherit = null,
     Object? enableDirectReaction = null,
     Object? automaticPush = null,
+    Object? enableAnimatedMFM = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -157,6 +166,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.automaticPush
           : automaticPush // ignore: cast_nullable_to_non_nullable
               as AutomaticPush,
+      enableAnimatedMFM: null == enableAnimatedMFM
+          ? _value.enableAnimatedMFM
+          : enableAnimatedMFM // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -170,7 +183,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.themeColorSystem = ThemeColorSystem.system,
       this.nsfwInherit = NSFWInherit.inherit,
       this.enableDirectReaction = false,
-      this.automaticPush = AutomaticPush.none});
+      this.automaticPush = AutomaticPush.none,
+      this.enableAnimatedMFM = true});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -193,10 +207,13 @@ class _$_GeneralSettings implements _GeneralSettings {
   @override
   @JsonKey()
   final AutomaticPush automaticPush;
+  @override
+  @JsonKey()
+  final bool enableAnimatedMFM;
 
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM)';
   }
 
   @override
@@ -215,7 +232,9 @@ class _$_GeneralSettings implements _GeneralSettings {
             (identical(other.enableDirectReaction, enableDirectReaction) ||
                 other.enableDirectReaction == enableDirectReaction) &&
             (identical(other.automaticPush, automaticPush) ||
-                other.automaticPush == automaticPush));
+                other.automaticPush == automaticPush) &&
+            (identical(other.enableAnimatedMFM, enableAnimatedMFM) ||
+                other.enableAnimatedMFM == enableAnimatedMFM));
   }
 
   @JsonKey(ignore: true)
@@ -227,7 +246,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       themeColorSystem,
       nsfwInherit,
       enableDirectReaction,
-      automaticPush);
+      automaticPush,
+      enableAnimatedMFM);
 
   @JsonKey(ignore: true)
   @override
@@ -250,7 +270,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final ThemeColorSystem themeColorSystem,
       final NSFWInherit nsfwInherit,
       final bool enableDirectReaction,
-      final AutomaticPush automaticPush}) = _$_GeneralSettings;
+      final AutomaticPush automaticPush,
+      final bool enableAnimatedMFM}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -267,6 +288,8 @@ abstract class _GeneralSettings implements GeneralSettings {
   bool get enableDirectReaction;
   @override
   AutomaticPush get automaticPush;
+  @override
+  bool get enableAnimatedMFM;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>

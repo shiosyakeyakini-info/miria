@@ -42,6 +42,7 @@ class GeneralSettings with _$GeneralSettings {
     @Default(NSFWInherit.inherit) NSFWInherit nsfwInherit,
     @Default(false) bool enableDirectReaction,
     @Default(AutomaticPush.none) AutomaticPush automaticPush,
+    @Default(true) bool enableAnimatedMFM,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

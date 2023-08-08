@@ -34,6 +34,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       linkStyle: TextStyle(color: theme.link),
       hashtagStyle: TextStyle(color: theme.hashtag),
       mentionStyle: TextStyle(color: theme.mention),
+      serifStyle:
+          TextStyle(fontFamilyFallback: resolveFontFamilySerifCallback()),
       reactionButtonBackgroundColor: theme.buttonBackground,
       reactionButtonMeReactedColor: theme.primary,
       renoteBorderColor: theme.renote,
@@ -74,6 +76,14 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       ];
     }
     return [];
+  }
+
+  List<String> resolveFontFamilySerifCallback() {
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      return ["Hiragino Mincho ProN", "Apple Color Emoji"];
+    }
+    return ["Noto Serif CJK JP", "Noto Serif"];
   }
 
   TextStyle resolveUnicodeEmojiStyle() {

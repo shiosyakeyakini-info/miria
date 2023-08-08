@@ -125,12 +125,22 @@ class _TimelineListViewState extends State<TimelineListView> {
   //FIXME static
   static double minMaxExtent = 0.0;
 
+  void timingCallback(_) {
+    final extent = _negativeOffset?.maxScrollExtent;
+    if (extent != null) {
+      minMaxExtent = -extent;
+    } else {
+      minMaxExtent = 0;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     if (widget.controller == null) {
       _controller = TimelineScrollController();
     }
+    WidgetsBinding.instance.addTimingsCallback(timingCallback);
   }
 
   @override
@@ -148,6 +158,7 @@ class _TimelineListViewState extends State<TimelineListView> {
   void dispose() {
     _controller?.dispose();
     super.dispose();
+    WidgetsBinding.instance.removeTimingsCallback(timingCallback);
   }
 
   @override

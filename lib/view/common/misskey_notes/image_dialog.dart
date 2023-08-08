@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ImageDialog extends ConsumerStatefulWidget {
@@ -168,20 +167,22 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                               options:
                                   Options(responseType: ResponseType.bytes));
 
-                          if(defaultTargetPlatform == TargetPlatform.android) {
-
-                            final androidInfo = await DeviceInfoPlugin().androidInfo;
-                              if (androidInfo.version.sdkInt <= 32) {
-                                final permissionStatus = await Permission.storage.status;
-                                if(permissionStatus.isDenied) {
-                                  await Permission.storage.request();
-                                }
-                              }  else {
-                                final permissionStatus = await Permission.photos.status;
-                                if(permissionStatus.isDenied) {
-                                  await Permission.photos.request();
-                                }
+                          if (defaultTargetPlatform == TargetPlatform.android) {
+                            final androidInfo =
+                                await DeviceInfoPlugin().androidInfo;
+                            if (androidInfo.version.sdkInt <= 32) {
+                              final permissionStatus =
+                                  await Permission.storage.status;
+                              if (permissionStatus.isDenied) {
+                                await Permission.storage.request();
                               }
+                            } else {
+                              final permissionStatus =
+                                  await Permission.photos.status;
+                              if (permissionStatus.isDenied) {
+                                await Permission.photos.request();
+                              }
+                            }
                           }
 
                           await ImageGallerySaver.saveImage(response.data);

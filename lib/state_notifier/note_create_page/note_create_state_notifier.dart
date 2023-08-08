@@ -344,6 +344,14 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
       findMfmMentions(nodes);
 
+      // 連合オフなのに他のサーバーの人がメンションに含まれている
+      if (state.localOnly &&
+          userList.any((element) =>
+              element.host != null &&
+              element.host != misskey.apiService.host)) {
+        throw SpecifiedException("連合オフやのによそのサーバーの人がメンションに含まれてるで");
+      }
+
       final mentionTargetUsers = [
         for (final user in userList)
           await misskey.users.showByName(UsersShowByUserNameRequest(

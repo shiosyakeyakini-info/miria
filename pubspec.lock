@@ -225,6 +225,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  colorfilter_generator:
+    dependency: "direct main"
+    description:
+      name: colorfilter_generator
+      sha256: ccc2995e440b1d828d55d99150e7cad64624f3cb4a1e235000de3f93cf10d35c
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.8"
   confetti:
     dependency: "direct main"
     description:
@@ -736,6 +744,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  matrix2d:
+    dependency: "direct main"
+    description:
+      name: matrix2d
+      sha256: "188718dd3bc2a31e372cfd0791b0f77f4f13ea76164147342cc378d9132949e7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   meta:
     dependency: transitive
     description:
@@ -748,16 +764,16 @@ packages:
     dependency: "direct main"
     description:
       name: mfm_parser
-      sha256: "16504680809b655c3ee4c53fea68d3d39ff21be5952b6008ef58eb803b86bf71"
+      sha256: ab52b5dfb5f5ebd54d9f1d8745a596a9fb7ba0e1b13e7d66984456f199143c09
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   mfm_renderer:
     dependency: "direct main"
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "03eafb327bb73efdae12546c27214fa3a8c406c2"
+      resolved-ref: "864e30194775acf00dfc8c5d131e98ce3ce8a852"
       url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
     source: git
     version: "0.0.1"

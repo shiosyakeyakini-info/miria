@@ -27,18 +27,18 @@ class MfmText extends ConsumerStatefulWidget {
   final List<InlineSpan> suffixSpan;
   final List<InlineSpan> prefixSpan;
   final Function(MisskeyEmojiData)? onEmojiTap;
+  final bool isEnableAnimatedMFM;
 
-  const MfmText(
-    this.mfmText, {
-    super.key,
-    this.host,
-    this.style,
-    this.emoji = const {},
-    this.isNyaize = false,
-    this.suffixSpan = const [],
-    this.prefixSpan = const [],
-    this.onEmojiTap,
-  });
+  const MfmText(this.mfmText,
+      {super.key,
+      this.host,
+      this.style,
+      this.emoji = const {},
+      this.isNyaize = false,
+      this.suffixSpan = const [],
+      this.prefixSpan = const [],
+      this.onEmojiTap,
+      this.isEnableAnimatedMFM = true});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MfmTextState();
@@ -170,6 +170,7 @@ class MfmTextState extends ConsumerState<MfmText> {
         code: code,
         language: lang,
       ),
+      serifStyle: AppTheme.of(context).serifStyle,
       linkTap: (src) => onTapLink(src).expectFailure(context),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
@@ -181,6 +182,7 @@ class MfmTextState extends ConsumerState<MfmText> {
       isNyaize: widget.isNyaize,
       suffixSpan: widget.suffixSpan,
       prefixSpan: widget.prefixSpan,
+      isUseAnimation: widget.isEnableAnimatedMFM,
     );
   }
 }

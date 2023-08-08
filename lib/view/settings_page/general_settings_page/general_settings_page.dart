@@ -21,6 +21,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   NSFWInherit nsfwInherit = NSFWInherit.inherit;
   AutomaticPush automaticPush = AutomaticPush.none;
   bool enableDirectReaction = false;
+  bool enableAnimatedMFM = true;
 
   @override
   void initState() {
@@ -48,18 +49,19 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       nsfwInherit = settings.nsfwInherit;
       enableDirectReaction = settings.enableDirectReaction;
       automaticPush = settings.automaticPush;
+      enableAnimatedMFM = settings.enableAnimatedMFM;
     });
   }
 
   Future<void> save() async {
     ref.read(generalSettingsRepositoryProvider).update(GeneralSettings(
-          lightColorThemeId: lightModeTheme,
-          darkColorThemeId: darkModeTheme,
-          themeColorSystem: colorSystem,
-          nsfwInherit: nsfwInherit,
-          enableDirectReaction: enableDirectReaction,
-          automaticPush: automaticPush,
-        ));
+        lightColorThemeId: lightModeTheme,
+        darkColorThemeId: darkModeTheme,
+        themeColorSystem: colorSystem,
+        nsfwInherit: nsfwInherit,
+        enableDirectReaction: enableDirectReaction,
+        automaticPush: automaticPush,
+        enableAnimatedMFM: enableAnimatedMFM));
   }
 
   @override
@@ -120,6 +122,16 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               },
                             ),
                           ),
+                          const Padding(padding: EdgeInsets.only(top: 10)),
+                          const Text("動きのあるMFM"),
+                          CheckboxListTile(
+                            value: enableAnimatedMFM,
+                            onChanged: (value) => setState(() {
+                              enableAnimatedMFM = value ?? true;
+                              save();
+                            }),
+                            title: const Text("動きのあるMFMを有効にします。"),
+                          )
                         ],
                       ))),
               Card(
