@@ -448,9 +448,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             children: [
                               for (final reaction in displayNote
                                   .reactions.entries
-                                  .take(isAllReactionVisible
-                                      ? displayNote.reactions.length
-                                      : 16)
                                   .mapIndexed((index, element) =>
                                       (index: index, element: element))
                                   .sorted((a, b) {
@@ -458,7 +455,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     b.element.value.compareTo(a.element.value);
                                 if (primary != 0) return primary;
                                 return a.index.compareTo(b.index);
-                              }))
+                              }).take(isAllReactionVisible
+                                      ? displayNote.reactions.length
+                                      : 16))
                                 ReactionButton(
                                   emojiData: MisskeyEmojiData.fromEmojiName(
                                       emojiName: reaction.element.key,
