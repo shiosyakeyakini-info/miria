@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:mfm_parser/mfm_parser.dart' as parser;
-import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -148,26 +147,35 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     final text = displayNote.text;
     if (text == null) return false;
     final parseResult = const parser.MfmParser().parse(text);
-    return nodeMaxTextLength(parseResult) >= 500;
+    final result = nodeMaxTextLength(parseResult);
+    return result.$1 >= 500 || result.$2 >= 6;
   }
 
-  int nodeMaxTextLength(List<parser.MfmNode> nodes) {
+  (int length, int newLinesCount) nodeMaxTextLength(
+      List<parser.MfmNode> nodes) {
     var thisNodeCount = 0;
+    var newLinesCount = 0;
     for (final node in nodes) {
       if (node is parser.MfmText) {
         thisNodeCount += node.text.length;
+        // 2行連続した改行の個数を数える
+        newLinesCount += node.text.split("\n\n").length - 1;
       } else if (node is parser.MfmEmojiCode ||
           node is parser.MfmUnicodeEmoji) {
         thisNodeCount += 1;
       } else if (node is parser.MfmFn) {
-        thisNodeCount =
-            max(thisNodeCount, nodeMaxTextLength(node.children ?? []));
+        final fnResult = nodeMaxTextLength(node.children ?? []);
+        thisNodeCount += fnResult.$1;
+        newLinesCount += fnResult.$2;
       } else if (node is parser.MfmBlock) {
-        thisNodeCount =
-            max(thisNodeCount, nodeMaxTextLength(node.children ?? []));
+        final blockResult = nodeMaxTextLength(node.children ?? []);
+        thisNodeCount += blockResult.$1;
+        newLinesCount += blockResult.$2;
+      } else if (node is parser.MfmURL) {
+        thisNodeCount += node.value.length;
       }
     }
-    return thisNodeCount;
+    return (thisNodeCount, newLinesCount);
   }
 
   @override
@@ -219,9 +227,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            constraints: const BoxConstraints(
-              maxWidth: 800,
-            ),
+            constraints: const BoxConstraints(maxWidth: 800),
             padding: EdgeInsets.only(
               top: 5 * MediaQuery.of(context).textScaleFactor,
               bottom: 5 * MediaQuery.of(context).textScaleFactor,
@@ -379,28 +385,31 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                 ],
                               )
                             else
-                              SimpleMfm(
-                                "${(displayNote.text ?? "").substring(0, 150)}...",
+                              SimpleMfmText(
+                                "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 150))}..."
+                                    .replaceAll("\n\n", "\n"),
+                                emojis: displayNote.emojis,
                                 suffixSpan: [
                                   WidgetSpan(
-                                      child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      padding: const EdgeInsets.all(5),
-                                      textStyle: TextStyle(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.fontSize),
-                                      minimumSize: const Size(0, 0),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        padding: const EdgeInsets.all(5),
+                                        textStyle: TextStyle(
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.fontSize),
+                                        minimumSize: const Size(0, 0),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      onPressed: () => setState(() {
+                                        isLongVisible = true;
+                                      }),
+                                      child: const Text("続きを表示"),
                                     ),
-                                    onPressed: () => setState(() {
-                                      isLongVisible = true;
-                                    }),
-                                    child: const Text("続きを表示"),
-                                  ))
+                                  )
                                 ],
                               ),
                             MisskeyFileView(
@@ -554,38 +563,38 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   displayNote: displayNote,
                                 ),
                                 IconButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          builder: (builder) {
-                                            return NoteModalSheet(
-                                              baseNote: widget.note,
-                                              targetNote: displayNote,
-                                              account: AccountScope.of(context),
-                                              noteBoundaryKey: globalKey,
-                                            );
-                                          });
-                                    },
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    style: const ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
-                                          EdgeInsets.zero),
-                                      minimumSize:
-                                          MaterialStatePropertyAll(Size(0, 0)),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    icon: Icon(
-                                      Icons.more_horiz,
-                                      size: 16 *
-                                          MediaQuery.of(context)
-                                              .textScaleFactor,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.color,
-                                    )),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (builder) {
+                                          return NoteModalSheet(
+                                            baseNote: widget.note,
+                                            targetNote: displayNote,
+                                            account: AccountScope.of(context),
+                                            noteBoundaryKey: globalKey,
+                                          );
+                                        });
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  style: const ButtonStyle(
+                                    padding: MaterialStatePropertyAll(
+                                        EdgeInsets.zero),
+                                    minimumSize:
+                                        MaterialStatePropertyAll(Size(0, 0)),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  icon: Icon(
+                                    Icons.more_horiz,
+                                    size: 16 *
+                                        MediaQuery.of(context).textScaleFactor,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ),
+                                ),
                               ]
                             ],
                           ),
