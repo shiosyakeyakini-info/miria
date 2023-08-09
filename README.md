@@ -22,7 +22,7 @@ Miriaはスマートフォン向けMisskeyクライアントです。
 
 ### 対応する予定があるもの
 
-[issue](https://github.com/shiosyakeyakini-info/miria/issue)を対応予定のメモ欄がわりに使っています。
+[issue](https://github.com/shiosyakeyakini-info/miria/issues)を対応予定のメモ欄がわりに使っています。
 
 ### 対応する予定がないもの
 
