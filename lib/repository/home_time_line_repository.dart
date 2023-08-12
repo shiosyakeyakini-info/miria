@@ -24,14 +24,20 @@ class HomeTimeLineRepository extends SocketTimelineRepository {
         onReacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   }) {
-    return misskey.homeTimelineStream(onReceived, onReacted, onVoted);
+    return misskey.homeTimelineStream(
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onVoted: onVoted,
+    );
   }
 
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
-    return await misskey.notes.homeTimeline(NotesTimelineRequest(
-      limit: 30,
-      untilId: untilId,
-    ));
+    return await misskey.notes.homeTimeline(
+      NotesTimelineRequest(
+        limit: 30,
+        untilId: untilId,
+      ),
+    );
   }
 }

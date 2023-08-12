@@ -24,7 +24,11 @@ class HybridTimelineRepository extends SocketTimelineRepository {
         onReacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   }) {
-    return misskey.hybridTimelineStream(onReceived, onReacted, onVoted);
+    return misskey.hybridTimelineStream(
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onVoted: onVoted,
+    );
   }
 
   @override

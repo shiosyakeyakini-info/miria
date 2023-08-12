@@ -24,7 +24,11 @@ class LocalTimeLineRepository extends SocketTimelineRepository {
         onReacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   }) {
-    return misskey.localTimelineStream(onReceived, onReacted, onVoted);
+    return misskey.localTimelineStream(
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onVoted: onVoted,
+    );
   }
 
   @override
