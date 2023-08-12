@@ -23,7 +23,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
 
     if (!mounted) return;
     context.pushRoute(TimeLineRoute(
-        currentTabSetting:
+        initialTabSetting:
             ref.read(tabSettingsRepositoryProvider).tabSettings.first));
   }
 

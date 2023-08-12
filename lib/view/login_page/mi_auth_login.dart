@@ -26,7 +26,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
       if (!mounted) return;
       context.pushRoute(
         TimeLineRoute(
-          currentTabSetting:
+          initialTabSetting:
               ref.read(tabSettingsRepositoryProvider).tabSettings.first,
         ),
       );

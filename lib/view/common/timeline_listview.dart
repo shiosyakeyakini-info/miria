@@ -243,6 +243,16 @@ class _TimelineListViewState extends State<TimelineListView> {
   SliverChildDelegate get negativeChildrenDelegate {
     return SliverChildBuilderDelegate(
       (BuildContext context, int index) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          final extent = (_negativeOffset?.hasContentDimensions ?? false)
+              ? _negativeOffset?.maxScrollExtent
+              : null;
+          if (extent != null) {
+            minMaxExtent = -extent;
+          } else {
+            minMaxExtent = 0;
+          }
+        });
         final separatorBuilder = widget.separatorBuilder;
         if (separatorBuilder != null) {
           final itemIndex = (-1 - index) ~/ 2;
