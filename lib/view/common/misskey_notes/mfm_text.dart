@@ -154,6 +154,7 @@ class MfmTextState extends ConsumerState<MfmText> {
               child: CustomEmoji(
                 emojiData: emojiData,
                 fontSizeRatio: 2,
+                style: style,
               ),
             ),
           ),
@@ -277,6 +278,7 @@ class SimpleMfmText extends ConsumerWidget {
             emojiInfo: emojis,
           ),
           fontSizeRatio: 1,
+          style: style,
         ),
       ),
       style: style,

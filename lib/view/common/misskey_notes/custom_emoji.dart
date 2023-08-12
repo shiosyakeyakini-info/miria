@@ -9,6 +9,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final double fontSizeRatio;
   final bool isAttachTooltip;
   final double? size;
+  final TextStyle? style;
 
   const CustomEmoji({
     super.key,
@@ -16,6 +17,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
     this.fontSizeRatio = 1,
     this.isAttachTooltip = true,
     this.size,
+    this.style,
   });
 
   @override
@@ -56,6 +58,10 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
     final scopedFontSize = widget.size ??
         (DefaultTextStyle.of(context).style.fontSize ?? 22) *
             widget.fontSizeRatio;
+    final style = widget.style ??
+        TextStyle(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
+        );
 
     final emojiData = widget.emojiData;
     switch (emojiData) {
@@ -68,9 +74,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             type: ImageType.customEmoji,
             errorBuilder: (context, e, s) => Text(
               emojiData.hostedName,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              ),
+              style: style,
             ),
             loadingBuilder: (context, widget, chunk) => SizedBox(
               height: scopedFontSize,
@@ -88,9 +92,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             fit: BoxFit.cover,
             child: Text(
               emojiData.char,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-              ).merge(AppTheme.of(context).unicodeEmojiStyle),
+              style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
             ),
           ),
         );
@@ -98,9 +100,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
       case NotEmojiData():
         cachedImage = Text(
           emojiData.name,
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyMedium?.color,
-          ),
+          style: style,
         );
         break;
     }
