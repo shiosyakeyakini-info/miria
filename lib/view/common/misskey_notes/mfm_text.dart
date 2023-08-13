@@ -5,6 +5,7 @@ import 'package:flutter_highlighting/flutter_highlighting.dart';
 import 'package:flutter_highlighting/themes/github-dark.dart';
 import 'package:flutter_highlighting/themes/github.dart';
 import 'package:highlighting/languages/all.dart';
+import 'package:mfm_parser/mfm_parser.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -19,7 +20,8 @@ import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MfmText extends ConsumerStatefulWidget {
-  final String mfmText;
+  final String? mfmText;
+  final List<MfmNode>? mfmNode;
   final String? host;
   final TextStyle? style;
   final Map<String, String> emoji;
@@ -29,16 +31,19 @@ class MfmText extends ConsumerStatefulWidget {
   final Function(MisskeyEmojiData)? onEmojiTap;
   final bool isEnableAnimatedMFM;
 
-  const MfmText(this.mfmText,
-      {super.key,
-      this.host,
-      this.style,
-      this.emoji = const {},
-      this.isNyaize = false,
-      this.suffixSpan = const [],
-      this.prefixSpan = const [],
-      this.onEmojiTap,
-      this.isEnableAnimatedMFM = true});
+  const MfmText({
+    super.key,
+    this.mfmText,
+    this.mfmNode,
+    this.host,
+    this.style,
+    this.emoji = const {},
+    this.isNyaize = false,
+    this.suffixSpan = const [],
+    this.prefixSpan = const [],
+    this.onEmojiTap,
+    this.isEnableAnimatedMFM = true,
+  }) : assert(mfmText != null || mfmNode != null);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => MfmTextState();
@@ -139,7 +144,8 @@ class MfmTextState extends ConsumerState<MfmText> {
   @override
   Widget build(BuildContext context) {
     return Mfm(
-      widget.mfmText,
+      mfmText: widget.mfmText,
+      mfmNode: widget.mfmNode,
       emojiBuilder: (context, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
             emojiName: ":$emojiName:",

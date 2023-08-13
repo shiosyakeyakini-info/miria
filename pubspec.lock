@@ -773,7 +773,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "864e30194775acf00dfc8c5d131e98ce3ce8a852"
+      resolved-ref: "9f520855f3717b35cb273991de143c2df960eb7f"
       url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
     source: git
     version: "0.0.1"
@@ -790,7 +790,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ed08e82295645d3267ee7bbb73d74e8f0a30a6ed
+      resolved-ref: "03c8d0202a2921cec1d2c634738fa94e4895c6b3"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

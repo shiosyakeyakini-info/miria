@@ -23,10 +23,24 @@ mixin _$GeneralSettings {
   String get lightColorThemeId => throw _privateConstructorUsedError;
   String get darkColorThemeId => throw _privateConstructorUsedError;
   ThemeColorSystem get themeColorSystem => throw _privateConstructorUsedError;
+
+  /// NSFW設定を継承する
   NSFWInherit get nsfwInherit => throw _privateConstructorUsedError;
+
+  /// ノートのカスタム絵文字直接タップでのリアクションを有効にする
   bool get enableDirectReaction => throw _privateConstructorUsedError;
+
+  /// TLの自動更新を有効にする
   AutomaticPush get automaticPush => throw _privateConstructorUsedError;
+
+  /// 動きのあるMFMを有効にする
   bool get enableAnimatedMFM => throw _privateConstructorUsedError;
+
+  /// 長いノートを省略する
+  bool get enableLongTextElipsed => throw _privateConstructorUsedError;
+
+  /// リアクション済みノートを短くする
+  bool get enableFavoritedRenoteElipsed => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +61,9 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       NSFWInherit nsfwInherit,
       bool enableDirectReaction,
       AutomaticPush automaticPush,
-      bool enableAnimatedMFM});
+      bool enableAnimatedMFM,
+      bool enableLongTextElipsed,
+      bool enableFavoritedRenoteElipsed});
 }
 
 /// @nodoc
@@ -70,6 +86,8 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? enableDirectReaction = null,
     Object? automaticPush = null,
     Object? enableAnimatedMFM = null,
+    Object? enableLongTextElipsed = null,
+    Object? enableFavoritedRenoteElipsed = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -100,6 +118,14 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.enableAnimatedMFM
           : enableAnimatedMFM // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableLongTextElipsed: null == enableLongTextElipsed
+          ? _value.enableLongTextElipsed
+          : enableLongTextElipsed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableFavoritedRenoteElipsed: null == enableFavoritedRenoteElipsed
+          ? _value.enableFavoritedRenoteElipsed
+          : enableFavoritedRenoteElipsed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -119,7 +145,9 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       NSFWInherit nsfwInherit,
       bool enableDirectReaction,
       AutomaticPush automaticPush,
-      bool enableAnimatedMFM});
+      bool enableAnimatedMFM,
+      bool enableLongTextElipsed,
+      bool enableFavoritedRenoteElipsed});
 }
 
 /// @nodoc
@@ -140,6 +168,8 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? enableDirectReaction = null,
     Object? automaticPush = null,
     Object? enableAnimatedMFM = null,
+    Object? enableLongTextElipsed = null,
+    Object? enableFavoritedRenoteElipsed = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -170,6 +200,14 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.enableAnimatedMFM
           : enableAnimatedMFM // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableLongTextElipsed: null == enableLongTextElipsed
+          ? _value.enableLongTextElipsed
+          : enableLongTextElipsed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableFavoritedRenoteElipsed: null == enableFavoritedRenoteElipsed
+          ? _value.enableFavoritedRenoteElipsed
+          : enableFavoritedRenoteElipsed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -184,7 +222,9 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.nsfwInherit = NSFWInherit.inherit,
       this.enableDirectReaction = false,
       this.automaticPush = AutomaticPush.none,
-      this.enableAnimatedMFM = true});
+      this.enableAnimatedMFM = true,
+      this.enableLongTextElipsed = false,
+      this.enableFavoritedRenoteElipsed = true});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -198,22 +238,40 @@ class _$_GeneralSettings implements _GeneralSettings {
   @override
   @JsonKey()
   final ThemeColorSystem themeColorSystem;
+
+  /// NSFW設定を継承する
   @override
   @JsonKey()
   final NSFWInherit nsfwInherit;
+
+  /// ノートのカスタム絵文字直接タップでのリアクションを有効にする
   @override
   @JsonKey()
   final bool enableDirectReaction;
+
+  /// TLの自動更新を有効にする
   @override
   @JsonKey()
   final AutomaticPush automaticPush;
+
+  /// 動きのあるMFMを有効にする
   @override
   @JsonKey()
   final bool enableAnimatedMFM;
 
+  /// 長いノートを省略する
+  @override
+  @JsonKey()
+  final bool enableLongTextElipsed;
+
+  /// リアクション済みノートを短くする
+  @override
+  @JsonKey()
+  final bool enableFavoritedRenoteElipsed;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed)';
   }
 
   @override
@@ -234,7 +292,13 @@ class _$_GeneralSettings implements _GeneralSettings {
             (identical(other.automaticPush, automaticPush) ||
                 other.automaticPush == automaticPush) &&
             (identical(other.enableAnimatedMFM, enableAnimatedMFM) ||
-                other.enableAnimatedMFM == enableAnimatedMFM));
+                other.enableAnimatedMFM == enableAnimatedMFM) &&
+            (identical(other.enableLongTextElipsed, enableLongTextElipsed) ||
+                other.enableLongTextElipsed == enableLongTextElipsed) &&
+            (identical(other.enableFavoritedRenoteElipsed,
+                    enableFavoritedRenoteElipsed) ||
+                other.enableFavoritedRenoteElipsed ==
+                    enableFavoritedRenoteElipsed));
   }
 
   @JsonKey(ignore: true)
@@ -247,7 +311,9 @@ class _$_GeneralSettings implements _GeneralSettings {
       nsfwInherit,
       enableDirectReaction,
       automaticPush,
-      enableAnimatedMFM);
+      enableAnimatedMFM,
+      enableLongTextElipsed,
+      enableFavoritedRenoteElipsed);
 
   @JsonKey(ignore: true)
   @override
@@ -271,7 +337,9 @@ abstract class _GeneralSettings implements GeneralSettings {
       final NSFWInherit nsfwInherit,
       final bool enableDirectReaction,
       final AutomaticPush automaticPush,
-      final bool enableAnimatedMFM}) = _$_GeneralSettings;
+      final bool enableAnimatedMFM,
+      final bool enableLongTextElipsed,
+      final bool enableFavoritedRenoteElipsed}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -283,13 +351,29 @@ abstract class _GeneralSettings implements GeneralSettings {
   @override
   ThemeColorSystem get themeColorSystem;
   @override
+
+  /// NSFW設定を継承する
   NSFWInherit get nsfwInherit;
   @override
+
+  /// ノートのカスタム絵文字直接タップでのリアクションを有効にする
   bool get enableDirectReaction;
   @override
+
+  /// TLの自動更新を有効にする
   AutomaticPush get automaticPush;
   @override
+
+  /// 動きのあるMFMを有効にする
   bool get enableAnimatedMFM;
+  @override
+
+  /// 長いノートを省略する
+  bool get enableLongTextElipsed;
+  @override
+
+  /// リアクション済みノートを短くする
+  bool get enableFavoritedRenoteElipsed;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>

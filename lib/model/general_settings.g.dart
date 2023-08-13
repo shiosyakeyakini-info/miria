@@ -21,6 +21,9 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$AutomaticPushEnumMap, json['automaticPush']) ??
               AutomaticPush.none,
       enableAnimatedMFM: json['enableAnimatedMFM'] as bool? ?? true,
+      enableLongTextElipsed: json['enableLongTextElipsed'] as bool? ?? false,
+      enableFavoritedRenoteElipsed:
+          json['enableFavoritedRenoteElipsed'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
@@ -32,6 +35,8 @@ Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
       'enableDirectReaction': instance.enableDirectReaction,
       'automaticPush': _$AutomaticPushEnumMap[instance.automaticPush]!,
       'enableAnimatedMFM': instance.enableAnimatedMFM,
+      'enableLongTextElipsed': instance.enableLongTextElipsed,
+      'enableFavoritedRenoteElipsed': instance.enableFavoritedRenoteElipsed,
     };
 
 const _$ThemeColorSystemEnumMap = {

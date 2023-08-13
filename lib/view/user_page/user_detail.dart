@@ -264,7 +264,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MfmText(
-                        response.name ?? response.username,
+                        mfmText: response.name ?? response.username,
                         style: Theme.of(context).textTheme.headlineSmall,
                         emoji: response.emojis ?? {},
                       ),
@@ -359,8 +359,10 @@ class UserDetailState extends ConsumerState<UserDetail> {
             ),
           Align(
             alignment: Alignment.center,
-            child: MfmText(response.description ?? "",
-                emoji: response.emojis ?? {}),
+            child: MfmText(
+              mfmText: response.description ?? "",
+              emoji: response.emojis ?? {},
+            ),
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
           Table(
@@ -408,13 +410,16 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 for (final field in response.fields ?? <UserField>[])
                   TableRow(children: [
                     TableCell(
+                      child: MfmText(
+                        mfmText: field.name,
+                        emoji: response.emojis ?? {},
+                      ),
+                    ),
+                    TableCell(
                         child: MfmText(
-                      field.name,
+                      mfmText: field.value,
                       emoji: response.emojis ?? {},
                     )),
-                    TableCell(
-                        child:
-                            MfmText(field.value, emoji: response.emojis ?? {})),
                   ])
               ],
             ),

@@ -22,6 +22,8 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   AutomaticPush automaticPush = AutomaticPush.none;
   bool enableDirectReaction = false;
   bool enableAnimatedMFM = true;
+  bool enableLongTextElipsed = false;
+  bool enableFavoritedRenoteElipsed = true;
 
   @override
   void initState() {
@@ -50,18 +52,24 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       enableDirectReaction = settings.enableDirectReaction;
       automaticPush = settings.automaticPush;
       enableAnimatedMFM = settings.enableAnimatedMFM;
+      enableLongTextElipsed = settings.enableLongTextElipsed;
+      enableFavoritedRenoteElipsed = settings.enableFavoritedRenoteElipsed;
     });
   }
 
   Future<void> save() async {
-    ref.read(generalSettingsRepositoryProvider).update(GeneralSettings(
-        lightColorThemeId: lightModeTheme,
-        darkColorThemeId: darkModeTheme,
-        themeColorSystem: colorSystem,
-        nsfwInherit: nsfwInherit,
-        enableDirectReaction: enableDirectReaction,
-        automaticPush: automaticPush,
-        enableAnimatedMFM: enableAnimatedMFM));
+    ref.read(generalSettingsRepositoryProvider).update(
+          GeneralSettings(
+              lightColorThemeId: lightModeTheme,
+              darkColorThemeId: darkModeTheme,
+              themeColorSystem: colorSystem,
+              nsfwInherit: nsfwInherit,
+              enableDirectReaction: enableDirectReaction,
+              automaticPush: automaticPush,
+              enableAnimatedMFM: enableAnimatedMFM,
+              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
+              enableLongTextElipsed: enableLongTextElipsed),
+        );
   }
 
   @override
@@ -77,63 +85,82 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
-                  child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("全般",
-                              style: Theme.of(context).textTheme.titleLarge),
-                          const Padding(padding: EdgeInsets.only(top: 10)),
-                          const Text("閲覧注意のついたノートの表示"),
-                          DropdownButton<NSFWInherit>(
-                            items: [
-                              for (final element in NSFWInherit.values)
-                                DropdownMenuItem(
-                                  value: element,
-                                  child: Text(element.displayName),
-                                )
-                            ],
-                            value: nsfwInherit,
-                            onChanged: (value) => setState(
-                              () {
-                                nsfwInherit = value ?? NSFWInherit.inherit;
-                                save();
-                              },
-                            ),
-                          ),
-                          const Padding(padding: EdgeInsets.only(top: 10)),
-                          const Text("一覧の自動更新"),
-                          DropdownButton<AutomaticPush>(
-                            items: [
-                              for (final element in AutomaticPush.values)
-                                DropdownMenuItem(
-                                  value: element,
-                                  child: Text(element.displayName),
-                                )
-                            ],
-                            value: automaticPush,
-                            onChanged: (value) => setState(
-                              () {
-                                automaticPush = value ?? AutomaticPush.none;
-                                save();
-                              },
-                            ),
-                          ),
-                          const Padding(padding: EdgeInsets.only(top: 10)),
-                          const Text("動きのあるMFM"),
-                          CheckboxListTile(
-                            value: enableAnimatedMFM,
-                            onChanged: (value) => setState(() {
-                              enableAnimatedMFM = value ?? true;
-                              save();
-                            }),
-                            title: const Text("動きのあるMFMを有効にします。"),
-                          )
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("全般", style: Theme.of(context).textTheme.titleLarge),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      const Text("閲覧注意のついたノートの表示"),
+                      DropdownButton<NSFWInherit>(
+                        items: [
+                          for (final element in NSFWInherit.values)
+                            DropdownMenuItem(
+                              value: element,
+                              child: Text(element.displayName),
+                            )
                         ],
-                      ))),
+                        value: nsfwInherit,
+                        onChanged: (value) => setState(
+                          () {
+                            nsfwInherit = value ?? NSFWInherit.inherit;
+                            save();
+                          },
+                        ),
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      const Text("一覧の自動更新"),
+                      DropdownButton<AutomaticPush>(
+                        items: [
+                          for (final element in AutomaticPush.values)
+                            DropdownMenuItem(
+                              value: element,
+                              child: Text(element.displayName),
+                            )
+                        ],
+                        value: automaticPush,
+                        onChanged: (value) => setState(
+                          () {
+                            automaticPush = value ?? AutomaticPush.none;
+                            save();
+                          },
+                        ),
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      const Text("動きのあるMFM"),
+                      CheckboxListTile(
+                        value: enableAnimatedMFM,
+                        onChanged: (value) => setState(() {
+                          enableAnimatedMFM = value ?? true;
+                          save();
+                        }),
+                        title: const Text("動きのあるMFMを有効にします。"),
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      const Text("ノートの省略"),
+                      CheckboxListTile(
+                        value: enableFavoritedRenoteElipsed,
+                        onChanged: (value) => setState(() {
+                          enableFavoritedRenoteElipsed = value ?? true;
+                          save();
+                        }),
+                        title: const Text("リアクション済みノートのRenoteを省略します。"),
+                      ),
+                      CheckboxListTile(
+                        value: enableLongTextElipsed,
+                        onChanged: (value) => setState(() {
+                          enableLongTextElipsed = value ?? true;
+                          save();
+                        }),
+                        title: const Text("長いノートを省略します。"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(15),

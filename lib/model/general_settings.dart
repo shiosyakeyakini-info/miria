@@ -39,10 +39,24 @@ class GeneralSettings with _$GeneralSettings {
     @Default("") String lightColorThemeId,
     @Default("") String darkColorThemeId,
     @Default(ThemeColorSystem.system) ThemeColorSystem themeColorSystem,
+
+    /// NSFW設定を継承する
     @Default(NSFWInherit.inherit) NSFWInherit nsfwInherit,
+
+    /// ノートのカスタム絵文字直接タップでのリアクションを有効にする
     @Default(false) bool enableDirectReaction,
+
+    /// TLの自動更新を有効にする
     @Default(AutomaticPush.none) AutomaticPush automaticPush,
+
+    /// 動きのあるMFMを有効にする
     @Default(true) bool enableAnimatedMFM,
+
+    /// 長いノートを省略する
+    @Default(false) bool enableLongTextElipsed,
+
+    /// リアクション済みノートを短くする
+    @Default(true) bool enableFavoritedRenoteElipsed,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

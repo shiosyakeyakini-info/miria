@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'network_image.dart';
 
-class MisskeyFileView extends ConsumerWidget {
+class MisskeyFileView extends ConsumerStatefulWidget {
   final List<DriveFile> files;
 
   final double height;
@@ -21,8 +21,15 @@ class MisskeyFileView extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final targetFiles = files;
+  ConsumerState<ConsumerStatefulWidget> createState() => MisskeyFileViewState();
+}
+
+class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
+  late bool isElipsed = widget.files.length >= 5;
+
+  @override
+  Widget build(BuildContext context) {
+    final targetFiles = widget.files;
 
     if (targetFiles.isEmpty) {
       return Container();
@@ -30,8 +37,8 @@ class MisskeyFileView extends ConsumerWidget {
       final targetFile = targetFiles.first;
       return Center(
         child: ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: height, maxWidth: double.infinity),
+            constraints: BoxConstraints(
+                maxHeight: widget.height, maxWidth: double.infinity),
             child: MisskeyImage(
               isSensitive: targetFile.isSensitive,
               thumbnailUrl:
@@ -43,24 +50,39 @@ class MisskeyFileView extends ConsumerWidget {
             )),
       );
     } else {
-      return GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final targetFile in targetFiles
-              .mapIndexed((index, element) => (element: element, index: index)))
-            SizedBox(
-                height: height,
-                width: double.infinity,
-                child: MisskeyImage(
-                  isSensitive: targetFile.element.isSensitive,
-                  thumbnailUrl: targetFile.element.thumbnailUrl?.toString(),
-                  targetFiles: targetFiles.map((e) => e.url).toList(),
-                  fileType: targetFile.element.type,
-                  name: targetFile.element.name,
-                  position: targetFile.index,
-                ))
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              for (final targetFile in targetFiles
+                  .mapIndexed(
+                      (index, element) => (element: element, index: index))
+                  .take(isElipsed ? 4 : targetFiles.length))
+                SizedBox(
+                    height: widget.height,
+                    width: double.infinity,
+                    child: MisskeyImage(
+                      isSensitive: targetFile.element.isSensitive,
+                      thumbnailUrl: targetFile.element.thumbnailUrl?.toString(),
+                      targetFiles: targetFiles.map((e) => e.url).toList(),
+                      fileType: targetFile.element.type,
+                      name: targetFile.element.name,
+                      position: targetFile.index,
+                    ))
+            ],
+          ),
+          if (isElipsed)
+            ElevatedButton(
+                onPressed: () => setState(() {
+                      isElipsed = !isElipsed;
+                    }),
+                child: const Text("続きを表示"))
         ],
       );
     }

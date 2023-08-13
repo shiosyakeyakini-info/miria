@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:mfm_parser/mfm_parser.dart' as parser;
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -117,6 +118,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final bool isForceUnvisibleReply;
   final bool isForceUnvisibleRenote;
   final bool isVisibleAllReactions;
+  final bool isForceVisibleLong;
 
   const MisskeyNote({
     super.key,
@@ -127,6 +129,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
     this.isForceUnvisibleReply = false,
     this.isForceUnvisibleRenote = false,
     this.isVisibleAllReactions = false,
+    this.isForceVisibleLong = false,
   });
 
   @override
@@ -137,6 +140,45 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   var isCwOpened = false;
   final globalKey = GlobalKey();
   late var isAllReactionVisible = widget.isVisibleAllReactions;
+  late bool isLongVisible;
+  late bool isReactionedRenote;
+  bool isLongVisibleInitialized = false;
+
+  List<parser.MfmNode>? displayTextNodes;
+
+  bool shouldCollaposed(List<parser.MfmNode> node) {
+    final result = nodeMaxTextLength(node);
+    return result.$1 >= 500 || result.$2 >= 6;
+  }
+
+  (int length, int newLinesCount) nodeMaxTextLength(
+      List<parser.MfmNode> nodes) {
+    var thisNodeCount = 0;
+    var newLinesCount = 0;
+    for (final node in nodes) {
+      if (node is parser.MfmText) {
+        thisNodeCount += node.text.length;
+        // 2行連続した改行の個数を数える
+        newLinesCount += node.text.split("\n\n").length - 1;
+      } else if (node is parser.MfmEmojiCode ||
+          node is parser.MfmUnicodeEmoji) {
+        thisNodeCount += 1;
+      } else if (node is parser.MfmFn) {
+        final fnResult = nodeMaxTextLength(node.children ?? []);
+        thisNodeCount += fnResult.$1;
+        newLinesCount += fnResult.$2;
+      } else if (node is parser.MfmBlock) {
+        final blockResult = nodeMaxTextLength(node.children ?? []);
+        thisNodeCount += blockResult.$1;
+        newLinesCount += blockResult.$2;
+      } else if (node is parser.MfmURL) {
+        thisNodeCount += node.value.length;
+      } else if (node is parser.MfmCodeBlock) {
+        thisNodeCount += node.code.length;
+      }
+    }
+    return (thisNodeCount, newLinesCount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +208,28 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
     if (widget.recursive == 3) {
       return Container();
+    }
+
+    displayTextNodes ??= const parser.MfmParser().parse(displayNote.text ?? "");
+
+    if (!isLongVisibleInitialized) {
+      isReactionedRenote = ref
+              .read(generalSettingsRepositoryProvider)
+              .settings
+              .enableFavoritedRenoteElipsed &&
+          !(displayNote.cw?.isNotEmpty == true) &&
+          (renoteId != null && displayNote.myReaction != null);
+
+      isLongVisible = !(ref
+              .read(generalSettingsRepositoryProvider)
+              .settings
+              .enableLongTextElipsed &&
+          !isReactionedRenote &&
+          !widget.isForceVisibleLong &&
+          !(displayNote.cw?.isNotEmpty == true) &&
+          shouldCollaposed(displayTextNodes!));
+
+      isLongVisibleInitialized = true;
     }
 
     final userId =
@@ -272,7 +336,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           ),
                           if (displayNote.cw != null) ...[
                             MfmText(
-                              displayNote.cw ?? "",
+                              mfmText: displayNote.cw ?? "",
                               host: displayNote.user.host,
                               emoji: displayNote.emojis,
                               isEnableAnimatedMFM: ref
@@ -310,67 +374,127 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           ],
                           if (displayNote.cw == null ||
                               displayNote.cw != null && isCwOpened) ...[
-                            MfmText(
-                              displayNote.text ?? "",
-                              host: displayNote.user.host,
-                              emoji: displayNote.emojis,
-                              isEnableAnimatedMFM: ref
-                                  .read(generalSettingsRepositoryProvider)
-                                  .settings
-                                  .enableAnimatedMFM,
-                              onEmojiTap: (emojiData) async =>
-                                  await reactionControl(
-                                      ref, context, displayNote,
-                                      requestEmoji: emojiData),
-                              suffixSpan: [
-                                if (!isEmptyRenote &&
-                                    displayNote.renoteId != null &&
-                                    (widget.recursive == 2 ||
-                                        widget.isForceUnvisibleRenote))
-                                  TextSpan(
-                                    text: "  RN:...",
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontStyle: FontStyle.italic,
+                            if (isReactionedRenote)
+                              SimpleMfmText(
+                                "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 50))}..."
+                                    .replaceAll("\n\n", "\n"),
+                                emojis: displayNote.emojis,
+                                suffixSpan: [
+                                  WidgetSpan(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        padding: const EdgeInsets.all(5),
+                                        textStyle: TextStyle(
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.fontSize),
+                                        minimumSize: const Size(0, 0),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      onPressed: () => setState(() {
+                                        isReactionedRenote = false;
+                                      }),
+                                      child: const Text("続きを表示"),
                                     ),
-                                  ),
-                              ],
-                            ),
-                            MisskeyFileView(
-                              files: displayNote.files,
-                              height: 200 *
-                                  pow(0.5, widget.recursive - 1).toDouble(),
-                            ),
-                            if (displayNote.poll != null)
-                              NoteVote(
-                                displayNote: displayNote,
-                                poll: displayNote.poll!,
-                                loginAs: widget.loginAs,
-                              ),
-                            if (displayNote.renoteId != null &&
-                                (widget.recursive < 2 &&
-                                    !widget.isForceUnvisibleRenote))
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                child: DottedBorder(
-                                  color: AppTheme.of(context).renoteBorderColor,
-                                  radius:
-                                      AppTheme.of(context).renoteBorderRadius,
-                                  strokeWidth:
-                                      AppTheme.of(context).renoteStrokeWidth,
-                                  dashPattern:
-                                      AppTheme.of(context).renoteDashPattern,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: MisskeyNote(
-                                      note: displayNote.renote!,
-                                      isDisplayBorder: false,
-                                      recursive: widget.recursive + 1,
-                                      loginAs: widget.loginAs,
-                                    ),
-                                  ),
-                                ),
+                                  )
+                                ],
                               )
+                            else ...[
+                              if (isLongVisible)
+                                MfmText(
+                                  mfmNode: displayTextNodes,
+                                  host: displayNote.user.host,
+                                  emoji: displayNote.emojis,
+                                  isEnableAnimatedMFM: ref
+                                      .read(generalSettingsRepositoryProvider)
+                                      .settings
+                                      .enableAnimatedMFM,
+                                  onEmojiTap: (emojiData) async =>
+                                      await reactionControl(
+                                          ref, context, displayNote,
+                                          requestEmoji: emojiData),
+                                  suffixSpan: [
+                                    if (!isEmptyRenote &&
+                                        displayNote.renoteId != null &&
+                                        (widget.recursive == 2 ||
+                                            widget.isForceUnvisibleRenote))
+                                      TextSpan(
+                                        text: "  RN:...",
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                  ],
+                                )
+                              else
+                                SimpleMfmText(
+                                  "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 150))}..."
+                                      .replaceAll("\n\n", "\n"),
+                                  emojis: displayNote.emojis,
+                                  suffixSpan: [
+                                    WidgetSpan(
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          padding: const EdgeInsets.all(5),
+                                          textStyle: TextStyle(
+                                              fontSize: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.fontSize),
+                                          minimumSize: const Size(0, 0),
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        onPressed: () => setState(() {
+                                          isLongVisible = true;
+                                        }),
+                                        child: const Text("続きを表示"),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              MisskeyFileView(
+                                files: displayNote.files,
+                                height: 200 *
+                                    pow(0.5, widget.recursive - 1).toDouble(),
+                              ),
+                              if (displayNote.poll != null)
+                                NoteVote(
+                                  displayNote: displayNote,
+                                  poll: displayNote.poll!,
+                                  loginAs: widget.loginAs,
+                                ),
+                              if (displayNote.renoteId != null &&
+                                  (widget.recursive < 2 &&
+                                      !widget.isForceUnvisibleRenote))
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: DottedBorder(
+                                    color:
+                                        AppTheme.of(context).renoteBorderColor,
+                                    radius:
+                                        AppTheme.of(context).renoteBorderRadius,
+                                    strokeWidth:
+                                        AppTheme.of(context).renoteStrokeWidth,
+                                    dashPattern:
+                                        AppTheme.of(context).renoteDashPattern,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: MisskeyNote(
+                                        note: displayNote.renote!,
+                                        isDisplayBorder: false,
+                                        recursive: widget.recursive + 1,
+                                        loginAs: widget.loginAs,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ]
                           ],
                           if (displayNote.reactions.isNotEmpty)
                             const Padding(padding: EdgeInsets.only(bottom: 5)),
@@ -487,38 +611,38 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   displayNote: displayNote,
                                 ),
                                 IconButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          builder: (builder) {
-                                            return NoteModalSheet(
-                                              baseNote: widget.note,
-                                              targetNote: displayNote,
-                                              account: AccountScope.of(context),
-                                              noteBoundaryKey: globalKey,
-                                            );
-                                          });
-                                    },
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    style: const ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
-                                          EdgeInsets.zero),
-                                      minimumSize:
-                                          MaterialStatePropertyAll(Size(0, 0)),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    icon: Icon(
-                                      Icons.more_horiz,
-                                      size: 16 *
-                                          MediaQuery.of(context)
-                                              .textScaleFactor,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.color,
-                                    )),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (builder) {
+                                          return NoteModalSheet(
+                                            baseNote: widget.note,
+                                            targetNote: displayNote,
+                                            account: AccountScope.of(context),
+                                            noteBoundaryKey: globalKey,
+                                          );
+                                        });
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  style: const ButtonStyle(
+                                    padding: MaterialStatePropertyAll(
+                                        EdgeInsets.zero),
+                                    minimumSize:
+                                        MaterialStatePropertyAll(Size(0, 0)),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  icon: Icon(
+                                    Icons.more_horiz,
+                                    size: 16 *
+                                        MediaQuery.of(context).textScaleFactor,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.color,
+                                  ),
+                                ),
                               ]
                             ],
                           ),
