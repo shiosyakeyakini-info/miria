@@ -88,6 +88,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                         recursive: 1,
                         isForceUnvisibleReply: true,
                         isDisplayBorder: false,
+                        isForceVisibleLong: true,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 5)),
                       Text(

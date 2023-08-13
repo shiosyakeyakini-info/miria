@@ -219,6 +219,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
               .read(generalSettingsRepositoryProvider)
               .settings
               .enableFavoritedRenoteElipsed &&
+          !widget.isForceVisibleLong &&
           !(displayNote.cw?.isNotEmpty == true) &&
           (renoteId != null && displayNote.myReaction != null);
 
@@ -497,91 +498,140 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                 )
                             ]
                           ],
-                          if (displayNote.reactions.isNotEmpty)
+                          if (displayNote.reactions.isNotEmpty &&
+                              !isReactionedRenote)
                             const Padding(padding: EdgeInsets.only(bottom: 5)),
-                          Wrap(
-                            spacing: 5 * MediaQuery.of(context).textScaleFactor,
-                            runSpacing:
-                                5 * MediaQuery.of(context).textScaleFactor,
-                            children: [
-                              for (final reaction in displayNote
-                                  .reactions.entries
-                                  .mapIndexed((index, element) =>
-                                      (index: index, element: element))
-                                  .sorted((a, b) {
-                                final primary =
-                                    b.element.value.compareTo(a.element.value);
-                                if (primary != 0) return primary;
-                                return a.index.compareTo(b.index);
-                              }).take(isAllReactionVisible
-                                      ? displayNote.reactions.length
-                                      : 16))
-                                ReactionButton(
-                                  emojiData: MisskeyEmojiData.fromEmojiName(
-                                      emojiName: reaction.element.key,
-                                      repository: ref.read(
-                                          emojiRepositoryProvider(
-                                              AccountScope.of(context))),
-                                      emojiInfo: displayNote.reactionEmojis),
-                                  reactionCount: reaction.element.value,
-                                  myReaction: displayNote.myReaction,
-                                  noteId: displayNote.id,
-                                  loginAs: widget.loginAs,
-                                ),
-                              if (!isAllReactionVisible &&
-                                  displayNote.reactions.length > 16)
-                                OutlinedButton(
-                                    style: AppTheme.of(context)
-                                        .reactionButtonStyle,
-                                    onPressed: () => setState(() {
-                                          isAllReactionVisible = true;
-                                        }),
-                                    child: Text(
-                                        "ほか${displayNote.reactions.length - 16}個")),
-                            ],
-                          ),
+                          if (!isReactionedRenote)
+                            Wrap(
+                              spacing:
+                                  5 * MediaQuery.of(context).textScaleFactor,
+                              runSpacing:
+                                  5 * MediaQuery.of(context).textScaleFactor,
+                              children: [
+                                for (final reaction in displayNote
+                                    .reactions.entries
+                                    .mapIndexed((index, element) =>
+                                        (index: index, element: element))
+                                    .sorted((a, b) {
+                                  final primary = b.element.value
+                                      .compareTo(a.element.value);
+                                  if (primary != 0) return primary;
+                                  return a.index.compareTo(b.index);
+                                }).take(isAllReactionVisible
+                                        ? displayNote.reactions.length
+                                        : 16))
+                                  ReactionButton(
+                                    emojiData: MisskeyEmojiData.fromEmojiName(
+                                        emojiName: reaction.element.key,
+                                        repository: ref.read(
+                                            emojiRepositoryProvider(
+                                                AccountScope.of(context))),
+                                        emojiInfo: displayNote.reactionEmojis),
+                                    reactionCount: reaction.element.value,
+                                    myReaction: displayNote.myReaction,
+                                    noteId: displayNote.id,
+                                    loginAs: widget.loginAs,
+                                  ),
+                                if (!isAllReactionVisible &&
+                                    displayNote.reactions.length > 16)
+                                  OutlinedButton(
+                                      style: AppTheme.of(context)
+                                          .reactionButtonStyle,
+                                      onPressed: () => setState(() {
+                                            isAllReactionVisible = true;
+                                          }),
+                                      child: Text(
+                                          "ほか${displayNote.reactions.length - 16}個")),
+                              ],
+                            ),
                           if (displayNote.channel != null)
                             NoteChannelView(channel: displayNote.channel!),
-                          Row(
-                            mainAxisAlignment: widget.loginAs != null
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.spaceAround,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              if (widget.loginAs != null) ...[
-                                IconButton(
-                                    constraints: const BoxConstraints(),
-                                    padding: EdgeInsets.zero,
-                                    style: const ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
-                                          EdgeInsets.zero),
-                                      minimumSize:
-                                          MaterialStatePropertyAll(Size(0, 0)),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                    ),
+                          if (!isReactionedRenote)
+                            Row(
+                              mainAxisAlignment: widget.loginAs != null
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.spaceAround,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                if (widget.loginAs != null) ...[
+                                  IconButton(
+                                      constraints: const BoxConstraints(),
+                                      padding: EdgeInsets.zero,
+                                      style: const ButtonStyle(
+                                        padding: MaterialStatePropertyAll(
+                                            EdgeInsets.zero),
+                                        minimumSize: MaterialStatePropertyAll(
+                                            Size(0, 0)),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      onPressed: () async =>
+                                          await _navigateDetailPage(context,
+                                                  displayNote, widget.loginAs)
+                                              .expectFailure(context),
+                                      icon: Icon(
+                                        Icons.u_turn_left,
+                                        size: 16 *
+                                            MediaQuery.of(context)
+                                                .textScaleFactor,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.color,
+                                      ))
+                                ] else ...[
+                                  TextButton.icon(
+                                      onPressed: () {
+                                        context.pushRoute(NoteCreateRoute(
+                                            reply: displayNote,
+                                            initialAccount:
+                                                AccountScope.of(context)));
+                                      },
+                                      style: const ButtonStyle(
+                                        padding: MaterialStatePropertyAll(
+                                            EdgeInsets.zero),
+                                        minimumSize: MaterialStatePropertyAll(
+                                            Size(0, 0)),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      label: Text(displayNote.repliesCount == 0
+                                          ? ""
+                                          : displayNote.repliesCount.format()),
+                                      icon: Icon(
+                                        Icons.reply,
+                                        size: 16 *
+                                            MediaQuery.of(context)
+                                                .textScaleFactor,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.color,
+                                      )),
+                                  RenoteButton(
+                                    displayNote: displayNote,
+                                  ),
+                                  FooterReactionButton(
                                     onPressed: () async =>
-                                        await _navigateDetailPage(context,
-                                                displayNote, widget.loginAs)
-                                            .expectFailure(context),
-                                    icon: Icon(
-                                      Icons.u_turn_left,
-                                      size: 16 *
-                                          MediaQuery.of(context)
-                                              .textScaleFactor,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.color,
-                                    ))
-                              ] else ...[
-                                TextButton.icon(
+                                        await reactionControl(
+                                            ref, context, displayNote),
+                                    displayNote: displayNote,
+                                  ),
+                                  IconButton(
                                     onPressed: () {
-                                      context.pushRoute(NoteCreateRoute(
-                                          reply: displayNote,
-                                          initialAccount:
-                                              AccountScope.of(context)));
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (builder) {
+                                            return NoteModalSheet(
+                                              baseNote: widget.note,
+                                              targetNote: displayNote,
+                                              account: AccountScope.of(context),
+                                              noteBoundaryKey: globalKey,
+                                            );
+                                          });
                                     },
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
                                     style: const ButtonStyle(
                                       padding: MaterialStatePropertyAll(
                                           EdgeInsets.zero),
@@ -590,11 +640,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
-                                    label: Text(displayNote.repliesCount == 0
-                                        ? ""
-                                        : displayNote.repliesCount.format()),
                                     icon: Icon(
-                                      Icons.reply,
+                                      Icons.more_horiz,
                                       size: 16 *
                                           MediaQuery.of(context)
                                               .textScaleFactor,
@@ -602,51 +649,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                           .textTheme
                                           .bodySmall
                                           ?.color,
-                                    )),
-                                RenoteButton(
-                                  displayNote: displayNote,
-                                ),
-                                FooterReactionButton(
-                                  onPressed: () async => await reactionControl(
-                                      ref, context, displayNote),
-                                  displayNote: displayNote,
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        builder: (builder) {
-                                          return NoteModalSheet(
-                                            baseNote: widget.note,
-                                            targetNote: displayNote,
-                                            account: AccountScope.of(context),
-                                            noteBoundaryKey: globalKey,
-                                          );
-                                        });
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  style: const ButtonStyle(
-                                    padding: MaterialStatePropertyAll(
-                                        EdgeInsets.zero),
-                                    minimumSize:
-                                        MaterialStatePropertyAll(Size(0, 0)),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
+                                    ),
                                   ),
-                                  icon: Icon(
-                                    Icons.more_horiz,
-                                    size: 16 *
-                                        MediaQuery.of(context).textScaleFactor,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.color,
-                                  ),
-                                ),
-                              ]
-                            ],
-                          ),
+                                ]
+                              ],
+                            ),
                         ],
                       ),
                     ),
