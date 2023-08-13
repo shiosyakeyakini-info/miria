@@ -42,6 +42,9 @@ mixin _$GeneralSettings {
   /// リアクション済みノートを短くする
   bool get enableFavoritedRenoteElipsed => throw _privateConstructorUsedError;
 
+  /// タブの位置
+  TabPosition get tabPosition => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
@@ -63,7 +66,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       AutomaticPush automaticPush,
       bool enableAnimatedMFM,
       bool enableLongTextElipsed,
-      bool enableFavoritedRenoteElipsed});
+      bool enableFavoritedRenoteElipsed,
+      TabPosition tabPosition});
 }
 
 /// @nodoc
@@ -88,6 +92,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? enableAnimatedMFM = null,
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
+    Object? tabPosition = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -126,6 +131,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.enableFavoritedRenoteElipsed
           : enableFavoritedRenoteElipsed // ignore: cast_nullable_to_non_nullable
               as bool,
+      tabPosition: null == tabPosition
+          ? _value.tabPosition
+          : tabPosition // ignore: cast_nullable_to_non_nullable
+              as TabPosition,
     ) as $Val);
   }
 }
@@ -147,7 +156,8 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       AutomaticPush automaticPush,
       bool enableAnimatedMFM,
       bool enableLongTextElipsed,
-      bool enableFavoritedRenoteElipsed});
+      bool enableFavoritedRenoteElipsed,
+      TabPosition tabPosition});
 }
 
 /// @nodoc
@@ -170,6 +180,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? enableAnimatedMFM = null,
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
+    Object? tabPosition = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -208,6 +219,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.enableFavoritedRenoteElipsed
           : enableFavoritedRenoteElipsed // ignore: cast_nullable_to_non_nullable
               as bool,
+      tabPosition: null == tabPosition
+          ? _value.tabPosition
+          : tabPosition // ignore: cast_nullable_to_non_nullable
+              as TabPosition,
     ));
   }
 }
@@ -224,7 +239,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.automaticPush = AutomaticPush.none,
       this.enableAnimatedMFM = true,
       this.enableLongTextElipsed = false,
-      this.enableFavoritedRenoteElipsed = true});
+      this.enableFavoritedRenoteElipsed = true,
+      this.tabPosition = TabPosition.top});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -269,9 +285,14 @@ class _$_GeneralSettings implements _GeneralSettings {
   @JsonKey()
   final bool enableFavoritedRenoteElipsed;
 
+  /// タブの位置
+  @override
+  @JsonKey()
+  final TabPosition tabPosition;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition)';
   }
 
   @override
@@ -298,7 +319,9 @@ class _$_GeneralSettings implements _GeneralSettings {
             (identical(other.enableFavoritedRenoteElipsed,
                     enableFavoritedRenoteElipsed) ||
                 other.enableFavoritedRenoteElipsed ==
-                    enableFavoritedRenoteElipsed));
+                    enableFavoritedRenoteElipsed) &&
+            (identical(other.tabPosition, tabPosition) ||
+                other.tabPosition == tabPosition));
   }
 
   @JsonKey(ignore: true)
@@ -313,7 +336,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       automaticPush,
       enableAnimatedMFM,
       enableLongTextElipsed,
-      enableFavoritedRenoteElipsed);
+      enableFavoritedRenoteElipsed,
+      tabPosition);
 
   @JsonKey(ignore: true)
   @override
@@ -339,7 +363,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final AutomaticPush automaticPush,
       final bool enableAnimatedMFM,
       final bool enableLongTextElipsed,
-      final bool enableFavoritedRenoteElipsed}) = _$_GeneralSettings;
+      final bool enableFavoritedRenoteElipsed,
+      final TabPosition tabPosition}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -374,6 +399,10 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// リアクション済みノートを短くする
   bool get enableFavoritedRenoteElipsed;
+  @override
+
+  /// タブの位置
+  TabPosition get tabPosition;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>

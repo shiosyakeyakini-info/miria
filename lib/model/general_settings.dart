@@ -33,6 +33,15 @@ enum AutomaticPush {
   const AutomaticPush(this.displayName);
 }
 
+enum TabPosition {
+  top("上"),
+  bottom("下");
+
+  final String displayName;
+
+  const TabPosition(this.displayName);
+}
+
 @freezed
 class GeneralSettings with _$GeneralSettings {
   const factory GeneralSettings({
@@ -57,6 +66,9 @@ class GeneralSettings with _$GeneralSettings {
 
     /// リアクション済みノートを短くする
     @Default(true) bool enableFavoritedRenoteElipsed,
+
+    /// タブの位置
+    @Default(TabPosition.top) TabPosition tabPosition,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>
