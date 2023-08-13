@@ -99,6 +99,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       const Text("閲覧注意のついたノートの表示"),
                       DropdownButton<NSFWInherit>(
+                        isExpanded: true,
                         items: [
                           for (final element in NSFWInherit.values)
                             DropdownMenuItem(
@@ -117,6 +118,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       const Text("一覧の自動更新"),
                       DropdownButton<AutomaticPush>(
+                        isExpanded: true,
                         items: [
                           for (final element in AutomaticPush.values)
                             DropdownMenuItem(
@@ -163,11 +165,12 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       const Text("タブの位置"),
                       DropdownButton<TabPosition>(
+                        isExpanded: true,
                         items: [
                           for (final element in TabPosition.values)
                             DropdownMenuItem(
                               value: element,
-                              child: Text(element.displayName),
+                              child: Text("${element.displayName}に表示する"),
                             )
                         ],
                         value: tabPosition,
