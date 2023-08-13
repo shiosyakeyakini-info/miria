@@ -301,16 +301,25 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   final tabSetting = tabSettings[index];
                   return AccountScope(
                     account: tabSetting.account,
-                    child: MisskeyTimeline(
-                      controller: scrollControllers[index],
-                      timeLineRepositoryProvider:
-                          tabSetting.tabType.timelineProvider(tabSetting),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: MisskeyTimeline(
+                            controller: scrollControllers[index],
+                            timeLineRepositoryProvider:
+                                tabSetting.tabType.timelineProvider(tabSetting),
+                          ),
+                        ),
+                        const TimelineEmoji(),
+                      ],
                     ),
                   );
                 },
               ),
             ),
-            const TimelineEmoji(),
             Container(
               // decoration: filteringInputEmoji.isEmpty
               //     ? BoxDecoration(
