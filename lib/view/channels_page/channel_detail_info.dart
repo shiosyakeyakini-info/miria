@@ -153,7 +153,7 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
                         child: const Text("フォローする"))
               ],
             )),
-        MfmText(data.description ?? ""),
+        MfmText(mfmText: data.description ?? ""),
         for (final pinnedNote in data.pinnedNotes ?? [])
           MisskeyNote(note: pinnedNote)
       ],

@@ -143,11 +143,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   late bool isLongVisible;
   bool isLongVisibleInitialized = false;
 
-  bool shouldCollaposed(Note displayNote) {
-    final text = displayNote.text;
-    if (text == null) return false;
-    final parseResult = const parser.MfmParser().parse(text);
-    final result = nodeMaxTextLength(parseResult);
+  List<parser.MfmNode>? displayTextNodes;
+
+  bool shouldCollaposed(List<parser.MfmNode> node) {
+    final result = nodeMaxTextLength(node);
     return result.$1 >= 500 || result.$2 >= 6;
   }
 
@@ -207,10 +206,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     if (widget.recursive == 3) {
       return Container();
     }
+
+    displayTextNodes ??= const parser.MfmParser().parse(displayNote.text ?? "");
+
     if (!isLongVisibleInitialized) {
       isLongVisible = widget.isForceVisibleLong ||
           displayNote.cw?.isNotEmpty == true ||
-          !shouldCollaposed(displayNote);
+          !shouldCollaposed(displayTextNodes!);
 
       isLongVisibleInitialized = true;
     }
@@ -319,7 +321,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           ),
                           if (displayNote.cw != null) ...[
                             MfmText(
-                              displayNote.cw ?? "",
+                              mfmText: displayNote.cw ?? "",
                               host: displayNote.user.host,
                               emoji: displayNote.emojis,
                               isEnableAnimatedMFM: ref
@@ -359,7 +361,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               displayNote.cw != null && isCwOpened) ...[
                             if (isLongVisible)
                               MfmText(
-                                displayNote.text ?? "",
+                                mfmNode: displayTextNodes,
                                 host: displayNote.user.host,
                                 emoji: displayNote.emojis,
                                 isEnableAnimatedMFM: ref

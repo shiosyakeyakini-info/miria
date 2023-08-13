@@ -77,7 +77,7 @@ class Announcement extends StatelessWidget {
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
                 MfmText(
-                  data.text,
+                  mfmText: data.text,
                   host: AccountScope.of(context).host == host ? null : host,
                 )
               ],

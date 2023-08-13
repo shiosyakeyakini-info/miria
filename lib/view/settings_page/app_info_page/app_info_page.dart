@@ -37,7 +37,7 @@ class AppInfoPageState extends ConsumerState<AppInfoPage> {
             account: ref.read(accountRepository).account.first,
             child: Column(
               children: [
-                MfmText('''
+                MfmText(mfmText: '''
 <center>\$[x3 Miria]</center>
 パッケージ名：${packageInfo?.packageName ?? ""}
 バージョン:${packageInfo?.version ?? ""}+${packageInfo?.buildNumber.toString() ?? ""}

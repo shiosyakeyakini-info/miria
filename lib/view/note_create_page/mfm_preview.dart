@@ -21,7 +21,7 @@ class MfmPreview extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: MfmText(
-        "$replyTo$previewText",
+        mfmText: "$replyTo$previewText",
         isNyaize: AccountScope.of(context).i.isCat,
       ),
     );
