@@ -63,7 +63,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
 
               if (isSigned && hasTabSetting) {
                 context.replaceRoute(TimeLineRoute(
-                    currentTabSetting: ref
+                    initialTabSetting: ref
                         .read(tabSettingsRepositoryProvider)
                         .tabSettings
                         .first));

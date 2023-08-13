@@ -28,7 +28,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
 
       if (!mounted) return;
       context.pushRoute(TimeLineRoute(
-          currentTabSetting:
+          initialTabSetting:
               ref.read(tabSettingsRepositoryProvider).tabSettings.first));
     } catch (e) {
       rethrow;
