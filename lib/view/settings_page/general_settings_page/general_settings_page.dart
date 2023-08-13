@@ -24,6 +24,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   bool enableAnimatedMFM = true;
   bool enableLongTextElipsed = false;
   bool enableFavoritedRenoteElipsed = true;
+  TabPosition tabPosition = TabPosition.top;
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       enableAnimatedMFM = settings.enableAnimatedMFM;
       enableLongTextElipsed = settings.enableLongTextElipsed;
       enableFavoritedRenoteElipsed = settings.enableFavoritedRenoteElipsed;
+      tabPosition = settings.tabPosition;
     });
   }
 
@@ -68,7 +70,8 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
               automaticPush: automaticPush,
               enableAnimatedMFM: enableAnimatedMFM,
               enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
-              enableLongTextElipsed: enableLongTextElipsed),
+              enableLongTextElipsed: enableLongTextElipsed,
+              tabPosition: tabPosition),
         );
   }
 
@@ -156,6 +159,24 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           save();
                         }),
                         title: const Text("長いノートを省略します。"),
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      const Text("タブの位置"),
+                      DropdownButton<TabPosition>(
+                        items: [
+                          for (final element in TabPosition.values)
+                            DropdownMenuItem(
+                              value: element,
+                              child: Text(element.displayName),
+                            )
+                        ],
+                        value: tabPosition,
+                        onChanged: (value) => setState(
+                          () {
+                            tabPosition = value ?? TabPosition.top;
+                            save();
+                          },
+                        ),
                       ),
                     ],
                   ),
