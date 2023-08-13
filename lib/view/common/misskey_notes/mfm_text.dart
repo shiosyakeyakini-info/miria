@@ -146,16 +146,18 @@ class MfmTextState extends ConsumerState<MfmText> {
     return Mfm(
       mfmText: widget.mfmText,
       mfmNode: widget.mfmNode,
-      emojiBuilder: (context, emojiName, style) {
+      emojiBuilder: (builderContext, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
             emojiName: ":$emojiName:",
-            repository:
-                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            repository: ref
+                .read(emojiRepositoryProvider(AccountScope.of(builderContext))),
             emojiInfo: widget.emoji);
         return DefaultTextStyle(
-          style: style ?? DefaultTextStyle.of(context).style,
+          style: style ?? DefaultTextStyle.of(builderContext).style,
           child: GestureDetector(
-            onTap: () => widget.onEmojiTap?.call(emojiData),
+            onTap: MfmBlurScope.of(builderContext)
+                ? null
+                : () => widget.onEmojiTap?.call(emojiData),
             child: EmojiInk(
               child: CustomEmoji(
                 emojiData: emojiData,
@@ -167,12 +169,15 @@ class MfmTextState extends ConsumerState<MfmText> {
         );
       },
       unicodeEmojiBuilder:
-          (BuildContext context, String emoji, TextStyle? style) => TextSpan(
-              text: emoji,
-              style: style,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () =>
-                    widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji))),
+          (BuildContext builderContext, String emoji, TextStyle? style) =>
+              TextSpan(
+                  text: emoji,
+                  style: style,
+                  recognizer: MfmBlurScope.of(builderContext)
+                      ? null
+                      : (TapGestureRecognizer()
+                        ..onTap = () => widget.onEmojiTap
+                            ?.call(UnicodeEmojiData(char: emoji)))),
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
         language: lang,
