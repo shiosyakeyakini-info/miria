@@ -200,6 +200,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
     return Scaffold(
       key: scaffoldKey,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(0),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+          )),
       body: SafeArea(
         child: Column(
           children: [
