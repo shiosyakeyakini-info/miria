@@ -335,10 +335,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               ),
             ),
             if (ref
-                    .read(generalSettingsRepositoryProvider)
-                    .settings
-                    .tabPosition ==
-                TabPosition.bottom)
+                        .read(generalSettingsRepositoryProvider)
+                        .settings
+                        .tabPosition ==
+                    TabPosition.bottom &&
+                !ref.watch(timelineFocusNode).hasFocus)
               buildAppbar(),
           ],
         ),
