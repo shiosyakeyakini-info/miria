@@ -6,7 +6,7 @@ extension NoteVisibilityExtension on NoteVisibility {
     return switch (this) {
       NoteVisibility.public => Icons.public,
       NoteVisibility.home => Icons.home,
-      NoteVisibility.followers => Icons.lock_outline,
+      NoteVisibility.followers => Icons.lock,
       NoteVisibility.specified => Icons.mail,
     };
   }
