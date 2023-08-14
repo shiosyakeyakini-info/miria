@@ -22,7 +22,8 @@ class GlobalTimeLineRepository extends TimelineRepository {
 
         notifyListeners();
       },
-    )..startStreaming();
+    );
+    misskey.startStreaming();
   }
 
   @override

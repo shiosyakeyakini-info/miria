@@ -4,10 +4,8 @@ import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ChannelTimelineRepository extends SocketTimelineRepository {
-  final Misskey misskey;
-
   ChannelTimelineRepository(
-    this.misskey,
+    super.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,

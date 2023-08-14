@@ -44,9 +44,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 
   @override
   void didChangeDependencies() {
+    final misskey = ref.read(misskeyProvider(widget.account));
     super.didChangeDependencies();
     controller?.disconnect();
-    controller = ref.read(misskeyProvider(widget.account)).serverStatsLogStream(
+    controller = misskey.serverStatsLogStream(
       (response) => setState(() {
         logged.insertAll(0, response);
       }),
@@ -55,10 +56,9 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
           logged.add(response);
         });
       },
-    )..startStreaming();
+    );
     queueController?.disconnect();
-    queueController =
-        ref.read(misskeyProvider(widget.account)).queueStatsLogStream(
+    queueController = misskey.queueStatsLogStream(
       (response) => setState(() {
         queueLogged.insertAll(0, response);
       }),
@@ -67,7 +67,8 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
           queueLogged.add(response);
         });
       },
-    )..startStreaming();
+    );
+    misskey.startStreaming();
 
     Future(() async {
       try {

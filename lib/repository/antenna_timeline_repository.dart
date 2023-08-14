@@ -4,10 +4,8 @@ import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class AntennaTimelineRepository extends SocketTimelineRepository {
-  final Misskey misskey;
-
   AntennaTimelineRepository(
-    this.misskey,
+    super.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
