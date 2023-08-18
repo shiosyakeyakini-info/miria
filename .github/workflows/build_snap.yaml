@@ -1,6 +1,6 @@
 name: Snapパッケージのビルド
 run-name: Building Miria's Snap package
-on: [workflow_dispatch]
+on: [push]
 jobs:
   build:
     name: ビルド（Snap）
