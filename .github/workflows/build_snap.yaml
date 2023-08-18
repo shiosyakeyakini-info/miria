@@ -15,6 +15,7 @@ jobs:
 
       - name: Get Build Version
         run: |
+          snap install flutter --classic
           flutter pub get
           echo "VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV  
 
