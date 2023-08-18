@@ -1,0 +1,40 @@
+name: Snapパッケージのビルド
+run-name: Building Miria's Snap package
+on: [workflow_dispatch]
+jobs:
+  build:
+    name: ビルド（Snap）
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build snap
+        uses: snapcore/action-build@v1
+        id: snapcraft
+
+      - name: Get Build Version
+        run: |
+          flutter pub get
+          echo "VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV  
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: $VERSION
+          release_name: Build snap $VERSION
+          body: Build miria's snap $VERSION
+          draft: true
+          prerelease: true
+          
+      - name: Upload release asset
+        uses: sekwah41/upload-release-assets@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url}}
+          asset_path: ${{ steps.snapcraft.outputs.snap }}
+        
