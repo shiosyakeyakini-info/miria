@@ -1,6 +1,6 @@
 name: Snapパッケージのビルド
 run-name: Building Miria's Snap package
-on: [push]
+on: [workflow_dispatch]
 jobs:
   build:
     name: ビルド（Snap）
@@ -18,24 +18,19 @@ jobs:
           sudo snap install flutter --classic
           flutter pub get
           echo "VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV  
-
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: $VERSION
-          release_name: Build snap $VERSION
-          body: Build miria's snap $VERSION
-          draft: true
-          prerelease: true
           
-      - name: Upload release asset
-        uses: sekwah41/upload-release-assets@v1.1.0
+      - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url}}
-          asset_path: ${{ steps.snapcraft.outputs.snap }}
-        
+        run: |
+          gh release create v$VERSION --generate-notes --draft ${{ steps.snapcraft.outputs.snap }}
+
+      # https://github.com/snapcore/action-publish
+      # 以下をコメントアウトすることでSnap Storeへのアップロードすることが可能です。
+      #- name: Upload snap store
+      #  uses: snapcore/action-publish@v1
+      #  env:
+      #    SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+      #  with:
+      #    snap: ${{ steps.snapcraft.outputs.snap }}
+      #    release: edge
