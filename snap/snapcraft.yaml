@@ -20,7 +20,6 @@ description: |
   ・このアプリケーションは新規登録およびアカウント削除の機能を提供していません。新規登録や削除が必要な場合、登録や削除に必要な要件をそれぞれのサーバーへご確認ください。
   ・このアプリケーションはサーバーを提供していません。このアプリと一緒に特定のサーバーを付随して提供していないので、このアプリ単独で利用することはできません。
   ・このアプリはMisskey v12以前のバージョンや、Firefish, Calckeyなどのフォークされたアプリケーションに対応していません。
-icon: ../assets/images/icon.png
 license: AGPL-3.0
 website: https://shiosyakeyakini.info/miria_web/index.html
 source-code: https://github.com/shiosyakeyakini-info/miria
