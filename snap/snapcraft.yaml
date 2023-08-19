@@ -32,7 +32,7 @@ description: |
   ・このアプリケーションはサーバーを提供していません。このアプリと一緒に特定のサーバーを付随して提供していないので、このアプリ単独で利用することはできません。
 
   ・このアプリはMisskey v12以前のバージョンや、Firefish, Calckeyなどのフォークされたアプリケーションに対応していません。
-license: AGPL-3.0+
+license: AGPL-3.0
 website: https://shiosyakeyakini.info/miria_web/index.html
 source-code: https://github.com/shiosyakeyakini-info/miria
 issues: https://github.com/shiosyakeyakini-info/miria/issues
