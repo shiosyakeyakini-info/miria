@@ -36,6 +36,7 @@ license: AGPL-3.0+
 website: https://shiosyakeyakini.info/miria_web/index.html
 source-code: https://github.com/shiosyakeyakini-info/miria
 issues: https://github.com/shiosyakeyakini-info/miria/issues
+icon: assets/images/icon.png
 adopt-info: miria
 base: core18 # the base snap is the execution environment for this snap
 grade: stable
