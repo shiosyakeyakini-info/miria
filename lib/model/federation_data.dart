@@ -18,5 +18,8 @@ class FederationData with _$FederationData {
     @Default("") String softwareVersion,
     @Default([]) List<String> languages,
     @Default([]) List<MetaAd> ads,
+    required bool isSupportedEmoji,
+    required bool isSupportedAnnouncement,
+    required bool isSupportedLocalTimeline,
   }) = _FederationData;
 }

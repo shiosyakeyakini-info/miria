@@ -34,10 +34,10 @@ class FederationPageState extends ConsumerState<FederationPage> {
   Widget build(BuildContext context) {
     final metaResponse = ref.watch(federationPageFederationDataProvider);
     final adsAvailable = metaResponse?.ads.isNotEmpty == true;
-    final isMisskey = metaResponse?.softwareName == "misskey";
+    final isMisskey = metaResponse?.isSupportedEmoji == true;
     final isAnotherHost = widget.account.host != widget.host;
     final isSupportedTimeline =
-        isMisskey && metaResponse?.softwareVersion.startsWith("13") == true;
+        isMisskey && metaResponse?.isSupportedLocalTimeline == true;
     return AccountScope(
       account: widget.account,
       child: DefaultTabController(
