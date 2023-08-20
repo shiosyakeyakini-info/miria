@@ -28,6 +28,9 @@ mixin _$FederationData {
   String get softwareVersion => throw _privateConstructorUsedError;
   List<String> get languages => throw _privateConstructorUsedError;
   List<MetaAd> get ads => throw _privateConstructorUsedError;
+  bool get isSupportedEmoji => throw _privateConstructorUsedError;
+  bool get isSupportedAnnouncement => throw _privateConstructorUsedError;
+  bool get isSupportedLocalTimeline => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FederationDataCopyWith<FederationData> get copyWith =>
@@ -52,7 +55,10 @@ abstract class $FederationDataCopyWith<$Res> {
       String softwareName,
       String softwareVersion,
       List<String> languages,
-      List<MetaAd> ads});
+      List<MetaAd> ads,
+      bool isSupportedEmoji,
+      bool isSupportedAnnouncement,
+      bool isSupportedLocalTimeline});
 }
 
 /// @nodoc
@@ -80,6 +86,9 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
     Object? softwareVersion = null,
     Object? languages = null,
     Object? ads = null,
+    Object? isSupportedEmoji = null,
+    Object? isSupportedAnnouncement = null,
+    Object? isSupportedLocalTimeline = null,
   }) {
     return _then(_value.copyWith(
       bannerUrl: freezed == bannerUrl
@@ -130,6 +139,18 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
           ? _value.ads
           : ads // ignore: cast_nullable_to_non_nullable
               as List<MetaAd>,
+      isSupportedEmoji: null == isSupportedEmoji
+          ? _value.isSupportedEmoji
+          : isSupportedEmoji // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedAnnouncement: null == isSupportedAnnouncement
+          ? _value.isSupportedAnnouncement
+          : isSupportedAnnouncement // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedLocalTimeline: null == isSupportedLocalTimeline
+          ? _value.isSupportedLocalTimeline
+          : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -154,7 +175,10 @@ abstract class _$$_FederationDataCopyWith<$Res>
       String softwareName,
       String softwareVersion,
       List<String> languages,
-      List<MetaAd> ads});
+      List<MetaAd> ads,
+      bool isSupportedEmoji,
+      bool isSupportedAnnouncement,
+      bool isSupportedLocalTimeline});
 }
 
 /// @nodoc
@@ -180,6 +204,9 @@ class __$$_FederationDataCopyWithImpl<$Res>
     Object? softwareVersion = null,
     Object? languages = null,
     Object? ads = null,
+    Object? isSupportedEmoji = null,
+    Object? isSupportedAnnouncement = null,
+    Object? isSupportedLocalTimeline = null,
   }) {
     return _then(_$_FederationData(
       bannerUrl: freezed == bannerUrl
@@ -230,6 +257,18 @@ class __$$_FederationDataCopyWithImpl<$Res>
           ? _value._ads
           : ads // ignore: cast_nullable_to_non_nullable
               as List<MetaAd>,
+      isSupportedEmoji: null == isSupportedEmoji
+          ? _value.isSupportedEmoji
+          : isSupportedEmoji // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedAnnouncement: null == isSupportedAnnouncement
+          ? _value.isSupportedAnnouncement
+          : isSupportedAnnouncement // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedLocalTimeline: null == isSupportedLocalTimeline
+          ? _value.isSupportedLocalTimeline
+          : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -249,7 +288,10 @@ class _$_FederationData implements _FederationData {
       this.softwareName = "",
       this.softwareVersion = "",
       final List<String> languages = const [],
-      final List<MetaAd> ads = const []})
+      final List<MetaAd> ads = const [],
+      required this.isSupportedEmoji,
+      required this.isSupportedAnnouncement,
+      required this.isSupportedLocalTimeline})
       : _languages = languages,
         _ads = ads;
 
@@ -296,8 +338,15 @@ class _$_FederationData implements _FederationData {
   }
 
   @override
+  final bool isSupportedEmoji;
+  @override
+  final bool isSupportedAnnouncement;
+  @override
+  final bool isSupportedLocalTimeline;
+
+  @override
   String toString() {
-    return 'FederationData(bannerUrl: $bannerUrl, faviconUrl: $faviconUrl, tosUrl: $tosUrl, name: $name, description: $description, usersCount: $usersCount, notesCount: $notesCount, reactionCount: $reactionCount, softwareName: $softwareName, softwareVersion: $softwareVersion, languages: $languages, ads: $ads)';
+    return 'FederationData(bannerUrl: $bannerUrl, faviconUrl: $faviconUrl, tosUrl: $tosUrl, name: $name, description: $description, usersCount: $usersCount, notesCount: $notesCount, reactionCount: $reactionCount, softwareName: $softwareName, softwareVersion: $softwareVersion, languages: $languages, ads: $ads, isSupportedEmoji: $isSupportedEmoji, isSupportedAnnouncement: $isSupportedAnnouncement, isSupportedLocalTimeline: $isSupportedLocalTimeline)';
   }
 
   @override
@@ -325,7 +374,15 @@ class _$_FederationData implements _FederationData {
                 other.softwareVersion == softwareVersion) &&
             const DeepCollectionEquality()
                 .equals(other._languages, _languages) &&
-            const DeepCollectionEquality().equals(other._ads, _ads));
+            const DeepCollectionEquality().equals(other._ads, _ads) &&
+            (identical(other.isSupportedEmoji, isSupportedEmoji) ||
+                other.isSupportedEmoji == isSupportedEmoji) &&
+            (identical(
+                    other.isSupportedAnnouncement, isSupportedAnnouncement) ||
+                other.isSupportedAnnouncement == isSupportedAnnouncement) &&
+            (identical(
+                    other.isSupportedLocalTimeline, isSupportedLocalTimeline) ||
+                other.isSupportedLocalTimeline == isSupportedLocalTimeline));
   }
 
   @override
@@ -342,7 +399,10 @@ class _$_FederationData implements _FederationData {
       softwareName,
       softwareVersion,
       const DeepCollectionEquality().hash(_languages),
-      const DeepCollectionEquality().hash(_ads));
+      const DeepCollectionEquality().hash(_ads),
+      isSupportedEmoji,
+      isSupportedAnnouncement,
+      isSupportedLocalTimeline);
 
   @JsonKey(ignore: true)
   @override
@@ -364,7 +424,10 @@ abstract class _FederationData implements FederationData {
       final String softwareName,
       final String softwareVersion,
       final List<String> languages,
-      final List<MetaAd> ads}) = _$_FederationData;
+      final List<MetaAd> ads,
+      required final bool isSupportedEmoji,
+      required final bool isSupportedAnnouncement,
+      required final bool isSupportedLocalTimeline}) = _$_FederationData;
 
   @override
   String? get bannerUrl;
@@ -390,6 +453,12 @@ abstract class _FederationData implements FederationData {
   List<String> get languages;
   @override
   List<MetaAd> get ads;
+  @override
+  bool get isSupportedEmoji;
+  @override
+  bool get isSupportedAnnouncement;
+  @override
+  bool get isSupportedLocalTimeline;
   @override
   @JsonKey(ignore: true)
   _$$_FederationDataCopyWith<_$_FederationData> get copyWith =>

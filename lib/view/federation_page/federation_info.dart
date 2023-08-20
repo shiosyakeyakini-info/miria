@@ -52,36 +52,68 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                   softwareName: "misskey",
                   softwareVersion: metaResponse.version,
                   languages: metaResponse.langs,
-                  ads: metaResponse.ads);
+                  ads: metaResponse.ads,
+
+                  // 自分のサーバーが非対応ということはない
+                  isSupportedAnnouncement: true,
+                  isSupportedEmoji: true,
+                  isSupportedLocalTimeline: true);
         } else {
           final federation = await ref
               .read(misskeyProvider(AccountScope.of(context)))
               .federation
               .showInstance(FederationShowInstanceRequest(host: widget.host));
-          final MetaResponse? misskeyMeta;
-          // Misskeyサーバーなら追加の情報を取得
+          MetaResponse? misskeyMeta;
 
-          if (federation.softwareName?.startsWith(RegExp("^(misskey)")) ==
-                  true &&
-              federation.softwareVersion?.startsWith("13") == true) {
-            misskeyMeta = await MisskeyServer().meta(widget.host);
+          bool isSupportedEmoji = false;
+          bool isSupportedAnnouncement = false;
+          bool isSupportedLocalTimeline = false;
+
+          if (federation.softwareName == "fedibird" ||
+              federation.softwareName == "mastodon") {
+            // already known unsupported software.
           } else {
-            misskeyMeta = null;
+            try {
+              // Misskeyサーバーかもしれなかったら追加の情報を取得
+
+              final misskeyServer = Misskey(host: widget.host, token: null);
+              final endpoints = await misskeyServer.endpoints();
+
+              if (endpoints.contains("announcement")) {
+                isSupportedAnnouncement = true;
+              }
+
+              // 絵文字が取得できなければローカルタイムラインを含め非対応
+              if (endpoints.contains("emojis")) {
+                isSupportedEmoji = true;
+
+                if (endpoints.contains("notes/local-timeline")) {
+                  isSupportedLocalTimeline = true;
+                }
+              }
+
+              misskeyMeta = await misskeyServer.meta();
+            } catch (e) {}
+            ;
           }
+
           ref.read(federationPageFederationDataProvider.notifier).state =
               FederationData(
-                  bannerUrl: (misskeyMeta?.bannerUrl)?.toString(),
-                  faviconUrl: (federation.faviconUrl)?.toString(),
-                  tosUrl: (misskeyMeta?.tosUrl)?.toString(),
-                  name: misskeyMeta?.name ?? federation.name,
-                  description:
-                      misskeyMeta?.description ?? federation.description,
-                  usersCount: federation.usersCount,
-                  notesCount: federation.notesCount,
-                  softwareName: federation.softwareName ?? "",
-                  softwareVersion: federation.softwareVersion ?? "",
-                  languages: misskeyMeta?.langs ?? [],
-                  ads: misskeyMeta?.ads ?? []);
+            bannerUrl: (misskeyMeta?.bannerUrl)?.toString(),
+            faviconUrl: (federation.faviconUrl)?.toString(),
+            tosUrl: (misskeyMeta?.tosUrl)?.toString(),
+            name: misskeyMeta?.name ?? federation.name,
+            description: misskeyMeta?.description ?? federation.description,
+            usersCount: federation.usersCount,
+            notesCount: federation.notesCount,
+            softwareName: federation.softwareName ?? "",
+            softwareVersion: federation.softwareVersion ?? "",
+            languages: misskeyMeta?.langs ?? [],
+            ads: misskeyMeta?.ads ?? [],
+            isSupportedEmoji: isSupportedEmoji,
+            isSupportedLocalTimeline: isSupportedLocalTimeline,
+            isSupportedAnnouncement: isSupportedAnnouncement,
+          );
         }
 
         setState(() {});

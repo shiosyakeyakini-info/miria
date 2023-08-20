@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
@@ -38,6 +39,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   late int currentIndex;
   late final PageController pageController;
   late final List<TimelineScrollController> scrollControllers;
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -146,6 +149,48 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     ));
   }
 
+  Widget buildAppbar() {
+    return AppBar(
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: tabSettings
+              .mapIndexed(
+                (index, tabSetting) => Ink(
+                  color: tabSetting == currentTabSetting
+                      ? AppTheme.of(context).currentDisplayTabColor
+                      : Colors.transparent,
+                  child: AccountScope(
+                    account: tabSetting.account,
+                    child: IconButton(
+                      icon: TabIconView(
+                        icon: tabSetting.icon,
+                        color: tabSetting == currentTabSetting
+                            ? Theme.of(context).primaryColor
+                            : Colors.white,
+                      ),
+                      onPressed: () => tabSetting == currentTabSetting
+                          ? reload()
+                          : pageController.jumpToPage(index),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+        ),
+      ),
+      actions: [
+        AccountScope(
+          account: currentTabSetting.account,
+          child: const NotificationIcon(),
+        ),
+      ],
+      leading: IconButton(
+          onPressed: () => scaffoldKey.currentState?.openDrawer(),
+          icon: const Icon(Icons.menu)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final socketTimelineBase = ref.watch(currentTabSetting.timelineProvider);
@@ -154,45 +199,21 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         : null;
 
     return Scaffold(
-      appBar: AppBar(
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: tabSettings
-                .mapIndexed(
-                  (index, tabSetting) => Ink(
-                    color: tabSetting == currentTabSetting
-                        ? AppTheme.of(context).currentDisplayTabColor
-                        : Colors.transparent,
-                    child: AccountScope(
-                      account: tabSetting.account,
-                      child: IconButton(
-                        icon: TabIconView(
-                          icon: tabSetting.icon,
-                          color: tabSetting == currentTabSetting
-                              ? Theme.of(context).primaryColor
-                              : Colors.white,
-                        ),
-                        onPressed: () => tabSetting == currentTabSetting
-                            ? reload()
-                            : pageController.jumpToPage(index),
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        actions: [
-          AccountScope(
-            account: currentTabSetting.account,
-            child: const NotificationIcon(),
-          ),
-        ],
-      ),
+      key: scaffoldKey,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(0),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+          )),
       body: SafeArea(
         child: Column(
           children: [
+            if (ref
+                    .read(generalSettingsRepositoryProvider)
+                    .settings
+                    .tabPosition ==
+                TabPosition.top)
+              buildAppbar(),
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -322,10 +343,18 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 ],
               ),
             ),
+            if (ref
+                        .read(generalSettingsRepositoryProvider)
+                        .settings
+                        .tabPosition ==
+                    TabPosition.bottom &&
+                !ref.watch(timelineFocusNode).hasFocus)
+              buildAppbar(),
           ],
         ),
       ),
       resizeToAvoidBottomInset: true,
+      drawerEnableOpenDragGesture: true,
       drawer: CommonDrawer(
         initialOpenAccount: currentTabSetting.account,
       ),

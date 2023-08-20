@@ -121,16 +121,15 @@ class AccountRepository extends ChangeNotifier {
 
     final software = nodeInfoResult["software"]["name"];
     // these software already known as unavailable this app
-    if (software == "calckey" ||
-        software == "dolphin" ||
-        software == "mastodon" ||
-        software == "fedibird" ||
-        software == "firefish") {
+    if (software == "mastodon" || software == "fedibird") {
       throw SpecifiedException("Miriaは$softwareに未対応です。");
     }
+
     final version = nodeInfoResult["software"]["version"];
-    if (availableServerVersion.allMatches(version).isEmpty) {
-      throw SpecifiedException("Miriaが認識できないバージョンです。\n$software $version");
+
+    final endpoints = await Misskey(host: server, token: null).endpoints();
+    if (!endpoints.contains("emojis")) {
+      throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
     }
   }
 

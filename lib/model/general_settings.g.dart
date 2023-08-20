@@ -24,6 +24,9 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
       enableLongTextElipsed: json['enableLongTextElipsed'] as bool? ?? false,
       enableFavoritedRenoteElipsed:
           json['enableFavoritedRenoteElipsed'] as bool? ?? true,
+      tabPosition:
+          $enumDecodeNullable(_$TabPositionEnumMap, json['tabPosition']) ??
+              TabPosition.top,
     );
 
 Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
@@ -37,6 +40,7 @@ Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
       'enableAnimatedMFM': instance.enableAnimatedMFM,
       'enableLongTextElipsed': instance.enableLongTextElipsed,
       'enableFavoritedRenoteElipsed': instance.enableFavoritedRenoteElipsed,
+      'tabPosition': _$TabPositionEnumMap[instance.tabPosition]!,
     };
 
 const _$ThemeColorSystemEnumMap = {
@@ -55,4 +59,9 @@ const _$NSFWInheritEnumMap = {
 const _$AutomaticPushEnumMap = {
   AutomaticPush.automatic: 'automatic',
   AutomaticPush.none: 'none',
+};
+
+const _$TabPositionEnumMap = {
+  TabPosition.top: 'top',
+  TabPosition.bottom: 'bottom',
 };

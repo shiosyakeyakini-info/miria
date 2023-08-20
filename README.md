@@ -8,20 +8,21 @@ Miriaはスマートフォン向けMisskeyクライアントです。
 - シームレスに操作ができること
 - MFMアートがそれなりに描画できること
 
-## スケジュール
+## インストール
 
-おおよその予定しているスケジュールはこのような感じです。
-
-| 時期 | |
-| --- | --- |
-| 5月末〜7月上旬 | TestFlightで公開(iOS), apkファイル直接配布(Android) |
-| 7月中旬頃 | 正式にストア公開 |
+- ストアからインストール
+  - [Play Store](https://play.google.com/store/apps/details?id=info.shiosyakeyakini.miria)
+  - [App Store](https://apps.apple.com/jp/app/miria/id6449201469)
+- 最新版をGitHubからインストール
+  - [GitHub最新版のリリース](https://github.com/shiosyakeyakini-info/miria/releases/latest)
+- 最新版をTestFlightからインストール
+  - TestFlightはpixivFanbox経由でのURL共有としています。 [pixivFanbox](https://shiosyakeyakini.fanbox.cc/)
 
 ## 対応予定
 
 ### 対応する予定があるもの
 
-issueを対応予定のメモ欄がわりに使っています。
+[issue](https://github.com/shiosyakeyakini-info/miria/issues)を対応予定のメモ欄がわりに使っています。
 
 ### 対応する予定がないもの
 
@@ -40,6 +41,6 @@ issueを対応予定のメモ欄がわりに使っています。
 
 `/assets/images/icon.png` においています。
 
-Miriaのアイコンはパブリックドメインとします。お使いのFedibirseでカスタム絵文字に登録するなどの用途で自由に使用することができます。
+Miriaのアイコンはパブリックドメインとします。お使いのFediverseでカスタム絵文字に登録するなどの用途で自由に使用することができます。
 
 二次創作やその他の利用もだいじょうぶです（でも拘束する根拠はないですが、R-18Gだけ避けてもらえるとうれしいです）
