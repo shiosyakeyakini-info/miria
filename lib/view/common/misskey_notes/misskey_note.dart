@@ -11,6 +11,7 @@ import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/repository/note_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
@@ -139,11 +140,8 @@ class MisskeyNote extends ConsumerStatefulWidget {
 }
 
 class MisskeyNoteState extends ConsumerState<MisskeyNote> {
-  var isCwOpened = false;
   final globalKey = GlobalKey();
   late var isAllReactionVisible = widget.isVisibleAllReactions;
-  late bool isLongVisible;
-  late bool isReactionedRenote;
   bool isLongVisibleInitialized = false;
 
   List<parser.MfmNode>? displayTextNodes;
@@ -214,8 +212,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
     displayTextNodes ??= const parser.MfmParser().parse(displayNote.text ?? "");
 
-    if (!isLongVisibleInitialized) {
-      isReactionedRenote = ref
+    final noteStatus = ref.watch(notesProvider(AccountScope.of(context))
+        .select((value) => value.noteStatuses[widget.note.id]))!;
+    if (!noteStatus.isLongVisibleInitialized ||
+        widget.isForceUnvisibleRenote ||
+        widget.isForceUnvisibleReply ||
+        widget.isForceVisibleLong) {
+      final isReactionedRenote = ref
               .read(generalSettingsRepositoryProvider)
               .settings
               .enableFavoritedRenoteElipsed &&
@@ -223,7 +226,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           !(displayNote.cw?.isNotEmpty == true) &&
           (renoteId != null && displayNote.myReaction != null);
 
-      isLongVisible = !(ref
+      final isLongVisible = !(ref
               .read(generalSettingsRepositoryProvider)
               .settings
               .enableLongTextElipsed &&
@@ -232,11 +235,26 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           !(displayNote.cw?.isNotEmpty == true) &&
           shouldCollaposed(displayTextNodes!));
 
-      isLongVisibleInitialized = true;
+      ref.read(notesProvider(AccountScope.of(context))).updateNoteStatus(
+          widget.note.id,
+          (status) => NoteStatus(
+              isCwOpened: false,
+              isLongVisible: isLongVisible,
+              isReactionedRenote: isReactionedRenote,
+              isLongVisibleInitialized: true),
+          isNotify: false);
     }
 
     final userId =
         "@${displayNote.user.username}${displayNote.user.host == null ? "" : "@${displayNote.user.host}"}";
+
+    final isCwOpened = ref.watch(notesProvider(AccountScope.of(context))
+        .select((value) => value.noteStatuses[widget.note.id]!.isCwOpened));
+    final isReactionedRenote = ref.watch(notesProvider(AccountScope.of(context))
+        .select(
+            (value) => value.noteStatuses[widget.note.id]!.isReactionedRenote));
+    final isLongVisible = ref.watch(notesProvider(AccountScope.of(context))
+        .select((value) => value.noteStatuses[widget.note.id]!.isLongVisible));
 
     return MediaQuery(
       data: MediaQueryData(
@@ -362,9 +380,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
                                     onPressed: () {
-                                      setState(() {
-                                        isCwOpened = !isCwOpened;
-                                      });
+                                      ref
+                                          .read(notesProvider(
+                                              AccountScope.of(context)))
+                                          .updateNoteStatus(
+                                              widget.note.id,
+                                              (status) => status.copyWith(
+                                                  isCwOpened:
+                                                      !status.isCwOpened));
                                     },
                                     child: Text(
                                       isCwOpened ? "隠す" : "続きを見る",
@@ -396,9 +419,16 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                         tapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
                                       ),
-                                      onPressed: () => setState(() {
-                                        isReactionedRenote = false;
-                                      }),
+                                      onPressed: () {
+                                        ref
+                                            .read(notesProvider(
+                                                AccountScope.of(context)))
+                                            .updateNoteStatus(
+                                                widget.note.id,
+                                                (status) => status.copyWith(
+                                                    isReactionedRenote: !status
+                                                        .isReactionedRenote));
+                                      },
                                       child: const Text("続きを表示"),
                                     ),
                                   )
@@ -452,9 +482,16 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                           tapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
                                         ),
-                                        onPressed: () => setState(() {
-                                          isLongVisible = true;
-                                        }),
+                                        onPressed: () {
+                                          ref
+                                              .read(notesProvider(
+                                                  AccountScope.of(context)))
+                                              .updateNoteStatus(
+                                                  widget.note.id,
+                                                  (status) => status.copyWith(
+                                                      isLongVisible: !status
+                                                          .isLongVisible));
+                                        },
                                         child: const Text("続きを表示"),
                                       ),
                                     )
