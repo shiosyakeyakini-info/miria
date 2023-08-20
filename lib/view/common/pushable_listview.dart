@@ -72,6 +72,9 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
   void didUpdateWidget(covariant PushableListView<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.listKey != widget.listKey) {
+      setState(() {
+        items.clear();
+      });
       initialize();
     }
   }
