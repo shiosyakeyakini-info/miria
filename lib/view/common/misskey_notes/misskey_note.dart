@@ -257,7 +257,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
         .select((value) => value.noteStatuses[widget.note.id]!.isLongVisible));
 
     return MediaQuery(
-      data: MediaQueryData(
+      data: MediaQuery.of(context).copyWith(
           textScaleFactor: MediaQuery.of(context).textScaleFactor *
               (widget.recursive > 1 ? 0.7 : 1)),
       child: RepaintBoundary(

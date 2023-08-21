@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -113,7 +115,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           children: [
             ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: double.infinity,
+                  maxWidth: min(MediaQuery.of(context).size.width, 800) * 0.75,
                   minHeight: 24 * MediaQuery.of(context).textScaleFactor,
                   maxHeight: 24 * MediaQuery.of(context).textScaleFactor,
                 ),
