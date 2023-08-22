@@ -42,6 +42,15 @@ enum TabPosition {
   const TabPosition(this.displayName);
 }
 
+enum EmojiType {
+  twemoji("Twemoji"),
+  system("標準");
+
+  final String displayName;
+
+  const EmojiType(this.displayName);
+}
+
 @freezed
 class GeneralSettings with _$GeneralSettings {
   const factory GeneralSettings({
@@ -69,6 +78,9 @@ class GeneralSettings with _$GeneralSettings {
 
     /// タブの位置
     @Default(TabPosition.top) TabPosition tabPosition,
+
+    /// 使用するUnicodeの絵文字種別
+    @Default(EmojiType.twemoji) EmojiType emojiType,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

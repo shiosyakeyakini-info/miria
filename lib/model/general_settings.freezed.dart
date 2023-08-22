@@ -45,6 +45,9 @@ mixin _$GeneralSettings {
   /// タブの位置
   TabPosition get tabPosition => throw _privateConstructorUsedError;
 
+  /// 使用するUnicodeの絵文字種別
+  EmojiType get emojiType => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
@@ -67,7 +70,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       bool enableAnimatedMFM,
       bool enableLongTextElipsed,
       bool enableFavoritedRenoteElipsed,
-      TabPosition tabPosition});
+      TabPosition tabPosition,
+      EmojiType emojiType});
 }
 
 /// @nodoc
@@ -93,6 +97,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
     Object? tabPosition = null,
+    Object? emojiType = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -135,6 +140,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.tabPosition
           : tabPosition // ignore: cast_nullable_to_non_nullable
               as TabPosition,
+      emojiType: null == emojiType
+          ? _value.emojiType
+          : emojiType // ignore: cast_nullable_to_non_nullable
+              as EmojiType,
     ) as $Val);
   }
 }
@@ -157,7 +166,8 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       bool enableAnimatedMFM,
       bool enableLongTextElipsed,
       bool enableFavoritedRenoteElipsed,
-      TabPosition tabPosition});
+      TabPosition tabPosition,
+      EmojiType emojiType});
 }
 
 /// @nodoc
@@ -181,6 +191,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
     Object? tabPosition = null,
+    Object? emojiType = null,
   }) {
     return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
@@ -223,6 +234,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.tabPosition
           : tabPosition // ignore: cast_nullable_to_non_nullable
               as TabPosition,
+      emojiType: null == emojiType
+          ? _value.emojiType
+          : emojiType // ignore: cast_nullable_to_non_nullable
+              as EmojiType,
     ));
   }
 }
@@ -240,7 +255,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.enableAnimatedMFM = true,
       this.enableLongTextElipsed = false,
       this.enableFavoritedRenoteElipsed = true,
-      this.tabPosition = TabPosition.top});
+      this.tabPosition = TabPosition.top,
+      this.emojiType = EmojiType.twemoji});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
       _$$_GeneralSettingsFromJson(json);
@@ -290,9 +306,14 @@ class _$_GeneralSettings implements _GeneralSettings {
   @JsonKey()
   final TabPosition tabPosition;
 
+  /// 使用するUnicodeの絵文字種別
+  @override
+  @JsonKey()
+  final EmojiType emojiType;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, emojiType: $emojiType)';
   }
 
   @override
@@ -321,7 +342,9 @@ class _$_GeneralSettings implements _GeneralSettings {
                 other.enableFavoritedRenoteElipsed ==
                     enableFavoritedRenoteElipsed) &&
             (identical(other.tabPosition, tabPosition) ||
-                other.tabPosition == tabPosition));
+                other.tabPosition == tabPosition) &&
+            (identical(other.emojiType, emojiType) ||
+                other.emojiType == emojiType));
   }
 
   @JsonKey(ignore: true)
@@ -337,7 +360,8 @@ class _$_GeneralSettings implements _GeneralSettings {
       enableAnimatedMFM,
       enableLongTextElipsed,
       enableFavoritedRenoteElipsed,
-      tabPosition);
+      tabPosition,
+      emojiType);
 
   @JsonKey(ignore: true)
   @override
@@ -364,7 +388,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final bool enableAnimatedMFM,
       final bool enableLongTextElipsed,
       final bool enableFavoritedRenoteElipsed,
-      final TabPosition tabPosition}) = _$_GeneralSettings;
+      final TabPosition tabPosition,
+      final EmojiType emojiType}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$_GeneralSettings.fromJson;
@@ -403,6 +428,10 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// タブの位置
   TabPosition get tabPosition;
+  @override
+
+  /// 使用するUnicodeの絵文字種別
+  EmojiType get emojiType;
   @override
   @JsonKey(ignore: true)
   _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>

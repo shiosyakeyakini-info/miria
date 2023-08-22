@@ -6,6 +6,7 @@ import 'package:flutter_highlighting/themes/github-dark.dart';
 import 'package:flutter_highlighting/themes/github.dart';
 import 'package:highlighting/languages/all.dart';
 import 'package:mfm_parser/mfm_parser.dart';
+import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -17,6 +18,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:twemoji_v2/twemoji_v2.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MfmText extends ConsumerStatefulWidget {
@@ -170,14 +172,25 @@ class MfmTextState extends ConsumerState<MfmText> {
       },
       unicodeEmojiBuilder:
           (BuildContext builderContext, String emoji, TextStyle? style) =>
-              TextSpan(
-                  text: emoji,
-                  style: style,
-                  recognizer: MfmBlurScope.of(builderContext)
-                      ? null
-                      : (TapGestureRecognizer()
-                        ..onTap = () => widget.onEmojiTap
-                            ?.call(UnicodeEmojiData(char: emoji)))),
+              ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
+                      EmojiType.twemoji
+                  ? TwemojiTextSpan(
+                      text: emoji,
+                      style: style,
+                      // recognizer: MfmBlurScope.of(builderContext)
+                      //     ? null
+                      //     : (TapGestureRecognizer()
+                      //       ..onTap = () => widget.onEmojiTap
+                      //           ?.call(UnicodeEmojiData(char: emoji)))
+                    )
+                  : TextSpan(
+                      text: emoji,
+                      style: style,
+                      recognizer: MfmBlurScope.of(builderContext)
+                          ? null
+                          : (TapGestureRecognizer()
+                            ..onTap = () => widget.onEmojiTap
+                                ?.call(UnicodeEmojiData(char: emoji)))),
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
         language: lang,

@@ -27,6 +27,8 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
       tabPosition:
           $enumDecodeNullable(_$TabPositionEnumMap, json['tabPosition']) ??
               TabPosition.top,
+      emojiType: $enumDecodeNullable(_$EmojiTypeEnumMap, json['emojiType']) ??
+          EmojiType.twemoji,
     );
 
 Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
@@ -41,6 +43,7 @@ Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
       'enableLongTextElipsed': instance.enableLongTextElipsed,
       'enableFavoritedRenoteElipsed': instance.enableFavoritedRenoteElipsed,
       'tabPosition': _$TabPositionEnumMap[instance.tabPosition]!,
+      'emojiType': _$EmojiTypeEnumMap[instance.emojiType]!,
     };
 
 const _$ThemeColorSystemEnumMap = {
@@ -64,4 +67,9 @@ const _$AutomaticPushEnumMap = {
 const _$TabPositionEnumMap = {
   TabPosition.top: 'top',
   TabPosition.bottom: 'bottom',
+};
+
+const _$EmojiTypeEnumMap = {
+  EmojiType.twemoji: 'twemoji',
+  EmojiType.system: 'system',
 };

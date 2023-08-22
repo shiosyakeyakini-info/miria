@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
+import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
+import 'package:twemoji_v2/twemoji_v2.dart';
 
 class CustomEmoji extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -85,17 +88,35 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
         );
         break;
       case UnicodeEmojiData():
-        cachedImage = SizedBox(
-          width: scopedFontSize,
-          height: scopedFontSize,
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: Text(
-              emojiData.char,
-              style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
-            ),
-          ),
-        );
+        switch (
+            ref.read(generalSettingsRepositoryProvider).settings.emojiType) {
+          case EmojiType.system:
+            cachedImage = SizedBox(
+              width: scopedFontSize,
+              height: scopedFontSize,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Text(
+                  emojiData.char,
+                  style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
+                ),
+              ),
+            );
+            break;
+          case EmojiType.twemoji:
+            cachedImage = SizedBox(
+              width: scopedFontSize,
+              height: scopedFontSize,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: TwemojiText(
+                  text: emojiData.char,
+                  style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
+                ),
+              ),
+            );
+            break;
+        }
         break;
       case NotEmojiData():
         cachedImage = Text(

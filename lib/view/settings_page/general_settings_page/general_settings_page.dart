@@ -25,6 +25,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   bool enableLongTextElipsed = false;
   bool enableFavoritedRenoteElipsed = true;
   TabPosition tabPosition = TabPosition.top;
+  EmojiType emojiType = EmojiType.twemoji;
 
   @override
   void initState() {
@@ -44,7 +45,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             .id;
       }
       darkModeTheme = settings.darkColorThemeId;
-      if (darkModeTheme.isEmpty) {
+      if (darkModeTheme.isEmpty ||
+          builtInColorThemes.every((element) =>
+              !element.isDarkTheme || element.id != darkModeTheme)) {
         darkModeTheme =
             builtInColorThemes.where((element) => element.isDarkTheme).first.id;
       }
@@ -56,22 +59,25 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       enableLongTextElipsed = settings.enableLongTextElipsed;
       enableFavoritedRenoteElipsed = settings.enableFavoritedRenoteElipsed;
       tabPosition = settings.tabPosition;
+      emojiType = settings.emojiType;
     });
   }
 
   Future<void> save() async {
     ref.read(generalSettingsRepositoryProvider).update(
           GeneralSettings(
-              lightColorThemeId: lightModeTheme,
-              darkColorThemeId: darkModeTheme,
-              themeColorSystem: colorSystem,
-              nsfwInherit: nsfwInherit,
-              enableDirectReaction: enableDirectReaction,
-              automaticPush: automaticPush,
-              enableAnimatedMFM: enableAnimatedMFM,
-              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
-              enableLongTextElipsed: enableLongTextElipsed,
-              tabPosition: tabPosition),
+            lightColorThemeId: lightModeTheme,
+            darkColorThemeId: darkModeTheme,
+            themeColorSystem: colorSystem,
+            nsfwInherit: nsfwInherit,
+            enableDirectReaction: enableDirectReaction,
+            automaticPush: automaticPush,
+            enableAnimatedMFM: enableAnimatedMFM,
+            enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
+            enableLongTextElipsed: enableLongTextElipsed,
+            tabPosition: tabPosition,
+            emojiType: emojiType,
+          ),
         );
   }
 
@@ -269,7 +275,25 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               enableDirectReaction = !enableDirectReaction;
                               save();
                             });
-                          })
+                          }),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      const Text("絵文字のスタイル"),
+                      DropdownButton(
+                          items: [
+                            for (final type in EmojiType.values)
+                              DropdownMenuItem(
+                                value: type,
+                                child: Text(type.displayName),
+                              )
+                          ],
+                          value: emojiType,
+                          isExpanded: true,
+                          onChanged: (value) {
+                            setState(() {
+                              emojiType = value ?? EmojiType.twemoji;
+                              save();
+                            });
+                          }),
                     ],
                   ),
                 ),

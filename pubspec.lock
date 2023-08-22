@@ -1295,6 +1295,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  twemoji_v2:
+    dependency: "direct main"
+    description:
+      name: twemoji_v2
+      sha256: e573f62ef26b1261c6a5e027096187a9b49da77d14bdeb54b16a55bd1127d482
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.3"
   typed_data:
     dependency: transitive
     description:
