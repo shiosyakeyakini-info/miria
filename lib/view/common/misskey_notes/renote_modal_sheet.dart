@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-class RenoteModalSheet extends ConsumerWidget {
+import 'local_only_icon.dart';
+
+class RenoteModalSheet extends ConsumerStatefulWidget {
   final Note note;
   final Account account;
 
@@ -18,7 +20,29 @@ class RenoteModalSheet extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      RenoteModalSheetState();
+}
+
+class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
+  bool isLocalOnly = false;
+  var visibility = NoteVisibility.public;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final accountSettings =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
+    isLocalOnly = accountSettings.defaultIsLocalOnly;
+    visibility =
+        accountSettings.defaultNoteVisibility == NoteVisibility.specified
+            ? NoteVisibility.followers
+            : accountSettings.defaultNoteVisibility;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       children: [
         ListTile(
@@ -26,20 +50,51 @@ class RenoteModalSheet extends ConsumerWidget {
             final scaffoldMessenger = ScaffoldMessenger.of(context);
             final navigator = Navigator.of(context);
             await ref
-                .read(misskeyProvider(account))
+                .read(misskeyProvider(widget.account))
                 .notes
-                .create(NotesCreateRequest(renoteId: note.id));
+                .create(NotesCreateRequest(
+                  renoteId: widget.note.id,
+                  localOnly: isLocalOnly,
+                  visibility: visibility,
+                ));
             scaffoldMessenger
                 .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
             navigator.pop();
           },
-          title: const Text("Renote"),
+          title: const Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: Text("Renote"),
+          ),
+          subtitle: Row(children: [
+            Expanded(
+              child: DropdownButton(
+                isExpanded: true,
+                items: [
+                  for (final element in NoteVisibility.values
+                      .where((element) => element != NoteVisibility.specified))
+                    DropdownMenuItem(
+                        value: element, child: Text(element.displayName))
+                ],
+                value: visibility,
+                onChanged: (value) => setState(() {
+                  visibility = value ?? NoteVisibility.public;
+                }),
+              ),
+            ),
+            IconButton(
+                onPressed: () => setState(() {
+                      isLocalOnly = !isLocalOnly;
+                    }),
+                icon: isLocalOnly
+                    ? const LocalOnlyIcon()
+                    : const Icon(Icons.rocket)),
+          ]),
         ),
         ListTile(
             onTap: () {
               final navigator = Navigator.of(context);
-              context.pushRoute(
-                  NoteCreateRoute(renote: note, initialAccount: account));
+              context.pushRoute(NoteCreateRoute(
+                  renote: widget.note, initialAccount: widget.account));
               navigator.pop();
             },
             title: const Text("引用Renote")),
@@ -49,11 +104,12 @@ class RenoteModalSheet extends ConsumerWidget {
               final navigator = Navigator.of(context);
               final selected = await showDialog<CommunityChannel?>(
                   context: context,
-                  builder: (context) => ChannelSelectDialog(account: account));
+                  builder: (context) =>
+                      ChannelSelectDialog(account: widget.account));
               if (selected != null) {
-                await ref.read(misskeyProvider(account)).notes.create(
+                await ref.read(misskeyProvider(widget.account)).notes.create(
                     NotesCreateRequest(
-                        renoteId: note.id, channelId: selected.id));
+                        renoteId: widget.note.id, channelId: selected.id));
 
                 scaffoldMessenger
                     .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
@@ -66,10 +122,14 @@ class RenoteModalSheet extends ConsumerWidget {
               final navigator = Navigator.of(context);
               final selected = await showDialog<CommunityChannel?>(
                   context: context,
-                  builder: (context) => ChannelSelectDialog(account: account));
+                  builder: (context) =>
+                      ChannelSelectDialog(account: widget.account));
+              if (!mounted) return;
               if (selected != null) {
                 context.pushRoute(NoteCreateRoute(
-                    renote: note, initialAccount: account, channel: selected));
+                    renote: widget.note,
+                    initialAccount: widget.account,
+                    channel: selected));
                 navigator.pop();
               }
             },
