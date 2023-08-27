@@ -161,12 +161,12 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                             Row(
                               children: [
                                 Checkbox(
-                                  value: ref.read(noteSearchLocalOnlyProvider),
-                                  onChanged: (value) => setState(() => ref
+                                  value: ref.watch(noteSearchLocalOnlyProvider),
+                                  onChanged: (value) => ref
                                           .read(noteSearchLocalOnlyProvider
                                               .notifier)
                                           .state =
-                                      !ref.read(noteSearchLocalOnlyProvider)),
+                                      !ref.read(noteSearchLocalOnlyProvider),
                                 ),
                               ],
                             )

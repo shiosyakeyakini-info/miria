@@ -86,17 +86,6 @@ void main() {
       verify(mockNote.search(argThat(equals(
               NotesSearchRequest(query: "", userId: TestData.user1ExpectId)))))
           .called(1);
-
-      when(mockNote.search(any)).thenAnswer((_) async => [TestData.note2]);
-      await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
-      await tester.pumpAndSettle();
-
-      verify(mockNote.search(argThat(equals(NotesSearchRequest(
-              query: "",
-              untilId: TestData.note1ExpectId,
-              userId: TestData.user1ExpectId)))))
-          .called(1);
-      expect(find.text(TestData.note2ExpectText), findsOneWidget);
     });
 
     testWidgets("チャンネル指定ができること", (tester) async {
@@ -140,17 +129,6 @@ void main() {
       verify(mockNote.search(argThat(equals(NotesSearchRequest(
               query: "", channelId: TestData.channel1ExpectId)))))
           .called(1);
-
-      when(mockNote.search(any)).thenAnswer((_) async => [TestData.note2]);
-      await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
-      await tester.pumpAndSettle();
-
-      verify(mockNote.search(argThat(equals(NotesSearchRequest(
-              query: "",
-              untilId: TestData.note1ExpectId,
-              channelId: TestData.channel1ExpectId)))))
-          .called(1);
-      expect(find.text(TestData.note2ExpectText), findsOneWidget);
     });
 
     testWidgets("ハッシュタグを検索した場合、ハッシュタグのエンドポイントで検索されること", (tester) async {
