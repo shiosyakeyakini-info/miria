@@ -58,6 +58,7 @@ dependencies:
   device_info_plus: ^9.0.2
   colorfilter_generator: ^0.0.8
   matrix2d: ^1.0.4
+  twemoji_v2: ^0.5.3
 
 dependency_overrides:
   image_editor:

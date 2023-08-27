@@ -1290,7 +1290,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
       ) as _i15.Future<Iterable<_i5.User>>);
   @override
   _i5.SocketController homeTimelineStream({
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(
       String,
@@ -1314,7 +1313,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           #homeTimelineStream,
           [],
           {
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onReacted: onReacted,
             #onUnreacted: onUnreacted,
@@ -1328,7 +1326,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #homeTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1343,7 +1340,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #homeTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1355,7 +1351,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
       ) as _i5.SocketController);
   @override
   _i5.SocketController localTimelineStream({
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(
       String,
@@ -1379,7 +1374,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           #localTimelineStream,
           [],
           {
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onReacted: onReacted,
             #onUnreacted: onUnreacted,
@@ -1393,7 +1387,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #localTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1408,7 +1401,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #localTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1420,7 +1412,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
       ) as _i5.SocketController);
   @override
   _i5.SocketController globalTimelineStream({
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(
       String,
@@ -1444,7 +1435,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           #globalTimelineStream,
           [],
           {
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onReacted: onReacted,
             #onUnreacted: onUnreacted,
@@ -1458,7 +1448,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #globalTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1473,7 +1462,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #globalTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1485,7 +1473,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
       ) as _i5.SocketController);
   @override
   _i5.SocketController hybridTimelineStream({
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(
       String,
@@ -1509,7 +1496,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           #hybridTimelineStream,
           [],
           {
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onReacted: onReacted,
             #onUnreacted: onUnreacted,
@@ -1523,7 +1509,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #hybridTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1538,7 +1523,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #hybridTimelineStream,
             [],
             {
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1551,7 +1535,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
   @override
   _i5.SocketController channelStream({
     required String? channelId,
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(
       String,
@@ -1576,7 +1559,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           [],
           {
             #channelId: channelId,
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onReacted: onReacted,
             #onUnreacted: onUnreacted,
@@ -1591,7 +1573,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             [],
             {
               #channelId: channelId,
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1607,7 +1588,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             [],
             {
               #channelId: channelId,
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1620,7 +1600,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
   @override
   _i5.SocketController userListStream({
     required String? listId,
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(_i5.User)? onUserAdded,
     _i15.FutureOr<void> Function(_i5.User)? onUserRemoved,
@@ -1644,7 +1623,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           [],
           {
             #listId: listId,
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onUserAdded: onUserAdded,
             #onUserRemoved: onUserRemoved,
@@ -1661,7 +1639,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             [],
             {
               #listId: listId,
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onUserAdded: onUserAdded,
               #onUserRemoved: onUserRemoved,
@@ -1679,7 +1656,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             [],
             {
               #listId: listId,
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onUserAdded: onUserAdded,
               #onUserRemoved: onUserRemoved,
@@ -1694,7 +1670,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
   @override
   _i5.SocketController antennaStream({
     required String? antennaId,
-    String? id,
     _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
     _i15.FutureOr<void> Function(
       String,
@@ -1719,7 +1694,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           [],
           {
             #antennaId: antennaId,
-            #id: id,
             #onNoteReceived: onNoteReceived,
             #onReacted: onReacted,
             #onUnreacted: onUnreacted,
@@ -1734,7 +1708,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             [],
             {
               #antennaId: antennaId,
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,
@@ -1750,7 +1723,6 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             [],
             {
               #antennaId: antennaId,
-              #id: id,
               #onNoteReceived: onNoteReceived,
               #onReacted: onReacted,
               #onUnreacted: onUnreacted,

@@ -790,7 +790,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "03c8d0202a2921cec1d2c634738fa94e4895c6b3"
+      resolved-ref: a4bca85ea0d094c562f1df82a8492353eb203b80
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
@@ -1295,6 +1295,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  twemoji_v2:
+    dependency: "direct main"
+    description:
+      name: twemoji_v2
+      sha256: e573f62ef26b1261c6a5e027096187a9b49da77d14bdeb54b16a55bd1127d482
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.3"
   typed_data:
     dependency: transitive
     description:
