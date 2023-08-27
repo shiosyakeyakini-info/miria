@@ -4,10 +4,8 @@ import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ChannelTimelineRepository extends SocketTimelineRepository {
-  final Misskey misskey;
-
   ChannelTimelineRepository(
-    this.misskey,
+    super.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
@@ -25,12 +23,21 @@ class ChannelTimelineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   }) {
     return misskey.channelStream(
-        tabSetting.channelId!, onReceived, onReacted, onVoted);
+      channelId: tabSetting.channelId!,
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onVoted: onVoted,
+    );
   }
 
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
-    return await misskey.channels.timeline(ChannelsTimelineRequest(
-        channelId: tabSetting.channelId!, limit: 30, untilId: untilId));
+    return await misskey.channels.timeline(
+      ChannelsTimelineRequest(
+        channelId: tabSetting.channelId!,
+        limit: 30,
+        untilId: untilId,
+      ),
+    );
   }
 }

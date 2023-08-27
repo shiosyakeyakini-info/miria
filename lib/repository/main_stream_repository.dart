@@ -67,7 +67,7 @@ class MainStreamRepository extends ChangeNotifier {
         emojiRepository.loadFromSource();
       },
     );
-    socketController?.startStreaming();
+    misskey.startStreaming();
     Future(() async {
       await confirmNotification();
     });
