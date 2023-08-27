@@ -171,26 +171,33 @@ class MfmTextState extends ConsumerState<MfmText> {
         );
       },
       unicodeEmojiBuilder:
-          (BuildContext builderContext, String emoji, TextStyle? style) =>
-              ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
-                      EmojiType.twemoji
-                  ? TwemojiTextSpan(
-                      text: emoji,
-                      style: style,
-                      // recognizer: MfmBlurScope.of(builderContext)
-                      //     ? null
-                      //     : (TapGestureRecognizer()
-                      //       ..onTap = () => widget.onEmojiTap
-                      //           ?.call(UnicodeEmojiData(char: emoji)))
-                    )
-                  : TextSpan(
-                      text: emoji,
-                      style: style,
-                      recognizer: MfmBlurScope.of(builderContext)
-                          ? null
-                          : (TapGestureRecognizer()
-                            ..onTap = () => widget.onEmojiTap
-                                ?.call(UnicodeEmojiData(char: emoji)))),
+          (BuildContext builderContext, String emoji, TextStyle? style) {
+        if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
+            EmojiType.system) {
+          return TextSpan(
+              text: emoji,
+              style: style,
+              recognizer: MfmBlurScope.of(builderContext)
+                  ? null
+                  : (TapGestureRecognizer()
+                    ..onTap = () => widget.onEmojiTap
+                        ?.call(UnicodeEmojiData(char: emoji))));
+        } else {
+          return WidgetSpan(
+            child: GestureDetector(
+              onTap: MfmBlurScope.of(builderContext)
+                  ? null
+                  : () =>
+                      widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+              child: Twemoji(
+                emoji: emoji,
+                width: style?.fontSize,
+                height: style?.fontSize,
+              ),
+            ),
+          );
+        }
+      },
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
         language: lang,
