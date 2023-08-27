@@ -11,6 +11,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
+  final Misskey misskey;
   final MainStreamRepository mainStreamRepository;
   final AccountRepository accountRepository;
   final EmojiRepository emojiRepository;
@@ -19,6 +20,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Object? error;
 
   SocketTimelineRepository(
+    this.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
@@ -122,7 +124,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           noteRepository.registerNote(
               registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
         },
-      )..startStreaming();
+      );
+      misskey.startStreaming();
 
       if (olderNotes.isEmpty) {
         try {

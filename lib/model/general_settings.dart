@@ -79,6 +79,9 @@ class GeneralSettings with _$GeneralSettings {
     /// タブの位置
     @Default(TabPosition.top) TabPosition tabPosition,
 
+    /// 文字の大きさの倍率
+    @Default(1.0) double textScaleFactor,
+
     /// 使用するUnicodeの絵文字種別
     @Default(EmojiType.twemoji) EmojiType emojiType,
   }) = _GeneralSettings;

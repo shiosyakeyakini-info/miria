@@ -4,10 +4,8 @@ import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class LocalTimeLineRepository extends SocketTimelineRepository {
-  final Misskey misskey;
-
   LocalTimeLineRepository(
-    this.misskey,
+    super.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
@@ -24,7 +22,11 @@ class LocalTimeLineRepository extends SocketTimelineRepository {
         onReacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   }) {
-    return misskey.localTimelineStream(onReceived, onReacted, onVoted);
+    return misskey.localTimelineStream(
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onVoted: onVoted,
+    );
   }
 
   @override

@@ -45,6 +45,9 @@ mixin _$GeneralSettings {
   /// タブの位置
   TabPosition get tabPosition => throw _privateConstructorUsedError;
 
+  /// 文字の大きさの倍率
+  double get textScaleFactor => throw _privateConstructorUsedError;
+
   /// 使用するUnicodeの絵文字種別
   EmojiType get emojiType => throw _privateConstructorUsedError;
 
@@ -71,6 +74,7 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       bool enableLongTextElipsed,
       bool enableFavoritedRenoteElipsed,
       TabPosition tabPosition,
+      double textScaleFactor,
       EmojiType emojiType});
 }
 
@@ -97,6 +101,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
     Object? tabPosition = null,
+    Object? textScaleFactor = null,
     Object? emojiType = null,
   }) {
     return _then(_value.copyWith(
@@ -140,6 +145,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.tabPosition
           : tabPosition // ignore: cast_nullable_to_non_nullable
               as TabPosition,
+      textScaleFactor: null == textScaleFactor
+          ? _value.textScaleFactor
+          : textScaleFactor // ignore: cast_nullable_to_non_nullable
+              as double,
       emojiType: null == emojiType
           ? _value.emojiType
           : emojiType // ignore: cast_nullable_to_non_nullable
@@ -167,6 +176,7 @@ abstract class _$$_GeneralSettingsCopyWith<$Res>
       bool enableLongTextElipsed,
       bool enableFavoritedRenoteElipsed,
       TabPosition tabPosition,
+      double textScaleFactor,
       EmojiType emojiType});
 }
 
@@ -191,6 +201,7 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
     Object? enableLongTextElipsed = null,
     Object? enableFavoritedRenoteElipsed = null,
     Object? tabPosition = null,
+    Object? textScaleFactor = null,
     Object? emojiType = null,
   }) {
     return _then(_$_GeneralSettings(
@@ -234,6 +245,10 @@ class __$$_GeneralSettingsCopyWithImpl<$Res>
           ? _value.tabPosition
           : tabPosition // ignore: cast_nullable_to_non_nullable
               as TabPosition,
+      textScaleFactor: null == textScaleFactor
+          ? _value.textScaleFactor
+          : textScaleFactor // ignore: cast_nullable_to_non_nullable
+              as double,
       emojiType: null == emojiType
           ? _value.emojiType
           : emojiType // ignore: cast_nullable_to_non_nullable
@@ -256,6 +271,7 @@ class _$_GeneralSettings implements _GeneralSettings {
       this.enableLongTextElipsed = false,
       this.enableFavoritedRenoteElipsed = true,
       this.tabPosition = TabPosition.top,
+      this.textScaleFactor = 1.0,
       this.emojiType = EmojiType.twemoji});
 
   factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
@@ -306,6 +322,11 @@ class _$_GeneralSettings implements _GeneralSettings {
   @JsonKey()
   final TabPosition tabPosition;
 
+  /// 文字の大きさの倍率
+  @override
+  @JsonKey()
+  final double textScaleFactor;
+
   /// 使用するUnicodeの絵文字種別
   @override
   @JsonKey()
@@ -313,7 +334,7 @@ class _$_GeneralSettings implements _GeneralSettings {
 
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, emojiType: $emojiType)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType)';
   }
 
   @override
@@ -343,6 +364,8 @@ class _$_GeneralSettings implements _GeneralSettings {
                     enableFavoritedRenoteElipsed) &&
             (identical(other.tabPosition, tabPosition) ||
                 other.tabPosition == tabPosition) &&
+            (identical(other.textScaleFactor, textScaleFactor) ||
+                other.textScaleFactor == textScaleFactor) &&
             (identical(other.emojiType, emojiType) ||
                 other.emojiType == emojiType));
   }
@@ -361,6 +384,7 @@ class _$_GeneralSettings implements _GeneralSettings {
       enableLongTextElipsed,
       enableFavoritedRenoteElipsed,
       tabPosition,
+      textScaleFactor,
       emojiType);
 
   @JsonKey(ignore: true)
@@ -389,6 +413,7 @@ abstract class _GeneralSettings implements GeneralSettings {
       final bool enableLongTextElipsed,
       final bool enableFavoritedRenoteElipsed,
       final TabPosition tabPosition,
+      final double textScaleFactor,
       final EmojiType emojiType}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
@@ -428,6 +453,10 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// タブの位置
   TabPosition get tabPosition;
+  @override
+
+  /// 文字の大きさの倍率
+  double get textScaleFactor;
   @override
 
   /// 使用するUnicodeの絵文字種別

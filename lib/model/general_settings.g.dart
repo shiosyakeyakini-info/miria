@@ -27,6 +27,7 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
       tabPosition:
           $enumDecodeNullable(_$TabPositionEnumMap, json['tabPosition']) ??
               TabPosition.top,
+      textScaleFactor: (json['textScaleFactor'] as num?)?.toDouble() ?? 1.0,
       emojiType: $enumDecodeNullable(_$EmojiTypeEnumMap, json['emojiType']) ??
           EmojiType.twemoji,
     );
@@ -43,6 +44,7 @@ Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
       'enableLongTextElipsed': instance.enableLongTextElipsed,
       'enableFavoritedRenoteElipsed': instance.enableFavoritedRenoteElipsed,
       'tabPosition': _$TabPositionEnumMap[instance.tabPosition]!,
+      'textScaleFactor': instance.textScaleFactor,
       'emojiType': _$EmojiTypeEnumMap[instance.emojiType]!,
     };
 
