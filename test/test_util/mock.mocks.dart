@@ -3,34 +3,36 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i15;
-import 'dart:io' as _i21;
-import 'dart:typed_data' as _i22;
-import 'dart:ui' as _i17;
+import 'dart:async' as _i16;
+import 'dart:io' as _i23;
+import 'dart:typed_data' as _i24;
+import 'dart:ui' as _i18;
 
-import 'package:dio/dio.dart' as _i23;
-import 'package:dio/src/adapter.dart' as _i9;
-import 'package:dio/src/cancel_token.dart' as _i24;
-import 'package:dio/src/dio_mixin.dart' as _i11;
-import 'package:dio/src/options.dart' as _i8;
-import 'package:dio/src/response.dart' as _i12;
-import 'package:dio/src/transformer.dart' as _i10;
-import 'package:file_picker/file_picker.dart' as _i26;
-import 'package:miria/model/account.dart' as _i16;
+import 'package:dio/dio.dart' as _i25;
+import 'package:dio/src/adapter.dart' as _i10;
+import 'package:dio/src/cancel_token.dart' as _i26;
+import 'package:dio/src/dio_mixin.dart' as _i12;
+import 'package:dio/src/options.dart' as _i9;
+import 'package:dio/src/response.dart' as _i13;
+import 'package:dio/src/transformer.dart' as _i11;
+import 'package:file_picker/file_picker.dart' as _i28;
+import 'package:miria/model/account.dart' as _i17;
 import 'package:miria/model/account_settings.dart' as _i2;
-import 'package:miria/model/misskey_emoji_data.dart' as _i20;
-import 'package:miria/model/tab_setting.dart' as _i14;
-import 'package:miria/repository/account_settings_repository.dart' as _i18;
-import 'package:miria/repository/emoji_repository.dart' as _i19;
-import 'package:miria/repository/tab_settings_repository.dart' as _i13;
-import 'package:misskey_dart/misskey_dart.dart' as _i5;
-import 'package:misskey_dart/src/data/ping_response.dart' as _i7;
-import 'package:misskey_dart/src/data/stats_response.dart' as _i6;
-import 'package:misskey_dart/src/services/api_service.dart' as _i3;
-import 'package:misskey_dart/src/services/streaming_service.dart' as _i4;
+import 'package:miria/model/general_settings.dart' as _i3;
+import 'package:miria/model/misskey_emoji_data.dart' as _i21;
+import 'package:miria/model/tab_setting.dart' as _i15;
+import 'package:miria/repository/account_settings_repository.dart' as _i19;
+import 'package:miria/repository/emoji_repository.dart' as _i20;
+import 'package:miria/repository/general_settings_repository.dart' as _i22;
+import 'package:miria/repository/tab_settings_repository.dart' as _i14;
+import 'package:misskey_dart/misskey_dart.dart' as _i6;
+import 'package:misskey_dart/src/data/ping_response.dart' as _i8;
+import 'package:misskey_dart/src/data/stats_response.dart' as _i7;
+import 'package:misskey_dart/src/services/api_service.dart' as _i4;
+import 'package:misskey_dart/src/services/streaming_service.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
-import 'mock.dart' as _i25;
+import 'mock.dart' as _i27;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -54,8 +56,9 @@ class _FakeAccountSettings_0 extends _i1.SmartFake
         );
 }
 
-class _FakeApiService_1 extends _i1.SmartFake implements _i3.ApiService {
-  _FakeApiService_1(
+class _FakeGeneralSettings_1 extends _i1.SmartFake
+    implements _i3.GeneralSettings {
+  _FakeGeneralSettings_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -64,9 +67,8 @@ class _FakeApiService_1 extends _i1.SmartFake implements _i3.ApiService {
         );
 }
 
-class _FakeStreamingService_2 extends _i1.SmartFake
-    implements _i4.StreamingService {
-  _FakeStreamingService_2(
+class _FakeApiService_2 extends _i1.SmartFake implements _i4.ApiService {
+  _FakeApiService_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -75,8 +77,9 @@ class _FakeStreamingService_2 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyNotes_3 extends _i1.SmartFake implements _i5.MisskeyNotes {
-  _FakeMisskeyNotes_3(
+class _FakeStreamingService_3 extends _i1.SmartFake
+    implements _i5.StreamingService {
+  _FakeStreamingService_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -85,9 +88,8 @@ class _FakeMisskeyNotes_3 extends _i1.SmartFake implements _i5.MisskeyNotes {
         );
 }
 
-class _FakeMisskeyChannels_4 extends _i1.SmartFake
-    implements _i5.MisskeyChannels {
-  _FakeMisskeyChannels_4(
+class _FakeMisskeyNotes_4 extends _i1.SmartFake implements _i6.MisskeyNotes {
+  _FakeMisskeyNotes_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -96,8 +98,9 @@ class _FakeMisskeyChannels_4 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyUsers_5 extends _i1.SmartFake implements _i5.MisskeyUsers {
-  _FakeMisskeyUsers_5(
+class _FakeMisskeyChannels_5 extends _i1.SmartFake
+    implements _i6.MisskeyChannels {
+  _FakeMisskeyChannels_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -106,8 +109,8 @@ class _FakeMisskeyUsers_5 extends _i1.SmartFake implements _i5.MisskeyUsers {
         );
 }
 
-class _FakeMisskeyI_6 extends _i1.SmartFake implements _i5.MisskeyI {
-  _FakeMisskeyI_6(
+class _FakeMisskeyUsers_6 extends _i1.SmartFake implements _i6.MisskeyUsers {
+  _FakeMisskeyUsers_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -116,8 +119,8 @@ class _FakeMisskeyI_6 extends _i1.SmartFake implements _i5.MisskeyI {
         );
 }
 
-class _FakeMisskeyClips_7 extends _i1.SmartFake implements _i5.MisskeyClips {
-  _FakeMisskeyClips_7(
+class _FakeMisskeyI_7 extends _i1.SmartFake implements _i6.MisskeyI {
+  _FakeMisskeyI_7(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -126,9 +129,8 @@ class _FakeMisskeyClips_7 extends _i1.SmartFake implements _i5.MisskeyClips {
         );
 }
 
-class _FakeMisskeyAntenna_8 extends _i1.SmartFake
-    implements _i5.MisskeyAntenna {
-  _FakeMisskeyAntenna_8(
+class _FakeMisskeyClips_8 extends _i1.SmartFake implements _i6.MisskeyClips {
+  _FakeMisskeyClips_8(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -137,8 +139,9 @@ class _FakeMisskeyAntenna_8 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyDrive_9 extends _i1.SmartFake implements _i5.MisskeyDrive {
-  _FakeMisskeyDrive_9(
+class _FakeMisskeyAntenna_9 extends _i1.SmartFake
+    implements _i6.MisskeyAntenna {
+  _FakeMisskeyAntenna_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -147,9 +150,8 @@ class _FakeMisskeyDrive_9 extends _i1.SmartFake implements _i5.MisskeyDrive {
         );
 }
 
-class _FakeMisskeyFollowing_10 extends _i1.SmartFake
-    implements _i5.MisskeyFollowing {
-  _FakeMisskeyFollowing_10(
+class _FakeMisskeyDrive_10 extends _i1.SmartFake implements _i6.MisskeyDrive {
+  _FakeMisskeyDrive_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -158,9 +160,9 @@ class _FakeMisskeyFollowing_10 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyBlocking_11 extends _i1.SmartFake
-    implements _i5.MisskeyBlocking {
-  _FakeMisskeyBlocking_11(
+class _FakeMisskeyFollowing_11 extends _i1.SmartFake
+    implements _i6.MisskeyFollowing {
+  _FakeMisskeyFollowing_11(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -169,8 +171,9 @@ class _FakeMisskeyBlocking_11 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyMute_12 extends _i1.SmartFake implements _i5.MisskeyMute {
-  _FakeMisskeyMute_12(
+class _FakeMisskeyBlocking_12 extends _i1.SmartFake
+    implements _i6.MisskeyBlocking {
+  _FakeMisskeyBlocking_12(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -179,9 +182,8 @@ class _FakeMisskeyMute_12 extends _i1.SmartFake implements _i5.MisskeyMute {
         );
 }
 
-class _FakeMisskeyRenoteMute_13 extends _i1.SmartFake
-    implements _i5.MisskeyRenoteMute {
-  _FakeMisskeyRenoteMute_13(
+class _FakeMisskeyMute_13 extends _i1.SmartFake implements _i6.MisskeyMute {
+  _FakeMisskeyMute_13(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -190,9 +192,9 @@ class _FakeMisskeyRenoteMute_13 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyFederation_14 extends _i1.SmartFake
-    implements _i5.MisskeyFederation {
-  _FakeMisskeyFederation_14(
+class _FakeMisskeyRenoteMute_14 extends _i1.SmartFake
+    implements _i6.MisskeyRenoteMute {
+  _FakeMisskeyRenoteMute_14(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -201,8 +203,9 @@ class _FakeMisskeyFederation_14 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyRoles_15 extends _i1.SmartFake implements _i5.MisskeyRoles {
-  _FakeMisskeyRoles_15(
+class _FakeMisskeyFederation_15 extends _i1.SmartFake
+    implements _i6.MisskeyFederation {
+  _FakeMisskeyFederation_15(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -211,9 +214,8 @@ class _FakeMisskeyRoles_15 extends _i1.SmartFake implements _i5.MisskeyRoles {
         );
 }
 
-class _FakeMisskeyHashtags_16 extends _i1.SmartFake
-    implements _i5.MisskeyHashtags {
-  _FakeMisskeyHashtags_16(
+class _FakeMisskeyRoles_16 extends _i1.SmartFake implements _i6.MisskeyRoles {
+  _FakeMisskeyRoles_16(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -222,8 +224,9 @@ class _FakeMisskeyHashtags_16 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyAp_17 extends _i1.SmartFake implements _i5.MisskeyAp {
-  _FakeMisskeyAp_17(
+class _FakeMisskeyHashtags_17 extends _i1.SmartFake
+    implements _i6.MisskeyHashtags {
+  _FakeMisskeyHashtags_17(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -232,9 +235,8 @@ class _FakeMisskeyAp_17 extends _i1.SmartFake implements _i5.MisskeyAp {
         );
 }
 
-class _FakeEmojisResponse_18 extends _i1.SmartFake
-    implements _i5.EmojisResponse {
-  _FakeEmojisResponse_18(
+class _FakeMisskeyAp_18 extends _i1.SmartFake implements _i6.MisskeyAp {
+  _FakeMisskeyAp_18(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -243,8 +245,9 @@ class _FakeEmojisResponse_18 extends _i1.SmartFake
         );
 }
 
-class _FakeEmojiResponse_19 extends _i1.SmartFake implements _i5.EmojiResponse {
-  _FakeEmojiResponse_19(
+class _FakeEmojisResponse_19 extends _i1.SmartFake
+    implements _i6.EmojisResponse {
+  _FakeEmojisResponse_19(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -253,8 +256,8 @@ class _FakeEmojiResponse_19 extends _i1.SmartFake implements _i5.EmojiResponse {
         );
 }
 
-class _FakeMetaResponse_20 extends _i1.SmartFake implements _i5.MetaResponse {
-  _FakeMetaResponse_20(
+class _FakeEmojiResponse_20 extends _i1.SmartFake implements _i6.EmojiResponse {
+  _FakeEmojiResponse_20(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -263,8 +266,8 @@ class _FakeMetaResponse_20 extends _i1.SmartFake implements _i5.MetaResponse {
         );
 }
 
-class _FakeStatsResponse_21 extends _i1.SmartFake implements _i6.StatsResponse {
-  _FakeStatsResponse_21(
+class _FakeMetaResponse_21 extends _i1.SmartFake implements _i6.MetaResponse {
+  _FakeMetaResponse_21(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -273,8 +276,8 @@ class _FakeStatsResponse_21 extends _i1.SmartFake implements _i6.StatsResponse {
         );
 }
 
-class _FakePingResponse_22 extends _i1.SmartFake implements _i7.PingResponse {
-  _FakePingResponse_22(
+class _FakeStatsResponse_22 extends _i1.SmartFake implements _i7.StatsResponse {
+  _FakeStatsResponse_22(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -283,9 +286,8 @@ class _FakePingResponse_22 extends _i1.SmartFake implements _i7.PingResponse {
         );
 }
 
-class _FakeServerInfoResponse_23 extends _i1.SmartFake
-    implements _i5.ServerInfoResponse {
-  _FakeServerInfoResponse_23(
+class _FakePingResponse_23 extends _i1.SmartFake implements _i8.PingResponse {
+  _FakePingResponse_23(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -294,9 +296,9 @@ class _FakeServerInfoResponse_23 extends _i1.SmartFake
         );
 }
 
-class _FakeGetOnlineUsersCountResponse_24 extends _i1.SmartFake
-    implements _i5.GetOnlineUsersCountResponse {
-  _FakeGetOnlineUsersCountResponse_24(
+class _FakeServerInfoResponse_24 extends _i1.SmartFake
+    implements _i6.ServerInfoResponse {
+  _FakeServerInfoResponse_24(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -305,9 +307,9 @@ class _FakeGetOnlineUsersCountResponse_24 extends _i1.SmartFake
         );
 }
 
-class _FakeSocketController_25 extends _i1.SmartFake
-    implements _i5.SocketController {
-  _FakeSocketController_25(
+class _FakeGetOnlineUsersCountResponse_25 extends _i1.SmartFake
+    implements _i6.GetOnlineUsersCountResponse {
+  _FakeGetOnlineUsersCountResponse_25(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -316,9 +318,9 @@ class _FakeSocketController_25 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyNotesReactions_26 extends _i1.SmartFake
-    implements _i5.MisskeyNotesReactions {
-  _FakeMisskeyNotesReactions_26(
+class _FakeSocketController_26 extends _i1.SmartFake
+    implements _i6.SocketController {
+  _FakeSocketController_26(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -327,9 +329,9 @@ class _FakeMisskeyNotesReactions_26 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyNotesFavorites_27 extends _i1.SmartFake
-    implements _i5.MisskeyNotesFavorites {
-  _FakeMisskeyNotesFavorites_27(
+class _FakeMisskeyNotesReactions_27 extends _i1.SmartFake
+    implements _i6.MisskeyNotesReactions {
+  _FakeMisskeyNotesReactions_27(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -338,9 +340,9 @@ class _FakeMisskeyNotesFavorites_27 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyNotesPolls_28 extends _i1.SmartFake
-    implements _i5.MisskeyNotesPolls {
-  _FakeMisskeyNotesPolls_28(
+class _FakeMisskeyNotesFavorites_28 extends _i1.SmartFake
+    implements _i6.MisskeyNotesFavorites {
+  _FakeMisskeyNotesFavorites_28(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -349,9 +351,9 @@ class _FakeMisskeyNotesPolls_28 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyNotesThreadMuting_29 extends _i1.SmartFake
-    implements _i5.MisskeyNotesThreadMuting {
-  _FakeMisskeyNotesThreadMuting_29(
+class _FakeMisskeyNotesPolls_29 extends _i1.SmartFake
+    implements _i6.MisskeyNotesPolls {
+  _FakeMisskeyNotesPolls_29(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -360,8 +362,9 @@ class _FakeMisskeyNotesThreadMuting_29 extends _i1.SmartFake
         );
 }
 
-class _FakeNote_30 extends _i1.SmartFake implements _i5.Note {
-  _FakeNote_30(
+class _FakeMisskeyNotesThreadMuting_30 extends _i1.SmartFake
+    implements _i6.MisskeyNotesThreadMuting {
+  _FakeMisskeyNotesThreadMuting_30(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -370,9 +373,8 @@ class _FakeNote_30 extends _i1.SmartFake implements _i5.Note {
         );
 }
 
-class _FakeNotesStateResponse_31 extends _i1.SmartFake
-    implements _i5.NotesStateResponse {
-  _FakeNotesStateResponse_31(
+class _FakeNote_31 extends _i1.SmartFake implements _i6.Note {
+  _FakeNote_31(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -381,9 +383,9 @@ class _FakeNotesStateResponse_31 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyUsersLists_32 extends _i1.SmartFake
-    implements _i5.MisskeyUsersLists {
-  _FakeMisskeyUsersLists_32(
+class _FakeNotesStateResponse_32 extends _i1.SmartFake
+    implements _i6.NotesStateResponse {
+  _FakeNotesStateResponse_32(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -392,9 +394,9 @@ class _FakeMisskeyUsersLists_32 extends _i1.SmartFake
         );
 }
 
-class _FakeUsersShowResponse_33 extends _i1.SmartFake
-    implements _i5.UsersShowResponse {
-  _FakeUsersShowResponse_33(
+class _FakeMisskeyUsersLists_33 extends _i1.SmartFake
+    implements _i6.MisskeyUsersLists {
+  _FakeMisskeyUsersLists_33(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -403,9 +405,9 @@ class _FakeUsersShowResponse_33 extends _i1.SmartFake
         );
 }
 
-class _FakeCommunityChannel_34 extends _i1.SmartFake
-    implements _i5.CommunityChannel {
-  _FakeCommunityChannel_34(
+class _FakeUsersShowResponse_34 extends _i1.SmartFake
+    implements _i6.UsersShowResponse {
+  _FakeUsersShowResponse_34(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -414,9 +416,9 @@ class _FakeCommunityChannel_34 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyDriveFiles_35 extends _i1.SmartFake
-    implements _i5.MisskeyDriveFiles {
-  _FakeMisskeyDriveFiles_35(
+class _FakeCommunityChannel_35 extends _i1.SmartFake
+    implements _i6.CommunityChannel {
+  _FakeCommunityChannel_35(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -425,9 +427,9 @@ class _FakeMisskeyDriveFiles_35 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyDriveFolders_36 extends _i1.SmartFake
-    implements _i5.MisskeyDriveFolders {
-  _FakeMisskeyDriveFolders_36(
+class _FakeMisskeyDriveFiles_36 extends _i1.SmartFake
+    implements _i6.MisskeyDriveFiles {
+  _FakeMisskeyDriveFiles_36(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -436,8 +438,9 @@ class _FakeMisskeyDriveFolders_36 extends _i1.SmartFake
         );
 }
 
-class _FakeDriveFile_37 extends _i1.SmartFake implements _i5.DriveFile {
-  _FakeDriveFile_37(
+class _FakeMisskeyDriveFolders_37 extends _i1.SmartFake
+    implements _i6.MisskeyDriveFolders {
+  _FakeMisskeyDriveFolders_37(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -446,8 +449,8 @@ class _FakeDriveFile_37 extends _i1.SmartFake implements _i5.DriveFile {
         );
 }
 
-class _FakeBaseOptions_38 extends _i1.SmartFake implements _i8.BaseOptions {
-  _FakeBaseOptions_38(
+class _FakeDriveFile_38 extends _i1.SmartFake implements _i6.DriveFile {
+  _FakeDriveFile_38(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -456,9 +459,8 @@ class _FakeBaseOptions_38 extends _i1.SmartFake implements _i8.BaseOptions {
         );
 }
 
-class _FakeHttpClientAdapter_39 extends _i1.SmartFake
-    implements _i9.HttpClientAdapter {
-  _FakeHttpClientAdapter_39(
+class _FakeBaseOptions_39 extends _i1.SmartFake implements _i9.BaseOptions {
+  _FakeBaseOptions_39(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -467,8 +469,9 @@ class _FakeHttpClientAdapter_39 extends _i1.SmartFake
         );
 }
 
-class _FakeTransformer_40 extends _i1.SmartFake implements _i10.Transformer {
-  _FakeTransformer_40(
+class _FakeHttpClientAdapter_40 extends _i1.SmartFake
+    implements _i10.HttpClientAdapter {
+  _FakeHttpClientAdapter_40(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -477,8 +480,8 @@ class _FakeTransformer_40 extends _i1.SmartFake implements _i10.Transformer {
         );
 }
 
-class _FakeInterceptors_41 extends _i1.SmartFake implements _i11.Interceptors {
-  _FakeInterceptors_41(
+class _FakeTransformer_41 extends _i1.SmartFake implements _i11.Transformer {
+  _FakeTransformer_41(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -487,8 +490,18 @@ class _FakeInterceptors_41 extends _i1.SmartFake implements _i11.Interceptors {
         );
 }
 
-class _FakeResponse_42<T1> extends _i1.SmartFake implements _i12.Response<T1> {
-  _FakeResponse_42(
+class _FakeInterceptors_42 extends _i1.SmartFake implements _i12.Interceptors {
+  _FakeInterceptors_42(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeResponse_43<T1> extends _i1.SmartFake implements _i13.Response<T1> {
+  _FakeResponse_43(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -501,13 +514,13 @@ class _FakeResponse_42<T1> extends _i1.SmartFake implements _i12.Response<T1> {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTabSettingsRepository extends _i1.Mock
-    implements _i13.TabSettingsRepository {
+    implements _i14.TabSettingsRepository {
   @override
-  Iterable<_i14.TabSetting> get tabSettings => (super.noSuchMethod(
+  Iterable<_i15.TabSetting> get tabSettings => (super.noSuchMethod(
         Invocation.getter(#tabSettings),
-        returnValue: <_i14.TabSetting>[],
-        returnValueForMissingStub: <_i14.TabSetting>[],
-      ) as Iterable<_i14.TabSetting>);
+        returnValue: <_i15.TabSetting>[],
+        returnValueForMissingStub: <_i15.TabSetting>[],
+      ) as Iterable<_i15.TabSetting>);
   @override
   bool get hasListeners => (super.noSuchMethod(
         Invocation.getter(#hasListeners),
@@ -515,35 +528,35 @@ class MockTabSettingsRepository extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  _i15.Future<void> load() => (super.noSuchMethod(
+  _i16.Future<void> load() => (super.noSuchMethod(
         Invocation.method(
           #load,
           [],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> save(List<_i14.TabSetting>? tabSettings) =>
+  _i16.Future<void> save(List<_i15.TabSetting>? tabSettings) =>
       (super.noSuchMethod(
         Invocation.method(
           #save,
           [tabSettings],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> removeAccount(_i16.Account? account) => (super.noSuchMethod(
+  _i16.Future<void> removeAccount(_i17.Account? account) => (super.noSuchMethod(
         Invocation.method(
           #removeAccount,
           [account],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  void addListener(_i17.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -551,7 +564,7 @@ class MockTabSettingsRepository extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i17.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -580,7 +593,7 @@ class MockTabSettingsRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAccountSettingsRepository extends _i1.Mock
-    implements _i18.AccountSettingsRepository {
+    implements _i19.AccountSettingsRepository {
   @override
   Iterable<_i2.AccountSettings> get accountSettings => (super.noSuchMethod(
         Invocation.getter(#accountSettings),
@@ -594,34 +607,34 @@ class MockAccountSettingsRepository extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  _i15.Future<void> load() => (super.noSuchMethod(
+  _i16.Future<void> load() => (super.noSuchMethod(
         Invocation.method(
           #load,
           [],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> save(_i2.AccountSettings? settings) => (super.noSuchMethod(
+  _i16.Future<void> save(_i2.AccountSettings? settings) => (super.noSuchMethod(
         Invocation.method(
           #save,
           [settings],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> removeAccount(_i16.Account? account) => (super.noSuchMethod(
+  _i16.Future<void> removeAccount(_i17.Account? account) => (super.noSuchMethod(
         Invocation.method(
           #removeAccount,
           [account],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i2.AccountSettings fromAccount(_i16.Account? account) => (super.noSuchMethod(
+  _i2.AccountSettings fromAccount(_i17.Account? account) => (super.noSuchMethod(
         Invocation.method(
           #fromAccount,
           [account],
@@ -642,7 +655,7 @@ class MockAccountSettingsRepository extends _i1.Mock
         ),
       ) as _i2.AccountSettings);
   @override
-  void addListener(_i17.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -650,7 +663,7 @@ class MockAccountSettingsRepository extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i17.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -678,9 +691,9 @@ class MockAccountSettingsRepository extends _i1.Mock
 /// A class which mocks [EmojiRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEmojiRepository extends _i1.Mock implements _i19.EmojiRepository {
+class MockEmojiRepository extends _i1.Mock implements _i20.EmojiRepository {
   @override
-  set emoji(List<_i19.EmojiRepositoryData>? _emoji) => super.noSuchMethod(
+  set emoji(List<_i20.EmojiRepositoryData>? _emoji) => super.noSuchMethod(
         Invocation.setter(
           #emoji,
           _emoji,
@@ -688,34 +701,34 @@ class MockEmojiRepository extends _i1.Mock implements _i19.EmojiRepository {
         returnValueForMissingStub: null,
       );
   @override
-  _i15.Future<void> loadFromSourceIfNeed() => (super.noSuchMethod(
+  _i16.Future<void> loadFromSourceIfNeed() => (super.noSuchMethod(
         Invocation.method(
           #loadFromSourceIfNeed,
           [],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> loadFromSource() => (super.noSuchMethod(
+  _i16.Future<void> loadFromSource() => (super.noSuchMethod(
         Invocation.method(
           #loadFromSource,
           [],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> loadFromLocalCache() => (super.noSuchMethod(
+  _i16.Future<void> loadFromLocalCache() => (super.noSuchMethod(
         Invocation.method(
           #loadFromLocalCache,
           [],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<List<_i20.MisskeyEmojiData>> searchEmojis(
+  _i16.Future<List<_i21.MisskeyEmojiData>> searchEmojis(
     String? name, {
     int? limit = 30,
   }) =>
@@ -725,29 +738,105 @@ class MockEmojiRepository extends _i1.Mock implements _i19.EmojiRepository {
           [name],
           {#limit: limit},
         ),
-        returnValue: _i15.Future<List<_i20.MisskeyEmojiData>>.value(
-            <_i20.MisskeyEmojiData>[]),
+        returnValue: _i16.Future<List<_i21.MisskeyEmojiData>>.value(
+            <_i21.MisskeyEmojiData>[]),
         returnValueForMissingStub:
-            _i15.Future<List<_i20.MisskeyEmojiData>>.value(
-                <_i20.MisskeyEmojiData>[]),
-      ) as _i15.Future<List<_i20.MisskeyEmojiData>>);
+            _i16.Future<List<_i21.MisskeyEmojiData>>.value(
+                <_i21.MisskeyEmojiData>[]),
+      ) as _i16.Future<List<_i21.MisskeyEmojiData>>);
   @override
-  List<_i20.MisskeyEmojiData> defaultEmojis({int? limit}) =>
+  List<_i21.MisskeyEmojiData> defaultEmojis({int? limit}) =>
       (super.noSuchMethod(
         Invocation.method(
           #defaultEmojis,
           [],
           {#limit: limit},
         ),
-        returnValue: <_i20.MisskeyEmojiData>[],
-        returnValueForMissingStub: <_i20.MisskeyEmojiData>[],
-      ) as List<_i20.MisskeyEmojiData>);
+        returnValue: <_i21.MisskeyEmojiData>[],
+        returnValueForMissingStub: <_i21.MisskeyEmojiData>[],
+      ) as List<_i21.MisskeyEmojiData>);
+}
+
+/// A class which mocks [GeneralSettingsRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGeneralSettingsRepository extends _i1.Mock
+    implements _i22.GeneralSettingsRepository {
+  @override
+  _i3.GeneralSettings get settings => (super.noSuchMethod(
+        Invocation.getter(#settings),
+        returnValue: _FakeGeneralSettings_1(
+          this,
+          Invocation.getter(#settings),
+        ),
+        returnValueForMissingStub: _FakeGeneralSettings_1(
+          this,
+          Invocation.getter(#settings),
+        ),
+      ) as _i3.GeneralSettings);
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  _i16.Future<void> load() => (super.noSuchMethod(
+        Invocation.method(
+          #load,
+          [],
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
+  @override
+  _i16.Future<void> update(_i3.GeneralSettings? settings) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #update,
+          [settings],
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
+  @override
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [Misskey].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMisskey extends _i1.Mock implements _i5.Misskey {
+class MockMisskey extends _i1.Mock implements _i6.Misskey {
   @override
   String get host => (super.noSuchMethod(
         Invocation.getter(#host),
@@ -755,19 +844,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: '',
       ) as String);
   @override
-  _i3.ApiService get apiService => (super.noSuchMethod(
+  _i4.ApiService get apiService => (super.noSuchMethod(
         Invocation.getter(#apiService),
-        returnValue: _FakeApiService_1(
+        returnValue: _FakeApiService_2(
           this,
           Invocation.getter(#apiService),
         ),
-        returnValueForMissingStub: _FakeApiService_1(
+        returnValueForMissingStub: _FakeApiService_2(
           this,
           Invocation.getter(#apiService),
         ),
-      ) as _i3.ApiService);
+      ) as _i4.ApiService);
   @override
-  set apiService(_i3.ApiService? _apiService) => super.noSuchMethod(
+  set apiService(_i4.ApiService? _apiService) => super.noSuchMethod(
         Invocation.setter(
           #apiService,
           _apiService,
@@ -775,19 +864,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i4.StreamingService get streamingService => (super.noSuchMethod(
+  _i5.StreamingService get streamingService => (super.noSuchMethod(
         Invocation.getter(#streamingService),
-        returnValue: _FakeStreamingService_2(
+        returnValue: _FakeStreamingService_3(
           this,
           Invocation.getter(#streamingService),
         ),
-        returnValueForMissingStub: _FakeStreamingService_2(
+        returnValueForMissingStub: _FakeStreamingService_3(
           this,
           Invocation.getter(#streamingService),
         ),
-      ) as _i4.StreamingService);
+      ) as _i5.StreamingService);
   @override
-  set streamingService(_i4.StreamingService? _streamingService) =>
+  set streamingService(_i5.StreamingService? _streamingService) =>
       super.noSuchMethod(
         Invocation.setter(
           #streamingService,
@@ -796,19 +885,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyNotes get notes => (super.noSuchMethod(
+  _i6.MisskeyNotes get notes => (super.noSuchMethod(
         Invocation.getter(#notes),
-        returnValue: _FakeMisskeyNotes_3(
+        returnValue: _FakeMisskeyNotes_4(
           this,
           Invocation.getter(#notes),
         ),
-        returnValueForMissingStub: _FakeMisskeyNotes_3(
+        returnValueForMissingStub: _FakeMisskeyNotes_4(
           this,
           Invocation.getter(#notes),
         ),
-      ) as _i5.MisskeyNotes);
+      ) as _i6.MisskeyNotes);
   @override
-  set notes(_i5.MisskeyNotes? _notes) => super.noSuchMethod(
+  set notes(_i6.MisskeyNotes? _notes) => super.noSuchMethod(
         Invocation.setter(
           #notes,
           _notes,
@@ -816,19 +905,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyChannels get channels => (super.noSuchMethod(
+  _i6.MisskeyChannels get channels => (super.noSuchMethod(
         Invocation.getter(#channels),
-        returnValue: _FakeMisskeyChannels_4(
+        returnValue: _FakeMisskeyChannels_5(
           this,
           Invocation.getter(#channels),
         ),
-        returnValueForMissingStub: _FakeMisskeyChannels_4(
+        returnValueForMissingStub: _FakeMisskeyChannels_5(
           this,
           Invocation.getter(#channels),
         ),
-      ) as _i5.MisskeyChannels);
+      ) as _i6.MisskeyChannels);
   @override
-  set channels(_i5.MisskeyChannels? _channels) => super.noSuchMethod(
+  set channels(_i6.MisskeyChannels? _channels) => super.noSuchMethod(
         Invocation.setter(
           #channels,
           _channels,
@@ -836,19 +925,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyUsers get users => (super.noSuchMethod(
+  _i6.MisskeyUsers get users => (super.noSuchMethod(
         Invocation.getter(#users),
-        returnValue: _FakeMisskeyUsers_5(
+        returnValue: _FakeMisskeyUsers_6(
           this,
           Invocation.getter(#users),
         ),
-        returnValueForMissingStub: _FakeMisskeyUsers_5(
+        returnValueForMissingStub: _FakeMisskeyUsers_6(
           this,
           Invocation.getter(#users),
         ),
-      ) as _i5.MisskeyUsers);
+      ) as _i6.MisskeyUsers);
   @override
-  set users(_i5.MisskeyUsers? _users) => super.noSuchMethod(
+  set users(_i6.MisskeyUsers? _users) => super.noSuchMethod(
         Invocation.setter(
           #users,
           _users,
@@ -856,19 +945,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyI get i => (super.noSuchMethod(
+  _i6.MisskeyI get i => (super.noSuchMethod(
         Invocation.getter(#i),
-        returnValue: _FakeMisskeyI_6(
+        returnValue: _FakeMisskeyI_7(
           this,
           Invocation.getter(#i),
         ),
-        returnValueForMissingStub: _FakeMisskeyI_6(
+        returnValueForMissingStub: _FakeMisskeyI_7(
           this,
           Invocation.getter(#i),
         ),
-      ) as _i5.MisskeyI);
+      ) as _i6.MisskeyI);
   @override
-  set i(_i5.MisskeyI? _i) => super.noSuchMethod(
+  set i(_i6.MisskeyI? _i) => super.noSuchMethod(
         Invocation.setter(
           #i,
           _i,
@@ -876,19 +965,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyClips get clips => (super.noSuchMethod(
+  _i6.MisskeyClips get clips => (super.noSuchMethod(
         Invocation.getter(#clips),
-        returnValue: _FakeMisskeyClips_7(
+        returnValue: _FakeMisskeyClips_8(
           this,
           Invocation.getter(#clips),
         ),
-        returnValueForMissingStub: _FakeMisskeyClips_7(
+        returnValueForMissingStub: _FakeMisskeyClips_8(
           this,
           Invocation.getter(#clips),
         ),
-      ) as _i5.MisskeyClips);
+      ) as _i6.MisskeyClips);
   @override
-  set clips(_i5.MisskeyClips? _clips) => super.noSuchMethod(
+  set clips(_i6.MisskeyClips? _clips) => super.noSuchMethod(
         Invocation.setter(
           #clips,
           _clips,
@@ -896,19 +985,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyAntenna get antennas => (super.noSuchMethod(
+  _i6.MisskeyAntenna get antennas => (super.noSuchMethod(
         Invocation.getter(#antennas),
-        returnValue: _FakeMisskeyAntenna_8(
+        returnValue: _FakeMisskeyAntenna_9(
           this,
           Invocation.getter(#antennas),
         ),
-        returnValueForMissingStub: _FakeMisskeyAntenna_8(
+        returnValueForMissingStub: _FakeMisskeyAntenna_9(
           this,
           Invocation.getter(#antennas),
         ),
-      ) as _i5.MisskeyAntenna);
+      ) as _i6.MisskeyAntenna);
   @override
-  set antennas(_i5.MisskeyAntenna? _antennas) => super.noSuchMethod(
+  set antennas(_i6.MisskeyAntenna? _antennas) => super.noSuchMethod(
         Invocation.setter(
           #antennas,
           _antennas,
@@ -916,19 +1005,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyDrive get drive => (super.noSuchMethod(
+  _i6.MisskeyDrive get drive => (super.noSuchMethod(
         Invocation.getter(#drive),
-        returnValue: _FakeMisskeyDrive_9(
+        returnValue: _FakeMisskeyDrive_10(
           this,
           Invocation.getter(#drive),
         ),
-        returnValueForMissingStub: _FakeMisskeyDrive_9(
+        returnValueForMissingStub: _FakeMisskeyDrive_10(
           this,
           Invocation.getter(#drive),
         ),
-      ) as _i5.MisskeyDrive);
+      ) as _i6.MisskeyDrive);
   @override
-  set drive(_i5.MisskeyDrive? _drive) => super.noSuchMethod(
+  set drive(_i6.MisskeyDrive? _drive) => super.noSuchMethod(
         Invocation.setter(
           #drive,
           _drive,
@@ -936,19 +1025,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyFollowing get following => (super.noSuchMethod(
+  _i6.MisskeyFollowing get following => (super.noSuchMethod(
         Invocation.getter(#following),
-        returnValue: _FakeMisskeyFollowing_10(
+        returnValue: _FakeMisskeyFollowing_11(
           this,
           Invocation.getter(#following),
         ),
-        returnValueForMissingStub: _FakeMisskeyFollowing_10(
+        returnValueForMissingStub: _FakeMisskeyFollowing_11(
           this,
           Invocation.getter(#following),
         ),
-      ) as _i5.MisskeyFollowing);
+      ) as _i6.MisskeyFollowing);
   @override
-  set following(_i5.MisskeyFollowing? _following) => super.noSuchMethod(
+  set following(_i6.MisskeyFollowing? _following) => super.noSuchMethod(
         Invocation.setter(
           #following,
           _following,
@@ -956,19 +1045,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyBlocking get blocking => (super.noSuchMethod(
+  _i6.MisskeyBlocking get blocking => (super.noSuchMethod(
         Invocation.getter(#blocking),
-        returnValue: _FakeMisskeyBlocking_11(
+        returnValue: _FakeMisskeyBlocking_12(
           this,
           Invocation.getter(#blocking),
         ),
-        returnValueForMissingStub: _FakeMisskeyBlocking_11(
+        returnValueForMissingStub: _FakeMisskeyBlocking_12(
           this,
           Invocation.getter(#blocking),
         ),
-      ) as _i5.MisskeyBlocking);
+      ) as _i6.MisskeyBlocking);
   @override
-  set blocking(_i5.MisskeyBlocking? _blocking) => super.noSuchMethod(
+  set blocking(_i6.MisskeyBlocking? _blocking) => super.noSuchMethod(
         Invocation.setter(
           #blocking,
           _blocking,
@@ -976,19 +1065,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyMute get mute => (super.noSuchMethod(
+  _i6.MisskeyMute get mute => (super.noSuchMethod(
         Invocation.getter(#mute),
-        returnValue: _FakeMisskeyMute_12(
+        returnValue: _FakeMisskeyMute_13(
           this,
           Invocation.getter(#mute),
         ),
-        returnValueForMissingStub: _FakeMisskeyMute_12(
+        returnValueForMissingStub: _FakeMisskeyMute_13(
           this,
           Invocation.getter(#mute),
         ),
-      ) as _i5.MisskeyMute);
+      ) as _i6.MisskeyMute);
   @override
-  set mute(_i5.MisskeyMute? _mute) => super.noSuchMethod(
+  set mute(_i6.MisskeyMute? _mute) => super.noSuchMethod(
         Invocation.setter(
           #mute,
           _mute,
@@ -996,19 +1085,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyRenoteMute get renoteMute => (super.noSuchMethod(
+  _i6.MisskeyRenoteMute get renoteMute => (super.noSuchMethod(
         Invocation.getter(#renoteMute),
-        returnValue: _FakeMisskeyRenoteMute_13(
+        returnValue: _FakeMisskeyRenoteMute_14(
           this,
           Invocation.getter(#renoteMute),
         ),
-        returnValueForMissingStub: _FakeMisskeyRenoteMute_13(
+        returnValueForMissingStub: _FakeMisskeyRenoteMute_14(
           this,
           Invocation.getter(#renoteMute),
         ),
-      ) as _i5.MisskeyRenoteMute);
+      ) as _i6.MisskeyRenoteMute);
   @override
-  set renoteMute(_i5.MisskeyRenoteMute? _renoteMute) => super.noSuchMethod(
+  set renoteMute(_i6.MisskeyRenoteMute? _renoteMute) => super.noSuchMethod(
         Invocation.setter(
           #renoteMute,
           _renoteMute,
@@ -1016,19 +1105,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyFederation get federation => (super.noSuchMethod(
+  _i6.MisskeyFederation get federation => (super.noSuchMethod(
         Invocation.getter(#federation),
-        returnValue: _FakeMisskeyFederation_14(
+        returnValue: _FakeMisskeyFederation_15(
           this,
           Invocation.getter(#federation),
         ),
-        returnValueForMissingStub: _FakeMisskeyFederation_14(
+        returnValueForMissingStub: _FakeMisskeyFederation_15(
           this,
           Invocation.getter(#federation),
         ),
-      ) as _i5.MisskeyFederation);
+      ) as _i6.MisskeyFederation);
   @override
-  set federation(_i5.MisskeyFederation? _federation) => super.noSuchMethod(
+  set federation(_i6.MisskeyFederation? _federation) => super.noSuchMethod(
         Invocation.setter(
           #federation,
           _federation,
@@ -1036,19 +1125,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyRoles get roles => (super.noSuchMethod(
+  _i6.MisskeyRoles get roles => (super.noSuchMethod(
         Invocation.getter(#roles),
-        returnValue: _FakeMisskeyRoles_15(
+        returnValue: _FakeMisskeyRoles_16(
           this,
           Invocation.getter(#roles),
         ),
-        returnValueForMissingStub: _FakeMisskeyRoles_15(
+        returnValueForMissingStub: _FakeMisskeyRoles_16(
           this,
           Invocation.getter(#roles),
         ),
-      ) as _i5.MisskeyRoles);
+      ) as _i6.MisskeyRoles);
   @override
-  set roles(_i5.MisskeyRoles? _roles) => super.noSuchMethod(
+  set roles(_i6.MisskeyRoles? _roles) => super.noSuchMethod(
         Invocation.setter(
           #roles,
           _roles,
@@ -1056,19 +1145,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyHashtags get hashtags => (super.noSuchMethod(
+  _i6.MisskeyHashtags get hashtags => (super.noSuchMethod(
         Invocation.getter(#hashtags),
-        returnValue: _FakeMisskeyHashtags_16(
+        returnValue: _FakeMisskeyHashtags_17(
           this,
           Invocation.getter(#hashtags),
         ),
-        returnValueForMissingStub: _FakeMisskeyHashtags_16(
+        returnValueForMissingStub: _FakeMisskeyHashtags_17(
           this,
           Invocation.getter(#hashtags),
         ),
-      ) as _i5.MisskeyHashtags);
+      ) as _i6.MisskeyHashtags);
   @override
-  set hashtags(_i5.MisskeyHashtags? _hashtags) => super.noSuchMethod(
+  set hashtags(_i6.MisskeyHashtags? _hashtags) => super.noSuchMethod(
         Invocation.setter(
           #hashtags,
           _hashtags,
@@ -1076,19 +1165,19 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i5.MisskeyAp get ap => (super.noSuchMethod(
+  _i6.MisskeyAp get ap => (super.noSuchMethod(
         Invocation.getter(#ap),
-        returnValue: _FakeMisskeyAp_17(
+        returnValue: _FakeMisskeyAp_18(
           this,
           Invocation.getter(#ap),
         ),
-        returnValueForMissingStub: _FakeMisskeyAp_17(
+        returnValueForMissingStub: _FakeMisskeyAp_18(
           this,
           Invocation.getter(#ap),
         ),
-      ) as _i5.MisskeyAp);
+      ) as _i6.MisskeyAp);
   @override
-  set ap(_i5.MisskeyAp? _ap) => super.noSuchMethod(
+  set ap(_i6.MisskeyAp? _ap) => super.noSuchMethod(
         Invocation.setter(
           #ap,
           _ap,
@@ -1096,36 +1185,36 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
         returnValueForMissingStub: null,
       );
   @override
-  _i15.Future<Iterable<_i5.AnnouncementsResponse>> announcements(
-          _i5.AnnouncementsRequest? request) =>
+  _i16.Future<Iterable<_i6.AnnouncementsResponse>> announcements(
+          _i6.AnnouncementsRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #announcements,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.AnnouncementsResponse>>.value(
-            <_i5.AnnouncementsResponse>[]),
+        returnValue: _i16.Future<Iterable<_i6.AnnouncementsResponse>>.value(
+            <_i6.AnnouncementsResponse>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.AnnouncementsResponse>>.value(
-                <_i5.AnnouncementsResponse>[]),
-      ) as _i15.Future<Iterable<_i5.AnnouncementsResponse>>);
+            _i16.Future<Iterable<_i6.AnnouncementsResponse>>.value(
+                <_i6.AnnouncementsResponse>[]),
+      ) as _i16.Future<Iterable<_i6.AnnouncementsResponse>>);
   @override
-  _i15.Future<List<String>> endpoints() => (super.noSuchMethod(
+  _i16.Future<List<String>> endpoints() => (super.noSuchMethod(
         Invocation.method(
           #endpoints,
           [],
         ),
-        returnValue: _i15.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i15.Future<List<String>>.value(<String>[]),
-      ) as _i15.Future<List<String>>);
+        returnValue: _i16.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i16.Future<List<String>>.value(<String>[]),
+      ) as _i16.Future<List<String>>);
   @override
-  _i15.Future<_i5.EmojisResponse> emojis() => (super.noSuchMethod(
+  _i16.Future<_i6.EmojisResponse> emojis() => (super.noSuchMethod(
         Invocation.method(
           #emojis,
           [],
         ),
         returnValue:
-            _i15.Future<_i5.EmojisResponse>.value(_FakeEmojisResponse_18(
+            _i16.Future<_i6.EmojisResponse>.value(_FakeEmojisResponse_19(
           this,
           Invocation.method(
             #emojis,
@@ -1133,22 +1222,22 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.EmojisResponse>.value(_FakeEmojisResponse_18(
+            _i16.Future<_i6.EmojisResponse>.value(_FakeEmojisResponse_19(
           this,
           Invocation.method(
             #emojis,
             [],
           ),
         )),
-      ) as _i15.Future<_i5.EmojisResponse>);
+      ) as _i16.Future<_i6.EmojisResponse>);
   @override
-  _i15.Future<_i5.EmojiResponse> emoji(_i5.EmojiRequest? request) =>
+  _i16.Future<_i6.EmojiResponse> emoji(_i6.EmojiRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #emoji,
           [request],
         ),
-        returnValue: _i15.Future<_i5.EmojiResponse>.value(_FakeEmojiResponse_19(
+        returnValue: _i16.Future<_i6.EmojiResponse>.value(_FakeEmojiResponse_20(
           this,
           Invocation.method(
             #emoji,
@@ -1156,21 +1245,21 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.EmojiResponse>.value(_FakeEmojiResponse_19(
+            _i16.Future<_i6.EmojiResponse>.value(_FakeEmojiResponse_20(
           this,
           Invocation.method(
             #emoji,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.EmojiResponse>);
+      ) as _i16.Future<_i6.EmojiResponse>);
   @override
-  _i15.Future<_i5.MetaResponse> meta() => (super.noSuchMethod(
+  _i16.Future<_i6.MetaResponse> meta() => (super.noSuchMethod(
         Invocation.method(
           #meta,
           [],
         ),
-        returnValue: _i15.Future<_i5.MetaResponse>.value(_FakeMetaResponse_20(
+        returnValue: _i16.Future<_i6.MetaResponse>.value(_FakeMetaResponse_21(
           this,
           Invocation.method(
             #meta,
@@ -1178,21 +1267,21 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.MetaResponse>.value(_FakeMetaResponse_20(
+            _i16.Future<_i6.MetaResponse>.value(_FakeMetaResponse_21(
           this,
           Invocation.method(
             #meta,
             [],
           ),
         )),
-      ) as _i15.Future<_i5.MetaResponse>);
+      ) as _i16.Future<_i6.MetaResponse>);
   @override
-  _i15.Future<_i6.StatsResponse> stats() => (super.noSuchMethod(
+  _i16.Future<_i7.StatsResponse> stats() => (super.noSuchMethod(
         Invocation.method(
           #stats,
           [],
         ),
-        returnValue: _i15.Future<_i6.StatsResponse>.value(_FakeStatsResponse_21(
+        returnValue: _i16.Future<_i7.StatsResponse>.value(_FakeStatsResponse_22(
           this,
           Invocation.method(
             #stats,
@@ -1200,21 +1289,21 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i6.StatsResponse>.value(_FakeStatsResponse_21(
+            _i16.Future<_i7.StatsResponse>.value(_FakeStatsResponse_22(
           this,
           Invocation.method(
             #stats,
             [],
           ),
         )),
-      ) as _i15.Future<_i6.StatsResponse>);
+      ) as _i16.Future<_i7.StatsResponse>);
   @override
-  _i15.Future<_i7.PingResponse> ping() => (super.noSuchMethod(
+  _i16.Future<_i8.PingResponse> ping() => (super.noSuchMethod(
         Invocation.method(
           #ping,
           [],
         ),
-        returnValue: _i15.Future<_i7.PingResponse>.value(_FakePingResponse_22(
+        returnValue: _i16.Future<_i8.PingResponse>.value(_FakePingResponse_23(
           this,
           Invocation.method(
             #ping,
@@ -1222,46 +1311,46 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i7.PingResponse>.value(_FakePingResponse_22(
+            _i16.Future<_i8.PingResponse>.value(_FakePingResponse_23(
           this,
           Invocation.method(
             #ping,
             [],
           ),
         )),
-      ) as _i15.Future<_i7.PingResponse>);
+      ) as _i16.Future<_i8.PingResponse>);
   @override
-  _i15.Future<_i5.ServerInfoResponse> serverInfo() => (super.noSuchMethod(
+  _i16.Future<_i6.ServerInfoResponse> serverInfo() => (super.noSuchMethod(
         Invocation.method(
           #serverInfo,
           [],
         ),
-        returnValue: _i15.Future<_i5.ServerInfoResponse>.value(
-            _FakeServerInfoResponse_23(
+        returnValue: _i16.Future<_i6.ServerInfoResponse>.value(
+            _FakeServerInfoResponse_24(
           this,
           Invocation.method(
             #serverInfo,
             [],
           ),
         )),
-        returnValueForMissingStub: _i15.Future<_i5.ServerInfoResponse>.value(
-            _FakeServerInfoResponse_23(
+        returnValueForMissingStub: _i16.Future<_i6.ServerInfoResponse>.value(
+            _FakeServerInfoResponse_24(
           this,
           Invocation.method(
             #serverInfo,
             [],
           ),
         )),
-      ) as _i15.Future<_i5.ServerInfoResponse>);
+      ) as _i16.Future<_i6.ServerInfoResponse>);
   @override
-  _i15.Future<_i5.GetOnlineUsersCountResponse> getOnlineUsersCount() =>
+  _i16.Future<_i6.GetOnlineUsersCountResponse> getOnlineUsersCount() =>
       (super.noSuchMethod(
         Invocation.method(
           #getOnlineUsersCount,
           [],
         ),
-        returnValue: _i15.Future<_i5.GetOnlineUsersCountResponse>.value(
-            _FakeGetOnlineUsersCountResponse_24(
+        returnValue: _i16.Future<_i6.GetOnlineUsersCountResponse>.value(
+            _FakeGetOnlineUsersCountResponse_25(
           this,
           Invocation.method(
             #getOnlineUsersCount,
@@ -1269,43 +1358,43 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.GetOnlineUsersCountResponse>.value(
-                _FakeGetOnlineUsersCountResponse_24(
+            _i16.Future<_i6.GetOnlineUsersCountResponse>.value(
+                _FakeGetOnlineUsersCountResponse_25(
           this,
           Invocation.method(
             #getOnlineUsersCount,
             [],
           ),
         )),
-      ) as _i15.Future<_i5.GetOnlineUsersCountResponse>);
+      ) as _i16.Future<_i6.GetOnlineUsersCountResponse>);
   @override
-  _i15.Future<Iterable<_i5.User>> pinnedUsers() => (super.noSuchMethod(
+  _i16.Future<Iterable<_i6.User>> pinnedUsers() => (super.noSuchMethod(
         Invocation.method(
           #pinnedUsers,
           [],
         ),
-        returnValue: _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
+        returnValue: _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
-      ) as _i15.Future<Iterable<_i5.User>>);
+            _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
+      ) as _i16.Future<Iterable<_i6.User>>);
   @override
-  _i5.SocketController homeTimelineStream({
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(
+  _i6.SocketController homeTimelineStream({
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
       DateTime,
     )? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1320,7 +1409,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #homeTimelineStream,
@@ -1334,7 +1423,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #homeTimelineStream,
@@ -1348,25 +1437,25 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController localTimelineStream({
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(
+  _i6.SocketController localTimelineStream({
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
       DateTime,
     )? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1381,7 +1470,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #localTimelineStream,
@@ -1395,7 +1484,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #localTimelineStream,
@@ -1409,25 +1498,25 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController globalTimelineStream({
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(
+  _i6.SocketController globalTimelineStream({
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
       DateTime,
     )? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1442,7 +1531,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #globalTimelineStream,
@@ -1456,7 +1545,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #globalTimelineStream,
@@ -1470,25 +1559,25 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController hybridTimelineStream({
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(
+  _i6.SocketController hybridTimelineStream({
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
       DateTime,
     )? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1503,7 +1592,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #hybridTimelineStream,
@@ -1517,7 +1606,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #hybridTimelineStream,
@@ -1531,26 +1620,26 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController channelStream({
+  _i6.SocketController channelStream({
     required String? channelId,
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
       DateTime,
     )? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1566,7 +1655,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #channelStream,
@@ -1581,7 +1670,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #channelStream,
@@ -1596,25 +1685,25 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController userListStream({
+  _i6.SocketController userListStream({
     required String? listId,
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(_i5.User)? onUserAdded,
-    _i15.FutureOr<void> Function(_i5.User)? onUserRemoved,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(_i6.User)? onUserAdded,
+    _i16.FutureOr<void> Function(_i6.User)? onUserRemoved,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(DateTime)? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(DateTime)? onDeleted,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1632,7 +1721,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #userListStream,
@@ -1649,7 +1738,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #userListStream,
@@ -1666,26 +1755,26 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController antennaStream({
+  _i6.SocketController antennaStream({
     required String? antennaId,
-    _i15.FutureOr<void> Function(_i5.Note)? onNoteReceived,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onReacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineReacted,
+      _i6.TimelineReacted,
     )? onUnreacted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
       DateTime,
     )? onDeleted,
-    _i15.FutureOr<void> Function(
+    _i16.FutureOr<void> Function(
       String,
-      _i5.TimelineVoted,
+      _i6.TimelineVoted,
     )? onVoted,
   }) =>
       (super.noSuchMethod(
@@ -1701,7 +1790,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onVoted: onVoted,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #antennaStream,
@@ -1716,7 +1805,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #antennaStream,
@@ -1731,11 +1820,11 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController serverStatsLogStream(
-    _i15.FutureOr<void> Function(List<_i5.StatsLogResponse>)? onLogReceived,
-    _i15.FutureOr<void> Function(_i5.StatsLogResponse)? onEventReceived,
+  _i6.SocketController serverStatsLogStream(
+    _i16.FutureOr<void> Function(List<_i6.StatsLogResponse>)? onLogReceived,
+    _i16.FutureOr<void> Function(_i6.StatsLogResponse)? onEventReceived,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1745,7 +1834,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             onEventReceived,
           ],
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #serverStatsLogStream,
@@ -1755,7 +1844,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             ],
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #serverStatsLogStream,
@@ -1765,12 +1854,12 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             ],
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController queueStatsLogStream(
-    _i15.FutureOr<void> Function(List<_i5.QueueStatsLogResponse>)?
+  _i6.SocketController queueStatsLogStream(
+    _i16.FutureOr<void> Function(List<_i6.QueueStatsLogResponse>)?
         onLogReceived,
-    _i15.FutureOr<void> Function(_i5.QueueStatsLogResponse)? onEventReceived,
+    _i16.FutureOr<void> Function(_i6.QueueStatsLogResponse)? onEventReceived,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1780,7 +1869,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             onEventReceived,
           ],
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #queueStatsLogStream,
@@ -1790,7 +1879,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             ],
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #queueStatsLogStream,
@@ -1800,28 +1889,28 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             ],
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i5.SocketController mainStream({
-    _i15.FutureOr<void> Function(_i5.Emoji)? onEmojiAdded,
-    _i15.FutureOr<void> Function(Iterable<_i5.Emoji>)? onEmojiUpdated,
-    _i15.FutureOr<void> Function(Iterable<_i5.Emoji>)? onEmojiDeleted,
-    _i15.FutureOr<void> Function(_i5.INotificationsResponse)? onNotification,
-    _i15.FutureOr<void> Function(_i5.Note)? onMention,
-    _i15.FutureOr<void> Function(_i5.Note)? onReply,
-    _i15.FutureOr<void> Function(_i5.Note)? onRenote,
-    _i15.FutureOr<void> Function(_i5.User)? onFollow,
-    _i15.FutureOr<void> Function(_i5.User)? onFollowed,
-    _i15.FutureOr<void> Function(_i5.User)? onUnfollow,
-    _i15.FutureOr<void> Function(_i5.User)? onMeUpdated,
-    _i15.FutureOr<void> Function()? onReadAllNotifications,
-    _i15.FutureOr<void> Function(_i5.INotificationsResponse)?
+  _i6.SocketController mainStream({
+    _i16.FutureOr<void> Function(_i6.Emoji)? onEmojiAdded,
+    _i16.FutureOr<void> Function(Iterable<_i6.Emoji>)? onEmojiUpdated,
+    _i16.FutureOr<void> Function(Iterable<_i6.Emoji>)? onEmojiDeleted,
+    _i16.FutureOr<void> Function(_i6.INotificationsResponse)? onNotification,
+    _i16.FutureOr<void> Function(_i6.Note)? onMention,
+    _i16.FutureOr<void> Function(_i6.Note)? onReply,
+    _i16.FutureOr<void> Function(_i6.Note)? onRenote,
+    _i16.FutureOr<void> Function(_i6.User)? onFollow,
+    _i16.FutureOr<void> Function(_i6.User)? onFollowed,
+    _i16.FutureOr<void> Function(_i6.User)? onUnfollow,
+    _i16.FutureOr<void> Function(_i6.User)? onMeUpdated,
+    _i16.FutureOr<void> Function()? onReadAllNotifications,
+    _i16.FutureOr<void> Function(_i6.INotificationsResponse)?
         onUnreadNotification,
-    _i15.FutureOr<void> Function(String)? onUnreadMention,
-    _i15.FutureOr<void> Function()? onReadAllUnreadMentions,
-    _i15.FutureOr<void> Function(String)? onUnreadSpecifiedNote,
-    _i15.FutureOr<void> Function()? onReadAllUnreadSpecifiedNotes,
-    _i15.FutureOr<void> Function(_i5.User)? onReceiveFollowRequest,
+    _i16.FutureOr<void> Function(String)? onUnreadMention,
+    _i16.FutureOr<void> Function()? onReadAllUnreadMentions,
+    _i16.FutureOr<void> Function(String)? onUnreadSpecifiedNote,
+    _i16.FutureOr<void> Function()? onReadAllUnreadSpecifiedNotes,
+    _i16.FutureOr<void> Function(_i6.User)? onReceiveFollowRequest,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1848,7 +1937,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             #onReceiveFollowRequest: onReceiveFollowRequest,
           },
         ),
-        returnValue: _FakeSocketController_25(
+        returnValue: _FakeSocketController_26(
           this,
           Invocation.method(
             #mainStream,
@@ -1875,7 +1964,7 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-        returnValueForMissingStub: _FakeSocketController_25(
+        returnValueForMissingStub: _FakeSocketController_26(
           this,
           Invocation.method(
             #mainStream,
@@ -1902,372 +1991,372 @@ class MockMisskey extends _i1.Mock implements _i5.Misskey {
             },
           ),
         ),
-      ) as _i5.SocketController);
+      ) as _i6.SocketController);
   @override
-  _i15.Future<void> startStreaming() => (super.noSuchMethod(
+  _i16.Future<void> startStreaming() => (super.noSuchMethod(
         Invocation.method(
           #startStreaming,
           [],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
 }
 
 /// A class which mocks [MisskeyNotes].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMisskeyNotes extends _i1.Mock implements _i5.MisskeyNotes {
+class MockMisskeyNotes extends _i1.Mock implements _i6.MisskeyNotes {
   @override
-  _i5.MisskeyNotesReactions get reactions => (super.noSuchMethod(
+  _i6.MisskeyNotesReactions get reactions => (super.noSuchMethod(
         Invocation.getter(#reactions),
-        returnValue: _FakeMisskeyNotesReactions_26(
+        returnValue: _FakeMisskeyNotesReactions_27(
           this,
           Invocation.getter(#reactions),
         ),
-        returnValueForMissingStub: _FakeMisskeyNotesReactions_26(
+        returnValueForMissingStub: _FakeMisskeyNotesReactions_27(
           this,
           Invocation.getter(#reactions),
         ),
-      ) as _i5.MisskeyNotesReactions);
+      ) as _i6.MisskeyNotesReactions);
   @override
-  _i5.MisskeyNotesFavorites get favorites => (super.noSuchMethod(
+  _i6.MisskeyNotesFavorites get favorites => (super.noSuchMethod(
         Invocation.getter(#favorites),
-        returnValue: _FakeMisskeyNotesFavorites_27(
+        returnValue: _FakeMisskeyNotesFavorites_28(
           this,
           Invocation.getter(#favorites),
         ),
-        returnValueForMissingStub: _FakeMisskeyNotesFavorites_27(
+        returnValueForMissingStub: _FakeMisskeyNotesFavorites_28(
           this,
           Invocation.getter(#favorites),
         ),
-      ) as _i5.MisskeyNotesFavorites);
+      ) as _i6.MisskeyNotesFavorites);
   @override
-  _i5.MisskeyNotesPolls get polls => (super.noSuchMethod(
+  _i6.MisskeyNotesPolls get polls => (super.noSuchMethod(
         Invocation.getter(#polls),
-        returnValue: _FakeMisskeyNotesPolls_28(
+        returnValue: _FakeMisskeyNotesPolls_29(
           this,
           Invocation.getter(#polls),
         ),
-        returnValueForMissingStub: _FakeMisskeyNotesPolls_28(
+        returnValueForMissingStub: _FakeMisskeyNotesPolls_29(
           this,
           Invocation.getter(#polls),
         ),
-      ) as _i5.MisskeyNotesPolls);
+      ) as _i6.MisskeyNotesPolls);
   @override
-  _i5.MisskeyNotesThreadMuting get threadMuting => (super.noSuchMethod(
+  _i6.MisskeyNotesThreadMuting get threadMuting => (super.noSuchMethod(
         Invocation.getter(#threadMuting),
-        returnValue: _FakeMisskeyNotesThreadMuting_29(
+        returnValue: _FakeMisskeyNotesThreadMuting_30(
           this,
           Invocation.getter(#threadMuting),
         ),
-        returnValueForMissingStub: _FakeMisskeyNotesThreadMuting_29(
+        returnValueForMissingStub: _FakeMisskeyNotesThreadMuting_30(
           this,
           Invocation.getter(#threadMuting),
         ),
-      ) as _i5.MisskeyNotesThreadMuting);
+      ) as _i6.MisskeyNotesThreadMuting);
   @override
-  _i15.Future<void> create(_i5.NotesCreateRequest? request) =>
+  _i16.Future<void> create(_i6.NotesCreateRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #create,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> delete(_i5.NotesDeleteRequest? request) =>
+  _i16.Future<void> delete(_i6.NotesDeleteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #delete,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<Iterable<_i5.Note>> notes(_i5.NotesRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> notes(_i6.NotesRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #notes,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<_i5.Note> show(_i5.NotesShowRequest? request) =>
+  _i16.Future<_i6.Note> show(_i6.NotesShowRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #show,
           [request],
         ),
-        returnValue: _i15.Future<_i5.Note>.value(_FakeNote_30(
+        returnValue: _i16.Future<_i6.Note>.value(_FakeNote_31(
           this,
           Invocation.method(
             #show,
             [request],
           ),
         )),
-        returnValueForMissingStub: _i15.Future<_i5.Note>.value(_FakeNote_30(
+        returnValueForMissingStub: _i16.Future<_i6.Note>.value(_FakeNote_31(
           this,
           Invocation.method(
             #show,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.Note>);
+      ) as _i16.Future<_i6.Note>);
   @override
-  _i15.Future<Iterable<_i5.Note>> homeTimeline(
-          _i5.NotesTimelineRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> homeTimeline(
+          _i6.NotesTimelineRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #homeTimeline,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> localTimeline(
-          _i5.NotesLocalTimelineRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> localTimeline(
+          _i6.NotesLocalTimelineRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #localTimeline,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> hybridTimeline(
-          _i5.NotesHybridTimelineRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> hybridTimeline(
+          _i6.NotesHybridTimelineRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #hybridTimeline,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> globalTimeline(
-          _i5.NotesGlobalTimelineRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> globalTimeline(
+          _i6.NotesGlobalTimelineRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #globalTimeline,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> userListTimeline(
-          _i5.UserListTimelineRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> userListTimeline(
+          _i6.UserListTimelineRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #userListTimeline,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<_i5.NotesStateResponse> state(_i5.NotesStateRequest? request) =>
+  _i16.Future<_i6.NotesStateResponse> state(_i6.NotesStateRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #state,
           [request],
         ),
-        returnValue: _i15.Future<_i5.NotesStateResponse>.value(
-            _FakeNotesStateResponse_31(
+        returnValue: _i16.Future<_i6.NotesStateResponse>.value(
+            _FakeNotesStateResponse_32(
           this,
           Invocation.method(
             #state,
             [request],
           ),
         )),
-        returnValueForMissingStub: _i15.Future<_i5.NotesStateResponse>.value(
-            _FakeNotesStateResponse_31(
+        returnValueForMissingStub: _i16.Future<_i6.NotesStateResponse>.value(
+            _FakeNotesStateResponse_32(
           this,
           Invocation.method(
             #state,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.NotesStateResponse>);
+      ) as _i16.Future<_i6.NotesStateResponse>);
   @override
-  _i15.Future<Iterable<_i5.Note>> search(_i5.NotesSearchRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> search(_i6.NotesSearchRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #search,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> searchByTag(
-          _i5.NotesSearchByTagRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> searchByTag(
+          _i6.NotesSearchByTagRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #searchByTag,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> renotes(_i5.NotesRenoteRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> renotes(_i6.NotesRenoteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #renotes,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> replies(_i5.NotesRepliesRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> replies(_i6.NotesRepliesRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #replies,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> children(_i5.NotesChildrenRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> children(_i6.NotesChildrenRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #children,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> conversation(
-          _i5.NotesConversationRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> conversation(
+          _i6.NotesConversationRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #conversation,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> featured(_i5.NotesFeaturedRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> featured(_i6.NotesFeaturedRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #featured,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Note>> mentions(_i5.NotesMentionsRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> mentions(_i6.NotesMentionsRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #mentions,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Clip>> clips(_i5.NotesClipsRequest? request) =>
+  _i16.Future<Iterable<_i6.Clip>> clips(_i6.NotesClipsRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #clips,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Clip>>.value(<_i5.Clip>[]),
+        returnValue: _i16.Future<Iterable<_i6.Clip>>.value(<_i6.Clip>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Clip>>.value(<_i5.Clip>[]),
-      ) as _i15.Future<Iterable<_i5.Clip>>);
+            _i16.Future<Iterable<_i6.Clip>>.value(<_i6.Clip>[]),
+      ) as _i16.Future<Iterable<_i6.Clip>>);
   @override
-  _i15.Future<void> unrenote(_i5.NotesUnrenoteRequest? request) =>
+  _i16.Future<void> unrenote(_i6.NotesUnrenoteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #unrenote,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
 }
 
 /// A class which mocks [MisskeyNotesFavorites].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMisskeyNotesFavorites extends _i1.Mock
-    implements _i5.MisskeyNotesFavorites {
+    implements _i6.MisskeyNotesFavorites {
   @override
-  _i15.Future<void> create(_i5.NotesFavoritesCreateRequest? request) =>
+  _i16.Future<void> create(_i6.NotesFavoritesCreateRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #create,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> delete(_i5.NotesFavoritesDeleteRequest? request) =>
+  _i16.Future<void> delete(_i6.NotesFavoritesDeleteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #delete,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
 }
 
 /// A class which mocks [MisskeyUsers].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
+class MockMisskeyUsers extends _i1.Mock implements _i6.MisskeyUsers {
   @override
-  _i5.MisskeyUsersLists get list => (super.noSuchMethod(
+  _i6.MisskeyUsersLists get list => (super.noSuchMethod(
         Invocation.getter(#list),
-        returnValue: _FakeMisskeyUsersLists_32(
+        returnValue: _FakeMisskeyUsersLists_33(
           this,
           Invocation.getter(#list),
         ),
-        returnValueForMissingStub: _FakeMisskeyUsersLists_32(
+        returnValueForMissingStub: _FakeMisskeyUsersLists_33(
           this,
           Invocation.getter(#list),
         ),
-      ) as _i5.MisskeyUsersLists);
+      ) as _i6.MisskeyUsersLists);
   @override
-  _i15.Future<_i5.UsersShowResponse> show(_i5.UsersShowRequest? request) =>
+  _i16.Future<_i6.UsersShowResponse> show(_i6.UsersShowRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #show,
           [request],
         ),
         returnValue:
-            _i15.Future<_i5.UsersShowResponse>.value(_FakeUsersShowResponse_33(
+            _i16.Future<_i6.UsersShowResponse>.value(_FakeUsersShowResponse_34(
           this,
           Invocation.method(
             #show,
@@ -2275,38 +2364,38 @@ class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.UsersShowResponse>.value(_FakeUsersShowResponse_33(
+            _i16.Future<_i6.UsersShowResponse>.value(_FakeUsersShowResponse_34(
           this,
           Invocation.method(
             #show,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.UsersShowResponse>);
+      ) as _i16.Future<_i6.UsersShowResponse>);
   @override
-  _i15.Future<Iterable<_i5.UsersShowResponse>> showByIds(
-          _i5.UsersShowByIdsRequest? request) =>
+  _i16.Future<Iterable<_i6.UsersShowResponse>> showByIds(
+          _i6.UsersShowByIdsRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #showByIds,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.UsersShowResponse>>.value(
-            <_i5.UsersShowResponse>[]),
+        returnValue: _i16.Future<Iterable<_i6.UsersShowResponse>>.value(
+            <_i6.UsersShowResponse>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.UsersShowResponse>>.value(
-                <_i5.UsersShowResponse>[]),
-      ) as _i15.Future<Iterable<_i5.UsersShowResponse>>);
+            _i16.Future<Iterable<_i6.UsersShowResponse>>.value(
+                <_i6.UsersShowResponse>[]),
+      ) as _i16.Future<Iterable<_i6.UsersShowResponse>>);
   @override
-  _i15.Future<_i5.UsersShowResponse> showByName(
-          _i5.UsersShowByUserNameRequest? request) =>
+  _i16.Future<_i6.UsersShowResponse> showByName(
+          _i6.UsersShowByUserNameRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #showByName,
           [request],
         ),
         returnValue:
-            _i15.Future<_i5.UsersShowResponse>.value(_FakeUsersShowResponse_33(
+            _i16.Future<_i6.UsersShowResponse>.value(_FakeUsersShowResponse_34(
           this,
           Invocation.method(
             #showByName,
@@ -2314,157 +2403,157 @@ class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.UsersShowResponse>.value(_FakeUsersShowResponse_33(
+            _i16.Future<_i6.UsersShowResponse>.value(_FakeUsersShowResponse_34(
           this,
           Invocation.method(
             #showByName,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.UsersShowResponse>);
+      ) as _i16.Future<_i6.UsersShowResponse>);
   @override
-  _i15.Future<Iterable<_i5.Note>> notes(_i5.UsersNotesRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> notes(_i6.UsersNotesRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #notes,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<Iterable<_i5.Clip>> clips(_i5.UsersClipsRequest? request) =>
+  _i16.Future<Iterable<_i6.Clip>> clips(_i6.UsersClipsRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #clips,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Clip>>.value(<_i5.Clip>[]),
+        returnValue: _i16.Future<Iterable<_i6.Clip>>.value(<_i6.Clip>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Clip>>.value(<_i5.Clip>[]),
-      ) as _i15.Future<Iterable<_i5.Clip>>);
+            _i16.Future<Iterable<_i6.Clip>>.value(<_i6.Clip>[]),
+      ) as _i16.Future<Iterable<_i6.Clip>>);
   @override
-  _i15.Future<Iterable<_i5.Following>> followers(
-          _i5.UsersFollowersRequest? request) =>
+  _i16.Future<Iterable<_i6.Following>> followers(
+          _i6.UsersFollowersRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #followers,
           [request],
         ),
         returnValue:
-            _i15.Future<Iterable<_i5.Following>>.value(<_i5.Following>[]),
+            _i16.Future<Iterable<_i6.Following>>.value(<_i6.Following>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Following>>.value(<_i5.Following>[]),
-      ) as _i15.Future<Iterable<_i5.Following>>);
+            _i16.Future<Iterable<_i6.Following>>.value(<_i6.Following>[]),
+      ) as _i16.Future<Iterable<_i6.Following>>);
   @override
-  _i15.Future<Iterable<_i5.Following>> following(
-          _i5.UsersFollowingRequest? request) =>
+  _i16.Future<Iterable<_i6.Following>> following(
+          _i6.UsersFollowingRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #following,
           [request],
         ),
         returnValue:
-            _i15.Future<Iterable<_i5.Following>>.value(<_i5.Following>[]),
+            _i16.Future<Iterable<_i6.Following>>.value(<_i6.Following>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Following>>.value(<_i5.Following>[]),
-      ) as _i15.Future<Iterable<_i5.Following>>);
+            _i16.Future<Iterable<_i6.Following>>.value(<_i6.Following>[]),
+      ) as _i16.Future<Iterable<_i6.Following>>);
   @override
-  _i15.Future<void> reportAbuse(_i5.UsersReportAbuseRequest? request) =>
+  _i16.Future<void> reportAbuse(_i6.UsersReportAbuseRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #reportAbuse,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<Iterable<_i5.UsersReactionsResponse>> reactions(
-          _i5.UsersReactionsRequest? request) =>
+  _i16.Future<Iterable<_i6.UsersReactionsResponse>> reactions(
+          _i6.UsersReactionsRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #reactions,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.UsersReactionsResponse>>.value(
-            <_i5.UsersReactionsResponse>[]),
+        returnValue: _i16.Future<Iterable<_i6.UsersReactionsResponse>>.value(
+            <_i6.UsersReactionsResponse>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.UsersReactionsResponse>>.value(
-                <_i5.UsersReactionsResponse>[]),
-      ) as _i15.Future<Iterable<_i5.UsersReactionsResponse>>);
+            _i16.Future<Iterable<_i6.UsersReactionsResponse>>.value(
+                <_i6.UsersReactionsResponse>[]),
+      ) as _i16.Future<Iterable<_i6.UsersReactionsResponse>>);
   @override
-  _i15.Future<Iterable<_i5.User>> search(_i5.UsersSearchRequest? request) =>
+  _i16.Future<Iterable<_i6.User>> search(_i6.UsersSearchRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #search,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
+        returnValue: _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
-      ) as _i15.Future<Iterable<_i5.User>>);
+            _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
+      ) as _i16.Future<Iterable<_i6.User>>);
   @override
-  _i15.Future<Iterable<_i5.User>> recommendation(
-          _i5.UsersRecommendationRequest? request) =>
+  _i16.Future<Iterable<_i6.User>> recommendation(
+          _i6.UsersRecommendationRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #recommendation,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
+        returnValue: _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
-      ) as _i15.Future<Iterable<_i5.User>>);
+            _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
+      ) as _i16.Future<Iterable<_i6.User>>);
   @override
-  _i15.Future<Iterable<_i5.User>> users(_i5.UsersUsersRequest? request) =>
+  _i16.Future<Iterable<_i6.User>> users(_i6.UsersUsersRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #users,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
+        returnValue: _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
-      ) as _i15.Future<Iterable<_i5.User>>);
+            _i16.Future<Iterable<_i6.User>>.value(<_i6.User>[]),
+      ) as _i16.Future<Iterable<_i6.User>>);
   @override
-  _i15.Future<void> updateMemo(_i5.UsersUpdateMemoRequest? request) =>
+  _i16.Future<void> updateMemo(_i6.UsersUpdateMemoRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateMemo,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
 }
 
 /// A class which mocks [MisskeyChannels].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMisskeyChannels extends _i1.Mock implements _i5.MisskeyChannels {
+class MockMisskeyChannels extends _i1.Mock implements _i6.MisskeyChannels {
   @override
-  _i15.Future<Iterable<_i5.Note>> timeline(
-          _i5.ChannelsTimelineRequest? request) =>
+  _i16.Future<Iterable<_i6.Note>> timeline(
+          _i6.ChannelsTimelineRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #timeline,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
+        returnValue: _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.Note>>.value(<_i5.Note>[]),
-      ) as _i15.Future<Iterable<_i5.Note>>);
+            _i16.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
+      ) as _i16.Future<Iterable<_i6.Note>>);
   @override
-  _i15.Future<_i5.CommunityChannel> show(_i5.ChannelsShowRequest? request) =>
+  _i16.Future<_i6.CommunityChannel> show(_i6.ChannelsShowRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #show,
           [request],
         ),
         returnValue:
-            _i15.Future<_i5.CommunityChannel>.value(_FakeCommunityChannel_34(
+            _i16.Future<_i6.CommunityChannel>.value(_FakeCommunityChannel_35(
           this,
           Invocation.method(
             #show,
@@ -2472,92 +2561,92 @@ class MockMisskeyChannels extends _i1.Mock implements _i5.MisskeyChannels {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.CommunityChannel>.value(_FakeCommunityChannel_34(
+            _i16.Future<_i6.CommunityChannel>.value(_FakeCommunityChannel_35(
           this,
           Invocation.method(
             #show,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.CommunityChannel>);
+      ) as _i16.Future<_i6.CommunityChannel>);
   @override
-  _i15.Future<Iterable<_i5.CommunityChannel>> followed(
-          _i5.ChannelsFollowedRequest? request) =>
+  _i16.Future<Iterable<_i6.CommunityChannel>> followed(
+          _i6.ChannelsFollowedRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #followed,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-            <_i5.CommunityChannel>[]),
+        returnValue: _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+            <_i6.CommunityChannel>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-                <_i5.CommunityChannel>[]),
-      ) as _i15.Future<Iterable<_i5.CommunityChannel>>);
+            _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+                <_i6.CommunityChannel>[]),
+      ) as _i16.Future<Iterable<_i6.CommunityChannel>>);
   @override
-  _i15.Future<Iterable<_i5.CommunityChannel>> myFavorite(
-          _i5.ChannelsMyFavoriteRequest? request) =>
+  _i16.Future<Iterable<_i6.CommunityChannel>> myFavorite(
+          _i6.ChannelsMyFavoriteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #myFavorite,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-            <_i5.CommunityChannel>[]),
+        returnValue: _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+            <_i6.CommunityChannel>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-                <_i5.CommunityChannel>[]),
-      ) as _i15.Future<Iterable<_i5.CommunityChannel>>);
+            _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+                <_i6.CommunityChannel>[]),
+      ) as _i16.Future<Iterable<_i6.CommunityChannel>>);
   @override
-  _i15.Future<Iterable<_i5.CommunityChannel>> featured() => (super.noSuchMethod(
+  _i16.Future<Iterable<_i6.CommunityChannel>> featured() => (super.noSuchMethod(
         Invocation.method(
           #featured,
           [],
         ),
-        returnValue: _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-            <_i5.CommunityChannel>[]),
+        returnValue: _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+            <_i6.CommunityChannel>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-                <_i5.CommunityChannel>[]),
-      ) as _i15.Future<Iterable<_i5.CommunityChannel>>);
+            _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+                <_i6.CommunityChannel>[]),
+      ) as _i16.Future<Iterable<_i6.CommunityChannel>>);
   @override
-  _i15.Future<Iterable<_i5.CommunityChannel>> owned(
-          _i5.ChannelsOwnedRequest? request) =>
+  _i16.Future<Iterable<_i6.CommunityChannel>> owned(
+          _i6.ChannelsOwnedRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #owned,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-            <_i5.CommunityChannel>[]),
+        returnValue: _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+            <_i6.CommunityChannel>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-                <_i5.CommunityChannel>[]),
-      ) as _i15.Future<Iterable<_i5.CommunityChannel>>);
+            _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+                <_i6.CommunityChannel>[]),
+      ) as _i16.Future<Iterable<_i6.CommunityChannel>>);
   @override
-  _i15.Future<Iterable<_i5.CommunityChannel>> search(
-          _i5.ChannelsSearchRequest? request) =>
+  _i16.Future<Iterable<_i6.CommunityChannel>> search(
+          _i6.ChannelsSearchRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #search,
           [request],
         ),
-        returnValue: _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-            <_i5.CommunityChannel>[]),
+        returnValue: _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+            <_i6.CommunityChannel>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.CommunityChannel>>.value(
-                <_i5.CommunityChannel>[]),
-      ) as _i15.Future<Iterable<_i5.CommunityChannel>>);
+            _i16.Future<Iterable<_i6.CommunityChannel>>.value(
+                <_i6.CommunityChannel>[]),
+      ) as _i16.Future<Iterable<_i6.CommunityChannel>>);
   @override
-  _i15.Future<_i5.CommunityChannel> create(
-          _i5.ChannelsCreateRequest? request) =>
+  _i16.Future<_i6.CommunityChannel> create(
+          _i6.ChannelsCreateRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #create,
           [request],
         ),
         returnValue:
-            _i15.Future<_i5.CommunityChannel>.value(_FakeCommunityChannel_34(
+            _i16.Future<_i6.CommunityChannel>.value(_FakeCommunityChannel_35(
           this,
           Invocation.method(
             #create,
@@ -2565,124 +2654,124 @@ class MockMisskeyChannels extends _i1.Mock implements _i5.MisskeyChannels {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.CommunityChannel>.value(_FakeCommunityChannel_34(
+            _i16.Future<_i6.CommunityChannel>.value(_FakeCommunityChannel_35(
           this,
           Invocation.method(
             #create,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.CommunityChannel>);
+      ) as _i16.Future<_i6.CommunityChannel>);
   @override
-  _i15.Future<void> update(_i5.ChannelsUpdateRequest? request) =>
+  _i16.Future<void> update(_i6.ChannelsUpdateRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #update,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> favorite(_i5.ChannelsFavoriteRequest? request) =>
+  _i16.Future<void> favorite(_i6.ChannelsFavoriteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #favorite,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> unfavorite(_i5.ChannelsUnfavoriteRequest? request) =>
+  _i16.Future<void> unfavorite(_i6.ChannelsUnfavoriteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #unfavorite,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> follow(_i5.ChannelsFollowRequest? request) =>
+  _i16.Future<void> follow(_i6.ChannelsFollowRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #follow,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<void> unfollow(_i5.ChannelsUnfollowRequest? request) =>
+  _i16.Future<void> unfollow(_i6.ChannelsUnfollowRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #unfollow,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
 }
 
 /// A class which mocks [MisskeyDrive].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMisskeyDrive extends _i1.Mock implements _i5.MisskeyDrive {
+class MockMisskeyDrive extends _i1.Mock implements _i6.MisskeyDrive {
   @override
-  _i5.MisskeyDriveFiles get files => (super.noSuchMethod(
+  _i6.MisskeyDriveFiles get files => (super.noSuchMethod(
         Invocation.getter(#files),
-        returnValue: _FakeMisskeyDriveFiles_35(
+        returnValue: _FakeMisskeyDriveFiles_36(
           this,
           Invocation.getter(#files),
         ),
-        returnValueForMissingStub: _FakeMisskeyDriveFiles_35(
+        returnValueForMissingStub: _FakeMisskeyDriveFiles_36(
           this,
           Invocation.getter(#files),
         ),
-      ) as _i5.MisskeyDriveFiles);
+      ) as _i6.MisskeyDriveFiles);
   @override
-  _i5.MisskeyDriveFolders get folders => (super.noSuchMethod(
+  _i6.MisskeyDriveFolders get folders => (super.noSuchMethod(
         Invocation.getter(#folders),
-        returnValue: _FakeMisskeyDriveFolders_36(
+        returnValue: _FakeMisskeyDriveFolders_37(
           this,
           Invocation.getter(#folders),
         ),
-        returnValueForMissingStub: _FakeMisskeyDriveFolders_36(
+        returnValueForMissingStub: _FakeMisskeyDriveFolders_37(
           this,
           Invocation.getter(#folders),
         ),
-      ) as _i5.MisskeyDriveFolders);
+      ) as _i6.MisskeyDriveFolders);
 }
 
 /// A class which mocks [MisskeyDriveFolders].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMisskeyDriveFolders extends _i1.Mock
-    implements _i5.MisskeyDriveFolders {
+    implements _i6.MisskeyDriveFolders {
   @override
-  _i15.Future<Iterable<_i5.DriveFolder>> folders(
-          _i5.DriveFoldersRequest? request) =>
+  _i16.Future<Iterable<_i6.DriveFolder>> folders(
+          _i6.DriveFoldersRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #folders,
           [request],
         ),
         returnValue:
-            _i15.Future<Iterable<_i5.DriveFolder>>.value(<_i5.DriveFolder>[]),
+            _i16.Future<Iterable<_i6.DriveFolder>>.value(<_i6.DriveFolder>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.DriveFolder>>.value(<_i5.DriveFolder>[]),
-      ) as _i15.Future<Iterable<_i5.DriveFolder>>);
+            _i16.Future<Iterable<_i6.DriveFolder>>.value(<_i6.DriveFolder>[]),
+      ) as _i16.Future<Iterable<_i6.DriveFolder>>);
 }
 
 /// A class which mocks [MisskeyDriveFiles].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
+class MockMisskeyDriveFiles extends _i1.Mock implements _i6.MisskeyDriveFiles {
   @override
-  _i15.Future<_i5.DriveFile> create(
-    _i5.DriveFilesCreateRequest? request,
-    _i21.File? fileContent,
+  _i16.Future<_i6.DriveFile> create(
+    _i6.DriveFilesCreateRequest? request,
+    _i23.File? fileContent,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2692,7 +2781,7 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
             fileContent,
           ],
         ),
-        returnValue: _i15.Future<_i5.DriveFile>.value(_FakeDriveFile_37(
+        returnValue: _i16.Future<_i6.DriveFile>.value(_FakeDriveFile_38(
           this,
           Invocation.method(
             #create,
@@ -2703,7 +2792,7 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.DriveFile>.value(_FakeDriveFile_37(
+            _i16.Future<_i6.DriveFile>.value(_FakeDriveFile_38(
           this,
           Invocation.method(
             #create,
@@ -2713,11 +2802,11 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
             ],
           ),
         )),
-      ) as _i15.Future<_i5.DriveFile>);
+      ) as _i16.Future<_i6.DriveFile>);
   @override
-  _i15.Future<_i5.DriveFile> createAsBinary(
-    _i5.DriveFilesCreateRequest? request,
-    _i22.Uint8List? fileContent,
+  _i16.Future<_i6.DriveFile> createAsBinary(
+    _i6.DriveFilesCreateRequest? request,
+    _i24.Uint8List? fileContent,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2727,7 +2816,7 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
             fileContent,
           ],
         ),
-        returnValue: _i15.Future<_i5.DriveFile>.value(_FakeDriveFile_37(
+        returnValue: _i16.Future<_i6.DriveFile>.value(_FakeDriveFile_38(
           this,
           Invocation.method(
             #createAsBinary,
@@ -2738,7 +2827,7 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.DriveFile>.value(_FakeDriveFile_37(
+            _i16.Future<_i6.DriveFile>.value(_FakeDriveFile_38(
           this,
           Invocation.method(
             #createAsBinary,
@@ -2748,15 +2837,15 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
             ],
           ),
         )),
-      ) as _i15.Future<_i5.DriveFile>);
+      ) as _i16.Future<_i6.DriveFile>);
   @override
-  _i15.Future<_i5.DriveFile> update(_i5.DriveFilesUpdateRequest? request) =>
+  _i16.Future<_i6.DriveFile> update(_i6.DriveFilesUpdateRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #update,
           [request],
         ),
-        returnValue: _i15.Future<_i5.DriveFile>.value(_FakeDriveFile_37(
+        returnValue: _i16.Future<_i6.DriveFile>.value(_FakeDriveFile_38(
           this,
           Invocation.method(
             #update,
@@ -2764,69 +2853,69 @@ class MockMisskeyDriveFiles extends _i1.Mock implements _i5.MisskeyDriveFiles {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i5.DriveFile>.value(_FakeDriveFile_37(
+            _i16.Future<_i6.DriveFile>.value(_FakeDriveFile_38(
           this,
           Invocation.method(
             #update,
             [request],
           ),
         )),
-      ) as _i15.Future<_i5.DriveFile>);
+      ) as _i16.Future<_i6.DriveFile>);
   @override
-  _i15.Future<void> delete(_i5.DriveFilesDeleteRequest? request) =>
+  _i16.Future<void> delete(_i6.DriveFilesDeleteRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #delete,
           [request],
         ),
-        returnValue: _i15.Future<void>.value(),
-        returnValueForMissingStub: _i15.Future<void>.value(),
-      ) as _i15.Future<void>);
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
   @override
-  _i15.Future<Iterable<_i5.DriveFile>> files(_i5.DriveFilesRequest? request) =>
+  _i16.Future<Iterable<_i6.DriveFile>> files(_i6.DriveFilesRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #files,
           [request],
         ),
         returnValue:
-            _i15.Future<Iterable<_i5.DriveFile>>.value(<_i5.DriveFile>[]),
+            _i16.Future<Iterable<_i6.DriveFile>>.value(<_i6.DriveFile>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.DriveFile>>.value(<_i5.DriveFile>[]),
-      ) as _i15.Future<Iterable<_i5.DriveFile>>);
+            _i16.Future<Iterable<_i6.DriveFile>>.value(<_i6.DriveFile>[]),
+      ) as _i16.Future<Iterable<_i6.DriveFile>>);
   @override
-  _i15.Future<Iterable<_i5.DriveFile>> find(
-          _i5.DriveFilesFindRequest? request) =>
+  _i16.Future<Iterable<_i6.DriveFile>> find(
+          _i6.DriveFilesFindRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #find,
           [request],
         ),
         returnValue:
-            _i15.Future<Iterable<_i5.DriveFile>>.value(<_i5.DriveFile>[]),
+            _i16.Future<Iterable<_i6.DriveFile>>.value(<_i6.DriveFile>[]),
         returnValueForMissingStub:
-            _i15.Future<Iterable<_i5.DriveFile>>.value(<_i5.DriveFile>[]),
-      ) as _i15.Future<Iterable<_i5.DriveFile>>);
+            _i16.Future<Iterable<_i6.DriveFile>>.value(<_i6.DriveFile>[]),
+      ) as _i16.Future<Iterable<_i6.DriveFile>>);
 }
 
 /// A class which mocks [Dio].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDio extends _i1.Mock implements _i23.Dio {
+class MockDio extends _i1.Mock implements _i25.Dio {
   @override
-  _i8.BaseOptions get options => (super.noSuchMethod(
+  _i9.BaseOptions get options => (super.noSuchMethod(
         Invocation.getter(#options),
-        returnValue: _FakeBaseOptions_38(
+        returnValue: _FakeBaseOptions_39(
           this,
           Invocation.getter(#options),
         ),
-        returnValueForMissingStub: _FakeBaseOptions_38(
+        returnValueForMissingStub: _FakeBaseOptions_39(
           this,
           Invocation.getter(#options),
         ),
-      ) as _i8.BaseOptions);
+      ) as _i9.BaseOptions);
   @override
-  set options(_i8.BaseOptions? _options) => super.noSuchMethod(
+  set options(_i9.BaseOptions? _options) => super.noSuchMethod(
         Invocation.setter(
           #options,
           _options,
@@ -2834,19 +2923,19 @@ class MockDio extends _i1.Mock implements _i23.Dio {
         returnValueForMissingStub: null,
       );
   @override
-  _i9.HttpClientAdapter get httpClientAdapter => (super.noSuchMethod(
+  _i10.HttpClientAdapter get httpClientAdapter => (super.noSuchMethod(
         Invocation.getter(#httpClientAdapter),
-        returnValue: _FakeHttpClientAdapter_39(
+        returnValue: _FakeHttpClientAdapter_40(
           this,
           Invocation.getter(#httpClientAdapter),
         ),
-        returnValueForMissingStub: _FakeHttpClientAdapter_39(
+        returnValueForMissingStub: _FakeHttpClientAdapter_40(
           this,
           Invocation.getter(#httpClientAdapter),
         ),
-      ) as _i9.HttpClientAdapter);
+      ) as _i10.HttpClientAdapter);
   @override
-  set httpClientAdapter(_i9.HttpClientAdapter? _httpClientAdapter) =>
+  set httpClientAdapter(_i10.HttpClientAdapter? _httpClientAdapter) =>
       super.noSuchMethod(
         Invocation.setter(
           #httpClientAdapter,
@@ -2855,19 +2944,19 @@ class MockDio extends _i1.Mock implements _i23.Dio {
         returnValueForMissingStub: null,
       );
   @override
-  _i10.Transformer get transformer => (super.noSuchMethod(
+  _i11.Transformer get transformer => (super.noSuchMethod(
         Invocation.getter(#transformer),
-        returnValue: _FakeTransformer_40(
+        returnValue: _FakeTransformer_41(
           this,
           Invocation.getter(#transformer),
         ),
-        returnValueForMissingStub: _FakeTransformer_40(
+        returnValueForMissingStub: _FakeTransformer_41(
           this,
           Invocation.getter(#transformer),
         ),
-      ) as _i10.Transformer);
+      ) as _i11.Transformer);
   @override
-  set transformer(_i10.Transformer? _transformer) => super.noSuchMethod(
+  set transformer(_i11.Transformer? _transformer) => super.noSuchMethod(
         Invocation.setter(
           #transformer,
           _transformer,
@@ -2875,17 +2964,17 @@ class MockDio extends _i1.Mock implements _i23.Dio {
         returnValueForMissingStub: null,
       );
   @override
-  _i11.Interceptors get interceptors => (super.noSuchMethod(
+  _i12.Interceptors get interceptors => (super.noSuchMethod(
         Invocation.getter(#interceptors),
-        returnValue: _FakeInterceptors_41(
+        returnValue: _FakeInterceptors_42(
           this,
           Invocation.getter(#interceptors),
         ),
-        returnValueForMissingStub: _FakeInterceptors_41(
+        returnValueForMissingStub: _FakeInterceptors_42(
           this,
           Invocation.getter(#interceptors),
         ),
-      ) as _i11.Interceptors);
+      ) as _i12.Interceptors);
   @override
   void close({bool? force = false}) => super.noSuchMethod(
         Invocation.method(
@@ -2896,13 +2985,13 @@ class MockDio extends _i1.Mock implements _i23.Dio {
         returnValueForMissingStub: null,
       );
   @override
-  _i15.Future<_i12.Response<T>> get<T>(
+  _i16.Future<_i13.Response<T>> get<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2916,7 +3005,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #get,
@@ -2931,7 +3020,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #get,
@@ -2945,14 +3034,14 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> getUri<T>(
+  _i16.Future<_i13.Response<T>> getUri<T>(
     Uri? uri, {
     Object? data,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2965,7 +3054,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #getUri,
@@ -2979,7 +3068,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #getUri,
@@ -2992,16 +3081,16 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> post<T>(
+  _i16.Future<_i13.Response<T>> post<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3016,7 +3105,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #post,
@@ -3032,7 +3121,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #post,
@@ -3047,15 +3136,15 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> postUri<T>(
+  _i16.Future<_i13.Response<T>> postUri<T>(
     Uri? uri, {
     Object? data,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3069,7 +3158,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #postUri,
@@ -3084,7 +3173,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #postUri,
@@ -3098,16 +3187,16 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> put<T>(
+  _i16.Future<_i13.Response<T>> put<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3122,7 +3211,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #put,
@@ -3138,7 +3227,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #put,
@@ -3153,15 +3242,15 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> putUri<T>(
+  _i16.Future<_i13.Response<T>> putUri<T>(
     Uri? uri, {
     Object? data,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3175,7 +3264,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #putUri,
@@ -3190,7 +3279,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #putUri,
@@ -3204,14 +3293,14 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> head<T>(
+  _i16.Future<_i13.Response<T>> head<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3224,7 +3313,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #head,
@@ -3238,7 +3327,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #head,
@@ -3251,13 +3340,13 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> headUri<T>(
+  _i16.Future<_i13.Response<T>> headUri<T>(
     Uri? uri, {
     Object? data,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3269,7 +3358,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #headUri,
@@ -3282,7 +3371,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #headUri,
@@ -3294,14 +3383,14 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> delete<T>(
+  _i16.Future<_i13.Response<T>> delete<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3314,7 +3403,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #delete,
@@ -3328,7 +3417,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #delete,
@@ -3341,13 +3430,13 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> deleteUri<T>(
+  _i16.Future<_i13.Response<T>> deleteUri<T>(
     Uri? uri, {
     Object? data,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3359,7 +3448,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #cancelToken: cancelToken,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #deleteUri,
@@ -3372,7 +3461,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #deleteUri,
@@ -3384,16 +3473,16 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> patch<T>(
+  _i16.Future<_i13.Response<T>> patch<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3408,7 +3497,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #patch,
@@ -3424,7 +3513,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #patch,
@@ -3439,15 +3528,15 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> patchUri<T>(
+  _i16.Future<_i13.Response<T>> patchUri<T>(
     Uri? uri, {
     Object? data,
-    _i8.Options? options,
-    _i24.CancelToken? cancelToken,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.Options? options,
+    _i26.CancelToken? cancelToken,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3461,7 +3550,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #patchUri,
@@ -3476,7 +3565,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #patchUri,
@@ -3490,18 +3579,18 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<dynamic>> download(
+  _i16.Future<_i13.Response<dynamic>> download(
     String? urlPath,
     dynamic savePath, {
-    _i8.ProgressCallback? onReceiveProgress,
+    _i9.ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? queryParameters,
-    _i24.CancelToken? cancelToken,
+    _i26.CancelToken? cancelToken,
     bool? deleteOnError = true,
     String? lengthHeader = r'content-length',
     Object? data,
-    _i8.Options? options,
+    _i9.Options? options,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3521,7 +3610,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           },
         ),
         returnValue:
-            _i15.Future<_i12.Response<dynamic>>.value(_FakeResponse_42<dynamic>(
+            _i16.Future<_i13.Response<dynamic>>.value(_FakeResponse_43<dynamic>(
           this,
           Invocation.method(
             #download,
@@ -3541,7 +3630,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<dynamic>>.value(_FakeResponse_42<dynamic>(
+            _i16.Future<_i13.Response<dynamic>>.value(_FakeResponse_43<dynamic>(
           this,
           Invocation.method(
             #download,
@@ -3560,17 +3649,17 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<dynamic>>);
+      ) as _i16.Future<_i13.Response<dynamic>>);
   @override
-  _i15.Future<_i12.Response<dynamic>> downloadUri(
+  _i16.Future<_i13.Response<dynamic>> downloadUri(
     Uri? uri,
     dynamic savePath, {
-    _i8.ProgressCallback? onReceiveProgress,
-    _i24.CancelToken? cancelToken,
+    _i9.ProgressCallback? onReceiveProgress,
+    _i26.CancelToken? cancelToken,
     bool? deleteOnError = true,
     String? lengthHeader = r'content-length',
     Object? data,
-    _i8.Options? options,
+    _i9.Options? options,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3589,7 +3678,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           },
         ),
         returnValue:
-            _i15.Future<_i12.Response<dynamic>>.value(_FakeResponse_42<dynamic>(
+            _i16.Future<_i13.Response<dynamic>>.value(_FakeResponse_43<dynamic>(
           this,
           Invocation.method(
             #downloadUri,
@@ -3608,7 +3697,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<dynamic>>.value(_FakeResponse_42<dynamic>(
+            _i16.Future<_i13.Response<dynamic>>.value(_FakeResponse_43<dynamic>(
           this,
           Invocation.method(
             #downloadUri,
@@ -3626,16 +3715,16 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<dynamic>>);
+      ) as _i16.Future<_i13.Response<dynamic>>);
   @override
-  _i15.Future<_i12.Response<T>> request<T>(
+  _i16.Future<_i13.Response<T>> request<T>(
     String? path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    _i24.CancelToken? cancelToken,
-    _i8.Options? options,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i26.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3650,7 +3739,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #request,
@@ -3666,7 +3755,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #request,
@@ -3681,15 +3770,15 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> requestUri<T>(
+  _i16.Future<_i13.Response<T>> requestUri<T>(
     Uri? uri, {
     Object? data,
-    _i24.CancelToken? cancelToken,
-    _i8.Options? options,
-    _i8.ProgressCallback? onSendProgress,
-    _i8.ProgressCallback? onReceiveProgress,
+    _i26.CancelToken? cancelToken,
+    _i9.Options? options,
+    _i9.ProgressCallback? onSendProgress,
+    _i9.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3703,7 +3792,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             #onReceiveProgress: onReceiveProgress,
           },
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #requestUri,
@@ -3718,7 +3807,7 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #requestUri,
@@ -3732,15 +3821,15 @@ class MockDio extends _i1.Mock implements _i23.Dio {
             },
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
   @override
-  _i15.Future<_i12.Response<T>> fetch<T>(_i8.RequestOptions? requestOptions) =>
+  _i16.Future<_i13.Response<T>> fetch<T>(_i9.RequestOptions? requestOptions) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetch,
           [requestOptions],
         ),
-        returnValue: _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+        returnValue: _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #fetch,
@@ -3748,28 +3837,28 @@ class MockDio extends _i1.Mock implements _i23.Dio {
           ),
         )),
         returnValueForMissingStub:
-            _i15.Future<_i12.Response<T>>.value(_FakeResponse_42<T>(
+            _i16.Future<_i13.Response<T>>.value(_FakeResponse_43<T>(
           this,
           Invocation.method(
             #fetch,
             [requestOptions],
           ),
         )),
-      ) as _i15.Future<_i12.Response<T>>);
+      ) as _i16.Future<_i13.Response<T>>);
 }
 
 /// A class which mocks [FakeFilePickerPlatform].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFilePickerPlatform extends _i1.Mock
-    implements _i25.FakeFilePickerPlatform {
+    implements _i27.FakeFilePickerPlatform {
   @override
-  _i15.Future<_i26.FilePickerResult?> pickFiles({
+  _i16.Future<_i28.FilePickerResult?> pickFiles({
     String? dialogTitle,
     String? initialDirectory,
-    _i26.FileType? type = _i26.FileType.any,
+    _i28.FileType? type = _i28.FileType.any,
     List<String>? allowedExtensions,
-    dynamic Function(_i26.FilePickerStatus)? onFileLoading,
+    dynamic Function(_i28.FilePickerStatus)? onFileLoading,
     bool? allowCompression = true,
     bool? allowMultiple = false,
     bool? withData = false,
@@ -3793,20 +3882,20 @@ class MockFilePickerPlatform extends _i1.Mock
             #lockParentWindow: lockParentWindow,
           },
         ),
-        returnValue: _i15.Future<_i26.FilePickerResult?>.value(),
-        returnValueForMissingStub: _i15.Future<_i26.FilePickerResult?>.value(),
-      ) as _i15.Future<_i26.FilePickerResult?>);
+        returnValue: _i16.Future<_i28.FilePickerResult?>.value(),
+        returnValueForMissingStub: _i16.Future<_i28.FilePickerResult?>.value(),
+      ) as _i16.Future<_i28.FilePickerResult?>);
   @override
-  _i15.Future<bool?> clearTemporaryFiles() => (super.noSuchMethod(
+  _i16.Future<bool?> clearTemporaryFiles() => (super.noSuchMethod(
         Invocation.method(
           #clearTemporaryFiles,
           [],
         ),
-        returnValue: _i15.Future<bool?>.value(),
-        returnValueForMissingStub: _i15.Future<bool?>.value(),
-      ) as _i15.Future<bool?>);
+        returnValue: _i16.Future<bool?>.value(),
+        returnValueForMissingStub: _i16.Future<bool?>.value(),
+      ) as _i16.Future<bool?>);
   @override
-  _i15.Future<String?> getDirectoryPath({
+  _i16.Future<String?> getDirectoryPath({
     String? dialogTitle,
     bool? lockParentWindow = false,
     String? initialDirectory,
@@ -3821,15 +3910,15 @@ class MockFilePickerPlatform extends _i1.Mock
             #initialDirectory: initialDirectory,
           },
         ),
-        returnValue: _i15.Future<String?>.value(),
-        returnValueForMissingStub: _i15.Future<String?>.value(),
-      ) as _i15.Future<String?>);
+        returnValue: _i16.Future<String?>.value(),
+        returnValueForMissingStub: _i16.Future<String?>.value(),
+      ) as _i16.Future<String?>);
   @override
-  _i15.Future<String?> saveFile({
+  _i16.Future<String?> saveFile({
     String? dialogTitle,
     String? fileName,
     String? initialDirectory,
-    _i26.FileType? type = _i26.FileType.any,
+    _i28.FileType? type = _i28.FileType.any,
     List<String>? allowedExtensions,
     bool? lockParentWindow = false,
   }) =>
@@ -3846,7 +3935,7 @@ class MockFilePickerPlatform extends _i1.Mock
             #lockParentWindow: lockParentWindow,
           },
         ),
-        returnValue: _i15.Future<String?>.value(),
-        returnValueForMissingStub: _i15.Future<String?>.value(),
-      ) as _i15.Future<String?>);
+        returnValue: _i16.Future<String?>.value(),
+        returnValueForMissingStub: _i16.Future<String?>.value(),
+      ) as _i16.Future<String?>);
 }

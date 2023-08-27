@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
+import 'package:miria/repository/general_settings_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/annotations.dart';
@@ -13,6 +14,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
   MockSpec<TabSettingsRepository>(),
   MockSpec<AccountSettingsRepository>(),
   MockSpec<EmojiRepository>(),
+  MockSpec<GeneralSettingsRepository>(),
 
   // API
   MockSpec<Misskey>(),

@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/account_settings.dart';
+import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
@@ -1169,11 +1170,16 @@ void main() {
           ]);
           when(emojiRepository.searchEmojis(any)).thenAnswer(
               (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          final generalSettingsRepository = MockGeneralSettingsRepository();
+          when(generalSettingsRepository.settings)
+              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
           await tester.pumpWidget(ProviderScope(
               overrides: [
                 emojiRepositoryProvider
-                    .overrideWith((ref, arg) => emojiRepository)
+                    .overrideWith((ref, arg) => emojiRepository),
+                generalSettingsRepositoryProvider
+                    .overrideWith((ref) => generalSettingsRepository),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1210,10 +1216,16 @@ void main() {
           when(emojiRepository.searchEmojis(any)).thenAnswer(
               (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
 
+          final generalSettingsRepository = MockGeneralSettingsRepository();
+          when(generalSettingsRepository.settings)
+              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+
           await tester.pumpWidget(ProviderScope(
               overrides: [
                 emojiRepositoryProvider
-                    .overrideWith((ref, arg) => emojiRepository)
+                    .overrideWith((ref, arg) => emojiRepository),
+                generalSettingsRepositoryProvider
+                    .overrideWith((ref) => generalSettingsRepository),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1838,12 +1850,17 @@ void main() {
             (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
         when(emojiRepository.defaultEmojis())
             .thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
+        final generalSettingsRepository = MockGeneralSettingsRepository();
+        when(generalSettingsRepository.settings)
+            .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
         await tester.pumpWidget(ProviderScope(
             overrides: [
               emojiRepositoryProvider
                   .overrideWith((ref, arg) => emojiRepository),
               inputComplementDelayedProvider.overrideWithValue(1),
+              generalSettingsRepositoryProvider
+                  .overrideWith((ref) => generalSettingsRepository),
             ],
             child: DefaultRootWidget(
                 initialRoute:
