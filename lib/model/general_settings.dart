@@ -69,6 +69,9 @@ class GeneralSettings with _$GeneralSettings {
 
     /// タブの位置
     @Default(TabPosition.top) TabPosition tabPosition,
+
+    /// 文字の大きさの倍率
+    @Default(1.0) double textScaleFactor,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

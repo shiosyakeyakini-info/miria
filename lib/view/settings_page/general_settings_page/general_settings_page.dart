@@ -25,6 +25,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   bool enableLongTextElipsed = false;
   bool enableFavoritedRenoteElipsed = true;
   TabPosition tabPosition = TabPosition.top;
+  double textScaleFactor = 1.0;
 
   @override
   void initState() {
@@ -56,22 +57,25 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       enableLongTextElipsed = settings.enableLongTextElipsed;
       enableFavoritedRenoteElipsed = settings.enableFavoritedRenoteElipsed;
       tabPosition = settings.tabPosition;
+      textScaleFactor = settings.textScaleFactor;
     });
   }
 
   Future<void> save() async {
     ref.read(generalSettingsRepositoryProvider).update(
           GeneralSettings(
-              lightColorThemeId: lightModeTheme,
-              darkColorThemeId: darkModeTheme,
-              themeColorSystem: colorSystem,
-              nsfwInherit: nsfwInherit,
-              enableDirectReaction: enableDirectReaction,
-              automaticPush: automaticPush,
-              enableAnimatedMFM: enableAnimatedMFM,
-              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
-              enableLongTextElipsed: enableLongTextElipsed,
-              tabPosition: tabPosition),
+            lightColorThemeId: lightModeTheme,
+            darkColorThemeId: darkModeTheme,
+            themeColorSystem: colorSystem,
+            nsfwInherit: nsfwInherit,
+            enableDirectReaction: enableDirectReaction,
+            automaticPush: automaticPush,
+            enableAnimatedMFM: enableAnimatedMFM,
+            enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
+            enableLongTextElipsed: enableLongTextElipsed,
+            tabPosition: tabPosition,
+            textScaleFactor: textScaleFactor,
+          ),
         );
   }
 
@@ -273,7 +277,36 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     ],
                   ),
                 ),
-              )
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "フォントサイズ",
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Slider(
+                        value: textScaleFactor,
+                        min: 0.5,
+                        max: 1.5,
+                        divisions: 10,
+                        label: "${(textScaleFactor * 100).toInt()}%",
+                        onChanged: (value) {
+                          setState(() {
+                            textScaleFactor = value;
+                            save();
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
