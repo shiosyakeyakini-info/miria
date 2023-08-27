@@ -79,7 +79,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               text: text,
               channelId: currentTabSetting.channelId,
               visibility: accountSettings.defaultNoteVisibility,
-              localOnly: accountSettings.defaultIsLocalOnly,
+              localOnly: currentTabSetting.channelId != null ||
+                  accountSettings.defaultIsLocalOnly,
               reactionAcceptance: accountSettings.defaultReactionAcceptance,
             ),
           );
