@@ -13,6 +13,8 @@ final noteSearchUserProvider = StateProvider.autoDispose<User?>((ref) => null);
 final noteSearchChannelProvider =
     StateProvider.autoDispose<CommunityChannel?>((ref) => null);
 
+final noteSearchLocalOnlyProvider = StateProvider.autoDispose((ref) => false);
+
 @RoutePage()
 class SearchPage extends ConsumerStatefulWidget {
   final String? initialSearchText;

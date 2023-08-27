@@ -155,6 +155,21 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                         const Icon(Icons.keyboard_arrow_right))
                               ],
                             )
+                          ]),
+                          TableRow(children: [
+                            const Text("ローカルのみ"),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: ref.read(noteSearchLocalOnlyProvider),
+                                  onChanged: (value) => setState(() => ref
+                                          .read(noteSearchLocalOnlyProvider
+                                              .notifier)
+                                          .state =
+                                      !ref.read(noteSearchLocalOnlyProvider)),
+                                ),
+                              ],
+                            )
                           ])
                         ],
                       ),
@@ -181,6 +196,7 @@ class NoteSearchList extends ConsumerWidget {
     final searchValue = ref.watch(noteSearchProvider);
     final channel = ref.watch(noteSearchChannelProvider);
     final user = ref.watch(noteSearchUserProvider);
+    final localOnly = ref.watch(noteSearchLocalOnlyProvider);
     final account = AccountScope.of(context);
     final parsedSearchValue = const MfmParser().parse(searchValue);
     final isHashtagOnly =
@@ -195,6 +211,7 @@ class NoteSearchList extends ConsumerWidget {
           searchValue,
           user?.id,
           channel?.id,
+          localOnly,
         ]),
         initializeFuture: () async {
           final Iterable<Note> notes;
@@ -207,7 +224,8 @@ class NoteSearchList extends ConsumerWidget {
                 NotesSearchRequest(
                     query: searchValue,
                     userId: user?.id,
-                    channelId: channel?.id));
+                    channelId: channel?.id,
+                    host: localOnly ? "." : null));
           }
 
           ref.read(notesProvider(account)).registerAll(notes);
@@ -228,7 +246,8 @@ class NoteSearchList extends ConsumerWidget {
                     query: searchValue,
                     userId: user?.id,
                     channelId: channel?.id,
-                    untilId: lastItem.id));
+                    untilId: lastItem.id,
+                    host: localOnly ? "." : null));
           }
           ref.read(notesProvider(account)).registerAll(notes);
           return notes.toList();
