@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,10 @@ class AccountRepository extends ChangeNotifier {
     final index = _account.indexOf(account);
     if (index == -1) return;
     if (accountDataValidated.isNotEmpty && accountDataValidated[index]) return;
-    _account[index] = _account[index]
-        .copyWith(i: await reader(misskeyProvider(_account[index])).i.i());
+    final i = await reader(misskeyProvider(_account[index])).i.i();
+    _account[index] = _account[index].copyWith(i: i);
+    tabSettingsRepository.updateAccount(account, i);
+
     accountDataValidated[index] = true;
     notifyListeners();
   }

@@ -44,13 +44,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   void initState() {
-    tabSettings = ref.read(
-      tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
-    );
-    currentIndex = tabSettings.indexOf(widget.initialTabSetting);
-    pageController = PageController(initialPage: currentIndex);
-    scrollControllers =
-        List.generate(tabSettings.length, (_) => TimelineScrollController());
     super.initState();
   }
 
@@ -93,6 +86,13 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    tabSettings = ref.watch(
+      tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
+    );
+    currentIndex = tabSettings.indexOf(widget.initialTabSetting);
+    pageController = PageController(initialPage: currentIndex);
+    scrollControllers =
+        List.generate(tabSettings.length, (_) => TimelineScrollController());
   }
 
   void reload() {
@@ -286,6 +286,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 ],
               ),
             ),
+            BannerArea(index: currentIndex),
             if (socketTimeline?.isLoading == true)
               const Padding(
                 padding: EdgeInsets.only(top: 10),
@@ -360,5 +361,78 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         initialOpenAccount: currentTabSetting.account,
       ),
     );
+  }
+}
+
+class BannerArea extends ConsumerWidget {
+  final int index;
+
+  const BannerArea({super.key, required this.index});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bannerAnnouncement = ref.watch(accountRepository.select((value) =>
+        value.account
+            .where((element) =>
+                element ==
+                ref
+                    .read(tabSettingsRepositoryProvider)
+                    .tabSettings
+                    .toList()[index]
+                    .account)
+            .firstOrNull
+            ?.i
+            .unreadAnnouncements));
+
+    // ダイアログの実装が大変なので（状態管理とか）いったんバナーと一緒に扱う
+    final bannerData = bannerAnnouncement
+        ?.where((element) =>
+            element.display == AnnouncementDisplayType.banner ||
+            element.display == AnnouncementDisplayType.dialog)
+        .firstOrNull;
+
+    if (bannerData == null) return const SizedBox.shrink();
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(left: 10, top: 3, bottom: 3),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+      child: Row(
+        children: [
+          if (bannerData.icon != null)
+            AnnouncementIcon(iconType: bannerData.icon!),
+          const Padding(padding: EdgeInsets.only(left: 10)),
+          Text(
+            "${bannerData.title}　${bannerData.text}",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AnnouncementIcon extends StatelessWidget {
+  final AnnouncementIconType iconType;
+
+  const AnnouncementIcon({super.key, required this.iconType});
+
+  @override
+  Widget build(BuildContext context) {
+    switch (iconType) {
+      case AnnouncementIconType.info:
+        return const Icon(Icons.info, color: Colors.white);
+      case AnnouncementIconType.warning:
+        return const Icon(Icons.warning, color: Colors.white);
+      case AnnouncementIconType.error:
+        return const Icon(Icons.error, color: Colors.white);
+      case AnnouncementIconType.success:
+        return const Icon(Icons.check, color: Colors.white);
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }
