@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/acct.dart';
 import 'package:miria/model/tab_setting.dart';
+import 'package:miria/model/timeline_controller_state.dart';
+import 'package:miria/model/timeline_page_state.dart';
 import 'package:miria/model/timeline_state.dart';
 import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/account_settings_repository.dart';
@@ -24,6 +26,8 @@ import 'package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.
 import 'package:miria/state_notifier/common/misskey_server_list_notifier.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
 import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
+import 'package:miria/state_notifier/timeline_page/timeline_controller.dart';
+import 'package:miria/state_notifier/timeline_page/timeline_page_controller.dart';
 import 'package:miria/state_notifier/user_list_page/users_lists_notifier.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -46,6 +50,16 @@ final misskeyWithoutAccountProvider = Provider.family<Misskey, String>(
 final timelineRepositoryProvider =
     NotifierProvider.family<TimelineRepository, TimelineState, TabSetting>(
   TimelineRepository.new,
+);
+
+final timelineControllerProvider = NotifierProvider.autoDispose
+    .family<TimelineController, TimelineControllerState, TabSetting>(
+  TimelineController.new,
+);
+
+final timelinePageControllerProvider =
+    NotifierProvider.autoDispose<TimelinePageController, TimelinePageState>(
+  TimelinePageController.new,
 );
 
 final mainStreamRepositoryProvider =

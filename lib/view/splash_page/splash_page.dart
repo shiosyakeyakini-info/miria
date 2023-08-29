@@ -64,11 +64,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
                   .isNotEmpty;
 
               if (isSigned && hasTabSetting) {
-                context.replaceRoute(TimelineRoute(
-                    initialTabSetting: ref
-                        .read(tabSettingsRepositoryProvider)
-                        .tabSettings
-                        .first));
+                context.replaceRoute(TimelineRoute());
                 if (initialSharingMedias.isNotEmpty ||
                     initialSharingText.isNotEmpty) {
                   if (accounts.length == 1) {
