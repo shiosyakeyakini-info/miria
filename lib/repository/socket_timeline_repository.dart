@@ -8,7 +8,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
-import 'package:miria/repository/time_line_repository.dart';
+import 'package:miria/repository/timeline_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 abstract class SocketTimelineRepository extends TimelineRepository {
@@ -79,7 +79,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   }
 
   @override
-  Future<void> startTimeLine() async {
+  Future<void> startTimeline() async {
     try {
       await emojiRepository.loadFromSourceIfNeed();
       // api/iおよびapi/metaはawaitしない
@@ -196,7 +196,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     try {
       await super.reconnect();
       socketController = null;
-      await startTimeLine();
+      await startTimeline();
       error = null;
     } finally {
       isReconnecting = false;

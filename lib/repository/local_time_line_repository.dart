@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-class LocalTimeLineRepository extends SocketTimelineRepository {
-  LocalTimeLineRepository(
+class LocalTimelineRepository extends SocketTimelineRepository {
+  LocalTimelineRepository(
     super.misskey,
     super.account,
     super.noteRepository,

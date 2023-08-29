@@ -4,7 +4,7 @@ import 'package:miria/model/acct.dart';
 import 'package:miria/model/converters/icon_converter.dart';
 import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_type.dart';
-import 'package:miria/repository/time_line_repository.dart';
+import 'package:miria/repository/timeline_repository.dart';
 
 part 'tab_setting.freezed.dart';
 part 'tab_setting.g.dart';

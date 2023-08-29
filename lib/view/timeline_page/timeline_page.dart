@@ -17,24 +17,24 @@ import 'package:miria/view/common/common_drawer.dart';
 import 'package:miria/view/common/notification_icon.dart';
 import 'package:miria/view/common/tab_icon_view.dart';
 import 'package:miria/view/common/timeline_listview.dart';
-import 'package:miria/view/time_line_page/misskey_time_line.dart';
-import 'package:miria/view/time_line_page/nyanpuppu.dart';
-import 'package:miria/view/time_line_page/timeline_emoji.dart';
-import 'package:miria/view/time_line_page/timeline_note.dart';
+import 'package:miria/view/timeline_page/misskey_timeline.dart';
+import 'package:miria/view/timeline_page/nyanpuppu.dart';
+import 'package:miria/view/timeline_page/timeline_emoji.dart';
+import 'package:miria/view/timeline_page/timeline_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
-class TimeLinePage extends ConsumerStatefulWidget {
+class TimelinePage extends ConsumerStatefulWidget {
   final TabSetting initialTabSetting;
 
-  const TimeLinePage({super.key, required this.initialTabSetting});
+  const TimelinePage({super.key, required this.initialTabSetting});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => TimeLinePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => TimelinePageState();
 }
 
-class TimeLinePageState extends ConsumerState<TimeLinePage> {
+class TimelinePageState extends ConsumerState<TimelinePage> {
   late List<TabSetting> tabSettings;
   late int currentIndex;
   late final PageController pageController;

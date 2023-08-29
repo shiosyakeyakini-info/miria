@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/repository/time_line_repository.dart';
+import 'package:miria/repository/timeline_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
@@ -70,7 +70,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     if (oldWidget.timeLineRepositoryProvider !=
         widget.timeLineRepositoryProvider) {
       ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
-      ref.read(widget.timeLineRepositoryProvider).startTimeLine();
+      ref.read(widget.timeLineRepositoryProvider).startTimeline();
       timelineRepository = ref.read(widget.timeLineRepositoryProvider);
       isDownDirectionLoading = false;
       isLastLoaded = false;
@@ -82,7 +82,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     super.initState();
     if (isInitStated) return;
     Future(() {
-      ref.read(widget.timeLineRepositoryProvider).startTimeLine();
+      ref.read(widget.timeLineRepositoryProvider).startTimeline();
     });
   }
 

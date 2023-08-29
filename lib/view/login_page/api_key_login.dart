@@ -35,7 +35,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
           .loginAsToken(serverController.text, apiKeyController.text);
 
       if (!mounted) return;
-      context.pushRoute(TimeLineRoute(
+      context.pushRoute(TimelineRoute(
           initialTabSetting:
               ref.read(tabSettingsRepositoryProvider).tabSettings.first));
     } catch (e) {

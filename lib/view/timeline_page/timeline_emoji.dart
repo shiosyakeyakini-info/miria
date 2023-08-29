@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
-import 'package:miria/view/time_line_page/timeline_note.dart';
+import 'package:miria/view/timeline_page/timeline_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TimelineEmoji extends ConsumerWidget {

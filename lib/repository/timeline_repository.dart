@@ -151,7 +151,7 @@ abstract class TimelineRepository extends ChangeNotifier {
   late final QueueList<Note> olderNotes =
       NotifierQueueList(noteRepository, generalSettingsRepository, tabSetting);
 
-  void startTimeLine() {}
+  void startTimeline() {}
 
   void disconnect() {}
 

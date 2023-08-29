@@ -21,7 +21,7 @@ import 'package:miria/repository/local_time_line_repository.dart';
 import 'package:miria/repository/role_timeline_repository.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
-import 'package:miria/repository/time_line_repository.dart';
+import 'package:miria/repository/timeline_repository.dart';
 import 'package:miria/repository/user_list_time_line_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/state_notifier/antenna_page/antennas_notifier.dart';
@@ -54,7 +54,7 @@ final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) {
   final account = ref.watch(accountProvider(tabSetting.acct));
-  return LocalTimeLineRepository(
+  return LocalTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
     ref.read(notesProvider(account)),
@@ -71,7 +71,7 @@ final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) {
   final account = ref.watch(accountProvider(tabSetting.acct));
-  return HomeTimeLineRepository(
+  return HomeTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
     ref.read(notesProvider(account)),
@@ -88,7 +88,7 @@ final globalTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) {
   final account = ref.watch(accountProvider(tabSetting.acct));
-  return GlobalTimeLineRepository(
+  return GlobalTimelineRepository(
     ref.read(misskeyProvider(account)),
     ref.read(notesProvider(account)),
     ref.read(mainStreamRepositoryProvider(account)),
