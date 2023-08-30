@@ -45,11 +45,13 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
     isLoading = true;
     Future(() async {
       try {
+        final result = await widget.initializeFuture();
         items
           ..clear()
-          ..addAll(await widget.initializeFuture());
+          ..addAll(result);
         if (!mounted) return;
         setState(() {
+          isFinalPage = result.isEmpty;
           isLoading = false;
         });
         scrollController.animateTo(-scrollController.position.pixels,
@@ -96,10 +98,10 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
           isLoading = true;
         });
         final result = await widget.nextFuture(items.last, items.length);
-        if (result.isEmpty) isFinalPage = true;
         items.addAll(result);
         if (!mounted) return;
         setState(() {
+          isFinalPage = result.isEmpty;
           isLoading = false;
         });
       } catch (e) {
