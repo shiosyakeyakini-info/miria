@@ -181,6 +181,18 @@ class AccountRepository extends Notifier<List<Account>> {
     await _addIfTabSettingNothing();
   }
 
+  Future<void> reorder(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final newState = state.toList();
+    final item = newState.removeAt(oldIndex);
+    newState.insert(newIndex, item);
+    state = newState;
+
+    await _save();
+  }
+
   Future<void> _save() async {
     const prefs = FlutterSecureStorage();
     await prefs.write(
