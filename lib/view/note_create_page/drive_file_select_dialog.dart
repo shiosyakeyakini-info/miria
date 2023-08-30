@@ -70,6 +70,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   showAd: false,
+                  hideIsEmpty: true,
                   initializeFuture: () async {
                     final misskey = ref.read(misskeyProvider(widget.account));
                     final response = await misskey.drive.folders.folders(
