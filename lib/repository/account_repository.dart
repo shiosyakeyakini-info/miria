@@ -169,6 +169,10 @@ class AccountRepository extends Notifier<List<Account>> {
   }
 
   Future<void> _addAccount(Account account) async {
+    if (state.map((e) => e.acct).contains(account.acct)) {
+      throw SpecifiedException("${account.acct}で既にログインしています");
+    }
+
     state = [...state, account];
     _validatedAccts.add(account.acct);
     await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
