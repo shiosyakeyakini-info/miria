@@ -29,7 +29,7 @@ class TabSettingsPage extends ConsumerStatefulWidget {
 }
 
 class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
-  late Account? selectedAccount = ref.read(accountRepository).account.first;
+  late Account? selectedAccount = ref.read(accountsProvider).first;
   TabType? selectedTabType = TabType.localTimeline;
   RolesListResponse? selectedRole;
   CommunityChannel? selectedChannel;
@@ -115,6 +115,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("タブ設定"),
@@ -145,11 +146,11 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               const Text("アカウント"),
               DropdownButton<Account>(
                 items: [
-                  for (final account in ref.read(accountRepository).account)
+                  for (final account in accounts)
                     DropdownMenuItem(
                       value: account,
-                      child: Text("${account.userId}@${account.host}"),
-                    )
+                      child: Text(account.acct.toString()),
+                    ),
                 ],
                 onChanged: (value) {
                   setState(() {

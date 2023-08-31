@@ -6,22 +6,15 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 
 @RoutePage()
-class SharingAccountSelectPage extends ConsumerStatefulWidget {
+class SharingAccountSelectPage extends ConsumerWidget {
   final String? sharingText;
   final List<String>? filePath;
 
   const SharingAccountSelectPage({super.key, this.sharingText, this.filePath});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      SharingAccountSelectPageState();
-}
-
-class SharingAccountSelectPageState
-    extends ConsumerState<SharingAccountSelectPage> {
-  @override
-  Widget build(BuildContext context) {
-    final accounts = ref.watch(accountRepository).account.toList();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(title: const Text("共有するアカウントを選択")),
       body: ListView.builder(
@@ -32,15 +25,15 @@ class SharingAccountSelectPageState
             onTap: () {
               context.replaceRoute(NoteCreateRoute(
                 initialAccount: account,
-                initialText: widget.sharingText,
-                initialMediaFiles: widget.filePath,
+                initialText: sharingText,
+                initialMediaFiles: filePath,
               ));
             },
             leading: AvatarIcon.fromIResponse(account.i),
             title: Text(account.i.name ?? account.i.username,
                 style: Theme.of(context).textTheme.titleMedium),
             subtitle: Text(
-              "@${account.userId}@${account.host}",
+              account.acct.toString(),
               style: Theme.of(context).textTheme.bodySmall,
             ),
           );

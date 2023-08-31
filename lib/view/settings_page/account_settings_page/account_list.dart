@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/providers.dart';
@@ -17,7 +16,7 @@ class AccountListPage extends ConsumerStatefulWidget {
 class AccountListPageState extends ConsumerState<AccountListPage> {
   @override
   Widget build(BuildContext context) {
-    final accounts = ref.watch(accountRepository).account.toList();
+    final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("アカウント設定"),
@@ -52,7 +51,9 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
                               ElevatedButton(
                                   onPressed: () async {
                                     await ref
-                                        .read(accountRepository)
+                                        .read(
+                                          accountRepositoryProvider.notifier,
+                                        )
                                         .remove(accounts[index]);
                                     if (!mounted) return;
                                     setState(() {});
