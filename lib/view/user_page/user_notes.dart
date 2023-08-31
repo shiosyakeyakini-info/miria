@@ -67,80 +67,96 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     },
                     children: const [
                       Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("返信つき")),
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("返信つき"),
+                      ),
                       Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("ファイルつき")),
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("ファイルつき"),
+                      ),
                       Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("リノートも"))
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("リノートも"),
+                      ),
                     ],
                   ),
                 ),
               ),
               IconButton(
-                  onPressed: () async {
-                    final userInfo = ref.read(userInfoProvider(widget.userId));
-                    final firstDate = widget.actualAccount == null
-                        ? userInfo?.response?.createdAt
-                        : userInfo?.remoteResponse?.createdAt;
+                onPressed: () async {
+                  final userInfo = ref.read(userInfoProvider(widget.userId));
+                  final firstDate = widget.actualAccount == null
+                      ? userInfo?.response?.createdAt
+                      : userInfo?.remoteResponse?.createdAt;
 
-                    final result = await showDatePicker(
-                        context: context,
-                        initialDate: untilDate ?? DateTime.now(),
-                        helpText: "この日までを表示",
-                        firstDate: firstDate ?? DateTime.now(),
-                        lastDate: DateTime.now());
-                    if (result != null) {
-                      untilDate = DateTime(result.year, result.month,
-                          result.day, 23, 59, 59, 999);
-                    }
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.date_range))
+                  final result = await showDatePicker(
+                    context: context,
+                    initialDate: untilDate ?? DateTime.now(),
+                    helpText: "この日までを表示",
+                    firstDate: firstDate ?? DateTime.now(),
+                    lastDate: DateTime.now(),
+                  );
+                  if (result != null) {
+                    untilDate = DateTime(
+                      result.year,
+                      result.month,
+                      result.day,
+                      23,
+                      59,
+                      59,
+                      999,
+                    );
+                  }
+                  setState(() {});
+                },
+                icon: const Icon(Icons.date_range),
+              ),
             ],
           ),
         ),
         Expanded(
           child: PushableListView<Note>(
-              listKey:
-                  Object.hashAll([isFileOnly, withReply, renote, untilDate]),
-              initializeFuture: () async {
-                final notes = await misskey.users.notes(UsersNotesRequest(
+            listKey: Object.hashAll([isFileOnly, withReply, renote, untilDate]),
+            initializeFuture: () async {
+              final notes = await misskey.users.notes(
+                UsersNotesRequest(
                   userId: widget.remoteUserId ?? widget.userId,
                   withFiles: isFileOnly,
                   includeReplies: withReply,
                   includeMyRenotes: renote,
                   untilDate: untilDate?.millisecondsSinceEpoch,
-                ));
-                if (!mounted) return [];
-                ref
-                    .read(notesProvider(AccountScope.of(context)))
-                    .registerAll(notes);
-                return notes.toList();
-              },
-              nextFuture: (lastElement, _) async {
-                final notes = await misskey.users.notes(UsersNotesRequest(
+                ),
+              );
+              if (!mounted) return [];
+              ref
+                  .read(notesProvider(AccountScope.of(context)))
+                  .registerAll(notes);
+              return notes.toList();
+            },
+            nextFuture: (lastElement, _) async {
+              final notes = await misskey.users.notes(
+                UsersNotesRequest(
                   userId: widget.remoteUserId ?? widget.userId,
                   untilId: lastElement.id,
                   withFiles: isFileOnly,
                   includeReplies: withReply,
                   includeMyRenotes: renote,
                   untilDate: untilDate?.millisecondsSinceEpoch,
-                ));
-                if (!mounted) return [];
-                ref
-                    .read(notesProvider(AccountScope.of(context)))
-                    .registerAll(notes);
-                return notes.toList();
-              },
-              itemBuilder: (context, element) {
-                return MisskeyNote(
-                  note: element,
-                  loginAs: widget.actualAccount,
-                );
-              }),
+                ),
+              );
+              if (!mounted) return [];
+              ref
+                  .read(notesProvider(AccountScope.of(context)))
+                  .registerAll(notes);
+              return notes.toList();
+            },
+            itemBuilder: (context, element) {
+              return MisskeyNote(
+                note: element,
+                loginAs: widget.actualAccount,
+              );
+            },
+          ),
         ),
       ],
     );
