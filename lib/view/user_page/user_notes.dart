@@ -10,11 +10,15 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
-
+  final String? remoteUserId;
   final Account? actualAccount;
 
-  const UserNotes(
-      {super.key, required this.userId, required this.actualAccount});
+  const UserNotes({
+    super.key,
+    required this.userId,
+    this.remoteUserId,
+    this.actualAccount,
+  }) : assert((remoteUserId == null) == (actualAccount == null));
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserNotesState();
@@ -77,15 +81,10 @@ class UserNotesState extends ConsumerState<UserNotes> {
               ),
               IconButton(
                   onPressed: () async {
+                    final userInfo = ref.read(userInfoProvider(widget.userId));
                     final firstDate = widget.actualAccount == null
-                        ? ref
-                            .read(userInfoProvider(widget.userId))
-                            ?.response
-                            ?.createdAt
-                        : ref
-                            .read(userInfoProvider(widget.userId))
-                            ?.remoteResponse
-                            ?.createdAt;
+                        ? userInfo?.response?.createdAt
+                        : userInfo?.remoteResponse?.createdAt;
 
                     final result = await showDatePicker(
                         context: context,
@@ -109,7 +108,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   Object.hashAll([isFileOnly, withReply, renote, untilDate]),
               initializeFuture: () async {
                 final notes = await misskey.users.notes(UsersNotesRequest(
-                  userId: widget.userId,
+                  userId: widget.remoteUserId ?? widget.userId,
                   withFiles: isFileOnly,
                   includeReplies: withReply,
                   includeMyRenotes: renote,
@@ -123,7 +122,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
               },
               nextFuture: (lastElement, _) async {
                 final notes = await misskey.users.notes(UsersNotesRequest(
-                  userId: widget.userId,
+                  userId: widget.remoteUserId ?? widget.userId,
                   untilId: lastElement.id,
                   withFiles: isFileOnly,
                   includeReplies: withReply,

@@ -97,7 +97,6 @@ class UserPageState extends ConsumerState<UserPage> {
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: UserNotes(
                         userId: widget.userId,
-                        actualAccount: null,
                       ),
                     ),
                     if (isRemoteUser)
@@ -106,7 +105,8 @@ class UserPageState extends ConsumerState<UserPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
-                            userId: userInfo.remoteResponse!.id,
+                            userId: widget.userId,
+                            remoteUserId: userInfo.remoteResponse!.id,
                             actualAccount: widget.account,
                           ),
                         ),
