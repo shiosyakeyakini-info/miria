@@ -11,7 +11,6 @@ import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/repository/note_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
@@ -236,13 +235,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           shouldCollaposed(displayTextNodes!));
 
       ref.read(notesProvider(AccountScope.of(context))).updateNoteStatus(
-          widget.note.id,
-          (status) => NoteStatus(
-              isCwOpened: false,
+            widget.note.id,
+            (status) => status.copyWith(
               isLongVisible: isLongVisible,
               isReactionedRenote: isReactionedRenote,
-              isLongVisibleInitialized: true),
-          isNotify: false);
+              isLongVisibleInitialized: true,
+            ),
+            isNotify: false,
+          );
     }
 
     final userId =
