@@ -65,7 +65,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   }
 
   List<String> resolveFontFamilyCallback() {
-    if (defaultTargetPlatform == TargetPlatform.windows) {
+    if (defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.linux) {
       return ["Noto Sans CJK JP", "KosugiMaru", "BIZ UDPGothic"];
     }
     if (defaultTargetPlatform == TargetPlatform.iOS ||
@@ -101,7 +102,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           fontFamily: "Segoe UI Emoji",
           fontFamilyFallback: ["Segoe UI Emoji", "Noto Color Emoji", "Meiryo"]);
     }
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (defaultTargetPlatform == TargetPlatform.android ||
+       defaultTargetPlatform == TargetPlatform.linux) {
       return const TextStyle(
           fontFamily: "Noto Color Emoji",
           fontFamilyFallback: ["Noto Color Emoji", "Noto Sans JP"]);
