@@ -96,17 +96,17 @@ flutter:
     - assets/fonts/
     - assets/images/
 
-fonts:
-  - family: KosugiMaru
-    fonts:
-      - asset: assets/fonts/KosugiMaru-Regular.ttf
-        weight: 300
-      - asset: assets/fonts/KosugiMaru-Regular.ttf
-        weight: 400
-      - asset: assets/fonts/KosugiMaru-Regular.ttf
-        weight: 500
-      - asset: assets/fonts/KosugiMaru-Regular.ttf
-        weight: 600
+  fonts:
+    - family: KosugiMaru
+      fonts:
+        - asset: assets/fonts/KosugiMaru-Regular.ttf
+          weight: 300
+        - asset: assets/fonts/KosugiMaru-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/KosugiMaru-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/KosugiMaru-Regular.ttf
+          weight: 600
 
 flutter_launcher_icons:
   android: "launcher_icon"
