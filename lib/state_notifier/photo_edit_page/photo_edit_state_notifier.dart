@@ -3,8 +3,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,13 +54,9 @@ class EditedEmojiData with _$EditedEmojiData {
 }
 
 class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
-  static List<String> _acceptReactions = [];
+  static final List<String> _acceptReactions = [];
 
-  final Dio dio;
-  PhotoEditStateNotifier(
-    super.state,
-    this.dio,
-  );
+  PhotoEditStateNotifier(super.state);
 
   /// 状態を初期化する
   Future<void> initialize(MisskeyPostFile file) async {
@@ -93,10 +87,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     );
   }
 
-  Future<Uint8List?> _drawImage(
-    PhotoEdit attemptState,
-    bool isReactionMarge,
-  ) async {
+  Future<Uint8List?> _drawImage(PhotoEdit attemptState) async {
     final initialImage = state.initialImage;
     if (initialImage == null) return null;
     final editorOption = ImageEditorOption();
@@ -133,7 +124,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
 
   /// 画像の描画を反映する
   Future<void> draw(PhotoEdit attemptState) async {
-    final editedImage = await _drawImage(attemptState, false);
+    final editedImage = await _drawImage(attemptState);
     if (editedImage == null) return;
     state = attemptState.copyWith(editedImage: editedImage);
   }
