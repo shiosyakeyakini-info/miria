@@ -215,18 +215,18 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     final size = state.cropSize;
     final defaultSize = state.defaultSize;
     final offset = state.cropOffset;
-    final validatedCropSize = Size(
-      max(0, min(size.width, defaultSize.width - offset.dx + 1)),
-      max(0, min(size.height, defaultSize.height - offset.dy + 1)),
-    );
-    final validateOffset = Offset(
+    final validatedOffset = Offset(
       max(0, min(offset.dx, defaultSize.width)),
       max(0, min(offset.dy, defaultSize.height)),
+    );
+    final validatedCropSize = Size(
+      max(1, min(size.width, defaultSize.width - validatedOffset.dx)),
+      max(1, min(size.height, defaultSize.height - validatedOffset.dy)),
     );
 
     return state.copyWith(
       cropSize: validatedCropSize,
-      cropOffset: validateOffset,
+      cropOffset: validatedOffset,
     );
   }
 
