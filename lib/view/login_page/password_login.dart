@@ -17,6 +17,14 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
   final userController = TextEditingController();
   final passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    serverController.dispose();
+    userController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   Future<void> login() async {
     await ref.read(accountRepository).loginAsPassword(
         serverController.text, userController.text, passwordController.text);

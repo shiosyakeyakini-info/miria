@@ -86,6 +86,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

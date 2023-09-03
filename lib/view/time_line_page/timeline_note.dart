@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final timelineNoteProvider = Provider((ref) => TextEditingController());
+final timelineNoteProvider =
+    ChangeNotifierProvider.autoDispose((ref) => TextEditingController());
+
 final timelineFocusNode =
     ChangeNotifierProvider.autoDispose((ref) => FocusNode());
 
@@ -26,10 +28,10 @@ class TimelineNoteFieldState extends ConsumerState<TimelineNoteField> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextField(
-        focusNode: ref.read(timelineFocusNode),
+        focusNode: ref.watch(timelineFocusNode),
         keyboardType: TextInputType.multiline,
         maxLines: null,
-        controller: ref.read(timelineNoteProvider),
+        controller: ref.watch(timelineNoteProvider),
         decoration: noteStyle,
       ),
     );

@@ -46,6 +46,12 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
   final queryController = TextEditingController();
 
   @override
+  void dispose() {
+    queryController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final origin = ref.watch(usersSelectDialogOriginProvider);
     return Column(

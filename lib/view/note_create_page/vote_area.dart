@@ -113,6 +113,12 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),

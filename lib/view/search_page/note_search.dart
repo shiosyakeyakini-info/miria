@@ -37,6 +37,12 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final selectedUser = ref.watch(noteSearchUserProvider);
     final selectedChannel = ref.watch(noteSearchChannelProvider);
