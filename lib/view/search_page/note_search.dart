@@ -59,26 +59,28 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
             children: [
               Expanded(
                 child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                    ),
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                  ),
                     focusNode: widget.focusNode,
-                    autofocus: true,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (value) {
-                      ref.read(noteSearchProvider.notifier).state = value;
-                    }),
+                  autofocus: true,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (value) {
+                    ref.read(noteSearchProvider.notifier).state = value;
+                  },
+                ),
               ),
               IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isDetail = !isDetail;
-                    });
-                  },
-                  icon: isDetail
-                      ? const Icon(Icons.keyboard_arrow_up)
-                      : const Icon(Icons.keyboard_arrow_down))
+                onPressed: () {
+                  setState(() {
+                    isDetail = !isDetail;
+                  });
+                },
+                icon: isDetail
+                    ? const Icon(Icons.keyboard_arrow_up)
+                    : const Icon(Icons.keyboard_arrow_down),
+              ),
             ],
           ),
         ),
@@ -107,82 +109,97 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                         defaultVerticalAlignment:
                             TableCellVerticalAlignment.middle,
                         children: [
-                          TableRow(children: [
-                            const Text("ユーザー"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
+                          TableRow(
+                            children: [
+                              const Text("ユーザー"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
                                     child: selectedUser == null
                                         ? Container()
-                                        : UserListItem(user: selectedUser)),
-                                IconButton(
+                                        : UserListItem(user: selectedUser),
+                                  ),
+                                  IconButton(
                                     onPressed: () async {
                                       final selected = await showDialog<User?>(
-                                          context: context,
-                                          builder: (context2) =>
-                                              UserSelectDialog(
-                                                account:
-                                                    AccountScope.of(context),
-                                              ));
+                                        context: context,
+                                        builder: (context2) => UserSelectDialog(
+                                          account: AccountScope.of(context),
+                                        ),
+                                      );
 
                                       ref
                                           .read(noteSearchUserProvider.notifier)
                                           .state = selected;
                                     },
                                     icon:
-                                        const Icon(Icons.keyboard_arrow_right))
-                              ],
-                            )
-                          ]),
-                          TableRow(children: [
-                            const Text("チャンネル"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
+                                        const Icon(Icons.keyboard_arrow_right),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: [
+                              const Text("チャンネル"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
                                     child: selectedChannel == null
                                         ? Container()
-                                        : Text(selectedChannel.name)),
-                                IconButton(
+                                        : Text(selectedChannel.name),
+                                  ),
+                                  IconButton(
                                     onPressed: () async {
                                       final selected =
                                           await showDialog<CommunityChannel?>(
-                                              context: context,
-                                              builder: (context2) =>
-                                                  ChannelSelectDialog(
-                                                    account: AccountScope.of(
-                                                        context),
-                                                  ));
+                                        context: context,
+                                        builder: (context2) =>
+                                            ChannelSelectDialog(
+                                          account: AccountScope.of(
+                                            context,
+                                          ),
+                                        ),
+                                      );
                                       ref
-                                          .read(noteSearchChannelProvider
-                                              .notifier)
+                                          .read(
+                                            noteSearchChannelProvider.notifier,
+                                          )
                                           .state = selected;
                                     },
                                     icon:
-                                        const Icon(Icons.keyboard_arrow_right))
-                              ],
-                            )
-                          ]),
-                          TableRow(children: [
-                            const Text("ローカルのみ"),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: ref.watch(noteSearchLocalOnlyProvider),
-                                  onChanged: (value) => ref
-                                          .read(noteSearchLocalOnlyProvider
-                                              .notifier)
-                                          .state =
-                                      !ref.read(noteSearchLocalOnlyProvider),
-                                ),
-                              ],
-                            )
-                          ])
+                                        const Icon(Icons.keyboard_arrow_right),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: [
+                              const Text("ローカルのみ"),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value:
+                                        ref.watch(noteSearchLocalOnlyProvider),
+                                    onChanged: (value) => ref
+                                            .read(
+                                              noteSearchLocalOnlyProvider
+                                                  .notifier,
+                                            )
+                                            .state =
+                                        !ref.read(noteSearchLocalOnlyProvider),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ],
@@ -192,8 +209,11 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
             ),
           ),
         const Expanded(
-            child: Padding(
-                padding: EdgeInsets.only(right: 10), child: NoteSearchList()))
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: NoteSearchList(),
+          ),
+        ),
       ],
     );
   }
@@ -218,53 +238,60 @@ class NoteSearchList extends ConsumerWidget {
     }
 
     return PushableListView(
-        listKey: Object.hashAll([
-          searchValue,
-          user?.id,
-          channel?.id,
-          localOnly,
-        ]),
-        initializeFuture: () async {
-          final Iterable<Note> notes;
-          if (isHashtagOnly) {
-            notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+      listKey: Object.hashAll([
+        searchValue,
+        user?.id,
+        channel?.id,
+        localOnly,
+      ]),
+      initializeFuture: () async {
+        final Iterable<Note> notes;
+        if (isHashtagOnly) {
+          notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
                 NotesSearchByTagRequest(
-                    tag: (parsedSearchValue[0] as MfmHashTag).hashTag));
-          } else {
-            notes = await ref.read(misskeyProvider(account)).notes.search(
+                  tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
+                ),
+              );
+        } else {
+          notes = await ref.read(misskeyProvider(account)).notes.search(
                 NotesSearchRequest(
-                    query: searchValue,
-                    userId: user?.id,
-                    channelId: channel?.id,
-                    host: localOnly ? "." : null));
-          }
+                  query: searchValue,
+                  userId: user?.id,
+                  channelId: channel?.id,
+                  host: localOnly ? "." : null,
+                ),
+              );
+        }
 
-          ref.read(notesProvider(account)).registerAll(notes);
-          return notes.toList();
-        },
-        nextFuture: (lastItem, _) async {
-          final Iterable<Note> notes;
-          if (isHashtagOnly) {
-            notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
-                  NotesSearchByTagRequest(
-                    tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
-                    untilId: lastItem.id,
-                  ),
-                );
-          } else {
-            notes = await ref.read(misskeyProvider(account)).notes.search(
+        ref.read(notesProvider(account)).registerAll(notes);
+        return notes.toList();
+      },
+      nextFuture: (lastItem, _) async {
+        final Iterable<Note> notes;
+        if (isHashtagOnly) {
+          notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+                NotesSearchByTagRequest(
+                  tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
+                  untilId: lastItem.id,
+                ),
+              );
+        } else {
+          notes = await ref.read(misskeyProvider(account)).notes.search(
                 NotesSearchRequest(
-                    query: searchValue,
-                    userId: user?.id,
-                    channelId: channel?.id,
-                    untilId: lastItem.id,
-                    host: localOnly ? "." : null));
-          }
-          ref.read(notesProvider(account)).registerAll(notes);
-          return notes.toList();
-        },
-        itemBuilder: (context, item) {
-          return MisskeyNote(note: item);
-        });
+                  query: searchValue,
+                  userId: user?.id,
+                  channelId: channel?.id,
+                  untilId: lastItem.id,
+                  host: localOnly ? "." : null,
+                ),
+              );
+        }
+        ref.read(notesProvider(account)).registerAll(notes);
+        return notes.toList();
+      },
+      itemBuilder: (context, item) {
+        return MisskeyNote(note: item);
+      },
+    );
   }
 }
