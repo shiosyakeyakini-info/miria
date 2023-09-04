@@ -620,67 +620,50 @@ class MisskeyNote extends HookConsumerWidget {
                         ],
                         if (displayNote.cw == null ||
                             displayNote.cw != null && isCwOpened) ...[
-                          if (isReactionedRenote)
-                            SimpleMfmText(
-                              "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 50))}..."
-                                  .replaceAll("\n\n", "\n"),
-                              isNyaize: displayNote.user.isCat,
-                              emojis: displayNote.emojis,
-                              suffixSpan: [
-                                WidgetSpan(
-                                  child: InNoteButton(
-                                    onPressed: toggleReactionedRenote,
-                                    child: Text(
-                                      S.of(context).showReactionedNote,
-                                    ),
+                          MfmText(
+                            mfmNode: displayTextNodes,
+                            host: displayNote.user.host,
+                            emoji: displayNote.emojis,
+                            isNyaize: displayNote.user.isCat,
+                            isEnableAnimatedMFM: ref
+                                .read(generalSettingsRepositoryProvider)
+                                .settings
+                                .enableAnimatedMFM,
+                            onEmojiTap: (emojiData) async =>
+                                await reactionControl(requestEmoji: emojiData),
+                            suffixSpan: [
+                              if (!isEmptyRenote &&
+                                  displayNote.renoteId != null &&
+                                  (recursive == 2 || isForceUnvisibleRenote))
+                                TextSpan(
+                                  text: "  RN:...",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontStyle: FontStyle.italic,
                                   ),
                                 ),
-                              ],
-                            )
-                          else ...[
-                            if (isLongVisible)
-                              MfmText(
-                                mfmNode: displayTextNodes,
-                                host: displayNote.user.host,
-                                emoji: displayNote.emojis,
-                                isNyaize: displayNote.user.isCat,
-                                isEnableAnimatedMFM: ref
-                                    .read(generalSettingsRepositoryProvider)
-                                    .settings
-                                    .enableAnimatedMFM,
-                                onEmojiTap: (emojiData) async =>
-                                    await reactionControl(
-                                      requestEmoji: emojiData,
-                                    ),
-                                suffixSpan: [
-                                  if (!isEmptyRenote &&
-                                      displayNote.renoteId != null &&
-                                      (recursive == 2 ||
-                                          isForceUnvisibleRenote))
-                                    TextSpan(
-                                      text: "  RN:...",
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                ],
-                              )
-                            else
-                              SimpleMfmText(
-                                "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 150))}..."
-                                    .replaceAll("\n\n", "\n"),
-                                emojis: displayNote.emojis,
-                                isNyaize: displayNote.user.isCat,
-                                suffixSpan: [
-                                  WidgetSpan(
-                                    child: InNoteButton(
-                                      onPressed: toggleLongNote,
-                                      child: Text(S.of(context).showLongText),
-                                    ),
-                                  ),
-                                ],
+                            ],
+                            maxLines: isReactionedRenote
+                                ? 1
+                                : isLongVisible
+                                ? null
+                                : 10,
+                          ),
+                          if (isReactionedRenote)
+                            Center(
+                              child: InNoteButton(
+                                onPressed: toggleReactionedRenote,
+                                child: Text(S.of(context).showReactionedNote),
                               ),
+                            )
+                          else if (!isLongVisible)
+                            Center(
+                              child: InNoteButton(
+                                onPressed: toggleLongNote,
+                                child: Text(S.of(context).showLongText),
+                              ),
+                            ),
+                          if (!isReactionedRenote) ...[
                             MisskeyFileView(
                               files: displayNote.files,
                               height: 200 * pow(0.5, recursive - 1).toDouble(),
