@@ -209,7 +209,6 @@ class FederationPageState extends ConsumerState<FederationPage> {
                         Account.demoAccount(widget.host, metaResponse!.meta!),
                     child: NoteSearch(
                       focusNode: FocusNode(),
-                      initialSearchText: "",
                     )),
             ],
           ),

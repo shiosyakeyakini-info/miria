@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -297,7 +298,10 @@ void main() {
         overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
         child: DefaultRootWidget(
           initialRoute: SearchRoute(
-              account: TestData.account, initialSearchText: "Misskey"),
+            account: TestData.account,
+            initialNoteSearchCondition:
+                const NoteSearchCondition(query: "Misskey"),
+          ),
         ),
       ));
       await tester.pumpAndSettle();

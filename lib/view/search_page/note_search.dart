@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_parser/mfm_parser.dart';
+import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/search_page/search_page.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
+final noteSearchProvider =
+    StateProvider.autoDispose((ref) => const NoteSearchCondition());
+
 class NoteSearch extends ConsumerStatefulWidget {
-  final String? initialSearchText;
+  final NoteSearchCondition? initialCondition;
   final FocusNode? focusNode;
 
   const NoteSearch({
     super.key,
-    required this.initialSearchText,
+    this.initialCondition,
     this.focusNode,
   });
 
@@ -27,13 +30,14 @@ class NoteSearch extends ConsumerStatefulWidget {
 
 class NoteSearchState extends ConsumerState<NoteSearch> {
   var isDetail = false;
-  late final controller =
-      TextEditingController(text: widget.initialSearchText ?? "");
+  late final controller = TextEditingController(
+    text: widget.initialCondition?.query,
+  );
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final initial = widget.initialSearchText;
+    final initial = widget.initialCondition;
     if (initial != null) {
       Future(() {
         ref.read(noteSearchProvider.notifier).state = initial;
@@ -49,8 +53,10 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedUser = ref.watch(noteSearchUserProvider);
-    final selectedChannel = ref.watch(noteSearchChannelProvider);
+    final condition = ref.watch(noteSearchProvider);
+    final selectedUser = condition.user;
+    final selectedChannel = condition.channel;
+
     return Column(
       children: [
         Padding(
@@ -63,11 +69,12 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
                   ),
-                    focusNode: widget.focusNode,
+                  focusNode: widget.focusNode,
                   autofocus: true,
                   textInputAction: TextInputAction.done,
                   onSubmitted: (value) {
-                    ref.read(noteSearchProvider.notifier).state = value;
+                    ref.read(noteSearchProvider.notifier).state =
+                        condition.copyWith(query: value);
                   },
                 ),
               ),
@@ -132,8 +139,10 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                       );
 
                                       ref
-                                          .read(noteSearchUserProvider.notifier)
-                                          .state = selected;
+                                          .read(noteSearchProvider.notifier)
+                                          .state = condition.copyWith(
+                                        user: selected,
+                                      );
                                     },
                                     icon:
                                         const Icon(Icons.keyboard_arrow_right),
@@ -168,10 +177,10 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                         ),
                                       );
                                       ref
-                                          .read(
-                                            noteSearchChannelProvider.notifier,
-                                          )
-                                          .state = selected;
+                                          .read(noteSearchProvider.notifier)
+                                          .state = condition.copyWith(
+                                        channel: selected,
+                                      );
                                     },
                                     icon:
                                         const Icon(Icons.keyboard_arrow_right),
@@ -186,15 +195,14 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                               Row(
                                 children: [
                                   Checkbox(
-                                    value:
-                                        ref.watch(noteSearchLocalOnlyProvider),
+                                    value: condition.localOnly,
                                     onChanged: (value) => ref
-                                            .read(
-                                              noteSearchLocalOnlyProvider
-                                                  .notifier,
-                                            )
-                                            .state =
-                                        !ref.read(noteSearchLocalOnlyProvider),
+                                        .read(
+                                          noteSearchProvider.notifier,
+                                        )
+                                        .state = condition.copyWith(
+                                      localOnly: !condition.localOnly,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -224,26 +232,18 @@ class NoteSearchList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchValue = ref.watch(noteSearchProvider);
-    final channel = ref.watch(noteSearchChannelProvider);
-    final user = ref.watch(noteSearchUserProvider);
-    final localOnly = ref.watch(noteSearchLocalOnlyProvider);
+    final condition = ref.watch(noteSearchProvider);
     final account = AccountScope.of(context);
-    final parsedSearchValue = const MfmParser().parse(searchValue);
+    final parsedSearchValue = const MfmParser().parse(condition.query ?? "");
     final isHashtagOnly =
         parsedSearchValue.length == 1 && parsedSearchValue[0] is MfmHashTag;
 
-    if (searchValue.isEmpty && channel == null && user == null) {
+    if (condition.isEmpty) {
       return Container();
     }
 
     return PushableListView(
-      listKey: Object.hashAll([
-        searchValue,
-        user?.id,
-        channel?.id,
-        localOnly,
-      ]),
+      listKey: condition.hashCode,
       initializeFuture: () async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
@@ -255,10 +255,10 @@ class NoteSearchList extends ConsumerWidget {
         } else {
           notes = await ref.read(misskeyProvider(account)).notes.search(
                 NotesSearchRequest(
-                  query: searchValue,
-                  userId: user?.id,
-                  channelId: channel?.id,
-                  host: localOnly ? "." : null,
+                  query: condition.query ?? "",
+                  userId: condition.user?.id,
+                  channelId: condition.channel?.id,
+                  host: condition.localOnly ? "." : null,
                 ),
               );
         }
@@ -278,11 +278,11 @@ class NoteSearchList extends ConsumerWidget {
         } else {
           notes = await ref.read(misskeyProvider(account)).notes.search(
                 NotesSearchRequest(
-                  query: searchValue,
-                  userId: user?.id,
-                  channelId: channel?.id,
+                  query: condition.query ?? "",
+                  userId: condition.user?.id,
+                  channelId: condition.channel?.id,
+                  host: condition.localOnly ? "." : null,
                   untilId: lastItem.id,
-                  host: localOnly ? "." : null,
                 ),
               );
         }
