@@ -60,6 +60,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         defaultTargetPlatform == TargetPlatform.macOS) {
       return "SF Pro Text";
     }
+    if (defaultTargetPlatform == TargetPlatform.linux) {
+      return "Noto Sans CJK JP";
+    }
 
     return "KosugiMaru";
   }
