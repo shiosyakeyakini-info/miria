@@ -102,27 +102,44 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () async {
-                  final userInfo = ref.read(userInfoProvider(widget.userId));
-                  final firstDate = widget.actualAccount == null
-                      ? userInfo?.response?.createdAt
-                      : userInfo?.remoteResponse?.createdAt;
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: (untilDate == null)
+                      ? null
+                      : (Theme.of(context).brightness == Brightness.light)
+                          ? Theme.of(context).primaryColorLight
+                          : Theme.of(context).primaryColorDark,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  color: (untilDate == null) ? null : Colors.white,
+                  onPressed: () async {
+                    final firstDate = widget.actualAccount == null
+                        ? ref
+                            .read(userInfoProvider(widget.userId))
+                            ?.response
+                            ?.createdAt
+                        : ref
+                            .read(userInfoProvider(widget.userId))
+                            ?.remoteResponse
+                            ?.createdAt;
 
-                  final result = await showDateTimePicker(
-                    context: context,
-                    initialDate: untilDate ?? DateTime.now(),
-                    firstDate: firstDate ?? DateTime.now(),
-                    lastDate: DateTime.now(),
-                    datePickerHelpText: S.of(context).showNotesBeforeThisDate,
-                    timePickerHelpText: S.of(context).showNotesBeforeThisTime,
-                  );
-                  if (result != null) {
-                    untilDate = result;
-                  }
-                  setState(() {});
-                },
-                icon: const Icon(Icons.date_range),
+                    final result = await showDateTimePicker(
+                      context: context,
+                      initialDate: untilDate ?? DateTime.now(),
+                      firstDate: firstDate ?? DateTime.now(),
+                      lastDate: DateTime.now(),
+                      datePickerHelpText: S.of(context).showNotesBeforeThisDate,
+                      timePickerHelpText: S.of(context).showNotesBeforeThisTime,
+                    );
+                    if (result != null) {
+                      setState(() {
+                        untilDate = result;
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.date_range),
+                ),
               ),
             ],
           ),
