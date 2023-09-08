@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/date_time_picker.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/user_page/user_page.dart';
@@ -108,23 +109,16 @@ class UserNotesState extends ConsumerState<UserNotes> {
                       ? userInfo?.response?.createdAt
                       : userInfo?.remoteResponse?.createdAt;
 
-                  final result = await showDatePicker(
+                  final result = await showDateTimePicker(
                     context: context,
                     initialDate: untilDate ?? DateTime.now(),
-                    helpText: S.of(context).showNotesBeforeThisDate,
                     firstDate: firstDate ?? DateTime.now(),
                     lastDate: DateTime.now(),
+                    datePickerHelpText: S.of(context).showNotesBeforeThisDate,
+                    timePickerHelpText: S.of(context).showNotesBeforeThisTime,
                   );
                   if (result != null) {
-                    untilDate = DateTime(
-                      result.year,
-                      result.month,
-                      result.day,
-                      23,
-                      59,
-                      59,
-                      999,
-                    );
+                    untilDate = result;
                   }
                   setState(() {});
                 },
