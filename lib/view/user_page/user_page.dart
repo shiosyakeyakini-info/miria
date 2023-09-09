@@ -9,6 +9,7 @@ import 'package:miria/view/user_page/user_clips.dart';
 import 'package:miria/view/user_page/user_detail.dart';
 import 'package:miria/view/user_page/user_notes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/user_page/user_plays.dart';
 import 'package:miria/view/user_page/user_reactions.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -51,7 +52,7 @@ class UserPageState extends ConsumerState<UserPage> {
     return AccountScope(
       account: widget.account,
       child: DefaultTabController(
-        length: 3 + (isReactionAvailable ? 1 : 0) + (isRemoteUser ? 2 : 0),
+        length: 4 + (isReactionAvailable ? 1 : 0) + (isRemoteUser ? 2 : 0),
         child: Scaffold(
           appBar: AppBar(
             title: SimpleMfmText(
@@ -70,7 +71,8 @@ class UserPageState extends ConsumerState<UserPage> {
                         "ノート${userInfo?.remoteResponse != null ? "（ローカル）" : ""}"),
                 if (isRemoteUser) const Tab(text: "ノート（リモート）"),
                 const Tab(text: "クリップ"),
-                if (isReactionAvailable) const Tab(text: "リアクション")
+                if (isReactionAvailable) const Tab(text: "リアクション"),
+                const Tab(text: "Play")
               ],
               isScrollable: true,
             ),
@@ -120,6 +122,18 @@ class UserPageState extends ConsumerState<UserPage> {
                       Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserReactions(userId: widget.userId)),
+                    if (isRemoteUser)
+                      AccountScope(
+                        account: Account.demoAccount(userInfo!.response!.host!),
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child:
+                                UserPlays(userId: userInfo.remoteResponse!.id)),
+                      )
+                    else
+                      Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: UserPlays(userId: widget.userId)),
                   ],
                 ),
               )
