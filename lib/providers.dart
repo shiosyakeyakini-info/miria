@@ -161,10 +161,7 @@ final errorEventProvider =
 
 final photoEditProvider =
     StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
-  (ref) => PhotoEditStateNotifier(
-    const PhotoEdit(),
-    ref.read(dioProvider),
-  ),
+  (ref) => PhotoEditStateNotifier(const PhotoEdit()),
 );
 
 final importExportRepository =
