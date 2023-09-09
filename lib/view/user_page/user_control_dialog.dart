@@ -6,6 +6,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_notification.dart';
 import 'package:miria/view/common/futurable.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -95,6 +96,15 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
   }
 
   Future<void> blockingCreate() async {
+    if (await SimpleConfirmDialog.show(
+            context: context,
+            message: "ブロックしてもええか？",
+            primary: "ブロックする",
+            secondary: "やっぱりやめる") !=
+        true) {
+      return;
+    }
+
     await ref
         .read(misskeyProvider(widget.account))
         .blocking
