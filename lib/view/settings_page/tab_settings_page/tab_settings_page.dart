@@ -244,8 +244,11 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                           ? Container()
                           : AccountScope(
                               account: selectedAccount!,
-                              child: TabIconView(
-                                icon: selectedIcon,
+                              child: SizedBox(
+                                height: 32,
+                                child: TabIconView(
+                                    icon: selectedIcon,
+                                    size: IconTheme.of(context).size),
                               ))),
                   IconButton(
                       onPressed: () async {
