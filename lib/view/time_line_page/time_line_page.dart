@@ -35,7 +35,7 @@ class TimeLinePage extends ConsumerStatefulWidget {
 }
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
-  late final List<TabSetting> tabSettings;
+  late List<TabSetting> tabSettings;
   late int currentIndex;
   late final PageController pageController;
   late final List<TimelineScrollController> scrollControllers;
@@ -44,6 +44,13 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   void initState() {
+    tabSettings = ref.read(
+      tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
+    );
+    currentIndex = tabSettings.indexOf(widget.initialTabSetting);
+    pageController = PageController(initialPage: currentIndex);
+    scrollControllers =
+        List.generate(tabSettings.length, (_) => TimelineScrollController());
     super.initState();
   }
 
@@ -86,13 +93,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    tabSettings = ref.watch(
-      tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
-    );
-    currentIndex = tabSettings.indexOf(widget.initialTabSetting);
-    pageController = PageController(initialPage: currentIndex);
-    scrollControllers =
-        List.generate(tabSettings.length, (_) => TimelineScrollController());
   }
 
   void reload() {
@@ -198,6 +198,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     final socketTimeline = socketTimelineBase is SocketTimelineRepository
         ? socketTimelineBase
         : null;
+    tabSettings = ref.watch(
+      tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
+    );
 
     return Scaffold(
       key: scaffoldKey,
@@ -259,7 +262,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     TabType.localTimeline,
                     TabType.globalTimeline,
                     TabType.homeTimeline,
-                  ].contains(currentTabSetting.tabType))
+                  ].contains(currentTabSetting.tabType)) ...[
+                    AnnoucementInfo(index: currentIndex),
                     IconButton(
                       onPressed: () {
                         showDialog(
@@ -271,6 +275,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       },
                       icon: const Icon(Icons.smart_toy_outlined),
                     ),
+                  ],
                   const Padding(
                     padding: EdgeInsets.only(right: 5),
                   ),
@@ -286,7 +291,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 ],
               ),
             ),
-            BannerArea(index: currentIndex),
             if (socketTimeline?.isLoading == true)
               const Padding(
                 padding: EdgeInsets.only(top: 10),
@@ -308,6 +312,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
+                        BannerArea(index: currentIndex),
                         Expanded(
                           child: MisskeyTimeline(
                             controller: scrollControllers[index],
@@ -389,7 +394,7 @@ class BannerArea extends ConsumerWidget {
         ?.where((element) =>
             element.display == AnnouncementDisplayType.banner ||
             element.display == AnnouncementDisplayType.dialog)
-        .firstOrNull;
+        .lastOrNull;
 
     if (bannerData == null) return const SizedBox.shrink();
 
@@ -412,6 +417,68 @@ class BannerArea extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class AnnoucementInfo extends ConsumerWidget {
+  final int index;
+
+  const AnnoucementInfo({super.key, required this.index});
+
+  void announcementsRoute(BuildContext context, WidgetRef ref) {
+    final account = ref.read(accountRepository.select((value) => value.account
+        .where((element) =>
+            element ==
+            ref
+                .read(tabSettingsRepositoryProvider)
+                .tabSettings
+                .toList()[index]
+                .account)
+        .firstOrNull));
+    if (account == null) return;
+    context.pushRoute(AnnouncementRoute(account: account));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasUnread = ref.watch(accountRepository.select((value) => value
+        .account
+        .where((element) =>
+            element ==
+            ref
+                .read(tabSettingsRepositoryProvider)
+                .tabSettings
+                .toList()[index]
+                .account)
+        .firstOrNull
+        ?.i
+        .unreadAnnouncements
+        .isNotEmpty));
+
+    if (hasUnread == true) {
+      return IconButton(
+          onPressed: () => announcementsRoute(context, ref),
+          icon: Stack(children: [
+            const Icon(Icons.campaign),
+            Transform.translate(
+                offset: const Offset(12, 12),
+                child: SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 1.5),
+                      borderRadius: BorderRadius.circular(20),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                )),
+          ]));
+    } else {
+      return IconButton(
+          onPressed: () => announcementsRoute(context, ref),
+          icon: const Icon(Icons.campaign));
+    }
   }
 }
 

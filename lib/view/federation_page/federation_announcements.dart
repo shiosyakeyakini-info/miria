@@ -5,9 +5,10 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/pushable_listview.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-class FederationAnnouncements extends ConsumerWidget {
+class FederationAnnouncements extends ConsumerStatefulWidget {
   final String host;
   const FederationAnnouncements({
     super.key,
@@ -15,33 +16,92 @@ class FederationAnnouncements extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      FederationAnnouncementsState();
+}
+
+class FederationAnnouncementsState
+    extends ConsumerState<FederationAnnouncements> {
+  var isActive = true;
+
+  @override
+  Widget build(BuildContext context) {
     final account = AccountScope.of(context);
-    final isCurrentServer = host == AccountScope.of(context).host;
-    return PushableListView(
-        initializeFuture: () async {
-          final Iterable<AnnouncementsResponse> response;
-          const request = AnnouncementsRequest();
-          if (isCurrentServer) {
-            response =
-                await ref.read(misskeyProvider(account)).announcements(request);
-          } else {
-            response = await MisskeyServer().announcements(host, request);
-          }
-          return response.toList();
-        },
-        nextFuture: (lastItem, _) async {
-          final Iterable<AnnouncementsResponse> response;
-          final request = AnnouncementsRequest(untilId: lastItem.id);
-          if (isCurrentServer) {
-            response =
-                await ref.read(misskeyProvider(account)).announcements(request);
-          } else {
-            response = await MisskeyServer().announcements(host, request);
-          }
-          return response.toList();
-        },
-        itemBuilder: (context, data) => Announcement(data: data, host: host));
+    final isCurrentServer = widget.host == AccountScope.of(context).host;
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: ToggleButtons(
+                  isSelected: [
+                    isActive,
+                    !isActive,
+                  ],
+                  onPressed: (value) {
+                    setState(() {
+                      switch (value) {
+                        case 0:
+                          isActive = true;
+                        case 1:
+                          isActive = false;
+                      }
+                    });
+                  },
+                  children: const [
+                    Padding(
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("いまの")),
+                    Padding(
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("前の")),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: PushableListView(
+              listKey: isActive,
+              initializeFuture: () async {
+                final Iterable<AnnouncementsResponse> response;
+                final request =
+                    AnnouncementsRequest(isActive: isActive, limit: 10);
+                if (isCurrentServer) {
+                  response = await ref
+                      .read(misskeyProvider(account))
+                      .announcements(request);
+                } else {
+                  response =
+                      await MisskeyServer().announcements(widget.host, request);
+                }
+                return response.toList();
+              },
+              nextFuture: (lastItem, offset) async {
+                final Iterable<AnnouncementsResponse> response;
+                // 互換性のためにuntilIdとoffsetを両方いれる
+                final request = AnnouncementsRequest(
+                    untilId: lastItem.id,
+                    isActive: isActive,
+                    limit: 30,
+                    offset: offset);
+                if (isCurrentServer) {
+                  response = await ref
+                      .read(misskeyProvider(account))
+                      .announcements(request);
+                } else {
+                  response =
+                      await MisskeyServer().announcements(widget.host, request);
+                }
+                return response.toList();
+              },
+              itemBuilder: (context, data) =>
+                  Announcement(data: data, host: widget.host)),
+        ),
+      ],
+    );
   }
 }
 
@@ -81,6 +141,12 @@ class AnnouncementState extends ConsumerState<Announcement> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
+                if (data.forYou == true)
+                  Text("あなた宛",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Theme.of(context).primaryColor)),
                 Row(
                   children: [
                     if (icon != null) AnnouncementIcon(iconType: icon),
@@ -107,8 +173,18 @@ class AnnouncementState extends ConsumerState<Announcement> {
                     data.isRead == false)
                   ElevatedButton(
                       onPressed: () async {
+                        final account = AccountScope.of(context);
+                        if (data.needConfirmationToRead == true) {
+                          final isConfirmed = await SimpleConfirmDialog.show(
+                              context: context,
+                              message: "「${data.title}」の内容ちゃんと読んだか？",
+                              primary: "読んだ",
+                              secondary: "もうちょい待って");
+                          if (isConfirmed != true) return;
+                        }
+
                         await ref
-                            .read(misskeyProvider(AccountScope.of(context)))
+                            .read(misskeyProvider(account))
                             .i
                             .readAnnouncement(IReadAnnouncementRequest(
                                 announcementId: data.id));

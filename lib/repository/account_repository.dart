@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:miria/providers.dart';
 import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,6 +63,28 @@ class AccountRepository extends ChangeNotifier {
     tabSettingsRepository.updateAccount(account, i);
 
     accountDataValidated[index] = true;
+    notifyListeners();
+  }
+
+  Future<void> createUnreadAnnouncement(
+      Account account, AnnouncementsResponse announcement) async {
+    final i = _account[_account.indexOf(account)].i.copyWith(
+        unreadAnnouncements: [
+          ..._account[_account.indexOf(account)].i.unreadAnnouncements,
+          announcement
+        ]);
+    _account[_account.indexOf(account)] =
+        _account[_account.indexOf(account)].copyWith(i: i);
+    tabSettingsRepository.updateAccount(account, i);
+    notifyListeners();
+  }
+
+  Future<void> removeUnreadAnnouncement(Account account) async {
+    final i =
+        _account[_account.indexOf(account)].i.copyWith(unreadAnnouncements: []);
+    _account[_account.indexOf(account)] =
+        _account[_account.indexOf(account)].copyWith(i: i);
+    tabSettingsRepository.updateAccount(account, i);
     notifyListeners();
   }
 
