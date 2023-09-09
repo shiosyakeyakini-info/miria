@@ -33,9 +33,12 @@ class NoteRepository extends ChangeNotifier {
   }
 
   void _registerNote(Note note) {
+    final registeredNote = _notes[note.id];
     _notes[note.id] = note.copyWith(
       renote: note.renote ?? _notes[note.renoteId],
       reply: note.reply ?? _notes[note.replyId],
+      poll: note.poll ?? registeredNote?.poll,
+      myReaction: note.myReaction ?? registeredNote?.myReaction,
     );
     _noteStatuses[note.id] ??= const NoteStatus(
         isCwOpened: false,
