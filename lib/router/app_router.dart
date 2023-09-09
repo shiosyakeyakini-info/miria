@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/model/tab_setting.dart';
+import 'package:miria/view/announcements_page/announcements_page.dart';
 import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/channels_page/channels_page.dart';
 import 'package:miria/view/clip_list_page/clip_detail_page.dart';
@@ -76,6 +77,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: ExploreRoleUsersRoute.page),
     AutoRoute(page: SearchRoute.page),
     AutoRoute(page: FederationRoute.page),
+    AutoRoute(page: AnnouncementRoute.page),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: SettingsRoute.page),
     AutoRoute(page: GeneralSettingsRoute.page),

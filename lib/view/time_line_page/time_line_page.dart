@@ -35,7 +35,7 @@ class TimeLinePage extends ConsumerStatefulWidget {
 }
 
 class TimeLinePageState extends ConsumerState<TimeLinePage> {
-  late final List<TabSetting> tabSettings;
+  late List<TabSetting> tabSettings;
   late int currentIndex;
   late final PageController pageController;
   late final List<TimelineScrollController> scrollControllers;
@@ -198,6 +198,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     final socketTimeline = socketTimelineBase is SocketTimelineRepository
         ? socketTimelineBase
         : null;
+    tabSettings = ref.watch(
+      tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
+    );
 
     return Scaffold(
       key: scaffoldKey,
@@ -259,7 +262,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     TabType.localTimeline,
                     TabType.globalTimeline,
                     TabType.homeTimeline,
-                  ].contains(currentTabSetting.tabType))
+                  ].contains(currentTabSetting.tabType)) ...[
+                    AnnoucementInfo(index: currentIndex),
                     IconButton(
                       onPressed: () {
                         showDialog(
@@ -271,6 +275,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       },
                       icon: const Icon(Icons.smart_toy_outlined),
                     ),
+                  ],
                   const Padding(
                     padding: EdgeInsets.only(right: 5),
                   ),
@@ -307,6 +312,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
+                        BannerArea(index: currentIndex),
                         Expanded(
                           child: MisskeyTimeline(
                             controller: scrollControllers[index],
@@ -360,5 +366,140 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         initialOpenAccount: currentTabSetting.account,
       ),
     );
+  }
+}
+
+class BannerArea extends ConsumerWidget {
+  final int index;
+
+  const BannerArea({super.key, required this.index});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bannerAnnouncement = ref.watch(accountRepository.select((value) =>
+        value.account
+            .where((element) =>
+                element ==
+                ref
+                    .read(tabSettingsRepositoryProvider)
+                    .tabSettings
+                    .toList()[index]
+                    .account)
+            .firstOrNull
+            ?.i
+            .unreadAnnouncements));
+
+    // ダイアログの実装が大変なので（状態管理とか）いったんバナーと一緒に扱う
+    final bannerData = bannerAnnouncement
+        ?.where((element) =>
+            element.display == AnnouncementDisplayType.banner ||
+            element.display == AnnouncementDisplayType.dialog)
+        .lastOrNull;
+
+    if (bannerData == null) return const SizedBox.shrink();
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(left: 10, top: 3, bottom: 3),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+      child: Row(
+        children: [
+          if (bannerData.icon != null)
+            AnnouncementIcon(iconType: bannerData.icon!),
+          const Padding(padding: EdgeInsets.only(left: 10)),
+          Text(
+            "${bannerData.title}　${bannerData.text}",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AnnoucementInfo extends ConsumerWidget {
+  final int index;
+
+  const AnnoucementInfo({super.key, required this.index});
+
+  void announcementsRoute(BuildContext context, WidgetRef ref) {
+    final account = ref.read(accountRepository.select((value) => value.account
+        .where((element) =>
+            element ==
+            ref
+                .read(tabSettingsRepositoryProvider)
+                .tabSettings
+                .toList()[index]
+                .account)
+        .firstOrNull));
+    if (account == null) return;
+    context.pushRoute(AnnouncementRoute(account: account));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasUnread = ref.watch(accountRepository.select((value) => value
+        .account
+        .where((element) =>
+            element ==
+            ref
+                .read(tabSettingsRepositoryProvider)
+                .tabSettings
+                .toList()[index]
+                .account)
+        .firstOrNull
+        ?.i
+        .unreadAnnouncements
+        .isNotEmpty));
+
+    if (hasUnread == true) {
+      return IconButton(
+          onPressed: () => announcementsRoute(context, ref),
+          icon: Stack(children: [
+            const Icon(Icons.campaign),
+            Transform.translate(
+                offset: const Offset(12, 12),
+                child: SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 1.5),
+                      borderRadius: BorderRadius.circular(20),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                )),
+          ]));
+    } else {
+      return IconButton(
+          onPressed: () => announcementsRoute(context, ref),
+          icon: const Icon(Icons.campaign));
+    }
+  }
+}
+
+class AnnouncementIcon extends StatelessWidget {
+  final AnnouncementIconType iconType;
+
+  const AnnouncementIcon({super.key, required this.iconType});
+
+  @override
+  Widget build(BuildContext context) {
+    switch (iconType) {
+      case AnnouncementIconType.info:
+        return const Icon(Icons.info, color: Colors.white);
+      case AnnouncementIconType.warning:
+        return const Icon(Icons.warning, color: Colors.white);
+      case AnnouncementIconType.error:
+        return const Icon(Icons.error, color: Colors.white);
+      case AnnouncementIconType.success:
+        return const Icon(Icons.check, color: Colors.white);
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }
