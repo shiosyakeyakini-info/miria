@@ -13,8 +13,13 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class NoteSearch extends ConsumerStatefulWidget {
   final String? initialSearchText;
+  final FocusNode? focusNode;
 
-  const NoteSearch({super.key, required this.initialSearchText});
+  const NoteSearch({
+    super.key,
+    required this.initialSearchText,
+    this.focusNode,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => NoteSearchState();
@@ -58,6 +63,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.search),
                     ),
+                    focusNode: widget.focusNode,
                     autofocus: true,
                     textInputAction: TextInputAction.done,
                     onSubmitted: (value) {

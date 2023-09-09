@@ -31,34 +31,76 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class NoteSearchPageState extends ConsumerState<SearchPage> {
+  late final List<FocusNode> focusNodes;
+  int tabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNodes = [FocusNode(), FocusNode()];
+  }
+
+  @override
+  void dispose() {
+    for (final focusNode in focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: AccountScope(
-          account: widget.account,
-          child: Scaffold(
-              appBar: AppBar(
-                title: const Text("検索"),
-                bottom: const TabBar(
-                  tabs: [
-                    Tab(text: "ノート"),
-                    Tab(text: "ユーザー"),
-                  ],
-                ),
-              ),
-              body: TabBarView(
+        account: widget.account,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text("検索"),
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: "ノート"),
+                Tab(text: "ユーザー"),
+              ],
+            ),
+          ),
+          body: Builder(
+            builder: (context) {
+              final tabController = DefaultTabController.of(context);
+              tabController.addListener(() {
+                if (tabController.index != tabIndex) {
+                  focusNodes[tabController.index].requestFocus();
+                  setState(() {
+                    tabIndex = tabController.index;
+                  });
+                }
+              });
+              return TabBarView(
+                controller: tabController,
                 children: [
-                  NoteSearch(initialSearchText: widget.initialSearchText),
+                  NoteSearch(
+                    initialSearchText: widget.initialSearchText,
+                    focusNode: focusNodes[0],
+                  ),
                   Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, right: 10, top: 10),
-                      child: UserSelectContent(
-                        onSelected: (item) => context.pushRoute(UserRoute(
-                            userId: item.id, account: widget.account)),
-                      ))
+                    padding:
+                        const EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: UserSelectContent(
+                      focusNode: focusNodes[1],
+                      onSelected: (item) => context.pushRoute(
+                        UserRoute(
+                          userId: item.id,
+                          account: widget.account,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              ))),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
