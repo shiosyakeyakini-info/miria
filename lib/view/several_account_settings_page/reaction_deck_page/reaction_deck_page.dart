@@ -8,11 +8,12 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart';
 import 'package:reorderables/reorderables.dart';
 
-enum ReactionDeckPageMenuType { addMany, copy }
+enum ReactionDeckPageMenuType { addMany, copy, clear }
 
 @RoutePage()
 class ReactionDeckPage extends ConsumerStatefulWidget {
@@ -58,11 +59,17 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
               ReactionDeckPageMenuType.addMany =>
                 showAddReactionsDialog(context: context),
               ReactionDeckPageMenuType.copy => copyReactions(context: context),
+              ReactionDeckPageMenuType.clear =>
+                clearReactions(context: context),
             },
             itemBuilder: (context) => const [
               PopupMenuItem(
                 value: ReactionDeckPageMenuType.addMany,
                 child: Text("一括追加"),
+              ),
+              PopupMenuItem(
+                value: ReactionDeckPageMenuType.clear,
+                child: Text("クリア"),
               ),
               PopupMenuItem(
                 value: ReactionDeckPageMenuType.copy,
@@ -191,5 +198,19 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("コピーしました")),
     );
+  }
+
+  Future<void> clearReactions({required BuildContext context}) async {
+    if (await SimpleConfirmDialog.show(
+            context: context,
+            message: "すでに設定済みのリアクションデッキをいったんすべてクリアしますか？",
+            primary: "クリアする",
+            secondary: "やっぱりやめる") ==
+        true) {
+      setState(() {
+        reactions.clear();
+        save();
+      });
+    }
   }
 }
