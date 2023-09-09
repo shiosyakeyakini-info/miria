@@ -11,6 +11,7 @@ import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/user_page/update_memo_dialog.dart';
 import 'package:miria/view/user_page/user_control_dialog.dart';
@@ -58,11 +59,20 @@ class UserDetailState extends ConsumerState<UserDetail> {
 
   Future<void> followDelete() async {
     if (isFollowEditing) return;
+    final account = AccountScope.of(context);
+    if (await SimpleConfirmDialog.show(
+            context: context,
+            message: "フォロー解除してもええか？",
+            primary: "解除する",
+            secondary: "やっぱりやめる") !=
+        true) {
+      return;
+    }
     setState(() {
       isFollowEditing = true;
     });
     await ref
-        .read(misskeyProvider(AccountScope.of(context)))
+        .read(misskeyProvider(account))
         .following
         .delete(FollowingDeleteRequest(userId: response.id));
     if (!mounted) return;
