@@ -63,6 +63,8 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             widget.fontSizeRatio;
     final style = widget.style ??
         TextStyle(
+          height: 1.0,
+          fontSize: scopedFontSize,
           color: Theme.of(context).textTheme.bodyMedium?.color,
         );
 
@@ -91,28 +93,28 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
         switch (
             ref.read(generalSettingsRepositoryProvider).settings.emojiType) {
           case EmojiType.system:
-            cachedImage = SizedBox(
-              width: scopedFontSize,
-              height: scopedFontSize,
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: Text(
-                  emojiData.char,
-                  style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
-                ),
+            cachedImage = FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(
+                emojiData.char,
+                strutStyle: StrutStyle(
+                    height: 1.0,
+                    forceStrutHeight: true,
+                    fontSize: scopedFontSize),
+                style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
               ),
             );
             break;
           case EmojiType.twemoji:
-            cachedImage = SizedBox(
-              width: scopedFontSize,
-              height: scopedFontSize,
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: TwemojiText(
-                  text: emojiData.char,
-                  style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
-                ),
+            cachedImage = FittedBox(
+              fit: BoxFit.fitHeight,
+              child: TwemojiText(
+                text: emojiData.char,
+                strutStyle: StrutStyle(
+                    height: 1.0,
+                    forceStrutHeight: true,
+                    fontSize: scopedFontSize),
+                style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
               ),
             );
             break;
