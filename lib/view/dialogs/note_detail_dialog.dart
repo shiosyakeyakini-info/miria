@@ -53,6 +53,12 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
   }
 
   @override
+  void dispose() {
+    reactionTextField.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: SizedBox(

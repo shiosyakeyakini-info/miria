@@ -30,6 +30,13 @@ class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
     ..text = widget.initialMeta.caption;
 
   @override
+  void dispose() {
+    fileNameController.dispose();
+    captionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: SizedBox(

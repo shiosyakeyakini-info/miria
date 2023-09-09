@@ -35,6 +35,12 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
     isNsfw = widget.file.isNsfw;
   }
 
+  @override
+  void dispose() {
+    captionController.dispose();
+    super.dispose();
+  }
+
   String generateRandomText() {
     var str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         .split("");

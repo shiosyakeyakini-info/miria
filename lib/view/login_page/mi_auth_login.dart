@@ -19,6 +19,12 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
   final serverController = TextEditingController();
   bool isAuthed = false;
 
+  @override
+  void dispose() {
+    serverController.dispose();
+    super.dispose();
+  }
+
   Future<void> login() async {
     try {
       IndicatorView.showIndicator(context);

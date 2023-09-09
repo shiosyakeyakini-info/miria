@@ -26,6 +26,12 @@ class CwTextAreaState extends ConsumerState<CwTextArea> {
   }
 
   @override
+  void dispose() {
+    cwController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ref.listen(
       noteCreateProvider(AccountScope.of(context))

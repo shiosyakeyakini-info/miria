@@ -20,6 +20,12 @@ class HardMutePage extends ConsumerStatefulWidget {
 class HardMutePageState extends ConsumerState<HardMutePage> {
   final controller = TextEditingController();
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   String muteValueString(List<MuteWord>? wordMutes) {
     if (wordMutes == null) return "";
 
