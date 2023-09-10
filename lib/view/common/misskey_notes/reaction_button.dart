@@ -122,6 +122,8 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             backgroundColor: MaterialStatePropertyAll(backgroundColor)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ConstrainedBox(
                 constraints: BoxConstraints(
