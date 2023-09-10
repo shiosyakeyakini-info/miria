@@ -7,6 +7,7 @@ class CustomKeyboardButton extends StatelessWidget {
   final String? afterInsert;
   final TextEditingController controller;
   final FocusNode focusNode;
+  final void Function()? onTap;
 
   const CustomKeyboardButton({
     super.key,
@@ -15,6 +16,7 @@ class CustomKeyboardButton extends StatelessWidget {
     required this.focusNode,
     String? displayText,
     this.afterInsert,
+    this.onTap,
   }) : displayText = displayText ?? keyboard;
 
   void insert() {
@@ -25,7 +27,7 @@ class CustomKeyboardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => insert(),
+      onTap: onTap ?? insert,
       child: Padding(
         padding: const EdgeInsets.all(5),
         child: ConstrainedBox(

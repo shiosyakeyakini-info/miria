@@ -9,3 +9,9 @@ class Emoji extends InputCompletionType {
 
   final String query;
 }
+
+class MfmFn extends InputCompletionType {
+  const MfmFn(this.query);
+
+  final String query;
+}

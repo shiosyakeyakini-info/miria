@@ -27,10 +27,31 @@ extension TextEditingControllerExtension on TextEditingController {
     }
   }
 
+  String? get mfmFnQuery {
+    final textBeforeSelection = this.textBeforeSelection;
+    if (textBeforeSelection == null) {
+      return null;
+    }
+    final lastOpenTagIndex = textBeforeSelection.lastIndexOf(r"$[");
+    if (lastOpenTagIndex < 0) {
+      return null;
+    }
+    final query = textBeforeSelection.substring(lastOpenTagIndex + 2);
+    if (RegExp(r"^[a-z234]*$").hasMatch(query)) {
+      return query;
+    } else {
+      return null;
+    }
+  }
+
   InputCompletionType get inputCompletionType {
     final emojiQuery = this.emojiQuery;
     if (emojiQuery != null) {
       return Emoji(emojiQuery);
+    }
+    final mfmFnQuery = this.mfmFnQuery;
+    if (mfmFnQuery != null) {
+      return MfmFn(mfmFnQuery);
     }
     return Basic();
   }
