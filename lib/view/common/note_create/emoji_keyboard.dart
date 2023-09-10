@@ -73,7 +73,9 @@ class EmojiKeyboard extends ConsumerWidget {
       case UnicodeEmojiData():
         controller.value = TextEditingValue(
           text: "$beforeSearchText${emoji.char}$after",
-          selection: TextSelection.collapsed(offset: emoji.char.length),
+          selection: TextSelection.collapsed(
+            offset: beforeSearchText.length + emoji.char.length,
+          ),
         );
         break;
       default:
