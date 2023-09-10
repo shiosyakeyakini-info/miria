@@ -44,6 +44,23 @@ extension TextEditingControllerExtension on TextEditingController {
     }
   }
 
+  String? get hashtagQuery {
+    final textBeforeSelection = this.textBeforeSelection;
+    if (textBeforeSelection == null) {
+      return null;
+    }
+    final lastHashIndex = textBeforeSelection.lastIndexOf("#");
+    if (lastHashIndex < 0) {
+      return null;
+    }
+    final query = textBeforeSelection.substring(lastHashIndex + 1);
+    if (query.contains(RegExp(r"""[ \u3000\t.,!?'"#:/[\]【】()「」（）<>]"""))) {
+      return null;
+    } else {
+      return query;
+    }
+  }
+
   InputCompletionType get inputCompletionType {
     final emojiQuery = this.emojiQuery;
     if (emojiQuery != null) {
@@ -52,6 +69,10 @@ extension TextEditingControllerExtension on TextEditingController {
     final mfmFnQuery = this.mfmFnQuery;
     if (mfmFnQuery != null) {
       return MfmFn(mfmFnQuery);
+    }
+    final hashtagQuery = this.hashtagQuery;
+    if (hashtagQuery != null) {
+      return Hashtag(hashtagQuery);
     }
     return Basic();
   }

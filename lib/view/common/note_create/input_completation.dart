@@ -8,6 +8,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/note_create/emoji_keyboard.dart';
+import 'package:miria/view/common/note_create/hashtag_keyboard.dart';
 import 'package:miria/view/common/note_create/mfm_fn_keyboard.dart';
 
 final inputCompletionTypeProvider =
@@ -109,6 +110,11 @@ class InputComplementState extends ConsumerState<InputComplement> {
                       focusNode: focusNode,
                     ),
                   MfmFn() => MfmFnKeyboard(
+                      controller: widget.controller,
+                      focusNode: focusNode,
+                    ),
+                  Hashtag() => HashtagKeyboard(
+                      account: account,
                       controller: widget.controller,
                       focusNode: focusNode,
                     ),

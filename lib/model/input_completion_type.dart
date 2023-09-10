@@ -15,3 +15,9 @@ class MfmFn extends InputCompletionType {
 
   final String query;
 }
+
+class Hashtag extends InputCompletionType {
+  const Hashtag(this.query);
+
+  final String query;
+}
