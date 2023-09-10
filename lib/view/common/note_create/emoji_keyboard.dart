@@ -1,40 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/input_completion_type.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 
-final _filteredEmojisProvider = NotifierProvider.autoDispose.family<
-    _FilteredEmojis, List<MisskeyEmojiData>, (Account, TextEditingController)>(
+final _filteredEmojisProvider = NotifierProvider.autoDispose
+    .family<_FilteredEmojis, List<MisskeyEmojiData>, Account>(
   _FilteredEmojis.new,
 );
 
-class _FilteredEmojis extends AutoDisposeFamilyNotifier<List<MisskeyEmojiData>,
-    (Account, TextEditingController)> {
+class _FilteredEmojis
+    extends AutoDisposeFamilyNotifier<List<MisskeyEmojiData>, Account> {
   @override
-  List<MisskeyEmojiData> build((Account, TextEditingController) arg) {
-    _controller.addListener(_updateEmojis);
-    ref.onDispose(() {
-      _controller.removeListener(_updateEmojis);
+  List<MisskeyEmojiData> build(Account arg) {
+    ref.listen(inputCompletionTypeProvider, (_, type) {
+      _updateEmojis(type);
     });
-    return ref.read(emojiRepositoryProvider(_account)).defaultEmojis();
+    return ref.read(emojiRepositoryProvider(arg)).defaultEmojis();
   }
 
-  Account get _account {
-    return arg.$1;
-  }
-
-  TextEditingController get _controller {
-    return arg.$2;
-  }
-
-  void _updateEmojis() async {
-    state = await ref
-        .read(emojiRepositoryProvider(_account))
-        .searchEmojis(_controller.emojiSearchValue);
+  void _updateEmojis(InputCompletionType type) async {
+    if (type is Emoji) {
+      state =
+          await ref.read(emojiRepositoryProvider(arg)).searchEmojis(type.query);
+    }
   }
 }
 
@@ -86,8 +79,7 @@ class EmojiKeyboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filteredEmojis =
-        ref.watch(_filteredEmojisProvider((account, controller)));
+    final filteredEmojis = ref.watch(_filteredEmojisProvider(account));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

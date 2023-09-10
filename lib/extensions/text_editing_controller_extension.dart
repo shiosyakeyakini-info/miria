@@ -1,25 +1,38 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:miria/model/input_completion_type.dart';
 
 extension TextEditingControllerExtension on TextEditingController {
-  bool get isIncludeBeforeColon {
-    if (selection.base.offset == -1) return false;
-    return text.substring(0, selection.base.offset).contains(":");
-  }
-
-  bool get isEmojiScope {
-    final position = selection.base.offset;
-    final startPosition = text.substring(0, position).lastIndexOf(":") + 1;
-    if (RegExp(r':[a-zA-z_0-9]+?:$')
-        .hasMatch(text.substring(0, startPosition))) {
-      return true;
+  String? get textBeforeSelection {
+    final baseOffset = selection.baseOffset;
+    if (baseOffset < 0) {
+      return null;
     }
-    return false;
+    return text.substring(0, baseOffset);
   }
 
-  String get emojiSearchValue {
-    final position = selection.base.offset;
-    final startPosition = text.substring(0, position).lastIndexOf(":") + 1;
-    return text.substring(startPosition, position);
+  String? get emojiQuery {
+    final textBeforeSelection = this.textBeforeSelection;
+    if (textBeforeSelection == null) {
+      return null;
+    }
+    final lastColonIndex = textBeforeSelection.lastIndexOf(":");
+    if (lastColonIndex < 0) {
+      return null;
+    }
+    if (RegExp(r':[a-zA-z_0-9]+?:$')
+        .hasMatch(text.substring(0, lastColonIndex + 1))) {
+      return null;
+    } else {
+      return textBeforeSelection.substring(lastColonIndex + 1);
+    }
+  }
+
+  InputCompletionType get inputCompletionType {
+    final emojiQuery = this.emojiQuery;
+    if (emojiQuery != null) {
+      return Emoji(emojiQuery);
+    }
+    return Basic();
   }
 
   void insert(String insertText, {String? afterText}) {

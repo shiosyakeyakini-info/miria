@@ -3,18 +3,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
+import 'package:miria/model/input_completion_type.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/note_create/emoji_keyboard.dart';
 
-enum InputCompletionType {
-  basic,
-  emoji,
-}
-
 final inputCompletionTypeProvider =
-    StateProvider.autoDispose((ref) => InputCompletionType.basic);
+    StateProvider.autoDispose<InputCompletionType>((ref) => Basic());
 
 final inputComplementDelayedProvider = Provider((ref) => 300);
 
@@ -57,18 +53,8 @@ class InputComplementState extends ConsumerState<InputComplement> {
   }
 
   void updateType() {
-    if (widget.controller.isIncludeBeforeColon) {
-      if (widget.controller.isEmojiScope) {
-        ref.read(inputCompletionTypeProvider.notifier).state =
-            InputCompletionType.basic;
-      } else {
-        ref.read(inputCompletionTypeProvider.notifier).state =
-            InputCompletionType.emoji;
-      }
-    } else {
-      ref.read(inputCompletionTypeProvider.notifier).state =
-          InputCompletionType.basic;
-    }
+    ref.read(inputCompletionTypeProvider.notifier).state =
+        widget.controller.inputCompletionType;
   }
 
   @override
@@ -112,11 +98,11 @@ class InputComplementState extends ConsumerState<InputComplement> {
                 constraints:
                     BoxConstraints(minWidth: MediaQuery.of(context).size.width),
                 child: switch (inputCompletionType) {
-                  InputCompletionType.basic => BasicKeyboard(
+                  Basic() => BasicKeyboard(
                       controller: widget.controller,
                       focusNode: focusNode,
                     ),
-                  InputCompletionType.emoji => EmojiKeyboard(
+                  Emoji() => EmojiKeyboard(
                       account: account,
                       controller: widget.controller,
                       focusNode: focusNode,
