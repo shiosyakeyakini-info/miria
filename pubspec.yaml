@@ -87,6 +87,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   mockito: ^5.4.2
   cider: ^0.2.3
+  flutter_distributor: ^0.3.4
 
 flutter:
   uses-material-design: true
