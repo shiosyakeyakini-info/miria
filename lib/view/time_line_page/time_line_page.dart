@@ -14,11 +14,11 @@ import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/server_detail_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/common_drawer.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/notification_icon.dart';
 import 'package:miria/view/common/tab_icon_view.dart';
 import 'package:miria/view/common/timeline_listview.dart';
 import 'package:miria/view/time_line_page/misskey_time_line.dart';
+import 'package:miria/view/time_line_page/nyanpuppu.dart';
 import 'package:miria/view/time_line_page/timeline_emoji.dart';
 import 'package:miria/view/time_line_page/timeline_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -236,14 +236,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       child: Text(currentTabSetting.name),
                     ),
                   ),
-                  const SizedBox(
-                    height: 24,
-                    child: NetworkImageView(
-                      url:
-                          "https://nos3.arkjp.net/image.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fc8a26f2b-7541-4fc6-bebb-036482b53cec.gif&emoji=1",
-                      type: ImageType.customEmoji,
-                    ),
-                  ),
+                  const Nyanpuppu(),
                   if (currentTabSetting.tabType == TabType.channel)
                     IconButton(
                       onPressed: () {
