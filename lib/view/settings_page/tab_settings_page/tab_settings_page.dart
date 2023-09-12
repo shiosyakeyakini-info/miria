@@ -86,6 +86,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -238,8 +244,11 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                           ? Container()
                           : AccountScope(
                               account: selectedAccount!,
-                              child: TabIconView(
-                                icon: selectedIcon,
+                              child: SizedBox(
+                                height: 32,
+                                child: TabIconView(
+                                    icon: selectedIcon,
+                                    size: IconTheme.of(context).size),
                               ))),
                   IconButton(
                       onPressed: () async {

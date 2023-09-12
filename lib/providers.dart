@@ -121,10 +121,10 @@ final antennaTimelineProvider =
 final mainStreamRepositoryProvider =
     ChangeNotifierProvider.family<MainStreamRepository, Account>(
         (ref, account) => MainStreamRepository(
-              ref.read(misskeyProvider(account)),
-              ref.read(emojiRepositoryProvider(account)),
-              account,
-            ));
+            ref.read(misskeyProvider(account)),
+            ref.read(emojiRepositoryProvider(account)),
+            account,
+            ref.read(accountRepository)));
 
 final favoriteProvider = ChangeNotifierProvider.autoDispose
     .family<FavoriteRepository, Account>((ref, account) => FavoriteRepository(
@@ -161,10 +161,7 @@ final errorEventProvider =
 
 final photoEditProvider =
     StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
-  (ref) => PhotoEditStateNotifier(
-    const PhotoEdit(),
-    ref.read(dioProvider),
-  ),
+  (ref) => PhotoEditStateNotifier(const PhotoEdit()),
 );
 
 final importExportRepository =

@@ -11,7 +11,6 @@ import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/repository/note_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
@@ -25,6 +24,7 @@ import 'package:miria/view/common/misskey_notes/note_vote.dart';
 import 'package:miria/view/common/misskey_notes/reaction_button.dart';
 import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
 import 'package:miria/view/common/misskey_notes/renote_user_dialog.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
@@ -236,13 +236,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           shouldCollaposed(displayTextNodes!));
 
       ref.read(notesProvider(AccountScope.of(context))).updateNoteStatus(
-          widget.note.id,
-          (status) => NoteStatus(
-              isCwOpened: false,
+            widget.note.id,
+            (status) => status.copyWith(
               isLongVisible: isLongVisible,
               isReactionedRenote: isReactionedRenote,
-              isLongVisibleInitialized: true),
-          isNotify: false);
+              isLongVisibleInitialized: true,
+            ),
+            isNotify: false,
+          );
     }
 
     final userId =
@@ -736,6 +737,15 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       return;
     }
     if (displayNote.myReaction != null && requestEmoji == null) {
+      if (await SimpleConfirmDialog.show(
+              context: context,
+              message: "リアクション取り消してもええか？",
+              primary: "取り消す",
+              secondary: "やっぱりやめる") !=
+          true) {
+        return;
+      }
+
       await ref
           .read(misskeyProvider(account))
           .notes

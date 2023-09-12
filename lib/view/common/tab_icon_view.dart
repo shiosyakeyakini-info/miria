@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/model/tab_icon.dart';
@@ -31,19 +32,13 @@ class TabIconView extends ConsumerWidget {
     }
     final customEmoji = icon?.customEmojiName;
     if (customEmoji != null) {
-      return SizedBox(
-        width: iconSize,
-        height: iconSize,
-        child: Center(
-          child: CustomEmoji(
-            emojiData: MisskeyEmojiData.fromEmojiName(
-              emojiName: ":$customEmoji:",
-              repository:
-                  ref.read(emojiRepositoryProvider(AccountScope.of(context))),
-            ),
-            size: iconSize,
-          ),
+      return CustomEmoji(
+        emojiData: MisskeyEmojiData.fromEmojiName(
+          emojiName: ":$customEmoji:",
+          repository:
+              ref.read(emojiRepositoryProvider(AccountScope.of(context))),
         ),
+        size: iconSize,
       );
     }
     return const SizedBox.shrink();

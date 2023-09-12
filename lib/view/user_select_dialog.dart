@@ -31,7 +31,13 @@ class UserSelectDialog extends StatelessWidget {
 
 class UserSelectContent extends ConsumerStatefulWidget {
   final void Function(User) onSelected;
-  const UserSelectContent({super.key, required this.onSelected});
+  final FocusNode? focusNode;
+
+  const UserSelectContent({
+    super.key,
+    required this.onSelected,
+    this.focusNode,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -46,6 +52,12 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
   final queryController = TextEditingController();
 
   @override
+  void dispose() {
+    queryController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final origin = ref.watch(usersSelectDialogOriginProvider);
     return Column(
@@ -55,6 +67,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
       children: [
         TextField(
           controller: queryController,
+          focusNode: widget.focusNode,
           autofocus: true,
           decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
           onSubmitted: (value) {

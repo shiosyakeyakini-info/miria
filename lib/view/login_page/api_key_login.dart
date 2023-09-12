@@ -19,6 +19,13 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
   final serverController = TextEditingController();
   final apiKeyController = TextEditingController();
 
+  @override
+  void dispose() {
+    serverController.dispose();
+    apiKeyController.dispose();
+    super.dispose();
+  }
+
   Future<void> login() async {
     try {
       IndicatorView.showIndicator(context);

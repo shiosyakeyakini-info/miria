@@ -3,8 +3,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,13 +54,9 @@ class EditedEmojiData with _$EditedEmojiData {
 }
 
 class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
-  static List<String> _acceptReactions = [];
+  static final List<String> _acceptReactions = [];
 
-  final Dio dio;
-  PhotoEditStateNotifier(
-    super.state,
-    this.dio,
-  );
+  PhotoEditStateNotifier(super.state);
 
   /// 状態を初期化する
   Future<void> initialize(MisskeyPostFile file) async {
@@ -79,7 +73,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
         throw UnsupportedError("$file is unsupported.");
     }
     final imageData = await ImageDescriptor.encoded(
-        await ImmutableBuffer.fromUint8List(initialImage));
+      await ImmutableBuffer.fromUint8List(initialImage),
+    );
     final defaultSize =
         Size(imageData.width.toDouble(), imageData.height.toDouble());
 
@@ -92,8 +87,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     );
   }
 
-  Future<Uint8List?> _drawImage(
-      PhotoEdit attemptState, bool isReactionMarge) async {
+  Future<Uint8List?> _drawImage(PhotoEdit attemptState) async {
     final initialImage = state.initialImage;
     if (initialImage == null) return null;
     final editorOption = ImageEditorOption();
@@ -104,24 +98,33 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     if (!attemptState.clipMode) {
       final offset = attemptState.cropOffset;
       final size = attemptState.cropSize;
-      editorOption.addOption(ClipOption(
-          x: offset.dx, y: offset.dy, width: size.width, height: size.height));
+      editorOption.addOption(
+        ClipOption(
+          x: offset.dx,
+          y: offset.dy,
+          width: size.width,
+          height: size.height,
+        ),
+      );
     }
 
     final presets = ColorFilterPresets().presets;
     for (final colorPreset in attemptState.adaptivePresets) {
       editorOption.addOptions(
-          presets.firstWhere((element) => element.name == colorPreset).option);
+        presets.firstWhere((element) => element.name == colorPreset).option,
+      );
     }
 
     final result = await ImageEditor.editImage(
-        image: initialImage, imageEditorOption: editorOption);
+      image: initialImage,
+      imageEditorOption: editorOption,
+    );
     return result;
   }
 
   /// 画像の描画を反映する
   Future<void> draw(PhotoEdit attemptState) async {
-    final editedImage = await _drawImage(attemptState, false);
+    final editedImage = await _drawImage(attemptState);
     if (editedImage == null) return;
     state = attemptState.copyWith(editedImage: editedImage);
   }
@@ -139,22 +142,26 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     final padding = 20 * state.defaultSize.width / state.actualSize.width;
 
     final removedPaddingImage = await ImageEditor.editImage(
-        image: resultImage,
-        imageEditorOption: ImageEditorOption()
-          ..addOptions([
-            ClipOption(
-                x: padding +
-                    (state.defaultSize.width - state.cropSize.width) / 2,
-                y: padding +
-                    (state.defaultSize.height - state.cropSize.height) / 2,
-                width: state.cropSize.width,
-                height: state.cropSize.height)
-          ]));
+      image: resultImage,
+      imageEditorOption: ImageEditorOption()
+        ..addOptions([
+          ClipOption(
+            x: padding + (state.defaultSize.width - state.cropSize.width) / 2,
+            y: padding + (state.defaultSize.height - state.cropSize.height) / 2,
+            width: state.cropSize.width,
+            height: state.cropSize.height,
+          ),
+        ]),
+    );
     return removedPaddingImage;
   }
 
   Offset resolveRotatedOffset(
-      Offset cropOffset, Size cropSize, Size defaultSize, int angle) {
+    Offset cropOffset,
+    Size cropSize,
+    Size defaultSize,
+    int angle,
+  ) {
     final rotatedX = defaultSize.width - cropSize.width - cropOffset.dx;
     return Offset(cropOffset.dy, rotatedX);
   }
@@ -162,30 +169,41 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   /// 画像を回転する
   void rotate() {
     final angle = ((state.angle - 90) % 360).abs();
-    draw(state.copyWith(
-      angle: angle,
-      defaultSize: Size(state.defaultSize.height, state.defaultSize.width),
-      cropSize: Size(state.cropSize.height, state.cropSize.width),
-      cropOffset: resolveRotatedOffset(
-          state.cropOffset, state.cropSize, state.defaultSize, angle),
-      emojis: [
-        for (final emoji in state.emojis)
-          emoji.copyWith(
+    draw(
+      state.copyWith(
+        angle: angle,
+        defaultSize: Size(state.defaultSize.height, state.defaultSize.width),
+        cropSize: Size(state.cropSize.height, state.cropSize.width),
+        cropOffset: resolveRotatedOffset(
+          state.cropOffset,
+          state.cropSize,
+          state.defaultSize,
+          angle,
+        ),
+        emojis: [
+          for (final emoji in state.emojis)
+            emoji.copyWith(
               angle: emoji.angle - pi / 2,
-              position: Offset(emoji.position.dy,
-                  state.defaultSize.width - emoji.scale - emoji.position.dx))
-      ],
-      selectedEmojiIndex: null,
-    ));
+              position: Offset(
+                emoji.position.dy,
+                state.defaultSize.width - emoji.scale - emoji.position.dx,
+              ),
+            ),
+        ],
+        selectedEmojiIndex: null,
+      ),
+    );
   }
 
   /// 画像を切り取る
   void crop() {
-    draw(state.copyWith(
-      clipMode: !state.clipMode,
-      colorFilterMode: false,
-      selectedEmojiIndex: null,
-    ));
+    draw(
+      state.copyWith(
+        clipMode: !state.clipMode,
+        colorFilterMode: false,
+        selectedEmojiIndex: null,
+      ),
+    );
   }
 
   void decideDrawArea(Size size) {
@@ -197,50 +215,77 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     final size = state.cropSize;
     final defaultSize = state.defaultSize;
     final offset = state.cropOffset;
+    final validatedOffset = Offset(
+      max(0, min(offset.dx, defaultSize.width)),
+      max(0, min(offset.dy, defaultSize.height)),
+    );
     final validatedCropSize = Size(
-        max(0, min(size.width, defaultSize.width - offset.dx + 1)),
-        max(0, min(size.height, defaultSize.height - offset.dy + 1)));
-    final validateOffset = Offset(max(0, min(offset.dx, defaultSize.width)),
-        max(0, min(offset.dy, defaultSize.height)));
+      max(1, min(size.width, defaultSize.width - validatedOffset.dx)),
+      max(1, min(size.height, defaultSize.height - validatedOffset.dy)),
+    );
 
     return state.copyWith(
       cropSize: validatedCropSize,
-      cropOffset: validateOffset,
+      cropOffset: validatedOffset,
     );
   }
 
   /// 画像の切り取り範囲の左上を移動する
   void cropMoveLeftTop(PointerMoveEvent detail) {
-    state = validateCrop(state.copyWith(
+    state = validateCrop(
+      state.copyWith(
         cropOffset: state.cropOffset + detail.localDelta,
-        cropSize: Size(state.cropSize.width - detail.localDelta.dx,
-            state.cropSize.height - detail.localDelta.dy)));
+        cropSize: Size(
+          state.cropSize.width - detail.localDelta.dx,
+          state.cropSize.height - detail.localDelta.dy,
+        ),
+      ),
+    );
   }
 
   /// 画像の切り取り範囲の右上を移動する
   void cropMoveRightTop(PointerMoveEvent detail) {
-    state = validateCrop(state.copyWith(
+    state = validateCrop(
+      state.copyWith(
         cropOffset: Offset(
-            state.cropOffset.dx, state.cropOffset.dy + detail.localDelta.dy),
-        cropSize: Size(state.cropSize.width + detail.localDelta.dx,
-            state.cropSize.height - detail.localDelta.dy)));
+          state.cropOffset.dx,
+          state.cropOffset.dy + detail.localDelta.dy,
+        ),
+        cropSize: Size(
+          state.cropSize.width + detail.localDelta.dx,
+          state.cropSize.height - detail.localDelta.dy,
+        ),
+      ),
+    );
   }
 
   /// 画像の切り取り範囲の左下を移動する
   void cropMoveLeftBottom(PointerMoveEvent detail) {
-    state = validateCrop(state.copyWith(
+    state = validateCrop(
+      state.copyWith(
         cropOffset: Offset(
-            state.cropOffset.dx + detail.localDelta.dx, state.cropOffset.dy),
-        cropSize: Size(state.cropSize.width - detail.localDelta.dx,
-            state.cropSize.height + detail.localDelta.dy)));
+          state.cropOffset.dx + detail.localDelta.dx,
+          state.cropOffset.dy,
+        ),
+        cropSize: Size(
+          state.cropSize.width - detail.localDelta.dx,
+          state.cropSize.height + detail.localDelta.dy,
+        ),
+      ),
+    );
   }
 
   /// 画像の切り取り範囲の右下を移動する
   void cropMoveRightBottom(PointerMoveEvent detail) {
-    state = validateCrop(state.copyWith(
+    state = validateCrop(
+      state.copyWith(
         cropOffset: Offset(state.cropOffset.dx, state.cropOffset.dy),
-        cropSize: Size(state.cropSize.width + detail.localDelta.dx,
-            state.cropSize.height + detail.localDelta.dy)));
+        cropSize: Size(
+          state.cropSize.width + detail.localDelta.dx,
+          state.cropSize.height + detail.localDelta.dy,
+        ),
+      ),
+    );
   }
 
   /// 画像の色調補正のプレビューを切り替える
@@ -258,18 +303,20 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     final editedImage = state.editedImage;
     if (editedImage == null) return;
     final previewImage = await ImageEditor.editImage(
-        image: editedImage,
-        imageEditorOption: ImageEditorOption()
-          ..addOption(const ScaleOption(300, 300, keepRatio: true)));
+      image: editedImage,
+      imageEditorOption: ImageEditorOption()
+        ..addOption(const ScaleOption(300, 300, keepRatio: true)),
+    );
     if (previewImage == null) return;
     final result = [
       for (final preset in ColorFilterPresets().presets)
         ColorFilterPreview(
-            name: preset.name,
-            image: await ImageEditor.editImage(
-                image: previewImage,
-                imageEditorOption: ImageEditorOption()
-                  ..addOptions(preset.option)))
+          name: preset.name,
+          image: await ImageEditor.editImage(
+            image: previewImage,
+            imageEditorOption: ImageEditorOption()..addOptions(preset.option),
+          ),
+        ),
     ].whereNotNull();
 
     state = state.copyWith(colorFilterPreviewImages: result.toList());
@@ -283,7 +330,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
       await draw(state.copyWith(adaptivePresets: list));
     } else {
       await draw(
-          state.copyWith(adaptivePresets: [...state.adaptivePresets, name]));
+        state.copyWith(adaptivePresets: [...state.adaptivePresets, name]),
+      );
     }
     await createPreviewImage();
   }
@@ -291,9 +339,10 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   /// リアクションを追加する
   Future<void> addReaction(Account account, BuildContext context) async {
     final reaction = await showDialog<MisskeyEmojiData?>(
-        context: context,
-        builder: (context) =>
-            ReactionPickerDialog(account: account, isAcceptSensitive: true));
+      context: context,
+      builder: (context) =>
+          ReactionPickerDialog(account: account, isAcceptSensitive: true),
+    );
     if (reaction == null) return;
 
     switch (reaction) {
@@ -302,9 +351,12 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
           if (!mounted) return;
           final dialogResult = await showDialog<bool?>(
-              context: context,
-              builder: (context) => LicenseConfirmDialog(
-                  emoji: reaction.baseName, account: account));
+            context: context,
+            builder: (context) => LicenseConfirmDialog(
+              emoji: reaction.baseName,
+              account: account,
+            ),
+          );
           if (dialogResult != true) return;
           _acceptReactions.add(reaction.baseName);
         }
@@ -316,16 +368,22 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
         return;
     }
 
-    state = state.copyWith(emojis: [
-      ...state.emojis,
-      EditedEmojiData(
+    state = state.copyWith(
+      emojis: [
+        ...state.emojis,
+        EditedEmojiData(
           emoji: reaction,
           scale: 100,
           position: Offset(
-              state.cropOffset.dx + (state.cropSize.width) / 2 - 50,
-              state.cropOffset.dy + (state.cropSize.height) / 2 - 50),
-          angle: 0),
-    ], selectedEmojiIndex: state.emojis.length, clipMode: false);
+            state.cropOffset.dx + (state.cropSize.width) / 2 - 50,
+            state.cropOffset.dy + (state.cropSize.height) / 2 - 50,
+          ),
+          angle: 0,
+        ),
+      ],
+      selectedEmojiIndex: state.emojis.length,
+      clipMode: false,
+    );
   }
 
   double _startScale = 0;
@@ -345,8 +403,9 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     if (selectedIndex == null) return;
     final emojis = state.emojis.toList();
     emojis[selectedIndex] = emojis[selectedIndex].copyWith(
-        scale: _startScale * detail.scale,
-        angle: _startAngle + detail.rotation);
+      scale: _startScale * detail.scale,
+      angle: _startAngle + detail.rotation,
+    );
 
     state = state.copyWith(emojis: emojis, clipMode: false);
   }
@@ -357,9 +416,11 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     if (selectedIndex == null) return;
     final emojis = state.emojis.toList();
     emojis[selectedIndex] = emojis[selectedIndex].copyWith(
-        position: Offset(
-            emojis[selectedIndex].position.dx + event.localDelta.dx,
-            emojis[selectedIndex].position.dy + event.localDelta.dy));
+      position: Offset(
+        emojis[selectedIndex].position.dx + event.localDelta.dx,
+        emojis[selectedIndex].position.dy + event.localDelta.dy,
+      ),
+    );
 
     state = state.copyWith(emojis: emojis);
   }
@@ -367,11 +428,19 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   /// リアクションを選択する
   void selectReaction(int index) {
     state = state.copyWith(
-        clipMode: false, colorFilterMode: false, selectedEmojiIndex: index);
+      clipMode: false,
+      colorFilterMode: false,
+      selectedEmojiIndex: index,
+    );
   }
 
   void clearSelectMode() {
-    draw(state.copyWith(
-        selectedEmojiIndex: null, colorFilterMode: false, clipMode: false));
+    draw(
+      state.copyWith(
+        selectedEmojiIndex: null,
+        colorFilterMode: false,
+        clipMode: false,
+      ),
+    );
   }
 }
