@@ -17,7 +17,9 @@ jobs:
           cache: true
 
       - name: Flutter pub get
-        run: flutter pub get
+        run: |
+          git config --system core.longpaths true
+          flutter pub get
 
       - name: Build for Windows
         run: |
@@ -25,14 +27,17 @@ jobs:
 
       - name: Copy DLL
         run: |
-          cp C:\Windows\System32\msvcp*.dll build\windows\runner\Release\
-          cp C:\Windows\System32\vcruntime*.dll build\windows\runner\Release\
+          cp C:\Windows\System32\msvcp140.dll build\windows\runner\Release\
+          cp C:\Windows\System32\vcruntime140.dll build\windows\runner\Release\
+          cp C:\Windows\System32\vcruntime140_1.dll build\windows\runner\Release\
       
       - name: Zip files
         run: |
-          ren build\windows\runner\Release build\windows\runner\Miria
-          Compress-Archive -Path build\windows\runner\Miria -DestinationPath miria-$(flutter run cider version)-windows-x64.zip -Force
+          ren build\windows\runner\Release Miria
+          Compress-Archive -Path build\windows\runner\Miria -DestinationPath miria_$(flutter pub run cider version)_windows-x64.zip -Force
 
       - name: Create tag and release note
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh releases create v$(flutter run cider version) --generate-notes --draft miria-$(flutter run cider version)-windows-x64.zip
+          gh release upload v$(flutter pub run cider version)  miria_$(flutter pub run cider version)_windows-x64.zip
