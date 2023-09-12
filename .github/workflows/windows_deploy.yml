@@ -1,0 +1,38 @@
+name: デプロイ(windows zip)
+
+on: [workflow_dispatch]
+
+jobs:
+  build_for_windows:
+    name: Windows用ビルド
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build for Windows
+        run: |
+          flutter build windows --release
+
+      - name: Copy DLL
+        run: |
+          cp C:\Windows\System32\msvcp*.dll build\windows\runner\Release\
+          cp C:\Windows\System32\vcruntime*.dll build\windows\runner\Release\
+      
+      - name: Zip files
+        run: |
+          ren build\windows\runner\Release build\windows\runner\Miria
+          Compress-Archive -Path build\windows\runner\Miria -DestinationPath miria-$(flutter run cider version)-windows-x64.zip -Force
+
+      - name: Create tag and release note
+        run: |
+          gh releases create v$(flutter run cider version) --generate-notes --draft miria-$(flutter run cider version)-windows-x64.zip

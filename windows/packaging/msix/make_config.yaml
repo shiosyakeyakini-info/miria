@@ -1,8 +1,0 @@
-display_name: Miria
-publisher_display_name: Npepperlinux
-identity_name: info.shiosyakeyakini.miria
-msix_version: 1.0.0.0
-logo_path: assets\images\icon.png
-languages: ja-jp
-add_execution_alias: miria
-architecture: x64
