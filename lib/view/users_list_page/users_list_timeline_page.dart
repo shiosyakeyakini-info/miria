@@ -16,7 +16,9 @@ class UsersListTimelinePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(list.name ?? ""),
+      ),
       body: AccountScope(
         account: account,
         child: Padding(
