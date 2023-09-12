@@ -398,6 +398,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UsersListDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListDetailPage(
+          key: args.key,
+          account: args.account,
+          listId: args.listId,
+        ),
+      );
+    },
   };
 }
 
@@ -1804,5 +1815,48 @@ class TimeLineRouteArgs {
   @override
   String toString() {
     return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
+  }
+}
+
+/// generated route for
+/// [UsersListDetailPage]
+class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
+  UsersListDetailRoute({
+    Key? key,
+    required Account account,
+    required String listId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListDetailRoute.name,
+          args: UsersListDetailRouteArgs(
+            key: key,
+            account: account,
+            listId: listId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListDetailRoute';
+
+  static const PageInfo<UsersListDetailRouteArgs> page =
+      PageInfo<UsersListDetailRouteArgs>(name);
+}
+
+class UsersListDetailRouteArgs {
+  const UsersListDetailRouteArgs({
+    this.key,
+    required this.account,
+    required this.listId,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final String listId;
+
+  @override
+  String toString() {
+    return 'UsersListDetailRouteArgs{key: $key, account: $account, listId: $listId}';
   }
 }
