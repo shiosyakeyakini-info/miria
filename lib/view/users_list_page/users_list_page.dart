@@ -15,17 +15,22 @@ class UsersListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(title: const Text("リスト")),
-        body: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: FutureListView(
-              future: ref.read(misskeyProvider(account)).users.list.list(),
-              builder: (context, item) => ListTile(
-                  onTap: () => context.pushRoute(
-                        UsersListTimelineRoute(
-                            account: account, listId: item.id),
-                      ),
-                  title: Text(item.name ?? "")),
-            )));
+      appBar: AppBar(title: const Text("リスト")),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: FutureListView(
+          future: ref.read(misskeyProvider(account)).users.list.list(),
+          builder: (context, item) => ListTile(
+            onTap: () => context.pushRoute(
+              UsersListTimelineRoute(
+                account: account,
+                list: item,
+              ),
+            ),
+            title: Text(item.name ?? ""),
+          ),
+        ),
+      ),
+    );
   }
 }

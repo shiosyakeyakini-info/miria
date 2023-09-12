@@ -350,7 +350,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: UsersListTimelinePage(
           args.account,
-          args.listId,
+          args.list,
           key: args.key,
         ),
       );
@@ -1603,14 +1603,14 @@ class UsersListRouteArgs {
 class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
   UsersListTimelineRoute({
     required Account account,
-    required String listId,
+    required UsersList list,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UsersListTimelineRoute.name,
           args: UsersListTimelineRouteArgs(
             account: account,
-            listId: listId,
+            list: list,
             key: key,
           ),
           initialChildren: children,
@@ -1625,19 +1625,19 @@ class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
 class UsersListTimelineRouteArgs {
   const UsersListTimelineRouteArgs({
     required this.account,
-    required this.listId,
+    required this.list,
     this.key,
   });
 
   final Account account;
 
-  final String listId;
+  final UsersList list;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UsersListTimelineRouteArgs{account: $account, listId: $listId, key: $key}';
+    return 'UsersListTimelineRouteArgs{account: $account, list: $list, key: $key}';
   }
 }
 

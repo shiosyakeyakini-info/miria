@@ -1675,6 +1675,71 @@ class MockMisskey extends _i1.Mock implements _i6.Misskey {
         ),
       ) as _i6.SocketController);
   @override
+  _i6.SocketController roleTimelineStream({
+    required String? roleId,
+    _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
+    _i16.FutureOr<void> Function(
+      String,
+      _i6.TimelineReacted,
+    )? onReacted,
+    _i16.FutureOr<void> Function(
+      String,
+      _i6.TimelineReacted,
+    )? onUnreacted,
+    _i16.FutureOr<void> Function(
+      String,
+      DateTime,
+    )? onDeleted,
+    _i16.FutureOr<void> Function(
+      String,
+      _i6.TimelineVoted,
+    )? onVoted,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #roleTimelineStream,
+          [],
+          {
+            #roleId: roleId,
+            #onNoteReceived: onNoteReceived,
+            #onReacted: onReacted,
+            #onUnreacted: onUnreacted,
+            #onDeleted: onDeleted,
+            #onVoted: onVoted,
+          },
+        ),
+        returnValue: _FakeSocketController_26(
+          this,
+          Invocation.method(
+            #roleTimelineStream,
+            [],
+            {
+              #roleId: roleId,
+              #onNoteReceived: onNoteReceived,
+              #onReacted: onReacted,
+              #onUnreacted: onUnreacted,
+              #onDeleted: onDeleted,
+              #onVoted: onVoted,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeSocketController_26(
+          this,
+          Invocation.method(
+            #roleTimelineStream,
+            [],
+            {
+              #roleId: roleId,
+              #onNoteReceived: onNoteReceived,
+              #onReacted: onReacted,
+              #onUnreacted: onUnreacted,
+              #onDeleted: onDeleted,
+              #onVoted: onVoted,
+            },
+          ),
+        ),
+      ) as _i6.SocketController);
+  @override
   _i6.SocketController channelStream({
     required String? channelId,
     _i16.FutureOr<void> Function(_i6.Note)? onNoteReceived,
