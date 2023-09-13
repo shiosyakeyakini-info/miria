@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/users_list_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_detail.dart';
@@ -9,6 +10,7 @@ import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:miria/view/user_select_dialog.dart';
+import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
@@ -26,6 +28,25 @@ class _UsersListNotifier
   Misskey get _misskey => arg.$1;
 
   String get _listId => arg.$2;
+
+  Future<void> updateList(UsersListSettings settings) async {
+    await _misskey.users.list.update(
+      UsersListsUpdateRequest(
+        listId: _listId,
+        name: settings.name,
+        isPublic: settings.isPublic,
+      ),
+    );
+    final list = state.valueOrNull;
+    if (list != null) {
+      state = AsyncValue.data(
+        list.copyWith(
+          name: settings.name,
+          isPublic: settings.isPublic,
+        ),
+      );
+    }
+  }
 }
 
 final _usersListUsersProvider = AutoDisposeAsyncNotifierProviderFamily<
@@ -92,8 +113,32 @@ class UsersListDetailPage extends ConsumerWidget {
     final users = ref.watch(_usersListUsersProvider(arg));
 
     return Scaffold(
-      appBar: AppBar(
-        title: list.whenOrNull(data: (list) => Text(list.name ?? "")),
+      appBar: list.maybeWhen(
+        data: (list) => AppBar(
+          title: Text(list.name ?? ""),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () async {
+                final settings = await showDialog<UsersListSettings>(
+                  context: context,
+                  builder: (context) => UsersListSettingsDialog(
+                    title: const Text("編集"),
+                    initialSettings: UsersListSettings.fromUsersList(list),
+                  ),
+                );
+                if (!context.mounted) return;
+                if (settings != null) {
+                  ref
+                      .read(_usersListNotifierProvider(arg).notifier)
+                      .updateList(settings)
+                      .expectFailure(context);
+                }
+              },
+            ),
+          ],
+        ),
+        orElse: () => AppBar(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
