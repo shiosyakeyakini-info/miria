@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/extensions/users_lists_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_setting.dart';
@@ -77,11 +78,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       }
       if (listId != null) {
         Future(() async {
-          selectedUserList = await ref
+          final response = await ref
               .read(misskeyProvider(tabSetting.account))
               .users
               .list
               .show(UsersListsShowRequest(listId: listId));
+          selectedUserList = response.toUsersList();
           setState(() {});
         });
       }

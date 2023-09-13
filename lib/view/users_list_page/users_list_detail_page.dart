@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/users_lists_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/users_list_settings.dart';
 import 'package:miria/providers.dart';
@@ -19,10 +20,11 @@ final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
 class _UsersListNotifier
     extends AutoDisposeFamilyAsyncNotifier<UsersList, (Misskey, String)> {
   @override
-  Future<UsersList> build((Misskey, String) arg) {
-    return _misskey.users.list.show(
+  Future<UsersList> build((Misskey, String) arg) async {
+    final response = await _misskey.users.list.show(
       UsersListsShowRequest(listId: _listId),
     );
+    return response.toUsersList();
   }
 
   Misskey get _misskey => arg.$1;
