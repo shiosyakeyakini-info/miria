@@ -1,6 +1,8 @@
 name: デプロイ(windows zip)
 
-on: [workflow_dispatch]
+on: 
+  release:
+    types: [published]
 
 jobs:
   build_for_windows:
