@@ -202,6 +202,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               createdAt: element.createdAt,
               id: element.id));
           break;
+        case NotificationType.test:
+          resultList.add(SimpleNotificationData(
+              text: "テストやで", createdAt: element.createdAt, id: element.id));
 
         default:
           break;
