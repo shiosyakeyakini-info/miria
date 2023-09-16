@@ -106,16 +106,9 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             );
             break;
           case EmojiType.twemoji:
-            cachedImage = FittedBox(
-              fit: BoxFit.fitHeight,
-              child: TwemojiText(
-                text: emojiData.char,
-                strutStyle: StrutStyle(
-                    height: 1.0,
-                    forceStrutHeight: true,
-                    fontSize: scopedFontSize),
-                style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
-              ),
+            cachedImage = Twemoji(
+              height: scopedFontSize,
+              emoji: emojiData.char,
             );
             break;
         }
