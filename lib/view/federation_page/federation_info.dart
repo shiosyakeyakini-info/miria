@@ -25,7 +25,7 @@ class FederationInfo extends ConsumerStatefulWidget {
 }
 
 class FederationInfoState extends ConsumerState<FederationInfo> {
-  Object? error;
+  (Object?, StackTrace)? error;
   FederationData? data;
 
   @override
@@ -121,7 +121,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
         print(e);
         print(s);
         setState(() {
-          error = e;
+          error = (e, s);
         });
       }
     });
@@ -241,7 +241,10 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
       );
     }
     if (error != null) {
-      ErrorDetail(error: error);
+      ErrorDetail(
+        error: error?.$1,
+        stackTrace: error?.$2,
+      );
     }
 
     return const Center(

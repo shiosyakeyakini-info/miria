@@ -290,7 +290,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 child: Center(child: CircularProgressIndicator()),
               ),
             if (socketTimeline?.error != null)
-              ErrorDetail(error: socketTimeline?.error!),
+              ErrorDetail(
+                error: socketTimeline?.error?.$1,
+                stackTrace: socketTimeline?.error?.$2,
+              ),
             Expanded(
               child: PageView.builder(
                 controller: pageController,

@@ -32,7 +32,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
 
 class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
   var isLoading = false;
-  Object? error;
+  (Object?, StackTrace)? error;
   var isFinalPage = false;
   final scrollController = ScrollController();
 
@@ -50,10 +50,10 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         });
         scrollController.animateTo(-scrollController.position.pixels,
             duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
-      } catch (e) {
+      } catch (e, s) {
         if (kDebugMode) print(e);
         setState(() {
-          error = e;
+          error = (e, s);
           isLoading = false;
         });
         rethrow;
@@ -129,7 +129,10 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ErrorNotification(error: error),
+                    ErrorNotification(
+                      error: error?.$1,
+                      stackTrace: error?.$2,
+                    ),
                     widget.additionalErrorInfo?.call(context, error) ??
                         const SizedBox.shrink()
                   ],

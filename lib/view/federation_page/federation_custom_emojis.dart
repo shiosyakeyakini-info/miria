@@ -21,7 +21,7 @@ class FederationCustomEmojis extends ConsumerStatefulWidget {
 class FederationCustomEmojisState
     extends ConsumerState<FederationCustomEmojis> {
   var isLoading = false;
-  Object? error;
+  (Object?, StackTrace)? error;
 
   Map<String, List<Emoji>> emojis = {};
 
@@ -43,7 +43,12 @@ class FederationCustomEmojisState
   @override
   Widget build(BuildContext context) {
     if (isLoading) return const Center(child: CircularProgressIndicator());
-    if (error != null) return ErrorDetail(error: error);
+    if (error != null) {
+      return ErrorDetail(
+        error: error?.$1,
+        stackTrace: error?.$2,
+      );
+    }
     return ListView.builder(
       itemCount: emojis.length,
       itemBuilder: (context, index) {
@@ -92,7 +97,8 @@ class FederationCustomEmojisState
                                 decoration: BoxDecoration(
                                     color: Theme.of(context).primaryColor),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 3, right: 3),
+                                  padding:
+                                      const EdgeInsets.only(left: 3, right: 3),
                                   child: Text(
                                     "センシティブ",
                                     style: Theme.of(context)
