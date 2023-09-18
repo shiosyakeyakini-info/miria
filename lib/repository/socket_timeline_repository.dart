@@ -76,7 +76,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       try {
         await emojiRepository.loadFromSourceIfNeed();
         await accountRepository.loadFromSourceIfNeed(tabSetting.account);
-        mainStreamRepository.reconnect();
+        await mainStreamRepository.reconnect();
         isLoading = false;
         error = null;
         notifyListeners();

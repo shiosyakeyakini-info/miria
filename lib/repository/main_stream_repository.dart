@@ -86,11 +86,19 @@ class MainStreamRepository extends ChangeNotifier {
     });
   }
 
-  void reconnect() {
-    socketController?.disconnect();
-    connect();
-    Future(() async {
-      await confirmNotification();
-    });
+  Future<void> reconnect() async {
+    try {
+      socketController!.disconnect();
+      socketController!.connect();
+    } catch (e) {
+      socketController = null;
+      await misskey.streamingService.restart();
+      connect();
+      return;
+    } finally {
+      Future(() async {
+        await confirmNotification();
+      });
+    }
   }
 }

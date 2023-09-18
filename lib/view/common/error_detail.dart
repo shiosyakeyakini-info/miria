@@ -26,6 +26,6 @@ class ErrorDetail extends StatelessWidget {
         return Text("[${response.statusCode}] ${response.data}");
       }
     }
-    return Text("不明なエラー：$error\n$stackTrace");
+    return Text("不明なエラー：$error/*\n$stackTrace*/");
   }
 }
