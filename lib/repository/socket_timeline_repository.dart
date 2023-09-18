@@ -17,7 +17,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   final EmojiRepository emojiRepository;
 
   bool isLoading = true;
-  Object? error;
+  (Object?, StackTrace)? error;
 
   SocketTimelineRepository(
     this.misskey,
@@ -76,12 +76,12 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       try {
         await emojiRepository.loadFromSourceIfNeed();
         await accountRepository.loadFromSourceIfNeed(tabSetting.account);
-        mainStreamRepository.reconnect();
+        await mainStreamRepository.reconnect();
         isLoading = false;
         error = null;
         notifyListeners();
-      } catch (e) {
-        error = e;
+      } catch (e, s) {
+        error = (e, s);
         isLoading = false;
         notifyListeners();
       }

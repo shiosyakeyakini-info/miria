@@ -301,12 +301,15 @@ class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
                       userId: widget.userId,
                     ));
               }
-            } catch (e) {
+            } catch (e, s) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text("エラー"),
-                  content: ErrorNotification(error: e),
+                  content: ErrorNotification(
+                    error: e,
+                    stackTrace: s,
+                  ),
                 ),
               );
               return;

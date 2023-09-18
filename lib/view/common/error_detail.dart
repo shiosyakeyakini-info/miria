@@ -3,8 +3,13 @@ import 'package:flutter/cupertino.dart';
 
 class ErrorDetail extends StatelessWidget {
   final Object? error;
+  final StackTrace? stackTrace;
 
-  const ErrorDetail({super.key, required this.error});
+  const ErrorDetail({
+    super.key,
+    required this.error,
+    required this.stackTrace,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +26,6 @@ class ErrorDetail extends StatelessWidget {
         return Text("[${response.statusCode}] ${response.data}");
       }
     }
-    return Text("不明なエラー：$error");
+    return Text("不明なエラー：$error/*\n$stackTrace*/");
   }
 }
