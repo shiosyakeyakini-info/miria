@@ -17,6 +17,7 @@ import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/global_time_line_repository.dart';
 import 'package:miria/repository/home_time_line_repository.dart';
 import 'package:miria/repository/local_time_line_repository.dart';
+import 'package:miria/repository/role_timeline_repository.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
@@ -69,6 +70,19 @@ final globalTimeLineProvider =
 final hybridTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) => HybridTimelineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
+              tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
+            ));
+
+final roleTimelineProvider =
+    ChangeNotifierProvider.family<RoleTimelineRepository, TabSetting>(
+        (ref, tabSetting) => RoleTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),

@@ -107,6 +107,11 @@ class AccountRepository extends ChangeNotifier {
             tabType: TabType.globalTimeline,
             name: "グローバルタイムライン",
             account: account),
+        TabSetting(
+            icon: TabIcon(codePoint: Icons.bookmark.codePoint),
+            tabType: TabType.roleTimeline,
+            name: "ロールタイムライン",
+            account: account),
       ]);
     }
   }
