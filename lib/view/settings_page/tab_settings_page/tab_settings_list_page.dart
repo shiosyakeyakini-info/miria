@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/tab_setting.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,24 +44,25 @@ class TabSettingsListPage extends ConsumerWidget {
               itemCount: tabSettings.length,
               itemBuilder: (context, index) {
                 final tabSetting = tabSettings[index];
-                final account = ref.watch(accountProvider(tabSetting.acct));
-                return ReorderableDragStartListener(
-                  key: Key("$index"),
-                  index: index,
-                  child: ListTile(
-                    leading: AccountScope(
-                      account: account,
-                      child: TabIconView(icon: tabSetting.icon),
+                if (Platform.isAndroid || Platform.isIOS) {
+                  return ReorderableDelayedDragStartListener(
+                    key: Key("$index"),
+                    index: index,
+                    child: TabSettingsListItem(
+                      tabSetting: tabSetting,
+                      index: index,
                     ),
-                    title: Text(tabSetting.name),
-                    subtitle: Text(
-                      "${tabSetting.tabType.displayName} / ${account.acct}",
+                  );
+                } else {
+                  return ReorderableDragStartListener(
+                    key: Key("$index"),
+                    index: index,
+                    child: TabSettingsListItem(
+                      tabSetting: tabSetting,
+                      index: index,
                     ),
-                    trailing: const Icon(Icons.drag_handle),
-                    onTap: () =>
-                        context.pushRoute(TabSettingsRoute(tabIndex: index)),
-                  ),
-                );
+                  );
+                }
               },
               onReorder: (oldIndex, newIndex) {
                 if (oldIndex < newIndex) {
@@ -86,6 +90,34 @@ class TabSettingsListPage extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TabSettingsListItem extends ConsumerWidget {
+  const TabSettingsListItem({
+    super.key,
+    required this.tabSetting,
+    required this.index,
+  });
+
+  final TabSetting tabSetting;
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = ref.watch(accountProvider(tabSetting.acct));
+    return ListTile(
+      leading: AccountScope(
+        account: account,
+        child: TabIconView(icon: tabSetting.icon),
+      ),
+      title: Text(tabSetting.name),
+      subtitle: Text(
+        "${tabSetting.tabType.displayName} / ${tabSetting.acct}",
+      ),
+      trailing: const Icon(Icons.drag_handle),
+      onTap: () => context.pushRoute(TabSettingsRoute(tabIndex: index)),
     );
   }
 }
