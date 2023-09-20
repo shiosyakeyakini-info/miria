@@ -1,31 +1,64 @@
 import 'package:auto_route/annotations.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/view/clip_list_page/clip_detail_note_list.dart';
-import 'package:miria/view/common/account_scope.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/model/account.dart';
+import 'package:miria/model/clip_settings.dart';
+import 'package:miria/providers.dart';
+import 'package:miria/view/clip_list_page/clip_detail_note_list.dart';
+import 'package:miria/view/clip_list_page/clip_list_page.dart';
+import 'package:miria/view/clip_list_page/clip_settings_dialog.dart';
+import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 
 @RoutePage()
-class ClipDetailPage extends ConsumerStatefulWidget {
+class ClipDetailPage extends ConsumerWidget {
   final Account account;
   final String id;
 
   const ClipDetailPage({super.key, required this.account, required this.id});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => ClipDetailPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final misskey = ref.watch(misskeyProvider(account));
+    final clip = ref.watch(
+      clipsListNotifierProvider(misskey).select(
+        (clips) => clips.valueOrNull?.firstWhereOrNull((e) => e.id == id),
+      ),
+    );
 
-class ClipDetailPageState extends ConsumerState<ClipDetailPage> {
-  @override
-  Widget build(BuildContext context) {
     return AccountScope(
-      account: widget.account,
+      account: account,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(clip?.name ?? ""),
+          actions: [
+            if (clip != null)
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () async {
+                  final settings = await showDialog<ClipSettings>(
+                    context: context,
+                    builder: (context) => ClipSettingsDialog(
+                      title: const Text("編集"),
+                      initialSettings: ClipSettings.fromClip(clip),
+                    ),
+                  );
+                  if (!context.mounted) return;
+                  if (settings != null) {
+                    ref
+                        .read(clipsListNotifierProvider(misskey).notifier)
+                        .updateClip(clip.id, settings)
+                        .expectFailure(context);
+                  }
+                },
+              ),
+          ],
+        ),
         body: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: ClipDetailNoteList(id: widget.id)),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ClipDetailNoteList(id: id),
+        ),
       ),
     );
   }
