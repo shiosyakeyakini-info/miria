@@ -129,6 +129,21 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
             ),
           ),
         ),
+        if (data.isSensitive)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: DecoratedBox(
+                decoration:
+                    BoxDecoration(color: Theme.of(context).primaryColor),
+                child: const Text(
+                  " センシティブ ",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
         const Padding(padding: EdgeInsets.only(top: 10)),
         Align(
             alignment: Alignment.centerRight,
