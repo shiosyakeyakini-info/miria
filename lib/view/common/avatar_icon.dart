@@ -25,6 +25,7 @@ class AvatarIcon extends StatelessWidget {
         id: response.id,
         username: response.username,
         avatarUrl: response.avatarUrl,
+        avatarBlurhash: response.avatarBlurhash,
         isCat: response.isCat,
         isBot: response.isBot,
       ),
@@ -41,6 +42,7 @@ class AvatarIcon extends StatelessWidget {
         id: response.id,
         username: response.username,
         avatarUrl: response.avatarUrl,
+        avatarBlurhash: response.avatarBlurhash,
         isCat: response.isCat,
         isBot: response.isBot,
       ),
@@ -48,16 +50,33 @@ class AvatarIcon extends StatelessWidget {
     );
   }
 
+  Color? averageColor() {
+    // https://github.com/woltapp/blurhash/blob/master/Algorithm.md
+    final blurhash = user.avatarBlurhash;
+    if (blurhash == null) {
+      return null;
+    }
+    final value = blurhash
+        .substring(2, 6)
+        .split("")
+        .map(
+          r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~'
+              .indexOf,
+        )
+        .fold(0, (acc, i) => acc * 83 + i);
+    return Color(0xFF000000 | value);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final catEarColor =
+        (user.isCat ? averageColor() : null) ?? Theme.of(context).primaryColor;
+
     return GestureDetector(
       onTap: onTap ??
           () {
             context.pushRoute(
-              UserRoute(
-                userId: user.id,
-                account: AccountScope.of(context),
-              ),
+              UserRoute(userId: user.id, account: AccountScope.of(context)),
             );
           },
       child: Padding(
@@ -79,7 +98,7 @@ class AvatarIcon extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.play_arrow_rounded,
-                      color: Theme.of(context).primaryColor,
+                      color: catEarColor,
                       size: height * 1 * MediaQuery.of(context).textScaleFactor,
                     ),
                   ),
@@ -100,7 +119,7 @@ class AvatarIcon extends StatelessWidget {
                     transform: Matrix4.rotationY(pi),
                     child: Icon(
                       Icons.play_arrow_rounded,
-                      color: Theme.of(context).primaryColor,
+                      color: catEarColor,
                       size: height * 1 * MediaQuery.of(context).textScaleFactor,
                     ),
                   ),
