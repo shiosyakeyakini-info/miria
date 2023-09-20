@@ -152,18 +152,11 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   void reconnect() {
     super.reconnect();
-    try {
-      socketController!.reconnect();
-    } catch (e) {
-      socketController = null;
-      Future(() async {
-        await misskey.streamingService.restart();
-        startTimeLine();
-      });
-      return;
-    }
-    mainStreamRepository.reconnect();
-    reloadLatestNotes();
+    socketController = null;
+    Future(() async {
+      await misskey.streamingService.restart();
+      startTimeLine();
+    });
   }
 
   @override
