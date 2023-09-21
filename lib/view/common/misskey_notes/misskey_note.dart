@@ -948,7 +948,7 @@ class RenoteButton extends StatelessWidget {
     // 他人のノートで、ダイレクトまたはフォロワーのみへの公開の場合、リノート不可
     if ((displayNote.visibility == NoteVisibility.specified ||
             displayNote.visibility == NoteVisibility.followers) &&
-        !(account.host == displayNote.user.host &&
+        !(displayNote.user.host == null &&
             account.userId == displayNote.user.username)) {
       return Icon(
         Icons.block,
