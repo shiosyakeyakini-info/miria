@@ -6,6 +6,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 class AntennaTimelineRepository extends SocketTimelineRepository {
   AntennaTimelineRepository(
     super.misskey,
+    super.account,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
@@ -20,12 +21,15 @@ class AntennaTimelineRepository extends SocketTimelineRepository {
     required void Function(Note note) onReceived,
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onReacted,
+    required FutureOr<void> Function(String id, TimelineReacted reaction)
+        onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   }) {
     return misskey.antennaStream(
       antennaId: tabSetting.antennaId!,
       onNoteReceived: onReceived,
       onReacted: onReacted,
+      onUnreacted: onUnreacted,
       onVoted: onVoted,
     );
   }
