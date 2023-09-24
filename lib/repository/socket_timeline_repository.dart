@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
@@ -12,6 +14,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
   final Misskey misskey;
+  final Account account;
   final MainStreamRepository mainStreamRepository;
   final AccountRepository accountRepository;
   final EmojiRepository emojiRepository;
@@ -22,6 +25,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   SocketTimelineRepository(
     this.misskey,
+    this.account,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
@@ -37,6 +41,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     required void Function(Note note) onReceived,
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onReacted,
+    required FutureOr<void> Function(String id, TimelineReacted reaction)
+        onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
   });
 
@@ -108,9 +114,32 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             reactionEmojis[emoji.name] = emoji.url;
           }
           noteRepository.registerNote(registeredNote.copyWith(
-            reactions: reaction,
-            reactionEmojis: reactionEmojis,
-          ));
+              reactions: reaction,
+              reactionEmojis: reactionEmojis,
+              myReaction: value.userId == account.i.id
+                  ? emoji?.name
+                  : registeredNote.myReaction));
+        },
+        onUnreacted: (id, value) {
+          final registeredNote = noteRepository.notes[id];
+          if (registeredNote == null) return;
+          final reaction = Map.of(registeredNote.reactions);
+          reaction[value.reaction] =
+              max((reaction[value.reaction] ?? 0) - 1, 0);
+          if (reaction[value.reaction] == 0) {
+            reaction.remove(value.reaction);
+          }
+          final emoji = value.emoji;
+          final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+          if (emoji != null && !value.reaction.endsWith("@.:")) {
+            reactionEmojis[emoji.name] = emoji.url;
+          }
+          noteRepository.registerNote(registeredNote.copyWith(
+              reactions: reaction,
+              reactionEmojis: reactionEmojis,
+              myReaction: value.userId == account.i.id
+                  ? ""
+                  : registeredNote.myReaction));
         },
         onVoted: (id, value) {
           final registeredNote = noteRepository.notes[id];

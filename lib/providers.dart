@@ -36,6 +36,7 @@ final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) => LocalTimeLineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
@@ -48,6 +49,7 @@ final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) => HomeTimeLineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
@@ -70,6 +72,7 @@ final hybridTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) => HybridTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
@@ -83,6 +86,7 @@ final channelTimelineProvider =
     ChangeNotifierProvider.family<ChannelTimelineRepository, TabSetting>(
         (ref, tabSetting) => ChannelTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
@@ -96,6 +100,7 @@ final userListTimelineProvider =
     ChangeNotifierProvider.family<UserListTimelineRepository, TabSetting>(
         (ref, tabSetting) => UserListTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
@@ -109,6 +114,7 @@ final antennaTimelineProvider =
     ChangeNotifierProvider.family<AntennaTimelineRepository, TabSetting>(
         (ref, tabSetting) => AntennaTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),

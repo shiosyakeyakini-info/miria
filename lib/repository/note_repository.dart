@@ -38,8 +38,10 @@ class NoteRepository extends ChangeNotifier {
       renote: note.renote ?? _notes[note.renoteId],
       reply: note.reply ?? _notes[note.replyId],
       poll: note.poll ?? registeredNote?.poll,
-      myReaction: note.myReaction ??
-          (note.reactions.isNotEmpty ? registeredNote?.myReaction : null),
+      myReaction: note.myReaction?.isEmpty == true
+          ? null
+          : (note.myReaction ??
+              (note.reactions.isNotEmpty ? registeredNote?.myReaction : null)),
     );
     _noteStatuses[note.id] ??= const NoteStatus(
         isCwOpened: false,
@@ -74,7 +76,7 @@ class NoteRepository extends ChangeNotifier {
 
   Future<void> refresh(String noteId) async {
     final note = await misskey.notes.show(NotesShowRequest(noteId: noteId));
-    registerNote(note);
+    registerNote(note.copyWith(myReaction: note.myReaction ?? ""));
   }
 
   void delete(String noteId) {
