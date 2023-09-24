@@ -32,8 +32,8 @@ class GlobalTimeLineRepository extends TimelineRepository {
   }
 
   @override
-  void reconnect() {
-    super.reconnect();
+  Future<void> reconnect() async {
+    await super.reconnect();
     socketController?.reconnect();
   }
 

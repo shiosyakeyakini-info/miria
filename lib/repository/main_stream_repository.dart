@@ -14,6 +14,7 @@ class MainStreamRepository extends ChangeNotifier {
   final Account account;
   final AccountRepository accountRepository;
   SocketController? socketController;
+  bool isReconnecting = false;
 
   MainStreamRepository(
     this.misskey,
@@ -87,18 +88,21 @@ class MainStreamRepository extends ChangeNotifier {
   }
 
   Future<void> reconnect() async {
+    if (isReconnecting) {
+      // 排他制御
+      while (isReconnecting) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      return;
+    }
+    isReconnecting = true;
     try {
-      socketController!.disconnect();
-      socketController!.connect();
-    } catch (e) {
+      socketController?.disconnect();
       socketController = null;
       await misskey.streamingService.restart();
       connect();
-      return;
     } finally {
-      Future(() async {
-        await confirmNotification();
-      });
+      isReconnecting = false;
     }
   }
 }
