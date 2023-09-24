@@ -15,6 +15,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   final MainStreamRepository mainStreamRepository;
   final AccountRepository accountRepository;
   final EmojiRepository emojiRepository;
+  bool isReconnecting = false;
 
   bool isLoading = true;
   (Object?, StackTrace)? error;
@@ -150,20 +151,16 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   }
 
   @override
-  void reconnect() {
-    super.reconnect();
+  Future<void> reconnect() async {
+    if (isReconnecting) return;
+    isReconnecting = true;
     try {
-      socketController!.reconnect();
-    } catch (e) {
+      await super.reconnect();
       socketController = null;
-      Future(() async {
-        await misskey.streamingService.restart();
-        startTimeLine();
-      });
-      return;
+      startTimeLine();
+    } finally {
+      isReconnecting = false;
     }
-    mainStreamRepository.reconnect();
-    reloadLatestNotes();
   }
 
   @override

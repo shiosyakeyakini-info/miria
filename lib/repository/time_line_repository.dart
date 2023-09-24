@@ -151,8 +151,8 @@ abstract class TimelineRepository extends ChangeNotifier {
 
   void disconnect() {}
 
-  void reconnect() {
-    globalNotificationRepository.reconnect();
+  Future<void> reconnect() async {
+    await globalNotificationRepository.reconnect();
   }
 
   void updateNote(Note newNote) {
