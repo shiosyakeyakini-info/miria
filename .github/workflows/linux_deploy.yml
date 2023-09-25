@@ -17,9 +17,22 @@ jobs:
         uses: subosito/flutter-action@v2
         with: 
           channel:  'stable'
+          cache:  true
+
+      - name: Cache pubspec dependencies
+        uses: actions/cache@v3
+        with: 
+          path: |
+            ${{ env.FLUTTER_HOME }}/.pub-cache
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key:  build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: build-pubspec-
 
       - name: Install Flutter Build Tools for Linux
-        run:  sudo apt install -y libsecret-1-dev imagemagick
+        run:  sudo apt install -y libsecret-1-dev
 
       - name: Flutter pub get
         run:  flutter pub get
@@ -35,8 +48,13 @@ jobs:
           cd build/linux/x64/release/bundle
           tar -czaf miria-$VERSION-x86_64.tar.gz
 
-      - name: Upload artifact
-        uses: actions/upload-artifacts@v3
-        with: 
-          name: linux-x86_64
-          path: build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
+      # - name: Upload artifact
+      #   uses: actions/upload-artifacts@v3
+      #   with: 
+      #     name: linux-x86_64
+      #     path: build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
+
+      - name: Upload artifact to release
+        env:  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:  gh release upload v$VERSION ./build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
