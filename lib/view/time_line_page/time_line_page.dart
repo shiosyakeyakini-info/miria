@@ -279,7 +279,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                               .timelineProvider(currentTabSetting),
                         )
                         .reconnect(),
-                    icon: const Icon(Icons.refresh),
+                    icon:
+                        socketTimeline != null && socketTimeline.isReconnecting
+                            ? CircularProgressIndicator()
+                            : const Icon(Icons.refresh),
                   )
                 ],
               ),
