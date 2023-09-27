@@ -84,6 +84,15 @@ class PollNotification extends NotificationData {
   });
 }
 
+class NoteNotification extends NotificationData {
+  final Note? note;
+  NoteNotification({
+    required this.note,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
 extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
   List<NotificationData> toNotificationData() {
     final resultList = <NotificationData>[];
@@ -205,6 +214,12 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
         case NotificationType.test:
           resultList.add(SimpleNotificationData(
               text: "テストやで", createdAt: element.createdAt, id: element.id));
+
+        case NotificationType.note:
+          resultList.add(NoteNotification(
+              note: element.note,
+              createdAt: element.createdAt,
+              id: element.id));
 
         default:
           break;
