@@ -31,20 +31,25 @@ class ImportExportRepository extends ChangeNotifier {
         onWillPop: () async => false,
         child: FolderSelectDialog(
           account: account,
-          fileShowTarget: "miria.json.unknown",
+          fileShowTarget: const ["miria.json", "miria.json.unknown"],
         ),
       ),
     );
 
-    final alreadyExists = await reader(misskeyProvider(account))
+    var alreadyExists = await reader(misskeyProvider(account))
         .drive
         .files
-        .find(DriveFilesFindRequest(
-            name: "miria.json.unknown", folderId: folder?.id));
+        .find(DriveFilesFindRequest(name: "miria.json", folderId: folder?.id));
 
     if (alreadyExists.isEmpty) {
-      await SimpleMessageDialog.show(context, "ここにMiriaの設定ファイルあれへんかったわ");
-      return;
+      alreadyExists = await reader(misskeyProvider(account)).drive.files.find(
+          DriveFilesFindRequest(
+              name: "miria.json.unknown", folderId: folder?.id));
+
+      if (alreadyExists.isEmpty) {
+        await SimpleMessageDialog.show(context, "ここにMiriaの設定ファイルあれへんかったわ");
+        return;
+      }
     }
 
     final importFile = alreadyExists.first;
@@ -110,7 +115,7 @@ class ImportExportRepository extends ChangeNotifier {
         onWillPop: () async => false,
         child: FolderSelectDialog(
           account: account,
-          fileShowTarget: "miria.json.unknown",
+          fileShowTarget: const ["miria.json", "miria.json.unknown"],
         ),
       ),
     );
