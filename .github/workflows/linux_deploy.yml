@@ -46,7 +46,7 @@ jobs:
       - name: Compress App
         run:  |
           cd build/linux/x64/release/bundle
-          tar -czaf miria-$VERSION-x86_64.tar.gz
+          tar -czaf miria-$VERSION-x86_64.tar.gz *
 
       # - name: Upload artifact
       #   uses: actions/upload-artifacts@v3
@@ -58,3 +58,6 @@ jobs:
         env:  
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run:  gh release upload v$VERSION ./build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
+
+      - name: Remove artifact.tar.gz
+        run:  rm build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
