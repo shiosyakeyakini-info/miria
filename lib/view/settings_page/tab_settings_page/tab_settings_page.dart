@@ -54,7 +54,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
     if (tab != null) {
       final tabSetting =
           ref.read(tabSettingsRepositoryProvider).tabSettings.toList()[tab];
-      selectedAccount = tabSetting.account;
+      selectedAccount = ref.read(accountProvider(tabSetting.acct));
       selectedTabType = tabSetting.tabType;
       final roleId = tabSetting.roleId;
       final channelId = tabSetting.channelId;
@@ -69,7 +69,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       if (roleId != null) {
         Future(() async {
           selectedRole = await ref
-              .read(misskeyProvider(tabSetting.account))
+              .read(misskeyProvider(selectedAccount!))
               .roles
               .show(RolesShowRequest(roleId: roleId));
           setState(() {});
@@ -78,7 +78,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       if (channelId != null) {
         Future(() async {
           selectedChannel = await ref
-              .read(misskeyProvider(tabSetting.account))
+              .read(misskeyProvider(selectedAccount!))
               .channels
               .show(ChannelsShowRequest(channelId: channelId));
           setState(() {});
@@ -87,7 +87,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       if (listId != null) {
         Future(() async {
           final response = await ref
-              .read(misskeyProvider(tabSetting.account))
+              .read(misskeyProvider(selectedAccount!))
               .users
               .list
               .show(UsersListsShowRequest(listId: listId));
@@ -98,7 +98,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       if (antennaId != null) {
         Future(() async {
           selectedAntenna = await ref
-              .read(misskeyProvider(tabSetting.account))
+              .read(misskeyProvider(selectedAccount!))
               .antennas
               .show(AntennasShowRequest(antennaId: antennaId));
           setState(() {});
@@ -381,7 +381,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       icon: icon,
                       tabType: tabType,
                       name: nameController.text,
-                      account: account,
+                      acct: account.acct,
                       roleId: selectedRole?.id,
                       channelId: selectedChannel?.id,
                       listId: selectedUserList?.id,

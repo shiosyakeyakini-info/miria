@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/account_settings.dart';
+import 'package:miria/model/acct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSettingsRepository extends ChangeNotifier {
@@ -28,8 +29,7 @@ class AccountSettingsRepository extends ChangeNotifier {
 
   Future<void> save(AccountSettings settings) async {
     _accountSettings = _accountSettings
-      ..removeWhere((element) =>
-          element.userId == settings.userId && element.host == settings.host)
+      ..removeWhere((oldSettings) => oldSettings.acct == settings.acct)
       ..add(settings)
       ..toList();
     await _saveAsList(_accountSettings);
@@ -43,19 +43,23 @@ class AccountSettingsRepository extends ChangeNotifier {
   }
 
   Future<void> removeAccount(Account account) async {
-    _accountSettings.removeWhere((element) =>
-        element.host == account.host && element.userId == account.userId);
+    _accountSettings
+        .removeWhere((accountSettings) => accountSettings.acct == account.acct);
     await _saveAsList(_accountSettings);
     notifyListeners();
   }
 
-  AccountSettings fromAccount(Account account) {
+  AccountSettings fromAcct(Acct acct) {
     return _accountSettings.firstWhereOrNull(
-            (e) => e.host == account.host && e.userId == account.userId) ??
+          (accountSettings) => accountSettings.acct == acct,
+        ) ??
         AccountSettings(
-          userId: account.userId,
-          host: account.host,
-          reactions: [],
+          userId: acct.username,
+          host: acct.host,
         );
+  }
+
+  AccountSettings fromAccount(Account account) {
+    return fromAcct(account.acct);
   }
 }

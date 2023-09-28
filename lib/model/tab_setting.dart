@@ -1,13 +1,24 @@
-import 'package:miria/model/account.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:miria/model/acct.dart';
 import 'package:miria/model/converters/icon_converter.dart';
 import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/repository/time_line_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'tab_setting.freezed.dart';
 part 'tab_setting.g.dart';
+
+Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
+  final account = json["account"];
+  if (account != null) {
+    return {
+      "host": account["host"],
+      "username": account["userId"],
+    };
+  }
+  return json[name]! as Map<String, dynamic>;
+}
 
 @freezed
 class TabSetting with _$TabSetting {
@@ -35,19 +46,23 @@ class TabSetting with _$TabSetting {
     String? antennaId,
 
     /// ノートの投稿のキャプチャをするかどうか
-    @Default(true) isSubscribe,
+    @Default(true) bool isSubscribe,
 
     /// 返信を含むかどうか
-    @Default(true) isIncludeReplies,
+    @Default(true) bool isIncludeReplies,
 
     /// ファイルのみにするかどうか
-    @Default(false) isMediaOnly,
+    @Default(false) bool isMediaOnly,
 
     /// タブ名
     required String name,
 
     /// アカウント情報
-    required Account account,
+    // https://github.com/rrousselGit/freezed/issues/488
+    // ignore: invalid_annotation_target
+    @JsonKey(readValue: _readAcct) required Acct acct,
+
+    /// Renoteを表示するかどうか
     @Default(true) bool renoteDisplay,
   }) = _TabSetting;
 

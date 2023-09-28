@@ -7,9 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/exported_setting.dart';
-import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -67,48 +65,33 @@ class ImportExportRepository extends ChangeNotifier {
 
     final json = jsonDecode(response.data);
 
-    final importedGeneralSettings =
-        GeneralSettings.fromJson(json["generalSettings"]);
-    final importedAccountSettings = (json["accountSettings"] as List)
-        .map((e) => AccountSettings.fromJson(e));
+    final importedSettings = ExportedSetting.fromJson(json);
 
     // アカウント設定よみこみ
     final accounts = reader(accountRepository).account;
-    for (final accountSetting in importedAccountSettings) {
+    for (final accountSetting in importedSettings.accountSettings) {
       // この端末でログイン済みのアカウントであれば
-      if (accounts.any((element) =>
-          element.host == accountSetting.host &&
-          element.userId == accountSetting.userId)) {
+      if (accounts.any((account) => account.acct == accountSetting.acct)) {
         reader(accountSettingsRepositoryProvider).save(accountSetting);
       }
     }
 
     // 全般設定
-    reader(generalSettingsRepositoryProvider).update(importedGeneralSettings);
+    reader(generalSettingsRepositoryProvider)
+        .update(importedSettings.generalSettings);
 
     // タブ設定
     final tabSettings = <TabSetting>[];
 
-    for (final tabSetting in json["tabSettings"]) {
-      final account = accounts.firstWhereOrNull(
-        (element) =>
-            tabSetting["account"]["host"] == element.host &&
-            tabSetting["account"]["userId"] == element.userId,
-      );
+    for (final tabSetting in importedSettings.tabSettings) {
+      final account = accounts
+          .firstWhereOrNull((account) => tabSetting.acct == account.acct);
 
       if (account == null) {
         continue;
       }
 
-      // Unhandled Exception: type 'EqualUnmodifiableMapView<dynamic, dynamic>' is not a subtype of type 'Map<String, dynamic>?' in type cast
-      // freezedがわるさしてそう
-      (tabSetting as Map<String, dynamic>)
-        ..remove("account")
-        ..addEntries(
-          [MapEntry("account", jsonDecode(jsonEncode(account.toJson())))],
-        );
-
-      tabSettings.add(TabSetting.fromJson(tabSetting));
+      tabSettings.add(tabSetting);
     }
     reader(tabSettingsRepositoryProvider).save(tabSettings);
 
@@ -166,13 +149,6 @@ class ImportExportRepository extends ChangeNotifier {
       accountSettings:
           reader(accountSettingsRepositoryProvider).accountSettings.toList(),
     ).toJson();
-
-    // 外に漏れると困るので
-    for (final element in data["tabSettings"] as List) {
-      element["account"]
-        ..remove("token")
-        ..remove("i");
-    }
 
     await reader(misskeyProvider(account)).drive.files.createAsBinary(
           DriveFilesCreateRequest(

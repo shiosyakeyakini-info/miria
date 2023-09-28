@@ -82,7 +82,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Future<void> startTimeLine() async {
     try {
       await emojiRepository.loadFromSourceIfNeed();
-      await accountRepository.loadFromSourceIfNeed(tabSetting.account);
+      await accountRepository.loadFromSourceIfNeed(tabSetting.acct);
       await mainStreamRepository.reconnect();
       isLoading = false;
       error = null;

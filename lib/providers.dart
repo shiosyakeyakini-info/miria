@@ -3,6 +3,7 @@ import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/acct.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/account_settings_repository.dart';
@@ -30,117 +31,145 @@ import 'package:misskey_dart/misskey_dart.dart';
 final dioProvider = Provider((ref) => Dio());
 final fileSystemProvider =
     Provider<FileSystem>((ref) => const LocalFileSystem());
-final misskeyProvider = Provider.family<Misskey, Account>((ref, account) =>
-    Misskey(
-        token: account.token,
-        host: account.host,
-        socketConnectionTimeout: const Duration(seconds: 20)));
+final misskeyProvider = Provider.family<Misskey, Account>(
+  (ref, account) => Misskey(
+    token: account.token,
+    host: account.host,
+    socketConnectionTimeout: const Duration(seconds: 20),
+  ),
+);
 
 final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
-        (ref, tabSetting) => LocalTimeLineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return LocalTimeLineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
+
 final homeTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
-        (ref, tabSetting) => HomeTimeLineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return HomeTimeLineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
+
 final globalTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
-        (ref, tabSetting) => GlobalTimeLineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return GlobalTimeLineRepository(
+    ref.read(misskeyProvider(account)),
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+  );
+});
 
 final hybridTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
-        (ref, tabSetting) => HybridTimelineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return HybridTimelineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
 
 final roleTimelineProvider =
     ChangeNotifierProvider.family<RoleTimelineRepository, TabSetting>(
-        (ref, tabSetting) => RoleTimelineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return RoleTimelineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
 
 final channelTimelineProvider =
     ChangeNotifierProvider.family<ChannelTimelineRepository, TabSetting>(
-        (ref, tabSetting) => ChannelTimelineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return ChannelTimelineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
 
 final userListTimelineProvider =
     ChangeNotifierProvider.family<UserListTimelineRepository, TabSetting>(
-        (ref, tabSetting) => UserListTimelineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return UserListTimelineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
 
 final antennaTimelineProvider =
     ChangeNotifierProvider.family<AntennaTimelineRepository, TabSetting>(
-        (ref, tabSetting) => AntennaTimelineRepository(
-              ref.read(misskeyProvider(tabSetting.account)),
-              tabSetting.account,
-              ref.read(notesProvider(tabSetting.account)),
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(generalSettingsRepositoryProvider),
-              tabSetting,
-              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
-              ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
-            ));
+        (ref, tabSetting) {
+  final account = ref.watch(accountProvider(tabSetting.acct));
+  return AntennaTimelineRepository(
+    ref.read(misskeyProvider(account)),
+    account,
+    ref.read(notesProvider(account)),
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(generalSettingsRepositoryProvider),
+    tabSetting,
+    ref.read(mainStreamRepositoryProvider(account)),
+    ref.read(accountRepository),
+    ref.read(emojiRepositoryProvider(account)),
+  );
+});
 
 final mainStreamRepositoryProvider =
     ChangeNotifierProvider.family<MainStreamRepository, Account>(
@@ -171,6 +200,18 @@ final accountRepository = ChangeNotifierProvider((ref) => AccountRepository(
     ref.read(tabSettingsRepositoryProvider),
     ref.read(accountSettingsRepositoryProvider),
     ref.read));
+
+final accountProvider = Provider.family<Account, Acct>(
+  (ref, acct) => ref.watch(
+    accountRepository.select(
+      (repository) => repository.account.firstWhere(
+        (account) =>
+            account.host == acct.host && account.userId == acct.username,
+      ),
+    ),
+  ),
+);
+
 final tabSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => TabSettingsRepository());
 

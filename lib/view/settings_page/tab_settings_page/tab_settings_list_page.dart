@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/tab_setting.dart';
@@ -46,14 +45,18 @@ class TabSettingsListPageState extends ConsumerState<TabSettingsListPage> {
           Expanded(
             child: ReorderableListView.builder(
                 itemBuilder: (context, index) {
+                  final tabSetting = tabSettings[index];
+                  final account = ref.watch(accountProvider(tabSetting.acct));
                   return ListTile(
                     key: Key("$index"),
                     leading: AccountScope(
-                        account: tabSettings[index].account,
-                        child: TabIconView(icon: tabSettings[index].icon)),
+                      account: account,
+                      child: TabIconView(icon: tabSettings[index].icon),
+                    ),
                     title: Text(tabSettings[index].name),
                     subtitle: Text(
-                        "${tabSettings[index].tabType.displayName} / @${tabSettings[index].account.userId}@${tabSettings[index].account.host} "),
+                      "${tabSetting.tabType.displayName} / ${account.acct}",
+                    ),
                     onTap: () =>
                         context.pushRoute(TabSettingsRoute(tabIndex: index)),
                   );
