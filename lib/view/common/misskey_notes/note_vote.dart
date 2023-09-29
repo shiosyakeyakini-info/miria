@@ -113,8 +113,8 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                   gradient: isOpened
                       ? LinearGradient(
                           colors: [
-                            colorTheme.primary,
-                            colorTheme.primary,
+                            colorTheme.buttonGradateA,
+                            colorTheme.buttonGradateB,
                             colorTheme.accentedBackground,
                           ],
                           stops: [
