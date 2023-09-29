@@ -1,18 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miria/model/color_theme.dart';
 
-// Misskeyからの移植
-//  primary -> --accent
-//  scaffoldBackground -> --bg
-//  foreground -> --fg
-//  renote -> --renote
-//  mention -> --mention
-//  hashtag -> --hashtag
-//  link -> --link
-//  divider -> --divider
-//  buttonBackground -> --buttonBg
-//  panelBackground -> --panelHeaderBg
-
 const builtInColorThemes = [
   ColorTheme(
     id: "4eea646f-7afa-4645-83e9-83af0333cd37",
@@ -21,6 +9,7 @@ const builtInColorThemes = [
     primary: Color(0xff86b300),
     primaryDarken: Color(0xff608000),
     primaryLighten: Color(0xfface600),
+    accentedBackground: Color(0x2686b300),
     background: Color(0xfff9f9f9),
     foreground: Color(0xff676767),
     renote: Color(0xff229e82),
@@ -39,6 +28,7 @@ const builtInColorThemes = [
     primary: Color(0xff86b300),
     primaryDarken: Color(0xff608000),
     primaryLighten: Color(0xfface600),
+    accentedBackground: Color(0x2686b300),
     background: Color(0xff232323),
     foreground: Color(0xffc7d1d8),
     renote: Color(0xff86b300),
@@ -57,6 +47,7 @@ const builtInColorThemes = [
     primary: Color(0xff9f8989),
     primaryDarken: Color(0xff876e6e),
     primaryLighten: Color(0xffb6a5a5),
+    accentedBackground: Color(0x269f8989),
     background: Color(0xfff5f3f3),
     foreground: Color(0xff7f6666),
     renote: Color(0xffa0ac7d),
@@ -75,6 +66,7 @@ const builtInColorThemes = [
     primary: Color(0xffce6641),
     primaryDarken: Color(0xffaf4f2d),
     primaryLighten: Color(0xffd8876a),
+    accentedBackground: Color(0x26ce6641),
     background: Color(0xff1f211f),
     foreground: Color(0xffcdd8c7),
     renote: Color(0xffce6641),
@@ -93,6 +85,7 @@ const builtInColorThemes = [
     primary: Color(0xffea9a52),
     primaryDarken: Color(0xffe47f25),
     primaryLighten: Color(0xfff0b57f),
+    accentedBackground: Color(0x26ea9a52),
     background: Color(0xffe6e5e2),
     foreground: Color(0xff958f8b),
     renote: Color(0xffea9a52),
@@ -111,6 +104,7 @@ const builtInColorThemes = [
     primary: Color(0xff81c08b),
     primaryDarken: Color(0xff5faf6c),
     primaryLighten: Color(0xffa3d1aa),
+    accentedBackground: Color(0x2681c08b),
     background: Color(0xff232125),
     foreground: Color(0xffefdab9),
     renote: Color(0xff659cc8),
@@ -129,6 +123,7 @@ const builtInColorThemes = [
     primary: Color(0xff5db0da),
     primaryDarken: Color(0xff339cd1),
     primaryLighten: Color(0xff87c4e3),
+    accentedBackground: Color(0x265db0da),
     background: Color(0xfff6f8f9),
     foreground: Color(0xff636b71),
     renote: Color(0xff5db0da),
@@ -147,6 +142,7 @@ const builtInColorThemes = [
     primary: Color(0xff63e2b7),
     primaryDarken: Color(0xff38daa3),
     primaryLighten: Color(0xff8eeacb),
+    accentedBackground: Color(0x2663e2b7),
     background: Color(0xff101014),
     foreground: Color(0xffd5d5d6),
     renote: Color(0xff63e2b7),
@@ -165,6 +161,7 @@ const builtInColorThemes = [
     primary: Color(0xff77b58c),
     primaryDarken: Color(0xff58a171),
     primaryLighten: Color(0xff98c7a8),
+    accentedBackground: Color(0x2677b58c),
     background: Color(0xffe2deda),
     foreground: Color(0xff3d3d3d),
     renote: Color(0xff229e92),
@@ -183,6 +180,7 @@ const builtInColorThemes = [
     primary: Color(0xff94b300),
     primaryDarken: Color(0xff6a8000),
     primaryLighten: Color(0xffbee600),
+    accentedBackground: Color(0x2694b300),
     background: Color(0xff252624),
     foreground: Color(0xffd8d4c7),
     renote: Color(0xff94b300),
@@ -201,6 +199,7 @@ const builtInColorThemes = [
     primary: Color(0xff008cff),
     primaryDarken: Color(0xff0070cc),
     primaryLighten: Color(0xff33a3ff),
+    accentedBackground: Color(0x26008cff),
     background: Color(0xfffafafa),
     foreground: Color(0xff444444),
     renote: Color(0xff008cff),
@@ -219,6 +218,7 @@ const builtInColorThemes = [
     primary: Color(0xffb4e900),
     primaryDarken: Color(0xff8db600),
     primaryLighten: Color(0xffccff1d),
+    accentedBackground: Color(0x26b4e900),
     background: Color(0xff0c1210),
     foreground: Color(0xffdee7e4),
     renote: Color(0xffb4e900),
@@ -237,6 +237,7 @@ const builtInColorThemes = [
     primary: Color(0xffdb6072),
     primaryDarken: Color(0xffd2364d),
     primaryLighten: Color(0xffe48a97),
+    accentedBackground: Color(0x26db6072),
     background: Color(0xfffef8f9),
     foreground: Color(0xff980d1a),
     renote: Color(0xffdb6072),
@@ -255,6 +256,7 @@ const builtInColorThemes = [
     primary: Color(0xffe97f00),
     primaryDarken: Color(0xffb66300),
     primaryLighten: Color(0xffff981d),
+    accentedBackground: Color(0x26e97f00),
     background: Color(0xff0c1210),
     foreground: Color(0xffdee7e4),
     renote: Color(0xffe97f00),
@@ -273,6 +275,7 @@ const builtInColorThemes = [
     primary: Color(0xffe36749),
     primaryDarken: Color(0xffd84521),
     primaryLighten: Color(0xffea8c75),
+    accentedBackground: Color(0x26e36749),
     background: Color(0xfff0eee9),
     foreground: Color(0xff5f5f5f),
     renote: Color(0xffe36749),
@@ -291,6 +294,7 @@ const builtInColorThemes = [
     primary: Color(0xffff5975),
     primaryDarken: Color(0xffff264b),
     primaryLighten: Color(0xffff8c9f),
+    accentedBackground: Color(0x26ff5975),
     background: Color(0xff1c1c25),
     foreground: Color(0xffeceff4),
     renote: Color(0xffff5975),
@@ -309,6 +313,7 @@ const builtInColorThemes = [
     primary: Color(0xff478384),
     primaryDarken: Color(0xff356263),
     primaryLighten: Color(0xff59a4a5),
+    accentedBackground: Color(0x26478384),
     background: Color(0xffe7e7eb),
     foreground: Color(0xff5f5f5f),
     renote: Color(0xff478384),
@@ -327,6 +332,7 @@ const builtInColorThemes = [
     primary: Color(0xff47bfe8),
     primaryDarken: Color(0xff1caee0),
     primaryLighten: Color(0xff74cfee),
+    accentedBackground: Color(0x2647bfe8),
     background: Color(0xff212526),
     foreground: Color(0xffdadada),
     renote: Color(0xff229e82),
@@ -345,6 +351,7 @@ const builtInColorThemes = [
     primary: Color(0xff00a497),
     primaryDarken: Color(0xff007168),
     primaryLighten: Color(0xff00d7c6),
+    accentedBackground: Color(0x2600a497),
     background: Color(0xff172426),
     foreground: Color(0xffdadada),
     renote: Color(0xff00a497),
