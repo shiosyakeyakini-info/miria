@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
@@ -18,6 +19,7 @@ import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/in_note_button.dart';
+import 'package:miria/view/common/misskey_notes/link_preview.dart';
 import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
@@ -183,6 +185,38 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     return (thisNodeCount, newLinesCount);
   }
 
+  // https://github.com/misskey-dev/misskey/blob/2023.9.2/packages/frontend/src/scripts/extract-url-from-mfm.ts
+  List<String> extractLinks(List<parser.MfmNode> nodes) {
+    String removeHash(String link) {
+      final hashIndex = link.lastIndexOf("#");
+      if (hashIndex < 0) {
+        return link;
+      } else {
+        return link.substring(0, hashIndex);
+      }
+    }
+
+    // # より前の部分が重複しているものを取り除く
+    final links = LinkedHashSet<String>(
+      equals: (link, other) => removeHash(link) == removeHash(other),
+      hashCode: (link) => removeHash(link).hashCode,
+    );
+    for (final node in nodes) {
+      final children = node.children;
+      if (children != null) {
+        links.addAll(extractLinks(children));
+      }
+      if (node is parser.MfmURL) {
+        links.add(node.value);
+      } else if (node is parser.MfmLink) {
+        if (!node.silent) {
+          links.add(node.url);
+        }
+      }
+    }
+    return links.toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final latestActualNote = ref.watch(notesProvider(AccountScope.of(context))
@@ -283,6 +317,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             (value) => value.noteStatuses[widget.note.id]!.isReactionedRenote));
     final isLongVisible = ref.watch(notesProvider(AccountScope.of(context))
         .select((value) => value.noteStatuses[widget.note.id]!.isLongVisible));
+
+    final links = extractLinks(displayTextNodes!);
 
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(
@@ -494,6 +530,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   displayNote: displayNote,
                                   poll: displayNote.poll!,
                                   loginAs: widget.loginAs,
+                                ),
+                              if (isLongVisible && widget.recursive < 2)
+                                ...links.map(
+                                  (link) => LinkPreview(
+                                    account: AccountScope.of(context),
+                                    link: link,
+                                  ),
                                 ),
                               if (displayNote.renoteId != null &&
                                   (widget.recursive < 2 &&
