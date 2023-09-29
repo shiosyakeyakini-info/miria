@@ -55,6 +55,8 @@ void main() {
             'link: ${theme.link}, '
             'divider: ${theme.divider}, '
             'buttonBackground: ${theme.buttonBackground}, '
+            'buttonGradateA: ${theme.buttonGradateA}, '
+            'buttonGradateB: ${theme.buttonGradateB}, '
             'panel: ${theme.panel}, '
             'panelBackground: ${theme.panelBackground}, '
             ')',

@@ -24,6 +24,8 @@ class ColorTheme with _$ColorTheme {
     required Color link,
     required Color divider,
     required Color buttonBackground,
+    required Color buttonGradateA,
+    required Color buttonGradateB,
     required Color panel,
     required Color panelBackground,
   }) = _ColorTheme;
@@ -131,6 +133,8 @@ class ColorTheme with _$ColorTheme {
       link: colors["link"]!,
       divider: colors["divider"]!,
       buttonBackground: colors["buttonBg"]!,
+      buttonGradateA: colors["buttonGradateA"]!,
+      buttonGradateB: colors["buttonGradateB"]!,
       panel: colors["panel"]!,
       panelBackground: colors["panelHeaderBg"]!,
     );
