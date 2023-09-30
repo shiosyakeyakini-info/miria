@@ -145,6 +145,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   bool isLongVisibleInitialized = false;
 
   List<parser.MfmNode>? displayTextNodes;
+  DateTime? latestUpdatedAt;
 
   bool shouldCollaposed(List<parser.MfmNode> node) {
     final result = nodeMaxTextLength(node);
@@ -208,6 +209,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
     if (widget.recursive == 3) {
       return Container();
+    }
+
+    if (latestUpdatedAt != displayNote.updatedAt) {
+      latestUpdatedAt = displayNote.updatedAt;
+      displayTextNodes = null;
     }
 
     displayTextNodes ??= const parser.MfmParser().parse(displayNote.text ?? "");
@@ -798,6 +804,12 @@ class NoteHeader1 extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.only(top: 2),
                 child: UserInformation(user: displayNote.user))),
+        if (displayNote.updatedAt != null)
+          Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: Icon(Icons.edit,
+                  size: Theme.of(context).textTheme.bodySmall?.fontSize,
+                  color: Theme.of(context).textTheme.bodySmall?.color)),
         GestureDetector(
           onTap: () async =>
               await _navigateDetailPage(context, displayNote, loginAs)
@@ -871,6 +883,15 @@ class RenoteHeader extends StatelessWidget {
             ),
           ),
         ),
+        if (note.updatedAt != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+            child: Icon(
+              Icons.edit,
+              size: renoteTextStyle?.fontSize,
+              color: renoteTextStyle?.color,
+            ),
+          ),
         Text(
           note.createdAt.differenceNow,
           textAlign: TextAlign.right,

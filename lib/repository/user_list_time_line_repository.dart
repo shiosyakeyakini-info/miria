@@ -24,12 +24,14 @@ class UserListTimelineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+    required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.userListStream(
       listId: tabSetting.listId!,
       onNoteReceived: onReceived,
       onReacted: onReacted,
       onVoted: onVoted,
+      onUpdated: onUpdated,
     );
   }
 
