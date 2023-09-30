@@ -10,11 +10,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mfm_parser/mfm_parser.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
+import 'package:miria/repository/note_repository.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
 import 'package:miria/view/note_create_page/file_settings_dialog.dart';
+import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -68,6 +70,8 @@ class NoteCreate with _$NoteCreate {
     int? voteDuration,
     @Default(VoteExpireDurationType.seconds)
     VoteExpireDurationType voteDurationType,
+    NoteCreationMode? noteCreationMode,
+    String? noteId,
   }) = _NoteCreate;
 }
 
@@ -83,6 +87,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   FileSystem fileSystem;
   Dio dio;
   Misskey misskey;
+  NoteRepository noteRepository;
   StateNotifier<(Object? error, BuildContext? context)> errorNotifier;
 
   NoteCreateNotifier(
@@ -91,6 +96,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     this.dio,
     this.misskey,
     this.errorNotifier,
+    this.noteRepository,
   );
 
   /// 初期化する
@@ -98,9 +104,10 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     CommunityChannel? channel,
     String? initialText,
     List<String>? initialMediaFiles,
-    Note? deletedNote,
+    Note? note,
     Note? renote,
     Note? reply,
+    NoteCreationMode? noteCreationMode,
   ) async {
     var resultState = state;
 
@@ -148,9 +155,9 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     }
 
     // 削除されたノートの反映
-    if (deletedNote != null) {
+    if (note != null) {
       final files = <MisskeyPostFile>[];
-      for (final file in deletedNote.files) {
+      for (final file in note.files) {
         if (file.type.startsWith("image")) {
           final response = await dio.get(file.url,
               options: Options(responseType: ResponseType.bytes));
@@ -172,33 +179,33 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           ));
         }
       }
-      final deletedNoteChannel = deletedNote.channel;
+      final deletedNoteChannel = note.channel;
 
       resultState = resultState.copyWith(
-        noteVisibility: deletedNote.visibility,
-        localOnly: deletedNote.localOnly,
+        noteVisibility: note.visibility,
+        localOnly: note.localOnly,
         files: files,
         channel: deletedNoteChannel != null
             ? NoteCreateChannel(
                 id: deletedNoteChannel.id, name: deletedNoteChannel.name)
             : null,
-        cwText: deletedNote.cw ?? "",
-        isCw: deletedNote.cw?.isNotEmpty == true,
-        text: deletedNote.text ?? "",
-        reactionAcceptance: deletedNote.reactionAcceptance,
+        cwText: note.cw ?? "",
+        isCw: note.cw?.isNotEmpty == true,
+        text: note.text ?? "",
+        reactionAcceptance: note.reactionAcceptance,
         replyTo: [
-          for (final userId in deletedNote.mentions)
+          for (final userId in note.mentions)
             (await misskey.users.show(UsersShowRequest(userId: userId)))
                 .toUser()
         ],
-        isVote: deletedNote.poll != null,
-        isVoteMultiple: deletedNote.poll?.multiple ?? false,
+        isVote: note.poll != null,
+        isVoteMultiple: note.poll?.multiple ?? false,
         voteExpireType: VoteExpireType.date,
-        voteContentCount:
-            deletedNote.poll?.choices.map((e) => e.text).length ?? 2,
-        voteContent:
-            deletedNote.poll?.choices.map((e) => e.text).toList() ?? [],
-        voteDate: deletedNote.poll?.expiresAt,
+        voteContentCount: note.poll?.choices.map((e) => e.text).length ?? 2,
+        voteContent: note.poll?.choices.map((e) => e.text).toList() ?? [],
+        voteDate: note.poll?.expiresAt,
+        noteCreationMode: noteCreationMode,
+        noteId: note.id,
       );
       state = resultState;
       return;
@@ -390,19 +397,30 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               ? voteDuration
               : null);
 
-      await misskey.notes.create(NotesCreateRequest(
-        visibility: state.noteVisibility,
-        text: postText,
-        cw: state.isCw ? state.cwText : null,
-        localOnly: state.localOnly,
-        replyId: state.reply?.id,
-        renoteId: state.renote?.id,
-        channelId: state.channel?.id,
-        fileIds: fileIds.isEmpty ? null : fileIds,
-        visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
-        reactionAcceptance: state.reactionAcceptance,
-        poll: state.isVote ? poll : null,
-      ));
+      if (state.noteCreationMode == NoteCreationMode.update) {
+        await misskey.notes.update(NotesUpdateRequest(
+          noteId: state.noteId!,
+          text: postText ?? "",
+          cw: state.isCw ? state.cwText : null,
+        ));
+        noteRepository.registerNote(noteRepository.notes[state.noteId!]!
+            .copyWith(
+                text: postText ?? "", cw: state.isCw ? state.cwText : null));
+      } else {
+        await misskey.notes.create(NotesCreateRequest(
+          visibility: state.noteVisibility,
+          text: postText,
+          cw: state.isCw ? state.cwText : null,
+          localOnly: state.localOnly,
+          replyId: state.reply?.id,
+          renoteId: state.renote?.id,
+          channelId: state.channel?.id,
+          fileIds: fileIds.isEmpty ? null : fileIds,
+          visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
+          reactionAcceptance: state.reactionAcceptance,
+          poll: state.isVote ? poll : null,
+        ));
+      }
       if (!mounted) return;
       state = state.copyWith(isNoteSending: NoteSendStatus.finished);
     } catch (e) {

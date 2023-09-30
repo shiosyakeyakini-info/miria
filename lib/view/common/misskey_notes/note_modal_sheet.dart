@@ -13,6 +13,7 @@ import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
 import 'package:miria/view/common/misskey_notes/open_another_account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
+import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -219,6 +220,19 @@ class NoteModalSheet extends ConsumerWidget {
                 baseNote.renote != null &&
                 baseNote.poll == null &&
                 baseNote.files.isEmpty)) ...[
+          if (account.i.policies.canEditNote)
+            ListTile(
+                title: const Text("編集する"),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  context.pushRoute(
+                    NoteCreateRoute(
+                      initialAccount: account,
+                      note: targetNote,
+                      noteCreationMode: NoteCreationMode.update,
+                    ),
+                  );
+                }),
           ListTile(
             title: const Text("削除する"),
             onTap: () async {
@@ -263,7 +277,8 @@ class NoteModalSheet extends ConsumerWidget {
                 context.pushRoute(
                   NoteCreateRoute(
                     initialAccount: account,
-                    deletedNote: targetNote,
+                    note: targetNote,
+                    noteCreationMode: NoteCreationMode.recreate,
                   ),
                 );
               }
