@@ -24,14 +24,15 @@ class ChannelTimelineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+    required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.channelStream(
-      channelId: tabSetting.channelId!,
-      onNoteReceived: onReceived,
-      onReacted: onReacted,
-      onUnreacted: onUnreacted,
-      onVoted: onVoted,
-    );
+        channelId: tabSetting.channelId!,
+        onNoteReceived: onReceived,
+        onReacted: onReacted,
+        onUnreacted: onUnreacted,
+        onVoted: onVoted,
+        onUpdated: onUpdated);
   }
 
   @override

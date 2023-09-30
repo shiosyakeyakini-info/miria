@@ -44,6 +44,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+    required FutureOr<void> Function(String id, NoteEdited vote) onUpdated,
   });
 
   void reloadLatestNotes() {
@@ -150,6 +151,12 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             .copyWith(votes: choices[value.choice].votes + 1);
         noteRepository.registerNote(
             registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
+      },
+      onUpdated: (id, value) {
+        final note = noteRepository.notes[id];
+        if (note == null) return;
+        noteRepository.registerNote(note.copyWith(
+            text: value.text, cw: value.cw, updatedAt: DateTime.now()));
       },
     );
     await misskey.startStreaming();
