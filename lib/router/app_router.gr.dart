@@ -156,6 +156,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    AnnouncementRoute.name: (routeData) {
+      final args = routeData.argsAs<AnnouncementRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AnnouncementPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     SplashRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -382,16 +392,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    AnnouncementRoute.name: (routeData) {
-      final args = routeData.argsAs<AnnouncementRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: AnnouncementPage(
           key: args.key,
           account: args.account,
         ),
@@ -941,6 +941,44 @@ class PhotoEditRouteArgs {
   @override
   String toString() {
     return 'PhotoEditRouteArgs{account: $account, file: $file, onSubmit: $onSubmit, key: $key}';
+  }
+}
+
+/// generated route for
+/// [AnnouncementPage]
+class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
+  AnnouncementRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AnnouncementRoute.name,
+          args: AnnouncementRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AnnouncementRoute';
+
+  static const PageInfo<AnnouncementRouteArgs> page =
+      PageInfo<AnnouncementRouteArgs>(name);
+}
+
+class AnnouncementRouteArgs {
+  const AnnouncementRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'AnnouncementRouteArgs{key: $key, account: $account}';
   }
 }
 
@@ -1760,43 +1798,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [AnnouncementPage]
-class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
-  AnnouncementRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          AnnouncementRoute.name,
-          args: AnnouncementRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'AnnouncementRoute';
-
-  static const PageInfo<AnnouncementRouteArgs> page =
-      PageInfo<AnnouncementRouteArgs>(name);
-}
-
-class AnnouncementRouteArgs {
-  const AnnouncementRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'AnnouncementRouteArgs{key: $key, account: $account}';
   }
 }
