@@ -1282,6 +1282,71 @@ void main() {
                   .text,
               ":${TestData.customEmoji1.baseName}:");
         });
+
+        testWidgets("MFMの関数名の入力補完が可能なこと", (tester) async {
+          await tester.pumpWidget(
+            ProviderScope(
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(r"$["));
+          await tester.pumpAndSettle();
+          expect(find.text("tada"), findsOneWidget);
+
+          await tester.enterText(find.byType(TextField).hitTestable(), r"$[r");
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("rainbow"));
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .textEditingController(find.byType(TextField).hitTestable())
+                .text,
+            r"$[rainbow ",
+          );
+        });
+
+        testWidgets("ハッシュタグの入力補完が可能なこと", (tester) async {
+          final mockMisskey = MockMisskey();
+          final mockHashtags = MockMisskeyHashtags();
+          when(mockMisskey.hashtags).thenReturn(mockHashtags);
+          when(mockHashtags.trend()).thenAnswer(
+            (_) async => [
+              const HashtagsTrendResponse(tag: "abc", chart: [], usersCount: 0),
+            ],
+          );
+          when(mockHashtags.search(any)).thenAnswer(
+            (_) async => ["def"],
+          );
+
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref, arg) => mockMisskey)
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.enterText(find.byType(TextField).hitTestable(), "#");
+          await tester.pumpAndSettle();
+          expect(find.text("abc"), findsOneWidget);
+
+          await tester.enterText(find.byType(TextField).hitTestable(), "#d");
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("def"));
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .textEditingController(find.byType(TextField).hitTestable())
+                .text,
+            "#def ",
+          );
+        });
       });
 
       group("プレビュー", () {
