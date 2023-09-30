@@ -35,6 +35,8 @@ final noteInputTextProvider =
 final noteFocusProvider =
     ChangeNotifierProvider.autoDispose((ref) => FocusNode());
 
+enum NoteCreationMode { update, recreate }
+
 @RoutePage()
 class NoteCreatePage extends ConsumerStatefulWidget {
   final Account initialAccount;
@@ -43,7 +45,8 @@ class NoteCreatePage extends ConsumerStatefulWidget {
   final CommunityChannel? channel;
   final Note? reply;
   final Note? renote;
-  final Note? deletedNote;
+  final Note? note;
+  final NoteCreationMode? noteCreationMode;
 
   const NoteCreatePage({
     super.key,
@@ -53,7 +56,8 @@ class NoteCreatePage extends ConsumerStatefulWidget {
     this.channel,
     this.reply,
     this.renote,
-    this.deletedNote,
+    this.note,
+    this.noteCreationMode,
   });
 
   @override
@@ -80,12 +84,14 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
     isFirstChangeDependenciesCalled = true;
     Future(() async {
       notifier.initialize(
-          widget.channel,
-          widget.initialText,
-          widget.initialMediaFiles,
-          widget.deletedNote,
-          widget.renote,
-          widget.reply);
+        widget.channel,
+        widget.initialText,
+        widget.initialMediaFiles,
+        widget.note,
+        widget.renote,
+        widget.reply,
+        widget.noteCreationMode,
+      );
 
       ref.read(noteInputTextProvider).addListener(() {
         notifier.setContentText(ref.read(noteInputTextProvider).text);
@@ -156,7 +162,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const NoteCreateSettingTop(),
+                      if (widget.noteCreationMode != NoteCreationMode.update)
+                        const NoteCreateSettingTop()
+                      else
+                        const Padding(padding: EdgeInsets.only(top: 30)),
                       const ChannelArea(),
                       const ReplyArea(),
                       const ReplyToArea(),
@@ -172,23 +181,30 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       ),
                       Row(
                         children: [
-                          IconButton(
-                              onPressed: () async =>
-                                  await notifier.chooseFile(context),
-                              icon: const Icon(Icons.image)),
-                          IconButton(
-                              onPressed: () {
-                                ref
-                                    .read(noteCreateProvider(
-                                            widget.initialAccount)
-                                        .notifier)
-                                    .toggleVote();
-                              },
-                              icon: const Icon(Icons.how_to_vote)),
+                          if (widget.noteCreationMode !=
+                              NoteCreationMode.update) ...[
+                            IconButton(
+                                onPressed: () async =>
+                                    await notifier.chooseFile(context),
+                                icon: const Icon(Icons.image)),
+                            if (widget.noteCreationMode !=
+                                NoteCreationMode.update)
+                              IconButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(noteCreateProvider(
+                                                widget.initialAccount)
+                                            .notifier)
+                                        .toggleVote();
+                                  },
+                                  icon: const Icon(Icons.how_to_vote)),
+                          ],
                           const CwToggleButton(),
-                          IconButton(
-                              onPressed: () => notifier.addReplyUser(context),
-                              icon: const Icon(Icons.mail_outline)),
+                          if (widget.noteCreationMode !=
+                              NoteCreationMode.update)
+                            IconButton(
+                                onPressed: () => notifier.addReplyUser(context),
+                                icon: const Icon(Icons.mail_outline)),
                           IconButton(
                               onPressed: () async {
                                 final selectedEmoji =
@@ -220,9 +236,15 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         ],
                       ),
                       const MfmPreview(),
-                      const FilePreview(),
+                      if (widget.noteCreationMode != NoteCreationMode.update)
+                        const FilePreview()
+                      else if (widget.note?.files.isNotEmpty == true)
+                        const Text("メディアがあります（編集はできません）"),
                       const RenoteArea(),
-                      const VoteArea(),
+                      if (widget.noteCreationMode != NoteCreationMode.update)
+                        const VoteArea()
+                      else if (widget.note?.poll != null)
+                        const Text("投票があります（編集はできません）"),
                     ],
                   ),
                 ),

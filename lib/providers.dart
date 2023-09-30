@@ -29,8 +29,11 @@ import 'package:misskey_dart/misskey_dart.dart';
 final dioProvider = Provider((ref) => Dio());
 final fileSystemProvider =
     Provider<FileSystem>((ref) => const LocalFileSystem());
-final misskeyProvider = Provider.family<Misskey, Account>(
-    (ref, account) => Misskey(token: account.token, host: account.host, socketConnectionTimeout: const Duration(seconds: 20)));
+final misskeyProvider = Provider.family<Misskey, Account>((ref, account) =>
+    Misskey(
+        token: account.token,
+        host: account.host,
+        socketConnectionTimeout: const Duration(seconds: 20)));
 
 final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -194,5 +197,6 @@ final noteCreateProvider = StateNotifierProvider.family
       ref.read(fileSystemProvider),
       ref.read(dioProvider),
       ref.read(misskeyProvider(account)),
-      ref.read(errorEventProvider.notifier)),
+      ref.read(errorEventProvider.notifier),
+      ref.read(notesProvider(account))),
 );
