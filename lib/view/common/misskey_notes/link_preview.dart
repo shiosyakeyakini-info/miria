@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/summaly_result.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/misskey_notes/player_embed.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 final _summalyProvider =
     AsyncNotifierProvider.family<_Summaly, SummalyResult, (String, String)>(
@@ -60,13 +62,63 @@ class LinkPreview extends ConsumerWidget {
         link: link,
         summalyResult: summalyResult,
       ),
-      orElse: () => LinkPreviewItem(link: link),
+      orElse: () => LinkPreviewTile(link: link),
     );
   }
 }
 
-class LinkPreviewItem extends StatelessWidget {
+class LinkPreviewItem extends StatefulWidget {
   const LinkPreviewItem({
+    super.key,
+    required this.link,
+    required this.summalyResult,
+  });
+
+  final String link;
+  final SummalyResult summalyResult;
+
+  @override
+  State<LinkPreviewItem> createState() => _LinkPreviewItemState();
+}
+
+class _LinkPreviewItemState extends State<LinkPreviewItem> {
+  bool isPlayerOpen = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (!isPlayerOpen)
+          LinkPreviewTile(
+            link: widget.link,
+            summalyResult: widget.summalyResult,
+          ),
+        if (widget.summalyResult.player.url != null &&
+            WebViewPlatform.instance != null)
+          if (isPlayerOpen) ...[
+            PlayerEmbed(player: widget.summalyResult.player),
+            OutlinedButton.icon(
+              onPressed: () => setState(() {
+                isPlayerOpen = false;
+              }),
+              icon: const Icon(Icons.close),
+              label: const Text("プレイヤーを閉じる"),
+            ),
+          ] else
+            OutlinedButton.icon(
+              onPressed: () => setState(() {
+                isPlayerOpen = true;
+              }),
+              icon: const Icon(Icons.play_arrow),
+              label: const Text("プレイヤーを開く"),
+            ),
+      ],
+    );
+  }
+}
+
+class LinkPreviewTile extends StatelessWidget {
+  const LinkPreviewTile({
     super.key,
     required this.link,
     this.summalyResult = const SummalyResult(player: Player()),
@@ -148,11 +200,13 @@ class LinkPreviewItem extends StatelessWidget {
                                   width: textTheme.labelMedium?.fontSize,
                                 ),
                               ),
-                            Text(
-                              summalyResult.sitename ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.labelMedium,
+                            Expanded(
+                              child: Text(
+                                summalyResult.sitename ?? "",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: textTheme.labelMedium,
+                              ),
                             ),
                           ],
                         ),
