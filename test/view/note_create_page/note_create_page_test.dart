@@ -1167,8 +1167,8 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1
           ]);
-          when(emojiRepository.searchEmojis(any)).thenAnswer(
-              (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(emojiRepository.defaultEmojis()).thenAnswer(
+              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
           final generalSettingsRepository = MockGeneralSettingsRepository();
           when(generalSettingsRepository.settings)
               .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
@@ -1212,8 +1212,8 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1
           ]);
-          when(emojiRepository.searchEmojis(any)).thenAnswer(
-              (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(emojiRepository.defaultEmojis()).thenAnswer(
+              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
 
           final generalSettingsRepository = MockGeneralSettingsRepository();
           when(generalSettingsRepository.settings)
