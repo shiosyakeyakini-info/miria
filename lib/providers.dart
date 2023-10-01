@@ -90,13 +90,13 @@ final roleTimelineProvider =
     ChangeNotifierProvider.family<RoleTimelineRepository, TabSetting>(
         (ref, tabSetting) => RoleTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(generalSettingsRepositoryProvider),
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(accountRepository),
-              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final channelTimelineProvider =
