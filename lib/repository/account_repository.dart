@@ -150,7 +150,8 @@ class AccountRepository extends ChangeNotifier {
 
     final version = nodeInfoResult["software"]["version"];
 
-    final endpoints = await Misskey(host: server, token: null).endpoints();
+    final endpoints =
+        await reader(misskeyProvider(Account.demoAccount(server))).endpoints();
     if (!endpoints.contains("emojis")) {
       throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
     }

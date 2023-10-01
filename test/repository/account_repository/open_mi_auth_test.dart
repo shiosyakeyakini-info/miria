@@ -43,8 +43,14 @@ void main() {
         requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo));
     when(dio.get(any)).thenAnswer((realInvocation) async => Response(
         requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo2));
-    final provider =
-        ProviderContainer(overrides: [dioProvider.overrideWithValue(dio)]);
+    final mockMisskey = MockMisskey();
+    when(mockMisskey.endpoints()).thenAnswer((_) async => []);
+    final provider = ProviderContainer(
+      overrides: [
+        dioProvider.overrideWithValue(dio),
+        misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+      ],
+    );
     final accountRepository = AccountRepository(MockTabSettingsRepository(),
         MockAccountSettingsRepository(), provider.read);
 
@@ -69,8 +75,14 @@ void main() {
     when(dio.get(any)).thenAnswer((realInvocation) async => Response(
         requestOptions: RequestOptions(),
         data: AuthTestData.oldVerMisskeyNodeInfo2));
-    final provider =
-        ProviderContainer(overrides: [dioProvider.overrideWithValue(dio)]);
+    final mockMisskey = MockMisskey();
+    when(mockMisskey.endpoints()).thenAnswer((_) async => []);
+    final provider = ProviderContainer(
+      overrides: [
+        dioProvider.overrideWithValue(dio),
+        misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+      ],
+    );
     final accountRepository = AccountRepository(MockTabSettingsRepository(),
         MockAccountSettingsRepository(), provider.read);
 
