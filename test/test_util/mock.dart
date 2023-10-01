@@ -25,6 +25,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
   MockSpec<MisskeyDrive>(),
   MockSpec<MisskeyDriveFolders>(),
   MockSpec<MisskeyDriveFiles>(),
+  MockSpec<MisskeyHashtags>(),
 
   // プラグインとか
   MockSpec<Dio>(),
