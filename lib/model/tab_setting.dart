@@ -22,6 +22,9 @@ class TabSetting with _$TabSetting {
     /// タブ種別
     required TabType tabType,
 
+    /// ロールタイムラインのノートの場合、ロールID
+    String? roleId,
+
     /// チャンネルのノートの場合、チャンネルID
     String? channelId,
 

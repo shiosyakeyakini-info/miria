@@ -26,6 +26,9 @@ mixin _$TabSetting {
   /// タブ種別
   TabType get tabType => throw _privateConstructorUsedError;
 
+  /// ロールタイムラインのノートの場合、ロールID
+  String? get roleId => throw _privateConstructorUsedError;
+
   /// チャンネルのノートの場合、チャンネルID
   String? get channelId => throw _privateConstructorUsedError;
 
@@ -60,6 +63,7 @@ abstract class $TabSettingCopyWith<$Res> {
   $Res call(
       {@IconDataConverter() TabIcon icon,
       TabType tabType,
+      String? roleId,
       String? channelId,
       String? listId,
       String? antennaId,
@@ -87,6 +91,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
   $Res call({
     Object? icon = null,
     Object? tabType = null,
+    Object? roleId = freezed,
     Object? channelId = freezed,
     Object? listId = freezed,
     Object? antennaId = freezed,
@@ -104,6 +109,10 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
               as TabType,
+      roleId: freezed == roleId
+          ? _value.roleId
+          : roleId // ignore: cast_nullable_to_non_nullable
+              as String?,
       channelId: freezed == channelId
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
@@ -163,6 +172,7 @@ abstract class _$$_TabSettingCopyWith<$Res>
   $Res call(
       {@IconDataConverter() TabIcon icon,
       TabType tabType,
+      String? roleId,
       String? channelId,
       String? listId,
       String? antennaId,
@@ -190,6 +200,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
   $Res call({
     Object? icon = null,
     Object? tabType = null,
+    Object? roleId = freezed,
     Object? channelId = freezed,
     Object? listId = freezed,
     Object? antennaId = freezed,
@@ -207,6 +218,10 @@ class __$$_TabSettingCopyWithImpl<$Res>
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
               as TabType,
+      roleId: freezed == roleId
+          ? _value.roleId
+          : roleId // ignore: cast_nullable_to_non_nullable
+              as String?,
       channelId: freezed == channelId
           ? _value.channelId
           : channelId // ignore: cast_nullable_to_non_nullable
@@ -242,6 +257,7 @@ class _$_TabSetting extends _TabSetting {
   const _$_TabSetting(
       {@IconDataConverter() required this.icon,
       required this.tabType,
+      this.roleId,
       this.channelId,
       this.listId,
       this.antennaId,
@@ -261,6 +277,10 @@ class _$_TabSetting extends _TabSetting {
   /// タブ種別
   @override
   final TabType tabType;
+
+  /// ロールタイムラインのノートの場合、ロールID
+  @override
+  final String? roleId;
 
   /// チャンネルのノートの場合、チャンネルID
   @override
@@ -292,7 +312,7 @@ class _$_TabSetting extends _TabSetting {
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -302,6 +322,7 @@ class _$_TabSetting extends _TabSetting {
             other is _$_TabSetting &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.tabType, tabType) || other.tabType == tabType) &&
+            (identical(other.roleId, roleId) || other.roleId == roleId) &&
             (identical(other.channelId, channelId) ||
                 other.channelId == channelId) &&
             (identical(other.listId, listId) || other.listId == listId) &&
@@ -321,6 +342,7 @@ class _$_TabSetting extends _TabSetting {
       runtimeType,
       icon,
       tabType,
+      roleId,
       channelId,
       listId,
       antennaId,
@@ -347,6 +369,7 @@ abstract class _TabSetting extends TabSetting {
   const factory _TabSetting(
       {@IconDataConverter() required final TabIcon icon,
       required final TabType tabType,
+      final String? roleId,
       final String? channelId,
       final String? listId,
       final String? antennaId,
@@ -366,6 +389,10 @@ abstract class _TabSetting extends TabSetting {
 
   /// タブ種別
   TabType get tabType;
+  @override
+
+  /// ロールタイムラインのノートの場合、ロールID
+  String? get roleId;
   @override
 
   /// チャンネルのノートの場合、チャンネルID

@@ -46,6 +46,7 @@ app.*.map.json
 
 # builder
 **/node_modules/
+**/build/
 
 # Release
 /private_keys/
