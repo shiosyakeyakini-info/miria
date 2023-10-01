@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -128,30 +127,31 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       resultState = resultState.copyWith(text: initialText);
     }
     if (initialMediaFiles != null && initialMediaFiles.isNotEmpty == true) {
-      resultState = resultState.copyWith(files: [
-        for (final media in initialMediaFiles)
-          if (media.toLowerCase().endsWith("jpg") ||
-              media.toLowerCase().endsWith("png") ||
-              media.toLowerCase().endsWith("gif") ||
-              media.toLowerCase().endsWith("webp"))
-            ImageFile(
-              data: await fileSystem.file(media).readAsBytes(),
-              fileName: media.substring(
-                  media.lastIndexOf(Platform.pathSeparator) + 1, media.length),
-              isNsfw: false,
-              caption: "",
-            )
-          else
-            UnknownFile(
-              data: await fileSystem.file(media).readAsBytes(),
-              fileName: media.substring(
-                media.lastIndexOf(Platform.pathSeparator) + 1,
-                media.length,
-              ),
-              isNsfw: false,
-              caption: "",
-            )
-      ]);
+      resultState = resultState.copyWith(
+        files: await Future.wait(
+          initialMediaFiles.map((media) async {
+            final file = fileSystem.file(media);
+            final contents = await file.readAsBytes();
+            final fileName = file.basename;
+            final extension = fileName.split(".").last.toLowerCase();
+            if (["jpg", "png", "gif", "webp"].contains(extension)) {
+              return ImageFile(
+                data: contents,
+                fileName: fileName,
+                isNsfw: false,
+                caption: "",
+              );
+            } else {
+              return UnknownFile(
+                data: contents,
+                fileName: fileName,
+                isNsfw: false,
+                caption: "",
+              );
+            }
+          }),
+        ),
+      );
     }
 
     // 削除されたノートの反映
@@ -473,16 +473,19 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
       final path = result.files.single.path;
       if (path == null) return;
+      final file = fileSystem.file(path);
       if (!mounted) return;
-      state = state.copyWith(files: [
-        ...state.files,
-        ImageFile(
-            data: await fileSystem.file(path).readAsBytes(),
-            fileName: path.substring(
-                path.lastIndexOf(Platform.pathSeparator) + 1, path.length),
+      state = state.copyWith(
+        files: [
+          ...state.files,
+          ImageFile(
+            data: await file.readAsBytes(),
+            fileName: file.basename,
             isNsfw: false,
-            caption: "")
-      ]);
+            caption: "",
+          ),
+        ],
+      );
     }
   }
 
