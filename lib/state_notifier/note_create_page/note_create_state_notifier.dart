@@ -470,20 +470,33 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         );
       }
     } else if (result == DriveModalSheetReturnValue.upload) {
-      final result = await FilePicker.platform.pickFiles(type: FileType.image);
-      if (result == null) return;
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: true,
+      );
+      if (result == null || result.files.isEmpty) return;
 
-      final path = result.files.single.path;
-      if (path == null) return;
-      final file = fileSystem.file(path);
+      final fsFiles = result.files.map((file) {
+        final path = file.path;
+        if (path != null) {
+          return fileSystem.file(path);
+        }
+        return null;
+      }).nonNulls;
+      final files = await Future.wait(
+        fsFiles.map(
+          (file) async => ImageFile(
+            data: await file.readAsBytes(),
+            fileName: file.basename,
+          ),
+        ),
+      );
+
       if (!mounted) return;
       state = state.copyWith(
         files: [
           ...state.files,
-          ImageFile(
-            data: await file.readAsBytes(),
-            fileName: file.basename,
-          ),
+          ...files,
         ],
       );
     }
