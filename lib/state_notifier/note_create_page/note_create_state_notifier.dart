@@ -138,15 +138,11 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               return ImageFile(
                 data: contents,
                 fileName: fileName,
-                isNsfw: false,
-                caption: "",
               );
             } else {
               return UnknownFile(
                 data: contents,
                 fileName: fileName,
-                isNsfw: false,
-                caption: "",
               );
             }
           }),
@@ -161,22 +157,25 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         if (file.type.startsWith("image")) {
           final response = await dio.get(file.url,
               options: Options(responseType: ResponseType.bytes));
-          files.add(ImageFileAlreadyPostedFile(
+          files.add(
+            ImageFileAlreadyPostedFile(
               fileName: file.name,
               data: response.data,
               id: file.id,
               isNsfw: file.isSensitive,
-              caption: file.comment ?? "",
-              isEdited: false));
+              caption: file.comment,
+            ),
+          );
         } else {
-          files.add(UnknownAlreadyPostedFile(
-            url: file.url,
-            id: file.id,
-            fileName: file.name,
-            isNsfw: file.isSensitive,
-            caption: file.comment ?? "",
-            isEdited: false,
-          ));
+          files.add(
+            UnknownAlreadyPostedFile(
+              url: file.url,
+              id: file.id,
+              fileName: file.name,
+              isNsfw: file.isSensitive,
+              caption: file.comment,
+            ),
+          );
         }
       }
       final deletedNoteChannel = note.channel;
@@ -444,28 +443,31 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         final fileContentResponse = await dio.get(result.url,
             options: Options(responseType: ResponseType.bytes));
 
-        state = state.copyWith(files: [
-          ...state.files,
-          ImageFileAlreadyPostedFile(
-            data: fileContentResponse.data,
-            fileName: result.name,
-            id: result.id,
-            isEdited: false,
-            isNsfw: result.isSensitive,
-            caption: result.comment ?? "",
-          )
-        ]);
+        state = state.copyWith(
+          files: [
+            ...state.files,
+            ImageFileAlreadyPostedFile(
+              data: fileContentResponse.data!,
+              fileName: result.name,
+              id: result.id,
+              isNsfw: result.isSensitive,
+              caption: result.comment,
+            ),
+          ],
+        );
       } else {
-        state = state.copyWith(files: [
-          ...state.files,
-          UnknownAlreadyPostedFile(
+        state = state.copyWith(
+          files: [
+            ...state.files,
+            UnknownAlreadyPostedFile(
               url: result.url,
               id: result.id,
-              isEdited: false,
               fileName: result.name,
               isNsfw: result.isSensitive,
-              caption: result.comment ?? "")
-        ]);
+              caption: result.comment,
+            ),
+          ],
+        );
       }
     } else if (result == DriveModalSheetReturnValue.upload) {
       final result = await FilePicker.platform.pickFiles(type: FileType.image);
@@ -481,8 +483,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           ImageFile(
             data: await file.readAsBytes(),
             fileName: file.basename,
-            isNsfw: false,
-            caption: "",
           ),
         ],
       );
