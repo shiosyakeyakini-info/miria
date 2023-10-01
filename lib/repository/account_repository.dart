@@ -88,6 +88,7 @@ class AccountRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  //一つ目のアカウントが追加されたときに自動で追加されるタブ
   Future<void> _addIfTabSettingNothing() async {
     if (_account.length == 1) {
       final account = _account.first;

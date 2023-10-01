@@ -18,6 +18,8 @@ class IconSelectDialog extends StatelessWidget {
     Icons.rocket_outlined,
     Icons.rocket_launch,
     Icons.rocket_launch_outlined,
+    Icons.bookmark,
+    Icons.bookmark_outline,
     Icons.hub,
     Icons.hub_outlined,
     Icons.settings_input_antenna,

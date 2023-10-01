@@ -10,6 +10,7 @@ _$_TabSetting _$$_TabSettingFromJson(Map<String, dynamic> json) =>
     _$_TabSetting(
       icon: const IconDataConverter().fromJson(json['icon']),
       tabType: $enumDecode(_$TabTypeEnumMap, json['tabType']),
+      roleId: json['roleId'] as String?,
       channelId: json['channelId'] as String?,
       listId: json['listId'] as String?,
       antennaId: json['antennaId'] as String?,
@@ -23,6 +24,7 @@ Map<String, dynamic> _$$_TabSettingToJson(_$_TabSetting instance) =>
     <String, dynamic>{
       'icon': const IconDataConverter().toJson(instance.icon),
       'tabType': _$TabTypeEnumMap[instance.tabType]!,
+      'roleId': instance.roleId,
       'channelId': instance.channelId,
       'listId': instance.listId,
       'antennaId': instance.antennaId,
@@ -37,6 +39,7 @@ const _$TabTypeEnumMap = {
   TabType.homeTimeline: 'homeTimeline',
   TabType.globalTimeline: 'globalTimeline',
   TabType.hybridTimeline: 'hybridTimeline',
+  TabType.roleTimeline: 'roleTimeline',
   TabType.channel: 'channel',
   TabType.userList: 'userList',
   TabType.antenna: 'antenna',

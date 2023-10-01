@@ -8,6 +8,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/common/tab_icon_view.dart';
+import 'package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
@@ -29,6 +30,7 @@ class TabSettingsPage extends ConsumerStatefulWidget {
 class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   late Account? selectedAccount = ref.read(accountRepository).account.first;
   TabType? selectedTabType = TabType.localTimeline;
+  RolesListResponse? selectedRole;
   CommunityChannel? selectedChannel;
   UsersList? selectedUserList;
   Antenna? selectedAntenna;
@@ -47,6 +49,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
           ref.read(tabSettingsRepositoryProvider).tabSettings.toList()[tab];
       selectedAccount = tabSetting.account;
       selectedTabType = tabSetting.tabType;
+      final roleId = tabSetting.roleId;
       final channelId = tabSetting.channelId;
       final listId = tabSetting.listId;
       final antennaId = tabSetting.antennaId;
@@ -54,6 +57,15 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
       isSubscribe = tabSetting.isSubscribe;
+      if (roleId != null) {
+        Future(() async {
+          selectedRole = await ref
+              .read(misskeyProvider(tabSetting.account))
+              .roles
+              .show(RolesShowRequest(roleId: roleId));
+          setState(() {});
+        });
+      }
       if (channelId != null) {
         Future(() async {
           selectedChannel = await ref
@@ -160,6 +172,29 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 value: selectedTabType,
               ),
               const Padding(padding: EdgeInsets.all(10)),
+              if (selectedTabType == TabType.roleTimeline) ...[
+                const Text("ロールタイムライン"),
+                Row(
+                  children: [
+                    Expanded(child: Text(selectedRole?.name ?? "")),
+                    IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount;
+                          if (selected == null) return;
+
+                          selectedRole = await showDialog<RolesListResponse>(
+                              context: context,
+                              builder: (context) =>
+                                  RoleSelectDialog(account: selected));
+                          setState(() {
+                            nameController.text =
+                                selectedRole?.name ?? nameController.text;
+                          });
+                        },
+                        icon: const Icon(Icons.navigate_next))
+                  ],
+                )
+              ],
               if (selectedTabType == TabType.channel) ...[
                 const Text("チャンネル"),
                 Row(
@@ -323,6 +358,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       tabType: tabType,
                       name: nameController.text,
                       account: account,
+                      roleId: selectedRole?.id,
                       channelId: selectedChannel?.id,
                       listId: selectedUserList?.id,
                       antennaId: selectedAntenna?.id,
