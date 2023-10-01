@@ -2141,6 +2141,8 @@ void main() {
 
         await tester.tap(find.text(TestData.drive1.name), warnIfMissed: false);
         await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.check));
+        await tester.pumpAndSettle();
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");

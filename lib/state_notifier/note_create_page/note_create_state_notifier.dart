@@ -435,40 +435,45 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     if (result == DriveModalSheetReturnValue.drive) {
       if (!mounted) return;
-      final result = await showDialog<DriveFile?>(
-          context: context,
-          builder: (context) => DriveFileSelectDialog(account: state.account));
+      final result = await showDialog<List<DriveFile>?>(
+        context: context,
+        builder: (context) => DriveFileSelectDialog(
+          account: state.account,
+          allowMultiple: true,
+        ),
+      );
       if (result == null) return;
-      if (result.type.startsWith("image")) {
-        final fileContentResponse = await dio.get(result.url,
-            options: Options(responseType: ResponseType.bytes));
-
-        state = state.copyWith(
-          files: [
-            ...state.files,
-            ImageFileAlreadyPostedFile(
+      final files = await Future.wait(
+        result.map((file) async {
+          if (file.type.startsWith("image")) {
+            final fileContentResponse = await dio.get<Uint8List>(
+              file.url,
+              options: Options(responseType: ResponseType.bytes),
+            );
+            return ImageFileAlreadyPostedFile(
               data: fileContentResponse.data!,
-              fileName: result.name,
-              id: result.id,
-              isNsfw: result.isSensitive,
-              caption: result.comment,
-            ),
-          ],
-        );
-      } else {
-        state = state.copyWith(
-          files: [
-            ...state.files,
-            UnknownAlreadyPostedFile(
-              url: result.url,
-              id: result.id,
-              fileName: result.name,
-              isNsfw: result.isSensitive,
-              caption: result.comment,
-            ),
-          ],
-        );
-      }
+              id: file.id,
+              fileName: file.name,
+              isNsfw: file.isSensitive,
+              caption: file.comment,
+            );
+          }
+          return UnknownAlreadyPostedFile(
+            url: file.url,
+            id: file.id,
+            fileName: file.name,
+            isNsfw: file.isSensitive,
+            caption: file.comment,
+          );
+        }),
+      );
+      if (!mounted) return;
+      state = state.copyWith(
+        files: [
+          ...state.files,
+          ...files,
+        ],
+      );
     } else if (result == DriveModalSheetReturnValue.upload) {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
