@@ -6,6 +6,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 class RoleTimelineRepository extends SocketTimelineRepository {
   RoleTimelineRepository(
     super.misskey,
+    super.account,
     super.noteRepository,
     super.globalNotificationRepository,
     super.generalSettingsRepository,
@@ -20,7 +21,10 @@ class RoleTimelineRepository extends SocketTimelineRepository {
     required void Function(Note note) onReceived,
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onReacted,
+    required FutureOr<void> Function(String id, TimelineReacted reaction)
+        onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+    required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.roleTimelineStream(
       roleId: tabSetting.roleId!,
