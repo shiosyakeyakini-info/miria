@@ -97,6 +97,7 @@ final roleTimelineProvider =
               tabSetting,
               ref.read(mainStreamRepositoryProvider(tabSetting.account)),
               ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
             ));
 
 final channelTimelineProvider =
