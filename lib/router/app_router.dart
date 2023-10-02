@@ -7,7 +7,6 @@ import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
-import "package:miria/model/misskey_post_file.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/model/server_preset.dart";
 import "package:miria/model/tab_setting.dart";

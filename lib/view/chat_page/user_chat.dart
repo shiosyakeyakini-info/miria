@@ -496,15 +496,7 @@ class UserChatTextField extends HookConsumerWidget {
                       if (editedFile != null) {
                         // NSFWやキャプションの変更を反映
                         final updatedFile = switch (file) {
-                          ImageFile() => ImageFile(
-                            data: file.data,
-                            fileName: file.fileName,
-                            isNsfw: editedFile.isNsfw,
-                            caption: editedFile.caption,
-                          ),
-                          UnknownFile() => UnknownFile(
-                            data: file.data,
-                            fileName: file.fileName,
+                          PostFile() => file.copyWith(
                             isNsfw: editedFile.isNsfw,
                             caption: editedFile.caption,
                           ),

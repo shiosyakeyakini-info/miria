@@ -419,20 +419,8 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
         : null;
     final fileIds = () {
       final fileIds = state.files
-          .where(
-            (file) =>
-                file is ImageFileAlreadyPostedFile ||
-                file is UnknownAlreadyPostedFile,
-          )
-          .map(
-            (file) => switch (file) {
-              ImageFileAlreadyPostedFile(id: final id) => id,
-              UnknownAlreadyPostedFile(id: final id) => id,
-              _ => throw UnsupportedError(
-                "Unsupported file type for draft: ${file.runtimeType}",
-              ),
-            },
-          )
+          .whereType<AlreadyPostedFile>()
+          .map((file) => file.file.id)
           .toList();
       return fileIds.isEmpty ? null : fileIds;
     }();

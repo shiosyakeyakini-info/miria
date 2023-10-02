@@ -2840,7 +2840,7 @@ class NotificationRouteArgs {
 class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
   PhotoEditRoute({
     required AccountContext accountContext,
-    required MisskeyPostFile file,
+    required Uint8List initialImage,
     required void Function(Uint8List) onSubmit,
     Key? key,
     List<PageRouteInfo>? children,
@@ -2848,7 +2848,7 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
          PhotoEditRoute.name,
          args: PhotoEditRouteArgs(
            accountContext: accountContext,
-           file: file,
+           initialImage: initialImage,
            onSubmit: onSubmit,
            key: key,
          ),
@@ -2864,7 +2864,7 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
       return WrappedRoute(
         child: PhotoEditPage(
           accountContext: args.accountContext,
-          file: args.file,
+          initialImage: args.initialImage,
           onSubmit: args.onSubmit,
           key: args.key,
         ),
@@ -2876,14 +2876,14 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
 class PhotoEditRouteArgs {
   const PhotoEditRouteArgs({
     required this.accountContext,
-    required this.file,
+    required this.initialImage,
     required this.onSubmit,
     this.key,
   });
 
   final AccountContext accountContext;
 
-  final MisskeyPostFile file;
+  final Uint8List initialImage;
 
   final void Function(Uint8List) onSubmit;
 
@@ -2891,7 +2891,7 @@ class PhotoEditRouteArgs {
 
   @override
   String toString() {
-    return 'PhotoEditRouteArgs{accountContext: $accountContext, file: $file, onSubmit: $onSubmit, key: $key}';
+    return 'PhotoEditRouteArgs{accountContext: $accountContext, initialImage: $initialImage, onSubmit: $onSubmit, key: $key}';
   }
 
   @override
@@ -2899,12 +2899,13 @@ class PhotoEditRouteArgs {
     if (identical(this, other)) return true;
     if (other is! PhotoEditRouteArgs) return false;
     return accountContext == other.accountContext &&
-        file == other.file &&
+        initialImage == other.initialImage &&
         key == other.key;
   }
 
   @override
-  int get hashCode => accountContext.hashCode ^ file.hashCode ^ key.hashCode;
+  int get hashCode =>
+      accountContext.hashCode ^ initialImage.hashCode ^ key.hashCode;
 }
 
 /// generated route for

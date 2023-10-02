@@ -4,7 +4,6 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -16,12 +15,12 @@ import "package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart";
 @RoutePage()
 class PhotoEditPage extends ConsumerStatefulWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
-  final MisskeyPostFile file;
+  final Uint8List initialImage;
   final void Function(Uint8List) onSubmit;
 
   const PhotoEditPage({
     required this.accountContext,
-    required this.file,
+    required this.initialImage,
     required this.onSubmit,
     super.key,
   });
@@ -43,7 +42,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    photoEdit.initialize(widget.file);
+    photoEdit.initialize(widget.initialImage);
   }
 
   @override

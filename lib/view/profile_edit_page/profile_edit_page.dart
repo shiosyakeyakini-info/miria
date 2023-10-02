@@ -142,10 +142,7 @@ class _ProfileEditForm extends HookConsumerWidget {
                                         accountContext: ref.read(
                                           accountContextProvider,
                                         ),
-                                        file: ImageFile(
-                                          data: f.bytes!,
-                                          fileName: f.name,
-                                        ),
+                                        initialImage: f.bytes!,
                                         onSubmit: (editedData) {
                                           Navigator.of(context).pop(editedData);
                                         },
