@@ -638,7 +638,6 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       state = state.copyWith(files: [...state.files, ...files]);
     } else if (result == DriveModalSheetReturnValue.upload) {
       final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
         allowMultiple: true,
         // iOSでは0の場合HEICファイルがJPEGに変換されないため
         // Androidでは圧縮時に画像の向きがおかしくなることがあるため圧縮パススルー
