@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -9,8 +7,8 @@ import 'package:miria/model/misskey_post_file.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/note_create_page/file_settings_dialog.dart';
+import 'package:miria/view/note_create_page/thumbnail.dart';
 
 class CreateFileView extends ConsumerWidget {
   final int index;
@@ -71,29 +69,29 @@ class CreateFileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final type = file.type;
+    final isImage = file.type?.startsWith("image") ?? false;
     return Column(
       children: [
         SizedBox(
           height: 200,
           child: GestureDetector(
-            onTap: (file.type?.startsWith("image") ?? false) &&
+            onTap: isImage &&
                     (defaultTargetPlatform == TargetPlatform.iOS ||
                         defaultTargetPlatform == TargetPlatform.macOS ||
                         defaultTargetPlatform == TargetPlatform.android)
                 ? () => onTap(context, ref)
                 : null,
             child: switch (file) {
-              PostFile(:final file) => Image.file(file),
-              AlreadyPostedFile(:final file) => NetworkImageView(
-                  url: file.thumbnailUrl ?? file.url,
-                  type: ImageType.imageThumbnail,
-                ),
+              PostFile(:final file) =>
+                isImage ? Image.file(file) : Thumbnail(type: type),
+              AlreadyPostedFile(:final file) => Thumbnail.driveFile(file),
             },
           ),
         ),
         Row(
           children: [
-            if (file.isNsfw) const Icon(Icons.details_rounded),
+            if (file.isNsfw) const Icon(Icons.warning_amber),
             Text(file.fileName),
             IconButton(
               onPressed: () => detailTap(context, ref),
