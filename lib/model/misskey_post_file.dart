@@ -1,4 +1,6 @@
-import 'dart:typed_data';
+import 'package:file/file.dart';
+import 'package:mime/mime.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 
 sealed class MisskeyPostFile {
   final String fileName;
@@ -10,52 +12,90 @@ sealed class MisskeyPostFile {
     this.isNsfw = false,
     this.caption,
   });
+
+  MisskeyPostFile copyWith({
+    String? fileName,
+    bool? isNsfw,
+    String? caption,
+  });
+
+  String? get type;
 }
 
-class ImageFile extends MisskeyPostFile {
-  final Uint8List data;
-  const ImageFile({
-    required this.data,
+class PostFile extends MisskeyPostFile {
+  final File file;
+
+  const PostFile({
+    required this.file,
     required super.fileName,
     super.isNsfw,
     super.caption,
   });
+
+  factory PostFile.file(File file) {
+    return PostFile(
+      file: file,
+      fileName: file.basename,
+    );
+  }
+
+  @override
+  PostFile copyWith({
+    File? file,
+    String? fileName,
+    bool? isNsfw,
+    String? caption,
+  }) {
+    return PostFile(
+      file: file ?? this.file,
+      fileName: fileName ?? this.fileName,
+      isNsfw: isNsfw ?? this.isNsfw,
+      caption: caption ?? this.caption,
+    );
+  }
+
+  @override
+  String? get type => lookupMimeType(file.path);
 }
 
-class ImageFileAlreadyPostedFile extends MisskeyPostFile {
-  final Uint8List data;
-  final String id;
+class AlreadyPostedFile extends MisskeyPostFile {
+  final DriveFile file;
   final bool isEdited;
-  const ImageFileAlreadyPostedFile({
-    required this.data,
-    required this.id,
+
+  const AlreadyPostedFile({
+    required this.file,
     this.isEdited = false,
     required super.fileName,
     super.isNsfw,
     super.caption,
   });
-}
 
-class UnknownFile extends MisskeyPostFile {
-  final Uint8List data;
-  const UnknownFile({
-    required this.data,
-    required super.fileName,
-    super.isNsfw,
-    super.caption,
-  });
-}
+  factory AlreadyPostedFile.file(DriveFile file) {
+    return AlreadyPostedFile(
+      file: file,
+      fileName: file.name,
+      isNsfw: file.isSensitive,
+      caption: file.comment,
+    );
+  }
 
-class UnknownAlreadyPostedFile extends MisskeyPostFile {
-  final String url;
-  final String id;
-  final bool isEdited;
-  const UnknownAlreadyPostedFile({
-    required this.url,
-    required this.id,
-    this.isEdited = false,
-    required super.fileName,
-    super.isNsfw,
-    super.caption,
-  });
+  @override
+  AlreadyPostedFile copyWith({
+    DriveFile? file,
+    bool? isEdited,
+    String? fileName,
+    bool? isNsfw,
+    String? caption,
+  }) {
+    return AlreadyPostedFile(
+      file: file ?? this.file,
+      isEdited: isEdited ?? this.isEdited,
+      fileName: fileName ?? this.fileName,
+      isNsfw: isNsfw ?? this.isNsfw,
+      caption: caption ?? this.caption,
+    );
+  }
+
+  @override
+  String get type => file.type;
 }
