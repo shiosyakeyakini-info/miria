@@ -4,7 +4,7 @@ import "package:dio/dio.dart";
 import "package:file_picker/file_picker.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:image/image.dart" as img;
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";

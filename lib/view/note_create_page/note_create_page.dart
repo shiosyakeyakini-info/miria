@@ -9,7 +9,7 @@ import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_draft_repository.dart";

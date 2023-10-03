@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 
 class ChatFilePreview extends StatelessWidget {
   final MisskeyPostFile file;

@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:miria/l10n/app_localizations.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
 
 import "../../test_util/test_datas.dart";

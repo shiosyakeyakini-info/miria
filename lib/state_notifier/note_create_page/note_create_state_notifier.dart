@@ -13,7 +13,7 @@ import "package:mime/mime.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/log.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_draft_repository.dart";
 import "package:miria/router/app_router.dart";

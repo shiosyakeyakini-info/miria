@@ -5,7 +5,7 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_post_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/chat_input_state_notifier.dart";
 import "package:miria/view/chat_page/chat_file_preview.dart";
