@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
+import 'package:miria/model/misskey_post_file.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/state_notifier/photo_edit_page/color_filter_preset.dart';
 import 'package:miria/view/photo_edit_page/license_confirm_dialog.dart';
