@@ -111,7 +111,9 @@ class UserNotesState extends ConsumerState<UserNotes> {
                 final notes = await misskey.users.notes(UsersNotesRequest(
                   userId: widget.userId,
                   withFiles: isFileOnly,
+                  // 後方互換性のため
                   includeReplies: withReply,
+                  withReplies: withReply,
                   includeMyRenotes: renote,
                   untilDate: untilDate?.millisecondsSinceEpoch,
                 ));
@@ -127,6 +129,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   untilId: lastElement.id,
                   withFiles: isFileOnly,
                   includeReplies: withReply,
+                  withReplies: withReply,
                   includeMyRenotes: renote,
                   untilDate: untilDate?.millisecondsSinceEpoch,
                 ));
