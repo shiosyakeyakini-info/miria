@@ -11,7 +11,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mfm_parser/mfm_parser.dart';
 import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
+import 'package:miria/model/misskey_post_file.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';

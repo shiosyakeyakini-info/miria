@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
+import 'package:miria/model/misskey_post_file.dart';
 import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/view/announcements_page/announcements_page.dart';
