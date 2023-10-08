@@ -106,6 +106,12 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           await ref.read(misskeyProvider(account)).notes.reactions.create(
               NotesReactionsCreateRequest(
                   noteId: widget.noteId, reaction: reactionString));
+
+          // misskey.ioはただちにリアクションを反映してくれない
+          if (account.host == "misskey.io") {
+            await Future.delayed(const Duration(seconds: 1));
+          }
+
           await ref.read(notesProvider(account)).refresh(widget.noteId);
         },
         onLongPress: () {
