@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:file/file.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mfm_parser/mfm_parser.dart';
@@ -283,6 +284,20 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       for (final file in state.files) {
         switch (file) {
           case ImageFile():
+            final fileName = file.fileName.toLowerCase();
+            var imageData = file.data;
+            try {
+              if (fileName.endsWith("jpg") ||
+                  fileName.endsWith("jpeg") ||
+                  fileName.endsWith("tiff") ||
+                  fileName.endsWith("tif")) {
+                imageData =
+                    await FlutterImageCompress.compressWithList(file.data);
+              }
+            } catch (e) {
+              print("failed to compress file");
+            }
+
             final response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
@@ -290,7 +305,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
                 isSensitive: file.isNsfw,
                 comment: file.caption,
               ),
-              file.data,
+              imageData,
             );
             fileIds.add(response.id);
 
