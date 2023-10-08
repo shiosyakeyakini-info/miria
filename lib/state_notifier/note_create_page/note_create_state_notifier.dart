@@ -138,15 +138,11 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               return ImageFile(
                 data: contents,
                 fileName: fileName,
-                isNsfw: false,
-                caption: "",
               );
             } else {
               return UnknownFile(
                 data: contents,
                 fileName: fileName,
-                isNsfw: false,
-                caption: "",
               );
             }
           }),
@@ -161,22 +157,25 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         if (file.type.startsWith("image")) {
           final response = await dio.get(file.url,
               options: Options(responseType: ResponseType.bytes));
-          files.add(ImageFileAlreadyPostedFile(
+          files.add(
+            ImageFileAlreadyPostedFile(
               fileName: file.name,
               data: response.data,
               id: file.id,
               isNsfw: file.isSensitive,
-              caption: file.comment ?? "",
-              isEdited: false));
+              caption: file.comment,
+            ),
+          );
         } else {
-          files.add(UnknownAlreadyPostedFile(
-            url: file.url,
-            id: file.id,
-            fileName: file.name,
-            isNsfw: file.isSensitive,
-            caption: file.comment ?? "",
-            isEdited: false,
-          ));
+          files.add(
+            UnknownAlreadyPostedFile(
+              url: file.url,
+              id: file.id,
+              fileName: file.name,
+              isNsfw: file.isSensitive,
+              caption: file.comment,
+            ),
+          );
         }
       }
       final deletedNoteChannel = note.channel;
@@ -436,54 +435,73 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     if (result == DriveModalSheetReturnValue.drive) {
       if (!mounted) return;
-      final result = await showDialog<DriveFile?>(
-          context: context,
-          builder: (context) => DriveFileSelectDialog(account: state.account));
+      final result = await showDialog<List<DriveFile>?>(
+        context: context,
+        builder: (context) => DriveFileSelectDialog(
+          account: state.account,
+          allowMultiple: true,
+        ),
+      );
       if (result == null) return;
-      if (result.type.startsWith("image")) {
-        final fileContentResponse = await dio.get(result.url,
-            options: Options(responseType: ResponseType.bytes));
-
-        state = state.copyWith(files: [
-          ...state.files,
-          ImageFileAlreadyPostedFile(
-            data: fileContentResponse.data,
-            fileName: result.name,
-            id: result.id,
-            isEdited: false,
-            isNsfw: result.isSensitive,
-            caption: result.comment ?? "",
-          )
-        ]);
-      } else {
-        state = state.copyWith(files: [
-          ...state.files,
-          UnknownAlreadyPostedFile(
-              url: result.url,
-              id: result.id,
-              isEdited: false,
-              fileName: result.name,
-              isNsfw: result.isSensitive,
-              caption: result.comment ?? "")
-        ]);
-      }
-    } else if (result == DriveModalSheetReturnValue.upload) {
-      final result = await FilePicker.platform.pickFiles(type: FileType.image);
-      if (result == null) return;
-
-      final path = result.files.single.path;
-      if (path == null) return;
-      final file = fileSystem.file(path);
+      final files = await Future.wait(
+        result.map((file) async {
+          if (file.type.startsWith("image")) {
+            final fileContentResponse = await dio.get<Uint8List>(
+              file.url,
+              options: Options(responseType: ResponseType.bytes),
+            );
+            return ImageFileAlreadyPostedFile(
+              data: fileContentResponse.data!,
+              id: file.id,
+              fileName: file.name,
+              isNsfw: file.isSensitive,
+              caption: file.comment,
+            );
+          }
+          return UnknownAlreadyPostedFile(
+            url: file.url,
+            id: file.id,
+            fileName: file.name,
+            isNsfw: file.isSensitive,
+            caption: file.comment,
+          );
+        }),
+      );
       if (!mounted) return;
       state = state.copyWith(
         files: [
           ...state.files,
-          ImageFile(
+          ...files,
+        ],
+      );
+    } else if (result == DriveModalSheetReturnValue.upload) {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: true,
+      );
+      if (result == null || result.files.isEmpty) return;
+
+      final fsFiles = result.files.map((file) {
+        final path = file.path;
+        if (path != null) {
+          return fileSystem.file(path);
+        }
+        return null;
+      }).nonNulls;
+      final files = await Future.wait(
+        fsFiles.map(
+          (file) async => ImageFile(
             data: await file.readAsBytes(),
             fileName: file.basename,
-            isNsfw: false,
-            caption: "",
           ),
+        ),
+      );
+
+      if (!mounted) return;
+      state = state.copyWith(
+        files: [
+          ...state.files,
+          ...files,
         ],
       );
     }
