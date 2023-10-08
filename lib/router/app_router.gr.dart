@@ -350,7 +350,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: UsersListTimelinePage(
           args.account,
-          args.listId,
+          args.list,
           key: args.key,
         ),
       );
@@ -395,6 +395,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: TimeLinePage(
           key: args.key,
           initialTabSetting: args.initialTabSetting,
+        ),
+      );
+    },
+    UsersListDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListDetailPage(
+          key: args.key,
+          account: args.account,
+          listId: args.listId,
         ),
       );
     },
@@ -1603,14 +1614,14 @@ class UsersListRouteArgs {
 class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
   UsersListTimelineRoute({
     required Account account,
-    required String listId,
+    required UsersList list,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UsersListTimelineRoute.name,
           args: UsersListTimelineRouteArgs(
             account: account,
-            listId: listId,
+            list: list,
             key: key,
           ),
           initialChildren: children,
@@ -1625,19 +1636,19 @@ class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
 class UsersListTimelineRouteArgs {
   const UsersListTimelineRouteArgs({
     required this.account,
-    required this.listId,
+    required this.list,
     this.key,
   });
 
   final Account account;
 
-  final String listId;
+  final UsersList list;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UsersListTimelineRouteArgs{account: $account, listId: $listId, key: $key}';
+    return 'UsersListTimelineRouteArgs{account: $account, list: $list, key: $key}';
   }
 }
 
@@ -1804,5 +1815,48 @@ class TimeLineRouteArgs {
   @override
   String toString() {
     return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
+  }
+}
+
+/// generated route for
+/// [UsersListDetailPage]
+class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
+  UsersListDetailRoute({
+    Key? key,
+    required Account account,
+    required String listId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListDetailRoute.name,
+          args: UsersListDetailRouteArgs(
+            key: key,
+            account: account,
+            listId: listId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListDetailRoute';
+
+  static const PageInfo<UsersListDetailRouteArgs> page =
+      PageInfo<UsersListDetailRouteArgs>(name);
+}
+
+class UsersListDetailRouteArgs {
+  const UsersListDetailRouteArgs({
+    this.key,
+    required this.account,
+    required this.listId,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final String listId;
+
+  @override
+  String toString() {
+    return 'UsersListDetailRouteArgs{key: $key, account: $account, listId: $listId}';
   }
 }

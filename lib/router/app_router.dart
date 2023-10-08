@@ -36,6 +36,7 @@ import 'package:miria/view/time_line_page/time_line_page.dart';
 import 'package:miria/view/user_page/user_followee.dart';
 import 'package:miria/view/user_page/user_follower.dart';
 import 'package:miria/view/user_page/user_page.dart';
+import 'package:miria/view/users_list_page/users_list_detail_page.dart';
 import 'package:miria/view/users_list_page/users_list_page.dart';
 import 'package:miria/view/users_list_page/users_list_timeline_page.dart';
 import 'package:miria/view/splash_page/splash_page.dart';
@@ -66,6 +67,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: AntennaNotesRoute.page),
     AutoRoute(page: UsersListRoute.page),
     AutoRoute(page: UsersListTimelineRoute.page),
+    AutoRoute(page: UsersListDetailRoute.page),
     AutoRoute(page: NotificationRoute.page),
     AutoRoute(page: FavoritedNoteRoute.page),
     AutoRoute(page: ClipListRoute.page),
