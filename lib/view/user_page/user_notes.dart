@@ -10,11 +10,15 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
-
+  final String? remoteUserId;
   final Account? actualAccount;
 
-  const UserNotes(
-      {super.key, required this.userId, required this.actualAccount});
+  const UserNotes({
+    super.key,
+    required this.userId,
+    this.remoteUserId,
+    this.actualAccount,
+  }) : assert((remoteUserId == null) == (actualAccount == null));
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserNotesState();
@@ -63,88 +67,99 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     },
                     children: const [
                       Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("返信つき")),
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("返信つき"),
+                      ),
                       Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("ファイルつき")),
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("ファイルつき"),
+                      ),
                       Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("リノートも"))
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Text("リノートも"),
+                      ),
                     ],
                   ),
                 ),
               ),
               IconButton(
-                  onPressed: () async {
-                    final firstDate = widget.actualAccount == null
-                        ? ref
-                            .read(userInfoProvider(widget.userId))
-                            ?.response
-                            ?.createdAt
-                        : ref
-                            .read(userInfoProvider(widget.userId))
-                            ?.remoteResponse
-                            ?.createdAt;
+                onPressed: () async {
+                  final userInfo = ref.read(userInfoProvider(widget.userId));
+                  final firstDate = widget.actualAccount == null
+                      ? userInfo?.response?.createdAt
+                      : userInfo?.remoteResponse?.createdAt;
 
-                    final result = await showDatePicker(
-                        context: context,
-                        initialDate: untilDate ?? DateTime.now(),
-                        helpText: "この日までを表示",
-                        firstDate: firstDate ?? DateTime.now(),
-                        lastDate: DateTime.now());
-                    if (result != null) {
-                      untilDate = DateTime(result.year, result.month,
-                          result.day, 23, 59, 59, 999);
-                    }
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.date_range))
+                  final result = await showDatePicker(
+                    context: context,
+                    initialDate: untilDate ?? DateTime.now(),
+                    helpText: "この日までを表示",
+                    firstDate: firstDate ?? DateTime.now(),
+                    lastDate: DateTime.now(),
+                  );
+                  if (result != null) {
+                    untilDate = DateTime(
+                      result.year,
+                      result.month,
+                      result.day,
+                      23,
+                      59,
+                      59,
+                      999,
+                    );
+                  }
+                  setState(() {});
+                },
+                icon: const Icon(Icons.date_range),
+              ),
             ],
           ),
         ),
         Expanded(
           child: PushableListView<Note>(
-              listKey:
-                  Object.hashAll([isFileOnly, withReply, renote, untilDate]),
-              initializeFuture: () async {
-                final notes = await misskey.users.notes(UsersNotesRequest(
-                  userId: widget.userId,
+            listKey: Object.hashAll([isFileOnly, withReply, renote, untilDate]),
+            initializeFuture: () async {
+              final notes = await misskey.users.notes(
+                UsersNotesRequest(
+                  userId: widget.remoteUserId ?? widget.userId,
                   withFiles: isFileOnly,
                   // 後方互換性のため
                   includeReplies: withReply,
                   withReplies: withReply,
                   includeMyRenotes: renote,
                   untilDate: untilDate?.millisecondsSinceEpoch,
-                ));
-                if (!mounted) return [];
-                ref
-                    .read(notesProvider(AccountScope.of(context)))
-                    .registerAll(notes);
-                return notes.toList();
-              },
-              nextFuture: (lastElement, _) async {
-                final notes = await misskey.users.notes(UsersNotesRequest(
-                  userId: widget.userId,
+                ),
+              );
+              if (!mounted) return [];
+              ref
+                  .read(notesProvider(AccountScope.of(context)))
+                  .registerAll(notes);
+              return notes.toList();
+            },
+            nextFuture: (lastElement, _) async {
+              final notes = await misskey.users.notes(
+                UsersNotesRequest(
+                  userId: widget.remoteUserId ?? widget.userId,
                   untilId: lastElement.id,
                   withFiles: isFileOnly,
                   includeReplies: withReply,
                   withReplies: withReply,
                   includeMyRenotes: renote,
                   untilDate: untilDate?.millisecondsSinceEpoch,
-                ));
-                if (!mounted) return [];
-                ref
-                    .read(notesProvider(AccountScope.of(context)))
-                    .registerAll(notes);
-                return notes.toList();
-              },
-              itemBuilder: (context, element) {
-                return MisskeyNote(
-                  note: element,
-                  loginAs: widget.actualAccount,
-                );
-              }),
+                ),
+              );
+              if (!mounted) return [];
+              ref
+                  .read(notesProvider(AccountScope.of(context)))
+                  .registerAll(notes);
+              return notes.toList();
+            },
+            itemBuilder: (context, element) {
+              return MisskeyNote(
+                note: element,
+                loginAs: widget.actualAccount,
+              );
+            },
+          ),
         ),
       ],
     );
