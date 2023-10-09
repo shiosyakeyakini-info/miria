@@ -109,7 +109,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
           // misskey.ioはただちにリアクションを反映してくれない
           if (account.host == "misskey.io") {
-            await Future.delayed(const Duration(seconds: 1));
+            await Future.delayed(const Duration(milliseconds: 1500));
           }
 
           await ref.read(notesProvider(account)).refresh(widget.noteId);
