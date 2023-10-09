@@ -48,7 +48,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel1ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel1.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -56,7 +56,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel1ExpectId)))));
+            (arg) => arg.channelId == TestData.channel1.id)))));
       });
 
       testWidgets("削除されたノートを直す場合で、そのノートがチャンネルのノートの場合、チャンネルのノートになること",
@@ -80,7 +80,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel1ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel1.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -88,7 +88,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel1ExpectId)))));
+            (arg) => arg.channelId == TestData.channel1.id)))));
       });
 
       testWidgets("チャンネルのノートにリプライをする場合、そのノートもチャンネルのノートになること", (tester) async {
@@ -111,7 +111,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel1ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel1.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -119,7 +119,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel1ExpectId)))));
+            (arg) => arg.channelId == TestData.channel1.id)))));
       });
 
       testWidgets("チャンネルのノートに引用リノートをする場合、引数のチャンネル先が選択されること", (tester) async {
@@ -143,7 +143,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel2ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel2.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -151,7 +151,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel2ExpectId)))));
+            (arg) => arg.channelId == TestData.channel2.id)))));
       });
     });
 
@@ -894,7 +894,8 @@ void main() {
         expect(
             find.descendant(
                 of: find.byType(ReplyToArea),
-                matching: find.text(TestData.note3ExpectUserName,
+                matching: find.textContaining(
+                    TestData.note3AsAnotherUser.user.username,
                     findRichText: true)),
             findsOneWidget);
       });
@@ -1412,7 +1413,7 @@ void main() {
               find.descendant(
                   of: find.byType(MfmPreview),
                   matching: find.textContaining(
-                      TestData.note3ExpectUserName.tight,
+                      TestData.note3AsAnotherUser.user.username.tight,
                       findRichText: true)),
               findsOneWidget);
         });
