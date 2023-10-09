@@ -117,7 +117,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             reactions: reaction,
             reactionEmojis: reactionEmojis,
             myReaction: value.userId == account.i.id
-                ? emoji?.name
+                ? (emoji?.name != null ? ":${emoji?.name}:" : null)
                 : registeredNote.myReaction));
       },
       onUnreacted: (id, value) {
