@@ -131,7 +131,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
             listKey: Object.hashAll(
                 [isFileOnly, withReply, renote, untilDate, highlight]),
             additionalErrorInfo: highlight
-                ? (context, e) => const Text("ハイライトは2023.10.0以降の機能です。")
+                ? (context, e) => const Text("ハイライトはMisskey 2023.10.0以降の機能です。")
                 : null,
             initializeFuture: () async {
               final Iterable<Note> notes;
