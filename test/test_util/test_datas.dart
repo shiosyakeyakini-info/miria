@@ -379,8 +379,6 @@ class TestData {
 }  
   
   '''));
-  static String note1ExpectText = "気づいたら、健康保険証っぽいプラズマ化したつまようじの賞味期限が切れてました…";
-  static String note1ExpectId = "9g3rcngj3e";
 
   static Note note2 = Note.fromJson(JSON5.parse(r'''
 {
@@ -419,10 +417,6 @@ class TestData {
   renoteId: null,
 }  
   '''));
-
-  /// 自身のノート（藍ちゃん）２
-  static String note2ExpectText =
-      "みにゃさん、数取りゲームしましょう！\n0~100の中で最も大きい数字を取った人が勝ちです。他の人と被ったらだめですよ～\n制限時間は10分です。数字はこの投稿にリプライで送ってくださいね！";
 
   /// 自身でないノート１
   static Note note3AsAnotherUser = Note.fromJson(JSON5.parse(r'''
@@ -649,8 +643,6 @@ class TestData {
   myReaction: ':ultra_igyo@.:',
 }  
   '''));
-
-  static String note3ExpectUserName = "@oishiibot";
 
   // ドライブ（フォルダ）
   static DriveFolder folder1 = DriveFolder.fromJson(JSON5.parse(r'''
@@ -1398,8 +1390,8 @@ class TestData {
     hasUnreadNote: false,
   }
   '''));
-  static String channel1ExpectId = "9axtmmcxuy";
-  static String channel1ExpectName = "ブルーアーカイ部 総合";
+
+  static String expectChannel1DescriptionContaining = "ありがとうブルーアーカイブ";
 
   static CommunityChannel channel2 = CommunityChannel.fromJson(JSON5.parse(r'''
 {
@@ -1422,8 +1414,270 @@ class TestData {
   hasUnreadNote: false,
 }  
   '''));
-  static String channel2ExpectId = "9b3chwrm7f";
-  static String channel2ExpectName = "Misskeyアークナイツ部";
+
+  // アンテナ
+  static Antenna antenna = Antenna.fromJson(JSON5.parse(r'''
+{
+    id: '9f7kcbzcoe',
+    createdAt: '2023-05-26T03:24:02.856Z',
+    name: 'ポテイモン',
+    keywords: [
+      [
+        'ポテイモン',
+      ],
+      [
+        '芋神',
+      ],
+      [
+        'misscat',
+      ],
+    ],
+    excludeKeywords: [
+      [
+        '応天門',
+      ],
+    ],
+    src: 'all',
+    userListId: null,
+    users: [
+      '',
+    ],
+    caseSensitive: false,
+    notify: false,
+    withReplies: false,
+    withFile: false,
+    isActive: true,
+    hasUnreadNote: false,
+  }
+'''));
+
+  static Clip clip = Clip.fromJson(JSON5.parse(r'''
+{
+    id: '9crm7l2n4k',
+    createdAt: '2023-03-25T14:12:37.103Z',
+    lastClippedAt: '2023-06-27T10:08:56.762Z',
+    userId: '9byjlos32z',
+    user: {
+      id: '7rkr3b1c1c',
+      name: '藍',
+      username: 'ai',
+      host: null,
+      avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-ecc1008f-3e2e-4206-ae7e-5093221f08be.png&avatar=1',
+      avatarBlurhash: null,
+      isBot: true,
+      isCat: true,
+      emojis: {},
+      onlineStatus: 'online',
+      badgeRoles: [],
+    },
+    name: 'ぴょんぷっぷー',
+    description: null,
+    isPublic: true,
+    favoritedCount: 0,
+    isFavorited: false,
+  }
+
+'''));
+
+  static RolesListResponse role = RolesListResponse.fromJson(JSON5.parse('''
+{
+    id: '9diazxez3m',
+    createdAt: '2023-04-13T06:28:30.827Z',
+    updatedAt: '2023-06-25T09:28:16.529Z',
+    name: 'Super New User',
+    description: 'アカウント作成してから1日以内のユーザー',
+    color: '#a4850a',
+    iconUrl: 'https://s3.arkjp.net/misskey/358069f4-e033-4366-891b-fcc4fc4d0c70.png',
+    target: 'conditional',
+    condFormula: {
+      id: '83328ff6-8bdc-4516-9dee-751222897481',
+      type: 'and',
+      values: [
+        {
+          id: 'deac20b7-2688-4d7e-a264-5d0f0345f003',
+          type: 'isLocal',
+        },
+        {
+          id: '9959c843-b273-4edf-8632-41b103af8b88',
+          sec: 86400,
+          type: 'createdLessThan',
+        },
+      ],
+    },
+    isPublic: true,
+    isAdministrator: false,
+    isModerator: false,
+    isExplorable: true,
+    asBadge: true,
+    canEditMembersByModerator: false,
+    displayOrder: 0,
+    policies: {
+      pinLimit: {
+        value: 3,
+        priority: 0,
+        useDefault: true,
+      },
+      canInvite: {
+        value: false,
+        priority: 0,
+        useDefault: true,
+      },
+      clipLimit: {
+        value: 10,
+        priority: 0,
+        useDefault: true,
+      },
+      canHideAds: {
+        value: false,
+        priority: 0,
+        useDefault: true,
+      },
+      antennaLimit: {
+        value: 5,
+        priority: 0,
+        useDefault: true,
+      },
+      gtlAvailable: {
+        value: true,
+        priority: 0,
+        useDefault: true,
+      },
+      ltlAvailable: {
+        value: true,
+        priority: 0,
+        useDefault: true,
+      },
+      webhookLimit: {
+        value: 3,
+        priority: 0,
+        useDefault: true,
+      },
+      canPublicNote: {
+        value: true,
+        priority: 0,
+        useDefault: true,
+      },
+      userListLimit: {
+        value: 5,
+        priority: 0,
+        useDefault: true,
+      },
+      wordMuteLimit: {
+        value: 200,
+        priority: 0,
+        useDefault: true,
+      },
+      alwaysMarkNsfw: {
+        value: false,
+        priority: 0,
+        useDefault: true,
+      },
+      canSearchNotes: {
+        value: false,
+        priority: 0,
+        useDefault: true,
+      },
+      driveCapacityMb: {
+        value: 10240,
+        priority: 0,
+        useDefault: true,
+      },
+      rateLimitFactor: {
+        value: 2,
+        priority: 0,
+        useDefault: true,
+      },
+      noteEachClipsLimit: {
+        value: 50,
+        priority: 0,
+        useDefault: true,
+      },
+      canManageCustomEmojis: {
+        value: false,
+        priority: 0,
+        useDefault: true,
+      },
+      userEachUserListsLimit: {
+        value: 20,
+        priority: 0,
+        useDefault: true,
+      },
+      canCreateContent: {
+        useDefault: true,
+        priority: 0,
+        value: true,
+      },
+      canUpdateContent: {
+        useDefault: true,
+        priority: 0,
+        value: true,
+      },
+      canDeleteContent: {
+        useDefault: true,
+        priority: 0,
+        value: true,
+      },
+      inviteLimit: {
+        useDefault: true,
+        priority: 0,
+        value: 0,
+      },
+      inviteLimitCycle: {
+        useDefault: true,
+        priority: 0,
+        value: 10080,
+      },
+      inviteExpirationTime: {
+        useDefault: true,
+        priority: 0,
+        value: 0,
+      },
+    },
+    usersCount: 0,
+  }
+'''));
+
+  static HashtagsTrendResponse hashtagTrends =
+      HashtagsTrendResponse.fromJson(JSON5.parse(r'''
+{
+    tag: 'ろぐぼチャレンジ',
+    chart: [
+      3,
+      2,
+      2,
+      1,
+      3,
+      4,
+      2,
+      4,
+      2,
+      4,
+      0,
+      0,
+      3,
+      2,
+      3,
+      6,
+      5,
+      4,
+      12,
+      8,
+    ],
+    usersCount: 15,
+  }
+'''));
+
+  static Hashtag hashtag = Hashtag.fromJson(JSON5.parse(r'''
+{
+    tag: 'アークナイツ',
+    mentionedUsersCount: 531,
+    mentionedLocalUsersCount: 3,
+    mentionedRemoteUsersCount: 528,
+    attachedUsersCount: 67,
+    attachedLocalUsersCount: 2,
+    attachedRemoteUsersCount: 65,
+  }
+'''));
 
   // Dio
   static DioError response404 = DioError(
