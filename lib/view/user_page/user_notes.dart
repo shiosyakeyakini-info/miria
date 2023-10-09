@@ -30,6 +30,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
   bool isFileOnly = false;
   bool withReply = false;
   bool renote = true;
+  bool highlight = false;
   DateTime? untilDate;
 
   @override
@@ -47,38 +48,49 @@ class UserNotesState extends ConsumerState<UserNotes> {
             children: [
               Expanded(
                 child: Center(
-                  child: ToggleButtons(
-                    isSelected: [
-                      withReply,
-                      isFileOnly,
-                      renote,
-                    ],
-                    onPressed: (value) {
-                      setState(() {
-                        switch (value) {
-                          case 0:
-                            withReply = !withReply;
-                          case 1:
-                            isFileOnly = !isFileOnly;
-                          case 2:
-                            renote = !renote;
-                        }
-                      });
-                    },
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("返信つき"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("ファイルつき"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("リノートも"),
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ToggleButtons(
+                      isSelected: [withReply, isFileOnly, renote, highlight],
+                      onPressed: (value) {
+                        setState(() {
+                          switch (value) {
+                            case 0:
+                              withReply = !withReply;
+                              highlight = false;
+                            case 1:
+                              isFileOnly = !isFileOnly;
+                              highlight = false;
+                            case 2:
+                              renote = !renote;
+                              highlight = false;
+                            case 3:
+                              withReply = false;
+                              isFileOnly = false;
+                              renote = false;
+                              highlight = true;
+                          }
+                        });
+                      },
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("返信つき"),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("ファイルつき"),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("リノートも"),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Text("ハイライト"),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -116,19 +128,31 @@ class UserNotesState extends ConsumerState<UserNotes> {
         ),
         Expanded(
           child: PushableListView<Note>(
-            listKey: Object.hashAll([isFileOnly, withReply, renote, untilDate]),
+            listKey: Object.hashAll(
+                [isFileOnly, withReply, renote, untilDate, highlight]),
+            additionalErrorInfo: highlight
+                ? (context, e) => const Text("ハイライトはMisskey 2023.10.0以降の機能です。")
+                : null,
             initializeFuture: () async {
-              final notes = await misskey.users.notes(
-                UsersNotesRequest(
-                  userId: widget.remoteUserId ?? widget.userId,
-                  withFiles: isFileOnly,
-                  // 後方互換性のため
-                  includeReplies: withReply,
-                  withReplies: withReply,
-                  includeMyRenotes: renote,
-                  untilDate: untilDate?.millisecondsSinceEpoch,
-                ),
-              );
+              final Iterable<Note> notes;
+              if (highlight) {
+                notes = await misskey.users.featuredNotes(
+                  UsersFeaturedNotesRequest(
+                      userId: widget.remoteUserId ?? widget.userId),
+                );
+              } else {
+                notes = await misskey.users.notes(
+                  UsersNotesRequest(
+                    userId: widget.remoteUserId ?? widget.userId,
+                    withFiles: isFileOnly,
+                    // 後方互換性のため
+                    includeReplies: withReply,
+                    withReplies: withReply,
+                    includeMyRenotes: renote,
+                    untilDate: untilDate?.millisecondsSinceEpoch,
+                  ),
+                );
+              }
               if (!mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
@@ -136,17 +160,27 @@ class UserNotesState extends ConsumerState<UserNotes> {
               return notes.toList();
             },
             nextFuture: (lastElement, _) async {
-              final notes = await misskey.users.notes(
-                UsersNotesRequest(
-                  userId: widget.remoteUserId ?? widget.userId,
-                  untilId: lastElement.id,
-                  withFiles: isFileOnly,
-                  includeReplies: withReply,
-                  withReplies: withReply,
-                  includeMyRenotes: renote,
-                  untilDate: untilDate?.millisecondsSinceEpoch,
-                ),
-              );
+              final Iterable<Note> notes;
+              if (highlight) {
+                notes = await misskey.users.featuredNotes(
+                  UsersFeaturedNotesRequest(
+                    userId: widget.remoteUserId ?? widget.userId,
+                    untilId: lastElement.id,
+                  ),
+                );
+              } else {
+                notes = await misskey.users.notes(
+                  UsersNotesRequest(
+                    userId: widget.remoteUserId ?? widget.userId,
+                    untilId: lastElement.id,
+                    withFiles: isFileOnly,
+                    includeReplies: withReply,
+                    withReplies: withReply,
+                    includeMyRenotes: renote,
+                    untilDate: untilDate?.millisecondsSinceEpoch,
+                  ),
+                );
+              }
               if (!mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
