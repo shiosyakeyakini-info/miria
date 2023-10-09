@@ -50,7 +50,7 @@ class NoteCreate with _$NoteCreate {
     required Account account,
     required NoteVisibility noteVisibility,
     required bool localOnly,
-    @Default([]) List<User> replyTo,
+    @Default([]) List<AbstractedUser> replyTo,
     @Default([]) List<MisskeyPostFile> files,
     NoteCreateChannel? channel,
     Note? reply,
@@ -196,7 +196,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         replyTo: [
           for (final userId in note.mentions)
             (await misskey.users.show(UsersShowRequest(userId: userId)))
-                .toUser()
         ],
         isVote: note.poll != null,
         isVoteMultiple: note.poll?.multiple ?? false,
@@ -229,7 +228,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           reply.user,
           for (final userId in reply.mentions)
             (await misskey.users.show(UsersShowRequest(userId: userId)))
-                .toUser()
         ]..removeWhere((element) => element.id == state.account.i.id),
       );
     }
@@ -625,7 +623,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     }
   }
 
-  void deleteReplyUser(User user) async {
+  void deleteReplyUser(AbstractedUser user) async {
     final list = state.replyTo.toList();
     state = state.copyWith(replyTo: list..remove(user));
   }

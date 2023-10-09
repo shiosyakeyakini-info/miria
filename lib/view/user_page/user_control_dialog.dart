@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/users_show_response_extension.dart';
+import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
@@ -21,7 +21,7 @@ enum UserControl {
 
 class UserControlDialog extends ConsumerStatefulWidget {
   final Account account;
-  final UsersShowResponse response;
+  final AbstractedUserDetailed response;
   final bool isMe;
 
   const UserControlDialog({

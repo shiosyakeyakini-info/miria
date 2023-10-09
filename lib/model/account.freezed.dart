@@ -23,7 +23,7 @@ mixin _$Account {
   String get host => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
-  IResponse get i => throw _privateConstructorUsedError;
+  UserMe get i => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,9 +35,9 @@ abstract class $AccountCopyWith<$Res> {
   factory $AccountCopyWith(Account value, $Res Function(Account) then) =
       _$AccountCopyWithImpl<$Res, Account>;
   @useResult
-  $Res call({String host, String userId, String? token, IResponse i});
+  $Res call({String host, String userId, String? token, UserMe i});
 
-  $IResponseCopyWith<$Res> get i;
+  $UserMeCopyWith<$Res> get i;
 }
 
 /// @nodoc
@@ -74,14 +74,14 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
-              as IResponse,
+              as UserMe,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $IResponseCopyWith<$Res> get i {
-    return $IResponseCopyWith<$Res>(_value.i, (value) {
+  $UserMeCopyWith<$Res> get i {
+    return $UserMeCopyWith<$Res>(_value.i, (value) {
       return _then(_value.copyWith(i: value) as $Val);
     });
   }
@@ -94,10 +94,10 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
       __$$_AccountCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String host, String userId, String? token, IResponse i});
+  $Res call({String host, String userId, String? token, UserMe i});
 
   @override
-  $IResponseCopyWith<$Res> get i;
+  $UserMeCopyWith<$Res> get i;
 }
 
 /// @nodoc
@@ -131,7 +131,7 @@ class __$$_AccountCopyWithImpl<$Res>
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
-              as IResponse,
+              as UserMe,
     ));
   }
 }
@@ -153,7 +153,7 @@ class _$_Account extends _Account {
   @override
   final String? token;
   @override
-  final IResponse i;
+  final UserMe i;
 
   @override
   String toString() {
@@ -179,7 +179,7 @@ abstract class _Account extends Account {
       {required final String host,
       required final String userId,
       final String? token,
-      required final IResponse i}) = _$_Account;
+      required final UserMe i}) = _$_Account;
   const _Account._() : super._();
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$_Account.fromJson;
@@ -191,7 +191,7 @@ abstract class _Account extends Account {
   @override
   String? get token;
   @override
-  IResponse get i;
+  UserMe get i;
   @override
   @JsonKey(ignore: true)
   _$$_AccountCopyWith<_$_Account> get copyWith =>

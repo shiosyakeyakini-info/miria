@@ -20,7 +20,7 @@ enum ExploreUserType {
 }
 
 class ExploreUsersState extends ConsumerState<ExploreUsers> {
-  final List<User> pinnedUser = [];
+  final List<AbstractedUserDetailed> pinnedUser = [];
   var exploreUserType = ExploreUserType.pinned;
   var sortType = UsersSortType.followerDescendant;
   var isDetailOpen = false;
@@ -96,7 +96,8 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
               if (isDetailOpen) ...[
                 Row(
                   children: [
-                    const Expanded(child: Text("並び順", textAlign: TextAlign.center)),
+                    const Expanded(
+                        child: Text("並び順", textAlign: TextAlign.center)),
                     Expanded(
                       child: DropdownButton<UsersSortType>(
                           items: [

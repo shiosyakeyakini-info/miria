@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserListItem extends ConsumerWidget {
-  final User user;
+  final AbstractedUser user;
 
   final void Function()? onTap;
 

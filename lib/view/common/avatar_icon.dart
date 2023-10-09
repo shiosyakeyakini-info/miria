@@ -8,7 +8,7 @@ import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class AvatarIcon extends StatelessWidget {
-  final User user;
+  final AbstractedUser user;
   final double height;
   final VoidCallback? onTap;
 
@@ -18,33 +18,6 @@ class AvatarIcon extends StatelessWidget {
     this.height = 48,
     this.onTap,
   });
-
-  factory AvatarIcon.fromIResponse(IResponse response, {double height = 48}) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
-
-  factory AvatarIcon.fromUserResponse(UsersShowResponse response,
-      {double height = 48}) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

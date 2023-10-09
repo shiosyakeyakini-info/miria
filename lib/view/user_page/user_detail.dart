@@ -8,7 +8,6 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
@@ -20,7 +19,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 class UserDetail extends ConsumerStatefulWidget {
   final Account account;
   final Account? controlAccount;
-  final UsersShowResponse response;
+  final AbstractedUserDetailed response;
 
   const UserDetail({
     super.key,
@@ -34,7 +33,7 @@ class UserDetail extends ConsumerStatefulWidget {
 }
 
 class UserDetailState extends ConsumerState<UserDetail> {
-  late UsersShowResponse response;
+  late UserDetailed response;
   bool isFollowEditing = false;
   String memo = "";
 
@@ -261,8 +260,8 @@ class UserDetailState extends ConsumerState<UserDetail> {
         child: Column(children: [
           Row(
             children: [
-              AvatarIcon.fromUserResponse(
-                response,
+              AvatarIcon(
+                user: response,
                 height: 80,
               ),
               Expanded(
@@ -276,7 +275,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       MfmText(
                         mfmText: response.name ?? response.username,
                         style: Theme.of(context).textTheme.headlineSmall,
-                        emoji: response.emojis ?? {},
+                        emoji: response.emojis,
                       ),
                       Text(
                         "@$userName",
@@ -371,7 +370,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
             alignment: Alignment.center,
             child: MfmText(
               mfmText: response.description ?? "",
-              emoji: response.emojis ?? {},
+              emoji: response.emojis,
             ),
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
@@ -422,13 +421,13 @@ class UserDetailState extends ConsumerState<UserDetail> {
                     TableCell(
                       child: MfmText(
                         mfmText: field.name,
-                        emoji: response.emojis ?? {},
+                        emoji: response.emojis,
                       ),
                     ),
                     TableCell(
                         child: MfmText(
                       mfmText: field.value,
-                      emoji: response.emojis ?? {},
+                      emoji: response.emojis,
                     )),
                   ])
               ],
@@ -517,7 +516,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
 }
 
 class BirthdayConfetti extends StatefulWidget {
-  final UsersShowResponse response;
+  final UserDetailed response;
   final Widget child;
 
   const BirthdayConfetti({
@@ -562,7 +561,7 @@ class BirthdayConfettiState extends State<BirthdayConfetti> {
   }
 }
 
-extension on UsersShowResponse {
+extension on UserDetailed {
   bool get requiresFollowRequest {
     return isLocked &&
         !((isFollowed ?? false) && (autoAcceptFollowed ?? false));

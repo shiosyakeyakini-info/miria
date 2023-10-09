@@ -12,7 +12,7 @@ class Account with _$Account {
     required String host,
     required String userId,
     String? token,
-    required IResponse i,
+    required UserMe i,
   }) = _Account;
 
   factory Account.fromJson(Map<String, Object?> json) =>
@@ -33,7 +33,7 @@ class Account with _$Account {
       host: host,
       userId: "",
       token: null,
-      i: IResponse(
+      i: UserMe(
           id: "",
           username: "",
           createdAt: DateTime.now(),

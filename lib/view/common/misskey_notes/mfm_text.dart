@@ -320,7 +320,7 @@ class SimpleMfmText extends ConsumerWidget {
 }
 
 class UserInformation extends ConsumerStatefulWidget {
-  final User user;
+  final AbstractedUser user;
   const UserInformation({
     super.key,
     required this.user,

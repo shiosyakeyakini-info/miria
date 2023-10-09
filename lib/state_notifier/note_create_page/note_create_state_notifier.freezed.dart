@@ -19,7 +19,7 @@ mixin _$NoteCreate {
   Account get account => throw _privateConstructorUsedError;
   NoteVisibility get noteVisibility => throw _privateConstructorUsedError;
   bool get localOnly => throw _privateConstructorUsedError;
-  List<User> get replyTo => throw _privateConstructorUsedError;
+  List<AbstractedUser> get replyTo => throw _privateConstructorUsedError;
   List<MisskeyPostFile> get files => throw _privateConstructorUsedError;
   NoteCreateChannel? get channel => throw _privateConstructorUsedError;
   Note? get reply => throw _privateConstructorUsedError;
@@ -58,7 +58,7 @@ abstract class $NoteCreateCopyWith<$Res> {
       {Account account,
       NoteVisibility noteVisibility,
       bool localOnly,
-      List<User> replyTo,
+      List<AbstractedUser> replyTo,
       List<MisskeyPostFile> files,
       NoteCreateChannel? channel,
       Note? reply,
@@ -140,7 +140,7 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
       replyTo: null == replyTo
           ? _value.replyTo
           : replyTo // ignore: cast_nullable_to_non_nullable
-              as List<User>,
+              as List<AbstractedUser>,
       files: null == files
           ? _value.files
           : files // ignore: cast_nullable_to_non_nullable
@@ -281,7 +281,7 @@ abstract class _$$_NoteCreateCopyWith<$Res>
       {Account account,
       NoteVisibility noteVisibility,
       bool localOnly,
-      List<User> replyTo,
+      List<AbstractedUser> replyTo,
       List<MisskeyPostFile> files,
       NoteCreateChannel? channel,
       Note? reply,
@@ -365,7 +365,7 @@ class __$$_NoteCreateCopyWithImpl<$Res>
       replyTo: null == replyTo
           ? _value._replyTo
           : replyTo // ignore: cast_nullable_to_non_nullable
-              as List<User>,
+              as List<AbstractedUser>,
       files: null == files
           ? _value._files
           : files // ignore: cast_nullable_to_non_nullable
@@ -457,7 +457,7 @@ class _$_NoteCreate implements _NoteCreate {
       {required this.account,
       required this.noteVisibility,
       required this.localOnly,
-      final List<User> replyTo = const [],
+      final List<AbstractedUser> replyTo = const [],
       final List<MisskeyPostFile> files = const [],
       this.channel,
       this.reply,
@@ -488,10 +488,10 @@ class _$_NoteCreate implements _NoteCreate {
   final NoteVisibility noteVisibility;
   @override
   final bool localOnly;
-  final List<User> _replyTo;
+  final List<AbstractedUser> _replyTo;
   @override
   @JsonKey()
-  List<User> get replyTo {
+  List<AbstractedUser> get replyTo {
     if (_replyTo is EqualUnmodifiableListView) return _replyTo;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_replyTo);
@@ -651,7 +651,7 @@ abstract class _NoteCreate implements NoteCreate {
       {required final Account account,
       required final NoteVisibility noteVisibility,
       required final bool localOnly,
-      final List<User> replyTo,
+      final List<AbstractedUser> replyTo,
       final List<MisskeyPostFile> files,
       final NoteCreateChannel? channel,
       final Note? reply,
@@ -680,7 +680,7 @@ abstract class _NoteCreate implements NoteCreate {
   @override
   bool get localOnly;
   @override
-  List<User> get replyTo;
+  List<AbstractedUser> get replyTo;
   @override
   List<MisskeyPostFile> get files;
   @override

@@ -29,7 +29,7 @@ class TabSettingsRepository extends ChangeNotifier {
     }
   }
 
-  void updateAccount(Account account, IResponse response) {
+  void updateAccount(Account account, UserMe response) {
     for (var i = 0; i < _tabSettings.length; i++) {
       if (_tabSettings[i].account == account) {
         _tabSettings[i] = _tabSettings[i]

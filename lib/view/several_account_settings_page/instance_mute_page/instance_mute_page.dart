@@ -48,7 +48,7 @@ class InstanceMutePageState extends ConsumerState<InstanceMutePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: CommonFuture<IResponse>(
+          child: CommonFuture<UserMe>(
             future: ref.read(misskeyProvider(widget.account)).i.i(),
             futureFinished: (data) {
               controller.text = data.mutedInstances.join("\n");

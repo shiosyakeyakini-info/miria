@@ -36,7 +36,7 @@ class SharingAccountSelectPageState
                 initialMediaFiles: widget.filePath,
               ));
             },
-            leading: AvatarIcon.fromIResponse(account.i),
+            leading: AvatarIcon(user: account.i),
             title: Text(account.i.name ?? account.i.username,
                 style: Theme.of(context).textTheme.titleMedium),
             subtitle: Text(

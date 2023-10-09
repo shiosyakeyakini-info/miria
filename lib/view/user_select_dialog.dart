@@ -30,7 +30,7 @@ class UserSelectDialog extends StatelessWidget {
 }
 
 class UserSelectContent extends ConsumerStatefulWidget {
-  final void Function(User) onSelected;
+  final void Function(AbstractedUser) onSelected;
   final FocusNode? focusNode;
 
   const UserSelectContent({
@@ -113,7 +113,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
 
 class UsersSelectContentList extends ConsumerWidget {
   const UsersSelectContentList({super.key, required this.onSelected});
-  final void Function(User) onSelected;
+  final void Function(AbstractedUserDetailed) onSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -52,28 +52,28 @@ class _UsersListNotifier
 }
 
 final _usersListUsersProvider = AutoDisposeAsyncNotifierProviderFamily<
-    _UsersListUsers, List<User>, (Misskey, String)>(
+    _UsersListUsers, List<UserDetailed>, (Misskey, String)>(
   _UsersListUsers.new,
 );
 
-class _UsersListUsers
-    extends AutoDisposeFamilyAsyncNotifier<List<User>, (Misskey, String)> {
+class _UsersListUsers extends AutoDisposeFamilyAsyncNotifier<List<UserDetailed>,
+    (Misskey, String)> {
   @override
-  Future<List<User>> build((Misskey, String) arg) async {
+  Future<List<UserDetailed>> build((Misskey, String) arg) async {
     final list = await ref.watch(_usersListNotifierProvider(arg).future);
     final response = await _misskey.users.showByIds(
       UsersShowByIdsRequest(
         userIds: list.userIds,
       ),
     );
-    return response.map((e) => e.toUser()).toList();
+    return response.toList();
   }
 
   Misskey get _misskey => arg.$1;
 
   String get _listId => arg.$2;
 
-  Future<void> push(User user) async {
+  Future<void> push(UserDetailed user) async {
     await _misskey.users.list.push(
       UsersListsPushRequest(
         listId: _listId,
@@ -83,7 +83,7 @@ class _UsersListUsers
     state = AsyncValue.data([...?state.valueOrNull, user]);
   }
 
-  Future<void> pull(User user) async {
+  Future<void> pull(UserDetailed user) async {
     await _misskey.users.list.pull(
       UsersListsPullRequest(
         listId: _listId,
@@ -158,7 +158,7 @@ class UsersListDetailPage extends ConsumerWidget {
                     trailing: ElevatedButton(
                       child: const Text("ユーザーを追加"),
                       onPressed: () async {
-                        final user = await showDialog<User>(
+                        final user = await showDialog<UserDetailed>(
                           context: context,
                           builder: (context) =>
                               UserSelectDialog(account: account),

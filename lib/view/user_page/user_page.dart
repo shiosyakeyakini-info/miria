@@ -15,9 +15,9 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class UserInfo {
   final String userId;
-  final UsersShowResponse? response;
+  final AbstractedUserDetailed? response;
   final String? remoteUserId;
-  final UsersShowResponse? remoteResponse;
+  final AbstractedUserDetailed? remoteResponse;
 
   const UserInfo({
     required this.userId,
@@ -160,8 +160,8 @@ class UserDetailTab extends ConsumerStatefulWidget {
 }
 
 class UserDetailTabState extends ConsumerState<UserDetailTab> {
-  UsersShowResponse? response;
-  UsersShowResponse? remoteResponse;
+  AbstractedUserDetailed? response;
+  AbstractedUserDetailed? remoteResponse;
   (Object?, StackTrace)? error;
 
   @override

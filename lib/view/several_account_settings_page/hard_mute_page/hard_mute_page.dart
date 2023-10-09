@@ -68,7 +68,7 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: CommonFuture<IResponse>(
+          child: CommonFuture<UserMe>(
             future: ref.read(misskeyProvider(widget.account)).i.i(),
             futureFinished: (data) {
               controller.text = muteValueString(data.mutedWords);

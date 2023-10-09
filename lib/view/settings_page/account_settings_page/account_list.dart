@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/providers.dart';
@@ -37,7 +36,7 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
             child: ListView.builder(
               itemCount: accounts.length,
               itemBuilder: (context, index) => ListTile(
-                leading: AvatarIcon.fromIResponse(accounts[index].i),
+                leading: AvatarIcon(user: accounts[index].i),
                 onLongPress: () {
                   showDialog(
                       context: context,
