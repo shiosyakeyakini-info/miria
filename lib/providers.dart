@@ -4,6 +4,7 @@ import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/acct.dart';
+import 'package:miria/model/color_theme.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/account_settings_repository.dart';
@@ -14,6 +15,7 @@ import 'package:miria/repository/favorite_repository.dart';
 import 'package:miria/repository/general_settings_repository.dart';
 import 'package:miria/repository/hybrid_timeline_repository.dart';
 import 'package:miria/repository/import_export_repository.dart';
+import 'package:miria/repository/color_theme_repository.dart';
 import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/global_time_line_repository.dart';
 import 'package:miria/repository/home_time_line_repository.dart';
@@ -299,3 +301,13 @@ final antennasNotifierProvider = AsyncNotifierProvider.autoDispose
 
 final clipsNotifierProvider = AsyncNotifierProvider.autoDispose
     .family<ClipsNotifier, List<Clip>, Misskey>(ClipsNotifier.new);
+
+final colorThemeRepositoryProvider =
+    NotifierProvider<ColorThemeRepository, List<ColorTheme>>(
+  ColorThemeRepository.new,
+);
+
+final installedThemeCodeRepositoryProvider =
+    NotifierProvider<InstalledThemeCodeRepository, List<String>>(
+  InstalledThemeCodeRepository.new,
+);

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/repository/account_repository.dart';
+import 'package:miria/repository/color_theme_repository.dart';
 import 'package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
@@ -56,11 +57,19 @@ class ErrorDialogListener extends ConsumerWidget {
               S.of(context).cannotMentionToRemoteInLocalOnlyNote,
           };
           SimpleMessageDialog.show(next.$2!, message);
+        } else if (error is ColorThemeException) {
+          final message = switch (error) {
+            InvalidThemeFormatException() => S.of(context).invalidThemeFormat,
+            DuplicatedThemeException() => S.of(context).duplicatedTheme,
+          };
+          SimpleMessageDialog.show(next.$2!, message);
         } else {
-          SimpleMessageDialog.show(next.$2!, "${S.of(context).thrownError}\n$next");
+          SimpleMessageDialog.show(
+              next.$2!, "${S.of(context).thrownError}\n$next");
         }
       } else if (error is Error) {
-        SimpleMessageDialog.show(next.$2!, "${S.of(context).thrownError}\n$next");
+        SimpleMessageDialog.show(
+            next.$2!, "${S.of(context).thrownError}\n$next");
       }
     });
 

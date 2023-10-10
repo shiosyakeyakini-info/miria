@@ -8,7 +8,6 @@ import 'package:miria/model/color_theme.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/themes/built_in_color_themes.dart';
 
 class AppThemeScope extends ConsumerStatefulWidget {
   final Widget child;
@@ -364,6 +363,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         .select((value) => value.settings.cursiveFontName));
     final fantasyFontName = ref.watch(generalSettingsRepositoryProvider
         .select((value) => value.settings.fantasyFontName));
+    final colorThemes = ref.watch(colorThemeRepositoryProvider);
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -375,11 +375,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       isDark = false;
     }
 
-    final foundColorTheme = builtInColorThemes.firstWhereOrNull((e) =>
-            e.isDarkTheme == isDark &&
-            e.id == (isDark ? darkTheme : lightTheme)) ??
-        builtInColorThemes
-            .firstWhere((element) => element.isDarkTheme == isDark);
+    final foundColorTheme = colorThemes.firstWhereOrNull(
+          (e) =>
+              e.isDarkTheme == isDark &&
+              e.id == (isDark ? darkTheme : lightTheme),
+        ) ??
+        colorThemes.firstWhere((element) => element.isDarkTheme == isDark);
 
     return Theme(
       data: buildTheme(
