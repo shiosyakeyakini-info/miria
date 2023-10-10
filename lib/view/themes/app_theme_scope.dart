@@ -7,6 +7,7 @@ import "package:miria/extensions/color_extension.dart";
 import "package:miria/model/color_theme.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/installed_themes_page/misskey_theme_codes_notifier.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
@@ -446,6 +447,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         (value) => value.settings.languages,
       ),
     );
+    final colorThemes = [
+      ...builtInColorThemes,
+      ...ref.watch(installedColorThemesProvider),
+    ];
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -459,14 +464,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     }
 
     final foundColorTheme =
-        builtInColorThemes.firstWhereOrNull(
+        colorThemes.firstWhereOrNull(
           (e) =>
               e.isDarkTheme == isDark &&
               e.id == (isDark ? darkTheme : lightTheme),
         ) ??
-        builtInColorThemes.firstWhere(
-          (element) => element.isDarkTheme == isDark,
-        );
+        colorThemes.firstWhere((element) => element.isDarkTheme == isDark);
 
     return Theme(
       data: buildTheme(

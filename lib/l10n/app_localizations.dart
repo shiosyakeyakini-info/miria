@@ -1932,6 +1932,18 @@ abstract class S {
   /// **'{acct}で既にログインしています'**
   String alreadyLoggedIn(String acct);
 
+  /// No description provided for @invalidThemeFormat.
+  ///
+  /// In ja, this message translates to:
+  /// **'テーマの形式が間違っています'**
+  String get invalidThemeFormat;
+
+  /// No description provided for @alreadyInstalledTheme.
+  ///
+  /// In ja, this message translates to:
+  /// **'このテーマは既にインストールされています'**
+  String get alreadyInstalledTheme;
+
   /// No description provided for @importFromThisFolder.
   ///
   /// In ja, this message translates to:
@@ -2286,6 +2298,12 @@ abstract class S {
   /// **'ライトモード・ダークモードのつかいわけ'**
   String get selectLightOrDarkMode;
 
+  /// No description provided for @manageThemes.
+  ///
+  /// In ja, this message translates to:
+  /// **'テーマの管理'**
+  String get manageThemes;
+
   /// No description provided for @reaction.
   ///
   /// In ja, this message translates to:
@@ -2351,6 +2369,42 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'システム標準'**
   String get systemFont;
+
+  /// No description provided for @installTheme.
+  ///
+  /// In ja, this message translates to:
+  /// **'テーマのインストール'**
+  String get installTheme;
+
+  /// No description provided for @themeCode.
+  ///
+  /// In ja, this message translates to:
+  /// **'テーマコード'**
+  String get themeCode;
+
+  /// No description provided for @install.
+  ///
+  /// In ja, this message translates to:
+  /// **'インストール'**
+  String get install;
+
+  /// No description provided for @installedThemes.
+  ///
+  /// In ja, this message translates to:
+  /// **'インストールされたテーマ'**
+  String get installedThemes;
+
+  /// No description provided for @noInstalledThemes.
+  ///
+  /// In ja, this message translates to:
+  /// **'インストールされたテーマがありません'**
+  String get noInstalledThemes;
+
+  /// No description provided for @confirmDeleteTheme.
+  ///
+  /// In ja, this message translates to:
+  /// **'このテーマを削除しますか？'**
+  String get confirmDeleteTheme;
 
   /// No description provided for @cache.
   ///

@@ -1178,6 +1178,12 @@ class SZh extends S {
   }
 
   @override
+  String get invalidThemeFormat => 'テーマの形式が間違っています';
+
+  @override
+  String get alreadyInstalledTheme => 'このテーマは既にインストールされています';
+
+  @override
   String get importFromThisFolder => '从该文件夹导入';
 
   @override
@@ -1365,6 +1371,9 @@ class SZh extends S {
   String get selectLightOrDarkMode => '选择浅色或深色模式';
 
   @override
+  String get manageThemes => 'テーマの管理';
+
+  @override
   String get reaction => '回应';
 
   @override
@@ -1397,6 +1406,24 @@ class SZh extends S {
 
   @override
   String get systemFont => '系统标准';
+
+  @override
+  String get installTheme => 'テーマのインストール';
+
+  @override
+  String get themeCode => 'テーマコード';
+
+  @override
+  String get install => 'インストール';
+
+  @override
+  String get installedThemes => 'インストールされたテーマ';
+
+  @override
+  String get noInstalledThemes => 'インストールされたテーマがありません';
+
+  @override
+  String get confirmDeleteTheme => 'このテーマを削除しますか？';
 
   @override
   String get cache => '快取';
