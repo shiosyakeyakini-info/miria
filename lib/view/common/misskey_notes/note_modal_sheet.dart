@@ -112,7 +112,6 @@ class NoteModalSheet extends ConsumerWidget {
             },
           ),
         ListTile(
-          leading: const Icon(Icons.open_in_new),
           title: const Text("別のアカウントで開く"),
           onTap: () => ref
               .read(misskeyNoteNotifierProvider(account).notifier)

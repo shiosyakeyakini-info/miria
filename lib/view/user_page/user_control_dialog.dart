@@ -190,9 +190,27 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               host: widget.account.host,
               path: widget.response.acct,
             ),
+            mode: LaunchMode.inAppWebView,
           );
           Navigator.of(context).pop();
         },
+      ),
+      if (widget.response.host != null)
+        ListTile(
+          title: const Text("ブラウザでリモート先を開く"),
+          onTap: () {
+            final uri = widget.response.uri ?? widget.response.url;
+            if (uri == null) return;
+            launchUrl(uri, mode: LaunchMode.inAppWebView);
+            Navigator.of(context).pop();
+          },
+        ),
+      ListTile(
+        title: const Text("別のアカウントで開く"),
+        onTap: () => ref
+            .read(misskeyNoteNotifierProvider(widget.account).notifier)
+            .openUserInOtherAccount(context, widget.response.toUser())
+            .expectFailure(context),
       ),
       ListTile(
         onTap: addToList,
