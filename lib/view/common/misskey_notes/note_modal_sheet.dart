@@ -14,6 +14,7 @@ import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
+import 'package:miria/view/user_page/user_control_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -67,26 +68,22 @@ class NoteModalSheet extends ConsumerWidget {
           },
         ),
         ListTile(
-          title: const Text("ユーザー名をコピー"),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: targetNote.user.name ?? targetNote.user.username,
+          title: const Text("ユーザー"),
+          onTap: () async {
+            final response = await ref
+                .read(misskeyProvider(account))
+                .users
+                .show(UsersShowRequest(userId: targetNote.userId));
+            if (!context.mounted) return;
+            showModalBottomSheet<void>(
+              context: context,
+              builder: (context) => UserControlDialog(
+                account: account,
+                response: response,
+                isMe: targetNote.user.host == null &&
+                    targetNote.user.username == account.userId,
               ),
             );
-            Navigator.of(context).pop();
-          },
-        ),
-        ListTile(
-          title: const Text("ユーザースクリーン名をコピー"),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text:
-                    "@${targetNote.user.username}${targetNote.user.host != null ? "@${targetNote.user.host}" : ""}",
-              ),
-            );
-            Navigator.of(context).pop();
           },
         ),
         ListTile(
