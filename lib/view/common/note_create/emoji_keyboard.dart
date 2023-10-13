@@ -5,6 +5,7 @@ import 'package:miria/model/input_completion_type.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 
@@ -80,6 +81,13 @@ class EmojiKeyboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filteredEmojis = ref.watch(_filteredEmojisProvider(account));
+
+    if (filteredEmojis.isEmpty) {
+      return BasicKeyboard(
+        controller: controller,
+        focusNode: focusNode,
+      );
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
