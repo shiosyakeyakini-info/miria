@@ -5,8 +5,8 @@ import 'package:miria/extensions/users_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/futurable.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
+import 'package:miria/view/user_page/antenna_modal_sheet.dart';
 import 'package:miria/view/user_page/users_list_modal_sheet.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,13 +51,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
   Future<void> addToAntenna() async {
     return showModalBottomSheet(
       context: context,
-      builder: (context) => CommonFuture<Iterable<Antenna>>(
-        future: ref.read(misskeyProvider(widget.account)).antennas.list(),
-        complete: (context, antennas) => AntennaControlDialog(
-          account: widget.account,
-          antennas: antennas.toList(),
-          acct: widget.response.acct,
-        ),
+      builder: (context) => AntennaModalSheet(
+        account: widget.account,
+        user: widget.response.toUser(),
       ),
     );
   }
@@ -250,97 +246,6 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           )
       ],
     ]);
-  }
-}
-
-class AntennaControlDialog extends ConsumerStatefulWidget {
-  const AntennaControlDialog({
-    super.key,
-    required this.account,
-    required this.antennas,
-    required this.acct,
-  });
-
-  final Account account;
-  final List<Antenna> antennas;
-  final String acct;
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _AntennaControlDialogState();
-}
-
-class _AntennaControlDialogState extends ConsumerState<AntennaControlDialog> {
-  late final List<Antenna> userAntennas;
-  late List<bool> isUserInAntenna;
-
-  @override
-  void initState() {
-    super.initState();
-    userAntennas = widget.antennas
-        .where((antenna) => antenna.src == AntennaSource.users)
-        .toList();
-    isUserInAntenna = userAntennas
-        .map((userAntenna) => userAntenna.users.contains(widget.acct))
-        .toList();
-  }
-
-  Future<void> updateUsers(Antenna antenna, List<String> users) async {
-    await ref.read(misskeyProvider(widget.account)).antennas.update(
-          AntennasUpdateRequest(
-            antennaId: antenna.id,
-            name: antenna.name,
-            src: antenna.src,
-            keywords: antenna.keywords,
-            excludeKeywords: antenna.excludeKeywords,
-            users: users,
-            caseSensitive: antenna.caseSensitive,
-            withReplies: antenna.withReplies,
-            withFile: antenna.withFile,
-            notify: antenna.notify,
-          ),
-        );
-  }
-
-  Future<void> pushTo(int index) async {
-    final antenna = userAntennas[index];
-    final users = [...antenna.users, widget.acct];
-    await updateUsers(antenna, users);
-    setState(() {
-      isUserInAntenna[index] = true;
-    });
-  }
-
-  Future<void> pullFrom(int index) async {
-    final antenna = userAntennas[index];
-    final users = antenna.users.where((user) => user != widget.acct).toList();
-    await updateUsers(antenna, users);
-    setState(() {
-      isUserInAntenna[index] = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: userAntennas.length,
-      itemBuilder: (context, i) {
-        return CheckboxListTile(
-          value: isUserInAntenna[i],
-          onChanged: (value) async {
-            if (value == null) {
-              return;
-            }
-            if (value) {
-              await pushTo(i).expectFailure(context);
-            } else {
-              await pullFrom(i).expectFailure(context);
-            }
-          },
-          title: Text(userAntennas[i].name),
-        );
-      },
-    );
   }
 }
 
