@@ -7,6 +7,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/futurable.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
+import 'package:miria/view/user_page/users_list_modal_sheet.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,13 +41,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
   Future<void> addToList() async {
     return showModalBottomSheet(
       context: context,
-      builder: (context) => CommonFuture<Iterable<UsersList>>(
-        future: ref.read(misskeyProvider(widget.account)).users.list.list(),
-        complete: (context, userLists) => UserListControlDialog(
-          account: widget.account,
-          userLists: userLists.toList(),
-          userId: widget.response.id,
-        ),
+      builder: (context) => UsersListModalSheet(
+        account: widget.account,
+        user: widget.response.toUser(),
       ),
     );
   }
@@ -253,82 +250,6 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           )
       ],
     ]);
-  }
-}
-
-class UserListControlDialog extends ConsumerStatefulWidget {
-  final Account account;
-  final List<UsersList> userLists;
-  final String userId;
-
-  const UserListControlDialog({
-    super.key,
-    required this.account,
-    required this.userLists,
-    required this.userId,
-  });
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _UserListControlDialogState();
-}
-
-class _UserListControlDialogState extends ConsumerState<UserListControlDialog> {
-  late List<bool> isUserInList;
-
-  @override
-  void initState() {
-    super.initState();
-    isUserInList = widget.userLists
-        .map((userList) => userList.userIds.contains(widget.userId))
-        .toList();
-  }
-
-  Future<void> pushTo(int index) async {
-    await ref.read(misskeyProvider(widget.account)).users.list.push(
-          UsersListsPushRequest(
-            listId: widget.userLists[index].id,
-            userId: widget.userId,
-          ),
-        );
-    setState(() {
-      isUserInList[index] = true;
-    });
-  }
-
-  Future<void> pullFrom(int index) async {
-    await ref.read(misskeyProvider(widget.account)).users.list.pull(
-          UsersListsPullRequest(
-            listId: widget.userLists[index].id,
-            userId: widget.userId,
-          ),
-        );
-    setState(() {
-      isUserInList[index] = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.userLists.length,
-      itemBuilder: (context, i) {
-        return CheckboxListTile(
-          value: isUserInList[i],
-          onChanged: (value) async {
-            if (value == null) {
-              return;
-            }
-            if (value) {
-              await pushTo(i).expectFailure(context);
-            } else {
-              await pullFrom(i).expectFailure(context);
-            }
-          },
-          title: Text(widget.userLists[i].name!),
-        );
-      },
-    );
   }
 }
 

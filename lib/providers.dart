@@ -28,6 +28,7 @@ import 'package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.
 import 'package:miria/state_notifier/common/misskey_server_list_notifier.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
 import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
+import 'package:miria/state_notifier/user_list_page/users_lists_notifier.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -271,4 +272,9 @@ final cacheManagerProvider = Provider<BaseCacheManager?>((ref) => null);
 final misskeyNoteNotifierProvider =
     NotifierProvider.family<MisskeyNoteNotifier, void, Account>(
   MisskeyNoteNotifier.new,
+);
+
+final usersListsNotifierProvider = AsyncNotifierProvider.autoDispose
+    .family<UsersListsNotifier, List<UsersList>, Misskey>(
+  UsersListsNotifier.new,
 );
