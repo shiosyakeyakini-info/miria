@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_parser/mfm_parser.dart' as parser;
 import 'package:miria/const.dart';
 import 'package:miria/extensions/date_time_extension.dart';
@@ -31,93 +32,8 @@ import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
 import 'package:miria/view/common/misskey_notes/renote_user_dialog.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
-
-Future<void> _navigateDetailPage(
-    BuildContext context, Note note, Account? loginAs) async {
-  final account = AccountScope.of(context);
-  final pushRoute = context.pushRoute;
-  if (loginAs == null) {
-    pushRoute(NoteDetailRoute(note: note, account: account));
-    return;
-  }
-  final ref = ProviderScope.containerOf(context);
-  final host = note.user.host ?? account.host;
-
-  try {
-    // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
-    final myHostUserData = await ref
-        .read(misskeyProvider(loginAs))
-        .users
-        .showByName(UsersShowByUserNameRequest(
-            userName: note.user.username, host: host));
-
-    final myHostUserNotes =
-        await ref.read(misskeyProvider(loginAs)).users.notes(UsersNotesRequest(
-              userId: myHostUserData.id,
-              untilDate: note.createdAt.millisecondsSinceEpoch + 1,
-            ));
-
-    final foundMyHostNote = myHostUserNotes
-        .firstWhereOrNull((e) => e.uri?.pathSegments.lastOrNull == note.id);
-    if (foundMyHostNote != null) {
-      pushRoute(NoteDetailRoute(note: foundMyHostNote, account: loginAs));
-      return;
-    }
-    throw Exception();
-  } catch (e) {
-    // 最終手段として、連合で照会する
-    final result = await ref.read(misskeyProvider(loginAs)).ap.show(
-        ApShowRequest(
-            uri: note.uri ??
-                Uri(
-                    scheme: "https",
-                    host: host,
-                    pathSegments: ["notes", note.id])));
-    // よくかんがえたら無駄
-    final resultNote = await ref
-        .read(misskeyProvider(loginAs))
-        .notes
-        .show(NotesShowRequest(noteId: result.object["id"]));
-    pushRoute(NoteDetailRoute(note: resultNote, account: loginAs));
-  }
-}
-
-Future<void> _navigateUserDetailPage(
-    BuildContext context, Note note, Account? loginAs) async {
-  final account = AccountScope.of(context);
-  final pushRoute = context.pushRoute;
-  if (loginAs == null) {
-    pushRoute(UserRoute(userId: note.user.id, account: account));
-    return;
-  }
-
-  final ref = ProviderScope.containerOf(context);
-  final host = note.user.host ?? account.host;
-
-  try {
-    // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
-    final myHostUserData = await ref
-        .read(misskeyProvider(loginAs))
-        .users
-        .showByName(UsersShowByUserNameRequest(
-            userName: note.user.username, host: host));
-    pushRoute(UserRoute(userId: myHostUserData.id, account: loginAs));
-  } catch (e) {
-    // 最終手段として、連合で照会する
-    final result = await ref.read(misskeyProvider(loginAs)).ap.show(
-        ApShowRequest(
-            uri: note.uri ??
-                Uri(
-                    scheme: "https",
-                    host: host,
-                    pathSegments: ["@${note.id}"])));
-    // よくかんがえたら無駄
-    pushRoute(UserRoute(userId: result.object["id"], account: loginAs));
-  }
-}
 
 class MisskeyNote extends ConsumerStatefulWidget {
   final Note note;
@@ -352,8 +268,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                   children: [
                     AvatarIcon(
                       user: displayNote.user,
-                      onTap: () async => await _navigateUserDetailPage(
-                              context, displayNote, widget.loginAs)
+                      onTap: () => ref
+                          .read(misskeyNoteNotifierProvider(account).notifier)
+                          .navigateToUserPage(
+                            context,
+                            displayNote.user,
+                            widget.loginAs,
+                          )
                           .expectFailure(context),
                     ),
                     const Padding(padding: EdgeInsets.only(left: 10)),
@@ -595,30 +516,36 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               children: [
                                 if (widget.loginAs != null) ...[
                                   IconButton(
-                                    constraints: const BoxConstraints(),
-                                    padding: EdgeInsets.zero,
-                                    style: const ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
-                                          EdgeInsets.zero),
-                                      minimumSize:
-                                          MaterialStatePropertyAll(Size(0, 0)),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    onPressed: () async =>
-                                        await _navigateDetailPage(context,
-                                                displayNote, widget.loginAs)
-                                            .expectFailure(context),
-                                    icon: Icon(
-                                      Icons.u_turn_left,
-                                      size: MediaQuery.textScalerOf(context)
-                                          .scale(16),
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.color,
-                                    ),
-                                  )
+                                      constraints: const BoxConstraints(),
+                                      padding: EdgeInsets.zero,
+                                      style: const ButtonStyle(
+                                        padding: MaterialStatePropertyAll(
+                                            EdgeInsets.zero),
+                                        minimumSize: MaterialStatePropertyAll(
+                                            Size(0, 0)),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      onPressed: () => ref
+                                          .read(
+                                            misskeyNoteNotifierProvider(account)
+                                                .notifier,
+                                          )
+                                          .navigateToNoteDetailPage(
+                                            context,
+                                            displayNote,
+                                            widget.loginAs,
+                                          )
+                                          .expectFailure(context),
+                                      icon: Icon(
+                                        Icons.u_turn_left,
+                                        size: MediaQuery.textScalerOf(context)
+                                            .scale(16),
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.color,
+                                      ))
                                 ] else ...[
                                   TextButton.icon(
                                     onPressed: () {
@@ -791,7 +718,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   }
 }
 
-class NoteHeader1 extends StatelessWidget {
+class NoteHeader1 extends ConsumerWidget {
   final Note displayNote;
   final Account? loginAs;
 
@@ -800,8 +727,11 @@ class NoteHeader1 extends StatelessWidget {
     required this.displayNote,
     required this.loginAs,
   });
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = AccountScope.of(context);
+
     return Row(
       children: [
         Expanded(
@@ -815,9 +745,10 @@ class NoteHeader1 extends StatelessWidget {
                   size: Theme.of(context).textTheme.bodySmall?.fontSize,
                   color: Theme.of(context).textTheme.bodySmall?.color)),
         GestureDetector(
-          onTap: () async =>
-              await _navigateDetailPage(context, displayNote, loginAs)
-                  .expectFailure(context),
+          onTap: () => ref
+              .read(misskeyNoteNotifierProvider(account).notifier)
+              .navigateToNoteDetailPage(context, displayNote, loginAs)
+              .expectFailure(context),
           child: Text(
             displayNote.createdAt.differenceNow,
             textAlign: TextAlign.right,
@@ -846,7 +777,7 @@ class NoteHeader1 extends StatelessWidget {
   }
 }
 
-class RenoteHeader extends StatelessWidget {
+class RenoteHeader extends ConsumerWidget {
   final Note note;
   final Account? loginAs;
 
@@ -857,21 +788,21 @@ class RenoteHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final renoteTextStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           color: AppTheme.of(context).renoteBorderColor,
         );
+    final account = AccountScope.of(context);
 
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 10)),
         Expanded(
           child: GestureDetector(
-            onTap: () async => await _navigateUserDetailPage(
-              context,
-              note,
-              loginAs,
-            ).expectFailure(context),
+            onTap: () => ref
+                .read(misskeyNoteNotifierProvider(account).notifier)
+                .navigateToUserPage(context, note.user, loginAs)
+                .expectFailure(context),
             child: SimpleMfmText(
               note.user.name ?? note.user.username,
               style: renoteTextStyle?.copyWith(
