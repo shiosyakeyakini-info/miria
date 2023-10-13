@@ -131,121 +131,137 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
-      ListTile(
-        onTap: () {
-          Clipboard.setData(
-            ClipboardData(
-              text: Uri(
-                scheme: "https",
-                host: widget.account.host,
-                path: widget.response.acct,
-              ).toString(),
-            ),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("コピーしました")),
-          );
-          Navigator.of(context).pop();
-        },
-        title: const Text("リンクをコピー"),
-      ),
-      ListTile(
-        onTap: () {
-          Clipboard.setData(
-            ClipboardData(
-              text: widget.response.name ?? widget.response.username,
-            ),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("コピーしました")),
-          );
-          Navigator.of(context).pop();
-        },
-        title: const Text("ユーザー名をコピー"),
-      ),
-      ListTile(
-        onTap: () {
-          Clipboard.setData(ClipboardData(text: widget.response.acct));
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("コピーしました")),
-          );
-          Navigator.of(context).pop();
-        },
-        title: const Text("ユーザースクリーン名をコピー"),
-      ),
-      ListTile(
-        title: const Text("ブラウザで開く"),
-        onTap: () {
-          launchUrl(
-            Uri(
-              scheme: "https",
-              host: widget.account.host,
-              path: widget.response.acct,
-            ),
-            mode: LaunchMode.inAppWebView,
-          );
-          Navigator.of(context).pop();
-        },
-      ),
-      if (widget.response.host != null)
+    return ListView(
+      children: [
         ListTile(
-          title: const Text("ブラウザでリモート先を開く"),
+          leading: const Icon(Icons.copy),
+          title: const Text("ユーザー名をコピー"),
           onTap: () {
-            final uri = widget.response.uri ?? widget.response.url;
-            if (uri == null) return;
-            launchUrl(uri, mode: LaunchMode.inAppWebView);
+            Clipboard.setData(
+              ClipboardData(
+                text: widget.response.name ?? widget.response.username,
+              ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("コピーしました")),
+            );
             Navigator.of(context).pop();
           },
         ),
-      ListTile(
-        title: const Text("別のアカウントで開く"),
-        onTap: () => ref
-            .read(misskeyNoteNotifierProvider(widget.account).notifier)
-            .openUserInOtherAccount(context, widget.response.toUser())
-            .expectFailure(context),
-      ),
-      ListTile(
-        onTap: addToList,
-        title: const Text("リストに追加"),
-      ),
-      ListTile(
-        onTap: addToAntenna,
-        title: const Text("アンテナに追加"),
-      ),
-      if (!widget.isMe) ...[
-        if (widget.response.isRenoteMuted ?? false)
+        ListTile(
+          leading: const Icon(Icons.copy),
+          title: const Text("ユーザースクリーン名をコピー"),
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: widget.response.acct));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("コピーしました")),
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.link),
+          title: const Text("リンクをコピー"),
+          onTap: () {
+            Clipboard.setData(
+              ClipboardData(
+                text: Uri(
+                  scheme: "https",
+                  host: widget.account.host,
+                  path: widget.response.acct,
+                ).toString(),
+              ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("コピーしました")),
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.open_in_browser),
+          title: const Text("ブラウザで開く"),
+          onTap: () {
+            launchUrl(
+              Uri(
+                scheme: "https",
+                host: widget.account.host,
+                path: widget.response.acct,
+              ),
+              mode: LaunchMode.inAppWebView,
+            );
+            Navigator.of(context).pop();
+          },
+        ),
+        if (widget.response.host != null)
           ListTile(
-            onTap: renoteMuteDelete.expectFailure(context),
-            title: const Text("Renoteのミュート解除する"),
-          )
-        else
-          ListTile(
-            onTap: renoteMuteCreate.expectFailure(context),
-            title: const Text("Renoteをミュートする"),
+            leading: const Icon(Icons.rocket_launch),
+            title: const Text("ブラウザでリモート先を開く"),
+            onTap: () {
+              final uri = widget.response.uri ?? widget.response.url;
+              if (uri == null) return;
+              launchUrl(uri, mode: LaunchMode.inAppWebView);
+              Navigator.of(context).pop();
+            },
           ),
-        if (widget.response.isMuted ?? false)
-          ListTile(
-            onTap: muteDelete.expectFailure(context),
-            title: const Text("ミュート解除する"),
-          )
-        else
-          ListTile(
-            onTap: muteCreate.expectFailure(context),
-            title: const Text("ミュートする"),
-          ),
-        if (widget.response.isBlocking ?? false)
-          ListTile(
-            onTap: blockingDelete.expectFailure(context),
-            title: const Text("ブロックを解除する"),
-          )
-        else
-          ListTile(
-            onTap: blockingCreate.expectFailure(context),
-            title: const Text("ブロックする"),
-          )
+        ListTile(
+          leading: const Icon(Icons.open_in_new),
+          title: const Text("別のアカウントで開く"),
+          onTap: () => ref
+              .read(misskeyNoteNotifierProvider(widget.account).notifier)
+              .openUserInOtherAccount(context, widget.response.toUser())
+              .expectFailure(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.list),
+          title: const Text("リストに追加"),
+          onTap: addToList,
+        ),
+        ListTile(
+          leading: const Icon(Icons.settings_input_antenna),
+          title: const Text("アンテナに追加"),
+          onTap: addToAntenna,
+        ),
+        if (!widget.isMe) ...[
+          if (widget.response.isRenoteMuted ?? false)
+            ListTile(
+              leading: const Icon(Icons.repeat_rounded),
+              title: const Text("Renoteのミュート解除する"),
+              onTap: renoteMuteDelete.expectFailure(context),
+            )
+          else
+            ListTile(
+              leading: const Icon(Icons.repeat_rounded),
+              title: const Text("Renoteをミュートする"),
+              onTap: renoteMuteCreate.expectFailure(context),
+            ),
+          if (widget.response.isMuted ?? false)
+            ListTile(
+              leading: const Icon(Icons.visibility),
+              title: const Text("ミュート解除する"),
+              onTap: muteDelete.expectFailure(context),
+            )
+          else
+            ListTile(
+              leading: const Icon(Icons.visibility_off),
+              title: const Text("ミュートする"),
+              onTap: muteCreate.expectFailure(context),
+            ),
+          if (widget.response.isBlocking ?? false)
+            ListTile(
+              leading: const Icon(Icons.block),
+              title: const Text("ブロックを解除する"),
+              onTap: blockingDelete.expectFailure(context),
+            )
+          else
+            ListTile(
+              leading: const Icon(Icons.block),
+              title: const Text("ブロックする"),
+              onTap: blockingCreate.expectFailure(context),
+            ),
+        ],
       ],
-    ]);
+    );
   }
 }
 
