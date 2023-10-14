@@ -64,7 +64,7 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ハードミュート")),
+      appBar: AppBar(title: const Text("ワードミュート")),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
