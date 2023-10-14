@@ -20,6 +20,8 @@ mixin _$NoteStatus {
   bool get isLongVisible => throw _privateConstructorUsedError;
   bool get isReactionedRenote => throw _privateConstructorUsedError;
   bool get isLongVisibleInitialized => throw _privateConstructorUsedError;
+  bool get isIncludeMuteWord => throw _privateConstructorUsedError;
+  bool get isMuteOpened => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NoteStatusCopyWith<NoteStatus> get copyWith =>
@@ -36,7 +38,9 @@ abstract class $NoteStatusCopyWith<$Res> {
       {bool isCwOpened,
       bool isLongVisible,
       bool isReactionedRenote,
-      bool isLongVisibleInitialized});
+      bool isLongVisibleInitialized,
+      bool isIncludeMuteWord,
+      bool isMuteOpened});
 }
 
 /// @nodoc
@@ -56,6 +60,8 @@ class _$NoteStatusCopyWithImpl<$Res, $Val extends NoteStatus>
     Object? isLongVisible = null,
     Object? isReactionedRenote = null,
     Object? isLongVisibleInitialized = null,
+    Object? isIncludeMuteWord = null,
+    Object? isMuteOpened = null,
   }) {
     return _then(_value.copyWith(
       isCwOpened: null == isCwOpened
@@ -74,6 +80,14 @@ class _$NoteStatusCopyWithImpl<$Res, $Val extends NoteStatus>
           ? _value.isLongVisibleInitialized
           : isLongVisibleInitialized // ignore: cast_nullable_to_non_nullable
               as bool,
+      isIncludeMuteWord: null == isIncludeMuteWord
+          ? _value.isIncludeMuteWord
+          : isIncludeMuteWord // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMuteOpened: null == isMuteOpened
+          ? _value.isMuteOpened
+          : isMuteOpened // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -90,7 +104,9 @@ abstract class _$$_NoteStatusCopyWith<$Res>
       {bool isCwOpened,
       bool isLongVisible,
       bool isReactionedRenote,
-      bool isLongVisibleInitialized});
+      bool isLongVisibleInitialized,
+      bool isIncludeMuteWord,
+      bool isMuteOpened});
 }
 
 /// @nodoc
@@ -108,6 +124,8 @@ class __$$_NoteStatusCopyWithImpl<$Res>
     Object? isLongVisible = null,
     Object? isReactionedRenote = null,
     Object? isLongVisibleInitialized = null,
+    Object? isIncludeMuteWord = null,
+    Object? isMuteOpened = null,
   }) {
     return _then(_$_NoteStatus(
       isCwOpened: null == isCwOpened
@@ -126,6 +144,14 @@ class __$$_NoteStatusCopyWithImpl<$Res>
           ? _value.isLongVisibleInitialized
           : isLongVisibleInitialized // ignore: cast_nullable_to_non_nullable
               as bool,
+      isIncludeMuteWord: null == isIncludeMuteWord
+          ? _value.isIncludeMuteWord
+          : isIncludeMuteWord // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMuteOpened: null == isMuteOpened
+          ? _value.isMuteOpened
+          : isMuteOpened // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -137,7 +163,9 @@ class _$_NoteStatus with DiagnosticableTreeMixin implements _NoteStatus {
       {required this.isCwOpened,
       required this.isLongVisible,
       required this.isReactionedRenote,
-      required this.isLongVisibleInitialized});
+      required this.isLongVisibleInitialized,
+      required this.isIncludeMuteWord,
+      required this.isMuteOpened});
 
   @override
   final bool isCwOpened;
@@ -147,10 +175,14 @@ class _$_NoteStatus with DiagnosticableTreeMixin implements _NoteStatus {
   final bool isReactionedRenote;
   @override
   final bool isLongVisibleInitialized;
+  @override
+  final bool isIncludeMuteWord;
+  @override
+  final bool isMuteOpened;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'NoteStatus(isCwOpened: $isCwOpened, isLongVisible: $isLongVisible, isReactionedRenote: $isReactionedRenote, isLongVisibleInitialized: $isLongVisibleInitialized)';
+    return 'NoteStatus(isCwOpened: $isCwOpened, isLongVisible: $isLongVisible, isReactionedRenote: $isReactionedRenote, isLongVisibleInitialized: $isLongVisibleInitialized, isIncludeMuteWord: $isIncludeMuteWord, isMuteOpened: $isMuteOpened)';
   }
 
   @override
@@ -162,7 +194,9 @@ class _$_NoteStatus with DiagnosticableTreeMixin implements _NoteStatus {
       ..add(DiagnosticsProperty('isLongVisible', isLongVisible))
       ..add(DiagnosticsProperty('isReactionedRenote', isReactionedRenote))
       ..add(DiagnosticsProperty(
-          'isLongVisibleInitialized', isLongVisibleInitialized));
+          'isLongVisibleInitialized', isLongVisibleInitialized))
+      ..add(DiagnosticsProperty('isIncludeMuteWord', isIncludeMuteWord))
+      ..add(DiagnosticsProperty('isMuteOpened', isMuteOpened));
   }
 
   @override
@@ -178,12 +212,22 @@ class _$_NoteStatus with DiagnosticableTreeMixin implements _NoteStatus {
                 other.isReactionedRenote == isReactionedRenote) &&
             (identical(
                     other.isLongVisibleInitialized, isLongVisibleInitialized) ||
-                other.isLongVisibleInitialized == isLongVisibleInitialized));
+                other.isLongVisibleInitialized == isLongVisibleInitialized) &&
+            (identical(other.isIncludeMuteWord, isIncludeMuteWord) ||
+                other.isIncludeMuteWord == isIncludeMuteWord) &&
+            (identical(other.isMuteOpened, isMuteOpened) ||
+                other.isMuteOpened == isMuteOpened));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isCwOpened, isLongVisible,
-      isReactionedRenote, isLongVisibleInitialized);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isCwOpened,
+      isLongVisible,
+      isReactionedRenote,
+      isLongVisibleInitialized,
+      isIncludeMuteWord,
+      isMuteOpened);
 
   @JsonKey(ignore: true)
   @override
@@ -197,7 +241,9 @@ abstract class _NoteStatus implements NoteStatus {
       {required final bool isCwOpened,
       required final bool isLongVisible,
       required final bool isReactionedRenote,
-      required final bool isLongVisibleInitialized}) = _$_NoteStatus;
+      required final bool isLongVisibleInitialized,
+      required final bool isIncludeMuteWord,
+      required final bool isMuteOpened}) = _$_NoteStatus;
 
   @override
   bool get isCwOpened;
@@ -207,6 +253,10 @@ abstract class _NoteStatus implements NoteStatus {
   bool get isReactionedRenote;
   @override
   bool get isLongVisibleInitialized;
+  @override
+  bool get isIncludeMuteWord;
+  @override
+  bool get isMuteOpened;
   @override
   @JsonKey(ignore: true)
   _$$_NoteStatusCopyWith<_$_NoteStatus> get copyWith =>

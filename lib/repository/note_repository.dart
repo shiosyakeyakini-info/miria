@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:miria/model/account.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 part 'note_repository.freezed.dart';
@@ -11,6 +12,8 @@ class NoteStatus with _$NoteStatus {
     required bool isLongVisible,
     required bool isReactionedRenote,
     required bool isLongVisibleInitialized,
+    required bool isIncludeMuteWord,
+    required bool isMuteOpened,
   }) = _NoteStatus;
 }
 
@@ -19,7 +22,23 @@ class NoteRepository extends ChangeNotifier {
   final Map<String, Note> _notes = {};
   final Map<String, NoteStatus> _noteStatuses = {};
 
-  NoteRepository(this.misskey);
+  final List<List<String>> muteWordContents = [];
+  final List<RegExp> muteWordRegExps = [];
+
+  NoteRepository(this.misskey, Account account) {
+    for (final muteWord in account.i.mutedWords) {
+      final content = muteWord.content;
+      final regExp = muteWord.regExp;
+      if (content != null) {
+        muteWordContents.add(content);
+      }
+      if (regExp != null) {
+        try {
+          muteWordRegExps.add(RegExp(regExp.substring(1, regExp.length - 1)));
+        } catch (e) {}
+      }
+    }
+  }
 
   Map<String, Note> get notes => _notes;
 
@@ -43,11 +62,17 @@ class NoteRepository extends ChangeNotifier {
           : (note.myReaction ??
               (note.reactions.isNotEmpty ? registeredNote?.myReaction : null)),
     );
-    _noteStatuses[note.id] ??= const NoteStatus(
+    _noteStatuses[note.id] ??= NoteStatus(
         isCwOpened: false,
         isLongVisible: false,
         isReactionedRenote: false,
-        isLongVisibleInitialized: false);
+        isLongVisibleInitialized: false,
+        isIncludeMuteWord: muteWordContents.any((e) => e.every((e2) =>
+                note.text?.contains(e2) == true ||
+                note.cw?.contains(e2) == true)) ||
+            muteWordRegExps.any((e) =>
+                note.text?.contains(e) == true || note.cw?.contains(e) == true),
+        isMuteOpened: false);
     final renote = note.renote;
     final reply = note.reply;
     if (renote != null) {

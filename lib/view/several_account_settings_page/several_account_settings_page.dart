@@ -33,7 +33,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             onTap: () {
               context.pushRoute(HardMuteRoute(account: account));
             },
-            title: const Text("ハードミュート"),
+            title: const Text("ワードミュート"),
           ),
           ListTile(
             onTap: () {

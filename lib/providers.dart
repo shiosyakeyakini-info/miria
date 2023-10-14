@@ -155,7 +155,8 @@ final favoriteProvider = ChangeNotifierProvider.autoDispose
         ref.read(misskeyProvider(account)), ref.read(notesProvider(account))));
 
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
-    (ref, account) => NoteRepository(ref.read(misskeyProvider(account))));
+    (ref, account) =>
+        NoteRepository(ref.read(misskeyProvider(account)), account));
 
 //TODO: アカウント毎である必要はない ホスト毎
 //TODO: のつもりだったけど、絵文字にロールが関係するようになるとアカウント毎になる
