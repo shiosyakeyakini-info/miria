@@ -822,7 +822,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ccb2b2c59a6f37704e5a49460202a10405286714
+      resolved-ref: "2d22027e241bfbce200c15f5fcc6e9f580b27542"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
