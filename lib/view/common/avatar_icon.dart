@@ -19,39 +19,6 @@ class AvatarIcon extends StatefulWidget {
     this.onTap,
   });
 
-  factory AvatarIcon.fromIResponse(IResponse response, {double height = 48}) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
-
-  factory AvatarIcon.fromUserResponse(
-    UsersShowResponse response, {
-    double height = 48,
-  }) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
-
   @override
   State<StatefulWidget> createState() => AvatarIconState();
 }
