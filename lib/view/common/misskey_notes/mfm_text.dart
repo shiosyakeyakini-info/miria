@@ -85,6 +85,13 @@ class MfmTextState extends ConsumerState<MfmText> {
           .show(NotesShowRequest(noteId: uri.pathSegments[1]));
       if (!mounted) return;
       context.pushRoute(NoteDetailRoute(account: account, note: note));
+    } else if (uri.pathSegments.length == 3 && uri.pathSegments[1] == "pages") {
+      final page = await ref.read(misskeyProvider(account)).pages.show(
+          PagesShowRequest(
+              name: uri.pathSegments[2],
+              username: uri.pathSegments[1].substring(1)));
+      if (!mounted) return;
+      context.pushRoute(MisskeyRouteRoute(account: account, page: page));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(uri.pathSegments.first);

@@ -3896,6 +3896,17 @@ class MockMisskeyUsers extends _i1.Mock implements _i6.MisskeyUsers {
         returnValueForMissingStub:
             _i17.Future<Iterable<_i6.Note>>.value(<_i6.Note>[]),
       ) as _i17.Future<Iterable<_i6.Note>>);
+  @override
+  _i17.Future<Iterable<_i6.Page>> pages(_i6.UsersPagesRequest? request) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #pages,
+          [request],
+        ),
+        returnValue: _i17.Future<Iterable<_i6.Page>>.value(<_i6.Page>[]),
+        returnValueForMissingStub:
+            _i17.Future<Iterable<_i6.Page>>.value(<_i6.Page>[]),
+      ) as _i17.Future<Iterable<_i6.Page>>);
 }
 
 /// A class which mocks [Dio].
