@@ -5,3 +5,35 @@ extension UserExtension on User {
     return "@$username${host != null ? "@$host" : ""}";
   }
 }
+
+extension UserDetailedExtension on UserDetailed {
+  bool get isFollowersVisibleForMe {
+    if (this is MeDetailed) {
+      return true;
+    }
+
+    final user = this;
+
+    return switch (followersVisibility ?? ffVisibility) {
+      FFVisibility.public => true,
+      FFVisibility.followers =>
+        user is UserDetailedNotMeWithRelations && user.isFollowing,
+      FFVisibility.private || null => false,
+    };
+  }
+
+  bool get isFollowingVisibleForMe {
+    if (this is MeDetailed) {
+      return true;
+    }
+
+    final user = this;
+
+    return switch (followingVisibility ?? ffVisibility) {
+      FFVisibility.public => true,
+      FFVisibility.followers =>
+        user is UserDetailedNotMeWithRelations && user.isFollowing,
+      FFVisibility.private || null => false,
+    };
+  }
+}

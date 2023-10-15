@@ -505,35 +505,37 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 )
               ],
             ),
-            InkWell(
-              onTap: () => context.pushRoute(UserFolloweeRoute(
-                  userId: response.id, account: AccountScope.of(context))),
-              child: Column(
-                children: [
-                  Text(response.followingCount.format(),
-                      style: Theme.of(context).textTheme.titleMedium),
-                  Text(
-                    S.of(context).follow,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )
-                ],
+            if (widget.response.isFollowingVisibleForMe)
+              InkWell(
+                onTap: () => context.pushRoute(UserFolloweeRoute(
+                    userId: response.id, account: AccountScope.of(context))),
+                child: Column(
+                  children: [
+                    Text(response.followingCount.format(),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      S.of(context).follow,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )
+                  ],
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () => context.pushRoute(UserFollowerRoute(
-                  userId: response.id, account: AccountScope.of(context))),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(response.followersCount.format(),
-                      style: Theme.of(context).textTheme.titleMedium),
-                  Text(
-                    S.of(context).follower,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )
-                ],
+            if (widget.response.isFollowersVisibleForMe)
+              InkWell(
+                onTap: () => context.pushRoute(UserFollowerRoute(
+                    userId: response.id, account: AccountScope.of(context))),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(response.followersCount.format(),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      S.of(context).follower,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )
+                  ],
+                ),
               ),
-            ),
           ]),
         ]),
       ),
