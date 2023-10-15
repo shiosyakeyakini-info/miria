@@ -96,9 +96,8 @@ class MfmTextState extends ConsumerState<MfmText> {
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(uri.pathSegments.first);
     } else {
-      // 自サーバーは内部ブラウザで起動する
       if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.inAppWebView);
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
       }
     }
   }
