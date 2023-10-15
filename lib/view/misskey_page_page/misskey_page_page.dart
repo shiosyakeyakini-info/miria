@@ -71,8 +71,7 @@ class MisskeyPagePage extends ConsumerWidget {
                             pageId: page.id,
                             userId: page.userId,
                           ),
-                          const Padding(
-                              padding: const EdgeInsets.only(left: 10)),
+                          const Padding(padding: EdgeInsets.only(left: 10)),
                           GestureDetector(
                             onTap: () => launchUrl(Uri(
                                 scheme: "https",
@@ -235,7 +234,9 @@ class PageLikeButtonState extends ConsumerState<PageLikeButton> {
             likeCount--;
           });
         }.expectFailure(context),
-        icon: const Icon(Icons.favorite),
+        icon: Icon(Icons.favorite,
+            size: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) *
+                MediaQuery.of(context).textScaleFactor),
         label: Text(likeCount.format()),
       );
     } else {
@@ -254,7 +255,9 @@ class PageLikeButtonState extends ConsumerState<PageLikeButton> {
               likeCount++;
             });
           }.expectFailure(context),
-          icon: const Icon(Icons.favorite),
+          icon: Icon(Icons.favorite,
+              size: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) *
+                  MediaQuery.of(context).textScaleFactor),
           label: Text(likeCount.format()));
     }
   }
