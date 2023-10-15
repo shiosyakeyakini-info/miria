@@ -409,6 +409,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    MisskeyRouteRoute.name: (routeData) {
+      final args = routeData.argsAs<MisskeyRouteRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MisskeyPagePage(
+          key: args.key,
+          account: args.account,
+          page: args.page,
+        ),
+      );
+    },
   };
 }
 
@@ -1858,5 +1869,48 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [MisskeyPagePage]
+class MisskeyRouteRoute extends PageRouteInfo<MisskeyRouteRouteArgs> {
+  MisskeyRouteRoute({
+    Key? key,
+    required Account account,
+    required Page page,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MisskeyRouteRoute.name,
+          args: MisskeyRouteRouteArgs(
+            key: key,
+            account: account,
+            page: page,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MisskeyRouteRoute';
+
+  static const PageInfo<MisskeyRouteRouteArgs> page =
+      PageInfo<MisskeyRouteRouteArgs>(name);
+}
+
+class MisskeyRouteRouteArgs {
+  const MisskeyRouteRouteArgs({
+    this.key,
+    required this.account,
+    required this.page,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final Page page;
+
+  @override
+  String toString() {
+    return 'MisskeyRouteRouteArgs{key: $key, account: $account, page: $page}';
   }
 }
