@@ -523,7 +523,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                               .buttonBackground,
                                           foregroundColor: Theme.of(context)
                                               .textTheme
-                                              .bodyMedium55
+                                              .bodyMedium
                                               ?.color,
                                           padding: const EdgeInsets.all(5),
                                           textStyle: TextStyle(
