@@ -37,7 +37,13 @@ class UserListTimelineRepository extends SocketTimelineRepository {
 
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
-    return await misskey.notes.userListTimeline(UserListTimelineRequest(
-        listId: tabSetting.listId!, limit: 30, untilId: untilId));
+    return await misskey.notes.userListTimeline(
+      UserListTimelineRequest(
+        listId: tabSetting.listId!,
+        untilId: untilId,
+        withRenotes: tabSetting.renoteDisplay,
+        withFiles: tabSetting.isMediaOnly,
+      ),
+    );
   }
 }
