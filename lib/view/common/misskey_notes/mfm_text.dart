@@ -89,7 +89,7 @@ class MfmTextState extends ConsumerState<MfmText> {
       final page = await ref.read(misskeyProvider(account)).pages.show(
           PagesShowRequest(
               name: uri.pathSegments[2],
-              username: uri.pathSegments[1].substring(1)));
+              username: uri.pathSegments[0].substring(1)));
       if (!mounted) return;
       context.pushRoute(MisskeyRouteRoute(account: account, page: page));
     } else if (uri.pathSegments.length == 1 &&
