@@ -39,6 +39,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
   TabIcon? selectedIcon;
   bool renoteDisplay = true;
   bool isSubscribe = true;
+  bool isMediaOnly = false;
+  bool isIncludeReply = false;
+
+  bool get availableIncludeReply =>
+      selectedTabType == TabType.localTimeline ||
+      selectedTabType == TabType.hybridTimeline;
 
   @override
   void didChangeDependencies() {
@@ -58,6 +64,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
       isSubscribe = tabSetting.isSubscribe;
+      isMediaOnly = tabSetting.isMediaOnly;
+      isIncludeReply = tabSetting.isIncludeReplies;
       if (roleId != null) {
         Future(() async {
           selectedRole = await ref
@@ -306,6 +314,20 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 onChanged: (value) =>
                     setState(() => renoteDisplay = !renoteDisplay),
               ),
+              if (availableIncludeReply)
+                CheckboxListTile(
+                  title: const Text("返信も入れる"),
+                  subtitle: const Text("Misskey v2023.10.1以降の機能です。"),
+                  value: isIncludeReply,
+                  onChanged: (value) =>
+                      setState(() => isIncludeReply = !isIncludeReply),
+                ),
+              CheckboxListTile(
+                title: const Text("ファイルのみにする"),
+                value: isMediaOnly,
+                onChanged: (value) =>
+                    setState(() => isMediaOnly = !isMediaOnly),
+              ),
               CheckboxListTile(
                 title: const Text("リアクションや投票数を自動更新する"),
                 subtitle: const Text(
@@ -366,6 +388,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       antennaId: selectedAntenna?.id,
                       renoteDisplay: renoteDisplay,
                       isSubscribe: isSubscribe,
+                      isIncludeReplies: isIncludeReply,
+                      isMediaOnly: isMediaOnly,
                     );
                     if (widget.tabIndex == null) {
                       await ref

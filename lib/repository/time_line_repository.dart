@@ -27,6 +27,9 @@ class NotifierQueueList extends QueueList<Note> {
         element.renoteId != null) {
       return false;
     }
+    if (tabSetting.isMediaOnly && element.files.isEmpty) {
+      return false;
+    }
     if (generalSettingsRepository.settings.nsfwInherit ==
             NSFWInherit.removeNsfw &&
         (element.files.any((e) => e.isSensitive) ||

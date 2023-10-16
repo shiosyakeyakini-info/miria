@@ -27,6 +27,10 @@ class HomeTimeLineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.homeTimelineStream(
+        parameter: HomeTimelineParameter(
+          withRenotes: tabSetting.renoteDisplay,
+          withFiles: tabSetting.isMediaOnly,
+        ),
         onNoteReceived: onReceived,
         onReacted: onReacted,
         onUnreacted: onUnreacted,
@@ -40,6 +44,8 @@ class HomeTimeLineRepository extends SocketTimelineRepository {
       NotesTimelineRequest(
         limit: 30,
         untilId: untilId,
+        withFiles: tabSetting.isMediaOnly,
+        withRenotes: tabSetting.renoteDisplay,
       ),
     );
   }

@@ -37,6 +37,12 @@ class TabSetting with _$TabSetting {
     /// ノートの投稿のキャプチャをするかどうか
     @Default(true) isSubscribe,
 
+    /// 返信を含むかどうか
+    @Default(true) isIncludeReplies,
+
+    /// ファイルのみにするかどうか
+    @Default(false) isMediaOnly,
+
     /// タブ名
     required String name,
 
