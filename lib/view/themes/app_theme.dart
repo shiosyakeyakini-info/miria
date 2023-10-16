@@ -42,6 +42,7 @@ class AppThemeData {
   final Color currentDisplayTabColor;
   final Color voteColor1;
   final Color voteColor2;
+  final Color buttonBackground;
 
   const AppThemeData({
     required this.isDarkMode,
@@ -62,5 +63,6 @@ class AppThemeData {
     required this.currentDisplayTabColor,
     required this.voteColor1,
     required this.voteColor2,
+    required this.buttonBackground,
   });
 }

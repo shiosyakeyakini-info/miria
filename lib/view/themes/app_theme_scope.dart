@@ -43,6 +43,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       renoteStrokeWidth: 1.5,
       renoteStrokePadding: 0.0,
       renoteDashPattern: [10.0, 6.0],
+      buttonBackground: theme.buttonBackground,
       currentDisplayTabColor:
           theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
       voteColor1: theme.isDarkTheme

@@ -396,13 +396,21 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       elevation: 0,
-                                      padding: const EdgeInsets.all(5),
+                                      backgroundColor:
+                                          AppTheme.of(context).buttonBackground,
+                                      foregroundColor: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
+                                      padding: const EdgeInsets.only(
+                                          left: 5, right: 5, top: 8, bottom: 8),
                                       textStyle: TextStyle(
                                           fontSize: Theme.of(context)
                                               .textTheme
-                                              .bodySmall
+                                              .bodyMedium
                                               ?.fontSize),
-                                      minimumSize: const Size(0, 0),
+                                      minimumSize:
+                                          const Size(double.infinity, 0),
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
@@ -436,13 +444,24 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         elevation: 0,
-                                        padding: const EdgeInsets.all(5),
+                                        backgroundColor: AppTheme.of(context)
+                                            .buttonBackground,
+                                        foregroundColor: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
+                                        padding: const EdgeInsets.only(
+                                            left: 5,
+                                            right: 5,
+                                            top: 8,
+                                            bottom: 8),
                                         textStyle: TextStyle(
                                             fontSize: Theme.of(context)
                                                 .textTheme
-                                                .bodySmall
+                                                .bodyMedium
                                                 ?.fontSize),
-                                        minimumSize: const Size(0, 0),
+                                        minimumSize:
+                                            const Size(double.infinity, 0),
                                         tapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
                                       ),
@@ -451,10 +470,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                             .read(notesProvider(
                                                 AccountScope.of(context)))
                                             .updateNoteStatus(
-                                                widget.note.id,
-                                                (status) => status.copyWith(
-                                                    isReactionedRenote: !status
-                                                        .isReactionedRenote));
+                                              widget.note.id,
+                                              (status) => status.copyWith(
+                                                  isReactionedRenote: !status
+                                                      .isReactionedRenote),
+                                            );
                                       },
                                       child: const Text("続きを表示"),
                                     ),
@@ -499,13 +519,20 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           elevation: 0,
+                                          backgroundColor: AppTheme.of(context)
+                                              .buttonBackground,
+                                          foregroundColor: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium55
+                                              ?.color,
                                           padding: const EdgeInsets.all(5),
                                           textStyle: TextStyle(
                                               fontSize: Theme.of(context)
                                                   .textTheme
-                                                  .bodySmall
+                                                  .bodyMedium
                                                   ?.fontSize),
-                                          minimumSize: const Size(0, 0),
+                                          minimumSize:
+                                              const Size(double.infinity, 0),
                                           tapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
                                         ),
