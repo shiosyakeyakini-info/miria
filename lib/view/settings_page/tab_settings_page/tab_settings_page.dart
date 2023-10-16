@@ -388,6 +388,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       antennaId: selectedAntenna?.id,
                       renoteDisplay: renoteDisplay,
                       isSubscribe: isSubscribe,
+                      isIncludeReplies: isIncludeReply,
+                      isMediaOnly: isMediaOnly,
                     );
                     if (widget.tabIndex == null) {
                       await ref
