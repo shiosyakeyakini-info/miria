@@ -27,6 +27,11 @@ class LocalTimeLineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.localTimelineStream(
+      parameter: LocalTimelineParameter(
+        withRenotes: tabSetting.renoteDisplay,
+        withReplies: tabSetting.isIncludeReplies,
+        withFiles: tabSetting.isMediaOnly,
+      ),
       onNoteReceived: onReceived,
       onReacted: onReacted,
       onUnreacted: onUnreacted,
@@ -37,7 +42,11 @@ class LocalTimeLineRepository extends SocketTimelineRepository {
 
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
-    return await misskey.notes
-        .localTimeline(NotesLocalTimelineRequest(untilId: untilId));
+    return await misskey.notes.localTimeline(NotesLocalTimelineRequest(
+      untilId: untilId,
+      withRenotes: tabSetting.renoteDisplay,
+      withReplies: tabSetting.isIncludeReplies,
+      withFiles: tabSetting.isMediaOnly,
+    ));
   }
 }

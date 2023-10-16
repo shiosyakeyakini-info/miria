@@ -17,6 +17,10 @@ class GlobalTimeLineRepository extends TimelineRepository {
   @override
   void startTimeLine() {
     socketController = misskey.globalTimelineStream(
+      parameter: GlobalTimelineParameter(
+        withRenotes: tabSetting.renoteDisplay,
+        withFiles: tabSetting.isMediaOnly,
+      ),
       onNoteReceived: (note) {
         newerNotes.add(note);
 
