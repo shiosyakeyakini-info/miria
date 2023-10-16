@@ -35,42 +35,104 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     final misskey = ref.read(misskeyProvider(widget.account));
-    return Scaffold(
-      appBar: AppBar(title: const Text("通知")),
-      body: AccountScope(
+    return DefaultTabController(
+      length: 3,
+      child: AccountScope(
         account: widget.account,
-        child: PushableListView<NotificationData>(
-          initializeFuture: () async {
-            final result =
-                await misskey.i.notifications(const INotificationsRequest(
-              limit: 50,
-            ));
-            ref
-                .read(notesProvider(widget.account))
-                .registerAll(result.map((e) => e.note).whereNotNull());
-            if (result.isNotEmpty) {
-              ref
-                  .read(mainStreamRepositoryProvider(widget.account))
-                  .latestMarkAs(result.first.id);
-            }
-            return result.toNotificationData();
-          },
-          nextFuture: (lastElement, _) async {
-            final result = await misskey.i.notifications(
-                INotificationsRequest(limit: 50, untilId: lastElement.id));
-            ref
-                .read(notesProvider(widget.account))
-                .registerAll(result.map((e) => e.note).whereNotNull());
-            return result.toNotificationData();
-          },
-          itemBuilder: (context, notification) => Align(
-            alignment: Alignment.center,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: NotificationItem(
-                notification: notification,
-                account: widget.account,
-              ),
+        child: Scaffold(
+          appBar: AppBar(
+              title: const Text("通知"),
+              bottom: TabBar(tabs: [
+                Tab(text: "みんな"),
+                Tab(text: "自分宛て"),
+                Tab(text: "ダイレクト")
+              ])),
+          body: Padding(
+            padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+            child: TabBarView(
+              children: [
+                PushableListView<NotificationData>(
+                  initializeFuture: () async {
+                    final result = await misskey.i
+                        .notifications(const INotificationsRequest(
+                      limit: 50,
+                    ));
+                    ref
+                        .read(notesProvider(widget.account))
+                        .registerAll(result.map((e) => e.note).whereNotNull());
+                    if (result.isNotEmpty) {
+                      ref
+                          .read(mainStreamRepositoryProvider(widget.account))
+                          .latestMarkAs(result.first.id);
+                    }
+                    return result.toNotificationData();
+                  },
+                  nextFuture: (lastElement, _) async {
+                    final result = await misskey.i.notifications(
+                        INotificationsRequest(
+                            limit: 50, untilId: lastElement.id));
+                    ref
+                        .read(notesProvider(widget.account))
+                        .registerAll(result.map((e) => e.note).whereNotNull());
+                    return result.toNotificationData();
+                  },
+                  itemBuilder: (context, notification) => Align(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 800),
+                      child: NotificationItem(
+                        notification: notification,
+                        account: widget.account,
+                      ),
+                    ),
+                  ),
+                ),
+                PushableListView<Note>(
+                  initializeFuture: () async {
+                    final notes = await ref
+                        .read(misskeyProvider(widget.account))
+                        .notes
+                        .mentions(const NotesMentionsRequest());
+                    ref.read(notesProvider(widget.account)).registerAll(notes);
+                    return notes.toList();
+                  },
+                  nextFuture: (item, _) async {
+                    final notes = await ref
+                        .read(misskeyProvider(widget.account))
+                        .notes
+                        .mentions(NotesMentionsRequest(untilId: item.id));
+                    ref.read(notesProvider(widget.account)).registerAll(notes);
+                    return notes.toList();
+                  },
+                  itemBuilder: (context, note) {
+                    return misskey_note.MisskeyNote(note: note);
+                  },
+                ),
+                PushableListView<Note>(
+                  initializeFuture: () async {
+                    final notes = await ref
+                        .read(misskeyProvider(widget.account))
+                        .notes
+                        .mentions(const NotesMentionsRequest(
+                            visibility: NoteVisibility.specified));
+                    ref.read(notesProvider(widget.account)).registerAll(notes);
+                    return notes.toList();
+                  },
+                  nextFuture: (item, _) async {
+                    final notes = await ref
+                        .read(misskeyProvider(widget.account))
+                        .notes
+                        .mentions(NotesMentionsRequest(
+                            untilId: item.id,
+                            visibility: NoteVisibility.specified));
+                    ref.read(notesProvider(widget.account)).registerAll(notes);
+                    return notes.toList();
+                  },
+                  itemBuilder: (context, note) {
+                    return misskey_note.MisskeyNote(note: note);
+                  },
+                ),
+              ],
             ),
           ),
         ),
