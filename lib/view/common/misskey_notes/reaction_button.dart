@@ -58,8 +58,11 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             : AppTheme.of(context).reactionButtonBackgroundColor;
 
     final foreground = isMyReaction
-        ? Colors.white
+        ? Theme.of(context).primaryColor
         : Theme.of(context).textTheme.bodyMedium?.color;
+
+    final borderColor =
+        isMyReaction ? Theme.of(context).primaryColor : Colors.transparent;
 
     return ElevatedButton(
       onPressed: () async {
@@ -130,9 +133,12 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                   noteId: widget.noteId);
             });
       },
-      style: AppTheme.of(context)
-          .reactionButtonStyle
-          .copyWith(backgroundColor: MaterialStatePropertyAll(backgroundColor)),
+      style: AppTheme.of(context).reactionButtonStyle.copyWith(
+            backgroundColor: MaterialStatePropertyAll(backgroundColor),
+            side: MaterialStatePropertyAll(
+              BorderSide(color: borderColor),
+            ),
+          ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
