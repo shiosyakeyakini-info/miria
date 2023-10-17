@@ -418,12 +418,15 @@ class BannerArea extends ConsumerWidget {
           if (bannerData.icon != null)
             AnnouncementIcon(iconType: bannerData.icon!),
           const Padding(padding: EdgeInsets.only(left: 10)),
-          Text(
-            "${bannerData.title}　${bannerData.text}",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: Colors.white),
+          Expanded(
+            child: Text(
+              "${bannerData.title}　${bannerData.text.replaceAll("\n", "　")}",
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.white),
+            ),
           ),
         ],
       ),

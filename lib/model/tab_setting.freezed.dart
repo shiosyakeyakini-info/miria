@@ -39,13 +39,13 @@ mixin _$TabSetting {
   String? get antennaId => throw _privateConstructorUsedError;
 
   /// ノートの投稿のキャプチャをするかどうか
-  dynamic get isSubscribe => throw _privateConstructorUsedError;
+  bool get isSubscribe => throw _privateConstructorUsedError;
 
   /// 返信を含むかどうか
-  dynamic get isIncludeReplies => throw _privateConstructorUsedError;
+  bool get isIncludeReplies => throw _privateConstructorUsedError;
 
   /// ファイルのみにするかどうか
-  dynamic get isMediaOnly => throw _privateConstructorUsedError;
+  bool get isMediaOnly => throw _privateConstructorUsedError;
 
   /// タブ名
   String get name => throw _privateConstructorUsedError;
@@ -73,9 +73,9 @@ abstract class $TabSettingCopyWith<$Res> {
       String? channelId,
       String? listId,
       String? antennaId,
-      dynamic isSubscribe,
-      dynamic isIncludeReplies,
-      dynamic isMediaOnly,
+      bool isSubscribe,
+      bool isIncludeReplies,
+      bool isMediaOnly,
       String name,
       Account account,
       bool renoteDisplay});
@@ -103,9 +103,9 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? channelId = freezed,
     Object? listId = freezed,
     Object? antennaId = freezed,
-    Object? isSubscribe = freezed,
-    Object? isIncludeReplies = freezed,
-    Object? isMediaOnly = freezed,
+    Object? isSubscribe = null,
+    Object? isIncludeReplies = null,
+    Object? isMediaOnly = null,
     Object? name = null,
     Object? account = null,
     Object? renoteDisplay = null,
@@ -135,18 +135,18 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.antennaId
           : antennaId // ignore: cast_nullable_to_non_nullable
               as String?,
-      isSubscribe: freezed == isSubscribe
+      isSubscribe: null == isSubscribe
           ? _value.isSubscribe
           : isSubscribe // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      isIncludeReplies: freezed == isIncludeReplies
+              as bool,
+      isIncludeReplies: null == isIncludeReplies
           ? _value.isIncludeReplies
           : isIncludeReplies // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      isMediaOnly: freezed == isMediaOnly
+              as bool,
+      isMediaOnly: null == isMediaOnly
           ? _value.isMediaOnly
           : isMediaOnly // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as bool,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -194,9 +194,9 @@ abstract class _$$_TabSettingCopyWith<$Res>
       String? channelId,
       String? listId,
       String? antennaId,
-      dynamic isSubscribe,
-      dynamic isIncludeReplies,
-      dynamic isMediaOnly,
+      bool isSubscribe,
+      bool isIncludeReplies,
+      bool isMediaOnly,
       String name,
       Account account,
       bool renoteDisplay});
@@ -224,9 +224,9 @@ class __$$_TabSettingCopyWithImpl<$Res>
     Object? channelId = freezed,
     Object? listId = freezed,
     Object? antennaId = freezed,
-    Object? isSubscribe = freezed,
-    Object? isIncludeReplies = freezed,
-    Object? isMediaOnly = freezed,
+    Object? isSubscribe = null,
+    Object? isIncludeReplies = null,
+    Object? isMediaOnly = null,
     Object? name = null,
     Object? account = null,
     Object? renoteDisplay = null,
@@ -256,11 +256,18 @@ class __$$_TabSettingCopyWithImpl<$Res>
           ? _value.antennaId
           : antennaId // ignore: cast_nullable_to_non_nullable
               as String?,
-      isSubscribe: freezed == isSubscribe ? _value.isSubscribe! : isSubscribe,
-      isIncludeReplies: freezed == isIncludeReplies
-          ? _value.isIncludeReplies!
-          : isIncludeReplies,
-      isMediaOnly: freezed == isMediaOnly ? _value.isMediaOnly! : isMediaOnly,
+      isSubscribe: null == isSubscribe
+          ? _value.isSubscribe
+          : isSubscribe // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isIncludeReplies: null == isIncludeReplies
+          ? _value.isIncludeReplies
+          : isIncludeReplies // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMediaOnly: null == isMediaOnly
+          ? _value.isMediaOnly
+          : isMediaOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -325,17 +332,17 @@ class _$_TabSetting extends _TabSetting {
   /// ノートの投稿のキャプチャをするかどうか
   @override
   @JsonKey()
-  final dynamic isSubscribe;
+  final bool isSubscribe;
 
   /// 返信を含むかどうか
   @override
   @JsonKey()
-  final dynamic isIncludeReplies;
+  final bool isIncludeReplies;
 
   /// ファイルのみにするかどうか
   @override
   @JsonKey()
-  final dynamic isMediaOnly;
+  final bool isMediaOnly;
 
   /// タブ名
   @override
@@ -366,12 +373,12 @@ class _$_TabSetting extends _TabSetting {
             (identical(other.listId, listId) || other.listId == listId) &&
             (identical(other.antennaId, antennaId) ||
                 other.antennaId == antennaId) &&
-            const DeepCollectionEquality()
-                .equals(other.isSubscribe, isSubscribe) &&
-            const DeepCollectionEquality()
-                .equals(other.isIncludeReplies, isIncludeReplies) &&
-            const DeepCollectionEquality()
-                .equals(other.isMediaOnly, isMediaOnly) &&
+            (identical(other.isSubscribe, isSubscribe) ||
+                other.isSubscribe == isSubscribe) &&
+            (identical(other.isIncludeReplies, isIncludeReplies) ||
+                other.isIncludeReplies == isIncludeReplies) &&
+            (identical(other.isMediaOnly, isMediaOnly) ||
+                other.isMediaOnly == isMediaOnly) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.account, account) || other.account == account) &&
             (identical(other.renoteDisplay, renoteDisplay) ||
@@ -388,9 +395,9 @@ class _$_TabSetting extends _TabSetting {
       channelId,
       listId,
       antennaId,
-      const DeepCollectionEquality().hash(isSubscribe),
-      const DeepCollectionEquality().hash(isIncludeReplies),
-      const DeepCollectionEquality().hash(isMediaOnly),
+      isSubscribe,
+      isIncludeReplies,
+      isMediaOnly,
       name,
       account,
       renoteDisplay);
@@ -417,9 +424,9 @@ abstract class _TabSetting extends TabSetting {
       final String? channelId,
       final String? listId,
       final String? antennaId,
-      final dynamic isSubscribe,
-      final dynamic isIncludeReplies,
-      final dynamic isMediaOnly,
+      final bool isSubscribe,
+      final bool isIncludeReplies,
+      final bool isMediaOnly,
       required final String name,
       required final Account account,
       final bool renoteDisplay}) = _$_TabSetting;
@@ -454,15 +461,15 @@ abstract class _TabSetting extends TabSetting {
   @override
 
   /// ノートの投稿のキャプチャをするかどうか
-  dynamic get isSubscribe;
+  bool get isSubscribe;
   @override
 
   /// 返信を含むかどうか
-  dynamic get isIncludeReplies;
+  bool get isIncludeReplies;
   @override
 
   /// ファイルのみにするかどうか
-  dynamic get isMediaOnly;
+  bool get isMediaOnly;
   @override
 
   /// タブ名

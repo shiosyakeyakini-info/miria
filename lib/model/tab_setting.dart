@@ -35,13 +35,13 @@ class TabSetting with _$TabSetting {
     String? antennaId,
 
     /// ノートの投稿のキャプチャをするかどうか
-    @Default(true) isSubscribe,
+    @Default(true) bool isSubscribe,
 
     /// 返信を含むかどうか
-    @Default(true) isIncludeReplies,
+    @Default(true) bool isIncludeReplies,
 
     /// ファイルのみにするかどうか
-    @Default(false) isMediaOnly,
+    @Default(false) bool isMediaOnly,
 
     /// タブ名
     required String name,
