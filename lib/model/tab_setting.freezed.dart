@@ -51,7 +51,12 @@ mixin _$TabSetting {
   String get name => throw _privateConstructorUsedError;
 
   /// アカウント情報
-  Account get account => throw _privateConstructorUsedError;
+// https://github.com/rrousselGit/freezed/issues/488
+// ignore: invalid_annotation_target
+  @JsonKey(readValue: _readAcct)
+  Acct get acct => throw _privateConstructorUsedError;
+
+  /// Renoteを表示するかどうか
   bool get renoteDisplay => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -77,11 +82,11 @@ abstract class $TabSettingCopyWith<$Res> {
       bool isIncludeReplies,
       bool isMediaOnly,
       String name,
-      Account account,
+      @JsonKey(readValue: _readAcct) Acct acct,
       bool renoteDisplay});
 
   $TabIconCopyWith<$Res> get icon;
-  $AccountCopyWith<$Res> get account;
+  $AcctCopyWith<$Res> get acct;
 }
 
 /// @nodoc
@@ -107,7 +112,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
     Object? name = null,
-    Object? account = null,
+    Object? acct = null,
     Object? renoteDisplay = null,
   }) {
     return _then(_value.copyWith(
@@ -151,10 +156,10 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      account: null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Account,
+      acct: null == acct
+          ? _value.acct
+          : acct // ignore: cast_nullable_to_non_nullable
+              as Acct,
       renoteDisplay: null == renoteDisplay
           ? _value.renoteDisplay
           : renoteDisplay // ignore: cast_nullable_to_non_nullable
@@ -172,9 +177,9 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
 
   @override
   @pragma('vm:prefer-inline')
-  $AccountCopyWith<$Res> get account {
-    return $AccountCopyWith<$Res>(_value.account, (value) {
-      return _then(_value.copyWith(account: value) as $Val);
+  $AcctCopyWith<$Res> get acct {
+    return $AcctCopyWith<$Res>(_value.acct, (value) {
+      return _then(_value.copyWith(acct: value) as $Val);
     });
   }
 }
@@ -198,13 +203,13 @@ abstract class _$$_TabSettingCopyWith<$Res>
       bool isIncludeReplies,
       bool isMediaOnly,
       String name,
-      Account account,
+      @JsonKey(readValue: _readAcct) Acct acct,
       bool renoteDisplay});
 
   @override
   $TabIconCopyWith<$Res> get icon;
   @override
-  $AccountCopyWith<$Res> get account;
+  $AcctCopyWith<$Res> get acct;
 }
 
 /// @nodoc
@@ -228,7 +233,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
     Object? name = null,
-    Object? account = null,
+    Object? acct = null,
     Object? renoteDisplay = null,
   }) {
     return _then(_$_TabSetting(
@@ -272,10 +277,10 @@ class __$$_TabSettingCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      account: null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Account,
+      acct: null == acct
+          ? _value.acct
+          : acct // ignore: cast_nullable_to_non_nullable
+              as Acct,
       renoteDisplay: null == renoteDisplay
           ? _value.renoteDisplay
           : renoteDisplay // ignore: cast_nullable_to_non_nullable
@@ -298,7 +303,7 @@ class _$_TabSetting extends _TabSetting {
       this.isIncludeReplies = true,
       this.isMediaOnly = false,
       required this.name,
-      required this.account,
+      @JsonKey(readValue: _readAcct) required this.acct,
       this.renoteDisplay = true})
       : super._();
 
@@ -349,15 +354,20 @@ class _$_TabSetting extends _TabSetting {
   final String name;
 
   /// アカウント情報
+// https://github.com/rrousselGit/freezed/issues/488
+// ignore: invalid_annotation_target
   @override
-  final Account account;
+  @JsonKey(readValue: _readAcct)
+  final Acct acct;
+
+  /// Renoteを表示するかどうか
   @override
   @JsonKey()
   final bool renoteDisplay;
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, isIncludeReplies: $isIncludeReplies, isMediaOnly: $isMediaOnly, name: $name, account: $account, renoteDisplay: $renoteDisplay)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, isIncludeReplies: $isIncludeReplies, isMediaOnly: $isMediaOnly, name: $name, acct: $acct, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -380,7 +390,7 @@ class _$_TabSetting extends _TabSetting {
             (identical(other.isMediaOnly, isMediaOnly) ||
                 other.isMediaOnly == isMediaOnly) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.account, account) || other.account == account) &&
+            (identical(other.acct, acct) || other.acct == acct) &&
             (identical(other.renoteDisplay, renoteDisplay) ||
                 other.renoteDisplay == renoteDisplay));
   }
@@ -399,7 +409,7 @@ class _$_TabSetting extends _TabSetting {
       isIncludeReplies,
       isMediaOnly,
       name,
-      account,
+      acct,
       renoteDisplay);
 
   @JsonKey(ignore: true)
@@ -428,7 +438,7 @@ abstract class _TabSetting extends TabSetting {
       final bool isIncludeReplies,
       final bool isMediaOnly,
       required final String name,
-      required final Account account,
+      @JsonKey(readValue: _readAcct) required final Acct acct,
       final bool renoteDisplay}) = _$_TabSetting;
   const _TabSetting._() : super._();
 
@@ -477,8 +487,13 @@ abstract class _TabSetting extends TabSetting {
   @override
 
   /// アカウント情報
-  Account get account;
+// https://github.com/rrousselGit/freezed/issues/488
+// ignore: invalid_annotation_target
+  @JsonKey(readValue: _readAcct)
+  Acct get acct;
   @override
+
+  /// Renoteを表示するかどうか
   bool get renoteDisplay;
   @override
   @JsonKey(ignore: true)

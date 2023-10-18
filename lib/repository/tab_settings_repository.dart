@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/tab_setting.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TabSettingsRepository extends ChangeNotifier {
@@ -29,16 +28,6 @@ class TabSettingsRepository extends ChangeNotifier {
     }
   }
 
-  void updateAccount(Account account, IResponse response) {
-    for (var i = 0; i < _tabSettings.length; i++) {
-      if (_tabSettings[i].account == account) {
-        _tabSettings[i] = _tabSettings[i]
-            .copyWith(account: _tabSettings[i].account.copyWith(i: response));
-      }
-    }
-    notifyListeners();
-  }
-
   Future<void> save(List<TabSetting> tabSettings) async {
     _tabSettings = tabSettings.toList();
     final prefs = await SharedPreferences.getInstance();
@@ -48,9 +37,7 @@ class TabSettingsRepository extends ChangeNotifier {
   }
 
   Future<void> removeAccount(Account account) async {
-    _tabSettings.removeWhere((element) =>
-        element.account.host == account.host &&
-        element.account.userId == account.userId);
+    _tabSettings.removeWhere((tabSetting) => tabSetting.acct == account.acct);
     await save(_tabSettings);
     notifyListeners();
   }

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
+import 'package:miria/model/acct.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -9,9 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 
 class CommonDrawer extends ConsumerWidget {
-  final Account initialOpenAccount;
+  final Acct initialOpenAcct;
 
-  const CommonDrawer({super.key, required this.initialOpenAccount});
+  const CommonDrawer({super.key, required this.initialOpenAcct});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,9 +25,7 @@ class CommonDrawer extends ConsumerWidget {
                 account: account,
                 child: ExpansionTile(
                     leading: AvatarIcon.fromIResponse(account.i),
-                    initiallyExpanded:
-                        account.userId == initialOpenAccount.userId &&
-                            account.host == initialOpenAccount.host,
+                    initiallyExpanded: account.acct == initialOpenAcct,
                     title: SimpleMfmText(account.i.name ?? account.i.username,
                         style: Theme.of(context).textTheme.titleMedium),
                     subtitle: Text(

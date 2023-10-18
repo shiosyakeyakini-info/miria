@@ -165,7 +165,7 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_AccountSettings implements _AccountSettings {
+class _$_AccountSettings extends _AccountSettings {
   const _$_AccountSettings(
       {required this.userId,
       required this.host,
@@ -173,7 +173,8 @@ class _$_AccountSettings implements _AccountSettings {
       this.defaultNoteVisibility = NoteVisibility.public,
       this.defaultIsLocalOnly = false,
       this.defaultReactionAcceptance = null})
-      : _reactions = reactions;
+      : _reactions = reactions,
+        super._();
 
   factory _$_AccountSettings.fromJson(Map<String, dynamic> json) =>
       _$$_AccountSettingsFromJson(json);
@@ -249,7 +250,7 @@ class _$_AccountSettings implements _AccountSettings {
   }
 }
 
-abstract class _AccountSettings implements AccountSettings {
+abstract class _AccountSettings extends AccountSettings {
   const factory _AccountSettings(
           {required final String userId,
           required final String host,
@@ -258,6 +259,7 @@ abstract class _AccountSettings implements AccountSettings {
           final bool defaultIsLocalOnly,
           final ReactionAcceptance? defaultReactionAcceptance}) =
       _$_AccountSettings;
+  const _AccountSettings._() : super._();
 
   factory _AccountSettings.fromJson(Map<String, dynamic> json) =
       _$_AccountSettings.fromJson;

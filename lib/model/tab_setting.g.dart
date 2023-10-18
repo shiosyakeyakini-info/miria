@@ -18,7 +18,7 @@ _$_TabSetting _$$_TabSettingFromJson(Map<String, dynamic> json) =>
       isIncludeReplies: json['isIncludeReplies'] as bool? ?? true,
       isMediaOnly: json['isMediaOnly'] as bool? ?? false,
       name: json['name'] as String,
-      account: Account.fromJson(json['account'] as Map<String, dynamic>),
+      acct: Acct.fromJson(_readAcct(json, 'acct') as Map<String, dynamic>),
       renoteDisplay: json['renoteDisplay'] as bool? ?? true,
     );
 
@@ -34,7 +34,7 @@ Map<String, dynamic> _$$_TabSettingToJson(_$_TabSetting instance) =>
       'isIncludeReplies': instance.isIncludeReplies,
       'isMediaOnly': instance.isMediaOnly,
       'name': instance.name,
-      'account': instance.account.toJson(),
+      'acct': instance.acct.toJson(),
       'renoteDisplay': instance.renoteDisplay,
     };
 

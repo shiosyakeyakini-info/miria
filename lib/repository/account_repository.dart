@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/acct.dart';
 import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
@@ -54,13 +55,13 @@ class AccountRepository extends ChangeNotifier {
     }
   }
 
-  Future<void> loadFromSourceIfNeed(Account account) async {
-    final index = _account.indexOf(account);
+  Future<void> loadFromSourceIfNeed(Acct acct) async {
+    final index =
+        _account.map((account) => account.acct).toList().indexOf(acct);
     if (index == -1) return;
     if (accountDataValidated.isNotEmpty && accountDataValidated[index]) return;
     final i = await reader(misskeyProvider(_account[index])).i.i();
     _account[index] = _account[index].copyWith(i: i);
-    tabSettingsRepository.updateAccount(account, i);
 
     accountDataValidated[index] = true;
     notifyListeners();
@@ -75,7 +76,6 @@ class AccountRepository extends ChangeNotifier {
         ]);
     _account[_account.indexOf(account)] =
         _account[_account.indexOf(account)].copyWith(i: i);
-    tabSettingsRepository.updateAccount(account, i);
     notifyListeners();
   }
 
@@ -84,7 +84,6 @@ class AccountRepository extends ChangeNotifier {
         _account[_account.indexOf(account)].i.copyWith(unreadAnnouncements: []);
     _account[_account.indexOf(account)] =
         _account[_account.indexOf(account)].copyWith(i: i);
-    tabSettingsRepository.updateAccount(account, i);
     notifyListeners();
   }
 
@@ -94,20 +93,23 @@ class AccountRepository extends ChangeNotifier {
       final account = _account.first;
       await tabSettingsRepository.save([
         TabSetting(
-            icon: TabIcon(codePoint: Icons.home.codePoint),
-            tabType: TabType.homeTimeline,
-            name: "ホームタイムライン",
-            account: account),
+          icon: TabIcon(codePoint: Icons.home.codePoint),
+          tabType: TabType.homeTimeline,
+          name: "ホームタイムライン",
+          acct: account.acct,
+        ),
         TabSetting(
-            icon: TabIcon(codePoint: Icons.public.codePoint),
-            tabType: TabType.localTimeline,
-            name: "ローカルタイムライン",
-            account: account),
+          icon: TabIcon(codePoint: Icons.public.codePoint),
+          tabType: TabType.localTimeline,
+          name: "ローカルタイムライン",
+          acct: account.acct,
+        ),
         TabSetting(
-            icon: TabIcon(codePoint: Icons.rocket_launch.codePoint),
-            tabType: TabType.globalTimeline,
-            name: "グローバルタイムライン",
-            account: account),
+          icon: TabIcon(codePoint: Icons.rocket_launch.codePoint),
+          tabType: TabType.globalTimeline,
+          name: "グローバルタイムライン",
+          acct: account.acct,
+        ),
       ]);
     }
   }
