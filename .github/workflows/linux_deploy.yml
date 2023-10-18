@@ -43,6 +43,24 @@ jobs:
       - name: Flutter Build
         run:  flutter build linux --release
 
+      - name: Setup Packaging AppImage
+        run:  |
+          sudo apt install -y locate libfuse2
+          wget -O appimagetool "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+          chmod +x appimagetool
+          sudo mv appimagetool /usr/local/bin/
+          flutter pub global activate flutter_distributor
+
+      - name: Packaging AppImage
+        run:  |
+          flutter_distributor package --platform linux --targets appimage --skip-clean
+          mv ./dist/$BUMP_VERSION/miria-$BUMP_VERSION-linux.AppImage ./dist/$BUMP_VERSION/miria-$BUMP_VERSION-amd64.AppImage
+
+      - name: Upload artifact to release (AppImage)
+        env:  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:  gh release upload v$VERSION ./dist/$BUMP_VERSION/miria-$BUMP_VERSION-amd64.AppImage
+  
       - name: Compress App
         run:  |
           cd build/linux/x64/release/bundle

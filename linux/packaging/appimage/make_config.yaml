@@ -1,0 +1,12 @@
+display_name: Miria
+icon: assets/images/icon.png
+keywords:
+  - Misskey
+  - みすきー
+  - Miria
+  - みりあ
+categories:
+  - Network
+include: []
+startup_notify: true
+generic_name: Misskey Client Application
