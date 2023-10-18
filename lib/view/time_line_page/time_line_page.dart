@@ -250,6 +250,18 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       },
                       icon: const Icon(Icons.info_outline),
                     )
+                  else if (currentTabSetting.tabType == TabType.userList)
+                    IconButton(
+                      icon: const Icon(Icons.info_outline),
+                      onPressed: () {
+                        context.pushRoute(
+                          UsersListDetailRoute(
+                            account: currentTabSetting.account,
+                            listId: currentTabSetting.listId!,
+                          ),
+                        );
+                      },
+                    )
                   else if ([
                     TabType.hybridTimeline,
                     TabType.localTimeline,
@@ -279,7 +291,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                               .timelineProvider(currentTabSetting),
                         )
                         .reconnect(),
-                    icon: const Icon(Icons.refresh),
+                    icon:
+                        socketTimeline != null && socketTimeline.isReconnecting
+                            ? CircularProgressIndicator()
+                            : const Icon(Icons.refresh),
                   )
                 ],
               ),

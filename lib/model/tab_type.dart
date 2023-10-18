@@ -8,6 +8,7 @@ enum TabType {
   homeTimeline("ホームタイムライン"),
   globalTimeline("グローバルタイムライン"),
   hybridTimeline("ソーシャルタイムライン"),
+  roleTimeline("ロールタイムライン"),
   channel("チャンネル"),
   userList("リスト"),
   antenna("アンテナ"),
@@ -27,6 +28,8 @@ enum TabType {
         return globalTimeLineProvider(setting);
       case TabType.hybridTimeline:
         return hybridTimeLineProvider(setting); //FIXME
+      case TabType.roleTimeline:
+        return roleTimelineProvider(setting);
       case TabType.channel:
         return channelTimelineProvider(setting);
       case TabType.userList:

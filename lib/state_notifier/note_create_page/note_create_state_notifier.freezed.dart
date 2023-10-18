@@ -40,6 +40,8 @@ mixin _$NoteCreate {
   int? get voteDuration => throw _privateConstructorUsedError;
   VoteExpireDurationType get voteDurationType =>
       throw _privateConstructorUsedError;
+  NoteCreationMode? get noteCreationMode => throw _privateConstructorUsedError;
+  String? get noteId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NoteCreateCopyWith<NoteCreate> get copyWith =>
@@ -74,7 +76,9 @@ abstract class $NoteCreateCopyWith<$Res> {
       bool isVoteMultiple,
       DateTime? voteDate,
       int? voteDuration,
-      VoteExpireDurationType voteDurationType});
+      VoteExpireDurationType voteDurationType,
+      NoteCreationMode? noteCreationMode,
+      String? noteId});
 
   $AccountCopyWith<$Res> get account;
   $NoteCreateChannelCopyWith<$Res>? get channel;
@@ -117,6 +121,8 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? voteDate = freezed,
     Object? voteDuration = freezed,
     Object? voteDurationType = null,
+    Object? noteCreationMode = freezed,
+    Object? noteId = freezed,
   }) {
     return _then(_value.copyWith(
       account: null == account
@@ -207,6 +213,14 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.voteDurationType
           : voteDurationType // ignore: cast_nullable_to_non_nullable
               as VoteExpireDurationType,
+      noteCreationMode: freezed == noteCreationMode
+          ? _value.noteCreationMode
+          : noteCreationMode // ignore: cast_nullable_to_non_nullable
+              as NoteCreationMode?,
+      noteId: freezed == noteId
+          ? _value.noteId
+          : noteId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -285,7 +299,9 @@ abstract class _$$_NoteCreateCopyWith<$Res>
       bool isVoteMultiple,
       DateTime? voteDate,
       int? voteDuration,
-      VoteExpireDurationType voteDurationType});
+      VoteExpireDurationType voteDurationType,
+      NoteCreationMode? noteCreationMode,
+      String? noteId});
 
   @override
   $AccountCopyWith<$Res> get account;
@@ -330,6 +346,8 @@ class __$$_NoteCreateCopyWithImpl<$Res>
     Object? voteDate = freezed,
     Object? voteDuration = freezed,
     Object? voteDurationType = null,
+    Object? noteCreationMode = freezed,
+    Object? noteId = freezed,
   }) {
     return _then(_$_NoteCreate(
       account: null == account
@@ -420,6 +438,14 @@ class __$$_NoteCreateCopyWithImpl<$Res>
           ? _value.voteDurationType
           : voteDurationType // ignore: cast_nullable_to_non_nullable
               as VoteExpireDurationType,
+      noteCreationMode: freezed == noteCreationMode
+          ? _value.noteCreationMode
+          : noteCreationMode // ignore: cast_nullable_to_non_nullable
+              as NoteCreationMode?,
+      noteId: freezed == noteId
+          ? _value.noteId
+          : noteId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -449,7 +475,9 @@ class _$_NoteCreate implements _NoteCreate {
       this.isVoteMultiple = false,
       this.voteDate,
       this.voteDuration,
-      this.voteDurationType = VoteExpireDurationType.seconds})
+      this.voteDurationType = VoteExpireDurationType.seconds,
+      this.noteCreationMode,
+      this.noteId})
       : _replyTo = replyTo,
         _files = files,
         _voteContent = voteContent;
@@ -528,10 +556,14 @@ class _$_NoteCreate implements _NoteCreate {
   @override
   @JsonKey()
   final VoteExpireDurationType voteDurationType;
+  @override
+  final NoteCreationMode? noteCreationMode;
+  @override
+  final String? noteId;
 
   @override
   String toString() {
-    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType)';
+    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
   }
 
   @override
@@ -572,7 +604,10 @@ class _$_NoteCreate implements _NoteCreate {
             (identical(other.voteDuration, voteDuration) ||
                 other.voteDuration == voteDuration) &&
             (identical(other.voteDurationType, voteDurationType) ||
-                other.voteDurationType == voteDurationType));
+                other.voteDurationType == voteDurationType) &&
+            (identical(other.noteCreationMode, noteCreationMode) ||
+                other.noteCreationMode == noteCreationMode) &&
+            (identical(other.noteId, noteId) || other.noteId == noteId));
   }
 
   @override
@@ -599,7 +634,9 @@ class _$_NoteCreate implements _NoteCreate {
         isVoteMultiple,
         voteDate,
         voteDuration,
-        voteDurationType
+        voteDurationType,
+        noteCreationMode,
+        noteId
       ]);
 
   @JsonKey(ignore: true)
@@ -632,7 +669,9 @@ abstract class _NoteCreate implements NoteCreate {
       final bool isVoteMultiple,
       final DateTime? voteDate,
       final int? voteDuration,
-      final VoteExpireDurationType voteDurationType}) = _$_NoteCreate;
+      final VoteExpireDurationType voteDurationType,
+      final NoteCreationMode? noteCreationMode,
+      final String? noteId}) = _$_NoteCreate;
 
   @override
   Account get account;
@@ -678,6 +717,10 @@ abstract class _NoteCreate implements NoteCreate {
   int? get voteDuration;
   @override
   VoteExpireDurationType get voteDurationType;
+  @override
+  NoteCreationMode? get noteCreationMode;
+  @override
+  String? get noteId;
   @override
   @JsonKey(ignore: true)
   _$$_NoteCreateCopyWith<_$_NoteCreate> get copyWith =>

@@ -22,21 +22,22 @@ class FileSettingsDialog extends ConsumerStatefulWidget {
 }
 
 class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
-  final fileNameController = TextEditingController();
+  late final TextEditingController fileNameController;
+  late final TextEditingController captionController;
   bool isNsfw = false;
-  final captionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    fileNameController.text = widget.file.fileName;
-    captionController.text = widget.file.caption;
+    fileNameController = TextEditingController(text: widget.file.fileName);
+    captionController = TextEditingController(text: widget.file.caption);
     isNsfw = widget.file.isNsfw;
   }
 
   @override
   void dispose() {
+    fileNameController.dispose();
     captionController.dispose();
     super.dispose();
   }

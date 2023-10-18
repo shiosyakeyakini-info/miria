@@ -106,7 +106,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           fontFamilyFallback: ["Segoe UI Emoji", "Noto Color Emoji", "Meiryo"]);
     }
     if (defaultTargetPlatform == TargetPlatform.android ||
-       defaultTargetPlatform == TargetPlatform.linux) {
+        defaultTargetPlatform == TargetPlatform.linux) {
       return const TextStyle(
           fontFamily: "Noto Color Emoji",
           fontFamilyFallback: ["Noto Color Emoji", "Noto Sans JP"]);
@@ -222,8 +222,19 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         suffixIconColor: theme.primary,
         isDense: true,
       ),
-      checkboxTheme:
-          CheckboxThemeData(fillColor: MaterialStatePropertyAll(theme.primary)),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return null;
+            }
+            if (states.contains(MaterialState.selected)) {
+              return theme.primary;
+            }
+            return null;
+          },
+        ),
+      ),
       expansionTileTheme: ExpansionTileThemeData(iconColor: theme.primary),
       toggleButtonsTheme: ToggleButtonsThemeData(
         color: theme.primary,

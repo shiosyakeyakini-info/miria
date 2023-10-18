@@ -88,6 +88,7 @@ class AccountRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  //一つ目のアカウントが追加されたときに自動で追加されるタブ
   Future<void> _addIfTabSettingNothing() async {
     if (_account.length == 1) {
       final account = _account.first;
@@ -150,7 +151,8 @@ class AccountRepository extends ChangeNotifier {
 
     final version = nodeInfoResult["software"]["version"];
 
-    final endpoints = await Misskey(host: server, token: null).endpoints();
+    final endpoints =
+        await reader(misskeyProvider(Account.demoAccount(server))).endpoints();
     if (!endpoints.contains("emojis")) {
       throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
     }

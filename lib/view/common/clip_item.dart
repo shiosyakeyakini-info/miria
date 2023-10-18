@@ -7,7 +7,13 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class ClipItem extends StatelessWidget {
   final Clip clip;
-  const ClipItem({super.key, required this.clip});
+  final Widget? trailing;
+
+  const ClipItem({
+    super.key,
+    required this.clip,
+    this.trailing,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,7 @@ class ClipItem extends StatelessWidget {
           ClipDetailRoute(account: AccountScope.of(context), id: clip.id)),
       title: Text(clip.name ?? ""),
       subtitle: SimpleMfmText(clip.description ?? ""),
+      trailing: trailing,
     );
   }
 }

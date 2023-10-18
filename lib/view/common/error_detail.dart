@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -26,6 +29,12 @@ class ErrorDetail extends StatelessWidget {
         return Text("[${response.statusCode}] ${response.data}");
       }
     }
-    return Text("不明なエラー：$error/*\n$stackTrace*/");
+    if (e is WebSocketException) {
+      return Text("通信に失敗しました。\n$stackTrace");
+    }
+    if (e is TimeoutException) {
+      return const Text("サーバーが応答してくれませんでした。");
+    }
+    return Text("不明なエラー：$error\n$stackTrace");
   }
 }

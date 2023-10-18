@@ -2,7 +2,7 @@ name: miria
 description: Miria is Misskey Client for Mobile App.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.3+63
+version: 1.0.7+73
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -60,6 +60,7 @@ dependencies:
   matrix2d: ^1.0.4
   twemoji_v2: ^0.5.3
   flutter_secure_storage_linux: ^1.2.0
+  flutter_image_compress: ^2.0.4
 
 dependency_overrides:
   image_editor:

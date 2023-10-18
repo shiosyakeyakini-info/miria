@@ -1,20 +1,22 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:file/file.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mfm_parser/mfm_parser.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
+import 'package:miria/repository/note_repository.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
 import 'package:miria/view/note_create_page/file_settings_dialog.dart';
+import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -68,6 +70,8 @@ class NoteCreate with _$NoteCreate {
     int? voteDuration,
     @Default(VoteExpireDurationType.seconds)
     VoteExpireDurationType voteDurationType,
+    NoteCreationMode? noteCreationMode,
+    String? noteId,
   }) = _NoteCreate;
 }
 
@@ -83,6 +87,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   FileSystem fileSystem;
   Dio dio;
   Misskey misskey;
+  NoteRepository noteRepository;
   StateNotifier<(Object? error, BuildContext? context)> errorNotifier;
 
   NoteCreateNotifier(
@@ -91,6 +96,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     this.dio,
     this.misskey,
     this.errorNotifier,
+    this.noteRepository,
   );
 
   /// 初期化する
@@ -98,9 +104,10 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     CommunityChannel? channel,
     String? initialText,
     List<String>? initialMediaFiles,
-    Note? deletedNote,
+    Note? note,
     Note? renote,
     Note? reply,
+    NoteCreationMode? noteCreationMode,
   ) async {
     var resultState = state;
 
@@ -121,84 +128,84 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       resultState = resultState.copyWith(text: initialText);
     }
     if (initialMediaFiles != null && initialMediaFiles.isNotEmpty == true) {
-      resultState = resultState.copyWith(files: [
-        for (final media in initialMediaFiles)
-          if (media.toLowerCase().endsWith("jpg") ||
-              media.toLowerCase().endsWith("png") ||
-              media.toLowerCase().endsWith("gif") ||
-              media.toLowerCase().endsWith("webp"))
-            ImageFile(
-              data: await fileSystem.file(media).readAsBytes(),
-              fileName: media.substring(
-                  media.lastIndexOf(Platform.pathSeparator) + 1, media.length),
-              isNsfw: false,
-              caption: "",
-            )
-          else
-            UnknownFile(
-              data: await fileSystem.file(media).readAsBytes(),
-              fileName: media.substring(
-                media.lastIndexOf(Platform.pathSeparator) + 1,
-                media.length,
-              ),
-              isNsfw: false,
-              caption: "",
-            )
-      ]);
+      resultState = resultState.copyWith(
+        files: await Future.wait(
+          initialMediaFiles.map((media) async {
+            final file = fileSystem.file(media);
+            final contents = await file.readAsBytes();
+            final fileName = file.basename;
+            final extension = fileName.split(".").last.toLowerCase();
+            if (["jpg", "png", "gif", "webp"].contains(extension)) {
+              return ImageFile(
+                data: contents,
+                fileName: fileName,
+              );
+            } else {
+              return UnknownFile(
+                data: contents,
+                fileName: fileName,
+              );
+            }
+          }),
+        ),
+      );
     }
 
     // 削除されたノートの反映
-    if (deletedNote != null) {
+    if (note != null) {
       final files = <MisskeyPostFile>[];
-      for (final file in deletedNote.files) {
+      for (final file in note.files) {
         if (file.type.startsWith("image")) {
           final response = await dio.get(file.url,
               options: Options(responseType: ResponseType.bytes));
-          files.add(ImageFileAlreadyPostedFile(
+          files.add(
+            ImageFileAlreadyPostedFile(
               fileName: file.name,
               data: response.data,
               id: file.id,
               isNsfw: file.isSensitive,
-              caption: file.comment ?? "",
-              isEdited: false));
+              caption: file.comment,
+            ),
+          );
         } else {
-          files.add(UnknownAlreadyPostedFile(
-            url: file.url,
-            id: file.id,
-            fileName: file.name,
-            isNsfw: file.isSensitive,
-            caption: file.comment ?? "",
-            isEdited: false,
-          ));
+          files.add(
+            UnknownAlreadyPostedFile(
+              url: file.url,
+              id: file.id,
+              fileName: file.name,
+              isNsfw: file.isSensitive,
+              caption: file.comment,
+            ),
+          );
         }
       }
-      final deletedNoteChannel = deletedNote.channel;
+      final deletedNoteChannel = note.channel;
 
       resultState = resultState.copyWith(
-        noteVisibility: deletedNote.visibility,
-        localOnly: deletedNote.localOnly,
+        noteVisibility: note.visibility,
+        localOnly: note.localOnly,
         files: files,
         channel: deletedNoteChannel != null
             ? NoteCreateChannel(
                 id: deletedNoteChannel.id, name: deletedNoteChannel.name)
             : null,
-        cwText: deletedNote.cw ?? "",
-        isCw: deletedNote.cw?.isNotEmpty == true,
-        text: deletedNote.text ?? "",
-        reactionAcceptance: deletedNote.reactionAcceptance,
+        cwText: note.cw ?? "",
+        isCw: note.cw?.isNotEmpty == true,
+        text: note.text ?? "",
+        reactionAcceptance: note.reactionAcceptance,
         replyTo: [
-          for (final userId in deletedNote.mentions)
+          for (final userId in note.mentions)
             (await misskey.users.show(UsersShowRequest(userId: userId)))
                 .toUser()
         ],
-        isVote: deletedNote.poll != null,
-        isVoteMultiple: deletedNote.poll?.multiple ?? false,
+        isVote: note.poll != null,
+        isVoteMultiple: note.poll?.multiple ?? false,
         voteExpireType: VoteExpireType.date,
-        voteContentCount:
-            deletedNote.poll?.choices.map((e) => e.text).length ?? 2,
-        voteContent:
-            deletedNote.poll?.choices.map((e) => e.text).toList() ?? [],
-        voteDate: deletedNote.poll?.expiresAt,
+        voteContentCount: note.poll?.choices.map((e) => e.text).length ?? 2,
+        voteContent: note.poll?.choices.map((e) => e.text).toList() ?? [],
+        voteDate: note.poll?.expiresAt,
+        noteCreationMode: noteCreationMode,
+        noteId: note.id,
       );
       state = resultState;
       return;
@@ -277,6 +284,20 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       for (final file in state.files) {
         switch (file) {
           case ImageFile():
+            final fileName = file.fileName.toLowerCase();
+            var imageData = file.data;
+            try {
+              if (fileName.endsWith("jpg") ||
+                  fileName.endsWith("jpeg") ||
+                  fileName.endsWith("tiff") ||
+                  fileName.endsWith("tif")) {
+                imageData =
+                    await FlutterImageCompress.compressWithList(file.data);
+              }
+            } catch (e) {
+              print("failed to compress file");
+            }
+
             final response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
@@ -284,7 +305,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
                 isSensitive: file.isNsfw,
                 comment: file.caption,
               ),
-              file.data,
+              imageData,
             );
             fileIds.add(response.id);
 
@@ -390,19 +411,30 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               ? voteDuration
               : null);
 
-      await misskey.notes.create(NotesCreateRequest(
-        visibility: state.noteVisibility,
-        text: postText,
-        cw: state.isCw ? state.cwText : null,
-        localOnly: state.localOnly,
-        replyId: state.reply?.id,
-        renoteId: state.renote?.id,
-        channelId: state.channel?.id,
-        fileIds: fileIds.isEmpty ? null : fileIds,
-        visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
-        reactionAcceptance: state.reactionAcceptance,
-        poll: state.isVote ? poll : null,
-      ));
+      if (state.noteCreationMode == NoteCreationMode.update) {
+        await misskey.notes.update(NotesUpdateRequest(
+          noteId: state.noteId!,
+          text: postText ?? "",
+          cw: state.isCw ? state.cwText : null,
+        ));
+        noteRepository.registerNote(noteRepository.notes[state.noteId!]!
+            .copyWith(
+                text: postText ?? "", cw: state.isCw ? state.cwText : null));
+      } else {
+        await misskey.notes.create(NotesCreateRequest(
+          visibility: state.noteVisibility,
+          text: postText,
+          cw: state.isCw ? state.cwText : null,
+          localOnly: state.localOnly,
+          replyId: state.reply?.id,
+          renoteId: state.renote?.id,
+          channelId: state.channel?.id,
+          fileIds: fileIds.isEmpty ? null : fileIds,
+          visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
+          reactionAcceptance: state.reactionAcceptance,
+          poll: state.isVote ? poll : null,
+        ));
+      }
       if (!mounted) return;
       state = state.copyWith(isNoteSending: NoteSendStatus.finished);
     } catch (e) {
@@ -418,53 +450,75 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     if (result == DriveModalSheetReturnValue.drive) {
       if (!mounted) return;
-      final result = await showDialog<DriveFile?>(
-          context: context,
-          builder: (context) => DriveFileSelectDialog(account: state.account));
+      final result = await showDialog<List<DriveFile>?>(
+        context: context,
+        builder: (context) => DriveFileSelectDialog(
+          account: state.account,
+          allowMultiple: true,
+        ),
+      );
       if (result == null) return;
-      if (result.type.startsWith("image")) {
-        final fileContentResponse = await dio.get(result.url,
-            options: Options(responseType: ResponseType.bytes));
-
-        state = state.copyWith(files: [
-          ...state.files,
-          ImageFileAlreadyPostedFile(
-            data: fileContentResponse.data,
-            fileName: result.name,
-            id: result.id,
-            isEdited: false,
-            isNsfw: result.isSensitive,
-            caption: result.comment ?? "",
-          )
-        ]);
-      } else {
-        state = state.copyWith(files: [
-          ...state.files,
-          UnknownAlreadyPostedFile(
-              url: result.url,
-              id: result.id,
-              isEdited: false,
-              fileName: result.name,
-              isNsfw: result.isSensitive,
-              caption: result.comment ?? "")
-        ]);
-      }
-    } else if (result == DriveModalSheetReturnValue.upload) {
-      final result = await FilePicker.platform.pickFiles(type: FileType.image);
-      if (result == null) return;
-
-      final path = result.files.single.path;
-      if (path == null) return;
+      final files = await Future.wait(
+        result.map((file) async {
+          if (file.type.startsWith("image")) {
+            final fileContentResponse = await dio.get<Uint8List>(
+              file.url,
+              options: Options(responseType: ResponseType.bytes),
+            );
+            return ImageFileAlreadyPostedFile(
+              data: fileContentResponse.data!,
+              id: file.id,
+              fileName: file.name,
+              isNsfw: file.isSensitive,
+              caption: file.comment,
+            );
+          }
+          return UnknownAlreadyPostedFile(
+            url: file.url,
+            id: file.id,
+            fileName: file.name,
+            isNsfw: file.isSensitive,
+            caption: file.comment,
+          );
+        }),
+      );
       if (!mounted) return;
-      state = state.copyWith(files: [
-        ...state.files,
-        ImageFile(
-            data: await fileSystem.file(path).readAsBytes(),
-            fileName: path.substring(
-                path.lastIndexOf(Platform.pathSeparator) + 1, path.length),
-            isNsfw: false,
-            caption: "")
-      ]);
+      state = state.copyWith(
+        files: [
+          ...state.files,
+          ...files,
+        ],
+      );
+    } else if (result == DriveModalSheetReturnValue.upload) {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: true,
+      );
+      if (result == null || result.files.isEmpty) return;
+
+      final fsFiles = result.files.map((file) {
+        final path = file.path;
+        if (path != null) {
+          return fileSystem.file(path);
+        }
+        return null;
+      }).nonNulls;
+      final files = await Future.wait(
+        fsFiles.map(
+          (file) async => ImageFile(
+            data: await file.readAsBytes(),
+            fileName: file.basename,
+          ),
+        ),
+      );
+
+      if (!mounted) return;
+      state = state.copyWith(
+        files: [
+          ...state.files,
+          ...files,
+        ],
+      );
     }
   }
 

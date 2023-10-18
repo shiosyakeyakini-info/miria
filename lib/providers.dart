@@ -17,6 +17,7 @@ import 'package:miria/repository/main_stream_repository.dart';
 import 'package:miria/repository/global_time_line_repository.dart';
 import 'package:miria/repository/home_time_line_repository.dart';
 import 'package:miria/repository/local_time_line_repository.dart';
+import 'package:miria/repository/role_timeline_repository.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:miria/repository/time_line_repository.dart';
@@ -29,8 +30,11 @@ import 'package:misskey_dart/misskey_dart.dart';
 final dioProvider = Provider((ref) => Dio());
 final fileSystemProvider =
     Provider<FileSystem>((ref) => const LocalFileSystem());
-final misskeyProvider = Provider.family<Misskey, Account>(
-    (ref, account) => Misskey(token: account.token, host: account.host));
+final misskeyProvider = Provider.family<Misskey, Account>((ref, account) =>
+    Misskey(
+        token: account.token,
+        host: account.host,
+        socketConnectionTimeout: const Duration(seconds: 20)));
 
 final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -71,6 +75,20 @@ final globalTimeLineProvider =
 final hybridTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
         (ref, tabSetting) => HybridTimelineRepository(
+              ref.read(misskeyProvider(tabSetting.account)),
+              tabSetting.account,
+              ref.read(notesProvider(tabSetting.account)),
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(generalSettingsRepositoryProvider),
+              tabSetting,
+              ref.read(mainStreamRepositoryProvider(tabSetting.account)),
+              ref.read(accountRepository),
+              ref.read(emojiRepositoryProvider(tabSetting.account)),
+            ));
+
+final roleTimelineProvider =
+    ChangeNotifierProvider.family<RoleTimelineRepository, TabSetting>(
+        (ref, tabSetting) => RoleTimelineRepository(
               ref.read(misskeyProvider(tabSetting.account)),
               tabSetting.account,
               ref.read(notesProvider(tabSetting.account)),
@@ -137,7 +155,8 @@ final favoriteProvider = ChangeNotifierProvider.autoDispose
         ref.read(misskeyProvider(account)), ref.read(notesProvider(account))));
 
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
-    (ref, account) => NoteRepository(ref.read(misskeyProvider(account))));
+    (ref, account) =>
+        NoteRepository(ref.read(misskeyProvider(account)), account));
 
 //TODO: アカウント毎である必要はない ホスト毎
 //TODO: のつもりだったけど、絵文字にロールが関係するようになるとアカウント毎になる
@@ -194,5 +213,6 @@ final noteCreateProvider = StateNotifierProvider.family
       ref.read(fileSystemProvider),
       ref.read(dioProvider),
       ref.read(misskeyProvider(account)),
-      ref.read(errorEventProvider.notifier)),
+      ref.read(errorEventProvider.notifier),
+      ref.read(notesProvider(account))),
 );

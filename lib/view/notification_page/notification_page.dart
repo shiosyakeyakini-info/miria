@@ -341,6 +341,23 @@ class NotificationItem extends ConsumerWidget {
             ],
           ),
         );
+      case NoteNotification():
+        return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (notification.note?.user != null)
+                SimpleMfmText(
+                  "${notification.note?.user.name ?? notification.note?.user.username}さんがノートしはったで",
+                  emojis: notification.note?.user.emojis ?? {},
+                ),
+              if (notification.note != null)
+                misskey_note.MisskeyNote(note: notification.note!)
+            ],
+          ),
+        );
     }
   }
 

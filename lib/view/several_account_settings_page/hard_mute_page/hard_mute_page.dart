@@ -64,7 +64,7 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ハードミュート")),
+      appBar: AppBar(title: const Text("ワードミュート")),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -76,12 +76,6 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
             complete: (context, data) {
               return Column(
                 children: [
-                  const Card(
-                      child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                        "指定した条件のノートをタイムラインに追加しないようにします。追加されなかったノートは、条件を変更しても除外されたままになります。反映されるまでに時間がかかる場合があります。"),
-                  )),
                   const Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
@@ -92,7 +86,7 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
                     autofocus: true,
                   ),
                   Text(
-                    "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。",
+                    "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。\nただし、Misskey Webと正規表現の仕様が異なるため、Miriaで動作する正規表現がMisskey Webで動作しなかったり、その逆が発生することがあります。",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   ElevatedButton.icon(

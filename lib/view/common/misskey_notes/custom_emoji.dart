@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
@@ -41,18 +42,20 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   }
 
   /// カスタム絵文字のURLを解決する
-  Uri resolveCustomEmojiUrl(Uri uri) {
-    //　特例としてにじみすのみ、URLの変換をかける
-    if (uri.host == "media.nijimiss.app") {
-      return Uri(
-        scheme: "https",
-        host: "nijimiss.moe",
-        pathSegments: ["proxy", "image.webp"],
-        queryParameters: {"url": Uri.encodeFull(uri.toString()), "emoji": "1"},
-      );
-    } else {
-      return uri;
-    }
+  Uri resolveFallbackCustomEmojiUrl(CustomEmojiData emojiData) {
+    return Uri(
+      scheme: "https",
+      host: emojiData.isCurrentServer
+          ? AccountScope.of(context).host
+          : emojiData.hostedName
+              .replaceAll(RegExp(r'^\:(.+?)@'), "")
+              .replaceAll(":", ""),
+      pathSegments: ["proxy", "image.webp"],
+      queryParameters: {
+        "url": Uri.encodeFull(emojiData.url.toString()),
+        "emoji": "1"
+      },
+    );
   }
 
   @override
@@ -75,11 +78,18 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
           isAttachTooltip: widget.isAttachTooltip,
           message: emojiData.hostedName,
           child: NetworkImageView(
-            url: resolveCustomEmojiUrl(emojiData.url).toString(),
+            url: emojiData.url.toString(),
             type: ImageType.customEmoji,
-            errorBuilder: (context, e, s) => Text(
-              emojiData.hostedName,
-              style: style,
+            errorBuilder: (context, e, s) => NetworkImageView(
+              url: resolveFallbackCustomEmojiUrl(emojiData).toString(),
+              type: ImageType.customEmoji,
+              loadingBuilder: (context, widget, chunk) => SizedBox(
+                height: scopedFontSize,
+                width: scopedFontSize,
+              ),
+              height: scopedFontSize,
+              errorBuilder: (context, e, s) =>
+                  Text(emojiData.hostedName, style: style),
             ),
             loadingBuilder: (context, widget, chunk) => SizedBox(
               height: scopedFontSize,

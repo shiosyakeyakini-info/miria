@@ -64,13 +64,16 @@ class ExploreHighlightState extends ConsumerState<ExploreHighlight> {
                 ref.read(notesProvider(account)).registerAll(note);
                 return note.toList();
               },
-              nextFuture: (_, index) async {
+              nextFuture: (item, index) async {
                 final Iterable<Note> note;
                 if (isNote) {
                   note = await ref
                       .read(misskeyProvider(account))
                       .notes
-                      .featured(NotesFeaturedRequest(offset: index));
+                      .featured(NotesFeaturedRequest(
+                        offset: index,
+                        untilId: item.id,
+                      ));
                 } else {
                   note = await ref
                       .read(misskeyProvider(account))

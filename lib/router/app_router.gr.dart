@@ -96,7 +96,8 @@ abstract class _$AppRouter extends RootStackRouter {
           channel: args.channel,
           reply: args.reply,
           renote: args.renote,
-          deletedNote: args.deletedNote,
+          note: args.note,
+          noteCreationMode: args.noteCreationMode,
         ),
       );
     },
@@ -153,6 +154,16 @@ abstract class _$AppRouter extends RootStackRouter {
           file: args.file,
           onSubmit: args.onSubmit,
           key: args.key,
+        ),
+      );
+    },
+    AnnouncementRoute.name: (routeData) {
+      final args = routeData.argsAs<AnnouncementRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AnnouncementPage(
+          key: args.key,
+          account: args.account,
         ),
       );
     },
@@ -218,7 +229,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: UsersListTimelinePage(
           args.account,
-          args.listId,
+          args.list,
           key: args.key,
         ),
       );
@@ -230,6 +241,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: UsersListPage(
           args.account,
           key: args.key,
+        ),
+      );
+    },
+    UsersListDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListDetailPage(
+          key: args.key,
+          account: args.account,
+          listId: args.listId,
         ),
       );
     },
@@ -382,16 +404,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    AnnouncementRoute.name: (routeData) {
-      final args = routeData.argsAs<AnnouncementRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: AnnouncementPage(
           key: args.key,
           account: args.account,
         ),
@@ -668,7 +680,8 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     CommunityChannel? channel,
     Note? reply,
     Note? renote,
-    Note? deletedNote,
+    Note? note,
+    NoteCreationMode? noteCreationMode,
     List<PageRouteInfo>? children,
   }) : super(
           NoteCreateRoute.name,
@@ -680,7 +693,8 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
             channel: channel,
             reply: reply,
             renote: renote,
-            deletedNote: deletedNote,
+            note: note,
+            noteCreationMode: noteCreationMode,
           ),
           initialChildren: children,
         );
@@ -700,7 +714,8 @@ class NoteCreateRouteArgs {
     this.channel,
     this.reply,
     this.renote,
-    this.deletedNote,
+    this.note,
+    this.noteCreationMode,
   });
 
   final Key? key;
@@ -717,11 +732,13 @@ class NoteCreateRouteArgs {
 
   final Note? renote;
 
-  final Note? deletedNote;
+  final Note? note;
+
+  final NoteCreationMode? noteCreationMode;
 
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, channel: $channel, reply: $reply, renote: $renote, deletedNote: $deletedNote}';
+    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
   }
 }
 
@@ -945,6 +962,44 @@ class PhotoEditRouteArgs {
 }
 
 /// generated route for
+/// [AnnouncementPage]
+class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
+  AnnouncementRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AnnouncementRoute.name,
+          args: AnnouncementRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AnnouncementRoute';
+
+  static const PageInfo<AnnouncementRouteArgs> page =
+      PageInfo<AnnouncementRouteArgs>(name);
+}
+
+class AnnouncementRouteArgs {
+  const AnnouncementRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'AnnouncementRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
@@ -1155,14 +1210,14 @@ class ReactionDeckRouteArgs {
 class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
   UsersListTimelineRoute({
     required Account account,
-    required String listId,
+    required UsersList list,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UsersListTimelineRoute.name,
           args: UsersListTimelineRouteArgs(
             account: account,
-            listId: listId,
+            list: list,
             key: key,
           ),
           initialChildren: children,
@@ -1177,19 +1232,19 @@ class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
 class UsersListTimelineRouteArgs {
   const UsersListTimelineRouteArgs({
     required this.account,
-    required this.listId,
+    required this.list,
     this.key,
   });
 
   final Account account;
 
-  final String listId;
+  final UsersList list;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UsersListTimelineRouteArgs{account: $account, listId: $listId, key: $key}';
+    return 'UsersListTimelineRouteArgs{account: $account, list: $list, key: $key}';
   }
 }
 
@@ -1228,6 +1283,49 @@ class UsersListRouteArgs {
   @override
   String toString() {
     return 'UsersListRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UsersListDetailPage]
+class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
+  UsersListDetailRoute({
+    Key? key,
+    required Account account,
+    required String listId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListDetailRoute.name,
+          args: UsersListDetailRouteArgs(
+            key: key,
+            account: account,
+            listId: listId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListDetailRoute';
+
+  static const PageInfo<UsersListDetailRouteArgs> page =
+      PageInfo<UsersListDetailRouteArgs>(name);
+}
+
+class UsersListDetailRouteArgs {
+  const UsersListDetailRouteArgs({
+    this.key,
+    required this.account,
+    required this.listId,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final String listId;
+
+  @override
+  String toString() {
+    return 'UsersListDetailRouteArgs{key: $key, account: $account, listId: $listId}';
   }
 }
 
@@ -1760,43 +1858,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [AnnouncementPage]
-class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
-  AnnouncementRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          AnnouncementRoute.name,
-          args: AnnouncementRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'AnnouncementRoute';
-
-  static const PageInfo<AnnouncementRouteArgs> page =
-      PageInfo<AnnouncementRouteArgs>(name);
-}
-
-class AnnouncementRouteArgs {
-  const AnnouncementRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'AnnouncementRouteArgs{key: $key, account: $account}';
   }
 }

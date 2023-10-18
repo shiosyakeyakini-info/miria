@@ -79,6 +79,7 @@ class UserReaction extends ConsumerWidget {
                   child: CustomEmoji(
                     emojiData: MisskeyEmojiData.fromEmojiName(
                         emojiName: response.type,
+                        emojiInfo: response.note.reactionEmojis,
                         repository: ref.read(
                             emojiRepositoryProvider(AccountScope.of(context)))),
                     fontSizeRatio: 2,

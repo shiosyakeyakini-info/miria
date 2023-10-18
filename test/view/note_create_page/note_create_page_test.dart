@@ -48,7 +48,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel1ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel1.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -56,7 +56,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel1ExpectId)))));
+            (arg) => arg.channelId == TestData.channel1.id)))));
       });
 
       testWidgets("削除されたノートを直す場合で、そのノートがチャンネルのノートの場合、チャンネルのノートになること",
@@ -72,7 +72,7 @@ void main() {
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
-                  deletedNote: TestData.note1.copyWith(
+                  note: TestData.note1.copyWith(
                       channelId: TestData.channel1.id,
                       channel: NoteChannelInfo(
                           id: TestData.channel1.id,
@@ -80,7 +80,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel1ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel1.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -88,7 +88,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel1ExpectId)))));
+            (arg) => arg.channelId == TestData.channel1.id)))));
       });
 
       testWidgets("チャンネルのノートにリプライをする場合、そのノートもチャンネルのノートになること", (tester) async {
@@ -111,7 +111,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel1ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel1.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -119,7 +119,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel1ExpectId)))));
+            (arg) => arg.channelId == TestData.channel1.id)))));
       });
 
       testWidgets("チャンネルのノートに引用リノートをする場合、引数のチャンネル先が選択されること", (tester) async {
@@ -143,7 +143,7 @@ void main() {
             )));
         await tester.pumpAndSettle();
 
-        expect(find.text(TestData.channel2ExpectName), findsOneWidget);
+        expect(find.text(TestData.channel2.name), findsOneWidget);
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -151,7 +151,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
-            (arg) => arg.channelId == TestData.channel2ExpectId)))));
+            (arg) => arg.channelId == TestData.channel2.id)))));
       });
     });
 
@@ -198,7 +198,7 @@ void main() {
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
-                  deletedNote: TestData.note1
+                  note: TestData.note1
                       .copyWith(visibility: NoteVisibility.specified)),
             )));
         await tester.pumpAndSettle();
@@ -365,7 +365,7 @@ void main() {
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
-                  deletedNote: TestData.note1.copyWith(localOnly: true)),
+                  note: TestData.note1.copyWith(localOnly: true)),
             )));
         await tester.pumpAndSettle();
         await tester.tap(find.byIcon(Icons.send));
@@ -506,7 +506,7 @@ void main() {
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
-                  deletedNote: TestData.note1.copyWith(
+                  note: TestData.note1.copyWith(
                       reactionAcceptance: ReactionAcceptance.likeOnly)),
             )));
         await tester.pumpAndSettle();
@@ -602,7 +602,7 @@ void main() {
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
-                  deletedNote: TestData.note1.copyWith(cw: "えっちなやつ")),
+                  note: TestData.note1.copyWith(cw: "えっちなやつ")),
             )));
         await tester.pumpAndSettle();
 
@@ -681,8 +681,7 @@ void main() {
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
-                  initialAccount: TestData.account,
-                  deletedNote: TestData.note1),
+                  initialAccount: TestData.account, note: TestData.note1),
             )));
         await tester.pumpAndSettle();
 
@@ -752,7 +751,7 @@ void main() {
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
-                  deletedNote: TestData.note1.copyWith(
+                  note: TestData.note1.copyWith(
                       files: [TestData.drive1], fileIds: [TestData.drive1.id])),
             )));
         await tester.pumpAndSettle();
@@ -803,11 +802,15 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(const DriveFilesCreateRequest(
-                name: "test.png",
-                force: true,
-                comment: "",
-                isSensitive: false))),
+            argThat(
+              equals(
+                const DriveFilesCreateRequest(
+                  name: "test.png",
+                  force: true,
+                  isSensitive: false,
+                ),
+              ),
+            ),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryImage))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
@@ -857,11 +860,15 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(const DriveFilesCreateRequest(
-                name: "test.txt",
-                force: true,
-                comment: "",
-                isSensitive: false))),
+            argThat(
+              equals(
+                const DriveFilesCreateRequest(
+                  name: "test.txt",
+                  force: true,
+                  isSensitive: false,
+                ),
+              ),
+            ),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryData))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
@@ -887,7 +894,8 @@ void main() {
         expect(
             find.descendant(
                 of: find.byType(ReplyToArea),
-                matching: find.text(TestData.note3ExpectUserName,
+                matching: find.textContaining(
+                    TestData.note3AsAnotherUser.user.username,
                     findRichText: true)),
             findsOneWidget);
       });
@@ -943,7 +951,7 @@ void main() {
             child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
               initialAccount: TestData.account,
-              deletedNote: TestData.note1.copyWith(mentions: ["@ai"]),
+              note: TestData.note1.copyWith(mentions: ["@ai"]),
             ))));
         await tester.pumpAndSettle();
         expect(find.text("返信先："), findsOneWidget);
@@ -1015,7 +1023,7 @@ void main() {
             child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
               initialAccount: TestData.account,
-              deletedNote: TestData.note4AsVote.copyWith(
+              note: TestData.note4AsVote.copyWith(
                   poll: TestData.note4AsVote.poll?.copyWith(multiple: false)),
             ))));
         await tester.pumpAndSettle();
@@ -1045,7 +1053,7 @@ void main() {
             child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
               initialAccount: TestData.account,
-              deletedNote: TestData.note4AsVote.copyWith(
+              note: TestData.note4AsVote.copyWith(
                   poll: TestData.note4AsVote.poll?.copyWith(multiple: true)),
             ))));
         await tester.pumpAndSettle();
@@ -1147,11 +1155,15 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(const DriveFilesCreateRequest(
-                name: "test.txt",
-                force: true,
-                comment: "",
-                isSensitive: false))),
+            argThat(
+              equals(
+                const DriveFilesCreateRequest(
+                  name: "test.txt",
+                  force: true,
+                  isSensitive: false,
+                ),
+              ),
+            ),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryData))))));
         verify(mockNote.create(argThat(equals(predicate<NotesCreateRequest>(
@@ -1168,8 +1180,8 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1
           ]);
-          when(emojiRepository.searchEmojis(any)).thenAnswer(
-              (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(emojiRepository.defaultEmojis()).thenAnswer(
+              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
           final generalSettingsRepository = MockGeneralSettingsRepository();
           when(generalSettingsRepository.settings)
               .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
@@ -1213,8 +1225,8 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1
           ]);
-          when(emojiRepository.searchEmojis(any)).thenAnswer(
-              (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(emojiRepository.defaultEmojis()).thenAnswer(
+              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
 
           final generalSettingsRepository = MockGeneralSettingsRepository();
           when(generalSettingsRepository.settings)
@@ -1283,6 +1295,71 @@ void main() {
                   .text,
               ":${TestData.customEmoji1.baseName}:");
         });
+
+        testWidgets("MFMの関数名の入力補完が可能なこと", (tester) async {
+          await tester.pumpWidget(
+            ProviderScope(
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(r"$["));
+          await tester.pumpAndSettle();
+          expect(find.text("tada"), findsOneWidget);
+
+          await tester.enterText(find.byType(TextField).hitTestable(), r"$[r");
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("rainbow"));
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .textEditingController(find.byType(TextField).hitTestable())
+                .text,
+            r"$[rainbow ",
+          );
+        });
+
+        testWidgets("ハッシュタグの入力補完が可能なこと", (tester) async {
+          final mockMisskey = MockMisskey();
+          final mockHashtags = MockMisskeyHashtags();
+          when(mockMisskey.hashtags).thenReturn(mockHashtags);
+          when(mockHashtags.trend()).thenAnswer(
+            (_) async => [
+              const HashtagsTrendResponse(tag: "abc", chart: [], usersCount: 0),
+            ],
+          );
+          when(mockHashtags.search(any)).thenAnswer(
+            (_) async => ["def"],
+          );
+
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref, arg) => mockMisskey)
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.enterText(find.byType(TextField).hitTestable(), "#");
+          await tester.pumpAndSettle();
+          expect(find.text("abc"), findsOneWidget);
+
+          await tester.enterText(find.byType(TextField).hitTestable(), "#d");
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("def"));
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .textEditingController(find.byType(TextField).hitTestable())
+                .text,
+            "#def ",
+          );
+        });
       });
 
       group("プレビュー", () {
@@ -1336,7 +1413,7 @@ void main() {
               find.descendant(
                   of: find.byType(MfmPreview),
                   matching: find.textContaining(
-                      TestData.note3ExpectUserName.tight,
+                      TestData.note3AsAnotherUser.user.username.tight,
                       findRichText: true)),
               findsOneWidget);
         });
@@ -2065,6 +2142,8 @@ void main() {
 
         await tester.tap(find.text(TestData.drive1.name), warnIfMissed: false);
         await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.check));
+        await tester.pumpAndSettle();
 
         await tester.enterText(
             find.byType(TextField).hitTestable(), ":ai_yay:");
@@ -2143,11 +2222,15 @@ void main() {
                 .equals([TestData.drive1.id], arg.fileIds))))));
 
         verify(mockDriveFiles.createAsBinary(
-            argThat(equals(const DriveFilesCreateRequest(
-                name: "test.png",
-                force: true,
-                comment: "",
-                isSensitive: false))),
+            argThat(
+              equals(
+                const DriveFilesCreateRequest(
+                  name: "test.png",
+                  force: true,
+                  isSensitive: false,
+                ),
+              ),
+            ),
             argThat(equals(predicate<Uint8List>((value) =>
                 const DeepCollectionEquality().equals(value, binaryImage))))));
       });

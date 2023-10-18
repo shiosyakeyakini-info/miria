@@ -24,14 +24,15 @@ class AntennaTimelineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, TimelineReacted reaction)
         onUnreacted,
     required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
+    required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.antennaStream(
-      antennaId: tabSetting.antennaId!,
-      onNoteReceived: onReceived,
-      onReacted: onReacted,
-      onUnreacted: onUnreacted,
-      onVoted: onVoted,
-    );
+        antennaId: tabSetting.antennaId!,
+        onNoteReceived: onReceived,
+        onReacted: onReacted,
+        onUnreacted: onUnreacted,
+        onVoted: onVoted,
+        onUpdated: onUpdated);
   }
 
   @override

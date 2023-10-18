@@ -63,12 +63,14 @@ class UserPageState extends ConsumerState<UserPage> {
             bottom: TabBar(
               tabs: [
                 Tab(
-                    text:
-                        "アカウント情報${userInfo?.remoteResponse != null ? "（ローカル）" : ""}"),
+                  text:
+                      "アカウント情報${userInfo?.remoteResponse != null ? "（ローカル）" : ""}",
+                ),
                 if (isRemoteUser) const Tab(text: "アカウント情報（リモート）"),
                 Tab(
-                    text:
-                        "ノート${userInfo?.remoteResponse != null ? "（ローカル）" : ""}"),
+                  text:
+                      "ノート${userInfo?.remoteResponse != null ? "（ローカル）" : ""}",
+                ),
                 if (isRemoteUser) const Tab(text: "ノート（リモート）"),
                 const Tab(text: "クリップ"),
                 if (isReactionAvailable) const Tab(text: "リアクション"),
@@ -99,7 +101,6 @@ class UserPageState extends ConsumerState<UserPage> {
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: UserNotes(
                         userId: widget.userId,
-                        actualAccount: null,
                       ),
                     ),
                     if (isRemoteUser)
@@ -108,35 +109,39 @@ class UserPageState extends ConsumerState<UserPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
-                            userId: userInfo.remoteResponse!.id,
+                            userId: widget.userId,
+                            remoteUserId: userInfo.remoteResponse!.id,
                             actualAccount: widget.account,
                           ),
                         ),
                       ),
                     Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: UserClips(
-                          userId: widget.userId,
-                        )),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: UserClips(
+                        userId: widget.userId,
+                      ),
+                    ),
                     if (isReactionAvailable)
                       Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserReactions(userId: widget.userId)),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserReactions(userId: widget.userId),
+                      ),
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(userInfo!.response!.host!),
                         child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child:
-                                UserPlays(userId: userInfo.remoteResponse!.id)),
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: UserPlays(userId: userInfo.remoteResponse!.id),
+                        ),
                       )
                     else
                       Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserPlays(userId: widget.userId)),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserPlays(userId: widget.userId),
+                      ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -178,10 +183,11 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
             .read(notesProvider(account))
             .registerAll(response?.pinnedNotes ?? []);
         ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
-            userId: widget.userId,
-            response: response,
-            remoteUserId: null,
-            remoteResponse: null);
+          userId: widget.userId,
+          response: response,
+          remoteUserId: null,
+          remoteResponse: null,
+        );
 
         final remoteHost = response?.host;
         if (remoteHost != null) {
@@ -189,7 +195,8 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
               .read(misskeyProvider(Account.demoAccount(remoteHost)))
               .users
               .showByName(
-                  UsersShowByUserNameRequest(userName: response!.username));
+                UsersShowByUserNameRequest(userName: response!.username),
+              );
 
           await ref
               .read(emojiRepositoryProvider(Account.demoAccount(remoteHost)))
@@ -199,10 +206,11 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
               .read(notesProvider(Account.demoAccount(remoteHost)))
               .registerAll(remoteResponse.pinnedNotes ?? []);
           ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
-              userId: widget.userId,
-              response: response,
-              remoteUserId: remoteResponse.id,
-              remoteResponse: remoteResponse);
+            userId: widget.userId,
+            response: response,
+            remoteUserId: remoteResponse.id,
+            remoteResponse: remoteResponse,
+          );
         }
       } catch (e, s) {
         setState(() {

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:miria/const.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
@@ -80,6 +81,10 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
                 .notes
                 .reactions
                 .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
+            if (account.host == "misskey.io") {
+              await Future.delayed(
+                  const Duration(milliseconds: misskeyIOReactionDelay));
+            }
 
             await ref.read(notesProvider(account)).refresh(widget.noteId);
 
@@ -106,6 +111,13 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           await ref.read(misskeyProvider(account)).notes.reactions.create(
               NotesReactionsCreateRequest(
                   noteId: widget.noteId, reaction: reactionString));
+
+          // misskey.ioはただちにリアクションを反映してくれない
+          if (account.host == "misskey.io") {
+            await Future.delayed(
+                const Duration(milliseconds: misskeyIOReactionDelay));
+          }
+
           await ref.read(notesProvider(account)).refresh(widget.noteId);
         },
         onLongPress: () {

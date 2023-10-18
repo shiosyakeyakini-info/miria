@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:mfm_parser/mfm_parser.dart' as parser;
+import 'package:miria/const.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/extensions/user_extension.dart';
@@ -145,6 +146,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
   bool isLongVisibleInitialized = false;
 
   List<parser.MfmNode>? displayTextNodes;
+  DateTime? latestUpdatedAt;
 
   bool shouldCollaposed(List<parser.MfmNode> node) {
     final result = nodeMaxTextLength(node);
@@ -210,10 +212,34 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       return Container();
     }
 
+    if (latestUpdatedAt != displayNote.updatedAt) {
+      latestUpdatedAt = displayNote.updatedAt;
+      displayTextNodes = null;
+    }
+
     displayTextNodes ??= const parser.MfmParser().parse(displayNote.text ?? "");
 
     final noteStatus = ref.watch(notesProvider(AccountScope.of(context))
         .select((value) => value.noteStatuses[widget.note.id]))!;
+
+    if (noteStatus.isIncludeMuteWord && !noteStatus.isMuteOpened) {
+      return SizedBox(
+        width: double.infinity,
+        child: GestureDetector(
+            onTap: () => ref
+                .read(notesProvider(AccountScope.of(context)))
+                .updateNoteStatus(displayNote.id,
+                    (status) => status.copyWith(isMuteOpened: true)),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+              child: Text(
+                "${displayNote.user.name ?? displayNote.user.username}が何か言うとるわ",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            )),
+      );
+    }
+
     if (!noteStatus.isLongVisibleInitialized ||
         widget.isForceUnvisibleRenote ||
         widget.isForceUnvisibleReply ||
@@ -751,6 +777,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           .notes
           .reactions
           .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
+      if (account.host == "misskey.io") {
+        await Future.delayed(
+            const Duration(milliseconds: misskeyIOReactionDelay));
+      }
       await ref.read(notesProvider(account)).refresh(displayNote.id);
       return;
     }
@@ -777,6 +807,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     if (selectedEmoji == null) return;
     await misskey.notes.reactions.create(NotesReactionsCreateRequest(
         noteId: displayNote.id, reaction: ":${selectedEmoji.baseName}:"));
+    if (account.host == "misskey.io") {
+      await Future.delayed(
+          const Duration(milliseconds: misskeyIOReactionDelay));
+    }
     await note.refresh(displayNote.id);
   }
 }
@@ -798,6 +832,12 @@ class NoteHeader1 extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.only(top: 2),
                 child: UserInformation(user: displayNote.user))),
+        if (displayNote.updatedAt != null)
+          Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: Icon(Icons.edit,
+                  size: Theme.of(context).textTheme.bodySmall?.fontSize,
+                  color: Theme.of(context).textTheme.bodySmall?.color)),
         GestureDetector(
           onTap: () async =>
               await _navigateDetailPage(context, displayNote, loginAs)
@@ -871,6 +911,15 @@ class RenoteHeader extends StatelessWidget {
             ),
           ),
         ),
+        if (note.updatedAt != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+            child: Icon(
+              Icons.edit,
+              size: renoteTextStyle?.fontSize,
+              color: renoteTextStyle?.color,
+            ),
+          ),
         Text(
           note.createdAt.differenceNow,
           textAlign: TextAlign.right,
@@ -948,7 +997,7 @@ class RenoteButton extends StatelessWidget {
     // 他人のノートで、ダイレクトまたはフォロワーのみへの公開の場合、リノート不可
     if ((displayNote.visibility == NoteVisibility.specified ||
             displayNote.visibility == NoteVisibility.followers) &&
-        !(account.host == displayNote.user.host &&
+        !(displayNote.user.host == null &&
             account.userId == displayNote.user.username)) {
       return Icon(
         Icons.block,

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 
-import 'custom_keyboard.dart';
+import 'custom_keyboard_button.dart';
 
-class CustomKeyboardList extends StatelessWidget {
+class BasicKeyboard extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
 
-  const CustomKeyboardList({
+  const BasicKeyboard({
     super.key,
     required this.controller,
     required this.focusNode,
@@ -14,69 +14,85 @@ class CustomKeyboardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      CustomKeyboard(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CustomKeyboardButton(
           keyboard: ":",
           displayText: "：",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: r"$[",
           afterInsert: "]",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "**",
           afterInsert: "**",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "<small>",
           afterInsert: "</small>",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "<i>",
           afterInsert: "</i>",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "***",
           afterInsert: "***",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "~~",
           afterInsert: "~~",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
-        keyboard: "> ",
-        displayText: "＞",
-        controller: controller,
-        focusNode: focusNode,
-      ),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
+          keyboard: "> ",
+          displayText: "＞",
+          controller: controller,
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "<center>",
           afterInsert: "</center>",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "`",
           afterInsert: "`",
           displayText: "｀",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "```\n",
           afterInsert: "\n```",
           controller: controller,
-          focusNode: focusNode),
-      CustomKeyboard(
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: "<plain>",
           afterInsert: "</plain>",
           controller: controller,
-          focusNode: focusNode)
-    ]);
+          focusNode: focusNode,
+        ),
+      ],
+    );
   }
 }
