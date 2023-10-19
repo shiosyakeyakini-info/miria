@@ -413,6 +413,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               SimpleMfmText(
                                 "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 50))}..."
                                     .replaceAll("\n\n", "\n"),
+                                isNyaize: displayNote.user.isCat,
                                 emojis: displayNote.emojis,
                                 suffixSpan: [
                                   WidgetSpan(
@@ -439,6 +440,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   mfmNode: displayTextNodes,
                                   host: displayNote.user.host,
                                   emoji: displayNote.emojis,
+                                  isNyaize: displayNote.user.isCat,
                                   isEnableAnimatedMFM: ref
                                       .read(generalSettingsRepositoryProvider)
                                       .settings
@@ -466,6 +468,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   "${(displayNote.text ?? "").substring(0, min((displayNote.text ?? "").length, 150))}..."
                                       .replaceAll("\n\n", "\n"),
                                   emojis: displayNote.emojis,
+                                  isNyaize: displayNote.user.isCat,
                                   suffixSpan: [
                                     WidgetSpan(
                                       child: InNoteButton(
