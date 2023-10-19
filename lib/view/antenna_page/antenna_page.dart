@@ -35,6 +35,7 @@ class AntennasListNotifier
         withReplies: settings.withReplies,
         withFile: settings.withFile,
         notify: settings.notify,
+        localOnly: settings.localOnly,
       ),
     );
     state = AsyncValue.data([...?state.valueOrNull, antenna]);
@@ -63,6 +64,7 @@ class AntennasListNotifier
         withReplies: settings.withReplies,
         withFile: settings.withFile,
         notify: settings.notify,
+        localOnly: settings.localOnly,
       ),
     );
     state = AsyncValue.data(

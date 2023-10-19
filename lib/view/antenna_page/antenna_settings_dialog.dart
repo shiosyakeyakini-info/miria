@@ -98,6 +98,12 @@ class _AntennaSettingsNotifier extends AutoDisposeNotifier<AntennaSettings> {
       state = state.copyWith(withFile: withFile);
     }
   }
+
+  void updateLocalOnly(bool? localOnly) {
+    if (localOnly != null) {
+      state = state.copyWith(localOnly: localOnly);
+    }
+  }
 }
 
 final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
@@ -316,6 +322,15 @@ class AntennaSettingsForm extends ConsumerWidget {
                 .read(_antennaSettingsNotifierProvider.notifier)
                 .updateWithFile,
           ),
+          CheckboxListTile(
+            title: const Text("ローカルのみ"),
+            subtitle: const Text("ローカルのみの指定はMisskey 2023.10.2以降で有効です。"),
+            value: settings.localOnly,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateLocalOnly,
+          ),
+
           // notifyは機能していない?
           Center(
             child: ElevatedButton(

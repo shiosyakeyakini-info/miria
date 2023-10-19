@@ -26,6 +26,7 @@ mixin _$AntennaSettings {
   bool get withReplies => throw _privateConstructorUsedError;
   bool get withFile => throw _privateConstructorUsedError;
   bool get notify => throw _privateConstructorUsedError;
+  bool get localOnly => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AntennaSettingsCopyWith<AntennaSettings> get copyWith =>
@@ -48,7 +49,8 @@ abstract class $AntennaSettingsCopyWith<$Res> {
       bool caseSensitive,
       bool withReplies,
       bool withFile,
-      bool notify});
+      bool notify,
+      bool localOnly});
 }
 
 /// @nodoc
@@ -74,6 +76,7 @@ class _$AntennaSettingsCopyWithImpl<$Res, $Val extends AntennaSettings>
     Object? withReplies = null,
     Object? withFile = null,
     Object? notify = null,
+    Object? localOnly = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -116,6 +119,10 @@ class _$AntennaSettingsCopyWithImpl<$Res, $Val extends AntennaSettings>
           ? _value.notify
           : notify // ignore: cast_nullable_to_non_nullable
               as bool,
+      localOnly: null == localOnly
+          ? _value.localOnly
+          : localOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -138,7 +145,8 @@ abstract class _$$_AntennaSettingsCopyWith<$Res>
       bool caseSensitive,
       bool withReplies,
       bool withFile,
-      bool notify});
+      bool notify,
+      bool localOnly});
 }
 
 /// @nodoc
@@ -162,6 +170,7 @@ class __$$_AntennaSettingsCopyWithImpl<$Res>
     Object? withReplies = null,
     Object? withFile = null,
     Object? notify = null,
+    Object? localOnly = null,
   }) {
     return _then(_$_AntennaSettings(
       name: null == name
@@ -204,6 +213,10 @@ class __$$_AntennaSettingsCopyWithImpl<$Res>
           ? _value.notify
           : notify // ignore: cast_nullable_to_non_nullable
               as bool,
+      localOnly: null == localOnly
+          ? _value.localOnly
+          : localOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -221,7 +234,8 @@ class _$_AntennaSettings extends _AntennaSettings {
       this.caseSensitive = false,
       this.withReplies = false,
       this.withFile = false,
-      this.notify = false})
+      this.notify = false,
+      this.localOnly = false})
       : _keywords = keywords,
         _excludeKeywords = excludeKeywords,
         _users = users,
@@ -274,10 +288,13 @@ class _$_AntennaSettings extends _AntennaSettings {
   @override
   @JsonKey()
   final bool notify;
+  @override
+  @JsonKey()
+  final bool localOnly;
 
   @override
   String toString() {
-    return 'AntennaSettings(name: $name, src: $src, userListId: $userListId, keywords: $keywords, excludeKeywords: $excludeKeywords, users: $users, caseSensitive: $caseSensitive, withReplies: $withReplies, withFile: $withFile, notify: $notify)';
+    return 'AntennaSettings(name: $name, src: $src, userListId: $userListId, keywords: $keywords, excludeKeywords: $excludeKeywords, users: $users, caseSensitive: $caseSensitive, withReplies: $withReplies, withFile: $withFile, notify: $notify, localOnly: $localOnly)';
   }
 
   @override
@@ -299,7 +316,9 @@ class _$_AntennaSettings extends _AntennaSettings {
                 other.withReplies == withReplies) &&
             (identical(other.withFile, withFile) ||
                 other.withFile == withFile) &&
-            (identical(other.notify, notify) || other.notify == notify));
+            (identical(other.notify, notify) || other.notify == notify) &&
+            (identical(other.localOnly, localOnly) ||
+                other.localOnly == localOnly));
   }
 
   @override
@@ -314,7 +333,8 @@ class _$_AntennaSettings extends _AntennaSettings {
       caseSensitive,
       withReplies,
       withFile,
-      notify);
+      notify,
+      localOnly);
 
   @JsonKey(ignore: true)
   @override
@@ -334,7 +354,8 @@ abstract class _AntennaSettings extends AntennaSettings {
       final bool caseSensitive,
       final bool withReplies,
       final bool withFile,
-      final bool notify}) = _$_AntennaSettings;
+      final bool notify,
+      final bool localOnly}) = _$_AntennaSettings;
   const _AntennaSettings._() : super._();
 
   @override
@@ -357,6 +378,8 @@ abstract class _AntennaSettings extends AntennaSettings {
   bool get withFile;
   @override
   bool get notify;
+  @override
+  bool get localOnly;
   @override
   @JsonKey(ignore: true)
   _$$_AntennaSettingsCopyWith<_$_AntennaSettings> get copyWith =>

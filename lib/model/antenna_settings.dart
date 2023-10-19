@@ -16,6 +16,7 @@ class AntennaSettings with _$AntennaSettings {
     @Default(false) bool withReplies,
     @Default(false) bool withFile,
     @Default(false) bool notify,
+    @Default(false) bool localOnly,
   }) = _AntennaSettings;
   const AntennaSettings._();
 
@@ -31,6 +32,7 @@ class AntennaSettings with _$AntennaSettings {
       withReplies: antenna.withReplies,
       withFile: antenna.withFile,
       notify: antenna.notify,
+      localOnly: antenna.localOnly ?? false,
     );
   }
 }
