@@ -68,7 +68,7 @@ class AvatarIcon extends StatelessWidget {
                       child: Transform.translate(
                         offset: Offset(
                             -height *
-                                0.3 *
+                                0.333 *
                                 MediaQuery.of(context).textScaleFactor,
                             -height *
                                 0.3 *
