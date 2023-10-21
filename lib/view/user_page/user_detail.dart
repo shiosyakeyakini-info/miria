@@ -205,17 +205,20 @@ class UserDetailState extends ConsumerState<UserDetail> {
                             if (!isFollowEditing)
                               (response.isFollowing ?? false)
                                   ? ElevatedButton(
-                                      onPressed: followDelete,
+                                      onPressed:
+                                          followDelete.expectFailure(context),
                                       child: const Text("フォロー解除"),
                                     )
                                   : (response.hasPendingFollowRequestFromYou ??
                                           false)
                                       ? ElevatedButton(
-                                          onPressed: followRequestCancel,
+                                          onPressed: followRequestCancel
+                                              .expectFailure(context),
                                           child: const Text("フォロー許可待ち"),
                                         )
                                       : OutlinedButton(
-                                          onPressed: followCreate,
+                                          onPressed: followCreate
+                                              .expectFailure(context),
                                           child: Text(
                                             (response.requiresFollowRequest)
                                                 ? "フォロー申請"
