@@ -132,12 +132,12 @@ class UserDetailState extends ConsumerState<UserDetail> {
         break;
       case UserControl.createBlock:
         setState(() {
-          response = response.copyWith(isBlocked: true);
+          response = response.copyWith(isBlocking: true);
         });
         break;
       case UserControl.deleteBlock:
         setState(() {
-          response = response.copyWith(isBlocked: false);
+          response = response.copyWith(isBlocking: false);
         });
         break;
     }
@@ -187,7 +187,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                 padding: EdgeInsets.all(10),
                                 child: Text("ミュート中"),
                               )),
-                            if (response.isBlocked ?? false)
+                            if (response.isBlocking ?? false)
                               const Card(
                                   child: Padding(
                                 padding: EdgeInsets.all(10),
