@@ -32,7 +32,7 @@ class ExplorePagesState extends ConsumerState<ExplorePlay> {
                 host: AccountScope.of(context).host,
                 pathSegments: ["play", item.id]));
           },
-          title: MfmText(mfmText: item.title),
+          title: MfmText(mfmText: item.title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
           subtitle: MfmText(mfmText: item.summary),
         );
       }),

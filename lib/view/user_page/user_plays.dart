@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,8 +32,8 @@ class UserPlays extends ConsumerWidget {
       },
       itemBuilder: (context, play) {
         return ListTile(
-          title: Text(play.title),
-          subtitle: Text(play.summary),
+          title: MfmText(mfmText: play.title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+          subtitle: MfmText(mfmText: play.summary),
           onTap: () {
             launchUrl(
                 Uri(
