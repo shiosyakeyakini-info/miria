@@ -537,9 +537,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               if (isLongVisible && widget.recursive < 2)
                                 ...links.map(
                                   (link) => LinkPreview(
-                                    account: AccountScope.of(context),
-                                    link: link,
-                                  ),
+                                      account: AccountScope.of(context),
+                                      link: link,
+                                      host: displayNote.user.host),
                                 ),
                               if (displayNote.renoteId != null &&
                                   (widget.recursive < 2 &&
