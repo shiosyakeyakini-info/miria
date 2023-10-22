@@ -2600,6 +2600,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     Key? key,
     String? initialText,
     List<String>? initialMediaFiles,
+    List<DriveFile>? initialDriveFiles,
     bool exitOnNoted = false,
     CommunityChannel? channel,
     Note? reply,
@@ -2615,6 +2616,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
            key: key,
            initialText: initialText,
            initialMediaFiles: initialMediaFiles,
+           initialDriveFiles: initialDriveFiles,
            exitOnNoted: exitOnNoted,
            channel: channel,
            reply: reply,
@@ -2638,6 +2640,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
           key: args.key,
           initialText: args.initialText,
           initialMediaFiles: args.initialMediaFiles,
+          initialDriveFiles: args.initialDriveFiles,
           exitOnNoted: args.exitOnNoted,
           channel: args.channel,
           reply: args.reply,
@@ -2657,6 +2660,7 @@ class NoteCreateRouteArgs {
     this.key,
     this.initialText,
     this.initialMediaFiles,
+    this.initialDriveFiles,
     this.exitOnNoted = false,
     this.channel,
     this.reply,
@@ -2674,6 +2678,8 @@ class NoteCreateRouteArgs {
 
   final List<String>? initialMediaFiles;
 
+  final List<DriveFile>? initialDriveFiles;
+
   final bool exitOnNoted;
 
   final CommunityChannel? channel;
@@ -2690,7 +2696,7 @@ class NoteCreateRouteArgs {
 
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode, draftId: $draftId}';
+    return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, initialDriveFiles: $initialDriveFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode, draftId: $draftId}';
   }
 
   @override
@@ -2703,6 +2709,10 @@ class NoteCreateRouteArgs {
         const ListEquality().equals(
           initialMediaFiles,
           other.initialMediaFiles,
+        ) &&
+        const ListEquality().equals(
+          initialDriveFiles,
+          other.initialDriveFiles,
         ) &&
         exitOnNoted == other.exitOnNoted &&
         channel == other.channel &&
@@ -2719,6 +2729,7 @@ class NoteCreateRouteArgs {
       key.hashCode ^
       initialText.hashCode ^
       const ListEquality().hash(initialMediaFiles) ^
+      const ListEquality().hash(initialDriveFiles) ^
       exitOnNoted.hashCode ^
       channel.hashCode ^
       reply.hashCode ^
