@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/pagination_state.dart';
@@ -62,5 +63,49 @@ class DriveFilesNotifier extends AutoDisposeFamilyAsyncNotifier<
     } finally {
       _state = _state.copyWith(isLoading: false);
     }
+  }
+
+  Future<void> uploadAsBinary(
+    Uint8List data, {
+    String? name,
+    String? comment,
+    bool? isSensitive,
+  }) async {
+    final response = await _misskey.drive.files.createAsBinary(
+      DriveFilesCreateRequest(
+        folderId: _folderId,
+        name: name,
+        comment: comment,
+        isSensitive: isSensitive,
+      ),
+      data,
+    );
+    _state = _state.copyWith(items: [response, ..._state]);
+  }
+
+  Future<void> delete(String fileId) async {
+    await _misskey.drive.files.delete(DriveFilesDeleteRequest(fileId: fileId));
+    _state = _state.copyWith(
+      items: _state.where((file) => file.id != fileId).toList(),
+    );
+  }
+
+  Future<void> updateFile({
+    required String fileId,
+    String? name,
+    bool? isSensitive,
+    String? comment,
+  }) async {
+    final response = await _misskey.drive.files.update(
+      DriveFilesUpdateRequest(
+        fileId: fileId,
+        name: name,
+        isSensitive: isSensitive,
+        comment: comment,
+      ),
+    );
+    _state = _state.copyWith(
+      items: _state.map((file) => file.id == fileId ? response : file).toList(),
+    );
   }
 }

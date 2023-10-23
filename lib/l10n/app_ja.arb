@@ -971,7 +971,10 @@
     "confirm": "決定",
 
     "folderName": "フォルダ名",
+    "confirmDeleteFile": "このファイルを削除しますか？",
     "deleted": "削除しました",
+    "editFile": "ファイルを編集",
+    "editImage": "画像を編集",
     "changeFolderName": "フォルダ名を変更",
     "confirmDeleteFolder": "このフォルダを削除しますか？",
     "noFiles": "ファイルがありません",
