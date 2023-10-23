@@ -72,6 +72,7 @@
     "apiKey": "APIキー",
     "contentWarning": "注釈",
     "follower": "フォロワー",
+    "drive": "ドライブ",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",
@@ -966,6 +967,8 @@
     "createdAtDescendingOrder": "新しい順",
     "updatedAtAscendingOrder": "更新されていない順",
     "updatedAtDescendingOrder": "更新された順",
+
+    "noFiles": "ファイルがありません",
 
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",

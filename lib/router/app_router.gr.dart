@@ -366,16 +366,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
-    TimeLineRoute.name: (routeData) {
-      final args = routeData.argsAs<TimeLineRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TimeLinePage(
-          key: args.key,
-          initialTabSetting: args.initialTabSetting,
-        ),
-      );
-    },
     UsersListDetailRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -437,6 +427,26 @@ abstract class _$AppRouter extends RootStackRouter {
         child: UserPage(
           key: args.key,
           userId: args.userId,
+          account: args.account,
+        ),
+      );
+    },
+    TimeLineRoute.name: (routeData) {
+      final args = routeData.argsAs<TimeLineRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: TimeLinePage(
+          key: args.key,
+          initialTabSetting: args.initialTabSetting,
+        ),
+      );
+    },
+    DriveRoute.name: (routeData) {
+      final args = routeData.argsAs<DriveRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DrivePage(
+          key: args.key,
           account: args.account,
         ),
       );
@@ -1728,44 +1738,6 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TimeLinePage]
-class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
-  TimeLineRoute({
-    Key? key,
-    required TabSetting initialTabSetting,
-    List<PageRouteInfo>? children,
-  }) : super(
-          TimeLineRoute.name,
-          args: TimeLineRouteArgs(
-            key: key,
-            initialTabSetting: initialTabSetting,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'TimeLineRoute';
-
-  static const PageInfo<TimeLineRouteArgs> page =
-      PageInfo<TimeLineRouteArgs>(name);
-}
-
-class TimeLineRouteArgs {
-  const TimeLineRouteArgs({
-    this.key,
-    required this.initialTabSetting,
-  });
-
-  final Key? key;
-
-  final TabSetting initialTabSetting;
-
-  @override
-  String toString() {
-    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
-  }
-}
-
-/// generated route for
 /// [UsersListDetailPage]
 class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
   UsersListDetailRoute({
@@ -2014,5 +1986,80 @@ class UserRouteArgs {
   @override
   String toString() {
     return 'UserRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [TimeLinePage]
+class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
+  TimeLineRoute({
+    Key? key,
+    required TabSetting initialTabSetting,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TimeLineRoute.name,
+          args: TimeLineRouteArgs(
+            key: key,
+            initialTabSetting: initialTabSetting,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TimeLineRoute';
+
+  static const PageInfo<TimeLineRouteArgs> page =
+      PageInfo<TimeLineRouteArgs>(name);
+}
+
+class TimeLineRouteArgs {
+  const TimeLineRouteArgs({
+    this.key,
+    required this.initialTabSetting,
+  });
+
+  final Key? key;
+
+  final TabSetting initialTabSetting;
+
+  @override
+  String toString() {
+    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
+  }
+}
+
+/// generated route for
+/// [DrivePage]
+class DriveRoute extends PageRouteInfo<DriveRouteArgs> {
+  DriveRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DriveRoute.name,
+          args: DriveRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DriveRoute';
+
+  static const PageInfo<DriveRouteArgs> page = PageInfo<DriveRouteArgs>(name);
+}
+
+class DriveRouteArgs {
+  const DriveRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'DriveRouteArgs{key: $key, account: $account}';
   }
 }
