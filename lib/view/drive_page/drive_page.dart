@@ -9,6 +9,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/pagination_bottom_item.dart';
+import 'package:miria/view/drive_page/breadcrumbs.dart';
 import 'package:miria/view/drive_page/drive_file_grid_item.dart';
 import 'package:miria/view/drive_page/drive_folder_grid_item.dart';
 
@@ -54,6 +55,15 @@ class DrivePage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).drive),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(
+              Theme.of(context).appBarTheme.toolbarHeight ?? kToolbarHeight,
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Breadcrumbs(account: account),
+            ),
+          ),
         ),
         body: RefreshIndicator(
           onRefresh: () => Future.wait([

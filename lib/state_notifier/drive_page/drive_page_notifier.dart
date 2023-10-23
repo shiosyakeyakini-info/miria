@@ -17,4 +17,22 @@ class DrivePageNotifier extends AutoDisposeNotifier<DrivePageState> {
       breadcrumbs: state.breadcrumbs.sublist(0, state.breadcrumbs.length - 1),
     );
   }
+
+  void popUntil(String? folderId) {
+    state = state.copyWith(
+      breadcrumbs: state.breadcrumbs.sublist(
+        0,
+        state.breadcrumbs.indexWhere((folder) => folder.id == folderId) + 1,
+      ),
+    );
+  }
+
+  void replace(DriveFolder folder) {
+    state = state.copyWith(
+      breadcrumbs: [
+        ...state.breadcrumbs.sublist(0, state.breadcrumbs.length - 1),
+        folder,
+      ],
+    );
+  }
 }
