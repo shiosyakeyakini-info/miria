@@ -7,6 +7,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/drive_page/drive_file_modal_sheet.dart';
 import 'package:miria/view/drive_page/drive_file_page/drive_file_details.dart';
+import 'package:miria/view/drive_page/drive_file_page/drive_file_notes.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
@@ -31,7 +32,7 @@ class DriveFilePage extends ConsumerWidget {
         ) ??
         this.file;
     return DefaultTabController(
-      length: 1,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).fileDetails),
@@ -60,12 +61,14 @@ class DriveFilePage extends ConsumerWidget {
           bottom: TabBar(
             tabs: [
               Tab(text: S.of(context).info),
+              Tab(text: S.of(context).attachedNotes),
             ],
           ),
         ),
         body: TabBarView(
           children: [
             DriveFileDetails(account: account, file: file),
+            DriveFileNotes(account: account, file: file),
           ],
         ),
       ),

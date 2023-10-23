@@ -988,8 +988,10 @@
     "fileCreatedAt": "作成日時",
     "fileType": "ファイルタイプ",
     "fileSize": "ファイルサイズ",
+    "noAttachedNotes": "添付されているノートがありません",
     "fileDetails": "ファイルの詳細",
     "info": "情報",
+    "attachedNotes": "添付されているノート",
 
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",

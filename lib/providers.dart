@@ -31,6 +31,7 @@ import 'package:miria/state_notifier/clip_list_page/clips_notifier.dart';
 import 'package:miria/state_notifier/common/download_file_notifier.dart';
 import 'package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart';
 import 'package:miria/state_notifier/common/misskey_server_list_notifier.dart';
+import 'package:miria/state_notifier/drive_page/drive_file_notes_page/drive_files_attached_notes_notifier.dart';
 import 'package:miria/state_notifier/drive_page/drive_files_notifier.dart';
 import 'package:miria/state_notifier/drive_page/drive_folders_notifier.dart';
 import 'package:miria/state_notifier/drive_page/drive_page_notifier.dart';
@@ -323,3 +324,7 @@ final drivePageNotifierProvider =
     NotifierProvider.autoDispose<DrivePageNotifier, DrivePageState>(
   DrivePageNotifier.new,
 );
+
+final driveFilesAttachedNotesProvider = AsyncNotifierProvider.autoDispose
+    .family<DriveFilesAttachedNotesNotifier, PaginationState<Note>,
+        (Misskey, String)>(DriveFilesAttachedNotesNotifier.new);
