@@ -1961,6 +1961,30 @@ class SJa extends S {
   String get noFiles => 'ファイルがありません';
 
   @override
+  String get changeFileName => 'ファイル名を変更';
+
+  @override
+  String get changeCaption => 'キャプションを変更';
+
+  @override
+  String get none => 'なし';
+
+  @override
+  String get fileCreatedAt => '作成日時';
+
+  @override
+  String get fileType => 'ファイルタイプ';
+
+  @override
+  String get fileSize => 'ファイルサイズ';
+
+  @override
+  String get fileDetails => 'ファイルの詳細';
+
+  @override
+  String get info => '情報';
+
+  @override
   String get misskeyGames => 'Misskey Games';
 
   @override

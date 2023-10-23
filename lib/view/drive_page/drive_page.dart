@@ -235,7 +235,11 @@ class DrivePage extends HookConsumerWidget {
                   itemCount: files.length,
                   itemBuilder: (context, index) {
                     final file = files.elementAt(index);
-                    return DriveFileWidget(file: file);
+                    return DriveFileWidget(
+                      file: file,
+                      onTap: () async =>
+                          await context.pushRoute(DriveFileRoute(file: file)),
+                    );
                   },
                 ),
               SliverToBoxAdapter(

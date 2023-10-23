@@ -11,6 +11,7 @@ class TextFormFieldDialog extends HookWidget {
     this.labelText,
     this.buttonText,
     this.initialValue,
+    this.maxLines = 1,
     this.validator,
   });
 
@@ -18,6 +19,7 @@ class TextFormFieldDialog extends HookWidget {
   final String? labelText;
   final String? buttonText;
   final String? initialValue;
+  final int? maxLines;
   final String? Function(String?)? validator;
 
   @override
@@ -34,6 +36,7 @@ class TextFormFieldDialog extends HookWidget {
             labelText: labelText,
             contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
           ),
+          maxLines: maxLines,
           onSaved: (value) => Navigator.of(context).pop(value),
           validator: validator,
         ),

@@ -3402,6 +3402,54 @@ abstract class S {
   /// **'ファイルがありません'**
   String get noFiles;
 
+  /// No description provided for @changeFileName.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイル名を変更'**
+  String get changeFileName;
+
+  /// No description provided for @changeCaption.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャプションを変更'**
+  String get changeCaption;
+
+  /// No description provided for @none.
+  ///
+  /// In ja, this message translates to:
+  /// **'なし'**
+  String get none;
+
+  /// No description provided for @fileCreatedAt.
+  ///
+  /// In ja, this message translates to:
+  /// **'作成日時'**
+  String get fileCreatedAt;
+
+  /// No description provided for @fileType.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルタイプ'**
+  String get fileType;
+
+  /// No description provided for @fileSize.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルサイズ'**
+  String get fileSize;
+
+  /// No description provided for @fileDetails.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルの詳細'**
+  String get fileDetails;
+
+  /// No description provided for @info.
+  ///
+  /// In ja, this message translates to:
+  /// **'情報'**
+  String get info;
+
   /// No description provided for @misskeyGames.
   ///
   /// In ja, this message translates to:
