@@ -968,6 +968,12 @@
     "updatedAtAscendingOrder": "更新されていない順",
     "updatedAtDescendingOrder": "更新された順",
 
+    "confirm": "決定",
+
+    "folderName": "フォルダ名",
+    "deleted": "削除しました",
+    "changeFolderName": "フォルダ名を変更",
+    "confirmDeleteFolder": "このフォルダを削除しますか？",
     "noFiles": "ファイルがありません",
 
     "misskeyGames": "Misskey Games",

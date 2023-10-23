@@ -12,6 +12,7 @@ import 'package:miria/view/common/pagination_bottom_item.dart';
 import 'package:miria/view/drive_page/breadcrumbs.dart';
 import 'package:miria/view/drive_page/drive_file_grid_item.dart';
 import 'package:miria/view/drive_page/drive_folder_grid_item.dart';
+import 'package:miria/view/drive_page/drive_folder_modal_sheet.dart';
 
 @RoutePage()
 class DrivePage extends ConsumerWidget {
@@ -55,6 +56,38 @@ class DrivePage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).drive),
+          actions: [
+            if (currentFolder != null)
+              IconButton(
+                onPressed: () async {
+                  await showModalBottomSheet<void>(
+                    context: context,
+                    builder: (context) => DriveFolderModalSheet(
+                      account: account,
+                      folder: currentFolder,
+                    ),
+                  );
+                  final siblings = await ref.read(
+                    driveFoldersNotifierProvider(
+                      (misskey, currentFolder.parentId),
+                    ).future,
+                  );
+                  final updated = siblings.firstWhereOrNull(
+                    (folder) => folder.id == currentFolder.id,
+                  );
+                  if (updated == null) {
+                    // フォルダが削除されたら一つ上のフォルダに戻る
+                    ref.read(drivePageNotifierProvider.notifier).pop();
+                  } else if (updated != currentFolder) {
+                    // フォルダが更新されたら現在のフォルダを置き換える
+                    ref
+                        .read(drivePageNotifierProvider.notifier)
+                        .replace(updated);
+                  }
+                },
+                icon: const Icon(Icons.more_vert),
+              ),
+          ],
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               Theme.of(context).appBarTheme.toolbarHeight ?? kToolbarHeight,
@@ -102,6 +135,13 @@ class DrivePage extends ConsumerWidget {
                         onTap: () => ref
                             .read(drivePageNotifierProvider.notifier)
                             .push(folder),
+                        onLongPress: () => showModalBottomSheet<void>(
+                          context: context,
+                          builder: (context) => DriveFolderModalSheet(
+                            account: account,
+                            folder: folder,
+                          ),
+                        ),
                       );
                     },
                   ),
