@@ -970,6 +970,7 @@
 
     "confirm": "決定",
 
+    "createFolder": "フォルダを作成",
     "folderName": "フォルダ名",
     "fileDownloaded": "ファイルを保存しました",
     "confirmDeleteFile": "このファイルを削除しますか？",

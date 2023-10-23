@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:file/file.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/pagination_state.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -63,6 +64,17 @@ class DriveFilesNotifier extends AutoDisposeFamilyAsyncNotifier<
     } finally {
       _state = _state.copyWith(isLoading: false);
     }
+  }
+
+  Future<void> upload(File file) async {
+    final response = await _misskey.drive.files.create(
+      DriveFilesCreateRequest(
+        folderId: _folderId,
+        name: file.basename,
+      ),
+      file,
+    );
+    _state = _state.copyWith(items: [response, ..._state]);
   }
 
   Future<void> uploadAsBinary(

@@ -64,6 +64,16 @@ class DriveFoldersNotifier extends AutoDisposeFamilyAsyncNotifier<
     }
   }
 
+  Future<void> create(String? name) async {
+    final response = await _misskey.drive.folders.create(
+      DriveFoldersCreateRequest(
+        name: name,
+        parentId: _folderId,
+      ),
+    );
+    _state = _state.copyWith(items: [response, ..._state]);
+  }
+
   Future<void> delete(String folderId) async {
     await _misskey.drive.folders
         .delete(DriveFoldersDeleteRequest(folderId: folderId));
