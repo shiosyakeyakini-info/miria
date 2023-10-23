@@ -3330,11 +3330,23 @@ abstract class S {
   /// **'決定'**
   String get confirm;
 
+  /// No description provided for @createFolder.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォルダを作成'**
+  String get createFolder;
+
   /// No description provided for @folderName.
   ///
   /// In ja, this message translates to:
   /// **'フォルダ名'**
   String get folderName;
+
+  /// No description provided for @fileDownloaded.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルを保存しました'**
+  String get fileDownloaded;
 
   /// No description provided for @confirmDeleteFile.
   ///
@@ -3359,6 +3371,18 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'画像を編集'**
   String get editImage;
+
+  /// No description provided for @createNoteFromThisFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'このファイルからノートを作成'**
+  String get createNoteFromThisFile;
+
+  /// No description provided for @download.
+  ///
+  /// In ja, this message translates to:
+  /// **'ダウンロード'**
+  String get download;
 
   /// No description provided for @changeFolderName.
   ///

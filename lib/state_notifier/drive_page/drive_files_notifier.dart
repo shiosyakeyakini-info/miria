@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:typed_data";
 
+import "package:file/file.dart";
 import "package:miria/model/pagination_state.dart";
 import "package:miria/providers.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -52,6 +53,26 @@ class DriveFilesNotifier extends _$DriveFilesNotifier {
         isLastLoaded: response.isEmpty,
       );
     });
+  }
+
+  Future<void> upload(
+    File file, {
+    String? name,
+    String? comment,
+    bool? isSensitive,
+  }) async {
+    final response = await _misskey.drive.files.create(
+      DriveFilesCreateRequest(
+        folderId: folderId,
+        name: name ?? file.basename,
+        comment: comment,
+        isSensitive: isSensitive,
+        force: true,
+      ),
+      file,
+    );
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(value.copyWith(items: [response, ...value.items]));
   }
 
   Future<void> uploadBinary(

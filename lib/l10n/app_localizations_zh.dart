@@ -1917,7 +1917,13 @@ class SZh extends S {
   String get confirm => '決定';
 
   @override
+  String get createFolder => 'フォルダを作成';
+
+  @override
   String get folderName => 'フォルダ名';
+
+  @override
+  String get fileDownloaded => 'ファイルを保存しました';
 
   @override
   String get confirmDeleteFile => 'このファイルを削除しますか？';
@@ -1930,6 +1936,12 @@ class SZh extends S {
 
   @override
   String get editImage => '画像を編集';
+
+  @override
+  String get createNoteFromThisFile => 'このファイルからノートを作成';
+
+  @override
+  String get download => 'ダウンロード';
 
   @override
   String get changeFolderName => 'フォルダ名を変更';

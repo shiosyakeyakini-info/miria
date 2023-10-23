@@ -1615,6 +1615,53 @@ class DraftsRouteArgs {
 }
 
 /// generated route for
+/// [DriveCreateModalSheet]
+class DriveCreateModalRoute extends PageRouteInfo<DriveCreateModalRouteArgs> {
+  DriveCreateModalRoute({
+    required DriveFolder? folder,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveCreateModalRoute.name,
+         args: DriveCreateModalRouteArgs(folder: folder, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveCreateModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveCreateModalRouteArgs>();
+      return DriveCreateModalSheet(folder: args.folder, key: args.key);
+    },
+  );
+}
+
+class DriveCreateModalRouteArgs {
+  const DriveCreateModalRouteArgs({required this.folder, this.key});
+
+  final DriveFolder? folder;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveCreateModalRouteArgs{folder: $folder, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveCreateModalRouteArgs) return false;
+    return folder == other.folder && key == other.key;
+  }
+
+  @override
+  int get hashCode => folder.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [DriveFileModalSheet]
 class DriveFileModalRoute extends PageRouteInfo<DriveFileModalRouteArgs> {
   DriveFileModalRoute({
