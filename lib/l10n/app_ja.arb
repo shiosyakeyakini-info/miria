@@ -1044,6 +1044,12 @@
     },
     "failedFileSave": "ファイルの保存に失敗したみたいや",
     
+    "confirm": "決定",
+
+    "folderName": "フォルダ名",
+    "deleted": "削除しました",
+    "changeFolderName": "フォルダ名を変更",
+    "confirmDeleteFolder": "このフォルダを削除しますか？",
     "noFiles": "ファイルがありません",
 
     "misskeyGames": "Misskey Games",

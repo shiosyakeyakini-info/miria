@@ -6,6 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/drive_page/drive_files_notifier.dart";
 import "package:miria/state_notifier/drive_page/drive_folders_notifier.dart";
 import "package:miria/view/common/pagination_bottom_widget.dart";
@@ -41,7 +42,7 @@ class DrivePage extends HookConsumerWidget {
             repository.settings.automaticPush == AutomaticPush.automatic,
       ),
     );
-    // https://github.com/flutter/flutter/blob/2663184aa79047d0a33a14a3b607954f8fdd8730/packages/flutter/lib/src/material/app_bar.dart#L2346
+    // https://github.com/flutter/flutter/blob/3.24.3/packages/flutter/lib/src/material/app_bar.dart#L2346
     // TODO: Material 3 にするときに `onSurface` に変更する。
     final appBarForegroundColor =
         Theme.of(context).appBarTheme.foregroundColor ??
@@ -88,7 +89,41 @@ class DrivePage extends HookConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(onPressed: () async => await context.maybePop()),
           title: Text(S.of(context).drive),
+          actions: [
+            if (currentFolder != null)
+              IconButton(
+                onPressed: () async {
+                  await context.pushRoute(
+                    DriveFolderModalRoute(folder: currentFolder),
+                  );
+                  final siblings = await ref.read(
+                    driveFoldersNotifierProvider(parentId).future,
+                  );
+                  final updated = siblings.items.firstWhereOrNull(
+                    (folder) => folder.id == currentFolder.id,
+                  );
+                  if (updated == null) {
+                    // フォルダが削除されたら一つ上のフォルダに戻る
+                    hierarchyFolders.value = hierarchyFolders.value.sublist(
+                      0,
+                      hierarchyFolders.value.length - 1,
+                    );
+                  } else if (updated != currentFolder) {
+                    // フォルダが更新されたら現在のフォルダを置き換える
+                    hierarchyFolders.value = [
+                      ...hierarchyFolders.value.sublist(
+                        0,
+                        hierarchyFolders.value.length - 1,
+                      ),
+                      updated,
+                    ];
+                  }
+                },
+                icon: const Icon(Icons.more_vert),
+              ),
+          ],
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               Theme.of(context).appBarTheme.toolbarHeight ?? kToolbarHeight,
@@ -179,6 +214,9 @@ class DrivePage extends HookConsumerWidget {
                       ...hierarchyFolders.value,
                       folders[index],
                     ],
+                    onLongPress: () async => await context.pushRoute(
+                      DriveFolderModalRoute(folder: folders[index]),
+                    ),
                   ),
                 ),
               SliverToBoxAdapter(

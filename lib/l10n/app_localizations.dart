@@ -3324,6 +3324,36 @@ abstract class S {
   /// **'ファイルの保存に失敗したみたいや'**
   String get failedFileSave;
 
+  /// No description provided for @confirm.
+  ///
+  /// In ja, this message translates to:
+  /// **'決定'**
+  String get confirm;
+
+  /// No description provided for @folderName.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォルダ名'**
+  String get folderName;
+
+  /// No description provided for @deleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'削除しました'**
+  String get deleted;
+
+  /// No description provided for @changeFolderName.
+  ///
+  /// In ja, this message translates to:
+  /// **'フォルダ名を変更'**
+  String get changeFolderName;
+
+  /// No description provided for @confirmDeleteFolder.
+  ///
+  /// In ja, this message translates to:
+  /// **'このフォルダを削除しますか？'**
+  String get confirmDeleteFolder;
+
   /// No description provided for @noFiles.
   ///
   /// In ja, this message translates to:

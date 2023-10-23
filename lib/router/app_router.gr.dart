@@ -1681,6 +1681,53 @@ class DriveFileSelectRouteArgs {
 }
 
 /// generated route for
+/// [DriveFolderModalSheet]
+class DriveFolderModalRoute extends PageRouteInfo<DriveFolderModalRouteArgs> {
+  DriveFolderModalRoute({
+    required DriveFolder folder,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFolderModalRoute.name,
+         args: DriveFolderModalRouteArgs(folder: folder, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFolderModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFolderModalRouteArgs>();
+      return DriveFolderModalSheet(folder: args.folder, key: args.key);
+    },
+  );
+}
+
+class DriveFolderModalRouteArgs {
+  const DriveFolderModalRouteArgs({required this.folder, this.key});
+
+  final DriveFolder folder;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFolderModalRouteArgs{folder: $folder, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFolderModalRouteArgs) return false;
+    return folder == other.folder && key == other.key;
+  }
+
+  @override
+  int get hashCode => folder.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [DriveModalSheet]
 class DriveModalRoute extends PageRouteInfo<void> {
   const DriveModalRoute({List<PageRouteInfo>? children})
@@ -3903,6 +3950,97 @@ class TabSettingsRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ tabIndex.hashCode;
+}
+
+/// generated route for
+/// [TextFormFieldDialog]
+class TextFormFieldRoute extends PageRouteInfo<TextFormFieldRouteArgs> {
+  TextFormFieldRoute({
+    Key? key,
+    Widget? title,
+    String? labelText,
+    String? buttonText,
+    String? initialValue,
+    String? Function(String?)? validator,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TextFormFieldRoute.name,
+         args: TextFormFieldRouteArgs(
+           key: key,
+           title: title,
+           labelText: labelText,
+           buttonText: buttonText,
+           initialValue: initialValue,
+           validator: validator,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'TextFormFieldRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TextFormFieldRouteArgs>(
+        orElse: () => const TextFormFieldRouteArgs(),
+      );
+      return TextFormFieldDialog(
+        key: args.key,
+        title: args.title,
+        labelText: args.labelText,
+        buttonText: args.buttonText,
+        initialValue: args.initialValue,
+        validator: args.validator,
+      );
+    },
+  );
+}
+
+class TextFormFieldRouteArgs {
+  const TextFormFieldRouteArgs({
+    this.key,
+    this.title,
+    this.labelText,
+    this.buttonText,
+    this.initialValue,
+    this.validator,
+  });
+
+  final Key? key;
+
+  final Widget? title;
+
+  final String? labelText;
+
+  final String? buttonText;
+
+  final String? initialValue;
+
+  final String? Function(String?)? validator;
+
+  @override
+  String toString() {
+    return 'TextFormFieldRouteArgs{key: $key, title: $title, labelText: $labelText, buttonText: $buttonText, initialValue: $initialValue, validator: $validator}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TextFormFieldRouteArgs) return false;
+    return key == other.key &&
+        title == other.title &&
+        labelText == other.labelText &&
+        buttonText == other.buttonText &&
+        initialValue == other.initialValue;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      title.hashCode ^
+      labelText.hashCode ^
+      buttonText.hashCode ^
+      initialValue.hashCode;
 }
 
 /// generated route for

@@ -1,5 +1,7 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class DriveFolderWidget extends ConsumerWidget {
@@ -35,7 +37,12 @@ class DriveFolderWidget extends ConsumerWidget {
                 ),
               ),
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+            IconButton(
+              onPressed: () async => await context.pushRoute(
+                DriveFolderModalRoute(folder: folder),
+              ),
+              icon: const Icon(Icons.more_vert),
+            ),
           ],
         ),
       ),

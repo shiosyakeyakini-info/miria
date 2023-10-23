@@ -37,8 +37,10 @@ import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
+import "package:miria/view/common/text_form_field_dialog.dart";
 import "package:miria/view/drafts_page/drafts_dialog.dart";
 import "package:miria/view/drafts_page/drafts_page.dart";
+import "package:miria/view/drive_page/drive_folder_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_page.dart";
 import "package:miria/view/drive_page/drive_shell_page.dart";
 import "package:miria/view/explore_page/explore_page.dart";
@@ -166,7 +168,10 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ChatMessageDetailRoute.page),
     AutoRoute(
       page: DriveShellRoute.page,
-      children: [AutoRoute(page: DriveRoute.page)],
+      children: [
+        AutoRoute(page: DriveRoute.page),
+        AutoModalRouteSheet(page: DriveFolderModalRoute.page),
+      ],
     ),
 
     AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page),
@@ -196,6 +201,7 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
     AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
     AutoDialogRoute(page: DraftsModalRoute.page),
+    AutoDialogRoute<String>(page: TextFormFieldRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),

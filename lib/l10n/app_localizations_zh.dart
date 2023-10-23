@@ -1914,6 +1914,21 @@ class SZh extends S {
   String get failedFileSave => 'ファイルの保存に失敗したみたいや';
 
   @override
+  String get confirm => '決定';
+
+  @override
+  String get folderName => 'フォルダ名';
+
+  @override
+  String get deleted => '削除しました';
+
+  @override
+  String get changeFolderName => 'フォルダ名を変更';
+
+  @override
+  String get confirmDeleteFolder => 'このフォルダを削除しますか？';
+
+  @override
   String get noFiles => 'ファイルがありません';
 
   @override
