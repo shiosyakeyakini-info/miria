@@ -6,6 +6,7 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/drive_page/drive_files_notifier.dart";
 import "package:miria/view/drive_page/drive_file_page/drive_file_info.dart";
+import "package:miria/view/drive_page/drive_file_page/drive_file_notes.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
@@ -27,7 +28,7 @@ class DriveFilePage extends ConsumerWidget {
         this.file;
 
     return DefaultTabController(
-      length: 1,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).fileDetails),
@@ -46,9 +47,19 @@ class DriveFilePage extends ConsumerWidget {
               icon: const Icon(Icons.more_vert),
             ),
           ],
-          bottom: TabBar(tabs: [Tab(text: S.of(context).info)]),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: S.of(context).info),
+              Tab(text: S.of(context).attachedNotes),
+            ],
+          ),
         ),
-        body: TabBarView(children: [DriveFileInfo(file: file)]),
+        body: TabBarView(
+          children: [
+            DriveFileInfo(file: file),
+            DriveFileNotes(file: file),
+          ],
+        ),
       ),
     );
   }

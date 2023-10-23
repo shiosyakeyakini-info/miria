@@ -3438,6 +3438,12 @@ abstract class S {
   /// **'ファイルサイズ'**
   String get fileSize;
 
+  /// No description provided for @noAttachedNotes.
+  ///
+  /// In ja, this message translates to:
+  /// **'添付されているノートがありません'**
+  String get noAttachedNotes;
+
   /// No description provided for @fileDetails.
   ///
   /// In ja, this message translates to:
@@ -3449,6 +3455,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'情報'**
   String get info;
+
+  /// No description provided for @attachedNotes.
+  ///
+  /// In ja, this message translates to:
+  /// **'添付されているノート'**
+  String get attachedNotes;
 
   /// No description provided for @misskeyGames.
   ///

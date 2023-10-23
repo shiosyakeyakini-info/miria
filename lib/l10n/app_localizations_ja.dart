@@ -1979,10 +1979,16 @@ class SJa extends S {
   String get fileSize => 'ファイルサイズ';
 
   @override
+  String get noAttachedNotes => '添付されているノートがありません';
+
+  @override
   String get fileDetails => 'ファイルの詳細';
 
   @override
   String get info => '情報';
+
+  @override
+  String get attachedNotes => '添付されているノート';
 
   @override
   String get misskeyGames => 'Misskey Games';
