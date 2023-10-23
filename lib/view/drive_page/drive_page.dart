@@ -18,9 +18,16 @@ import 'package:miria/view/drive_page/drive_folder_modal_sheet.dart';
 
 @RoutePage()
 class DrivePage extends ConsumerWidget {
-  const DrivePage({super.key, required this.account});
+  const DrivePage({
+    super.key,
+    required this.account,
+    this.title,
+    this.floatingActionButtonBuilder,
+  });
 
   final Account account;
+  final Widget? title;
+  final Widget Function(BuildContext context)? floatingActionButtonBuilder;
 
   static const itemMaxCrossAxisExtent = 400.0;
 
@@ -57,8 +64,19 @@ class DrivePage extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).drive),
+          title: title ?? Text(S.of(context).drive),
           actions: [
+            if (floatingActionButtonBuilder != null)
+              IconButton(
+                onPressed: () => showModalBottomSheet(
+                  context: context,
+                  builder: (context) => DriveCreateModalSheet(
+                    account: account,
+                    folder: currentFolder,
+                  ),
+                ),
+                icon: const Icon(Icons.add),
+              ),
             if (currentFolder != null)
               IconButton(
                 onPressed: () async {
@@ -249,16 +267,17 @@ class DrivePage extends ConsumerWidget {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => showModalBottomSheet<void>(
-            context: context,
-            builder: (context) => DriveCreateModalSheet(
-              account: account,
-              folder: currentFolder,
+        floatingActionButton: floatingActionButtonBuilder?.call(context) ??
+            FloatingActionButton(
+              onPressed: () => showModalBottomSheet<void>(
+                context: context,
+                builder: (context) => DriveCreateModalSheet(
+                  account: account,
+                  folder: currentFolder,
+                ),
+              ),
+              child: const Icon(Icons.add),
             ),
-          ),
-          child: const Icon(Icons.add),
-        ),
       ),
     );
   }

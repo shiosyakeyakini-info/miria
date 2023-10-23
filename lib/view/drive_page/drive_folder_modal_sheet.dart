@@ -7,6 +7,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/text_form_field_dialog.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
+import 'package:miria/view/drive_page/drive_folder_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class DriveFolderModalSheet extends ConsumerWidget {
@@ -39,6 +40,27 @@ class DriveFolderModalSheet extends ConsumerWidget {
       if (!context.mounted) return;
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> move(WidgetRef ref) async {
+    final context = ref.context;
+    final misskey = ref.read(misskeyProvider(account));
+    final result = await showDialog<(DriveFolder?,)>(
+      context: context,
+      builder: (context) => DriveFolderSelectDialog(account: account),
+    );
+    if (result == null) return;
+    await ref
+        .read(driveFoldersNotifierProvider((misskey, folder.parentId)).notifier)
+        .move(
+          folderId: folder.id,
+          parentId: result.$1?.id,
+        );
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context).moved)),
+    );
+    Navigator.of(context).pop();
   }
 
   Future<void> delete(WidgetRef ref) async {
@@ -81,6 +103,11 @@ class DriveFolderModalSheet extends ConsumerWidget {
           leading: const Icon(Icons.settings),
           title: Text(S.of(context).changeFolderName),
           onTap: () => changeName(ref).expectFailure(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.drive_file_move),
+          title: Text(S.of(context).move),
+          onTap: () => move(ref).expectFailure(context),
         ),
         ListTile(
           leading: const Icon(Icons.delete),
