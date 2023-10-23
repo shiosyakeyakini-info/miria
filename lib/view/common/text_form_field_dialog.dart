@@ -8,6 +8,7 @@ class TextFormFieldDialog extends StatefulWidget {
     this.labelText,
     this.buttonText,
     this.initialValue,
+    this.maxLines = 1,
     this.validator,
   });
 
@@ -15,6 +16,7 @@ class TextFormFieldDialog extends StatefulWidget {
   final String? labelText;
   final String? buttonText;
   final String? initialValue;
+  final int? maxLines;
   final String? Function(String?)? validator;
 
   @override
@@ -36,6 +38,7 @@ class _TextFormFieldDialogState extends State<TextFormFieldDialog> {
             labelText: widget.labelText,
             contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
           ),
+          maxLines: widget.maxLines,
           onSaved: (value) => Navigator.of(context).pop(value),
           validator: widget.validator,
         ),

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/pagination_bottom_item.dart';
@@ -199,9 +200,16 @@ class DrivePage extends ConsumerWidget {
                         });
                         return const SizedBox.shrink();
                       }
+                      final file = files[index];
                       return DriveFileGridItem(
                         account: account,
-                        file: files[index],
+                        file: file,
+                        onTap: () => context.pushRoute(
+                          DriveFileRoute(
+                            account: account,
+                            file: file,
+                          ),
+                        ),
                       );
                     },
                   ),

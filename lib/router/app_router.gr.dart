@@ -452,6 +452,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    DriveFileRoute.name: (routeData) {
+      final args = routeData.argsAs<DriveFileRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DriveFilePage(
+          key: args.key,
+          account: args.account,
+          file: args.file,
+        ),
+      );
+    },
   };
 }
 
@@ -2067,5 +2078,48 @@ class DriveRouteArgs {
   @override
   String toString() {
     return 'DriveRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [DriveFilePage]
+class DriveFileRoute extends PageRouteInfo<DriveFileRouteArgs> {
+  DriveFileRoute({
+    Key? key,
+    required Account account,
+    required DriveFile file,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DriveFileRoute.name,
+          args: DriveFileRouteArgs(
+            key: key,
+            account: account,
+            file: file,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DriveFileRoute';
+
+  static const PageInfo<DriveFileRouteArgs> page =
+      PageInfo<DriveFileRouteArgs>(name);
+}
+
+class DriveFileRouteArgs {
+  const DriveFileRouteArgs({
+    this.key,
+    required this.account,
+    required this.file,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final DriveFile file;
+
+  @override
+  String toString() {
+    return 'DriveFileRouteArgs{key: $key, account: $account, file: $file}';
   }
 }
