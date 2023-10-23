@@ -543,6 +543,12 @@ abstract class S {
   /// **'送信中'**
   String get sending;
 
+  /// No description provided for @drive.
+  ///
+  /// In ja, this message translates to:
+  /// **'ドライブ'**
+  String get drive;
+
   /// No description provided for @antennaName.
   ///
   /// In ja, this message translates to:
@@ -3317,6 +3323,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'ファイルの保存に失敗したみたいや'**
   String get failedFileSave;
+
+  /// No description provided for @noFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルがありません'**
+  String get noFiles;
 
   /// No description provided for @misskeyGames.
   ///

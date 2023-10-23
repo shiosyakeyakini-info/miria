@@ -1697,6 +1697,74 @@ class DriveModalRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DrivePage]
+class DriveRoute extends PageRouteInfo<void> {
+  const DriveRoute({List<PageRouteInfo>? children})
+    : super(DriveRoute.name, initialChildren: children);
+
+  static const String name = 'DriveRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DrivePage();
+    },
+  );
+}
+
+/// generated route for
+/// [DriveShellPage]
+class DriveShellRoute extends PageRouteInfo<DriveShellRouteArgs> {
+  DriveShellRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveShellRoute.name,
+         args: DriveShellRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveShellRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveShellRouteArgs>();
+      return WrappedRoute(
+        child: DriveShellPage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
+}
+
+class DriveShellRouteArgs {
+  const DriveShellRouteArgs({required this.accountContext, this.key});
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveShellRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveShellRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ExpireSelectDialog]
 class ExpireSelectRoute extends PageRouteInfo<void> {
   const ExpireSelectRoute({List<PageRouteInfo>? children})

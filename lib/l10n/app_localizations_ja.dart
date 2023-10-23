@@ -231,6 +231,9 @@ class SJa extends S {
   String get sending => '送信中';
 
   @override
+  String get drive => 'ドライブ';
+
+  @override
   String get antennaName => 'アンテナの名前';
 
   @override
@@ -1917,6 +1920,9 @@ class SJa extends S {
 
   @override
   String get failedFileSave => 'ファイルの保存に失敗したみたいや';
+
+  @override
+  String get noFiles => 'ファイルがありません';
 
   @override
   String get misskeyGames => 'Misskey Games';

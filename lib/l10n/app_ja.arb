@@ -76,6 +76,7 @@
     "contentWarning": "注釈",
     "follower": "フォロワー",
     "sending": "送信中",
+    "drive": "ドライブ",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",
@@ -1042,6 +1043,8 @@
         }
     },
     "failedFileSave": "ファイルの保存に失敗したみたいや",
+    
+    "noFiles": "ファイルがありません",
 
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",

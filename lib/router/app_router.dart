@@ -39,6 +39,8 @@ import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
 import "package:miria/view/drafts_page/drafts_dialog.dart";
 import "package:miria/view/drafts_page/drafts_page.dart";
+import "package:miria/view/drive_page/drive_page.dart";
+import "package:miria/view/drive_page/drive_shell_page.dart";
 import "package:miria/view/explore_page/explore_page.dart";
 import "package:miria/view/explore_page/explore_role_users_page.dart";
 import "package:miria/view/favorited_note_page/favorited_note_page.dart";
@@ -162,6 +164,10 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: UserChatRoute.page),
     AutoRoute(page: ChatSearchRoute.page),
     AutoRoute(page: ChatMessageDetailRoute.page),
+    AutoRoute(
+      page: DriveShellRoute.page,
+      children: [AutoRoute(page: DriveRoute.page)],
+    ),
 
     AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page),
 
