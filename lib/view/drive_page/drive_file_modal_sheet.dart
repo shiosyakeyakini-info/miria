@@ -148,6 +148,16 @@ class DriveFileModalSheet extends ConsumerWidget {
             onTap: () async => await _editImage(ref),
           ),
         ListTile(
+          leading: const Icon(Icons.edit),
+          title: Text(S.of(context).createNoteFromThisFile),
+          onTap: () async => await context.pushRoute(
+            NoteCreateRoute(
+              initialAccount: ref.read(accountContextProvider).postAccount,
+              initialDriveFiles: [file],
+            ),
+          ),
+        ),
+        ListTile(
           leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
           onTap: () async {
