@@ -1886,18 +1886,51 @@ class DriveModalRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [DrivePage]
-class DriveRoute extends PageRouteInfo<void> {
-  const DriveRoute({List<PageRouteInfo>? children})
-    : super(DriveRoute.name, initialChildren: children);
+class DriveRoute extends PageRouteInfo<DriveRouteArgs> {
+  DriveRoute({
+    bool selectFolder = false,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveRoute.name,
+         args: DriveRouteArgs(selectFolder: selectFolder, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'DriveRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const DrivePage();
+      final args = data.argsAs<DriveRouteArgs>(
+        orElse: () => const DriveRouteArgs(),
+      );
+      return DrivePage(selectFolder: args.selectFolder, key: args.key);
     },
   );
+}
+
+class DriveRouteArgs {
+  const DriveRouteArgs({this.selectFolder = false, this.key});
+
+  final bool selectFolder;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveRouteArgs{selectFolder: $selectFolder, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveRouteArgs) return false;
+    return selectFolder == other.selectFolder && key == other.key;
+  }
+
+  @override
+  int get hashCode => selectFolder.hashCode ^ key.hashCode;
 }
 
 /// generated route for

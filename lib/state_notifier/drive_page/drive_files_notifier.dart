@@ -9,6 +9,8 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "drive_files_notifier.g.dart";
 
+// Stack overflowを避けるため
+// ignore: provider_dependencies
 @Riverpod(dependencies: [misskeyPostContext])
 class DriveFilesNotifier extends _$DriveFilesNotifier {
   @override
@@ -126,5 +128,30 @@ class DriveFilesNotifier extends _$DriveFilesNotifier {
             .toList(),
       ),
     );
+  }
+
+  Future<void> move({required String fileId, required String? folderId}) async {
+    if (folderId == this.folderId) {
+      return;
+    }
+    // `folderId` がnullのときキーが削除されるのを回避
+    final response = await _misskey.apiService.post<Map<String, dynamic>>(
+      "drive/files/update",
+      {"fileId": fileId, "folderId": folderId},
+      excludeRemoveNullPredicate: (key, _) => key == "folderId",
+    );
+    final file = DriveFile.fromJson(response);
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(
+      value.copyWith(
+        items: value.items.where((file) => file.id != fileId).toList(),
+      ),
+    );
+    ref.read(driveFilesNotifierProvider(folderId).notifier).add(file);
+  }
+
+  void add(DriveFile file) {
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(value.copyWith(items: [file, ...value.items]));
   }
 }

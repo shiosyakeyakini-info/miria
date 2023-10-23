@@ -3348,6 +3348,12 @@ abstract class S {
   /// **'ファイルを保存しました'**
   String get fileDownloaded;
 
+  /// No description provided for @moved.
+  ///
+  /// In ja, this message translates to:
+  /// **'移動しました'**
+  String get moved;
+
   /// No description provided for @confirmDeleteFile.
   ///
   /// In ja, this message translates to:
@@ -3383,6 +3389,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'ダウンロード'**
   String get download;
+
+  /// No description provided for @move.
+  ///
+  /// In ja, this message translates to:
+  /// **'移動'**
+  String get move;
 
   /// No description provided for @changeFolderName.
   ///

@@ -132,6 +132,34 @@ class DriveFileModalSheet extends ConsumerWidget {
     await ref.context.maybePop();
   }
 
+  Future<void> _move(WidgetRef ref) async {
+    final result = await ref.context.pushRoute(
+      DriveShellRoute(
+        accountContext: ref.read(accountContextProvider),
+        children: [DriveRoute(selectFolder: true)],
+      ),
+    );
+    if (result case (final DriveFolder? folder,)) {
+      if (folder?.id == file.folderId) return;
+      final result = await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .guard(
+            () => ref
+                .read(driveFilesNotifierProvider(file.folderId).notifier)
+                .move(fileId: file.id, folderId: folder?.id),
+          );
+      if (result.hasError) return;
+      if (!ref.context.mounted) return;
+      ScaffoldMessenger.of(ref.context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(ref.context).moved),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      await ref.context.maybePop();
+    }
+  }
+
   Future<void> _delete(WidgetRef ref) async {
     final result = await SimpleConfirmDialog.show(
       context: ref.context,
@@ -215,6 +243,11 @@ class DriveFileModalSheet extends ConsumerWidget {
           leading: const Icon(Icons.download),
           title: Text(S.of(context).download),
           onTap: () async => await _download(ref),
+        ),
+        ListTile(
+          leading: const Icon(Icons.drive_file_move),
+          title: Text(S.of(context).move),
+          onTap: () async => await _move(ref),
         ),
         ListTile(
           leading: const Icon(Icons.delete),

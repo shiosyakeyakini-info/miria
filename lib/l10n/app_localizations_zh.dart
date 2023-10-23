@@ -1926,6 +1926,9 @@ class SZh extends S {
   String get fileDownloaded => 'ファイルを保存しました';
 
   @override
+  String get moved => '移動しました';
+
+  @override
   String get confirmDeleteFile => 'このファイルを削除しますか？';
 
   @override
@@ -1942,6 +1945,9 @@ class SZh extends S {
 
   @override
   String get download => 'ダウンロード';
+
+  @override
+  String get move => '移動';
 
   @override
   String get changeFolderName => 'フォルダ名を変更';

@@ -7,6 +7,8 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "drive_folders_notifier.g.dart";
 
+// Stack overflowを避けるため
+// ignore: provider_dependencies
 @Riverpod(dependencies: [misskeyPostContext])
 class DriveFoldersNotifier extends _$DriveFoldersNotifier {
   @override
@@ -86,5 +88,33 @@ class DriveFoldersNotifier extends _$DriveFoldersNotifier {
             .toList(),
       ),
     );
+  }
+
+  Future<void> move({
+    required String folderId,
+    required String? parentId,
+  }) async {
+    if (parentId == this.folderId) {
+      return;
+    }
+    // `parentId` がnullのときキーが削除されるのを回避
+    final response = await _misskey.apiService.post<Map<String, dynamic>>(
+      "drive/folders/update",
+      {"folderId": folderId, "parentId": parentId},
+      excludeRemoveNullPredicate: (key, _) => key == "parentId",
+    );
+    final folder = DriveFolder.fromJson(response);
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(
+      value.copyWith(
+        items: value.items.where((folder) => folder.id != folderId).toList(),
+      ),
+    );
+    ref.read(driveFoldersNotifierProvider(parentId).notifier).add(folder);
+  }
+
+  void add(DriveFolder folder) {
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(value.copyWith(items: [folder, ...value.items]));
   }
 }

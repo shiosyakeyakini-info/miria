@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/drive_page/drive_folders_notifier.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -33,6 +34,34 @@ class DriveFolderModalSheet extends ConsumerWidget {
                 .updateName(folder.id, name),
           );
       if (!ref.context.mounted) return;
+      await ref.context.maybePop();
+    }
+  }
+
+  Future<void> _move(WidgetRef ref) async {
+    final result = await ref.context.pushRoute(
+      DriveShellRoute(
+        accountContext: ref.read(accountContextProvider),
+        children: [DriveRoute(selectFolder: true)],
+      ),
+    );
+    if (result case (final DriveFolder? parent,)) {
+      if (parent?.id == folder.parentId) return;
+      final result = await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .guard(
+            () => ref
+                .read(driveFoldersNotifierProvider(folder.parentId).notifier)
+                .move(folderId: folder.id, parentId: parent?.id),
+          );
+      if (result.hasError) return;
+      if (!ref.context.mounted) return;
+      ScaffoldMessenger.of(ref.context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(ref.context).moved),
+          duration: const Duration(seconds: 1),
+        ),
+      );
       await ref.context.maybePop();
     }
   }
@@ -78,6 +107,11 @@ class DriveFolderModalSheet extends ConsumerWidget {
           leading: const Icon(Icons.settings),
           title: Text(S.of(context).changeFolderName),
           onTap: () async => await _changeName(ref),
+        ),
+        ListTile(
+          leading: const Icon(Icons.drive_file_move),
+          title: Text(S.of(context).move),
+          onTap: () async => await _move(ref),
         ),
         ListTile(
           leading: const Icon(Icons.delete),

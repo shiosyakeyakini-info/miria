@@ -16,7 +16,9 @@ import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class DrivePage extends HookConsumerWidget {
-  const DrivePage({super.key});
+  const DrivePage({this.selectFolder = false, super.key});
+
+  final bool selectFolder;
 
   static const itemMaxCrossAxisExtent = 300.0;
 
@@ -90,8 +92,17 @@ class DrivePage extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: BackButton(onPressed: () async => await context.maybePop()),
-          title: Text(S.of(context).drive),
+          title: selectFolder
+              ? Text(S.of(context).selectFolder)
+              : Text(S.of(context).drive),
           actions: [
+            if (!selectFolder)
+              IconButton(
+                onPressed: () async => await context.pushRoute(
+                  DriveCreateModalRoute(folder: currentFolder),
+                ),
+                icon: const Icon(Icons.add),
+              ),
             if (currentFolder != null)
               IconButton(
                 onPressed: () async {
@@ -255,10 +266,13 @@ class DrivePage extends HookConsumerWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () async => await context.pushRoute(
-            DriveCreateModalRoute(folder: currentFolder),
-          ),
-          child: const Icon(Icons.add),
+          onPressed: selectFolder
+              ? () async =>
+                    await context.router.parent()?.maybePop((currentFolder,))
+              : () async => await context.pushRoute(
+                  DriveCreateModalRoute(folder: currentFolder),
+                ),
+          child: selectFolder ? const Icon(Icons.check) : const Icon(Icons.add),
         ),
       ),
     );
