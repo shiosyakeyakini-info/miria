@@ -41,6 +41,14 @@ class DrivePage extends HookConsumerWidget {
             repository.settings.automaticPush == AutomaticPush.automatic,
       ),
     );
+    // https://github.com/flutter/flutter/blob/2663184aa79047d0a33a14a3b607954f8fdd8730/packages/flutter/lib/src/material/app_bar.dart#L2346
+    // TODO: Material 3 にするときに `onSurface` に変更する。
+    final appBarForegroundColor =
+        Theme.of(context).appBarTheme.foregroundColor ??
+        switch (Theme.of(context).brightness) {
+          Brightness.light => Theme.of(context).colorScheme.onPrimary,
+          Brightness.dark => Theme.of(context).colorScheme.onSurface,
+        };
     final controller = useScrollController();
     final isAtBottom = useState(false);
     useEffect(() {
@@ -79,7 +87,77 @@ class DrivePage extends HookConsumerWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(S.of(context).drive)),
+        appBar: AppBar(
+          title: Text(S.of(context).drive),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(
+              Theme.of(context).appBarTheme.toolbarHeight ?? kToolbarHeight,
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                // `reverse: true` とすると [SingleChildScrollView] は子が長くても
+                // 右端のウィジェットを表示する。そのためネストが深くなっても現在の
+                // フォルダを表示させることができる。
+                reverse: true,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: IconButton(
+                        onPressed: hierarchyFolders.value.isNotEmpty
+                            ? () => hierarchyFolders.value = []
+                            : null,
+                        icon: Icon(
+                          Icons.cloud,
+                          color: hierarchyFolders.value.isNotEmpty
+                              ? appBarForegroundColor.withValues(alpha: 0.8)
+                              : appBarForegroundColor,
+                        ),
+                      ),
+                    ),
+                    ...hierarchyFolders.value
+                        .mapIndexed(
+                          (index, folder) => [
+                            Icon(
+                              Icons.navigate_next,
+                              color: appBarForegroundColor.withValues(
+                                alpha: 0.5,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: folder.id != folderId
+                                  ? () => hierarchyFolders.value =
+                                        hierarchyFolders.value.sublist(
+                                          0,
+                                          index + 1,
+                                        )
+                                  : null,
+                              style: TextButton.styleFrom(
+                                foregroundColor: appBarForegroundColor
+                                    .withValues(alpha: 0.8),
+                                disabledForegroundColor: appBarForegroundColor,
+                              ),
+                              child: Text(
+                                folder.name,
+                                style: TextStyle(
+                                  fontWeight: folder.id == folderId
+                                      ? FontWeight.bold
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                        .flattened,
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
         body: RefreshIndicator(
           onRefresh: () async => await Future.wait([
             ref.refresh(driveFoldersNotifierProvider(folderId).future),
