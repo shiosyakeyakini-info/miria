@@ -975,6 +975,7 @@
     "deleted": "削除しました",
     "editFile": "ファイルを編集",
     "editImage": "画像を編集",
+    "createNoteFromThisFile": "このファイルからノートを作成",
     "changeFolderName": "フォルダ名を変更",
     "confirmDeleteFolder": "このフォルダを削除しますか？",
     "noFiles": "ファイルがありません",
