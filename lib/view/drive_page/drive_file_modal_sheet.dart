@@ -90,6 +90,16 @@ class DriveFileModalSheet extends ConsumerWidget {
     );
   }
 
+  Future<void> download(WidgetRef ref) async {
+    final context = ref.context;
+    await ref.read(downloadFileNotifierProvider.notifier).downloadFile(file);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context).fileDownloaded)),
+    );
+    Navigator.of(context).pop();
+  }
+
   Future<void> delete(WidgetRef ref) async {
     final context = ref.context;
     final misskey = ref.read(misskeyProvider(account));
@@ -159,6 +169,12 @@ class DriveFileModalSheet extends ConsumerWidget {
             Navigator.of(context).pop();
           },
         ),
+        if (Platform.isAndroid || Platform.isIOS)
+          ListTile(
+            leading: const Icon(Icons.download),
+            title: Text(S.of(context).download),
+            onTap: () => download(ref).expectFailure(context),
+          ),
         ListTile(
           leading: const Icon(Icons.delete),
           title: Text(S.of(context).delete),

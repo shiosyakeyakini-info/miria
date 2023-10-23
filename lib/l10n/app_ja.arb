@@ -971,11 +971,13 @@
     "confirm": "決定",
 
     "folderName": "フォルダ名",
+    "fileDownloaded": "ファイルを保存しました",
     "confirmDeleteFile": "このファイルを削除しますか？",
     "deleted": "削除しました",
     "editFile": "ファイルを編集",
     "editImage": "画像を編集",
     "createNoteFromThisFile": "このファイルからノートを作成",
+    "download": "ダウンロード",
     "changeFolderName": "フォルダ名を変更",
     "confirmDeleteFolder": "このフォルダを削除しますか？",
     "noFiles": "ファイルがありません",
