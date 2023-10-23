@@ -3336,11 +3336,29 @@ abstract class S {
   /// **'フォルダ名'**
   String get folderName;
 
+  /// No description provided for @confirmDeleteFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'このファイルを削除しますか？'**
+  String get confirmDeleteFile;
+
   /// No description provided for @deleted.
   ///
   /// In ja, this message translates to:
   /// **'削除しました'**
   String get deleted;
+
+  /// No description provided for @editFile.
+  ///
+  /// In ja, this message translates to:
+  /// **'ファイルを編集'**
+  String get editFile;
+
+  /// No description provided for @editImage.
+  ///
+  /// In ja, this message translates to:
+  /// **'画像を編集'**
+  String get editImage;
 
   /// No description provided for @changeFolderName.
   ///

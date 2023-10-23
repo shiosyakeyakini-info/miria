@@ -1,6 +1,8 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/note_create_page/thumbnail.dart";
 import "package:misskey_dart/misskey_dart.dart" hide Clip;
 
@@ -48,7 +50,11 @@ class DriveFileWidget extends ConsumerWidget {
                     ),
                   ),
                 ),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+                IconButton(
+                  onPressed: () async =>
+                      await context.pushRoute(DriveFileModalRoute(file: file)),
+                  icon: const Icon(Icons.more_vert),
+                ),
               ],
             ),
           ],

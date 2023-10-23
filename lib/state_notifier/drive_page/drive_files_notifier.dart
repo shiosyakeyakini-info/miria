@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:typed_data";
 
 import "package:miria/model/pagination_state.dart";
 import "package:miria/providers.dart";
@@ -51,5 +52,58 @@ class DriveFilesNotifier extends _$DriveFilesNotifier {
         isLastLoaded: response.isEmpty,
       );
     });
+  }
+
+  Future<void> uploadBinary(
+    Uint8List data, {
+    String? name,
+    String? comment,
+    bool? isSensitive,
+  }) async {
+    final response = await _misskey.drive.files.createAsBinary(
+      DriveFilesCreateRequest(
+        folderId: folderId,
+        name: name,
+        comment: comment,
+        isSensitive: isSensitive,
+      ),
+      data,
+    );
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(value.copyWith(items: [response, ...value.items]));
+  }
+
+  Future<void> delete(String fileId) async {
+    await _misskey.drive.files.delete(DriveFilesDeleteRequest(fileId: fileId));
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(
+      value.copyWith(
+        items: value.items.where((file) => file.id != fileId).toList(),
+      ),
+    );
+  }
+
+  Future<void> updateFile({
+    required String fileId,
+    String? name,
+    bool? isSensitive,
+    String? comment,
+  }) async {
+    final response = await _misskey.drive.files.update(
+      DriveFilesUpdateRequest(
+        fileId: fileId,
+        name: name,
+        isSensitive: isSensitive,
+        comment: comment,
+      ),
+    );
+    final value = state.value ?? const PaginationState();
+    state = AsyncValue.data(
+      value.copyWith(
+        items: value.items
+            .map((file) => file.id == fileId ? response : file)
+            .toList(),
+      ),
+    );
   }
 }

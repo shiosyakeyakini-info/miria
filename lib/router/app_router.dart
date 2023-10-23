@@ -40,6 +40,7 @@ import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
 import "package:miria/view/common/text_form_field_dialog.dart";
 import "package:miria/view/drafts_page/drafts_dialog.dart";
 import "package:miria/view/drafts_page/drafts_page.dart";
+import "package:miria/view/drive_page/drive_file_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_folder_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_page.dart";
 import "package:miria/view/drive_page/drive_shell_page.dart";
@@ -170,6 +171,7 @@ class AppRouter extends RootStackRouter {
       page: DriveShellRoute.page,
       children: [
         AutoRoute(page: DriveRoute.page),
+        AutoModalRouteSheet(page: DriveFileModalRoute.page),
         AutoModalRouteSheet(page: DriveFolderModalRoute.page),
       ],
     ),

@@ -1615,6 +1615,53 @@ class DraftsRouteArgs {
 }
 
 /// generated route for
+/// [DriveFileModalSheet]
+class DriveFileModalRoute extends PageRouteInfo<DriveFileModalRouteArgs> {
+  DriveFileModalRoute({
+    required DriveFile file,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFileModalRoute.name,
+         args: DriveFileModalRouteArgs(file: file, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFileModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFileModalRouteArgs>();
+      return DriveFileModalSheet(file: args.file, key: args.key);
+    },
+  );
+}
+
+class DriveFileModalRouteArgs {
+  const DriveFileModalRouteArgs({required this.file, this.key});
+
+  final DriveFile file;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFileModalRouteArgs{file: $file, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFileModalRouteArgs) return false;
+    return file == other.file && key == other.key;
+  }
+
+  @override
+  int get hashCode => file.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [DriveFileSelectDialog]
 class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
   DriveFileSelectRoute({

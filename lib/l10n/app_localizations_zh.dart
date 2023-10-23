@@ -1920,7 +1920,16 @@ class SZh extends S {
   String get folderName => 'フォルダ名';
 
   @override
+  String get confirmDeleteFile => 'このファイルを削除しますか？';
+
+  @override
   String get deleted => '削除しました';
+
+  @override
+  String get editFile => 'ファイルを編集';
+
+  @override
+  String get editImage => '画像を編集';
 
   @override
   String get changeFolderName => 'フォルダ名を変更';
