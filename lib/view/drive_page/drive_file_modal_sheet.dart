@@ -9,12 +9,14 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/download_file_notifier.dart";
 import "package:miria/state_notifier/drive_page/drive_files_notifier.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:miria/view/note_create_page/thumbnail.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:url_launcher/url_launcher.dart";
 
 @RoutePage()
 class DriveFileModalSheet extends ConsumerWidget {
@@ -89,6 +91,43 @@ class DriveFileModalSheet extends ConsumerWidget {
             ),
       ),
     );
+    if (!ref.context.mounted) return;
+    await ref.context.maybePop();
+  }
+
+  Future<void> _download(WidgetRef ref) async {
+    if (defaultTargetPlatform
+        case TargetPlatform.android || TargetPlatform.iOS) {
+      final result = await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .guard(
+            () => ref
+                .read(downloadFileNotifierProvider.notifier)
+                .downloadFile(file),
+          );
+      if (!ref.context.mounted) return;
+      if (result.value case DownloadFileResult.succeeded) {
+        ScaffoldMessenger.of(ref.context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(ref.context).fileDownloaded),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+        await ref.context.maybePop();
+      } else {
+        await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .showSimpleDialog(
+              message: (context) =>
+                  "${S.of(context).failedFileSave}\n[$result]",
+            );
+      }
+    } else {
+      await launchUrl(
+        Uri.parse(file.url),
+        mode: LaunchMode.externalApplication,
+      );
+    }
     if (!ref.context.mounted) return;
     await ref.context.maybePop();
   }
@@ -171,6 +210,11 @@ class DriveFileModalSheet extends ConsumerWidget {
             );
             await ref.context.maybePop();
           },
+        ),
+        ListTile(
+          leading: const Icon(Icons.download),
+          title: Text(S.of(context).download),
+          onTap: () async => await _download(ref),
         ),
         ListTile(
           leading: const Icon(Icons.delete),
