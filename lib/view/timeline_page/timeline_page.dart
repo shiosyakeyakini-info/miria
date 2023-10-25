@@ -5,7 +5,6 @@ import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/repository/socket_timeline_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/channel_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -97,7 +96,9 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   }
 
   void reload() {
-    ref.read(currentTabSetting.timelineProvider).moveToOlder();
+    ref
+        .read(timelineRepositoryProvider(currentTabSetting).notifier)
+        .moveToOlder();
     scrollControllers[currentIndex].forceScrollToTop();
   }
 
@@ -105,7 +106,9 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     final tabSetting = tabSettings[index];
     if ([TabType.globalTimeline, TabType.homeTimeline, TabType.hybridTimeline]
         .contains(tabSetting.tabType)) {
-      ref.read(tabSetting.timelineProvider).moveToOlder();
+      ref
+          .read(timelineRepositoryProvider(currentTabSetting).notifier)
+          .moveToOlder();
     }
     setState(() {
       currentIndex = index;
@@ -116,7 +119,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     CommunityChannel? channel;
     if (currentTabSetting.channelId != null) {
       final Note? note;
-      final timeline = ref.read(currentTabSetting.timelineProvider);
+      final timeline = ref.read(timelineRepositoryProvider(currentTabSetting));
       if (timeline.olderNotes.isNotEmpty) {
         note = timeline.olderNotes.first;
       } else if (timeline.newerNotes.isNotEmpty) {
@@ -198,10 +201,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
   @override
   Widget build(BuildContext context) {
-    final socketTimelineBase = ref.watch(currentTabSetting.timelineProvider);
-    final socketTimeline = socketTimelineBase is SocketTimelineRepository
-        ? socketTimelineBase
-        : null;
+    final timeline = ref.watch(timelineRepositoryProvider(currentTabSetting));
     tabSettings = ref.watch(
       tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
     );
@@ -295,27 +295,26 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
                   IconButton(
                     onPressed: () => ref
                         .read(
-                          currentTabSetting.tabType
-                              .timelineProvider(currentTabSetting),
+                          timelineRepositoryProvider(currentTabSetting)
+                              .notifier,
                         )
-                        .reconnect(),
-                    icon:
-                        socketTimeline != null && socketTimeline.isReconnecting
-                            ? const CircularProgressIndicator()
-                            : const Icon(Icons.refresh),
+                        .startTimeline(restart: true),
+                    icon: timeline.isLoading
+                        ? const CircularProgressIndicator()
+                        : const Icon(Icons.refresh),
                   )
                 ],
               ),
             ),
-            if (socketTimeline?.isLoading == true)
+            if (timeline.isLoading)
               const Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Center(child: CircularProgressIndicator()),
               ),
-            if (socketTimeline?.error != null)
+            if (timeline.error != null)
               ErrorDetail(
-                error: socketTimeline?.error?.$1,
-                stackTrace: socketTimeline?.error?.$2,
+                error: timeline.error?.$1,
+                stackTrace: timeline.error?.$2,
               ),
             Expanded(
               child: PageView.builder(
@@ -336,8 +335,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
                         Expanded(
                           child: MisskeyTimeline(
                             controller: scrollControllers[index],
-                            timeLineRepositoryProvider:
-                                tabSetting.tabType.timelineProvider(tabSetting),
+                            tabSetting: tabSetting,
                           ),
                         ),
                         const TimelineEmoji(),

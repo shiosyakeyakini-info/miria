@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/general_settings.dart';
+import 'package:miria/model/tab_setting.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/repository/timeline_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -13,13 +14,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
-  final ChangeNotifierProvider<TimelineRepository> timeLineRepositoryProvider;
+  final TabSetting tabSetting;
   final TimelineScrollController controller;
 
   MisskeyTimeline({
     super.key,
     TimelineScrollController? controller,
-    required this.timeLineRepositoryProvider,
+    required this.tabSetting,
   }) : controller = controller ?? TimelineScrollController();
 
   @override
@@ -31,35 +32,14 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   late final TimelineScrollController scrollController = widget.controller;
   bool isScrolling = false;
   late TimelineRepository timelineRepository =
-      ref.read(widget.timeLineRepositoryProvider);
+      ref.read(timelineRepositoryProvider(widget.tabSetting).notifier);
   bool contextAccessed = false;
 
   bool isInitStated = false;
-  bool isDownDirectionLoading = false;
-  bool isLastLoaded = false;
 
   Future<void> downDirectionLoad() async {
-    if (isDownDirectionLoading) return;
     Future(() async {
-      try {
-        if (!mounted) return;
-        setState(() {
-          isDownDirectionLoading = true;
-        });
-        final result = await timelineRepository.previousLoad();
-        if (!mounted) return;
-        setState(() {
-          isDownDirectionLoading = false;
-          isLastLoaded = result == 0;
-        });
-      } catch (e) {
-        if (mounted) {
-          setState(() {
-            isDownDirectionLoading = false;
-          });
-        }
-        rethrow;
-      }
+      await timelineRepository.downDirectionLoad();
     });
   }
 
@@ -67,13 +47,15 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     contextAccessed = true;
-    if (oldWidget.timeLineRepositoryProvider !=
-        widget.timeLineRepositoryProvider) {
-      ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
-      ref.read(widget.timeLineRepositoryProvider).startTimeline();
-      timelineRepository = ref.read(widget.timeLineRepositoryProvider);
-      isDownDirectionLoading = false;
-      isLastLoaded = false;
+    if (oldWidget.tabSetting != widget.tabSetting) {
+      ref
+          .read(timelineRepositoryProvider(oldWidget.tabSetting).notifier)
+          .disconnect();
+      ref
+          .read(timelineRepositoryProvider(widget.tabSetting).notifier)
+          .startTimeline();
+      timelineRepository =
+          ref.read(timelineRepositoryProvider(widget.tabSetting).notifier);
     }
   }
 
@@ -82,7 +64,9 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     super.initState();
     if (isInitStated) return;
     Future(() {
-      ref.read(widget.timeLineRepositoryProvider).startTimeline();
+      ref
+          .read(timelineRepositoryProvider(widget.tabSetting).notifier)
+          .startTimeline();
     });
   }
 
@@ -97,7 +81,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     if (scrollController.positions.isNotEmpty) {
       scrollController.scrollToTop();
     }
-    final repository = ref.watch(widget.timeLineRepositoryProvider);
+    final repository = ref.watch(timelineRepositoryProvider(widget.tabSetting));
 
     return Padding(
         padding: const EdgeInsets.only(right: 10),
@@ -109,16 +93,15 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
           itemBuilder: (BuildContext context, int index) {
             // final corecctedIndex = index - 5;
             final correctedNewer = [
-              if (timelineRepository.olderNotes.isNotEmpty)
-                ...timelineRepository.olderNotes
-                    .slice(0, min(5, timelineRepository.olderNotes.length))
+              if (repository.olderNotes.isNotEmpty)
+                ...repository.olderNotes
+                    .slice(0, min(5, repository.olderNotes.length))
                     .reversed,
-              ...timelineRepository.newerNotes,
+              ...repository.newerNotes,
             ];
             final correctedOlder = [
-              if (timelineRepository.olderNotes.length > 5)
-                ...timelineRepository.olderNotes
-                    .slice(5, timelineRepository.olderNotes.length)
+              if (repository.olderNotes.length > 5)
+                ...repository.olderNotes.slice(5, repository.olderNotes.length)
             ];
 
             if (index > 0) {
@@ -133,11 +116,11 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
             }
 
             if (-index == correctedOlder.length) {
-              if (isLastLoaded) {
+              if (repository.isLastLoaded) {
                 return const SizedBox.shrink();
               }
 
-              if (isDownDirectionLoading &&
+              if (repository.isDownDirectionLoading &&
                   repository.newerNotes.length + repository.olderNotes.length !=
                       0) {
                 return const Padding(
@@ -189,25 +172,13 @@ class NoteWrapperState extends ConsumerState<NoteWrapper> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.targetNote.renoteId != null && widget.targetNote.text == null) {
-      widget.timeline.subscribe(SubscribeItem(
-        noteId: widget.targetNote.renoteId!,
-        renoteId: null,
-        replyId: null,
-      ));
-    } else {
-      widget.timeline.subscribe(SubscribeItem(
-        noteId: widget.targetNote.id,
-        renoteId: widget.targetNote.renoteId,
-        replyId: widget.targetNote.replyId,
-      ));
-    }
+    widget.timeline.subscribe(widget.targetNote);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.timeline.preserveDescribe(widget.targetNote.id);
+    widget.timeline.preserveUnsubscribe(widget.targetNote);
   }
 
   @override
