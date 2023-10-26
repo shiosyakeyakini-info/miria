@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/image_file.dart';
@@ -20,15 +21,19 @@ class CreateFileView extends ConsumerWidget {
   });
 
   Future<void> onTap(BuildContext context, WidgetRef ref) async {
-    final account = AccountScope.of(context);
-    context.pushRoute<Uint8List?>(PhotoEditRoute(
-        account: AccountScope.of(context),
-        file: file,
-        onSubmit: (result) {
-          ref
-              .read(noteCreateProvider(account).notifier)
-              .setFileContent(file, result);
-        }));
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.android) {
+      final account = AccountScope.of(context);
+      context.pushRoute<Uint8List?>(PhotoEditRoute(
+          account: AccountScope.of(context),
+          file: file,
+          onSubmit: (result) {
+            ref
+                .read(noteCreateProvider(account).notifier)
+                .setFileContent(file, result);
+          }));
+    }
   }
 
   Future<void> detailTap(BuildContext context, WidgetRef ref) async {
