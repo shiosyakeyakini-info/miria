@@ -495,10 +495,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       if (!mounted) return;
       final result = await showDialog<List<DriveFile>?>(
         context: context,
-        builder: (context) => DriveFileSelectDialog(
-          account: state.account,
-          allowMultiple: true,
-        ),
+        builder: (context) => DriveFileSelectDialog(account: state.account),
       );
       if (result == null) return;
       final files = await Future.wait(
