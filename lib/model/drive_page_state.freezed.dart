@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DrivePageState {
   List<DriveFolder> get breadcrumbs => throw _privateConstructorUsedError;
+  List<DriveFile> get selectedFiles => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DrivePageStateCopyWith<DrivePageState> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $DrivePageStateCopyWith<$Res> {
           DrivePageState value, $Res Function(DrivePageState) then) =
       _$DrivePageStateCopyWithImpl<$Res, DrivePageState>;
   @useResult
-  $Res call({List<DriveFolder> breadcrumbs});
+  $Res call({List<DriveFolder> breadcrumbs, List<DriveFile> selectedFiles});
 }
 
 /// @nodoc
@@ -46,12 +47,17 @@ class _$DrivePageStateCopyWithImpl<$Res, $Val extends DrivePageState>
   @override
   $Res call({
     Object? breadcrumbs = null,
+    Object? selectedFiles = null,
   }) {
     return _then(_value.copyWith(
       breadcrumbs: null == breadcrumbs
           ? _value.breadcrumbs
           : breadcrumbs // ignore: cast_nullable_to_non_nullable
               as List<DriveFolder>,
+      selectedFiles: null == selectedFiles
+          ? _value.selectedFiles
+          : selectedFiles // ignore: cast_nullable_to_non_nullable
+              as List<DriveFile>,
     ) as $Val);
   }
 }
@@ -64,7 +70,7 @@ abstract class _$$DrivePageStateImplCopyWith<$Res>
       __$$DrivePageStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<DriveFolder> breadcrumbs});
+  $Res call({List<DriveFolder> breadcrumbs, List<DriveFile> selectedFiles});
 }
 
 /// @nodoc
@@ -79,12 +85,17 @@ class __$$DrivePageStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? breadcrumbs = null,
+    Object? selectedFiles = null,
   }) {
     return _then(_$DrivePageStateImpl(
       breadcrumbs: null == breadcrumbs
           ? _value._breadcrumbs
           : breadcrumbs // ignore: cast_nullable_to_non_nullable
               as List<DriveFolder>,
+      selectedFiles: null == selectedFiles
+          ? _value._selectedFiles
+          : selectedFiles // ignore: cast_nullable_to_non_nullable
+              as List<DriveFile>,
     ));
   }
 }
@@ -92,8 +103,11 @@ class __$$DrivePageStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DrivePageStateImpl implements _DrivePageState {
-  const _$DrivePageStateImpl({final List<DriveFolder> breadcrumbs = const []})
-      : _breadcrumbs = breadcrumbs;
+  const _$DrivePageStateImpl(
+      {final List<DriveFolder> breadcrumbs = const [],
+      final List<DriveFile> selectedFiles = const []})
+      : _breadcrumbs = breadcrumbs,
+        _selectedFiles = selectedFiles;
 
   final List<DriveFolder> _breadcrumbs;
   @override
@@ -104,9 +118,18 @@ class _$DrivePageStateImpl implements _DrivePageState {
     return EqualUnmodifiableListView(_breadcrumbs);
   }
 
+  final List<DriveFile> _selectedFiles;
+  @override
+  @JsonKey()
+  List<DriveFile> get selectedFiles {
+    if (_selectedFiles is EqualUnmodifiableListView) return _selectedFiles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedFiles);
+  }
+
   @override
   String toString() {
-    return 'DrivePageState(breadcrumbs: $breadcrumbs)';
+    return 'DrivePageState(breadcrumbs: $breadcrumbs, selectedFiles: $selectedFiles)';
   }
 
   @override
@@ -115,12 +138,16 @@ class _$DrivePageStateImpl implements _DrivePageState {
         (other.runtimeType == runtimeType &&
             other is _$DrivePageStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._breadcrumbs, _breadcrumbs));
+                .equals(other._breadcrumbs, _breadcrumbs) &&
+            const DeepCollectionEquality()
+                .equals(other._selectedFiles, _selectedFiles));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_breadcrumbs));
+      runtimeType,
+      const DeepCollectionEquality().hash(_breadcrumbs),
+      const DeepCollectionEquality().hash(_selectedFiles));
 
   @JsonKey(ignore: true)
   @override
@@ -131,11 +158,14 @@ class _$DrivePageStateImpl implements _DrivePageState {
 }
 
 abstract class _DrivePageState implements DrivePageState {
-  const factory _DrivePageState({final List<DriveFolder> breadcrumbs}) =
-      _$DrivePageStateImpl;
+  const factory _DrivePageState(
+      {final List<DriveFolder> breadcrumbs,
+      final List<DriveFile> selectedFiles}) = _$DrivePageStateImpl;
 
   @override
   List<DriveFolder> get breadcrumbs;
+  @override
+  List<DriveFile> get selectedFiles;
   @override
   @JsonKey(ignore: true)
   _$$DrivePageStateImplCopyWith<_$DrivePageStateImpl> get copyWith =>

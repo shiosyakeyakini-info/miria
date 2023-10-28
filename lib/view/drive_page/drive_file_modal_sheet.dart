@@ -137,6 +137,7 @@ class DriveFileModalSheet extends ConsumerWidget {
             driveFilesNotifierProvider((misskey, file.folderId)).notifier,
           )
           .delete(file.id);
+      ref.read(drivePageNotifierProvider.notifier).deselectFile(file);
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.of(context).deleted)),

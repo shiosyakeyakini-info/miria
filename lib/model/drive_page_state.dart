@@ -7,5 +7,6 @@ part 'drive_page_state.freezed.dart';
 class DrivePageState with _$DrivePageState {
   const factory DrivePageState({
     @Default([]) List<DriveFolder> breadcrumbs,
+    @Default([]) List<DriveFile> selectedFiles,
   }) = _DrivePageState;
 }

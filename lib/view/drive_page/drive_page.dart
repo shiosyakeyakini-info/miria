@@ -15,6 +15,7 @@ import 'package:miria/view/drive_page/drive_create_modal_sheet.dart';
 import 'package:miria/view/drive_page/drive_file_grid_item.dart';
 import 'package:miria/view/drive_page/drive_folder_grid_item.dart';
 import 'package:miria/view/drive_page/drive_folder_modal_sheet.dart';
+import 'package:miria/view/drive_page/drive_selected_files_modal_sheet.dart';
 
 @RoutePage()
 class DrivePage extends ConsumerWidget {
@@ -23,20 +24,21 @@ class DrivePage extends ConsumerWidget {
     required this.account,
     this.title,
     this.floatingActionButtonBuilder,
+    this.tapToSelect = false,
   });
 
   final Account account;
   final Widget? title;
   final Widget Function(BuildContext context)? floatingActionButtonBuilder;
+  final bool tapToSelect;
 
   static const itemMaxCrossAxisExtent = 400.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyProvider(account));
-    final last = ref.watch(
-      drivePageNotifierProvider.select((state) => state.breadcrumbs.lastOrNull),
-    );
+    final state = ref.watch(drivePageNotifierProvider);
+    final last = state.breadcrumbs.lastOrNull;
     final folderId = last?.id;
     final arg = (misskey, folderId);
     final currentFolder = ref.watch(
@@ -54,17 +56,25 @@ class DrivePage extends ConsumerWidget {
             repository.settings.automaticPush == AutomaticPush.automatic,
       ),
     );
+    final isSelecting = tapToSelect || state.selectedFiles.isNotEmpty;
 
     return PopScope(
-      canPop: currentFolder == null,
+      canPop: currentFolder == null && state.selectedFiles.isEmpty,
       onPopInvoked: (_) {
-        if (currentFolder != null) {
+        if (state.selectedFiles.isNotEmpty) {
+          ref.read(drivePageNotifierProvider.notifier).deselectAll();
+        } else if (currentFolder != null) {
           ref.read(drivePageNotifierProvider.notifier).pop();
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: title ?? Text(S.of(context).drive),
+          leading: state.selectedFiles.isEmpty
+              ? const BackButton()
+              : const CloseButton(),
+          title: state.selectedFiles.isEmpty
+              ? title ?? Text(S.of(context).drive)
+              : Text(S.of(context).selectedFiles(state.selectedFiles.length)),
           actions: [
             if (floatingActionButtonBuilder != null)
               IconButton(
@@ -77,7 +87,45 @@ class DrivePage extends ConsumerWidget {
                 ),
                 icon: const Icon(Icons.add),
               ),
-            if (currentFolder != null)
+            if (isSelecting) ...[
+              files.maybeWhen(
+                data: (files) {
+                  if (files.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  if (files.every(
+                    (file) => state.selectedFiles.any((e) => e.id == file.id),
+                  )) {
+                    return IconButton(
+                      onPressed: () => ref
+                          .read(drivePageNotifierProvider.notifier)
+                          .deselectFiles(files),
+                      icon: const Icon(Icons.deselect),
+                    );
+                  } else {
+                    return IconButton(
+                      onPressed: () => ref
+                          .read(drivePageNotifierProvider.notifier)
+                          .selectFiles(files),
+                      icon: const Icon(Icons.select_all),
+                    );
+                  }
+                },
+                orElse: () => const SizedBox.shrink(),
+              ),
+              IconButton(
+                onPressed: state.selectedFiles.isNotEmpty
+                    ? () => showModalBottomSheet<void>(
+                          context: context,
+                          builder: (context) => DriveSelectedFilesModalSheet(
+                            account: account,
+                            files: state.selectedFiles,
+                          ),
+                        )
+                    : null,
+                icon: const Icon(Icons.more_vert),
+              ),
+            ] else if (currentFolder != null)
               IconButton(
                 onPressed: () async {
                   await showModalBottomSheet<void>(
@@ -219,15 +267,35 @@ class DrivePage extends ConsumerWidget {
                         return const SizedBox.shrink();
                       }
                       final file = files[index];
+                      final isSelected =
+                          state.selectedFiles.any((e) => e.id == file.id);
                       return DriveFileGridItem(
                         account: account,
                         file: file,
-                        onTap: () => context.pushRoute(
-                          DriveFileRoute(
-                            account: account,
-                            file: file,
-                          ),
-                        ),
+                        isSelected: isSelected,
+                        onTap: () {
+                          if (isSelecting) {
+                            if (isSelected) {
+                              ref
+                                  .read(drivePageNotifierProvider.notifier)
+                                  .deselectFile(file);
+                            } else {
+                              ref
+                                  .read(drivePageNotifierProvider.notifier)
+                                  .selectFile(file);
+                            }
+                          } else {
+                            context.pushRoute(
+                              DriveFileRoute(
+                                account: account,
+                                file: file,
+                              ),
+                            );
+                          }
+                        },
+                        onLongPress: () => ref
+                            .read(drivePageNotifierProvider.notifier)
+                            .selectFile(file),
                       );
                     },
                   ),
