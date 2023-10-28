@@ -1822,6 +1822,53 @@ class DriveFileSelectRouteArgs {
 }
 
 /// generated route for
+/// [DriveFilesModalSheet]
+class DriveFilesModalRoute extends PageRouteInfo<DriveFilesModalRouteArgs> {
+  DriveFilesModalRoute({
+    required List<DriveFile> files,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveFilesModalRoute.name,
+         args: DriveFilesModalRouteArgs(files: files, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'DriveFilesModalRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFilesModalRouteArgs>();
+      return DriveFilesModalSheet(files: args.files, key: args.key);
+    },
+  );
+}
+
+class DriveFilesModalRouteArgs {
+  const DriveFilesModalRouteArgs({required this.files, this.key});
+
+  final List<DriveFile> files;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'DriveFilesModalRouteArgs{files: $files, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFilesModalRouteArgs) return false;
+    return const ListEquality().equals(files, other.files) && key == other.key;
+  }
+
+  @override
+  int get hashCode => const ListEquality().hash(files) ^ key.hashCode;
+}
+
+/// generated route for
 /// [DriveFolderModalSheet]
 class DriveFolderModalRoute extends PageRouteInfo<DriveFolderModalRouteArgs> {
   DriveFolderModalRoute({

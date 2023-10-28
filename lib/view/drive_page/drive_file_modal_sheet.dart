@@ -11,6 +11,7 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/download_file_notifier.dart";
 import "package:miria/state_notifier/drive_page/drive_files_notifier.dart";
+import "package:miria/state_notifier/drive_page/selected_drive_files_notifier_provider.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
@@ -150,6 +151,7 @@ class DriveFileModalSheet extends ConsumerWidget {
           );
       if (result.hasError) return;
       if (!ref.context.mounted) return;
+      ref.read(selectedDriveFilesNotifierProvider.notifier).remove(file.id);
       ScaffoldMessenger.of(ref.context).showSnackBar(
         SnackBar(
           content: Text(S.of(ref.context).moved),

@@ -1,42 +1,44 @@
+import "dart:io";
+
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/state_notifier/drive_page/drive_folders_notifier.dart";
+import "package:miria/state_notifier/common/download_file_notifier.dart";
+import "package:miria/state_notifier/drive_page/drive_files_notifier.dart";
 import "package:miria/state_notifier/drive_page/selected_drive_files_notifier_provider.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class DriveFolderModalSheet extends ConsumerWidget {
-  const DriveFolderModalSheet({required this.folder, super.key});
+class DriveFilesModalSheet extends ConsumerWidget {
+  const DriveFilesModalSheet({required this.files, super.key});
 
-  final DriveFolder folder;
+  final List<DriveFile> files;
 
-  Future<void> _changeName(WidgetRef ref) async {
-    final name = await ref.context.pushRoute<String>(
-      TextFormFieldRoute(
-        title: Text(S.of(ref.context).changeFolderName),
-        labelText: S.of(ref.context).folderName,
-        initialValue: folder.name,
+  Future<void> _download(WidgetRef ref) async {
+    await ref
+        .read(dialogStateNotifierProvider.notifier)
+        .guard(
+          () => Future.wait(
+            files.map(
+              (file) => ref
+                  .read(downloadFileNotifierProvider.notifier)
+                  .downloadFile(file),
+            ),
+          ),
+        );
+    if (!ref.context.mounted) return;
+    ScaffoldMessenger.of(ref.context).showSnackBar(
+      SnackBar(
+        content: Text(S.of(ref.context).fileDownloaded),
+        duration: const Duration(seconds: 1),
       ),
     );
-    if (!ref.context.mounted) return;
-    if (name != null && name != folder.name) {
-      await ref
-          .read(dialogStateNotifierProvider.notifier)
-          .guard(
-            () => ref
-                .read(driveFoldersNotifierProvider(folder.parentId).notifier)
-                .updateName(folder.id, name),
-          );
-      if (!ref.context.mounted) return;
-      await ref.context.maybePop();
-    }
+    await ref.context.maybePop();
   }
 
   Future<void> _move(WidgetRef ref) async {
@@ -47,16 +49,20 @@ class DriveFolderModalSheet extends ConsumerWidget {
       ),
     );
     if (result case (final DriveFolder? parent,)) {
-      if (parent?.id == folder.parentId) return;
       final result = await ref
           .read(dialogStateNotifierProvider.notifier)
           .guard(
-            () => ref
-                .read(driveFoldersNotifierProvider(folder.parentId).notifier)
-                .move(folderId: folder.id, parentId: parent?.id),
+            () => Future.wait(
+              files.map(
+                (file) => ref
+                    .read(driveFilesNotifierProvider(file.folderId).notifier)
+                    .move(fileId: file.id, folderId: parent?.id),
+              ),
+            ),
           );
       if (result.hasError) return;
       if (!ref.context.mounted) return;
+      ref.read(selectedDriveFilesNotifierProvider.notifier).removeAll();
       ScaffoldMessenger.of(ref.context).showSnackBar(
         SnackBar(
           content: Text(S.of(ref.context).moved),
@@ -70,7 +76,7 @@ class DriveFolderModalSheet extends ConsumerWidget {
   Future<void> _delete(WidgetRef ref) async {
     final result = await SimpleConfirmDialog.show(
       context: ref.context,
-      message: S.of(ref.context).confirmDeleteFolder,
+      message: S.of(ref.context).confirmDeleteFiles(files.length),
       primary: S.of(ref.context).willDelete,
       secondary: S.of(ref.context).cancel,
     );
@@ -78,9 +84,13 @@ class DriveFolderModalSheet extends ConsumerWidget {
       final result = await ref
           .read(dialogStateNotifierProvider.notifier)
           .guard(
-            () => ref
-                .read(driveFoldersNotifierProvider(folder.parentId).notifier)
-                .delete(folder.id),
+            () => Future.wait(
+              files.map(
+                (file) => ref
+                    .read(driveFilesNotifierProvider(file.folderId).notifier)
+                    .delete(file.id),
+              ),
+            ),
           );
       if (result.hasError) return;
       if (!ref.context.mounted) return;
@@ -100,16 +110,13 @@ class DriveFolderModalSheet extends ConsumerWidget {
     return ListView(
       shrinkWrap: true,
       children: [
-        ListTile(
-          leading: const Icon(Icons.folder, size: 50),
-          title: Text(folder.name),
-          subtitle: Text(folder.createdAt.formatUntilSeconds(context)),
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: Text(S.of(context).changeFolderName),
-          onTap: () async => await _changeName(ref),
-        ),
+        ListTile(title: Text(S.of(context).nFiles(files.length))),
+        if (Platform.isAndroid || Platform.isIOS)
+          ListTile(
+            leading: const Icon(Icons.download),
+            title: Text(S.of(context).download),
+            onTap: () async => await _download(ref),
+          ),
         ListTile(
           leading: const Icon(Icons.drive_file_move),
           title: Text(S.of(context).move),

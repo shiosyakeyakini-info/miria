@@ -1060,6 +1060,24 @@
     "changeFolderName": "フォルダ名を変更",
     "confirmDeleteFolder": "このフォルダを削除しますか？",
     "noFiles": "ファイルがありません",
+    "confirmDeleteFiles": "{n, plural, other {{n}個のファイルを削除しますか？}}",
+    "@confirmDeleteFiles": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nFiles": "{n, plural, other {{n}個のファイル}}",
+    "@nFiles": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
     "changeFileName": "ファイル名を変更",
     "changeCaption": "キャプションを変更",
     "none": "なし",

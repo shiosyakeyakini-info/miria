@@ -43,6 +43,7 @@ import "package:miria/view/drafts_page/drafts_page.dart";
 import "package:miria/view/drive_page/drive_create_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_file_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_file_page/drive_file_page.dart";
+import "package:miria/view/drive_page/drive_files_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_folder_modal_sheet.dart";
 import "package:miria/view/drive_page/drive_page.dart";
 import "package:miria/view/drive_page/drive_shell_page.dart";
@@ -176,6 +177,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: DriveFileRoute.page),
         AutoModalRouteSheet(page: DriveCreateModalRoute.page),
         AutoModalRouteSheet(page: DriveFileModalRoute.page),
+        AutoModalRouteSheet(page: DriveFilesModalRoute.page),
         AutoModalRouteSheet(page: DriveFolderModalRoute.page),
       ],
     ),

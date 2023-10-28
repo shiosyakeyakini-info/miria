@@ -3414,6 +3414,18 @@ abstract class S {
   /// **'ファイルがありません'**
   String get noFiles;
 
+  /// No description provided for @confirmDeleteFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'{n, plural, other {{n}個のファイルを削除しますか？}}'**
+  String confirmDeleteFiles(int n);
+
+  /// No description provided for @nFiles.
+  ///
+  /// In ja, this message translates to:
+  /// **'{n, plural, other {{n}個のファイル}}'**
+  String nFiles(int n);
+
   /// No description provided for @changeFileName.
   ///
   /// In ja, this message translates to:

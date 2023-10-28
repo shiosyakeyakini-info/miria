@@ -1959,6 +1959,36 @@ class SZh extends S {
   String get noFiles => 'ファイルがありません';
 
   @override
+  String confirmDeleteFiles(int n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString個のファイルを削除しますか？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nFiles(int n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString個のファイル',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get changeFileName => 'ファイル名を変更';
 
   @override
