@@ -164,8 +164,8 @@ class _ProfileEditForm extends HookConsumerWidget {
                           final selected = await context
                               .pushRoute<List<DriveFile>?>(
                                 DriveFileSelectRoute(
-                                  account: account,
-                                  allowMultiple: false,
+                                  accountContext: AccountContext.as(account),
+                                  children: [DriveRoute(selectFile: true)],
                                 ),
                               );
                           if (selected != null && selected.isNotEmpty) {

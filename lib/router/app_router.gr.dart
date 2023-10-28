@@ -1759,16 +1759,14 @@ class DriveFileRouteArgs {
 /// [DriveFileSelectDialog]
 class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
   DriveFileSelectRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
-    bool allowMultiple = false,
     List<PageRouteInfo>? children,
   }) : super(
          DriveFileSelectRoute.name,
          args: DriveFileSelectRouteArgs(
-           account: account,
+           accountContext: accountContext,
            key: key,
-           allowMultiple: allowMultiple,
          ),
          initialChildren: children,
        );
@@ -1781,9 +1779,8 @@ class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
       final args = data.argsAs<DriveFileSelectRouteArgs>();
       return WrappedRoute(
         child: DriveFileSelectDialog(
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
-          allowMultiple: args.allowMultiple,
         ),
       );
     },
@@ -1791,34 +1788,26 @@ class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
 }
 
 class DriveFileSelectRouteArgs {
-  const DriveFileSelectRouteArgs({
-    required this.account,
-    this.key,
-    this.allowMultiple = false,
-  });
+  const DriveFileSelectRouteArgs({required this.accountContext, this.key});
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
-  final bool allowMultiple;
-
   @override
   String toString() {
-    return 'DriveFileSelectRouteArgs{account: $account, key: $key, allowMultiple: $allowMultiple}';
+    return 'DriveFileSelectRouteArgs{accountContext: $accountContext, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! DriveFileSelectRouteArgs) return false;
-    return account == other.account &&
-        key == other.key &&
-        allowMultiple == other.allowMultiple;
+    return accountContext == other.accountContext && key == other.key;
   }
 
   @override
-  int get hashCode => account.hashCode ^ key.hashCode ^ allowMultiple.hashCode;
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1935,12 +1924,19 @@ class DriveModalRoute extends PageRouteInfo<void> {
 /// [DrivePage]
 class DriveRoute extends PageRouteInfo<DriveRouteArgs> {
   DriveRoute({
+    bool selectFile = false,
+    bool selectFiles = false,
     bool selectFolder = false,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
          DriveRoute.name,
-         args: DriveRouteArgs(selectFolder: selectFolder, key: key),
+         args: DriveRouteArgs(
+           selectFile: selectFile,
+           selectFiles: selectFiles,
+           selectFolder: selectFolder,
+           key: key,
+         ),
          initialChildren: children,
        );
 
@@ -1952,13 +1948,27 @@ class DriveRoute extends PageRouteInfo<DriveRouteArgs> {
       final args = data.argsAs<DriveRouteArgs>(
         orElse: () => const DriveRouteArgs(),
       );
-      return DrivePage(selectFolder: args.selectFolder, key: args.key);
+      return DrivePage(
+        selectFile: args.selectFile,
+        selectFiles: args.selectFiles,
+        selectFolder: args.selectFolder,
+        key: args.key,
+      );
     },
   );
 }
 
 class DriveRouteArgs {
-  const DriveRouteArgs({this.selectFolder = false, this.key});
+  const DriveRouteArgs({
+    this.selectFile = false,
+    this.selectFiles = false,
+    this.selectFolder = false,
+    this.key,
+  });
+
+  final bool selectFile;
+
+  final bool selectFiles;
 
   final bool selectFolder;
 
@@ -1966,18 +1976,25 @@ class DriveRouteArgs {
 
   @override
   String toString() {
-    return 'DriveRouteArgs{selectFolder: $selectFolder, key: $key}';
+    return 'DriveRouteArgs{selectFile: $selectFile, selectFiles: $selectFiles, selectFolder: $selectFolder, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! DriveRouteArgs) return false;
-    return selectFolder == other.selectFolder && key == other.key;
+    return selectFile == other.selectFile &&
+        selectFiles == other.selectFiles &&
+        selectFolder == other.selectFolder &&
+        key == other.key;
   }
 
   @override
-  int get hashCode => selectFolder.hashCode ^ key.hashCode;
+  int get hashCode =>
+      selectFile.hashCode ^
+      selectFiles.hashCode ^
+      selectFolder.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for

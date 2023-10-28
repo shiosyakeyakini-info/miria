@@ -63,8 +63,8 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
       // ドライブから選択
       final driveFiles = await router.push<List<DriveFile>>(
         DriveFileSelectRoute(
-          account: ref.read(accountContextProvider).postAccount,
-          allowMultiple: false,
+          accountContext: ref.read(accountContextProvider),
+          children: [DriveRoute(selectFiles: true)],
         ),
       );
 

@@ -206,7 +206,17 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<UsersListSettings>(page: UsersListSettingsRoute.page),
     AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
     AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
-    AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
+    AutoDialogRoute<List<DriveFile>>(
+      page: DriveFileSelectRoute.page,
+      children: [
+        AutoRoute(page: DriveRoute.page),
+        AutoRoute(page: DriveFileRoute.page),
+        AutoModalRouteSheet(page: DriveCreateModalRoute.page),
+        AutoModalRouteSheet(page: DriveFileModalRoute.page),
+        AutoModalRouteSheet(page: DriveFilesModalRoute.page),
+        AutoModalRouteSheet(page: DriveFolderModalRoute.page),
+      ],
+    ),
     AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
     AutoDialogRoute(page: DraftsModalRoute.page),
     AutoDialogRoute<String>(page: TextFormFieldRoute.page),
@@ -225,7 +235,7 @@ class AppRouter extends RootStackRouter {
 
 /// ダイアログ
 class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
-  AutoDialogRoute({required super.page})
+  AutoDialogRoute({required super.page, super.children})
     : super(
         transitionsBuilder: TransitionsBuilders.fadeIn,
         duration: const Duration(milliseconds: 200),

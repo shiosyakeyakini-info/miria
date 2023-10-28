@@ -741,8 +741,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           .read(appRouterProvider)
           .push<List<DriveFile>>(
             DriveFileSelectRoute(
-              account: ref.read(accountContextProvider).postAccount,
-              allowMultiple: true,
+              accountContext: ref.read(accountContextProvider),
+              children: [DriveRoute(selectFiles: true)],
             ),
           );
       if (result == null) return;
