@@ -80,7 +80,7 @@ class AvatarIcon extends StatelessWidget {
             );
           },
       child: Padding(
-        padding: const EdgeInsets.only(top: 3),
+        padding: const EdgeInsets.only(top: 3, left: 10, right: 5),
         child: Stack(
           children: [
             if (user.isCat)
