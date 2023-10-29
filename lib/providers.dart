@@ -202,16 +202,10 @@ final accountRepository = ChangeNotifierProvider((ref) => AccountRepository(
     ref.read(accountSettingsRepositoryProvider),
     ref.read));
 
-final accountProvider = Provider.family<Account, Acct>(
-  (ref, acct) => ref.watch(
-    accountRepository.select(
-      (repository) => repository.account.firstWhere(
-        (account) =>
-            account.host == acct.host && account.userId == acct.username,
-      ),
-    ),
-  ),
-);
+final accountProvider = Provider.family<Account, Acct>((ref, acct) {
+  final repository = ref.watch(accountRepository);
+  return repository.account.firstWhere((element) => element.acct == acct);
+});
 
 final tabSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => TabSettingsRepository());
