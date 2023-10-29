@@ -26,6 +26,7 @@ class AvatarIcon extends StatelessWidget {
         username: response.username,
         avatarUrl: response.avatarUrl,
         avatarBlurhash: response.avatarBlurhash,
+        avatarDecorations: response.avatarDecorations,
         isCat: response.isCat,
         isBot: response.isBot,
       ),
@@ -43,6 +44,7 @@ class AvatarIcon extends StatelessWidget {
         username: response.username,
         avatarUrl: response.avatarUrl,
         avatarBlurhash: response.avatarBlurhash,
+        avatarDecorations: response.avatarDecorations,
         isCat: response.isCat,
         isBot: response.isBot,
       ),
@@ -80,7 +82,10 @@ class AvatarIcon extends StatelessWidget {
             );
           },
       child: Padding(
-        padding: const EdgeInsets.only(top: 3, left: 10, right: 5),
+        padding: EdgeInsets.only(
+            top: 3,
+            left: 10 * MediaQuery.of(context).textScaleFactor,
+            right: 5 * MediaQuery.of(context).textScaleFactor),
         child: Stack(
           children: [
             if (user.isCat)
