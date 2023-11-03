@@ -64,6 +64,7 @@ class AccountRepository extends ChangeNotifier {
     _account[index] = _account[index].copyWith(i: i);
 
     accountDataValidated[index] = true;
+    reader(notesProvider(_account[index])).updateMute(i.mutedWords);
     notifyListeners();
   }
 

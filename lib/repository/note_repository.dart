@@ -26,7 +26,11 @@ class NoteRepository extends ChangeNotifier {
   final List<RegExp> muteWordRegExps = [];
 
   NoteRepository(this.misskey, Account account) {
-    for (final muteWord in account.i.mutedWords) {
+    updateMute(account.i.mutedWords);
+  }
+
+  void updateMute(List<MuteWord> mutedWords) {
+    for (final muteWord in mutedWords) {
       final content = muteWord.content;
       final regExp = muteWord.regExp;
       if (content != null) {
