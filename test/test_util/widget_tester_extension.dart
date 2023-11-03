@@ -13,7 +13,8 @@ extension WidgetTestExtension on WidgetTester {
 
   Future<void> pageNation() async {
     await tap(find.descendant(
-        of: find.byType(IconButton),
+        of: find.descendant(
+            of: find.byType(Center), matching: find.byType(IconButton)),
         matching: find.byIcon(Icons.keyboard_arrow_down)));
     await pumpAndSettle();
   }

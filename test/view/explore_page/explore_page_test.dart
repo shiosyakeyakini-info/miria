@@ -29,8 +29,8 @@ void main() {
         expect(find.text(TestData.note1.text!), findsOneWidget);
         verify(notes.featured(argThat(equals(const NotesFeaturedRequest()))));
         await tester.pageNation();
-        verify(notes.featured(
-            argThat(equals(NotesFeaturedRequest(untilId: TestData.note1.id)))));
+        verify(notes.featured(argThat(equals(
+            NotesFeaturedRequest(untilId: TestData.note1.id, offset: 1)))));
       });
 
       testWidgets("アンケートのノートを表示できること", (tester) async {
