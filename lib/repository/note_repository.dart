@@ -165,6 +165,17 @@ class NoteRepository extends ChangeNotifier {
     );
   }
 
+  void addMyReaction(String noteId, String reaction) {
+    addReaction(
+      noteId,
+      TimelineReacted(
+        reaction: reaction,
+        emoji: null,
+        userId: account.i.id,
+      ),
+    );
+  }
+
   void removeReaction(String noteId, TimelineReacted reaction) {
     final registeredNote = _notes[noteId];
     if (registeredNote == null) return;
@@ -189,6 +200,20 @@ class NoteRepository extends ChangeNotifier {
       registeredNote.copyWith(
         reactions: reactions,
         myReaction: isMyReaction ? "" : registeredNote.myReaction,
+      ),
+    );
+  }
+
+  void removeMyReaction(String noteId) {
+    final myReaction = _notes[noteId]?.myReaction;
+    if (myReaction == null) return;
+
+    removeReaction(
+      noteId,
+      TimelineReacted(
+        reaction: myReaction,
+        emoji: null,
+        userId: account.i.id,
       ),
     );
   }
