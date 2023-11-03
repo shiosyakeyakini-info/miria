@@ -142,6 +142,11 @@ class NoteRepository extends ChangeNotifier {
     final registeredNote = _notes[noteId];
     if (registeredNote == null) return;
 
+    final isMyReaction = reaction.userId == account.i.id;
+    if (isMyReaction && registeredNote.myReaction == reaction.reaction) {
+      return;
+    }
+
     final reactions = Map.of(registeredNote.reactions);
     reactions[reaction.reaction] = (reactions[reaction.reaction] ?? 0) + 1;
     final emoji = reaction.emoji;
@@ -154,9 +159,8 @@ class NoteRepository extends ChangeNotifier {
       registeredNote.copyWith(
         reactions: reactions,
         reactionEmojis: reactionEmojis,
-        myReaction: reaction.userId == account.i.id
-            ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-            : registeredNote.myReaction,
+        myReaction:
+            isMyReaction ? reaction.reaction : registeredNote.myReaction,
       ),
     );
   }
@@ -164,6 +168,11 @@ class NoteRepository extends ChangeNotifier {
   void removeReaction(String noteId, TimelineReacted reaction) {
     final registeredNote = _notes[noteId];
     if (registeredNote == null) return;
+
+    final isMyReaction = reaction.userId == account.i.id;
+    if (isMyReaction && registeredNote.myReaction == null) {
+      return;
+    }
 
     final reactions = Map.of(registeredNote.reactions);
     final reactionCount = reactions[reaction.reaction];
@@ -179,8 +188,7 @@ class NoteRepository extends ChangeNotifier {
     registerNote(
       registeredNote.copyWith(
         reactions: reactions,
-        myReaction:
-            reaction.userId == account.i.id ? "" : registeredNote.myReaction,
+        myReaction: isMyReaction ? "" : registeredNote.myReaction,
       ),
     );
   }
