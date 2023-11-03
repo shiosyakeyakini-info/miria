@@ -9,6 +9,7 @@ import 'package:mockito/mockito.dart';
 import '../../test_util/default_root_widget.dart';
 import '../../test_util/mock.mocks.dart';
 import '../../test_util/test_datas.dart';
+import '../../test_util/widget_tester_extension.dart';
 
 void main() {
   group("ノート検索", () {
@@ -45,6 +46,7 @@ void main() {
               query: "Misskey", untilId: TestData.note1.id)))))
           .called(1);
       expect(find.text(TestData.note2.text!), findsOneWidget);
+      await tester.pageNation();
     });
 
     testWidgets("ユーザー指定ができること", (tester) async {

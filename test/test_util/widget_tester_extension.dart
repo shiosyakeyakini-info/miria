@@ -10,4 +10,11 @@ extension WidgetTestExtension on WidgetTester {
       throw Exception("$finder has not text editing controller.");
     }
   }
+
+  Future<void> pageNation() async {
+    await tap(find.descendant(
+        of: find.byType(IconButton),
+        matching: find.byIcon(Icons.keyboard_arrow_down)));
+    await pumpAndSettle();
+  }
 }

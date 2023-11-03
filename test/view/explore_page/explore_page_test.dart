@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 import '../../test_util/default_root_widget.dart';
 import '../../test_util/mock.mocks.dart';
 import '../../test_util/test_datas.dart';
+import '../../test_util/widget_tester_extension.dart';
 
 void main() {
   group("みつける", () {
@@ -27,6 +28,9 @@ void main() {
 
         expect(find.text(TestData.note1.text!), findsOneWidget);
         verify(notes.featured(argThat(equals(const NotesFeaturedRequest()))));
+        await tester.pageNation();
+        verify(notes.featured(
+            argThat(equals(NotesFeaturedRequest(untilId: TestData.note1.id)))));
       });
 
       testWidgets("アンケートのノートを表示できること", (tester) async {
@@ -50,6 +54,10 @@ void main() {
         expect(find.text(TestData.note1.text!), findsOneWidget);
         verify(polls.recommendation(
             argThat(equals(const NotesPollsRecommendationRequest()))));
+        await tester.pageNation();
+
+        verify(polls.recommendation(
+            argThat(equals(const NotesPollsRecommendationRequest(offset: 1)))));
       });
     });
 
@@ -98,6 +106,13 @@ void main() {
             state: UsersState.alive,
             origin: Origin.local,
             sort: UsersSortType.followerDescendant)))));
+        await tester.pageNation();
+        verify(users.users(argThat(equals(const UsersUsersRequest(
+          state: UsersState.alive,
+          origin: Origin.local,
+          sort: UsersSortType.followerDescendant,
+          offset: 1,
+        )))));
       });
 
       testWidgets("リモートのユーザーを表示できること", (tester) async {
@@ -125,6 +140,13 @@ void main() {
             state: UsersState.alive,
             origin: Origin.remote,
             sort: UsersSortType.followerDescendant)))));
+        await tester.pageNation();
+        verify(users.users(argThat(equals(const UsersUsersRequest(
+          state: UsersState.alive,
+          origin: Origin.remote,
+          sort: UsersSortType.followerDescendant,
+          offset: 1,
+        )))));
       });
     });
 

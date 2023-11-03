@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 import '../../test_util/default_root_widget.dart';
 import '../../test_util/mock.mocks.dart';
 import '../../test_util/test_datas.dart';
+import '../../test_util/widget_tester_extension.dart';
 
 void main() {
   group("チャンネル詳細", () {
@@ -167,6 +168,11 @@ void main() {
       expect(find.text(TestData.note1.text!), findsOneWidget);
       verify(channel.timeline(argThat(predicate<ChannelsTimelineRequest>(
           (e) => e.channelId == TestData.channel1.id))));
+
+      await tester.pageNation();
+      verify(channel.timeline(argThat(predicate<ChannelsTimelineRequest>((e) =>
+          e.channelId == TestData.channel1.id &&
+          e.untilId == TestData.note1.id))));
     });
   });
 }

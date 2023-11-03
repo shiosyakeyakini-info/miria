@@ -9,6 +9,7 @@ import 'package:mockito/mockito.dart';
 import '../../test_util/default_root_widget.dart';
 import '../../test_util/mock.mocks.dart';
 import '../../test_util/test_datas.dart';
+import '../../test_util/widget_tester_extension.dart';
 
 void main() {
   group("チャンネル", () {
@@ -37,6 +38,10 @@ void main() {
         expect(find.text(TestData.channel1.name), findsOneWidget);
         verify(channel.search(
             argThat(equals(const ChannelsSearchRequest(query: "ゲーム開発部")))));
+
+        await tester.pageNation();
+        verify(channel.search(argThat(equals(ChannelsSearchRequest(
+            query: "ゲーム開発部", untilId: TestData.channel1.id)))));
       });
     });
 
@@ -107,6 +112,9 @@ void main() {
         expect(find.text(TestData.channel1.name), findsOneWidget);
         verify(
             channel.followed(argThat(equals(const ChannelsFollowedRequest()))));
+        await tester.pageNation();
+        verify(channel.followed(argThat(
+            equals(ChannelsFollowedRequest(untilId: TestData.channel1.id)))));
       });
     });
   });
