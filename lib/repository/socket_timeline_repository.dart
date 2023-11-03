@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -103,61 +102,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
         notifyListeners();
       },
-      onReacted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-        final reaction = Map.of(registeredNote.reactions);
-        reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
-        final emoji = value.emoji;
-        final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-        if (emoji != null && !value.reaction.endsWith("@.:")) {
-          reactionEmojis[emoji.name] = emoji.url;
-        }
-        noteRepository.registerNote(registeredNote.copyWith(
-            reactions: reaction,
-            reactionEmojis: reactionEmojis,
-            myReaction: value.userId == account.i.id
-                ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-                : registeredNote.myReaction));
-      },
-      onUnreacted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-        final reaction = Map.of(registeredNote.reactions);
-        reaction[value.reaction] = max((reaction[value.reaction] ?? 0) - 1, 0);
-        if (reaction[value.reaction] == 0) {
-          reaction.remove(value.reaction);
-        }
-        final emoji = value.emoji;
-        final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-        if (emoji != null && !value.reaction.endsWith("@.:")) {
-          reactionEmojis[emoji.name] = emoji.url;
-        }
-        noteRepository.registerNote(registeredNote.copyWith(
-            reactions: reaction,
-            reactionEmojis: reactionEmojis,
-            myReaction:
-                value.userId == account.i.id ? "" : registeredNote.myReaction));
-      },
-      onVoted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-
-        final poll = registeredNote.poll;
-        if (poll == null) return;
-
-        final choices = poll.choices.toList();
-        choices[value.choice] = choices[value.choice]
-            .copyWith(votes: choices[value.choice].votes + 1);
-        noteRepository.registerNote(
-            registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
-      },
-      onUpdated: (id, value) {
-        final note = noteRepository.notes[id];
-        if (note == null) return;
-        noteRepository.registerNote(note.copyWith(
-            text: value.text, cw: value.cw, updatedAt: DateTime.now()));
-      },
+      onReacted: noteRepository.addReaction,
+      onUnreacted: noteRepository.removeReaction,
+      onVoted: noteRepository.addVote,
+      onUpdated: noteRepository.updateNote,
     );
     await misskey.startStreaming();
     Future(() async {
