@@ -6,8 +6,9 @@ part of 'account_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_AccountSettings _$$_AccountSettingsFromJson(Map<String, dynamic> json) =>
-    _$_AccountSettings(
+_$AccountSettingsImpl _$$AccountSettingsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AccountSettingsImpl(
       userId: json['userId'] as String,
       host: json['host'] as String,
       reactions: (json['reactions'] as List<dynamic>?)
@@ -23,7 +24,8 @@ _$_AccountSettings _$$_AccountSettingsFromJson(Map<String, dynamic> json) =>
           null,
     );
 
-Map<String, dynamic> _$$_AccountSettingsToJson(_$_AccountSettings instance) =>
+Map<String, dynamic> _$$AccountSettingsImplToJson(
+        _$AccountSettingsImpl instance) =>
     <String, dynamic>{
       'userId': instance.userId,
       'host': instance.host,

@@ -6,8 +6,8 @@ part of 'unicode_emoji.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UnicodeEmoji _$$_UnicodeEmojiFromJson(Map<String, dynamic> json) =>
-    _$_UnicodeEmoji(
+_$UnicodeEmojiImpl _$$UnicodeEmojiImplFromJson(Map<String, dynamic> json) =>
+    _$UnicodeEmojiImpl(
       category: json['category'] as String,
       char: json['char'] as String,
       name: json['name'] as String,
@@ -15,7 +15,7 @@ _$_UnicodeEmoji _$$_UnicodeEmojiFromJson(Map<String, dynamic> json) =>
           (json['keywords'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$$_UnicodeEmojiToJson(_$_UnicodeEmoji instance) =>
+Map<String, dynamic> _$$UnicodeEmojiImplToJson(_$UnicodeEmojiImpl instance) =>
     <String, dynamic>{
       'category': instance.category,
       'char': instance.char,

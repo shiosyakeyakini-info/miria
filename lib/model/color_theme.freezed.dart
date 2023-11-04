@@ -163,11 +163,11 @@ class _$ColorThemeCopyWithImpl<$Res, $Val extends ColorTheme>
 }
 
 /// @nodoc
-abstract class _$$_ColorThemeCopyWith<$Res>
+abstract class _$$ColorThemeImplCopyWith<$Res>
     implements $ColorThemeCopyWith<$Res> {
-  factory _$$_ColorThemeCopyWith(
-          _$_ColorTheme value, $Res Function(_$_ColorTheme) then) =
-      __$$_ColorThemeCopyWithImpl<$Res>;
+  factory _$$ColorThemeImplCopyWith(
+          _$ColorThemeImpl value, $Res Function(_$ColorThemeImpl) then) =
+      __$$ColorThemeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -190,11 +190,11 @@ abstract class _$$_ColorThemeCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ColorThemeCopyWithImpl<$Res>
-    extends _$ColorThemeCopyWithImpl<$Res, _$_ColorTheme>
-    implements _$$_ColorThemeCopyWith<$Res> {
-  __$$_ColorThemeCopyWithImpl(
-      _$_ColorTheme _value, $Res Function(_$_ColorTheme) _then)
+class __$$ColorThemeImplCopyWithImpl<$Res>
+    extends _$ColorThemeCopyWithImpl<$Res, _$ColorThemeImpl>
+    implements _$$ColorThemeImplCopyWith<$Res> {
+  __$$ColorThemeImplCopyWithImpl(
+      _$ColorThemeImpl _value, $Res Function(_$ColorThemeImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -217,7 +217,7 @@ class __$$_ColorThemeCopyWithImpl<$Res>
     Object? panel = null,
     Object? panelBackground = null,
   }) {
-    return _then(_$_ColorTheme(
+    return _then(_$ColorThemeImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -288,8 +288,8 @@ class __$$_ColorThemeCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ColorTheme implements _ColorTheme {
-  const _$_ColorTheme(
+class _$ColorThemeImpl implements _ColorTheme {
+  const _$ColorThemeImpl(
       {required this.id,
       required this.name,
       required this.isDarkTheme,
@@ -349,7 +349,7 @@ class _$_ColorTheme implements _ColorTheme {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ColorTheme &&
+            other is _$ColorThemeImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.isDarkTheme, isDarkTheme) ||
@@ -398,8 +398,8 @@ class _$_ColorTheme implements _ColorTheme {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ColorThemeCopyWith<_$_ColorTheme> get copyWith =>
-      __$$_ColorThemeCopyWithImpl<_$_ColorTheme>(this, _$identity);
+  _$$ColorThemeImplCopyWith<_$ColorThemeImpl> get copyWith =>
+      __$$ColorThemeImplCopyWithImpl<_$ColorThemeImpl>(this, _$identity);
 }
 
 abstract class _ColorTheme implements ColorTheme {
@@ -419,7 +419,7 @@ abstract class _ColorTheme implements ColorTheme {
       required final Color divider,
       required final Color buttonBackground,
       required final Color panel,
-      required final Color panelBackground}) = _$_ColorTheme;
+      required final Color panelBackground}) = _$ColorThemeImpl;
 
   @override
   String get id;
@@ -455,6 +455,6 @@ abstract class _ColorTheme implements ColorTheme {
   Color get panelBackground;
   @override
   @JsonKey(ignore: true)
-  _$$_ColorThemeCopyWith<_$_ColorTheme> get copyWith =>
+  _$$ColorThemeImplCopyWith<_$ColorThemeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -270,11 +270,11 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
 }
 
 /// @nodoc
-abstract class _$$_NoteCreateCopyWith<$Res>
+abstract class _$$NoteCreateImplCopyWith<$Res>
     implements $NoteCreateCopyWith<$Res> {
-  factory _$$_NoteCreateCopyWith(
-          _$_NoteCreate value, $Res Function(_$_NoteCreate) then) =
-      __$$_NoteCreateCopyWithImpl<$Res>;
+  factory _$$NoteCreateImplCopyWith(
+          _$NoteCreateImpl value, $Res Function(_$NoteCreateImpl) then) =
+      __$$NoteCreateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -314,11 +314,11 @@ abstract class _$$_NoteCreateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_NoteCreateCopyWithImpl<$Res>
-    extends _$NoteCreateCopyWithImpl<$Res, _$_NoteCreate>
-    implements _$$_NoteCreateCopyWith<$Res> {
-  __$$_NoteCreateCopyWithImpl(
-      _$_NoteCreate _value, $Res Function(_$_NoteCreate) _then)
+class __$$NoteCreateImplCopyWithImpl<$Res>
+    extends _$NoteCreateCopyWithImpl<$Res, _$NoteCreateImpl>
+    implements _$$NoteCreateImplCopyWith<$Res> {
+  __$$NoteCreateImplCopyWithImpl(
+      _$NoteCreateImpl _value, $Res Function(_$NoteCreateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -349,7 +349,7 @@ class __$$_NoteCreateCopyWithImpl<$Res>
     Object? noteCreationMode = freezed,
     Object? noteId = freezed,
   }) {
-    return _then(_$_NoteCreate(
+    return _then(_$NoteCreateImpl(
       account: null == account
           ? _value.account
           : account // ignore: cast_nullable_to_non_nullable
@@ -452,8 +452,8 @@ class __$$_NoteCreateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NoteCreate implements _NoteCreate {
-  const _$_NoteCreate(
+class _$NoteCreateImpl implements _NoteCreate {
+  const _$NoteCreateImpl(
       {required this.account,
       required this.noteVisibility,
       required this.localOnly,
@@ -570,7 +570,7 @@ class _$_NoteCreate implements _NoteCreate {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NoteCreate &&
+            other is _$NoteCreateImpl &&
             (identical(other.account, account) || other.account == account) &&
             (identical(other.noteVisibility, noteVisibility) ||
                 other.noteVisibility == noteVisibility) &&
@@ -642,8 +642,8 @@ class _$_NoteCreate implements _NoteCreate {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NoteCreateCopyWith<_$_NoteCreate> get copyWith =>
-      __$$_NoteCreateCopyWithImpl<_$_NoteCreate>(this, _$identity);
+  _$$NoteCreateImplCopyWith<_$NoteCreateImpl> get copyWith =>
+      __$$NoteCreateImplCopyWithImpl<_$NoteCreateImpl>(this, _$identity);
 }
 
 abstract class _NoteCreate implements NoteCreate {
@@ -671,7 +671,7 @@ abstract class _NoteCreate implements NoteCreate {
       final int? voteDuration,
       final VoteExpireDurationType voteDurationType,
       final NoteCreationMode? noteCreationMode,
-      final String? noteId}) = _$_NoteCreate;
+      final String? noteId}) = _$NoteCreateImpl;
 
   @override
   Account get account;
@@ -723,7 +723,7 @@ abstract class _NoteCreate implements NoteCreate {
   String? get noteId;
   @override
   @JsonKey(ignore: true)
-  _$$_NoteCreateCopyWith<_$_NoteCreate> get copyWith =>
+  _$$NoteCreateImplCopyWith<_$NoteCreateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -776,22 +776,22 @@ class _$NoteCreateChannelCopyWithImpl<$Res, $Val extends NoteCreateChannel>
 }
 
 /// @nodoc
-abstract class _$$_NoteCreateChannelCopyWith<$Res>
+abstract class _$$NoteCreateChannelImplCopyWith<$Res>
     implements $NoteCreateChannelCopyWith<$Res> {
-  factory _$$_NoteCreateChannelCopyWith(_$_NoteCreateChannel value,
-          $Res Function(_$_NoteCreateChannel) then) =
-      __$$_NoteCreateChannelCopyWithImpl<$Res>;
+  factory _$$NoteCreateChannelImplCopyWith(_$NoteCreateChannelImpl value,
+          $Res Function(_$NoteCreateChannelImpl) then) =
+      __$$NoteCreateChannelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String id, String name});
 }
 
 /// @nodoc
-class __$$_NoteCreateChannelCopyWithImpl<$Res>
-    extends _$NoteCreateChannelCopyWithImpl<$Res, _$_NoteCreateChannel>
-    implements _$$_NoteCreateChannelCopyWith<$Res> {
-  __$$_NoteCreateChannelCopyWithImpl(
-      _$_NoteCreateChannel _value, $Res Function(_$_NoteCreateChannel) _then)
+class __$$NoteCreateChannelImplCopyWithImpl<$Res>
+    extends _$NoteCreateChannelCopyWithImpl<$Res, _$NoteCreateChannelImpl>
+    implements _$$NoteCreateChannelImplCopyWith<$Res> {
+  __$$NoteCreateChannelImplCopyWithImpl(_$NoteCreateChannelImpl _value,
+      $Res Function(_$NoteCreateChannelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -800,7 +800,7 @@ class __$$_NoteCreateChannelCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
   }) {
-    return _then(_$_NoteCreateChannel(
+    return _then(_$NoteCreateChannelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -815,8 +815,8 @@ class __$$_NoteCreateChannelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NoteCreateChannel implements _NoteCreateChannel {
-  const _$_NoteCreateChannel({required this.id, required this.name});
+class _$NoteCreateChannelImpl implements _NoteCreateChannel {
+  const _$NoteCreateChannelImpl({required this.id, required this.name});
 
   @override
   final String id;
@@ -832,7 +832,7 @@ class _$_NoteCreateChannel implements _NoteCreateChannel {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NoteCreateChannel &&
+            other is _$NoteCreateChannelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
   }
@@ -843,15 +843,15 @@ class _$_NoteCreateChannel implements _NoteCreateChannel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NoteCreateChannelCopyWith<_$_NoteCreateChannel> get copyWith =>
-      __$$_NoteCreateChannelCopyWithImpl<_$_NoteCreateChannel>(
+  _$$NoteCreateChannelImplCopyWith<_$NoteCreateChannelImpl> get copyWith =>
+      __$$NoteCreateChannelImplCopyWithImpl<_$NoteCreateChannelImpl>(
           this, _$identity);
 }
 
 abstract class _NoteCreateChannel implements NoteCreateChannel {
   const factory _NoteCreateChannel(
       {required final String id,
-      required final String name}) = _$_NoteCreateChannel;
+      required final String name}) = _$NoteCreateChannelImpl;
 
   @override
   String get id;
@@ -859,6 +859,6 @@ abstract class _NoteCreateChannel implements NoteCreateChannel {
   String get name;
   @override
   @JsonKey(ignore: true)
-  _$$_NoteCreateChannelCopyWith<_$_NoteCreateChannel> get copyWith =>
+  _$$NoteCreateChannelImplCopyWith<_$NoteCreateChannelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

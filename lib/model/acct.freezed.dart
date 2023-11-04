@@ -66,18 +66,20 @@ class _$AcctCopyWithImpl<$Res, $Val extends Acct>
 }
 
 /// @nodoc
-abstract class _$$_AcctCopyWith<$Res> implements $AcctCopyWith<$Res> {
-  factory _$$_AcctCopyWith(_$_Acct value, $Res Function(_$_Acct) then) =
-      __$$_AcctCopyWithImpl<$Res>;
+abstract class _$$AcctImplCopyWith<$Res> implements $AcctCopyWith<$Res> {
+  factory _$$AcctImplCopyWith(
+          _$AcctImpl value, $Res Function(_$AcctImpl) then) =
+      __$$AcctImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String host, String username});
 }
 
 /// @nodoc
-class __$$_AcctCopyWithImpl<$Res> extends _$AcctCopyWithImpl<$Res, _$_Acct>
-    implements _$$_AcctCopyWith<$Res> {
-  __$$_AcctCopyWithImpl(_$_Acct _value, $Res Function(_$_Acct) _then)
+class __$$AcctImplCopyWithImpl<$Res>
+    extends _$AcctCopyWithImpl<$Res, _$AcctImpl>
+    implements _$$AcctImplCopyWith<$Res> {
+  __$$AcctImplCopyWithImpl(_$AcctImpl _value, $Res Function(_$AcctImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -86,7 +88,7 @@ class __$$_AcctCopyWithImpl<$Res> extends _$AcctCopyWithImpl<$Res, _$_Acct>
     Object? host = null,
     Object? username = null,
   }) {
-    return _then(_$_Acct(
+    return _then(_$AcctImpl(
       host: null == host
           ? _value.host
           : host // ignore: cast_nullable_to_non_nullable
@@ -101,10 +103,11 @@ class __$$_AcctCopyWithImpl<$Res> extends _$AcctCopyWithImpl<$Res, _$_Acct>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Acct extends _Acct {
-  const _$_Acct({required this.host, required this.username}) : super._();
+class _$AcctImpl extends _Acct {
+  const _$AcctImpl({required this.host, required this.username}) : super._();
 
-  factory _$_Acct.fromJson(Map<String, dynamic> json) => _$$_AcctFromJson(json);
+  factory _$AcctImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AcctImplFromJson(json);
 
   @override
   final String host;
@@ -115,7 +118,7 @@ class _$_Acct extends _Acct {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Acct &&
+            other is _$AcctImpl &&
             (identical(other.host, host) || other.host == host) &&
             (identical(other.username, username) ||
                 other.username == username));
@@ -128,12 +131,12 @@ class _$_Acct extends _Acct {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AcctCopyWith<_$_Acct> get copyWith =>
-      __$$_AcctCopyWithImpl<_$_Acct>(this, _$identity);
+  _$$AcctImplCopyWith<_$AcctImpl> get copyWith =>
+      __$$AcctImplCopyWithImpl<_$AcctImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AcctToJson(
+    return _$$AcctImplToJson(
       this,
     );
   }
@@ -141,10 +144,11 @@ class _$_Acct extends _Acct {
 
 abstract class _Acct extends Acct {
   const factory _Acct(
-      {required final String host, required final String username}) = _$_Acct;
+      {required final String host,
+      required final String username}) = _$AcctImpl;
   const _Acct._() : super._();
 
-  factory _Acct.fromJson(Map<String, dynamic> json) = _$_Acct.fromJson;
+  factory _Acct.fromJson(Map<String, dynamic> json) = _$AcctImpl.fromJson;
 
   @override
   String get host;
@@ -152,5 +156,6 @@ abstract class _Acct extends Acct {
   String get username;
   @override
   @JsonKey(ignore: true)
-  _$$_AcctCopyWith<_$_Acct> get copyWith => throw _privateConstructorUsedError;
+  _$$AcctImplCopyWith<_$AcctImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

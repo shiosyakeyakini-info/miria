@@ -6,8 +6,8 @@ part of 'summaly_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SummalyResult _$$_SummalyResultFromJson(Map<String, dynamic> json) =>
-    _$_SummalyResult(
+_$SummalyResultImpl _$$SummalyResultImplFromJson(Map<String, dynamic> json) =>
+    _$SummalyResultImpl(
       title: json['title'] as String?,
       icon: json['icon'] as String?,
       description: json['description'] as String?,
@@ -18,7 +18,7 @@ _$_SummalyResult _$$_SummalyResultFromJson(Map<String, dynamic> json) =>
       url: json['url'] as String?,
     );
 
-Map<String, dynamic> _$$_SummalyResultToJson(_$_SummalyResult instance) =>
+Map<String, dynamic> _$$SummalyResultImplToJson(_$SummalyResultImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
       'icon': instance.icon,
@@ -30,7 +30,7 @@ Map<String, dynamic> _$$_SummalyResultToJson(_$_SummalyResult instance) =>
       'url': instance.url,
     };
 
-_$_Player _$$_PlayerFromJson(Map<String, dynamic> json) => _$_Player(
+_$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
       url: json['url'] as String?,
       width: (json['width'] as num?)?.toDouble(),
       height: (json['height'] as num?)?.toDouble(),
@@ -38,7 +38,8 @@ _$_Player _$$_PlayerFromJson(Map<String, dynamic> json) => _$_Player(
           (json['allow'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$$_PlayerToJson(_$_Player instance) => <String, dynamic>{
+Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) =>
+    <String, dynamic>{
       'url': instance.url,
       'width': instance.width,
       'height': instance.height,

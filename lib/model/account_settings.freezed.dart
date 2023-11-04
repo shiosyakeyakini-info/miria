@@ -100,11 +100,11 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
 }
 
 /// @nodoc
-abstract class _$$_AccountSettingsCopyWith<$Res>
+abstract class _$$AccountSettingsImplCopyWith<$Res>
     implements $AccountSettingsCopyWith<$Res> {
-  factory _$$_AccountSettingsCopyWith(
-          _$_AccountSettings value, $Res Function(_$_AccountSettings) then) =
-      __$$_AccountSettingsCopyWithImpl<$Res>;
+  factory _$$AccountSettingsImplCopyWith(_$AccountSettingsImpl value,
+          $Res Function(_$AccountSettingsImpl) then) =
+      __$$AccountSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -117,11 +117,11 @@ abstract class _$$_AccountSettingsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_AccountSettingsCopyWithImpl<$Res>
-    extends _$AccountSettingsCopyWithImpl<$Res, _$_AccountSettings>
-    implements _$$_AccountSettingsCopyWith<$Res> {
-  __$$_AccountSettingsCopyWithImpl(
-      _$_AccountSettings _value, $Res Function(_$_AccountSettings) _then)
+class __$$AccountSettingsImplCopyWithImpl<$Res>
+    extends _$AccountSettingsCopyWithImpl<$Res, _$AccountSettingsImpl>
+    implements _$$AccountSettingsImplCopyWith<$Res> {
+  __$$AccountSettingsImplCopyWithImpl(
+      _$AccountSettingsImpl _value, $Res Function(_$AccountSettingsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -134,7 +134,7 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
     Object? defaultIsLocalOnly = null,
     Object? defaultReactionAcceptance = freezed,
   }) {
-    return _then(_$_AccountSettings(
+    return _then(_$AccountSettingsImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -165,8 +165,8 @@ class __$$_AccountSettingsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_AccountSettings extends _AccountSettings {
-  const _$_AccountSettings(
+class _$AccountSettingsImpl extends _AccountSettings {
+  const _$AccountSettingsImpl(
       {required this.userId,
       required this.host,
       final List<String> reactions = const [],
@@ -176,8 +176,8 @@ class _$_AccountSettings extends _AccountSettings {
       : _reactions = reactions,
         super._();
 
-  factory _$_AccountSettings.fromJson(Map<String, dynamic> json) =>
-      _$$_AccountSettingsFromJson(json);
+  factory _$AccountSettingsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AccountSettingsImplFromJson(json);
 
   @override
   final String userId;
@@ -211,7 +211,7 @@ class _$_AccountSettings extends _AccountSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AccountSettings &&
+            other is _$AccountSettingsImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.host, host) || other.host == host) &&
             const DeepCollectionEquality()
@@ -239,12 +239,13 @@ class _$_AccountSettings extends _AccountSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AccountSettingsCopyWith<_$_AccountSettings> get copyWith =>
-      __$$_AccountSettingsCopyWithImpl<_$_AccountSettings>(this, _$identity);
+  _$$AccountSettingsImplCopyWith<_$AccountSettingsImpl> get copyWith =>
+      __$$AccountSettingsImplCopyWithImpl<_$AccountSettingsImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_AccountSettingsToJson(
+    return _$$AccountSettingsImplToJson(
       this,
     );
   }
@@ -258,11 +259,11 @@ abstract class _AccountSettings extends AccountSettings {
           final NoteVisibility defaultNoteVisibility,
           final bool defaultIsLocalOnly,
           final ReactionAcceptance? defaultReactionAcceptance}) =
-      _$_AccountSettings;
+      _$AccountSettingsImpl;
   const _AccountSettings._() : super._();
 
   factory _AccountSettings.fromJson(Map<String, dynamic> json) =
-      _$_AccountSettings.fromJson;
+      _$AccountSettingsImpl.fromJson;
 
   @override
   String get userId;
@@ -278,6 +279,6 @@ abstract class _AccountSettings extends AccountSettings {
   ReactionAcceptance? get defaultReactionAcceptance;
   @override
   @JsonKey(ignore: true)
-  _$$_AccountSettingsCopyWith<_$_AccountSettings> get copyWith =>
+  _$$AccountSettingsImplCopyWith<_$AccountSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

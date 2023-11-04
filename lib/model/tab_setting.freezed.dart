@@ -185,11 +185,11 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
 }
 
 /// @nodoc
-abstract class _$$_TabSettingCopyWith<$Res>
+abstract class _$$TabSettingImplCopyWith<$Res>
     implements $TabSettingCopyWith<$Res> {
-  factory _$$_TabSettingCopyWith(
-          _$_TabSetting value, $Res Function(_$_TabSetting) then) =
-      __$$_TabSettingCopyWithImpl<$Res>;
+  factory _$$TabSettingImplCopyWith(
+          _$TabSettingImpl value, $Res Function(_$TabSettingImpl) then) =
+      __$$TabSettingImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -213,11 +213,11 @@ abstract class _$$_TabSettingCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_TabSettingCopyWithImpl<$Res>
-    extends _$TabSettingCopyWithImpl<$Res, _$_TabSetting>
-    implements _$$_TabSettingCopyWith<$Res> {
-  __$$_TabSettingCopyWithImpl(
-      _$_TabSetting _value, $Res Function(_$_TabSetting) _then)
+class __$$TabSettingImplCopyWithImpl<$Res>
+    extends _$TabSettingCopyWithImpl<$Res, _$TabSettingImpl>
+    implements _$$TabSettingImplCopyWith<$Res> {
+  __$$TabSettingImplCopyWithImpl(
+      _$TabSettingImpl _value, $Res Function(_$TabSettingImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -236,7 +236,7 @@ class __$$_TabSettingCopyWithImpl<$Res>
     Object? acct = null,
     Object? renoteDisplay = null,
   }) {
-    return _then(_$_TabSetting(
+    return _then(_$TabSettingImpl(
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -291,8 +291,8 @@ class __$$_TabSettingCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TabSetting extends _TabSetting {
-  const _$_TabSetting(
+class _$TabSettingImpl extends _TabSetting {
+  const _$TabSettingImpl(
       {@IconDataConverter() required this.icon,
       required this.tabType,
       this.roleId,
@@ -307,8 +307,8 @@ class _$_TabSetting extends _TabSetting {
       this.renoteDisplay = true})
       : super._();
 
-  factory _$_TabSetting.fromJson(Map<String, dynamic> json) =>
-      _$$_TabSettingFromJson(json);
+  factory _$TabSettingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TabSettingImplFromJson(json);
 
   @override
   @IconDataConverter()
@@ -374,7 +374,7 @@ class _$_TabSetting extends _TabSetting {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TabSetting &&
+            other is _$TabSettingImpl &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.tabType, tabType) || other.tabType == tabType) &&
             (identical(other.roleId, roleId) || other.roleId == roleId) &&
@@ -415,12 +415,12 @@ class _$_TabSetting extends _TabSetting {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TabSettingCopyWith<_$_TabSetting> get copyWith =>
-      __$$_TabSettingCopyWithImpl<_$_TabSetting>(this, _$identity);
+  _$$TabSettingImplCopyWith<_$TabSettingImpl> get copyWith =>
+      __$$TabSettingImplCopyWithImpl<_$TabSettingImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TabSettingToJson(
+    return _$$TabSettingImplToJson(
       this,
     );
   }
@@ -439,11 +439,11 @@ abstract class _TabSetting extends TabSetting {
       final bool isMediaOnly,
       required final String name,
       @JsonKey(readValue: _readAcct) required final Acct acct,
-      final bool renoteDisplay}) = _$_TabSetting;
+      final bool renoteDisplay}) = _$TabSettingImpl;
   const _TabSetting._() : super._();
 
   factory _TabSetting.fromJson(Map<String, dynamic> json) =
-      _$_TabSetting.fromJson;
+      _$TabSettingImpl.fromJson;
 
   @override
   @IconDataConverter()
@@ -497,6 +497,6 @@ abstract class _TabSetting extends TabSetting {
   bool get renoteDisplay;
   @override
   @JsonKey(ignore: true)
-  _$$_TabSettingCopyWith<_$_TabSetting> get copyWith =>
+  _$$TabSettingImplCopyWith<_$TabSettingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

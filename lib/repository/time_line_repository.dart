@@ -97,6 +97,7 @@ abstract class TimelineRepository extends ChangeNotifier {
   final TabSetting tabSetting;
 
   final List<SubscribeItem> subscribedList = [];
+  late final Timer timer;
 
   TimelineRepository(
     this.noteRepository,
@@ -105,7 +106,7 @@ abstract class TimelineRepository extends ChangeNotifier {
     this.tabSetting,
   ) {
     // describer
-    Timer.periodic(const Duration(seconds: 10), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       final now = DateTime.now();
       bool condition(SubscribeItem element) =>
           element.unsubscribedTime != null &&
@@ -153,6 +154,12 @@ abstract class TimelineRepository extends ChangeNotifier {
   void startTimeLine() {}
 
   void disconnect() {}
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
 
   Future<void> reconnect() async {
     await globalNotificationRepository.reconnect();

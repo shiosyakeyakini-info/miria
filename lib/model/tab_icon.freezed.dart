@@ -66,20 +66,21 @@ class _$TabIconCopyWithImpl<$Res, $Val extends TabIcon>
 }
 
 /// @nodoc
-abstract class _$$_TabIconCopyWith<$Res> implements $TabIconCopyWith<$Res> {
-  factory _$$_TabIconCopyWith(
-          _$_TabIcon value, $Res Function(_$_TabIcon) then) =
-      __$$_TabIconCopyWithImpl<$Res>;
+abstract class _$$TabIconImplCopyWith<$Res> implements $TabIconCopyWith<$Res> {
+  factory _$$TabIconImplCopyWith(
+          _$TabIconImpl value, $Res Function(_$TabIconImpl) then) =
+      __$$TabIconImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int? codePoint, String? customEmojiName});
 }
 
 /// @nodoc
-class __$$_TabIconCopyWithImpl<$Res>
-    extends _$TabIconCopyWithImpl<$Res, _$_TabIcon>
-    implements _$$_TabIconCopyWith<$Res> {
-  __$$_TabIconCopyWithImpl(_$_TabIcon _value, $Res Function(_$_TabIcon) _then)
+class __$$TabIconImplCopyWithImpl<$Res>
+    extends _$TabIconCopyWithImpl<$Res, _$TabIconImpl>
+    implements _$$TabIconImplCopyWith<$Res> {
+  __$$TabIconImplCopyWithImpl(
+      _$TabIconImpl _value, $Res Function(_$TabIconImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -88,7 +89,7 @@ class __$$_TabIconCopyWithImpl<$Res>
     Object? codePoint = freezed,
     Object? customEmojiName = freezed,
   }) {
-    return _then(_$_TabIcon(
+    return _then(_$TabIconImpl(
       codePoint: freezed == codePoint
           ? _value.codePoint
           : codePoint // ignore: cast_nullable_to_non_nullable
@@ -103,11 +104,11 @@ class __$$_TabIconCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TabIcon implements _TabIcon {
-  const _$_TabIcon({this.codePoint, this.customEmojiName});
+class _$TabIconImpl implements _TabIcon {
+  const _$TabIconImpl({this.codePoint, this.customEmojiName});
 
-  factory _$_TabIcon.fromJson(Map<String, dynamic> json) =>
-      _$$_TabIconFromJson(json);
+  factory _$TabIconImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TabIconImplFromJson(json);
 
   @override
   final int? codePoint;
@@ -123,7 +124,7 @@ class _$_TabIcon implements _TabIcon {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TabIcon &&
+            other is _$TabIconImpl &&
             (identical(other.codePoint, codePoint) ||
                 other.codePoint == codePoint) &&
             (identical(other.customEmojiName, customEmojiName) ||
@@ -137,12 +138,12 @@ class _$_TabIcon implements _TabIcon {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TabIconCopyWith<_$_TabIcon> get copyWith =>
-      __$$_TabIconCopyWithImpl<_$_TabIcon>(this, _$identity);
+  _$$TabIconImplCopyWith<_$TabIconImpl> get copyWith =>
+      __$$TabIconImplCopyWithImpl<_$TabIconImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TabIconToJson(
+    return _$$TabIconImplToJson(
       this,
     );
   }
@@ -150,9 +151,9 @@ class _$_TabIcon implements _TabIcon {
 
 abstract class _TabIcon implements TabIcon {
   const factory _TabIcon(
-      {final int? codePoint, final String? customEmojiName}) = _$_TabIcon;
+      {final int? codePoint, final String? customEmojiName}) = _$TabIconImpl;
 
-  factory _TabIcon.fromJson(Map<String, dynamic> json) = _$_TabIcon.fromJson;
+  factory _TabIcon.fromJson(Map<String, dynamic> json) = _$TabIconImpl.fromJson;
 
   @override
   int? get codePoint;
@@ -160,6 +161,6 @@ abstract class _TabIcon implements TabIcon {
   String? get customEmojiName;
   @override
   @JsonKey(ignore: true)
-  _$$_TabIconCopyWith<_$_TabIcon> get copyWith =>
+  _$$TabIconImplCopyWith<_$TabIconImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

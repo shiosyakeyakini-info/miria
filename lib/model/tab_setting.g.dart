@@ -6,8 +6,8 @@ part of 'tab_setting.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_TabSetting _$$_TabSettingFromJson(Map<String, dynamic> json) =>
-    _$_TabSetting(
+_$TabSettingImpl _$$TabSettingImplFromJson(Map<String, dynamic> json) =>
+    _$TabSettingImpl(
       icon: const IconDataConverter().fromJson(json['icon']),
       tabType: $enumDecode(_$TabTypeEnumMap, json['tabType']),
       roleId: json['roleId'] as String?,
@@ -22,7 +22,7 @@ _$_TabSetting _$$_TabSettingFromJson(Map<String, dynamic> json) =>
       renoteDisplay: json['renoteDisplay'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$$_TabSettingToJson(_$_TabSetting instance) =>
+Map<String, dynamic> _$$TabSettingImplToJson(_$TabSettingImpl instance) =>
     <String, dynamic>{
       'icon': const IconDataConverter().toJson(instance.icon),
       'tabType': _$TabTypeEnumMap[instance.tabType]!,

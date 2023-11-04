@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/general_settings_repository.dart';
@@ -17,6 +18,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
   MockSpec<AccountSettingsRepository>(),
   MockSpec<EmojiRepository>(),
   MockSpec<GeneralSettingsRepository>(),
+  MockSpec<AccountRepository>(),
 
   // API
   MockSpec<Misskey>(),
@@ -42,6 +44,8 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
   // プラグインとか
   MockSpec<Dio>(),
   MockSpec<HttpClient>(),
+  MockSpec<SocketController>(),
+  MockSpec<StreamingService>(),
   MockSpec<FakeFilePickerPlatform>(as: #MockFilePickerPlatform)
 ])
 // ignore: unused_import

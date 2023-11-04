@@ -6,8 +6,9 @@ part of 'general_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
-    _$_GeneralSettings(
+_$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$GeneralSettingsImpl(
       lightColorThemeId: json['lightColorThemeId'] as String? ?? "",
       darkColorThemeId: json['darkColorThemeId'] as String? ?? "",
       themeColorSystem: $enumDecodeNullable(
@@ -32,7 +33,8 @@ _$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
           EmojiType.twemoji,
     );
 
-Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
+Map<String, dynamic> _$$GeneralSettingsImplToJson(
+        _$GeneralSettingsImpl instance) =>
     <String, dynamic>{
       'lightColorThemeId': instance.lightColorThemeId,
       'darkColorThemeId': instance.darkColorThemeId,
