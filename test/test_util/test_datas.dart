@@ -644,6 +644,99 @@ class TestData {
 }  
   '''));
 
+  /// Renote
+  static Note note6AsRenote = Note.fromJson(JSON5.parse('''
+{
+    id: '9lmbcrob34',
+    createdAt: '2023-11-03T15:07:13.307Z',
+    userId: '9byjlos32z',
+    user: {
+      id: '9byjlos32z',
+      name: 'そらいろ:role_reaction_shooter:',
+      username: 'shiosyakeyakini',
+      host: null,
+      avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-5e0b7842-adf7-4d29-b04a-a6e1faa4c3c4.png&avatar=1',
+      avatarBlurhash: 'eaN^k|,Rj%3x]_NM{t7t7jE^+tRjYR%s;MxMxIoogozxvRkRkRijE',
+      isBot: false,
+      isCat: true,
+      emojis: {},
+      onlineStatus: 'online',
+      badgeRoles: [
+        {
+          name: 'Patreon Miskist',
+          iconUrl: 'https://s3.arkjp.net/misskey/b03aec5c-4ef6-475d-b9ae-040531e77ff2.png',
+          displayOrder: 10,
+        },
+        {
+          name: 'Misskey Supporter',
+          iconUrl: 'https://s3.arkjp.net/misskey/dab4e89c-4ed1-4c06-918d-441db61dabaf.png',
+          displayOrder: 10,
+        },
+        {
+          name: 'FANBOX サポーター',
+          iconUrl: 'https://s3.arkjp.net/misskey/6e3b469e-16ed-4cc2-9098-215b441da254.png',
+          displayOrder: 0,
+        },
+      ],
+    },
+    text: null,
+    cw: null,
+    visibility: 'public',
+    localOnly: false,
+    reactionAcceptance: null,
+    renoteCount: 0,
+    repliesCount: 0,
+    reactions: {},
+    reactionEmojis: {},
+    fileIds: [],
+    files: [],
+    replyId: null,
+    renoteId: '9lmb9yahs7',
+    renote: {
+      id: '9lmb9yahs7',
+      createdAt: '2023-11-03T15:05:01.913Z',
+      userId: '9g0ku8jkft',
+      user: {
+        id: '9g0ku8jkft',
+        name: 'しゅうまい君（バカンス）',
+        username: 'shuumai',
+        host: null,
+        avatarUrl: 'https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fe44afb80-e469-4ca2-bfd0-ddb8555e6a26.png&avatar=1',
+        avatarBlurhash: 'eoJThjozuNozo|kpj[ofaye.y=ayVFj[Vts;ayV@j[W;WDj[jEayoz',
+        isBot: true,
+        isCat: false,
+        emojis: {},
+        onlineStatus: 'unknown',
+        badgeRoles: [
+          {
+            name: 'Verified',
+            iconUrl: 'https://s3.arkjp.net/misskey/8df80984-86f9-4cc5-a289-1f6ab59c74b8.png',
+            displayOrder: 1000,
+          },
+        ],
+      },
+      text: 'どう考えてもおいしい冷める前のケースに使われてしまいそう」 （白いの自分が綺麗になると自分が36な',
+      cw: null,
+      visibility: 'public',
+      localOnly: false,
+      reactionAcceptance: null,
+      renoteCount: 2,
+      repliesCount: 0,
+      reactions: {
+        '❤': 1,
+        ':miria@.:': 44,
+        ':36kyoutei@.:': 5,
+      },
+      reactionEmojis: {},
+      fileIds: [],
+      files: [],
+      replyId: null,
+      renoteId: null,
+      myReaction: ':miria@.:',
+    },
+  }
+'''));
+
   // ドライブ（フォルダ）
   static DriveFolder folder1 = DriveFolder.fromJson(JSON5.parse(r'''
   {

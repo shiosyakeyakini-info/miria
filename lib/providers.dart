@@ -28,6 +28,7 @@ import 'package:miria/state_notifier/common/misskey_server_list_notifier.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
 import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 final dioProvider = Provider((ref) => Dio());
 final fileSystemProvider =
@@ -257,3 +258,5 @@ final misskeyServerListNotifierProvider = AsyncNotifierProvider.autoDispose<
     MisskeyServerListNotifier, List<JoinMisskeyInstanceInfo>>(
   MisskeyServerListNotifier.new,
 );
+
+final cacheManagerProvider = Provider<BaseCacheManager?>((ref) => null);

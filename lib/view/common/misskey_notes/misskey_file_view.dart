@@ -223,7 +223,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                 return cachedWidget!;
               }
 
-              return FutureBuilder(
+              cachedWidget = FutureBuilder(
                 future: Future.delayed(const Duration(milliseconds: 100)),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
@@ -281,6 +281,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                   return Container();
                 },
               );
+              return cachedWidget!;
             },
           )),
         ),

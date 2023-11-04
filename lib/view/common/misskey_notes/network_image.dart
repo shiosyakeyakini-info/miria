@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:miria/providers.dart';
 
 enum ImageType {
   avatarIcon,
@@ -13,7 +15,7 @@ enum ImageType {
   other
 }
 
-class NetworkImageView extends StatelessWidget {
+class NetworkImageView extends ConsumerWidget {
   final String url;
   final ImageType type;
   final ImageLoadingBuilder? loadingBuilder;
@@ -32,7 +34,7 @@ class NetworkImageView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (url.endsWith(".svg")) {
       return SvgPicture.network(
         url,
@@ -55,6 +57,7 @@ class NetworkImageView extends StatelessWidget {
         errorWidget: (context, url, error) =>
             errorBuilder?.call(context, error, StackTrace.current) ??
             Container(),
+        cacheManager: ref.read(cacheManagerProvider),
         height: height,
         placeholder: (context, url) =>
             loadingBuilder?.call(context, Container(), null) ??
