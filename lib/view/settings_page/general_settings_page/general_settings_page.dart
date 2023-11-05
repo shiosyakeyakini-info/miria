@@ -36,6 +36,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   String monospaceFontName = "";
   String cursiveFontName = "";
   String fantasyFontName = "";
+  bool hideAvatar = false;
 
   @override
   void initState() {
@@ -76,6 +77,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       monospaceFontName = settings.monospaceFontName;
       cursiveFontName = settings.cursiveFontName;
       fantasyFontName = settings.fantasyFontName;
+      hideAvatar = settings.hideAvatar;
     });
   }
 
@@ -99,6 +101,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
             monospaceFontName: monospaceFontName,
             cursiveFontName: cursiveFontName,
             fantasyFontName: fantasyFontName,
+            hideAvatar: hideAvatar,
           ),
         );
   }
@@ -189,6 +192,14 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           save();
                         }),
                         title: const Text("長いノートを省略します。"),
+                      ),
+                      CheckboxListTile(
+                        value: hideAvatar,
+                        onChanged: (value) => setState(() {
+                          hideAvatar = value ?? true;
+                          save();
+                        }),
+                        title: const Text("ユーザーのアバターを非表示にします。"),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       const Text("タブの位置"),
