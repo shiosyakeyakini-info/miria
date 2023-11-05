@@ -6,6 +6,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserReactions extends ConsumerWidget {
@@ -67,7 +68,7 @@ class UserReaction extends ConsumerWidget {
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: AppTheme.of(context).colorTheme.accentedBackground,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
