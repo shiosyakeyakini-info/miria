@@ -439,7 +439,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                             isCwOpened: !status.isCwOpened));
                               },
                               child: Text(
-                                isCwOpened ? "隠す" : "続きを見る",
+                                isCwOpened ? "隠す" : "隠してあるのんの続きを見して",
                               ),
                             ),
                           ],
@@ -571,7 +571,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           if (displayNote.reactions.isNotEmpty &&
                               !isReactionedRenote)
                             const Padding(padding: EdgeInsets.only(bottom: 5)),
-                          if (!isReactionedRenote)
+                          if (!isReactionedRenote &&
+                              (displayNote.cw == null ||
+                                  (displayNote.cw != null && isCwOpened)))
                             Wrap(
                               spacing:
                                   5 * MediaQuery.of(context).textScaleFactor,
