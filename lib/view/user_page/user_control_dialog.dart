@@ -205,32 +205,32 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
       if (!widget.isMe) ...[
         if (widget.response.isRenoteMuted ?? false)
           ListTile(
-            onTap: renoteMuteDelete,
+            onTap: renoteMuteDelete.expectFailure(context),
             title: const Text("Renoteのミュート解除する"),
           )
         else
           ListTile(
-            onTap: renoteMuteCreate,
+            onTap: renoteMuteCreate.expectFailure(context),
             title: const Text("Renoteをミュートする"),
           ),
         if (widget.response.isMuted ?? false)
           ListTile(
-            onTap: muteDelete,
+            onTap: muteDelete.expectFailure(context),
             title: const Text("ミュート解除する"),
           )
         else
           ListTile(
-            onTap: muteCreate,
+            onTap: muteCreate.expectFailure(context),
             title: const Text("ミュートする"),
           ),
-        if (widget.response.isBlocked ?? false)
+        if (widget.response.isBlocking ?? false)
           ListTile(
-            onTap: blockingDelete,
+            onTap: blockingDelete.expectFailure(context),
             title: const Text("ブロックを解除する"),
           )
         else
           ListTile(
-            onTap: blockingCreate,
+            onTap: blockingCreate.expectFailure(context),
             title: const Text("ブロックする"),
           )
       ],

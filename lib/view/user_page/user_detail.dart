@@ -9,6 +9,7 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/constants.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
@@ -43,18 +44,26 @@ class UserDetailState extends ConsumerState<UserDetail> {
     setState(() {
       isFollowEditing = true;
     });
-    await ref
-        .read(misskeyProvider(AccountScope.of(context)))
-        .following
-        .create(FollowingCreateRequest(userId: response.id));
-    if (!mounted) return;
-    setState(() {
-      isFollowEditing = false;
-      response = response.copyWith(
-        isFollowing: !response.requiresFollowRequest,
-        hasPendingFollowRequestFromYou: response.requiresFollowRequest,
-      );
-    });
+    try {
+      await ref
+          .read(misskeyProvider(AccountScope.of(context)))
+          .following
+          .create(FollowingCreateRequest(userId: response.id));
+      if (!mounted) return;
+      setState(() {
+        isFollowEditing = false;
+        response = response.copyWith(
+          isFollowing: !response.requiresFollowRequest,
+          hasPendingFollowRequestFromYou: response.requiresFollowRequest,
+        );
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isFollowEditing = false;
+      });
+      rethrow;
+    }
   }
 
   Future<void> followDelete() async {
@@ -71,15 +80,23 @@ class UserDetailState extends ConsumerState<UserDetail> {
     setState(() {
       isFollowEditing = true;
     });
-    await ref
-        .read(misskeyProvider(account))
-        .following
-        .delete(FollowingDeleteRequest(userId: response.id));
-    if (!mounted) return;
-    setState(() {
-      isFollowEditing = false;
-      response = response.copyWith(isFollowing: false);
-    });
+    try {
+      await ref
+          .read(misskeyProvider(account))
+          .following
+          .delete(FollowingDeleteRequest(userId: response.id));
+      if (!mounted) return;
+      setState(() {
+        isFollowEditing = false;
+        response = response.copyWith(isFollowing: false);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isFollowEditing = false;
+      });
+      rethrow;
+    }
   }
 
   Future<void> followRequestCancel() async {
@@ -87,16 +104,24 @@ class UserDetailState extends ConsumerState<UserDetail> {
     setState(() {
       isFollowEditing = true;
     });
-    await ref
-        .read(misskeyProvider(AccountScope.of(context)))
-        .following
-        .requests
-        .cancel(FollowingRequestsCancelRequest(userId: response.id));
-    if (!mounted) return;
-    setState(() {
-      isFollowEditing = false;
-      response = response.copyWith(hasPendingFollowRequestFromYou: false);
-    });
+    try {
+      await ref
+          .read(misskeyProvider(AccountScope.of(context)))
+          .following
+          .requests
+          .cancel(FollowingRequestsCancelRequest(userId: response.id));
+      if (!mounted) return;
+      setState(() {
+        isFollowEditing = false;
+        response = response.copyWith(hasPendingFollowRequestFromYou: false);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isFollowEditing = false;
+      });
+      rethrow;
+    }
   }
 
   Future<void> userControl(bool isMe) async {
@@ -132,12 +157,12 @@ class UserDetailState extends ConsumerState<UserDetail> {
         break;
       case UserControl.createBlock:
         setState(() {
-          response = response.copyWith(isBlocked: true);
+          response = response.copyWith(isBlocking: true);
         });
         break;
       case UserControl.deleteBlock:
         setState(() {
-          response = response.copyWith(isBlocked: false);
+          response = response.copyWith(isBlocking: false);
         });
         break;
     }
@@ -187,7 +212,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                 padding: EdgeInsets.all(10),
                                 child: Text("ミュート中"),
                               )),
-                            if (response.isBlocked ?? false)
+                            if (response.isBlocking ?? false)
                               const Card(
                                   child: Padding(
                                 padding: EdgeInsets.all(10),
@@ -205,17 +230,20 @@ class UserDetailState extends ConsumerState<UserDetail> {
                             if (!isFollowEditing)
                               (response.isFollowing ?? false)
                                   ? ElevatedButton(
-                                      onPressed: followDelete,
+                                      onPressed:
+                                          followDelete.expectFailure(context),
                                       child: const Text("フォロー解除"),
                                     )
                                   : (response.hasPendingFollowRequestFromYou ??
                                           false)
                                       ? ElevatedButton(
-                                          onPressed: followRequestCancel,
+                                          onPressed: followRequestCancel
+                                              .expectFailure(context),
                                           child: const Text("フォロー許可待ち"),
                                         )
                                       : OutlinedButton(
-                                          onPressed: followCreate,
+                                          onPressed: followCreate
+                                              .expectFailure(context),
                                           child: Text(
                                             (response.requiresFollowRequest)
                                                 ? "フォロー申請"
