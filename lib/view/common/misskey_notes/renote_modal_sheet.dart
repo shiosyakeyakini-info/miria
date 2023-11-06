@@ -4,6 +4,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -43,97 +44,141 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final channel = widget.note.channel;
     return ListView(
       children: [
-        ListTile(
-          onTap: () async {
-            final scaffoldMessenger = ScaffoldMessenger.of(context);
-            final navigator = Navigator.of(context);
-            await ref
-                .read(misskeyProvider(widget.account))
-                .notes
-                .create(NotesCreateRequest(
-                  renoteId: widget.note.id,
-                  localOnly: isLocalOnly,
-                  visibility: visibility,
-                ));
-            scaffoldMessenger
-                .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
-            navigator.pop();
-          },
-          title: const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Text("Renote"),
-          ),
-          subtitle: Row(children: [
-            Expanded(
-              child: DropdownButton(
-                isExpanded: true,
-                items: [
-                  for (final element in NoteVisibility.values
-                      .where((element) => element != NoteVisibility.specified))
-                    DropdownMenuItem(
-                        value: element, child: Text(element.displayName))
-                ],
-                value: visibility,
-                onChanged: (value) => setState(() {
-                  visibility = value ?? NoteVisibility.public;
-                }),
-              ),
-            ),
-            IconButton(
-                onPressed: () => setState(() {
-                      isLocalOnly = !isLocalOnly;
-                    }),
-                icon: isLocalOnly
-                    ? const LocalOnlyIcon()
-                    : const Icon(Icons.rocket)),
-          ]),
-        ),
-        ListTile(
-            onTap: () {
-              final navigator = Navigator.of(context);
-              context.pushRoute(NoteCreateRoute(
-                  renote: widget.note, initialAccount: widget.account));
-              navigator.pop();
-            },
-            title: const Text("引用Renote")),
-        ListTile(
+        if (channel != null) ...[
+          ListTile(
             onTap: () async {
               final scaffoldMessenger = ScaffoldMessenger.of(context);
               final navigator = Navigator.of(context);
-              final selected = await showDialog<CommunityChannel?>(
-                  context: context,
-                  builder: (context) =>
-                      ChannelSelectDialog(account: widget.account));
-              if (selected != null) {
-                await ref.read(misskeyProvider(widget.account)).notes.create(
-                    NotesCreateRequest(
-                        renoteId: widget.note.id, channelId: selected.id));
-
-                scaffoldMessenger
-                    .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
-                navigator.pop();
-              }
-            },
-            title: const Text("チャンネルへRenote")),
-        ListTile(
+              await ref
+                  .read(misskeyProvider(widget.account))
+                  .notes
+                  .create(NotesCreateRequest(
+                    renoteId: widget.note.id,
+                    channelId: channel.id,
+                  ));
+              scaffoldMessenger
+                  .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
+              navigator.pop();
+            }.expectFailure(context),
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text("${channel.name}内にRenote"),
+            ),
+          ),
+          ListTile(
             onTap: () async {
               final navigator = Navigator.of(context);
-              final selected = await showDialog<CommunityChannel?>(
-                  context: context,
-                  builder: (context) =>
-                      ChannelSelectDialog(account: widget.account));
+              final channelsShowData = await ref
+                  .read(misskeyProvider(widget.account))
+                  .channels
+                  .show(ChannelsShowRequest(channelId: channel.id));
               if (!mounted) return;
-              if (selected != null) {
+              navigator.pop();
+              context.pushRoute(NoteCreateRoute(
+                  renote: widget.note,
+                  channel: channelsShowData,
+                  initialAccount: widget.account));
+            }.expectFailure(context),
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text("${channel.name}内に引用Renote"),
+            ),
+          ),
+        ],
+        if (widget.note.channel?.allowRenoteToExternal != false) ...[
+          ListTile(
+            onTap: () async {
+              final scaffoldMessenger = ScaffoldMessenger.of(context);
+              final navigator = Navigator.of(context);
+              await ref
+                  .read(misskeyProvider(widget.account))
+                  .notes
+                  .create(NotesCreateRequest(
+                    renoteId: widget.note.id,
+                    localOnly: isLocalOnly,
+                    visibility: visibility,
+                  ));
+              scaffoldMessenger
+                  .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
+              navigator.pop();
+            }.expectFailure(context),
+            title: const Padding(
+              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text("Renote"),
+            ),
+            subtitle: Row(children: [
+              Expanded(
+                child: DropdownButton(
+                  isExpanded: true,
+                  items: [
+                    for (final element in NoteVisibility.values.where(
+                        (element) => element != NoteVisibility.specified))
+                      DropdownMenuItem(
+                          value: element, child: Text(element.displayName))
+                  ],
+                  value: visibility,
+                  onChanged: (value) => setState(() {
+                    visibility = value ?? NoteVisibility.public;
+                  }),
+                ),
+              ),
+              IconButton(
+                  onPressed: () => setState(() {
+                        isLocalOnly = !isLocalOnly;
+                      }),
+                  icon: isLocalOnly
+                      ? const LocalOnlyIcon()
+                      : const Icon(Icons.rocket)),
+            ]),
+          ),
+          ListTile(
+              onTap: () {
+                final navigator = Navigator.of(context);
                 context.pushRoute(NoteCreateRoute(
-                    renote: widget.note,
-                    initialAccount: widget.account,
-                    channel: selected));
+                    renote: widget.note, initialAccount: widget.account));
                 navigator.pop();
-              }
-            },
-            title: const Text("チャンネルへ引用Renote")),
+              },
+              title: const Text("引用Renote")),
+          ListTile(
+              onTap: () async {
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+                final navigator = Navigator.of(context);
+                final selected = await showDialog<CommunityChannel?>(
+                    context: context,
+                    builder: (context) =>
+                        ChannelSelectDialog(account: widget.account));
+                if (selected != null) {
+                  await ref.read(misskeyProvider(widget.account)).notes.create(
+                      NotesCreateRequest(
+                          renoteId: widget.note.id, channelId: selected.id));
+
+                  scaffoldMessenger.showSnackBar(
+                      const SnackBar(content: Text("Renoteしました。")));
+                  navigator.pop();
+                }
+              }.expectFailure(context),
+              title: const Text("ほかのチャンネルへRenote")),
+          ListTile(
+              onTap: () async {
+                final navigator = Navigator.of(context);
+                final selected = await showDialog<CommunityChannel?>(
+                    context: context,
+                    builder: (context) =>
+                        ChannelSelectDialog(account: widget.account));
+                if (!mounted) return;
+                if (selected != null) {
+                  context.pushRoute(NoteCreateRoute(
+                      renote: widget.note,
+                      initialAccount: widget.account,
+                      channel: selected));
+                  navigator.pop();
+                }
+              },
+              title: const Text("ほかのチャンネルへ引用Renote")),
+        ]
       ],
     );
   }
