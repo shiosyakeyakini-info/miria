@@ -571,9 +571,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                           if (displayNote.reactions.isNotEmpty &&
                               !isReactionedRenote)
                             const Padding(padding: EdgeInsets.only(bottom: 5)),
-                          if (!isReactionedRenote &&
-                              (displayNote.cw == null ||
-                                  (displayNote.cw != null && isCwOpened)))
+                          if (!isReactionedRenote)
                             Wrap(
                               spacing:
                                   5 * MediaQuery.of(context).textScaleFactor,
