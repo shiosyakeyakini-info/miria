@@ -57,6 +57,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   .notes
                   .create(NotesCreateRequest(
                     renoteId: widget.note.id,
+                    localOnly: true,
                     channelId: channel.id,
                   ));
               scaffoldMessenger
@@ -151,16 +152,22 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     builder: (context) =>
                         ChannelSelectDialog(account: widget.account));
                 if (selected != null) {
-                  await ref.read(misskeyProvider(widget.account)).notes.create(
-                      NotesCreateRequest(
-                          renoteId: widget.note.id, channelId: selected.id));
+                  await ref
+                      .read(misskeyProvider(widget.account))
+                      .notes
+                      .create(NotesCreateRequest(
+                        renoteId: widget.note.id,
+                        channelId: selected.id,
+                        localOnly: true,
+                      ));
 
                   scaffoldMessenger.showSnackBar(
                       const SnackBar(content: Text("Renoteしました。")));
                   navigator.pop();
                 }
               }.expectFailure(context),
-              title: const Text("ほかのチャンネルへRenote")),
+              title: Text(
+                  "${widget.note.channel != null ? "ほかの" : ""}チャンネルへRenote")),
           ListTile(
               onTap: () async {
                 final navigator = Navigator.of(context);
@@ -177,7 +184,8 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   navigator.pop();
                 }
               },
-              title: const Text("ほかのチャンネルへ引用Renote")),
+              title: Text(
+                  "${widget.note.channel != null ? "ほかの" : ""}チャンネルへ引用Renote")),
         ]
       ],
     );

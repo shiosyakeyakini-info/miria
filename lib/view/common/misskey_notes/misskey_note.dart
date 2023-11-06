@@ -330,6 +330,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
           alignment: Alignment.center,
           child: Container(
             constraints: const BoxConstraints(maxWidth: 800),
+            margin: EdgeInsets.only(
+                left: displayNote.channel?.color != null ? 5.0 : 0.0),
             padding: EdgeInsets.only(
               top: 5 * MediaQuery.of(context).textScaleFactor,
               bottom: 5 * MediaQuery.of(context).textScaleFactor,
@@ -342,14 +344,18 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         ? Theme.of(context).scaffoldBackgroundColor
                         : null,
                     border: Border(
-                        left: displayNote.channel?.color != null
-                            ? BorderSide(
-                                color: Color(
-                                    0xFF000000 | displayNote.channel!.color!),
-                                width: 4)
-                            : BorderSide.none,
-                        bottom: BorderSide(
-                            color: Theme.of(context).dividerColor, width: 0.5)))
+                      left: displayNote.channel?.color != null
+                          ? BorderSide(
+                              color: Color(
+                                  0xFF000000 | displayNote.channel!.color!),
+                              width: 4)
+                          : BorderSide.none,
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 0.5,
+                      ),
+                    ),
+                  )
                 : BoxDecoration(
                     color: widget.recursive == 1
                         ? Theme.of(context).scaffoldBackgroundColor
@@ -894,6 +900,7 @@ class RenoteHeader extends StatelessWidget {
 
     return Row(
       children: [
+        const Padding(padding: EdgeInsets.only(left: 10)),
         Expanded(
           child: GestureDetector(
             onTap: () async => await _navigateUserDetailPage(
