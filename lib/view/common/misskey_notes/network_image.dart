@@ -6,6 +6,7 @@ import 'package:miria/providers.dart';
 
 enum ImageType {
   avatarIcon,
+  avatarDecoration,
   customEmoji,
   imageThumbnail,
   image,
@@ -47,6 +48,7 @@ class NetworkImageView extends ConsumerWidget {
     }
 
     if (type == ImageType.avatarIcon ||
+        type == ImageType.avatarDecoration ||
         type == ImageType.customEmoji ||
         type == ImageType.imageThumbnail ||
         type == ImageType.serverIcon ||

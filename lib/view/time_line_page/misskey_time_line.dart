@@ -96,7 +96,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     final repository = ref.watch(widget.timeLineRepositoryProvider);
 
     return Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(right: 10),
         child: TimelineListView.builder(
           reverse: true,
           controller: scrollController,
