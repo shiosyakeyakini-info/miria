@@ -225,9 +225,15 @@ class NoteRepository extends ChangeNotifier {
     final poll = registeredNote.poll;
     if (poll == null) return;
 
+    final isMyVote = vote.userId == account.i.id;
+    if (isMyVote && poll.choices[vote.choice].isVoted) {
+      return;
+    }
+
     final choices = poll.choices.toList();
     choices[vote.choice] = choices[vote.choice].copyWith(
       votes: choices[vote.choice].votes + 1,
+      isVoted: isMyVote,
     );
 
     registerNote(
@@ -235,6 +241,10 @@ class NoteRepository extends ChangeNotifier {
         poll: poll.copyWith(choices: choices),
       ),
     );
+  }
+
+  void addMyVote(String noteId, int choice) {
+    addVote(noteId, TimelineVoted(choice: choice, userId: account.i.id));
   }
 
   void updateNote(String noteId, NoteEdited note) {
