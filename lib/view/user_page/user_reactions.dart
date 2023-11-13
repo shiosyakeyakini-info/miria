@@ -88,7 +88,7 @@ class UserReaction extends ConsumerWidget {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                 child: MisskeyNote(note: response.note)),
             const Padding(padding: EdgeInsets.all(5)),
           ],

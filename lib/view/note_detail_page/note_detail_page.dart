@@ -65,7 +65,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text("ノート")),
         body: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
           child: isLoading
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(

@@ -34,7 +34,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     return Scaffold(
       appBar: AppBar(title: const Text("リノートの直後のノート")),
       body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(right: 10),
         child: PushableListView<Note>(
           initializeFuture: () async {
             final (

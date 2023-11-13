@@ -145,27 +145,30 @@ class PageContent extends ConsumerWidget {
       }
     }
     if (content is misskey.PageNote) {
-      return FutureBuilder(future: (() async {
-        final account = AccountScope.of(context);
-        final note = await ref
-            .read(misskeyProvider(account))
-            .notes
-            .show(misskey.NotesShowRequest(noteId: content.note));
-        ref.read(notesProvider(account)).registerNote(note);
-        return note;
-      })(), builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.data != null) {
-          return MisskeyNote(note: snapshot.data!);
-        } else if (snapshot.hasError) {
-          return const Text("エラーが起きたみたいや");
-        } else {
-          return const Center(
-            child: SizedBox(
-                width: 20, height: 20, child: CircularProgressIndicator()),
-          );
-        }
-      });
+      return FutureBuilder(
+        future: (() async {
+          final account = AccountScope.of(context);
+          final note = await ref
+              .read(misskeyProvider(account))
+              .notes
+              .show(misskey.NotesShowRequest(noteId: content.note));
+          ref.read(notesProvider(account)).registerNote(note);
+          return note;
+        })(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.data != null) {
+            return MisskeyNote(note: snapshot.data!);
+          } else if (snapshot.hasError) {
+            return const Text("エラーが起きたみたいや");
+          } else {
+            return const Center(
+              child: SizedBox(
+                  width: 20, height: 20, child: CircularProgressIndicator()),
+            );
+          }
+        },
+      );
     }
     if (content is misskey.PageSection) {
       return Padding(

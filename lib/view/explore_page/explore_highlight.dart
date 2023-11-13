@@ -23,11 +23,11 @@ class ExploreHighlightState extends ConsumerState<ExploreHighlight> {
   Widget build(BuildContext context) {
     final account = AccountScope.of(context);
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(right: 10),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 3, bottom: 3),
+            padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10),
             child: LayoutBuilder(
               builder: (context, constraints) => ToggleButtons(
                   constraints: BoxConstraints.expand(

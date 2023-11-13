@@ -525,7 +525,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
           Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: ListView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

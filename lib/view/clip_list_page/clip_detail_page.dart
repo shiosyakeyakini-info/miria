@@ -56,7 +56,7 @@ class ClipDetailPage extends ConsumerWidget {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.only(right: 10),
           child: ClipDetailNoteList(id: id),
         ),
       ),

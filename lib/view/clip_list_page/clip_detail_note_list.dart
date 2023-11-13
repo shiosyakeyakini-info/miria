@@ -13,24 +13,28 @@ class ClipDetailNoteList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PushableListView<Note>(initializeFuture: () async {
-      final account = AccountScope.of(context);
-      final response = await ref
-          .read(misskeyProvider(account))
-          .clips
-          .notes(ClipsNotesRequest(clipId: id));
-      ref.read(notesProvider(account)).registerAll(response);
-      return response.toList();
-    }, nextFuture: (latestItem, _) async {
-      final account = AccountScope.of(context);
-      final response = await ref
-          .read(misskeyProvider(account))
-          .clips
-          .notes(ClipsNotesRequest(clipId: id, untilId: latestItem.id));
-      ref.read(notesProvider(account)).registerAll(response);
-      return response.toList();
-    }, itemBuilder: (context, item) {
-      return MisskeyNote(note: item);
-    });
+    return PushableListView<Note>(
+      initializeFuture: () async {
+        final account = AccountScope.of(context);
+        final response = await ref
+            .read(misskeyProvider(account))
+            .clips
+            .notes(ClipsNotesRequest(clipId: id));
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      nextFuture: (latestItem, _) async {
+        final account = AccountScope.of(context);
+        final response = await ref
+            .read(misskeyProvider(account))
+            .clips
+            .notes(ClipsNotesRequest(clipId: id, untilId: latestItem.id));
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      itemBuilder: (context, item) {
+        return MisskeyNote(note: item);
+      },
+    );
   }
 }

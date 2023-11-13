@@ -23,7 +23,7 @@ class FavoritedNotePage extends ConsumerWidget {
         body: AccountScope(
             account: account,
             child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(right: 10),
               child: PushableListView(
                 initializeFuture: () async {
                   final response = await ref
