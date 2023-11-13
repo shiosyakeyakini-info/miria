@@ -152,9 +152,17 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   }
 
   Future<void> showAddReactionsDialog({required BuildContext context}) async {
+    final endpoints =
+        await ref.read(misskeyProvider(widget.account)).endpoints();
+    final domain =
+        endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
+    if (!mounted) return;
     final emojiNames = await showDialog<List<String>>(
       context: context,
-      builder: (context) => AddReactionsDialog(account: widget.account),
+      builder: (context) => AddReactionsDialog(
+        account: widget.account,
+        domain: domain,
+      ),
     );
     if (emojiNames == null) {
       return;

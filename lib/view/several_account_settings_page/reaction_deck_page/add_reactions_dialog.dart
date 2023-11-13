@@ -6,9 +6,14 @@ import 'package:miria/view/themes/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AddReactionsDialog extends StatefulWidget {
-  final Account account;
+  const AddReactionsDialog({
+    super.key,
+    required this.account,
+    this.domain = "system",
+  });
 
-  const AddReactionsDialog({super.key, required this.account});
+  final Account account;
+  final String domain;
 
   @override
   State<AddReactionsDialog> createState() => _AddReactionsDialogState();
@@ -33,7 +38,7 @@ class _AddReactionsDialogState extends State<AddReactionsDialog> {
       pathSegments: [
         "registry",
         "value",
-        "system",
+        widget.domain,
         "client",
         "base",
         "reactions",
