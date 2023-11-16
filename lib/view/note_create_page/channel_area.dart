@@ -18,8 +18,8 @@ class ChannelArea extends ConsumerWidget {
         children: [
           Icon(
             Icons.tv,
-            size: Theme.of(context).textTheme.bodySmall!.fontSize! *
-                MediaQuery.of(context).textScaleFactor,
+            size: MediaQuery.textScalerOf(context)
+                .scale(Theme.of(context).textTheme.bodySmall!.fontSize!),
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           Text(

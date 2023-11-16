@@ -301,8 +301,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: true,
-            textScaleFactor:
-                MediaQuery.textScaleFactorOf(context) * textScaleFactor,
+            textScaler: textScaleFactor != 1
+                ? TextScaler.linear(
+                    MediaQuery.textScalerOf(context).scale(textScaleFactor),
+                  )
+                : null,
           ),
           child: widget.child,
         ),

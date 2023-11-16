@@ -148,42 +148,49 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
   Widget build(BuildContext context) {
     final disabled = !widget.isAcceptSensitive && widget.emoji.isSensitive;
     return VisibilityDetector(
-        key: Key(widget.emoji.baseName),
-        onVisibilityChanged: (visibilityInfo) {
-          if (visibilityInfo.visibleFraction != 0) {
-            setState(() {
-              isVisibility = true;
-              isVisibilityOnceMore = true;
-            });
-          }
-        },
-        child: DecoratedBox(
-            decoration: disabled && isVisibility
-                ? BoxDecoration(color: Theme.of(context).disabledColor)
-                : const BoxDecoration(),
-            child: ElevatedButton(
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-                  padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-                  elevation: MaterialStatePropertyAll(0),
-                  minimumSize: MaterialStatePropertyAll(Size(0, 0)),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      key: Key(widget.emoji.baseName),
+      onVisibilityChanged: (visibilityInfo) {
+        if (visibilityInfo.visibleFraction != 0) {
+          setState(() {
+            isVisibility = true;
+            isVisibilityOnceMore = true;
+          });
+        }
+      },
+      child: DecoratedBox(
+        decoration: disabled && isVisibility
+            ? BoxDecoration(color: Theme.of(context).disabledColor)
+            : const BoxDecoration(),
+        child: ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+            padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+            elevation: MaterialStatePropertyAll(0),
+            minimumSize: MaterialStatePropertyAll(Size.zero),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          onPressed: () async {
+            if (!isVisibility) return;
+            if (disabled) {
+              SimpleMessageDialog.show(
+                context,
+                "ここでセンシティブなカスタム絵文字を使われへんねやわ",
+              );
+            } else {
+              widget.onTap.call(widget.emoji);
+            }
+          },
+          child: isVisibility
+              ? SizedBox(
+                  height: MediaQuery.textScalerOf(context).scale(32),
+                  child: CustomEmoji(emojiData: widget.emoji),
+                )
+              : SizedBox(
+                  width: MediaQuery.textScalerOf(context).scale(32),
+                  height: MediaQuery.textScalerOf(context).scale(32),
                 ),
-                onPressed: () async {
-                  if (!isVisibility) return;
-                  if (disabled) {
-                    SimpleMessageDialog.show(
-                        context, "ここでセンシティブなカスタム絵文字を使われへんねやわ");
-                  } else {
-                    widget.onTap.call(widget.emoji);
-                  }
-                },
-                child: isVisibility
-                    ? SizedBox(
-                        height: 32 * MediaQuery.of(context).textScaleFactor,
-                        child: CustomEmoji(emojiData: widget.emoji))
-                    : SizedBox(
-                        width: 32 * MediaQuery.of(context).textScaleFactor,
-                        height: 32 * MediaQuery.of(context).textScaleFactor))));
+        ),
+      ),
+    );
   }
 }

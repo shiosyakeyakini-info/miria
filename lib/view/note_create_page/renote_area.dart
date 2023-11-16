@@ -13,21 +13,25 @@ class RenoteArea extends ConsumerWidget {
         .select((value) => value.renote));
 
     if (renote != null) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          "RN:",
-          style: TextStyle(color: Theme.of(context).primaryColor),
-        ),
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).primaryColor)),
-          padding: const EdgeInsets.all(5),
-          child: MediaQuery(
-            data: const MediaQueryData(textScaleFactor: 0.8),
-            child: MisskeyNote(note: renote),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "RN:",
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
-        )
-      ]);
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).primaryColor),
+            ),
+            padding: const EdgeInsets.all(5),
+            child: MediaQuery(
+              data: const MediaQueryData(textScaler: TextScaler.linear(0.8)),
+              child: MisskeyNote(note: renote),
+            ),
+          ),
+        ],
+      );
     }
 
     return Container();

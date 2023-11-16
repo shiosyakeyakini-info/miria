@@ -237,31 +237,36 @@ class PageLikeButtonState extends ConsumerState<PageLikeButton> {
             likeCount--;
           });
         }.expectFailure(context),
-        icon: Icon(Icons.favorite,
-            size: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) *
-                MediaQuery.of(context).textScaleFactor),
+        icon: Icon(
+          Icons.favorite,
+          size: MediaQuery.textScalerOf(context)
+              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+        ),
         label: Text(likeCount.format()),
       );
     } else {
       return OutlinedButton.icon(
-          onPressed: () async {
-            if (AccountScope.of(context).i.id == widget.userId) {
-              SimpleMessageDialog.show(context, "自分のページにはふぁぼつけられへんねん");
-              return;
-            }
-            await ref
-                .read(misskeyProvider(AccountScope.of(context)))
-                .pages
-                .like(misskey.PagesLikeRequest(pageId: widget.pageId));
-            setState(() {
-              liked = true;
-              likeCount++;
-            });
-          }.expectFailure(context),
-          icon: Icon(Icons.favorite,
-              size: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) *
-                  MediaQuery.of(context).textScaleFactor),
-          label: Text(likeCount.format()));
+        onPressed: () async {
+          if (AccountScope.of(context).i.id == widget.userId) {
+            SimpleMessageDialog.show(context, "自分のページにはふぁぼつけられへんねん");
+            return;
+          }
+          await ref
+              .read(misskeyProvider(AccountScope.of(context)))
+              .pages
+              .like(misskey.PagesLikeRequest(pageId: widget.pageId));
+          setState(() {
+            liked = true;
+            likeCount++;
+          });
+        }.expectFailure(context),
+        icon: Icon(
+          Icons.favorite,
+          size: MediaQuery.textScalerOf(context)
+              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+        ),
+        label: Text(likeCount.format()),
+      );
     }
   }
 }
