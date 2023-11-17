@@ -45,8 +45,8 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
   Widget build(BuildContext context) {
     return AccountScope(
       account: widget.account,
-      child: WillPopScope(
-        onWillPop: () async => false,
+      child: PopScope(
+        canPop: false,
         child: Scaffold(
           appBar: AppBar(
             title: const Text("写真編集"),

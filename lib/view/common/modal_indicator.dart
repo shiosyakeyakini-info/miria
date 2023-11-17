@@ -85,11 +85,9 @@ class ModalOverlay extends ModalRoute<void> {
   }
 
   Widget dialogContent(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: isAndroidBackEnable,
       child: contents,
-      onWillPop: () {
-        return Future(() => isAndroidBackEnable);
-      },
     ); //
   }
 }
