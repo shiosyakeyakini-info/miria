@@ -130,6 +130,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
                 : theme.foreground.lighten(0.1)));
 
     final themeData = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: theme.primary,
+        brightness: theme.isDarkTheme ? Brightness.dark : Brightness.light,
+        primary: theme.primary,
+      ),
       brightness: theme.isDarkTheme ? Brightness.dark : Brightness.light,
       primaryColor: theme.primary,
       primaryColorDark: theme.primaryDarken,
@@ -151,7 +156,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         labelColor: Colors.white,
         labelStyle: textTheme.titleSmall,
         unselectedLabelStyle:
-            textTheme.titleSmall?.copyWith(color: textTheme.bodySmall?.color),
+            textTheme.titleSmall?.copyWith(color: Colors.white60),
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(color: theme.primary),
         ),
