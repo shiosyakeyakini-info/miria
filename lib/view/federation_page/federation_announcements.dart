@@ -151,8 +151,8 @@ class AnnouncementState extends ConsumerState<Announcement> {
                   children: [
                     if (icon != null) AnnouncementIcon(iconType: icon),
                     Expanded(
-                      child: Text(
-                        data.title,
+                      child: MfmText(
+                        mfmText: data.title,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
