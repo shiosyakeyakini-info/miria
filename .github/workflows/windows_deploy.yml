@@ -29,14 +29,14 @@ jobs:
 
       - name: Copy DLL
         run: |
-          cp C:\Windows\System32\msvcp140.dll build\windows\runner\Release\
-          cp C:\Windows\System32\vcruntime140.dll build\windows\runner\Release\
-          cp C:\Windows\System32\vcruntime140_1.dll build\windows\runner\Release\
+          cp C:\Windows\System32\msvcp140.dll build\windows\x64\runner\Release\
+          cp C:\Windows\System32\vcruntime140.dll build\windows\x64\runner\Release\
+          cp C:\Windows\System32\vcruntime140_1.dll build\windows\x64\runner\Release\
       
       - name: Zip files
         run: |
-          ren build\windows\runner\Release Miria
-          Compress-Archive -Path build\windows\runner\Miria -DestinationPath miria_$(flutter pub run cider version)_windows-x64.zip -Force
+          ren build\windows\x64\runner\Release Miria
+          Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath miria_$(flutter pub run cider version)_windows-x64.zip -Force
 
       - name: Create tag and release note
         env:
