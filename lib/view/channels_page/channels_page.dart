@@ -30,6 +30,7 @@ class ChannelsPage extends StatelessWidget {
               Tab(text: "管理中")
             ],
             isScrollable: true,
+            tabAlignment: TabAlignment.center,
           ),
         ),
         body: AccountScope(

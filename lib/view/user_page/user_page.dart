@@ -79,6 +79,7 @@ class UserPageState extends ConsumerState<UserPage> {
                 const Tab(text: "Play"),
               ],
               isScrollable: true,
+              tabAlignment: TabAlignment.center,
             ),
           ),
           body: Column(

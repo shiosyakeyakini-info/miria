@@ -45,6 +45,7 @@ class ExplorePageState extends ConsumerState<ExplorePage> {
                   Tab(text: "ハッシュタグ"),
                   Tab(text: "よそのサーバー"),
                 ],
+                tabAlignment: TabAlignment.center,
               ),
             ),
             body: const TabBarView(
