@@ -21,6 +21,7 @@ class NetworkImageView extends ConsumerWidget {
   final ImageType type;
   final ImageLoadingBuilder? loadingBuilder;
   final ImageErrorWidgetBuilder? errorBuilder;
+  final double? width;
   final double? height;
   final BoxFit? fit;
 
@@ -30,6 +31,7 @@ class NetworkImageView extends ConsumerWidget {
     required this.type,
     this.loadingBuilder,
     this.errorBuilder,
+    this.width,
     this.height,
     this.fit,
   });
@@ -39,6 +41,7 @@ class NetworkImageView extends ConsumerWidget {
     if (url.endsWith(".svg")) {
       return SvgPicture.network(
         url,
+        width: width,
         height: height,
         fit: fit ?? BoxFit.contain,
         placeholderBuilder: (context) =>
@@ -60,6 +63,7 @@ class NetworkImageView extends ConsumerWidget {
             errorBuilder?.call(context, error, StackTrace.current) ??
             Container(),
         cacheManager: ref.read(cacheManagerProvider),
+        width: width,
         height: height,
         placeholder: (context, url) =>
             loadingBuilder?.call(context, Container(), null) ??
@@ -72,6 +76,7 @@ class NetworkImageView extends ConsumerWidget {
         fit: fit,
         loadingBuilder: loadingBuilder,
         errorBuilder: errorBuilder,
+        width: width,
         height: height,
       );
     }

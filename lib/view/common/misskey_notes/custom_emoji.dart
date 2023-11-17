@@ -14,6 +14,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final bool isAttachTooltip;
   final double? size;
   final TextStyle? style;
+  final bool forceSquare;
 
   const CustomEmoji({
     super.key,
@@ -22,6 +23,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
     this.isAttachTooltip = true,
     this.size,
     this.style,
+    this.forceSquare = false,
   });
 
   @override
@@ -95,6 +97,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
               height: scopedFontSize,
               width: scopedFontSize,
             ),
+            width: widget.forceSquare ? scopedFontSize : null,
             height: scopedFontSize,
           ),
         );
