@@ -16,6 +16,7 @@ import 'package:miria/view/common/misskey_notes/link_navigator.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
+import 'package:miria/extensions/date_time_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -126,6 +127,25 @@ class MfmTextState extends ConsumerState<MfmText> {
         code: code,
         language: lang,
       ),
+      unixTimeBuilder: (context, unixtime, style) {
+        return WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).dividerColor),
+                borderRadius: BorderRadius.circular(10)),
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            margin: const EdgeInsets.only(left: 5, right: 5),
+            child: Text.rich(
+              textScaler: TextScaler.noScaling,
+              TextSpan(
+                  style: style,
+                  text:
+                      "${unixtime?.formatUntilSeconds ?? "？？？"} (${unixtime?.differenceNowDetail ?? "？？？"})"),
+            ),
+          ),
+        );
+      },
       serifStyle: AppTheme.of(context).serifStyle,
       linkTap: (src) => const LinkNavigator()
           .onTapLink(context, ref, src, widget.host)

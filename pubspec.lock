@@ -803,9 +803,11 @@ packages:
   mfm_renderer:
     dependency: "direct main"
     description:
-      path: "../mfm_renderer"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "21ce61cec5c96b9bbf27084eec296fa7b0dc641b"
+      url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
+    source: git
     version: "0.0.1"
   mime:
     dependency: transitive

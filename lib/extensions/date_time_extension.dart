@@ -10,10 +10,29 @@ extension DateTimeExtension on DateTime {
   String get format => DateFormat("yyyy 年 M 月 d 日").format(toUtc().toLocal());
 
   String get formatUntilSeconds =>
-      DateFormat("yyyy 年 M 月 d 日 HH:mm").format(toUtc().toLocal());
+      "${year < 0 ? "-" : ""}${DateFormat("yyyy 年 M 月 d 日 HH:mm:ss").format(toUtc().toLocal())}";
 
   String get formatUntilMilliSeconds =>
-      "${DateFormat("yyyy/MM/dd HH:mm:ss", "ja_jp").format(toUtc().toLocal())}.${millisecond.toString().padLeft(3, '0')}";
+      "${year < 0 ? "-" : ""}${DateFormat("yyyy/MM/dd HH:mm:ss", "ja_jp").format(toUtc().toLocal())}.${millisecond.toString().padLeft(3, '0')}";
+
+  String get differenceNowDetail {
+    final differ = this - DateTime.now();
+    if (differ <= const Duration(seconds: 0)) {
+      return differenceNow;
+    } else if (differ >= const Duration(days: 365)) {
+      return "${differ.inDays ~/ 365}年後";
+    } else if (differ >= const Duration(days: 1)) {
+      return "${differ.inDays}日後";
+    } else if (differ >= const Duration(hours: 1)) {
+      return "${differ.inHours}時間後";
+    } else if (differ >= const Duration(minutes: 1)) {
+      return "${differ.inMinutes}分後";
+    } else if (differ >= const Duration(seconds: 1)) {
+      return "${differ.inSeconds}秒後";
+    } else {
+      return "たったいま";
+    }
+  }
 
   String get differenceNow {
     final differ = DateTime.now() - this;
@@ -27,8 +46,10 @@ extension DateTimeExtension on DateTime {
       return "${differ.inMinutes}分前";
     } else if (differ < const Duration(days: 1)) {
       return "${differ.inHours}時間前";
-    } else {
+    } else if (differ <= const Duration(days: 365)) {
       return "${differ.inDays}日前";
+    } else {
+      return "${differ.inDays ~/ 365}年前";
     }
   }
 }

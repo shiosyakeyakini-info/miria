@@ -18,7 +18,7 @@ dependencies:
   misskey_dart:
     git: https://github.com/shiosyakeyakini-info/misskey_dart.git
   mfm_renderer:
-    path: ../mfm_renderer/
+    git: https://github.com/shiosyakeyakini-info/mfm_renderer.git
   tuple: ^2.0.1
   path_provider: ^2.0.14
   dio: ^5.1.1
