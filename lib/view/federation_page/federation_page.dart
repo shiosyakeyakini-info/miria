@@ -59,6 +59,7 @@ class FederationPageState extends ConsumerState<FederationPage> {
                 if (isSupportedTimeline) const Tab(text: "カスタム絵文字"),
                 if (isSupportedTimeline) const Tab(text: "LTL")
               ],
+              tabAlignment: TabAlignment.center,
             ),
           ),
           body: TabBarView(
