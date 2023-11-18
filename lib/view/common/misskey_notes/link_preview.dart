@@ -178,8 +178,9 @@ class LinkPreviewTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final imageSize = ((textTheme.titleSmall?.fontSize ?? 15) * 5) *
-        min(1, MediaQuery.of(context).textScaleFactor);
+    final unscaledSize = (textTheme.titleSmall?.fontSize ?? 15) * 5;
+    final imageSize =
+        min(unscaledSize, MediaQuery.textScalerOf(context).scale(unscaledSize));
     final thumbnail = summalyResult.thumbnail;
     final icon = summalyResult.icon;
     return Padding(

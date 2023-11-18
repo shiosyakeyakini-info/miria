@@ -119,7 +119,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                           stops: [
                             0,
                             choice.element.votes / totalVotes,
-                            choice.element.votes / totalVotes
+                            choice.element.votes / totalVotes,
                           ],
                         )
                       : null,
@@ -139,11 +139,12 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                     padding: const EdgeInsets.all(2),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.transparent),
-                          borderRadius: BorderRadius.circular(3),
-                          color: Theme.of(context)
-                              .scaffoldBackgroundColor
-                              .withAlpha(215)),
+                        border: Border.all(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(3),
+                        color: Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withAlpha(215),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 3, right: 3),
                         child: SimpleMfmText(
@@ -155,12 +156,13 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                                 alignment: PlaceholderAlignment.middle,
                                 child: Icon(
                                   Icons.check,
-                                  size: (Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.fontSize ??
-                                          22) *
-                                      MediaQuery.of(context).textScaleFactor,
+                                  size: MediaQuery.textScalerOf(context).scale(
+                                    Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.fontSize ??
+                                        22,
+                                  ),
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyMedium

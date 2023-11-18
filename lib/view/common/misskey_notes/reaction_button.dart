@@ -62,95 +62,99 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         : Theme.of(context).textTheme.bodyMedium?.color;
 
     return ElevatedButton(
-        onPressed: () async {
-          if (widget.loginAs != null) return;
-          // リアクション取り消し
-          final account = AccountScope.of(context);
-          if (isMyReaction) {
-            if (await SimpleConfirmDialog.show(
-                    context: context,
-                    message: "リアクション取り消してもええか？",
-                    primary: "取り消す",
-                    secondary: "やっぱりやめる") !=
-                true) {
-              return;
-            }
-
-            await ref
-                .read(misskeyProvider(account))
-                .notes
-                .reactions
-                .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
-            if (account.host == "misskey.io") {
-              await Future.delayed(
-                  const Duration(milliseconds: misskeyIOReactionDelay));
-            }
-
-            await ref.read(notesProvider(account)).refresh(widget.noteId);
-
+      onPressed: () async {
+        if (widget.loginAs != null) return;
+        // リアクション取り消し
+        final account = AccountScope.of(context);
+        if (isMyReaction) {
+          if (await SimpleConfirmDialog.show(
+                  context: context,
+                  message: "リアクション取り消してもええか？",
+                  primary: "取り消す",
+                  secondary: "やっぱりやめる") !=
+              true) {
             return;
           }
 
-          // すでに別のリアクションを行っている
-          if (widget.myReaction != null) return;
-
-          final String reactionString;
-          final emojiData = widget.emojiData;
-          switch (emojiData) {
-            case UnicodeEmojiData():
-              reactionString = emojiData.char;
-              break;
-            case CustomEmojiData():
-              if (!emojiData.isCurrentServer) return;
-              reactionString = ":${emojiData.baseName}:";
-              break;
-            case NotEmojiData():
-              return;
-          }
-
-          await ref.read(misskeyProvider(account)).notes.reactions.create(
-              NotesReactionsCreateRequest(
-                  noteId: widget.noteId, reaction: reactionString));
-
-          // misskey.ioはただちにリアクションを反映してくれない
+          await ref
+              .read(misskeyProvider(account))
+              .notes
+              .reactions
+              .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
           if (account.host == "misskey.io") {
             await Future.delayed(
                 const Duration(milliseconds: misskeyIOReactionDelay));
           }
 
           await ref.read(notesProvider(account)).refresh(widget.noteId);
-        },
-        onLongPress: () {
-          showDialog(
-              context: context,
-              builder: (context2) {
-                return ReactionUserDialog(
-                    account: AccountScope.of(context),
-                    emojiData: widget.emojiData,
-                    noteId: widget.noteId);
-              });
-        },
-        style: AppTheme.of(context).reactionButtonStyle.copyWith(
-            backgroundColor: MaterialStatePropertyAll(backgroundColor)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: min(MediaQuery.of(context).size.width, 800) * 0.75,
-                  minHeight: 24 * MediaQuery.of(context).textScaleFactor,
-                  maxHeight: 24 * MediaQuery.of(context).textScaleFactor,
-                ),
-                child: CustomEmoji(
+
+          return;
+        }
+
+        // すでに別のリアクションを行っている
+        if (widget.myReaction != null) return;
+
+        final String reactionString;
+        final emojiData = widget.emojiData;
+        switch (emojiData) {
+          case UnicodeEmojiData():
+            reactionString = emojiData.char;
+            break;
+          case CustomEmojiData():
+            if (!emojiData.isCurrentServer) return;
+            reactionString = ":${emojiData.baseName}:";
+            break;
+          case NotEmojiData():
+            return;
+        }
+
+        await ref.read(misskeyProvider(account)).notes.reactions.create(
+            NotesReactionsCreateRequest(
+                noteId: widget.noteId, reaction: reactionString));
+
+        // misskey.ioはただちにリアクションを反映してくれない
+        if (account.host == "misskey.io") {
+          await Future.delayed(
+              const Duration(milliseconds: misskeyIOReactionDelay));
+        }
+
+        await ref.read(notesProvider(account)).refresh(widget.noteId);
+      },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (context2) {
+              return ReactionUserDialog(
+                  account: AccountScope.of(context),
                   emojiData: widget.emojiData,
-                  isAttachTooltip: false,
-                )),
-            const Padding(padding: EdgeInsets.only(left: 5)),
-            Text(widget.reactionCount.toString(),
-                style: TextStyle(color: foreground)),
-          ],
-        ));
+                  noteId: widget.noteId);
+            });
+      },
+      style: AppTheme.of(context)
+          .reactionButtonStyle
+          .copyWith(backgroundColor: MaterialStatePropertyAll(backgroundColor)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: min(MediaQuery.of(context).size.width, 800) * 0.75,
+              minHeight: MediaQuery.textScalerOf(context).scale(24),
+              maxHeight: MediaQuery.textScalerOf(context).scale(24),
+            ),
+            child: CustomEmoji(
+              emojiData: widget.emojiData,
+              isAttachTooltip: false,
+            ),
+          ),
+          const Padding(padding: EdgeInsets.only(left: 5)),
+          Text(
+            widget.reactionCount.toString(),
+            style: TextStyle(color: foreground),
+          ),
+        ],
+      ),
+    );
   }
 }

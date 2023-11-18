@@ -100,7 +100,7 @@ class EmojiKeyboard extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: SizedBox(
-                height: 32 * MediaQuery.of(context).textScaleFactor,
+                height: MediaQuery.textScalerOf(context).scale(32),
                 child: CustomEmoji(emojiData: emoji),
               ),
             ),

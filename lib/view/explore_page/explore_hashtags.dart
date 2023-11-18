@@ -110,13 +110,14 @@ class Hashtag extends StatelessWidget {
           HashtagRoute(hashtag: hashtag, account: AccountScope.of(context))),
       title: Text("#$hashtag", style: AppTheme.of(context).hashtagStyle),
       trailing: Text.rich(
-        TextSpan(children: [
-          TextSpan(
-            text: usersCount.format(),
-          ),
-          TextSpan(text: "人", style: Theme.of(context).textTheme.bodySmall),
-        ]),
-        textScaleFactor: MediaQuery.of(context).textScaleFactor,
+        TextSpan(
+          children: [
+            TextSpan(
+              text: usersCount.format(),
+            ),
+            TextSpan(text: "人", style: Theme.of(context).textTheme.bodySmall),
+          ],
+        ),
       ),
     );
   }

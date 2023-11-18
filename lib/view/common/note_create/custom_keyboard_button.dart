@@ -32,8 +32,8 @@ class CustomKeyboardButton extends StatelessWidget {
         padding: const EdgeInsets.all(5),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minWidth: 32 * MediaQuery.of(context).textScaleFactor,
-            maxHeight: 32 * MediaQuery.of(context).textScaleFactor,
+            minWidth: MediaQuery.textScalerOf(context).scale(32),
+            maxHeight: MediaQuery.textScalerOf(context).scale(32),
           ),
           child: Text(
             keyboard,

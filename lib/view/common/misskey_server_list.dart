@@ -70,14 +70,14 @@ class MisskeyServerList extends ConsumerWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 10),
                                     child: SizedBox(
-                                      width: (Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.fontSize ??
-                                              22) *
-                                          MediaQuery.of(context)
-                                              .textScaleFactor *
-                                          2,
+                                      width: MediaQuery.textScalerOf(context)
+                                          .scale(
+                                        Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.fontSize ??
+                                            22 * 2,
+                                      ),
                                       child: Image.network(
                                         "https://instanceapp.misskey.page/instance-icons/${server.url}.webp",
                                       ),
