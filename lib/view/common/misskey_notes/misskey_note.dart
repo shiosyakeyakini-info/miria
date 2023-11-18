@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:mfm_parser/mfm_parser.dart' as parser;
 import 'package:miria/const.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/extensions/note_extension.dart';
 import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
@@ -224,11 +225,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     final renoteId = widget.note.renote?.id;
     final Note? renoteNote;
 
-    bool isEmptyRenote = renoteId != null &&
-        latestActualNote?.text == null &&
-        latestActualNote?.cw == null &&
-        (latestActualNote?.files.isEmpty ?? true) &&
-        latestActualNote?.poll == null;
+    bool isEmptyRenote = latestActualNote?.isEmptyRenote == true;
 
     if (isEmptyRenote) {
       renoteNote = ref.watch(notesProvider(AccountScope.of(context))
@@ -263,10 +260,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
         child: GestureDetector(
             onTap: () => ref
                 .read(notesProvider(AccountScope.of(context)))
-                .updateNoteStatus(displayNote.id,
+                .updateNoteStatus(widget.note.id,
                     (status) => status.copyWith(isMuteOpened: true)),
             child: Padding(
-              padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+              padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0),
               child: Text(
                 "${displayNote.user.name ?? displayNote.user.username}が何か言うとるわ",
                 style: Theme.of(context).textTheme.bodySmall,
