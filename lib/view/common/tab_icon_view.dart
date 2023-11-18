@@ -39,6 +39,7 @@ class TabIconView extends ConsumerWidget {
               ref.read(emojiRepositoryProvider(AccountScope.of(context))),
         ),
         size: iconSize,
+        forceSquare: true,
       );
     }
     return const SizedBox.shrink();
