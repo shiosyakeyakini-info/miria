@@ -51,6 +51,21 @@ mixin _$GeneralSettings {
   /// 使用するUnicodeの絵文字種別
   EmojiType get emojiType => throw _privateConstructorUsedError;
 
+  /// デフォルトのフォント名
+  String get defaultFontName => throw _privateConstructorUsedError;
+
+  /// `$[font.serif のフォント名
+  String get serifFontName => throw _privateConstructorUsedError;
+
+  /// `$[font.monospace およびコードブロックのフォント名
+  String get monospaceFontName => throw _privateConstructorUsedError;
+
+  /// `$[font.cursive のフォント名
+  String get cursiveFontName => throw _privateConstructorUsedError;
+
+  /// `$[font.fantasy のフォント名
+  String get fantasyFontName => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
@@ -75,7 +90,12 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       bool enableFavoritedRenoteElipsed,
       TabPosition tabPosition,
       double textScaleFactor,
-      EmojiType emojiType});
+      EmojiType emojiType,
+      String defaultFontName,
+      String serifFontName,
+      String monospaceFontName,
+      String cursiveFontName,
+      String fantasyFontName});
 }
 
 /// @nodoc
@@ -103,6 +123,11 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? tabPosition = null,
     Object? textScaleFactor = null,
     Object? emojiType = null,
+    Object? defaultFontName = null,
+    Object? serifFontName = null,
+    Object? monospaceFontName = null,
+    Object? cursiveFontName = null,
+    Object? fantasyFontName = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -153,6 +178,26 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.emojiType
           : emojiType // ignore: cast_nullable_to_non_nullable
               as EmojiType,
+      defaultFontName: null == defaultFontName
+          ? _value.defaultFontName
+          : defaultFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      serifFontName: null == serifFontName
+          ? _value.serifFontName
+          : serifFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      monospaceFontName: null == monospaceFontName
+          ? _value.monospaceFontName
+          : monospaceFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      cursiveFontName: null == cursiveFontName
+          ? _value.cursiveFontName
+          : cursiveFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      fantasyFontName: null == fantasyFontName
+          ? _value.fantasyFontName
+          : fantasyFontName // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -177,7 +222,12 @@ abstract class _$$GeneralSettingsImplCopyWith<$Res>
       bool enableFavoritedRenoteElipsed,
       TabPosition tabPosition,
       double textScaleFactor,
-      EmojiType emojiType});
+      EmojiType emojiType,
+      String defaultFontName,
+      String serifFontName,
+      String monospaceFontName,
+      String cursiveFontName,
+      String fantasyFontName});
 }
 
 /// @nodoc
@@ -203,6 +253,11 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
     Object? tabPosition = null,
     Object? textScaleFactor = null,
     Object? emojiType = null,
+    Object? defaultFontName = null,
+    Object? serifFontName = null,
+    Object? monospaceFontName = null,
+    Object? cursiveFontName = null,
+    Object? fantasyFontName = null,
   }) {
     return _then(_$GeneralSettingsImpl(
       lightColorThemeId: null == lightColorThemeId
@@ -253,6 +308,26 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
           ? _value.emojiType
           : emojiType // ignore: cast_nullable_to_non_nullable
               as EmojiType,
+      defaultFontName: null == defaultFontName
+          ? _value.defaultFontName
+          : defaultFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      serifFontName: null == serifFontName
+          ? _value.serifFontName
+          : serifFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      monospaceFontName: null == monospaceFontName
+          ? _value.monospaceFontName
+          : monospaceFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      cursiveFontName: null == cursiveFontName
+          ? _value.cursiveFontName
+          : cursiveFontName // ignore: cast_nullable_to_non_nullable
+              as String,
+      fantasyFontName: null == fantasyFontName
+          ? _value.fantasyFontName
+          : fantasyFontName // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -272,7 +347,12 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
       this.enableFavoritedRenoteElipsed = true,
       this.tabPosition = TabPosition.top,
       this.textScaleFactor = 1.0,
-      this.emojiType = EmojiType.twemoji});
+      this.emojiType = EmojiType.twemoji,
+      this.defaultFontName = "",
+      this.serifFontName = "",
+      this.monospaceFontName = "",
+      this.cursiveFontName = "",
+      this.fantasyFontName = ""});
 
   factory _$GeneralSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$GeneralSettingsImplFromJson(json);
@@ -332,9 +412,34 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
   @JsonKey()
   final EmojiType emojiType;
 
+  /// デフォルトのフォント名
+  @override
+  @JsonKey()
+  final String defaultFontName;
+
+  /// `$[font.serif のフォント名
+  @override
+  @JsonKey()
+  final String serifFontName;
+
+  /// `$[font.monospace およびコードブロックのフォント名
+  @override
+  @JsonKey()
+  final String monospaceFontName;
+
+  /// `$[font.cursive のフォント名
+  @override
+  @JsonKey()
+  final String cursiveFontName;
+
+  /// `$[font.fantasy のフォント名
+  @override
+  @JsonKey()
+  final String fantasyFontName;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType, defaultFontName: $defaultFontName, serifFontName: $serifFontName, monospaceFontName: $monospaceFontName, cursiveFontName: $cursiveFontName, fantasyFontName: $fantasyFontName)';
   }
 
   @override
@@ -367,7 +472,17 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
             (identical(other.textScaleFactor, textScaleFactor) ||
                 other.textScaleFactor == textScaleFactor) &&
             (identical(other.emojiType, emojiType) ||
-                other.emojiType == emojiType));
+                other.emojiType == emojiType) &&
+            (identical(other.defaultFontName, defaultFontName) ||
+                other.defaultFontName == defaultFontName) &&
+            (identical(other.serifFontName, serifFontName) ||
+                other.serifFontName == serifFontName) &&
+            (identical(other.monospaceFontName, monospaceFontName) ||
+                other.monospaceFontName == monospaceFontName) &&
+            (identical(other.cursiveFontName, cursiveFontName) ||
+                other.cursiveFontName == cursiveFontName) &&
+            (identical(other.fantasyFontName, fantasyFontName) ||
+                other.fantasyFontName == fantasyFontName));
   }
 
   @JsonKey(ignore: true)
@@ -385,7 +500,12 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
       enableFavoritedRenoteElipsed,
       tabPosition,
       textScaleFactor,
-      emojiType);
+      emojiType,
+      defaultFontName,
+      serifFontName,
+      monospaceFontName,
+      cursiveFontName,
+      fantasyFontName);
 
   @JsonKey(ignore: true)
   @override
@@ -415,7 +535,12 @@ abstract class _GeneralSettings implements GeneralSettings {
       final bool enableFavoritedRenoteElipsed,
       final TabPosition tabPosition,
       final double textScaleFactor,
-      final EmojiType emojiType}) = _$GeneralSettingsImpl;
+      final EmojiType emojiType,
+      final String defaultFontName,
+      final String serifFontName,
+      final String monospaceFontName,
+      final String cursiveFontName,
+      final String fantasyFontName}) = _$GeneralSettingsImpl;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$GeneralSettingsImpl.fromJson;
@@ -462,6 +587,26 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// 使用するUnicodeの絵文字種別
   EmojiType get emojiType;
+  @override
+
+  /// デフォルトのフォント名
+  String get defaultFontName;
+  @override
+
+  /// `$[font.serif のフォント名
+  String get serifFontName;
+  @override
+
+  /// `$[font.monospace およびコードブロックのフォント名
+  String get monospaceFontName;
+  @override
+
+  /// `$[font.cursive のフォント名
+  String get cursiveFontName;
+  @override
+
+  /// `$[font.fantasy のフォント名
+  String get fantasyFontName;
   @override
   @JsonKey(ignore: true)
   _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>

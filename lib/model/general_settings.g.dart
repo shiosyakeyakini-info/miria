@@ -31,6 +31,11 @@ _$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
       textScaleFactor: (json['textScaleFactor'] as num?)?.toDouble() ?? 1.0,
       emojiType: $enumDecodeNullable(_$EmojiTypeEnumMap, json['emojiType']) ??
           EmojiType.twemoji,
+      defaultFontName: json['defaultFontName'] as String? ?? "",
+      serifFontName: json['serifFontName'] as String? ?? "",
+      monospaceFontName: json['monospaceFontName'] as String? ?? "",
+      cursiveFontName: json['cursiveFontName'] as String? ?? "",
+      fantasyFontName: json['fantasyFontName'] as String? ?? "",
     );
 
 Map<String, dynamic> _$$GeneralSettingsImplToJson(
@@ -48,6 +53,11 @@ Map<String, dynamic> _$$GeneralSettingsImplToJson(
       'tabPosition': _$TabPositionEnumMap[instance.tabPosition]!,
       'textScaleFactor': instance.textScaleFactor,
       'emojiType': _$EmojiTypeEnumMap[instance.emojiType]!,
+      'defaultFontName': instance.defaultFontName,
+      'serifFontName': instance.serifFontName,
+      'monospaceFontName': instance.monospaceFontName,
+      'cursiveFontName': instance.cursiveFontName,
+      'fantasyFontName': instance.fantasyFontName,
     };
 
 const _$ThemeColorSystemEnumMap = {

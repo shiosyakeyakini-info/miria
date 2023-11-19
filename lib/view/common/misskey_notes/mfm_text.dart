@@ -147,6 +147,9 @@ class MfmTextState extends ConsumerState<MfmText> {
         );
       },
       serifStyle: AppTheme.of(context).serifStyle,
+      monospaceStyle: AppTheme.of(context).monospaceStyle,
+      cursiveStyle: AppTheme.of(context).cursiveStyle,
+      fantasyStyle: AppTheme.of(context).fantasyStyle,
       linkTap: (src) => const LinkNavigator()
           .onTapLink(context, ref, src, widget.host)
           .expectFailure(context),
@@ -198,12 +201,7 @@ class CodeBlock extends StatelessWidget {
             theme:
                 AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
             padding: const EdgeInsets.all(10),
-            textStyle: const TextStyle(fontFamilyFallback: [
-              "Monaco",
-              "Menlo",
-              "Consolas",
-              "Noto Mono"
-            ]),
+            textStyle: AppTheme.of(context).monospaceStyle,
           )),
     );
   }

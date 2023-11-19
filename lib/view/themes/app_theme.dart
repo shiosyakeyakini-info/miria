@@ -32,6 +32,9 @@ class AppThemeData {
   final TextStyle hashtagStyle;
   final TextStyle unicodeEmojiStyle;
   final TextStyle serifStyle;
+  final TextStyle monospaceStyle;
+  final TextStyle cursiveStyle;
+  final TextStyle fantasyStyle;
   final Color reactionButtonMeReactedColor;
   final Color reactionButtonBackgroundColor;
   final Color renoteBorderColor;
@@ -53,6 +56,9 @@ class AppThemeData {
     required this.hashtagStyle,
     required this.unicodeEmojiStyle,
     required this.serifStyle,
+    required this.monospaceStyle,
+    required this.cursiveStyle,
+    required this.fantasyStyle,
     required this.reactionButtonMeReactedColor,
     required this.reactionButtonBackgroundColor,
     required this.renoteBorderColor,

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:miria/extensions/color_extension.dart';
 import 'package:miria/model/color_theme.dart';
 import 'package:miria/model/general_settings.dart';
@@ -19,7 +20,14 @@ class AppThemeScope extends ConsumerStatefulWidget {
 }
 
 class AppThemeScopeState extends ConsumerState<AppThemeScope> {
-  AppThemeData buildDarkAppThemeData(BuildContext context, ColorTheme theme) {
+  AppThemeData buildDarkAppThemeData({
+    required BuildContext context,
+    required ColorTheme theme,
+    required String serifFontName,
+    required String monospaceFontName,
+    required String cursiveFontName,
+    required String fantasyFontName,
+  }) {
     return AppThemeData(
       isDarkMode: theme.isDarkTheme,
       noteTextStyle: const InputDecoration(),
@@ -34,8 +42,14 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       linkStyle: TextStyle(color: theme.link),
       hashtagStyle: TextStyle(color: theme.hashtag),
       mentionStyle: TextStyle(color: theme.mention),
-      serifStyle:
-          TextStyle(fontFamilyFallback: resolveFontFamilySerifCallback()),
+      serifStyle: resolveFontFamilySerif(serifFontName),
+      monospaceStyle: resolveFontFamilyMonospace(monospaceFontName),
+      cursiveStyle: cursiveFontName.isNotEmpty
+          ? GoogleFonts.getFont(cursiveFontName)
+          : const TextStyle(),
+      fantasyStyle: fantasyFontName.isNotEmpty
+          ? GoogleFonts.getFont(fantasyFontName)
+          : const TextStyle(),
       reactionButtonBackgroundColor: theme.buttonBackground,
       reactionButtonMeReactedColor: theme.primary,
       renoteBorderColor: theme.renote,
@@ -56,7 +70,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     );
   }
 
-  String resolveFontFamilyName() {
+  String resolveFontFamilyName(String defaultFontName) {
+    if (defaultFontName.isNotEmpty) {
+      return defaultFontName;
+    }
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return "SF Pro Text";
@@ -68,14 +85,20 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     return "KosugiMaru";
   }
 
-  List<String> resolveFontFamilyCallback() {
+  List<String> resolveFontFamilyFallback(String defaultFontName) {
     if (defaultTargetPlatform == TargetPlatform.windows ||
         defaultTargetPlatform == TargetPlatform.linux) {
-      return ["Noto Sans CJK JP", "KosugiMaru", "BIZ UDPGothic"];
+      return [
+        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
+        "Noto Sans CJK JP",
+        "KosugiMaru",
+        "BIZ UDPGothic"
+      ];
     }
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return [
+        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
         "Hiragino Maru Gothic ProN",
         "Apple Color Emoji",
       ];
@@ -83,12 +106,42 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     return [];
   }
 
-  List<String> resolveFontFamilySerifCallback() {
+  TextStyle resolveFontFamilySerif(String defaultFontName) {
+    final fallback = <String>[];
+
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
-      return ["Hiragino Mincho ProN", "Apple Color Emoji"];
+      fallback.addAll(["Hiragino Mincho ProN", "Apple Color Emoji"]);
+    } else {
+      fallback.addAll(["Noto Serif CJK JP", "Noto Serif", "Droid Serif"]);
     }
-    return ["Noto Serif CJK JP", "Noto Serif"];
+    return (defaultFontName.isEmpty
+            ? const TextStyle()
+            : GoogleFonts.getFont(defaultFontName))
+        .copyWith(fontFamilyFallback: fallback);
+  }
+
+  TextStyle resolveFontFamilyMonospace(String monospaceFontName) {
+    final String? fontName;
+    final fallback = <String>[];
+
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      fontName = "Monaco";
+      fallback.addAll(const ["Apple Color Emoji", "Hiragino Maru Gothic ProN"]);
+    } else if (defaultTargetPlatform == TargetPlatform.windows) {
+      fontName = "Consolas";
+      fallback.addAll(const ["Segoe UI Emoji", "Noto Color Emoji", "Meiryo"]);
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      fontName = "Droid Sans Mono";
+      fallback.addAll(const ["Noto Color Emoji", "Noto Sans JP"]);
+    } else {
+      fontName = null;
+    }
+    return (monospaceFontName.isNotEmpty
+            ? GoogleFonts.getFont(monospaceFontName)
+            : TextStyle(fontFamily: fontName))
+        .copyWith(fontFamilyFallback: fallback);
   }
 
   TextStyle resolveUnicodeEmojiStyle() {
@@ -115,14 +168,27 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     return const TextStyle();
   }
 
-  ThemeData buildTheme(BuildContext context, ColorTheme theme) {
-    final textThemePre = Theme.of(context).textTheme.merge(
-        (theme.isDarkTheme ? ThemeData.dark() : ThemeData.light())
+  TextTheme applyGoogleFont(TextTheme textTheme, String? fontName) {
+    return fontName != null && GoogleFonts.asMap().containsKey(fontName)
+        ? GoogleFonts.getTextTheme(fontName, textTheme)
+        : textTheme;
+  }
+
+  ThemeData buildTheme({
+    required BuildContext context,
+    required ColorTheme theme,
+    required String defaultFontName,
+  }) {
+    final textThemePre = applyGoogleFont(
+        Theme.of(context).textTheme.merge((theme.isDarkTheme
+                ? ThemeData.dark()
+                : ThemeData.light())
             .textTheme
             .apply(
-                fontFamily: resolveFontFamilyName(),
-                fontFamilyFallback: resolveFontFamilyCallback(),
-                bodyColor: theme.foreground));
+                fontFamily: resolveFontFamilyName(defaultFontName),
+                fontFamilyFallback: resolveFontFamilyFallback(defaultFontName),
+                bodyColor: theme.foreground)),
+        defaultFontName);
     final textTheme = textThemePre.copyWith(
         bodySmall: textThemePre.bodySmall?.copyWith(
             color: theme.isDarkTheme
@@ -283,6 +349,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       generalSettingsRepositoryProvider
           .select((value) => value.settings.textScaleFactor),
     );
+    final defaultFontName = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.defaultFontName));
+    final serifFontName = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.serifFontName));
+    final monospaceFontName = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.monospaceFontName));
+    final cursiveFontName = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.cursiveFontName));
+    final fantasyFontName = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.fantasyFontName));
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -301,9 +377,19 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
             .firstWhere((element) => element.isDarkTheme == isDark);
 
     return Theme(
-      data: buildTheme(context, foundColorTheme),
+      data: buildTheme(
+        context: context,
+        theme: foundColorTheme,
+        defaultFontName: defaultFontName,
+      ),
       child: AppTheme(
-        themeData: buildDarkAppThemeData(context, foundColorTheme),
+        themeData: buildDarkAppThemeData(
+            context: context,
+            theme: foundColorTheme,
+            serifFontName: serifFontName,
+            monospaceFontName: monospaceFontName,
+            cursiveFontName: cursiveFontName,
+            fantasyFontName: fantasyFontName),
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: true,
