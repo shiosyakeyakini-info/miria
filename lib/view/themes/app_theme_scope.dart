@@ -45,10 +45,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       serifStyle: resolveFontFamilySerif(serifFontName),
       monospaceStyle: resolveFontFamilyMonospace(monospaceFontName),
       cursiveStyle: cursiveFontName.isNotEmpty
-          ? GoogleFonts.getFont(cursiveFontName)
+          ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
           : const TextStyle(),
       fantasyStyle: fantasyFontName.isNotEmpty
-          ? GoogleFonts.getFont(fantasyFontName)
+          ? (fromGoogleFont(fantasyFontName) ?? const TextStyle())
           : const TextStyle(),
       reactionButtonBackgroundColor: theme.buttonBackground,
       reactionButtonMeReactedColor: theme.primary,
@@ -117,7 +117,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     }
     return (defaultFontName.isEmpty
             ? const TextStyle()
-            : GoogleFonts.getFont(defaultFontName))
+            : (fromGoogleFont(defaultFontName) ?? const TextStyle())
         .copyWith(fontFamilyFallback: fallback);
   }
 
@@ -139,7 +139,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       fontName = null;
     }
     return (monospaceFontName.isNotEmpty
-            ? GoogleFonts.getFont(monospaceFontName)
+            ? (fromGoogleFont(monospaceFontName) ??
+                TextStyle(fontFamily: fontName))
             : TextStyle(fontFamily: fontName))
         .copyWith(fontFamilyFallback: fallback);
   }
@@ -172,6 +173,14 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     return fontName != null && GoogleFonts.asMap().containsKey(fontName)
         ? GoogleFonts.getTextTheme(fontName, textTheme)
         : textTheme;
+  }
+
+  TextStyle? fromGoogleFont(String? fontName) {
+    return fontName != null &&
+            fontName.isNotEmpty == true &&
+            GoogleFonts.asMap().containsKey(fontName)
+        ? GoogleFonts.getFont(fontName)
+        : null;
   }
 
   ThemeData buildTheme({
