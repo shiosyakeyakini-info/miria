@@ -116,9 +116,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       fallback.addAll(["Noto Serif CJK JP", "Noto Serif", "Droid Serif"]);
     }
     return (defaultFontName.isEmpty
-        ? const TextStyle()
-        : (fromGoogleFont(defaultFontName) ?? const TextStyle())
-            .copyWith(fontFamilyFallback: fallback));
+            ? const TextStyle()
+            : (fromGoogleFont(defaultFontName) ?? const TextStyle()))
+        .copyWith(fontFamilyFallback: fallback);
   }
 
   TextStyle resolveFontFamilyMonospace(String monospaceFontName) {
