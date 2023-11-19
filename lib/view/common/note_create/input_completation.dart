@@ -112,6 +112,7 @@ class InputComplementState extends ConsumerState<InputComplement> {
                   MfmFn() => MfmFnKeyboard(
                       controller: widget.controller,
                       focusNode: focusNode,
+                      parentContext: context,
                     ),
                   Hashtag() => HashtagKeyboard(
                       account: account,

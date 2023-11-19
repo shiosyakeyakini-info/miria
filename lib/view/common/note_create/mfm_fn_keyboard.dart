@@ -25,8 +25,10 @@ const mfmFn = [
   "font",
   "blur",
   "rainbow",
-  // "sparkle",
+  "sparkle",
   "rotate",
+  "ruby",
+  "unixtime"
 ];
 
 final _filteredMfmFnProvider = Provider.autoDispose<List<String>>((ref) {
@@ -43,12 +45,37 @@ class MfmFnKeyboard extends ConsumerWidget {
     super.key,
     required this.controller,
     required this.focusNode,
+    required this.parentContext,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
+  final BuildContext parentContext;
 
-  void insertMfmFn(String mfmFn) {
+  Future<void> insertMfmFn(BuildContext context, String mfmFn) async {
+    if (mfmFn == "unixtime") {
+      final resultDate = await showDatePicker(
+          context: parentContext,
+          firstDate: DateTime.utc(-271820, 12, 31),
+          initialDate: DateTime.now(),
+          lastDate: DateTime.utc(275760, 9, 13));
+      if (resultDate == null) return;
+      final resultTime = await showTimePicker(
+        context: parentContext,
+        initialTime:
+            TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+      );
+      if (resultTime == null) return;
+      final date = DateTime(resultDate.year, resultDate.month, resultDate.day,
+          resultTime.hour, resultTime.minute, 0);
+      final unixtime = date.millisecondsSinceEpoch ~/ 1000;
+
+      controller.insert("unixtime $unixtime");
+      focusNode.requestFocus();
+
+      return;
+    }
+
     final textBeforeSelection = controller.textBeforeSelection;
     final lastOpenTagIndex = textBeforeSelection!.lastIndexOf(r"$[");
     final queryLength = textBeforeSelection.length - lastOpenTagIndex - 2;
@@ -77,7 +104,7 @@ class MfmFnKeyboard extends ConsumerWidget {
             keyboard: mfmFn,
             controller: controller,
             focusNode: focusNode,
-            onTap: () => insertMfmFn(mfmFn),
+            onTap: () async => await insertMfmFn(context, mfmFn),
           ),
       ],
     );
