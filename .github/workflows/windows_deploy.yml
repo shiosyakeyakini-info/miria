@@ -1,0 +1,45 @@
+name: デプロイ(windows zip)
+
+on: 
+  release:
+    types: [published]
+
+jobs:
+  build_for_windows:
+    name: Windows用ビルド
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter pub get
+        run: |
+          git config --system core.longpaths true
+          flutter pub get
+
+      - name: Build for Windows
+        run: |
+          flutter build windows --release
+
+      - name: Copy DLL
+        run: |
+          cp C:\Windows\System32\msvcp140.dll build\windows\x64\runner\Release\
+          cp C:\Windows\System32\vcruntime140.dll build\windows\x64\runner\Release\
+          cp C:\Windows\System32\vcruntime140_1.dll build\windows\x64\runner\Release\
+      
+      - name: Zip files
+        run: |
+          ren build\windows\x64\runner\Release Miria
+          Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath miria_$(flutter pub run cider version)_windows-x64.zip -Force
+
+      - name: Create tag and release note
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v$(flutter pub run cider version)  miria_$(flutter pub run cider version)_windows-x64.zip
