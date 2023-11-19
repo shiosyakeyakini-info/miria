@@ -206,6 +206,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         voteDate: note.poll?.expiresAt,
         noteCreationMode: noteCreationMode,
         noteId: note.id,
+        renote: note.renote,
+        reply: note.reply,
       );
       state = resultState;
       return;
