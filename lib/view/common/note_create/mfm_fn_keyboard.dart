@@ -53,7 +53,7 @@ class MfmFnKeyboard extends ConsumerWidget {
   final FocusNode focusNode;
   final BuildContext parentContext;
 
-  Future<void> insertMfmFn(BuildContext context, String mfmFn) async {
+  Future<void> insertMfmFn(String mfmFn) async {
     final textBeforeSelection = controller.textBeforeSelection;
     final lastOpenTagIndex = textBeforeSelection!.lastIndexOf(r"$[");
     final queryLength = textBeforeSelection.length - lastOpenTagIndex - 2;
@@ -95,7 +95,7 @@ class MfmFnKeyboard extends ConsumerWidget {
             keyboard: mfmFn,
             controller: controller,
             focusNode: focusNode,
-            onTap: () async => await insertMfmFn(context, mfmFn),
+            onTap: () => insertMfmFn(mfmFn),
           ),
       ],
     );
