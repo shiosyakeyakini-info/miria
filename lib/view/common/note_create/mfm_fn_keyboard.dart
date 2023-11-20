@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/input_completion_type.dart';
+import 'package:miria/view/common/date_time_picker.dart';
 import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_button.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
@@ -53,33 +54,23 @@ class MfmFnKeyboard extends ConsumerWidget {
   final BuildContext parentContext;
 
   Future<void> insertMfmFn(BuildContext context, String mfmFn) async {
-    if (mfmFn == "unixtime") {
-      final resultDate = await showDatePicker(
-          context: parentContext,
-          firstDate: DateTime.utc(-271820, 12, 31),
-          initialDate: DateTime.now(),
-          lastDate: DateTime.utc(275760, 9, 13));
-      if (resultDate == null) return;
-      final resultTime = await showTimePicker(
-        context: parentContext,
-        initialTime:
-            TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
-      );
-      if (resultTime == null) return;
-      final date = DateTime(resultDate.year, resultDate.month, resultDate.day,
-          resultTime.hour, resultTime.minute, 0);
-      final unixtime = date.millisecondsSinceEpoch ~/ 1000;
-
-      controller.insert("unixtime $unixtime");
-      focusNode.requestFocus();
-
-      return;
-    }
-
     final textBeforeSelection = controller.textBeforeSelection;
     final lastOpenTagIndex = textBeforeSelection!.lastIndexOf(r"$[");
     final queryLength = textBeforeSelection.length - lastOpenTagIndex - 2;
     controller.insert("${mfmFn.substring(queryLength)} ");
+    if (mfmFn == "unixtime") {
+      final resultDate = await showDateTimePicker(
+        context: parentContext,
+        firstDate: DateTime.utc(-271820, 12, 31),
+        initialDate: DateTime.now(),
+        lastDate: DateTime.utc(275760, 9, 13),
+      );
+      if (resultDate == null) return;
+
+      final unixtime = resultDate.millisecondsSinceEpoch ~/ 1000;
+
+      controller.insert("$unixtime");
+    }
     focusNode.requestFocus();
   }
 
