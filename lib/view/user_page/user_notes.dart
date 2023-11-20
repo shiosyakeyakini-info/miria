@@ -147,8 +147,10 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     withFiles: isFileOnly,
                     // 後方互換性のため
                     includeReplies: withReply,
-                    withReplies: withReply,
                     includeMyRenotes: renote,
+                    withReplies: withReply,
+                    withRenotes: renote,
+                    withChannelNotes: true,
                     untilDate: untilDate?.millisecondsSinceEpoch,
                   ),
                 );
@@ -175,8 +177,10 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     untilId: lastElement.id,
                     withFiles: isFileOnly,
                     includeReplies: withReply,
-                    withReplies: withReply,
                     includeMyRenotes: renote,
+                    withReplies: withReply,
+                    withRenotes: renote,
+                    withChannelNotes: true,
                     untilDate: untilDate?.millisecondsSinceEpoch,
                   ),
                 );
