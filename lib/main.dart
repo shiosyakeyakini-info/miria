@@ -1,16 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/error_dialog_listener.dart';
 import 'package:miria/view/common/main_stream.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/sharing_intent_listener.dart';
 import 'package:miria/view/themes/app_theme_scope.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;

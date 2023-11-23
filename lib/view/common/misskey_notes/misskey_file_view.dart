@@ -5,10 +5,10 @@ import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/image_dialog.dart';
 import 'package:miria/view/common/misskey_notes/in_note_button.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
+import 'package:miria/view/common/misskey_notes/video_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'network_image.dart';
 
 class MisskeyFileView extends ConsumerStatefulWidget {
   final List<DriveFile> files;
@@ -174,6 +174,13 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           imageUrlList: widget.targetFiles,
                           initialPage: widget.position,
                         ));
+              } else if (widget.fileType.startsWith("video")) {
+                showDialog(
+                  context: context,
+                  builder: (context) => VideoDialog(
+                    url: widget.targetFiles[widget.position],
+                  ),
+                );
               } else {
                 launchUrl(Uri.parse(widget.targetFiles[widget.position]),
                     mode: LaunchMode.externalApplication);
