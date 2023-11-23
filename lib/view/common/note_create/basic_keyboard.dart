@@ -26,6 +26,12 @@ class BasicKeyboard extends StatelessWidget {
           focusNode: focusNode,
         ),
         CustomKeyboardButton(
+          keyboard: "#",
+          displayText: "＃",
+          controller: controller,
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
           keyboard: r"$[",
           afterInsert: "]",
           controller: controller,
@@ -40,6 +46,12 @@ class BasicKeyboard extends StatelessWidget {
         CustomKeyboardButton(
           keyboard: "<small>",
           afterInsert: "</small>",
+          controller: controller,
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
+          keyboard: "@",
+          displayText: "＠",
           controller: controller,
           focusNode: focusNode,
         ),
