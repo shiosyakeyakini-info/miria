@@ -210,6 +210,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       primaryColor: theme.primary,
       primaryColorDark: theme.primaryDarken,
       primaryColorLight: theme.primaryLighten,
+      dividerColor: theme.divider,
       appBarTheme: AppBarTheme(
         elevation: 0,
         titleSpacing: 0,
