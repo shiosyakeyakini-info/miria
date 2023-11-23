@@ -2,12 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mfm_parser/mfm_parser.dart' hide MfmText;
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/extensions/list_mfm_node_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/image_dialog.dart';
+import 'package:miria/view/common/misskey_notes/link_preview.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
@@ -123,7 +126,22 @@ class PageContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final content = this.content;
     if (content is misskey.PageText) {
-      return MfmText(mfmText: content.text);
+      final account = AccountScope.of(context);
+      final nodes = const MfmParser().parse(content.text);
+      return Column(
+        children: [
+          MfmText(
+            mfmNode: nodes,
+          ),
+          ...nodes.extractLinks().map(
+                (link) => LinkPreview(
+                  account: account,
+                  link: link,
+                  host: account.host,
+                ),
+              )
+        ],
+      );
     }
     if (content is misskey.PageImage) {
       final url = page.attachedFiles
