@@ -12,7 +12,6 @@ jobs:
   build_for_windows:
     name: Windows用ビルド
     runs-on: windows-latest
-
     steps:
       - uses: actions/checkout@v4
       
@@ -27,6 +26,11 @@ jobs:
           git config --system core.longpaths true
           flutter pub get
 
+      - name: Get App Version
+        run:  |
+          echo "version=$(flutter pub run cider version)" >> $env:GITHUB_ENV
+          sed -i "s/VersionNumber/$(flutter pub run cider version)/" windows/innosetup.iss
+
       - name: Build for Windows
         run: |
           flutter build windows --release
@@ -36,14 +40,22 @@ jobs:
           cp C:\Windows\System32\msvcp140.dll build\windows\x64\runner\Release\
           cp C:\Windows\System32\vcruntime140.dll build\windows\x64\runner\Release\
           cp C:\Windows\System32\vcruntime140_1.dll build\windows\x64\runner\Release\
-      
+
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.1.0
+        with:
+          path: windows/innosetup.iss
+
+      - name: Rename .EXE Installer
+        run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe
+
       - name: Zip files
         run: |
           ren build\windows\x64\runner\Release Miria
-          Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath miria_$(flutter pub run cider version)_windows-x64.zip -Force
+          Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath miria_${env:version}_windows-x64.zip -Force
 
       - name: Create tag and release note
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload v$(flutter pub run cider version)  miria_$(flutter pub run cider version)_windows-x64.zip
+          gh release upload v${env:version}  miria_${env:version}_windows-x64.zip miria-installer_${env:version}_x64.exe
