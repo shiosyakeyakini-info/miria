@@ -38,7 +38,7 @@ jobs:
       - name: Run flutter test with coverage
         run: flutter test --coverage --coverage-path=~/coverage/lcov.info
 
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: ~/coverage/lcov.info
