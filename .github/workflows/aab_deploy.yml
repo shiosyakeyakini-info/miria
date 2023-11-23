@@ -63,7 +63,7 @@ jobs:
             export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
             flutter build appbundle --no-tree-shake-icons --release
         - name: Upload artifact
-          uses: actions/upload-artifact@v2.2.0
+          uses: actions/upload-artifact@v3
           with:
             name: app-release.aab
             # 保存するファイル
