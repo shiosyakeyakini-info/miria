@@ -77,7 +77,7 @@ class MfmFnKeyboard extends ConsumerWidget {
           builder: (context) => const ColorPickerDialog());
       if (result != null) {
         controller.insert(
-            ".color=${result.red.toRadixString(16)}${result.green.toRadixString(16)}${result.blue.toRadixString(16)} ");
+            ".color=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ");
       }
     } else {
       controller.insert(" ");
