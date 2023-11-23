@@ -33,7 +33,7 @@ class TimelineNoteFieldState extends ConsumerState<TimelineNoteField> {
         maxLines: null,
         controller: ref.watch(timelineNoteProvider),
         decoration: noteStyle,
-        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        // onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ),
     );
   }
