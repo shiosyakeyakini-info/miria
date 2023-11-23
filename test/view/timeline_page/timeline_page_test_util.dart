@@ -53,8 +53,6 @@ class TimelinePageTest {
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
 
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);
-
-    when(mockAccountRepository.account).thenReturn([TestData.account]);
   }
 
   Widget buildWidget({
@@ -65,7 +63,7 @@ class TimelinePageTest {
         misskeyProvider.overrideWith((ref, arg) => mockMisskey),
         tabSettingsRepositoryProvider
             .overrideWith((ref) => mockTabSettingsRepository),
-        accountRepository.overrideWith((ref) => mockAccountRepository),
+        accountsProvider.overrideWith((ref) => [TestData.account]),
         emojiRepositoryProvider
             .overrideWith((ref, arg) => MockEmojiRepository())
       ],

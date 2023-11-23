@@ -21,8 +21,7 @@ class MainStreamState extends ConsumerState<MainStream> {
 
   @override
   Widget build(BuildContext context) {
-    final accounts =
-        ref.watch(accountRepository.select((value) => value.account));
+    final accounts = ref.watch(accountsProvider);
 
     if (isConnected) {
       for (final account in accounts) {

@@ -1,23 +1,20 @@
+import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
-class AccountListPage extends ConsumerStatefulWidget {
+class AccountListPage extends ConsumerWidget {
   const AccountListPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => AccountListPageState();
-}
-
-class AccountListPageState extends ConsumerState<AccountListPage> {
-  @override
-  Widget build(BuildContext context) {
-    final accounts = ref.watch(accountRepository).account.toList();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("アカウント設定"),
@@ -32,44 +29,29 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
         ],
       ),
       body: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
-            child: ListView.builder(
+            child: ReorderableListView.builder(
+              buildDefaultDragHandles: false,
               itemCount: accounts.length,
-              itemBuilder: (context, index) => ListTile(
-                leading: AvatarIcon.fromIResponse(accounts[index].i),
-                onLongPress: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            content: const Text("ほんまに削除してええな？"),
-                            actions: [
-                              OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("やっぱりせえへん")),
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    await ref
-                                        .read(accountRepository)
-                                        .remove(accounts[index]);
-                                    if (!mounted) return;
-                                    setState(() {});
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("ええで"))
-                            ],
-                          ));
-                },
-                title: Text(
-                    accounts[index].i.name ?? accounts[index].i.username,
-                    style: Theme.of(context).textTheme.titleMedium),
-                subtitle: Text(
-                  "@${accounts[index].userId}@${accounts[index].host}",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
+              itemBuilder: (context, index) {
+                final account = accounts[index];
+                if (Platform.isAndroid || Platform.isIOS) {
+                  return ReorderableDelayedDragStartListener(
+                    key: Key("$index"),
+                    index: index,
+                    child: AccountListItem(account),
+                  );
+                } else {
+                  return ReorderableDragStartListener(
+                    key: Key("$index"),
+                    index: index,
+                    child: AccountListItem(account),
+                  );
+                }
+              },
+              onReorder: ref.read(accountRepositoryProvider.notifier).reorder,
             ),
           ),
           Align(
@@ -77,14 +59,73 @@ class AccountListPageState extends ConsumerState<AccountListPage> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                  onPressed: () {
-                    context.router
-                      ..removeWhere((route) => true)
-                      ..push(const SplashRoute());
-                  },
-                  child: const Text("アカウント設定をおわる")),
+                onPressed: () {
+                  context.router
+                    ..removeWhere((route) => true)
+                    ..push(const SplashRoute());
+                },
+                child: const Text("アカウント設定をおわる"),
+              ),
             ),
-          )
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AccountListItem extends ConsumerWidget {
+  const AccountListItem(this.account, {super.key});
+
+  final Account account;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: AvatarIcon.fromIResponse(account.i),
+      title: Text(
+        account.i.name ?? account.i.username,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      subtitle: Text(
+        account.acct.toString(),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  content: const Text("ほんまに削除してええな？"),
+                  actions: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("やっぱりせえへん"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await ref
+                            .read(
+                              accountRepositoryProvider.notifier,
+                            )
+                            .remove(account);
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("ええで"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const Icon(Icons.drag_handle),
         ],
       ),
     );

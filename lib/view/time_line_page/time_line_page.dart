@@ -273,7 +273,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     TabType.globalTimeline,
                     TabType.homeTimeline,
                   ].contains(currentTabSetting.tabType)) ...[
-                    AnnoucementInfo(index: currentIndex),
+                    AnnoucementInfo(tabSetting: currentTabSetting),
                     IconButton(
                       onPressed: () {
                         showDialog(
@@ -298,7 +298,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         .reconnect(),
                     icon:
                         socketTimeline != null && socketTimeline.isReconnecting
-                            ? CircularProgressIndicator()
+                            ? const CircularProgressIndicator()
                             : const Icon(Icons.refresh),
                   )
                 ],
@@ -329,7 +329,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        BannerArea(index: currentIndex),
+                        BannerArea(tabSetting: currentTabSetting),
                         Expanded(
                           child: MisskeyTimeline(
                             controller: scrollControllers[index],
@@ -387,20 +387,15 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 }
 
 class BannerArea extends ConsumerWidget {
-  final int index;
+  final TabSetting tabSetting;
 
-  const BannerArea({super.key, required this.index});
+  const BannerArea({super.key, required this.tabSetting});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final acct = ref.watch(
-      tabSettingsRepositoryProvider
-          .select((repository) => repository.tabSettings.toList()[index].acct),
-    );
     final bannerAnnouncement = ref.watch(
-      accountProvider(acct).select(
-        (account) => account.i.unreadAnnouncements,
-      ),
+      accountProvider(tabSetting.acct)
+          .select((account) => account.i.unreadAnnouncements),
     );
 
     // ダイアログの実装が大変なので（状態管理とか）いったんバナーと一緒に扱う
@@ -438,32 +433,23 @@ class BannerArea extends ConsumerWidget {
 }
 
 class AnnoucementInfo extends ConsumerWidget {
-  final int index;
+  final TabSetting tabSetting;
 
-  const AnnoucementInfo({super.key, required this.index});
+  const AnnoucementInfo({super.key, required this.tabSetting});
 
   void announcementsRoute(BuildContext context, WidgetRef ref) {
-    final acct = ref
-        .read(tabSettingsRepositoryProvider)
-        .tabSettings
-        .toList()[index]
-        .acct;
-    final account = ref.read(accountProvider(acct));
+    final account = ref.read(accountProvider(tabSetting.acct));
     context.pushRoute(AnnouncementRoute(account: account));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final acct = ref.watch(
-      tabSettingsRepositoryProvider
-          .select((repository) => repository.tabSettings.toList()[index].acct),
-    );
     final hasUnread = ref.watch(
-      accountProvider(acct)
+      accountProvider(tabSetting.acct)
           .select((account) => account.i.unreadAnnouncements.isNotEmpty),
     );
 
-    if (hasUnread == true) {
+    if (hasUnread) {
       return IconButton(
           onPressed: () => announcementsRoute(context, ref),
           icon: Stack(children: [

@@ -30,7 +30,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
     try {
       IndicatorView.showIndicator(context);
       await ref
-          .read(accountRepository)
+          .read(accountRepositoryProvider.notifier)
           .loginAsToken(serverController.text, apiKeyController.text);
 
       if (!mounted) return;

@@ -53,7 +53,7 @@ final localTimeLineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -70,7 +70,7 @@ final homeTimeLineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -100,7 +100,7 @@ final hybridTimeLineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -117,7 +117,7 @@ final roleTimelineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -134,7 +134,7 @@ final channelTimelineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -151,7 +151,7 @@ final userListTimelineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -168,7 +168,7 @@ final antennaTimelineProvider =
     ref.read(generalSettingsRepositoryProvider),
     tabSetting,
     ref.read(mainStreamRepositoryProvider(account)),
-    ref.read(accountRepository),
+    ref.read(accountRepositoryProvider.notifier),
     ref.read(emojiRepositoryProvider(account)),
   );
 });
@@ -179,7 +179,7 @@ final mainStreamRepositoryProvider =
             ref.read(misskeyProvider(account)),
             ref.read(emojiRepositoryProvider(account)),
             account,
-            ref.read(accountRepository)));
+            ref.read(accountRepositoryProvider.notifier)));
 
 final favoriteProvider = ChangeNotifierProvider.autoDispose
     .family<FavoriteRepository, Account>((ref, account) => FavoriteRepository(
@@ -198,15 +198,21 @@ final emojiRepositoryProvider = Provider.family<EmojiRepository, Account>(
         accountSettingsRepository:
             ref.read(accountSettingsRepositoryProvider)));
 
-final accountRepository = ChangeNotifierProvider((ref) => AccountRepository(
-    ref.read(tabSettingsRepositoryProvider),
-    ref.read(accountSettingsRepositoryProvider),
-    ref.read));
+final accountRepositoryProvider =
+    NotifierProvider<AccountRepository, List<Account>>(AccountRepository.new);
 
-final accountProvider = Provider.family<Account, Acct>((ref, acct) {
-  final repository = ref.watch(accountRepository);
-  return repository.account.firstWhere((element) => element.acct == acct);
-});
+final accountsProvider =
+    Provider<List<Account>>((ref) => ref.watch(accountRepositoryProvider));
+
+final accountProvider = Provider.family<Account, Acct>(
+  (ref, acct) => ref.watch(
+    accountsProvider.select(
+      (accounts) => accounts.firstWhere(
+        (account) => account.acct == acct,
+      ),
+    ),
+  ),
+);
 
 final tabSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => TabSettingsRepository());

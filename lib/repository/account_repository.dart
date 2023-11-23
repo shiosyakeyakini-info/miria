@@ -2,34 +2,24 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/acct.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/repository/account_settings_repository.dart';
-import 'package:miria/repository/tab_settings_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-class AccountRepository extends ChangeNotifier {
-  final List<Account> _account = [];
-  final accountDataValidated = <bool>[];
+class AccountRepository extends Notifier<List<Account>> {
+  final _validatedAccts = <Acct>{};
+  String _sessionId = "";
 
-  Iterable<Account> get account => _account;
-
-  final TabSettingsRepository tabSettingsRepository;
-  final AccountSettingsRepository accountSettingsRepository;
-  final T Function<T>(ProviderListenable<T> provider) reader;
-
-  AccountRepository(
-      this.tabSettingsRepository, this.accountSettingsRepository, this.reader);
+  @override
+  List<Account> build() {
+    return [];
+  }
 
   Future<void> load() async {
     const prefs = FlutterSecureStorage();
@@ -38,16 +28,10 @@ class AccountRepository extends ChangeNotifier {
       return;
     }
     try {
-      _account
-        ..clear()
-        ..addAll(
-            (jsonDecode(storedData) as List).map((e) => Account.fromJson(e)));
-
-      accountDataValidated
-        ..clear()
-        ..addAll(Iterable.generate(_account.length, (index) => false));
-
-      notifyListeners();
+      state = (jsonDecode(storedData) as List)
+          .map((e) => Account.fromJson(e))
+          .toList();
+      _validatedAccts.clear();
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -56,73 +40,57 @@ class AccountRepository extends ChangeNotifier {
   }
 
   Future<void> loadFromSourceIfNeed(Acct acct) async {
-    final index =
-        _account.map((account) => account.acct).toList().indexOf(acct);
-    if (index == -1) return;
-    if (accountDataValidated.isNotEmpty && accountDataValidated[index]) return;
-    final i = await reader(misskeyProvider(_account[index])).i.i();
-    _account[index] = _account[index].copyWith(i: i);
+    if (_validatedAccts.contains(acct)) return;
 
-    accountDataValidated[index] = true;
-    reader(notesProvider(_account[index])).updateMute(i.mutedWords);
-    notifyListeners();
+    final index = state.indexWhere((e) => e.acct == acct);
+    if (index < 0) return;
+    final account = state[index];
+    final i = await ref.read(misskeyProvider(account)).i.i();
+    ref.read(notesProvider(account)).updateMute(i.mutedWords);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+    _validatedAccts.add(acct);
   }
 
   Future<void> createUnreadAnnouncement(
-      Account account, AnnouncementsResponse announcement) async {
-    final i = _account[_account.indexOf(account)].i.copyWith(
-        unreadAnnouncements: [
-          ..._account[_account.indexOf(account)].i.unreadAnnouncements,
-          announcement
-        ]);
-    _account[_account.indexOf(account)] =
-        _account[_account.indexOf(account)].copyWith(i: i);
-    notifyListeners();
+    Account account,
+    AnnouncementsResponse announcement,
+  ) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(
+      unreadAnnouncements: [
+        ...state[index].i.unreadAnnouncements,
+        announcement
+      ],
+    );
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
   }
 
   Future<void> removeUnreadAnnouncement(Account account) async {
-    final i =
-        _account[_account.indexOf(account)].i.copyWith(unreadAnnouncements: []);
-    _account[_account.indexOf(account)] =
-        _account[_account.indexOf(account)].copyWith(i: i);
-    notifyListeners();
-  }
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(
+      unreadAnnouncements: [],
+    );
 
-  //一つ目のアカウントが追加されたときに自動で追加されるタブ
-  Future<void> _addIfTabSettingNothing() async {
-    if (_account.length == 1) {
-      final account = _account.first;
-      await tabSettingsRepository.save([
-        TabSetting(
-          icon: TabIcon(codePoint: Icons.home.codePoint),
-          tabType: TabType.homeTimeline,
-          name: "ホームタイムライン",
-          acct: account.acct,
-        ),
-        TabSetting(
-          icon: TabIcon(codePoint: Icons.public.codePoint),
-          tabType: TabType.localTimeline,
-          name: "ローカルタイムライン",
-          acct: account.acct,
-        ),
-        TabSetting(
-          icon: TabIcon(codePoint: Icons.rocket_launch.codePoint),
-          tabType: TabType.globalTimeline,
-          name: "グローバルタイムライン",
-          acct: account.acct,
-        ),
-      ]);
-    }
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
   }
 
   Future<void> remove(Account account) async {
-    _account.remove(account);
-    await tabSettingsRepository.removeAccount(account);
-    await accountSettingsRepository.removeAccount(account);
-    await save();
+    state = state.where((e) => e != account).toList();
+    _validatedAccts.remove(account.acct);
+    await ref.read(tabSettingsRepositoryProvider).removeAccount(account);
+    await ref.read(accountSettingsRepositoryProvider).removeAccount(account);
+    await _save();
   }
 
-  Future<void> validateMisskey(String server) async {
+  Future<void> _validateMisskey(String server) async {
     //先にnodeInfoを取得する
     final Response nodeInfo;
 
@@ -138,12 +106,12 @@ class AccountRepository extends ChangeNotifier {
     }
 
     try {
-      nodeInfo = await reader(dioProvider).getUri(uri);
+      nodeInfo = await ref.read(dioProvider).getUri(uri);
     } catch (e) {
       throw SpecifiedException("$server はMisskeyサーバーとして認識できませんでした。");
     }
     final nodeInfoHref = nodeInfo.data["links"][0]["href"];
-    final nodeInfoHrefResponse = await reader(dioProvider).get(nodeInfoHref);
+    final nodeInfoHrefResponse = await ref.read(dioProvider).get(nodeInfoHref);
     final nodeInfoResult = nodeInfoHrefResponse.data;
 
     final software = nodeInfoResult["software"]["name"];
@@ -154,8 +122,9 @@ class AccountRepository extends ChangeNotifier {
 
     final version = nodeInfoResult["software"]["version"];
 
-    final endpoints =
-        await reader(misskeyProvider(Account.demoAccount(server))).endpoints();
+    final endpoints = await ref
+        .read(misskeyProvider(Account.demoAccount(server)))
+        .endpoints();
     if (!endpoints.contains("emojis")) {
       throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
     }
@@ -167,50 +136,77 @@ class AccountRepository extends ChangeNotifier {
         await MisskeyServer().loginAsPassword(server, userId, password);
     final i = await Misskey(token: token, host: server).i.i();
     final account = Account(host: server, token: token, userId: userId, i: i);
-    addAccount(account);
-    await _addIfTabSettingNothing();
+    _addAccount(account);
   }
 
   Future<void> loginAsToken(String server, String token) async {
-    await validateMisskey(server);
+    await _validateMisskey(server);
     final i = await Misskey(token: token, host: server).i.i();
-    addAccount(Account(host: server, userId: i.username, token: token, i: i));
-    await _addIfTabSettingNothing();
+    _addAccount(Account(host: server, userId: i.username, token: token, i: i));
   }
 
-  String sessionId = "";
-
   Future<void> openMiAuth(String server) async {
-    await validateMisskey(server);
+    await _validateMisskey(server);
 
-    sessionId = const Uuid().v4();
+    _sessionId = const Uuid().v4();
     await launchUrl(
-      MisskeyServer().buildMiAuthURL(server, sessionId,
-          name: "Miria", permission: Permission.values),
+      MisskeyServer().buildMiAuthURL(
+        server,
+        _sessionId,
+        name: "Miria",
+        permission: Permission.values,
+      ),
       mode: LaunchMode.externalApplication,
     );
   }
 
   Future<void> validateMiAuth(String server) async {
-    final token = await MisskeyServer().checkMiAuthToken(server, sessionId);
+    final token = await MisskeyServer().checkMiAuthToken(server, _sessionId);
     final i = await Misskey(token: token, host: server).i.i();
-    await addAccount(
-        Account(host: server, userId: i.username, token: token, i: i));
+    await _addAccount(
+      Account(host: server, userId: i.username, token: token, i: i),
+    );
+  }
+
+  Future<void> _addAccount(Account account) async {
+    if (state.map((e) => e.acct).contains(account.acct)) {
+      throw SpecifiedException("${account.acct}で既にログインしています");
+    }
+
+    state = [...state, account];
+    _validatedAccts.add(account.acct);
+    await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
+
+    await _save();
     await _addIfTabSettingNothing();
   }
 
-  Future<void> addAccount(Account account) async {
-    _account.add(account);
-    accountDataValidated.add(true);
-    await reader(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
+  Future<void> reorder(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final newState = state.toList();
+    final item = newState.removeAt(oldIndex);
+    newState.insert(newIndex, item);
+    state = newState;
 
-    await save();
+    await _save();
   }
 
-  Future<void> save() async {
+  Future<void> _save() async {
     const prefs = FlutterSecureStorage();
     await prefs.write(
-        key: "accounts",
-        value: jsonEncode(_account.map((e) => e.toJson()).toList()));
+      key: "accounts",
+      value: jsonEncode(state.map((e) => e.toJson()).toList()),
+    );
+  }
+
+  Future<void> _addIfTabSettingNothing() async {
+    if (state.length == 1) {
+      final account = state.first;
+      ref
+          .read(tabSettingsRepositoryProvider)
+          .initializeTabSettings(account.acct);
+    }
   }
 }

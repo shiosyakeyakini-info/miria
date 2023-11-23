@@ -28,7 +28,9 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
   Future<void> login() async {
     try {
       IndicatorView.showIndicator(context);
-      await ref.read(accountRepository).validateMiAuth(serverController.text);
+      await ref
+          .read(accountRepositoryProvider.notifier)
+          .validateMiAuth(serverController.text);
       if (!mounted) return;
       context.pushRoute(
         TimeLineRoute(
@@ -84,7 +86,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(accountRepository)
+                      .read(accountRepositoryProvider.notifier)
                       .openMiAuth(serverController.text)
                       .expectFailure(context);
                   setState(() {

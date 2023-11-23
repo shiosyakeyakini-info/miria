@@ -24,12 +24,12 @@ class SplashPageState extends ConsumerState<SplashPage> {
   String initialSharingText = "";
 
   Future<void> initialize() async {
-    await ref.read(accountRepository).load();
+    await ref.read(accountRepositoryProvider.notifier).load();
     await ref.read(tabSettingsRepositoryProvider).load();
     await ref.read(accountSettingsRepositoryProvider).load();
     await ref.read(generalSettingsRepositoryProvider).load();
 
-    for (final account in ref.read(accountRepository).account) {
+    for (final account in ref.read(accountsProvider)) {
       await ref.read(emojiRepositoryProvider(account)).loadFromLocalCache();
     }
 
@@ -55,7 +55,8 @@ class SplashPageState extends ConsumerState<SplashPage> {
           future: initialize(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              final isSigned = ref.read(accountRepository).account.isNotEmpty;
+              final accounts = ref.read(accountsProvider);
+              final isSigned = accounts.isNotEmpty;
               final hasTabSetting = ref
                   .read(tabSettingsRepositoryProvider)
                   .tabSettings
@@ -69,7 +70,6 @@ class SplashPageState extends ConsumerState<SplashPage> {
                         .first));
                 if (initialSharingMedias.isNotEmpty ||
                     initialSharingText.isNotEmpty) {
-                  final accounts = ref.read(accountRepository).account;
                   if (accounts.length == 1) {
                     context.pushRoute(NoteCreateRoute(
                       initialMediaFiles: initialSharingMedias,
@@ -87,9 +87,10 @@ class SplashPageState extends ConsumerState<SplashPage> {
                 // KeyChainに保存したデータだけアンインストールしても残るので
                 // この状況が発生する
                 Future(() async {
-                  final accounts = ref.read(accountRepository).account.toList();
                   for (final account in accounts) {
-                    await ref.read(accountRepository).remove(account);
+                    await ref
+                        .read(accountRepositoryProvider.notifier)
+                        .remove(account);
                   }
                   if (!mounted) return;
 
