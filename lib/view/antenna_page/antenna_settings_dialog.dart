@@ -7,6 +7,7 @@ import 'package:miria/model/antenna_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -171,13 +172,13 @@ class AntennaSettingsForm extends ConsumerWidget {
           TextFormField(
             initialValue: initialSettings.name,
             maxLength: 100,
-            decoration: const InputDecoration(
-              labelText: "アンテナ名",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+            decoration: InputDecoration(
+              labelText: S.of(context).antennaName,
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "入力してください";
+                return S.of(context).pleaseInput;
               }
               return null;
             },
@@ -185,7 +186,7 @@ class AntennaSettingsForm extends ConsumerWidget {
                 ref.read(_antennaSettingsNotifierProvider.notifier).updateName,
           ),
           const SizedBox(height: 10),
-          const Text("アンテナのソース"),
+          Text(S.of(context).antennaSource),
           const SizedBox(height: 5),
           DropdownButtonFormField<AntennaSource>(
             items: AntennaSource.values
@@ -194,17 +195,17 @@ class AntennaSettingsForm extends ConsumerWidget {
                     value: e,
                     child: Text(
                       switch (e) {
-                        AntennaSource.home => "ホーム",
-                        AntennaSource.all => "全て",
-                        AntennaSource.users => "ユーザー",
-                        AntennaSource.list => "リスト",
+                        AntennaSource.home => S.of(context).antennaSourceHome,
+                        AntennaSource.all => S.of(context).antennaSourceAll,
+                        AntennaSource.users => S.of(context).antennaSourceUser,
+                        AntennaSource.list => S.of(context).antennaSourceList,
                       },
                     ),
                   ),
                 )
                 .toList(),
             value: settings.src,
-            hint: const Text("ソースを選択"),
+            hint: Text(S.of(context).selectAntennas),
             onChanged:
                 ref.read(_antennaSettingsNotifierProvider.notifier).updateSrc,
           ),
@@ -221,7 +222,7 @@ class AntennaSettingsForm extends ConsumerWidget {
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return "選択してください";
+                  return S.of(context).pleaseInput;
                 }
                 return null;
               },

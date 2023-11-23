@@ -1,0 +1,70 @@
+{
+    "announcement": "お知らせ",
+    "antenna": "アンテナ",
+    "user": "ユーザー",
+    "sensitive": "センシティブ",
+    "favorite": "お気に入り",
+    "favorited": "お気に入り中",
+    "willFavorite": "お気に入りに入れるで",
+    "following": "フォロー中",
+    "willFollow": "フォローするで",
+    "edit": "編集",
+    "create": "作成",
+    "delete": "削除",
+    "done": "ほい",
+    "@done": {
+        "description": "わかった"
+    },
+    "willDelete": "削除するで",
+    "cancel": "やっぱやめる",
+    "pleaseInput": "入れてや",
+    "pleaseSelect": "選んでや",
+
+    "antennaName": "アンテナの名前",
+    "antennaSource": "アンテナのソース",
+    "antennaSourceHome": "ホーム",
+    "antennaSourceAll": "ぜんぶ",
+    "antennaSourceUser": "ユーザー",
+    "antennaSourceList": "リスト",
+    "selectAntennas": "ソースを選択",
+    "selectList": "リストを選択",
+    "antennaSourceUserHintText": "ユーザーネームを改行で区切って指定します",
+    "addUser": "ユーザーを追加",
+    "keywords": "キーワード",
+    "antennaSourceKeywordsHintText": "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
+    "excludeKeywords": "除外キーワード",
+    "antennaSOurceExcludeKeywordsHintText": "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
+    "discriminateUpperLower": "大文字と小文字を区別する",
+    "receiveReplies": "リプライを受信する",
+    "receiveOnlyFiles": "ファイル付きのノートのみ受信する",
+    "receiveLocal": "ローカルのみ受信する",
+    
+    "channelJoinningCounts": "{usersCount}人が参加中",
+    "@channelJoinningCounts": {
+        "description": "チャンネルの参加人数",
+        "placeholders": {
+            "usersCount": {
+                "type": "string"
+            }
+        }
+    },
+    "channelNotes": "{notesCount}投稿",
+    "@channelNotes": {
+        "description": "チャンネルのノート数",
+        "placeholders": {
+            "notesCount": {
+                "type": "string"
+            }
+        }
+    },
+    "channelLastNotedAt": "{lastNotedAt} に更新",
+    "@channelLastNotedAt": {
+        "description": "チャンネルのノート数",
+        "placeholders": {
+            "lastNotedAt": {
+                "type": "string"
+            }
+        }
+    },
+    "confirmDeletingAntenna": "アンテナ削除するか？"
+}
