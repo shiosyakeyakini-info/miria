@@ -2,21 +2,28 @@
     "announcement": "お知らせ",
     "antenna": "アンテナ",
     "user": "ユーザー",
+    "channel": "チャンネル",
+    "timeline": "タイムライン",
     "sensitive": "センシティブ",
     "favorite": "お気に入り",
-    "favorited": "お気に入り中",
-    "willFavorite": "お気に入りに入れるで",
-    "following": "フォロー中",
-    "willFollow": "フォローするで",
+    "trend": "トレンド",
+    "clip": "クリップ",
     "edit": "編集",
     "create": "作成",
     "delete": "削除",
+    "search": "検索",
+    "detail": "詳細",
+    "follow": "フォロー",
+    "following": "フォロー中",
+    "managing": "管理中",
     "done": "ほい",
+    "public": "パブリック",
     "@done": {
         "description": "わかった"
     },
     "willDelete": "削除するで",
     "cancel": "やっぱやめる",
+    "noneAction": "なにもしない",
     "pleaseInput": "入れてや",
     "pleaseSelect": "選んでや",
 
@@ -38,6 +45,7 @@
     "receiveReplies": "リプライを受信する",
     "receiveOnlyFiles": "ファイル付きのノートのみ受信する",
     "receiveLocal": "ローカルのみ受信する",
+    "confirmDeletingAntenna": "アンテナ削除するか？",
     
     "channelJoinningCounts": "{usersCount}人が参加中",
     "@channelJoinningCounts": {
@@ -66,5 +74,50 @@
             }
         }
     },
-    "confirmDeletingAntenna": "アンテナ削除するか？"
+    "favorited": "お気に入り中",
+    "willFavorite": "お気に入りに入れるで",
+    "willFollow": "フォローするで",
+    "channelInformation": "チャンネル情報",
+    "channelStatics": "{notesCount} 投稿 / {usersCount} 人が参加中 / {lastNotedAt} に更新",
+    "@channelStatics": {
+        "description": "チャンネルの統計情報",
+        "placeholders": {
+            "notesCount": {
+                "type": "string"
+            },
+            "usersCount": {
+                "type": "string"
+            },
+            "lastNotedAt": {
+                "type": "string"
+            }
+        }
+    },
+
+    "confirmDeleteClip": "このクリップ削除してええか？",
+    "clipName": "クリップ名",
+    "clipDescription": "説明（省略してもええよ）",
+    "alreadyAddedClip": "すでにクリップに追加されてるノートみたいやねん",
+    "deleteClip": "クリップから削除する",
+
+    "thanksForAbuse": "内容が送信されました。ご報告ありがとうございました。",
+    "abuseTo": "{userName} を通報する",
+    "@abuseTo": {
+        "placeholders": {
+            "userName": {
+                "type": "string"
+            }
+        }
+    },
+    "plaseInputReasonWhyAbuse": "通報理由の詳細を記入してください。対象のノートがある場合はそのURLも記入してください。",
+    "doAbusing": "通報する",
+
+    "closeTweet": "ツイートを閉じる",
+    "closePlayer": "プレイヤーを閉じる",
+    "doneCopy": "コピーしたで"
+
+
+    
+
+    
 }

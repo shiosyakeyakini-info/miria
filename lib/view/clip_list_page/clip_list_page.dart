@@ -12,6 +12,7 @@ import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final clipsListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
     ClipsListNotifier, List<Clip>, Misskey>(ClipsListNotifier.new);
@@ -79,15 +80,15 @@ class ClipListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("クリップ一覧"),
+        title:  Text(S.of(context).clip),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
               final settings = await showDialog<ClipSettings>(
                 context: context,
-                builder: (context) => const ClipSettingsDialog(
-                  title: Text("作成"),
+                builder: (context) =>  ClipSettingsDialog(
+                  title: Text(S.of(context).create),
                 ),
               );
               if (!context.mounted) return;
@@ -115,9 +116,9 @@ class ClipListPage extends ConsumerWidget {
                   onPressed: () async {
                     final result = await SimpleConfirmDialog.show(
                       context: context,
-                      message: "このクリップを削除しますか？",
-                      primary: "削除する",
-                      secondary: "やめる",
+                      message: S.of(context).confirmDeleteClip,
+                      primary: S.of(context).willDelete,
+                      secondary: S.of(context).cancel,
                     );
                     if (!context.mounted) return;
                     if (result ?? false) {

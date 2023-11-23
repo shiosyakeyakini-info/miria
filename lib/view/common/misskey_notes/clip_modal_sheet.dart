@@ -6,6 +6,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClipModalSheet extends ConsumerStatefulWidget {
   final Account account;
@@ -76,9 +77,9 @@ class ClipModalSheetState extends ConsumerState<ClipModalSheet> {
             "ALREADY_CLIPPED") {
           final result = await SimpleConfirmDialog.show(
               context: context,
-              message: "すでにクリップに追加されたノートのようです。",
-              primary: "クリップから削除する",
-              secondary: "なにもしない");
+              message: S.of(context).alreadyAddedClip,
+              primary: S.of(context).deleteClip,
+              secondary: S.of(context).noneAction);
           if (result == true) {
             await remove(clip);
           }

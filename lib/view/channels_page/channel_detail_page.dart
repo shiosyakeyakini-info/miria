@@ -8,6 +8,7 @@ import 'package:miria/view/channels_page/channel_timeline.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class ChannelDetailPage extends ConsumerWidget {
@@ -28,10 +29,10 @@ class ChannelDetailPage extends ConsumerWidget {
         account: account,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("チャンネル"),
-            bottom: const TabBar(tabs: [
-              Tab(child: Text("チャンネル情報")),
-              Tab(child: Text("タイムライン"))
+            title:  Text(S.of(context).channel),
+            bottom:  TabBar(tabs: [
+              Tab(child: Text(S.of(context).channelInformation)),
+              Tab(child: Text(S.of(context).timeline))
             ]),
           ),
           body: TabBarView(
