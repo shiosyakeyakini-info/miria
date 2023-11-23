@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm_renderer/mfm_renderer.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -33,7 +32,12 @@ class ExplorePagesState extends ConsumerState<ExplorePages> {
               MisskeyRouteRoute(account: AccountScope.of(context), page: item),
             );
           },
-          title: MfmText(mfmText: item.title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+          title: MfmText(
+              mfmText: item.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold)),
           subtitle: MfmText(mfmText: item.summary ?? ""),
         );
       }),

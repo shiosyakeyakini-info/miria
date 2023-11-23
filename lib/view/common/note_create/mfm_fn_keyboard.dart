@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/input_completion_type.dart';
+import 'package:miria/view/common/color_picker_dialog.dart';
 import 'package:miria/view/common/date_time_picker.dart';
 import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_button.dart';
@@ -57,7 +58,7 @@ class MfmFnKeyboard extends ConsumerWidget {
     final textBeforeSelection = controller.textBeforeSelection;
     final lastOpenTagIndex = textBeforeSelection!.lastIndexOf(r"$[");
     final queryLength = textBeforeSelection.length - lastOpenTagIndex - 2;
-    controller.insert("${mfmFn.substring(queryLength)} ");
+    controller.insert(mfmFn.substring(queryLength));
     if (mfmFn == "unixtime") {
       final resultDate = await showDateTimePicker(
         context: parentContext,
@@ -65,12 +66,23 @@ class MfmFnKeyboard extends ConsumerWidget {
         initialDate: DateTime.now(),
         lastDate: DateTime.utc(275760, 9, 13),
       );
-      if (resultDate == null) return;
+      if (resultDate != null) {
+        final unixtime = resultDate.millisecondsSinceEpoch ~/ 1000;
 
-      final unixtime = resultDate.millisecondsSinceEpoch ~/ 1000;
-
-      controller.insert("$unixtime");
+        controller.insert(" $unixtime");
+      }
+    } else if (mfmFn == "fg" || mfmFn == "bg") {
+      final result = await showDialog<Color?>(
+          context: parentContext,
+          builder: (context) => const ColorPickerDialog());
+      if (result != null) {
+        controller.insert(
+            ".color=${result.red.toRadixString(16)}${result.green.toRadixString(16)}${result.blue.toRadixString(16)} ");
+      }
+    } else {
+      controller.insert(" ");
     }
+
     focusNode.requestFocus();
   }
 
