@@ -872,6 +872,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  mfm:
+    dependency: "direct main"
+    description:
+      name: mfm
+      sha256: "4b7a7902f4e26bbafb8a4c289792c96532d561573246f750073b8d1af39dbc1b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   mfm_parser:
     dependency: "direct main"
     description:
@@ -880,15 +888,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  mfm_renderer:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: b36c99f350fc3a73ebf61693f98d2c617fca47ae
-      url: "https://github.com/shiosyakeyakini-info/mfm_renderer.git"
-    source: git
-    version: "0.0.1"
   mime:
     dependency: transitive
     description:
