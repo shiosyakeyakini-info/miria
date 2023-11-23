@@ -36,11 +36,13 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
         final response = await ref
             .read(misskeyProvider(widget.account))
             .emoji(EmojiRequest(name: widget.emoji));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
           data = response;
         });
       } catch (e) {
+        if (!mounted) return;
         setState(() {
           error = e;
         });

@@ -32,6 +32,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
       final response = await ref
           .read(misskeyProvider(AccountScope.of(context)))
           .pinnedUsers();
+      if (!mounted) return;
       setState(() {
         pinnedUser
           ..clear()
@@ -96,7 +97,8 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
               if (isDetailOpen) ...[
                 Row(
                   children: [
-                    const Expanded(child: Text("並び順", textAlign: TextAlign.center)),
+                    const Expanded(
+                        child: Text("並び順", textAlign: TextAlign.center)),
                     Expanded(
                       child: DropdownButton<UsersSortType>(
                           items: [

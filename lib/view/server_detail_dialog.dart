@@ -76,6 +76,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
             .read(misskeyProvider(widget.account))
             .getOnlineUsersCount();
 
+        if (!mounted) return;
         setState(() {
           onlineUsers = onlineUserCountsResponse.count;
         });
@@ -85,7 +86,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
       try {
         final serverInfoResponse =
             await ref.read(misskeyProvider(widget.account)).serverInfo();
-        totalMemories = serverInfoResponse.mem.total;
+        if (!mounted) return;
+        setState(() {
+          totalMemories = serverInfoResponse.mem.total;
+        });
       } catch (e) {
         //TODO
       }
@@ -100,6 +104,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
       final pingResponse =
           await ref.read(misskeyProvider(widget.account)).ping();
 
+      if (!mounted) return;
       setState(() {
         ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
       });
