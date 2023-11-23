@@ -46,6 +46,7 @@ void main() {
             'primary: ${theme.primary}, '
             'primaryDarken: ${theme.primaryDarken}, '
             'primaryLighten: ${theme.primaryLighten}, '
+            'accentedBackground: ${theme.accentedBackground}, '
             'background: ${theme.background}, '
             'foreground: ${theme.foreground}, '
             'renote: ${theme.renote}, '
@@ -54,6 +55,8 @@ void main() {
             'link: ${theme.link}, '
             'divider: ${theme.divider}, '
             'buttonBackground: ${theme.buttonBackground}, '
+            'buttonGradateA: ${theme.buttonGradateA}, '
+            'buttonGradateB: ${theme.buttonGradateB}, '
             'panel: ${theme.panel}, '
             'panelBackground: ${theme.panelBackground}, '
             ')',

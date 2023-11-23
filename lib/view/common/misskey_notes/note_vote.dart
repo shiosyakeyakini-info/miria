@@ -94,6 +94,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
     final differ = isExpired
         ? null
         : widget.poll.expiresAt?.difference(DateTime.now()).format;
+    final colorTheme = AppTheme.of(context).colorTheme;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -108,13 +109,13 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(5),
-                  color: isOpened ? null : AppTheme.of(context).voteColor2,
+                  color: isOpened ? null : colorTheme.accentedBackground,
                   gradient: isOpened
                       ? LinearGradient(
                           colors: [
-                            AppTheme.of(context).voteColor1,
-                            AppTheme.of(context).voteColor1,
-                            AppTheme.of(context).voteColor2,
+                            colorTheme.buttonGradateA,
+                            colorTheme.buttonGradateB,
+                            colorTheme.accentedBackground,
                           ],
                           stops: [
                             0,

@@ -15,6 +15,7 @@ class ColorTheme with _$ColorTheme {
     required Color primary,
     required Color primaryDarken,
     required Color primaryLighten,
+    required Color accentedBackground,
     required Color background,
     required Color foreground,
     required Color renote,
@@ -23,6 +24,8 @@ class ColorTheme with _$ColorTheme {
     required Color link,
     required Color divider,
     required Color buttonBackground,
+    required Color buttonGradateA,
+    required Color buttonGradateB,
     required Color panel,
     required Color panelBackground,
   }) = _ColorTheme;
@@ -121,6 +124,7 @@ class ColorTheme with _$ColorTheme {
       primary: colors["accent"]!,
       primaryDarken: colors["accentDarken"]!,
       primaryLighten: colors["accentLighten"]!,
+      accentedBackground: colors["accentedBg"]!,
       background: colors["bg"]!,
       foreground: colors["fg"]!,
       renote: colors["renote"]!,
@@ -129,6 +133,8 @@ class ColorTheme with _$ColorTheme {
       link: colors["link"]!,
       divider: colors["divider"]!,
       buttonBackground: colors["buttonBg"]!,
+      buttonGradateA: colors["buttonGradateA"]!,
+      buttonGradateB: colors["buttonGradateB"]!,
       panel: colors["panel"]!,
       panelBackground: colors["panelHeaderBg"]!,
     );

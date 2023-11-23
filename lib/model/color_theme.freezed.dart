@@ -22,6 +22,7 @@ mixin _$ColorTheme {
   Color get primary => throw _privateConstructorUsedError;
   Color get primaryDarken => throw _privateConstructorUsedError;
   Color get primaryLighten => throw _privateConstructorUsedError;
+  Color get accentedBackground => throw _privateConstructorUsedError;
   Color get background => throw _privateConstructorUsedError;
   Color get foreground => throw _privateConstructorUsedError;
   Color get renote => throw _privateConstructorUsedError;
@@ -30,6 +31,8 @@ mixin _$ColorTheme {
   Color get link => throw _privateConstructorUsedError;
   Color get divider => throw _privateConstructorUsedError;
   Color get buttonBackground => throw _privateConstructorUsedError;
+  Color get buttonGradateA => throw _privateConstructorUsedError;
+  Color get buttonGradateB => throw _privateConstructorUsedError;
   Color get panel => throw _privateConstructorUsedError;
   Color get panelBackground => throw _privateConstructorUsedError;
 
@@ -51,6 +54,7 @@ abstract class $ColorThemeCopyWith<$Res> {
       Color primary,
       Color primaryDarken,
       Color primaryLighten,
+      Color accentedBackground,
       Color background,
       Color foreground,
       Color renote,
@@ -59,6 +63,8 @@ abstract class $ColorThemeCopyWith<$Res> {
       Color link,
       Color divider,
       Color buttonBackground,
+      Color buttonGradateA,
+      Color buttonGradateB,
       Color panel,
       Color panelBackground});
 }
@@ -82,6 +88,7 @@ class _$ColorThemeCopyWithImpl<$Res, $Val extends ColorTheme>
     Object? primary = null,
     Object? primaryDarken = null,
     Object? primaryLighten = null,
+    Object? accentedBackground = null,
     Object? background = null,
     Object? foreground = null,
     Object? renote = null,
@@ -90,6 +97,8 @@ class _$ColorThemeCopyWithImpl<$Res, $Val extends ColorTheme>
     Object? link = null,
     Object? divider = null,
     Object? buttonBackground = null,
+    Object? buttonGradateA = null,
+    Object? buttonGradateB = null,
     Object? panel = null,
     Object? panelBackground = null,
   }) {
@@ -118,6 +127,10 @@ class _$ColorThemeCopyWithImpl<$Res, $Val extends ColorTheme>
           ? _value.primaryLighten
           : primaryLighten // ignore: cast_nullable_to_non_nullable
               as Color,
+      accentedBackground: null == accentedBackground
+          ? _value.accentedBackground
+          : accentedBackground // ignore: cast_nullable_to_non_nullable
+              as Color,
       background: null == background
           ? _value.background
           : background // ignore: cast_nullable_to_non_nullable
@@ -149,6 +162,14 @@ class _$ColorThemeCopyWithImpl<$Res, $Val extends ColorTheme>
       buttonBackground: null == buttonBackground
           ? _value.buttonBackground
           : buttonBackground // ignore: cast_nullable_to_non_nullable
+              as Color,
+      buttonGradateA: null == buttonGradateA
+          ? _value.buttonGradateA
+          : buttonGradateA // ignore: cast_nullable_to_non_nullable
+              as Color,
+      buttonGradateB: null == buttonGradateB
+          ? _value.buttonGradateB
+          : buttonGradateB // ignore: cast_nullable_to_non_nullable
               as Color,
       panel: null == panel
           ? _value.panel
@@ -177,6 +198,7 @@ abstract class _$$ColorThemeImplCopyWith<$Res>
       Color primary,
       Color primaryDarken,
       Color primaryLighten,
+      Color accentedBackground,
       Color background,
       Color foreground,
       Color renote,
@@ -185,6 +207,8 @@ abstract class _$$ColorThemeImplCopyWith<$Res>
       Color link,
       Color divider,
       Color buttonBackground,
+      Color buttonGradateA,
+      Color buttonGradateB,
       Color panel,
       Color panelBackground});
 }
@@ -206,6 +230,7 @@ class __$$ColorThemeImplCopyWithImpl<$Res>
     Object? primary = null,
     Object? primaryDarken = null,
     Object? primaryLighten = null,
+    Object? accentedBackground = null,
     Object? background = null,
     Object? foreground = null,
     Object? renote = null,
@@ -214,6 +239,8 @@ class __$$ColorThemeImplCopyWithImpl<$Res>
     Object? link = null,
     Object? divider = null,
     Object? buttonBackground = null,
+    Object? buttonGradateA = null,
+    Object? buttonGradateB = null,
     Object? panel = null,
     Object? panelBackground = null,
   }) {
@@ -241,6 +268,10 @@ class __$$ColorThemeImplCopyWithImpl<$Res>
       primaryLighten: null == primaryLighten
           ? _value.primaryLighten
           : primaryLighten // ignore: cast_nullable_to_non_nullable
+              as Color,
+      accentedBackground: null == accentedBackground
+          ? _value.accentedBackground
+          : accentedBackground // ignore: cast_nullable_to_non_nullable
               as Color,
       background: null == background
           ? _value.background
@@ -274,6 +305,14 @@ class __$$ColorThemeImplCopyWithImpl<$Res>
           ? _value.buttonBackground
           : buttonBackground // ignore: cast_nullable_to_non_nullable
               as Color,
+      buttonGradateA: null == buttonGradateA
+          ? _value.buttonGradateA
+          : buttonGradateA // ignore: cast_nullable_to_non_nullable
+              as Color,
+      buttonGradateB: null == buttonGradateB
+          ? _value.buttonGradateB
+          : buttonGradateB // ignore: cast_nullable_to_non_nullable
+              as Color,
       panel: null == panel
           ? _value.panel
           : panel // ignore: cast_nullable_to_non_nullable
@@ -296,6 +335,7 @@ class _$ColorThemeImpl implements _ColorTheme {
       required this.primary,
       required this.primaryDarken,
       required this.primaryLighten,
+      required this.accentedBackground,
       required this.background,
       required this.foreground,
       required this.renote,
@@ -304,6 +344,8 @@ class _$ColorThemeImpl implements _ColorTheme {
       required this.link,
       required this.divider,
       required this.buttonBackground,
+      required this.buttonGradateA,
+      required this.buttonGradateB,
       required this.panel,
       required this.panelBackground});
 
@@ -319,6 +361,8 @@ class _$ColorThemeImpl implements _ColorTheme {
   final Color primaryDarken;
   @override
   final Color primaryLighten;
+  @override
+  final Color accentedBackground;
   @override
   final Color background;
   @override
@@ -336,13 +380,17 @@ class _$ColorThemeImpl implements _ColorTheme {
   @override
   final Color buttonBackground;
   @override
+  final Color buttonGradateA;
+  @override
+  final Color buttonGradateB;
+  @override
   final Color panel;
   @override
   final Color panelBackground;
 
   @override
   String toString() {
-    return 'ColorTheme(id: $id, name: $name, isDarkTheme: $isDarkTheme, primary: $primary, primaryDarken: $primaryDarken, primaryLighten: $primaryLighten, background: $background, foreground: $foreground, renote: $renote, mention: $mention, hashtag: $hashtag, link: $link, divider: $divider, buttonBackground: $buttonBackground, panel: $panel, panelBackground: $panelBackground)';
+    return 'ColorTheme(id: $id, name: $name, isDarkTheme: $isDarkTheme, primary: $primary, primaryDarken: $primaryDarken, primaryLighten: $primaryLighten, accentedBackground: $accentedBackground, background: $background, foreground: $foreground, renote: $renote, mention: $mention, hashtag: $hashtag, link: $link, divider: $divider, buttonBackground: $buttonBackground, buttonGradateA: $buttonGradateA, buttonGradateB: $buttonGradateB, panel: $panel, panelBackground: $panelBackground)';
   }
 
   @override
@@ -359,6 +407,8 @@ class _$ColorThemeImpl implements _ColorTheme {
                 other.primaryDarken == primaryDarken) &&
             (identical(other.primaryLighten, primaryLighten) ||
                 other.primaryLighten == primaryLighten) &&
+            (identical(other.accentedBackground, accentedBackground) ||
+                other.accentedBackground == accentedBackground) &&
             (identical(other.background, background) ||
                 other.background == background) &&
             (identical(other.foreground, foreground) ||
@@ -370,30 +420,38 @@ class _$ColorThemeImpl implements _ColorTheme {
             (identical(other.divider, divider) || other.divider == divider) &&
             (identical(other.buttonBackground, buttonBackground) ||
                 other.buttonBackground == buttonBackground) &&
+            (identical(other.buttonGradateA, buttonGradateA) ||
+                other.buttonGradateA == buttonGradateA) &&
+            (identical(other.buttonGradateB, buttonGradateB) ||
+                other.buttonGradateB == buttonGradateB) &&
             (identical(other.panel, panel) || other.panel == panel) &&
             (identical(other.panelBackground, panelBackground) ||
                 other.panelBackground == panelBackground));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      isDarkTheme,
-      primary,
-      primaryDarken,
-      primaryLighten,
-      background,
-      foreground,
-      renote,
-      mention,
-      hashtag,
-      link,
-      divider,
-      buttonBackground,
-      panel,
-      panelBackground);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        isDarkTheme,
+        primary,
+        primaryDarken,
+        primaryLighten,
+        accentedBackground,
+        background,
+        foreground,
+        renote,
+        mention,
+        hashtag,
+        link,
+        divider,
+        buttonBackground,
+        buttonGradateA,
+        buttonGradateB,
+        panel,
+        panelBackground
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -410,6 +468,7 @@ abstract class _ColorTheme implements ColorTheme {
       required final Color primary,
       required final Color primaryDarken,
       required final Color primaryLighten,
+      required final Color accentedBackground,
       required final Color background,
       required final Color foreground,
       required final Color renote,
@@ -418,6 +477,8 @@ abstract class _ColorTheme implements ColorTheme {
       required final Color link,
       required final Color divider,
       required final Color buttonBackground,
+      required final Color buttonGradateA,
+      required final Color buttonGradateB,
       required final Color panel,
       required final Color panelBackground}) = _$ColorThemeImpl;
 
@@ -434,6 +495,8 @@ abstract class _ColorTheme implements ColorTheme {
   @override
   Color get primaryLighten;
   @override
+  Color get accentedBackground;
+  @override
   Color get background;
   @override
   Color get foreground;
@@ -449,6 +512,10 @@ abstract class _ColorTheme implements ColorTheme {
   Color get divider;
   @override
   Color get buttonBackground;
+  @override
+  Color get buttonGradateA;
+  @override
+  Color get buttonGradateB;
   @override
   Color get panel;
   @override
