@@ -1,0 +1,68 @@
+name: デプロイ(Linux)
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build_for_linux:
+    name: Linux用ビルド
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Flutter Develop dependencies
+        run:  sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel:  'stable'
+          cache:  true
+
+      - name: Cache pubspec dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.FLUTTER_HOME }}/.pub-cache
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key:  build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: build-pubspec-
+
+      - name: Install Flutter Build Tools for Linux
+        run:  sudo apt install -y libsecret-1-dev libmpv-dev
+
+      - name: Flutter pub get
+        run:  flutter pub get
+
+      - name: Get Version
+        run:  echo "VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV
+
+      - name: Flutter Build
+        run:  flutter build linux --release
+
+      - name: Compress App
+        run:  |
+          cd build/linux/x64/release/bundle
+          tar -czaf miria_$VERSION_x64.tar.gz *
+
+      # - name: Upload artifact
+      #   uses: actions/upload-artifacts@v3
+      #   with: 
+      #     name: linux-x86_64
+      #     path: build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
+
+      - name: Upload artifact to release
+        env:  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:  gh release upload v$VERSION ./build/linux/x64/release/bundle/miria_$VERSION_x64.tar.gz
+
+      - name: Remove artifact.tar.gz
+        run:  rm build/linux/x64/release/bundle/miria-$VERSION-x86_64.tar.gz
