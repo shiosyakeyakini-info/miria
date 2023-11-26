@@ -25,7 +25,6 @@ class TimelineNoteField extends ConsumerWidget {
         maxLines: null,
         controller: ref.watch(timelineNoteProvider),
         decoration: noteStyle,
-        // onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ),
     );
   }
