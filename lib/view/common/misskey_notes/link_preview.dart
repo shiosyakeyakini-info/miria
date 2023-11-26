@@ -208,7 +208,7 @@ class LinkPreviewTile extends ConsumerWidget {
               padding: const EdgeInsets.all(4),
               child: Row(
                 children: [
-                  if (thumbnail == null)
+                  if (thumbnail == null || (summalyResult.sensitive ?? false))
                     SizedBox(height: imageSize)
                   else
                     CachedNetworkImage(
