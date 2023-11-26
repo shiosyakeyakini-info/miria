@@ -34,6 +34,7 @@ import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> _navigateDetailPage(
     BuildContext context, Note note, Account? loginAs) async {
@@ -233,7 +234,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             child: Padding(
               padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0),
               child: Text(
-                "${displayNote.user.name ?? displayNote.user.username}が何か言うとるわ",
+                S.of(context).mutedNotePlaceholder(
+                    displayNote.user.name ?? displayNote.user.username),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             )),
@@ -412,7 +414,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                             isCwOpened: !status.isCwOpened));
                               },
                               child: Text(
-                                isCwOpened ? "隠す" : "隠してあるのんの続きを見して",
+                                isCwOpened
+                                    ? S.of(context).hide
+                                    : S.of(context).showCw,
                               ),
                             ),
                           ],
@@ -438,7 +442,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                                       .isReactionedRenote),
                                             );
                                       },
-                                      child: const Text("続きを表示"),
+                                      child: Text(
+                                          S.of(context).showReactionedNote),
                                     ),
                                   )
                                 ],
@@ -491,7 +496,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                                       isLongVisible: !status
                                                           .isLongVisible));
                                         },
-                                        child: const Text("続きを表示"),
+                                        child: Text(S.of(context).showLongText),
                                       ),
                                     )
                                   ],
@@ -583,8 +588,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       onPressed: () => setState(() {
                                             isAllReactionVisible = true;
                                           }),
-                                      child: Text(
-                                          "ほか${displayNote.reactions.length - 16}個")),
+                                      child: Text(S.of(context).otherReactions(
+                                          (displayNote.reactions.length - 16)
+                                              .format()))),
                               ],
                             ),
                           if (displayNote.channel != null)
@@ -745,9 +751,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     if (displayNote.myReaction != null && requestEmoji == null) {
       if (await SimpleConfirmDialog.show(
               context: context,
-              message: "リアクション取り消してもええか？",
-              primary: "取り消す",
-              secondary: "やっぱりやめる") !=
+              message: S.of(context).confirmDeleteReaction,
+              primary: S.of(context).cancelReaction,
+              secondary: S.of(context).cancel) !=
           true) {
         return;
       }
@@ -884,8 +890,9 @@ class RenoteHeader extends StatelessWidget {
               emojis: note.user.emojis,
               suffixSpan: [
                 TextSpan(
-                  text:
-                      " が ${note.user.acct == note.renote?.user.acct ? "セルフRenote" : "Renote"}",
+                  text: note.user.acct == note.renote?.user.acct
+                      ? S.of(context).renoted
+                      : S.of(context).selfRenoted,
                   style: renoteTextStyle,
                 )
               ],

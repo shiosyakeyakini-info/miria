@@ -114,10 +114,83 @@
 
     "closeTweet": "ツイートを閉じる",
     "closePlayer": "プレイヤーを閉じる",
-    "doneCopy": "コピーしたで"
+    "doneCopy": "コピーしたで",
+    "mutedNotePlaceholder": "{userName}が何か言うとるわ",
+    "@mutedNotePlaceholder": {
+        "placeholders": {
+            "userName": {
+                "type": "string"
+            }
+        }
+    },
+    "hide": "隠す",
+    "showCw": "隠してあるのんの続きを見して",
+    "showReactionedNote": "続きを表示",
+    "showLongText": "続きを表示",
+    "showLongFiles": "続きを表示",
+    "otherReactions": "ほか{reactionCounts}個",
+    "@otherReactions": {
+        "placeholders": {
+            "reactionCounts": {
+                "type": "string"
+            }
+        }
+    },
+    "confirmDeleteReaction": "リアクション取り消してもええか？",
+    "cancelReaction": "取り消す",
+    "renoted": "がRenote",
+    "selfRenoted": "がセルフRenote",
 
+    "detail": "詳細",
+    "copyContents": "内容をコピー",
+    "copyLinks": "リンクをコピー",
+    "copyName": "ユーザー名をコピー",
+    "copyUserScreenName": "ユーザースクリーン名をコピー",
+    "openBrowsers": "ブラウザで開く",
+    "openBrowsersAsRemote": "ブラウザでリモート先を開く",
+    "shareNotes": "ノートを共有",
+    "deleteFavorite": "お気に入り解除",
+    "renotedNotes": "リノート直後のノート",
+    "deletedRecreate": "削除してなおす",
+    "confirmDeletedRecreate": "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
+    "deleteRenote": "リノートを解除する",
+    "confirmDelete": "ほんまに消してええな？",
+    "doDeleting": "消す！",
 
-    
+    "confirmPoll": "{choiced}に投票しますか？",
+    "@confirmPoll": {
+        "placeholders": {
+            "choiced": {
+                "type": "string"
+            }
+        }
+    },
+    "votesCount": "({votes}票)",
+    "@votesCount": {
+        "placeholders": {
+            "votes": {
+                "type": "string"
+            }
+        }
+    },
+    "totalVotesCount": "計{votes}票・",
+    "@totalVotesCount": {
+        "votes": {
+            "type": "string"
+        }
+    },
+    "finished": "終了済み",
+    "openResult": "結果を見る",
+    "doVoting": "投票する",
+    "alreadyVoted": "投票済み",
+    "remainDiffer": "あと{differ}",
+    "@remainDiffer": {
+        "placeholders": {
+            "differ": {
+                "type": "string"
+            }
+        }
+    }
 
     
 }
