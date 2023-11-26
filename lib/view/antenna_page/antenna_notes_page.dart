@@ -6,7 +6,6 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/antenna_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/antenna_page/antenna_notes.dart';
-import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
@@ -24,7 +23,7 @@ class AntennaNotesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyProvider(account));
     final antenna = ref.watch(
-          antennasListNotifierProvider(misskey).select(
+          antennasNotifierProvider(misskey).select(
             (antennas) => antennas.valueOrNull
                 ?.firstWhereOrNull((e) => e.id == this.antenna.id),
           ),
@@ -51,7 +50,7 @@ class AntennaNotesPage extends ConsumerWidget {
                 if (!context.mounted) return;
                 if (settings != null) {
                   ref
-                      .read(antennasListNotifierProvider(misskey).notifier)
+                      .read(antennasNotifierProvider(misskey).notifier)
                       .updateAntenna(antenna.id, settings)
                       .expectFailure(context);
                 }

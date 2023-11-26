@@ -6,7 +6,6 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/clip_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/clip_list_page/clip_detail_note_list.dart';
-import 'package:miria/view/clip_list_page/clip_list_page.dart';
 import 'package:miria/view/clip_list_page/clip_settings_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
@@ -22,7 +21,7 @@ class ClipDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyProvider(account));
     final clip = ref.watch(
-      clipsListNotifierProvider(misskey).select(
+      clipsNotifierProvider(misskey).select(
         (clips) => clips.valueOrNull?.firstWhereOrNull((e) => e.id == id),
       ),
     );
@@ -47,7 +46,7 @@ class ClipDetailPage extends ConsumerWidget {
                   if (!context.mounted) return;
                   if (settings != null) {
                     ref
-                        .read(clipsListNotifierProvider(misskey).notifier)
+                        .read(clipsNotifierProvider(misskey).notifier)
                         .updateClip(clip.id, settings)
                         .expectFailure(context);
                   }

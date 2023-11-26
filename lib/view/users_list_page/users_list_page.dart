@@ -9,47 +9,6 @@ import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-
-final _usersListListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
-    _UsersListListNotifier,
-    List<UsersList>,
-    Misskey>(_UsersListListNotifier.new);
-
-class _UsersListListNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<UsersList>, Misskey> {
-  @override
-  Future<List<UsersList>> build(Misskey arg) async {
-    final response = await _misskey.users.list.list();
-    return response.toList();
-  }
-
-  Misskey get _misskey => arg;
-
-  Future<void> create(UsersListSettings settings) async {
-    final list = await _misskey.users.list.create(
-      UsersListsCreateRequest(
-        name: settings.name,
-      ),
-    );
-    if (settings.isPublic) {
-      await _misskey.users.list.update(
-        UsersListsUpdateRequest(
-          listId: list.id,
-          isPublic: settings.isPublic,
-        ),
-      );
-    }
-    state = AsyncValue.data([...?state.valueOrNull, list]);
-  }
-
-  Future<void> delete(String listId) async {
-    await _misskey.users.list.delete(UsersListsDeleteRequest(listId: listId));
-    state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != listId).toList() ?? [],
-    );
-  }
-}
 
 @RoutePage()
 class UsersListPage extends ConsumerWidget {
@@ -60,7 +19,7 @@ class UsersListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyProvider(account));
-    final list = ref.watch(_usersListListNotifierProvider(misskey));
+    final list = ref.watch(usersListsNotifierProvider(misskey));
 
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +37,7 @@ class UsersListPage extends ConsumerWidget {
               if (!context.mounted) return;
               if (settings != null) {
                 ref
-                    .read(_usersListListNotifierProvider(misskey).notifier)
+                    .read(usersListsNotifierProvider(misskey).notifier)
                     .create(settings)
                     .expectFailure(context);
               }
@@ -109,7 +68,7 @@ class UsersListPage extends ConsumerWidget {
                       if (result ?? false) {
                         await ref
                             .read(
-                              _usersListListNotifierProvider(misskey).notifier,
+                              usersListsNotifierProvider(misskey).notifier,
                             )
                             .delete(list.id)
                             .expectFailure(context);
