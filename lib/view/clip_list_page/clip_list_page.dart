@@ -11,62 +11,7 @@ import 'package:miria/view/common/clip_item.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-final clipsListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
-    ClipsListNotifier, List<Clip>, Misskey>(ClipsListNotifier.new);
-
-class ClipsListNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<Clip>, Misskey> {
-  @override
-  Future<List<Clip>> build(Misskey arg) async {
-    final response = await _misskey.clips.list();
-    return response.toList();
-  }
-
-  Misskey get _misskey => arg;
-
-  Future<void> create(ClipSettings settings) async {
-    final list = await _misskey.clips.create(
-      ClipsCreateRequest(
-        name: settings.name,
-        description: settings.description,
-        isPublic: settings.isPublic,
-      ),
-    );
-    state = AsyncValue.data([...?state.valueOrNull, list]);
-  }
-
-  Future<void> delete(String clipId) async {
-    await _misskey.clips.delete(ClipsDeleteRequest(clipId: clipId));
-    state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != clipId).toList() ?? [],
-    );
-  }
-
-  Future<void> updateClip(
-    String clipId,
-    ClipSettings settings,
-  ) async {
-    final clip = await _misskey.clips.update(
-      ClipsUpdateRequest(
-        clipId: clipId,
-        name: settings.name,
-        description: settings.description,
-        isPublic: settings.isPublic,
-      ),
-    );
-    state = AsyncValue.data(
-      state.valueOrNull
-              ?.map(
-                (e) => (e.id == clipId) ? clip : e,
-              )
-              .toList() ??
-          [],
-    );
-  }
-}
 
 @RoutePage()
 class ClipListPage extends ConsumerWidget {
@@ -76,7 +21,7 @@ class ClipListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyProvider(account));
-    final clips = ref.watch(clipsListNotifierProvider(misskey));
+    final clips = ref.watch(clipsNotifierProvider(misskey));
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +39,7 @@ class ClipListPage extends ConsumerWidget {
               if (!context.mounted) return;
               if (settings != null) {
                 ref
-                    .read(clipsListNotifierProvider(misskey).notifier)
+                    .read(clipsNotifierProvider(misskey).notifier)
                     .create(settings)
                     .expectFailure(context);
               }
@@ -124,7 +69,7 @@ class ClipListPage extends ConsumerWidget {
                     if (result ?? false) {
                       await ref
                           .read(
-                            clipsListNotifierProvider(misskey).notifier,
+                            clipsNotifierProvider(misskey).notifier,
                           )
                           .delete(clip.id)
                           .expectFailure(context);

@@ -5,15 +5,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
-import 'package:miria/view/common/misskey_notes/open_another_account.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
+import 'package:miria/view/user_page/user_control_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,9 +41,11 @@ class NoteModalSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final accounts = ref.watch(accountRepositoryProvider);
     return ListView(
       children: [
         ListTile(
+          leading: const Icon(Icons.info_outline),
           title: Text(S.of(context).detail),
           onTap: () {
             context
@@ -50,6 +53,7 @@ class NoteModalSheet extends ConsumerWidget {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.copy),
           title: Text(S.of(context).copyContents),
           onTap: () {
             Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
@@ -57,6 +61,7 @@ class NoteModalSheet extends ConsumerWidget {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
           onTap: () {
             Clipboard.setData(
@@ -68,30 +73,29 @@ class NoteModalSheet extends ConsumerWidget {
           },
         ),
         ListTile(
-          title: Text(S.of(context).copyName),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: targetNote.user.name ?? targetNote.user.username,
+          leading: const Icon(Icons.person),
+          title: const Text("ユーザー"),
+          trailing: const Icon(Icons.keyboard_arrow_right),
+          onTap: () async {
+            final response = await ref
+                .read(misskeyProvider(account))
+                .users
+                .show(UsersShowRequest(userId: targetNote.userId));
+            if (!context.mounted) return;
+            showModalBottomSheet<void>(
+              context: context,
+              builder: (context) => UserControlDialog(
+                account: account,
+                response: response,
+                isMe: targetNote.user.host == null &&
+                    targetNote.user.username == account.userId,
               ),
             );
-            Navigator.of(context).pop();
           },
         ),
         ListTile(
-          title: Text(S.of(context).copyUserScreenName),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text:
-                    "@${targetNote.user.username}${targetNote.user.host != null ? "@${targetNote.user.host}" : ""}",
-              ),
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-        ListTile(
-          title: Text(S.of(context).openBrowsers),
+          leading: const Icon(Icons.open_in_browser),
+          title: const Text("ブラウザで開く"),
           onTap: () async {
             launchUrlString(
               "https://${account.host}/notes/${targetNote.id}",
@@ -103,7 +107,8 @@ class NoteModalSheet extends ConsumerWidget {
         ),
         if (targetNote.user.host != null)
           ListTile(
-            title: Text(S.of(context).openBrowsersAsRemote),
+            leading: const Icon(Icons.rocket_launch),
+            title: Text(S.of(context).openBrowsers),
             onTap: () async {
               final uri = targetNote.url ?? targetNote.uri;
               if (uri == null) return;
@@ -112,9 +117,19 @@ class NoteModalSheet extends ConsumerWidget {
               Navigator.of(context).pop();
             },
           ),
-        if (!targetNote.localOnly)
-          OpenAnotherAccount(note: targetNote, beforeOpenAccount: account),
+        // ノートが連合なしのときは現在のアカウントと同じサーバーのアカウントが複数ある場合のみ表示する
+        if (!targetNote.localOnly ||
+            accounts.where((e) => e.host == account.host).length > 1)
+          ListTile(
+            leading: const Icon(Icons.open_in_new),
+            title: const Text("別のアカウントで開く"),
+            onTap: () => ref
+                .read(misskeyNoteNotifierProvider(account).notifier)
+                .openNoteInOtherAccount(context, targetNote)
+                .expectFailure(context),
+          ),
         ListTile(
+          leading: const Icon(Icons.share),
           title: Text(S.of(context).shareNotes),
           onTap: () {
             ref.read(noteModalSheetSharingModeProviding.notifier).state = true;
@@ -162,6 +177,7 @@ class NoteModalSheet extends ConsumerWidget {
             return (data == null)
                 ? const Center(child: CircularProgressIndicator())
                 : ListTile(
+                    leading: const Icon(Icons.star_rounded),
                     onTap: () async {
                       if (data.isFavorited) {
                         ref
@@ -195,6 +211,7 @@ class NoteModalSheet extends ConsumerWidget {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.attach_file),
           title: Text(S.of(context).clip),
           onTap: () {
             Navigator.of(context).pop();
@@ -207,6 +224,7 @@ class NoteModalSheet extends ConsumerWidget {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.repeat_rounded),
           title: Text(S.of(context).renotedNotes),
           onTap: () {
             context.pushRoute(
@@ -225,17 +243,19 @@ class NoteModalSheet extends ConsumerWidget {
                 baseNote.files.isEmpty)) ...[
           if (account.i.policies.canEditNote)
             ListTile(
-                title: Text(S.of(context).edit),
-                onTap: () async {
-                  Navigator.of(context).pop();
-                  context.pushRoute(
-                    NoteCreateRoute(
-                      initialAccount: account,
-                      note: targetNote,
-                      noteCreationMode: NoteCreationMode.update,
-                    ),
-                  );
-                }),
+              leading: const Icon(Icons.edit),
+              title: Text(S.of(context).edit),
+              onTap: () async {
+                Navigator.of(context).pop();
+                context.pushRoute(
+                  NoteCreateRoute(
+                    initialAccount: account,
+                    note: targetNote,
+                    noteCreationMode: NoteCreationMode.update,
+                  ),
+                );
+              },
+            ),
           ListTile(
             title: Text(S.of(context).delete),
             onTap: () async {
@@ -259,6 +279,7 @@ class NoteModalSheet extends ConsumerWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
             onTap: () async {
               if (await showDialog(
@@ -294,6 +315,7 @@ class NoteModalSheet extends ConsumerWidget {
             baseNote.files.isEmpty &&
             baseNote.poll == null) ...[
           ListTile(
+            leading: const Icon(Icons.delete),
             title: Text(S.of(context).deleteRenote),
             onTap: () async {
               await ref
@@ -311,6 +333,7 @@ class NoteModalSheet extends ConsumerWidget {
             (baseNote.user.host == null &&
                 baseNote.user.username != account.userId))
           ListTile(
+            leading: const Icon(Icons.report),
             title: Text(S.of(context).doAbusing),
             onTap: () {
               Navigator.of(context).pop();

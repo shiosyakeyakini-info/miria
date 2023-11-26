@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
-import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
@@ -17,7 +16,7 @@ class AntennaList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
     final misskey = ref.watch(misskeyProvider(account));
-    final antennas = ref.watch(antennasListNotifierProvider(misskey));
+    final antennas = ref.watch(antennasNotifierProvider(misskey));
 
     return antennas.when(
       data: (antennas) {
@@ -40,7 +39,7 @@ class AntennaList extends ConsumerWidget {
                   if (result ?? false) {
                     await ref
                         .read(
-                          antennasListNotifierProvider(misskey).notifier,
+                          antennasNotifierProvider(misskey).notifier,
                         )
                         .delete(antenna.id)
                         .expectFailure(context);

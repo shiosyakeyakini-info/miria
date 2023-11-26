@@ -29,7 +29,6 @@ jobs:
       - name: Get App Version
         run:  |
           echo "version=$(flutter pub run cider version)" >> $env:GITHUB_ENV
-          sed -i "s/VersionNumber/$(flutter pub run cider version)/" windows/innosetup.iss
 
       - name: Build for Windows
         run: |
@@ -45,6 +44,7 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.1.0
         with:
           path: windows/innosetup.iss
+          options: /dMyAppVersion="${{ env.version }}"
 
       - name: Rename .EXE Installer
         run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe
