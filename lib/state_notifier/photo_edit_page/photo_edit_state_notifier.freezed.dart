@@ -149,11 +149,10 @@ class _$PhotoEditCopyWithImpl<$Res, $Val extends PhotoEdit>
 }
 
 /// @nodoc
-abstract class _$$PhotoEditImplCopyWith<$Res>
-    implements $PhotoEditCopyWith<$Res> {
-  factory _$$PhotoEditImplCopyWith(
-          _$PhotoEditImpl value, $Res Function(_$PhotoEditImpl) then) =
-      __$$PhotoEditImplCopyWithImpl<$Res>;
+abstract class _$$_PhotoEditCopyWith<$Res> implements $PhotoEditCopyWith<$Res> {
+  factory _$$_PhotoEditCopyWith(
+          _$_PhotoEdit value, $Res Function(_$_PhotoEdit) then) =
+      __$$_PhotoEditCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -174,11 +173,11 @@ abstract class _$$PhotoEditImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$PhotoEditImplCopyWithImpl<$Res>
-    extends _$PhotoEditCopyWithImpl<$Res, _$PhotoEditImpl>
-    implements _$$PhotoEditImplCopyWith<$Res> {
-  __$$PhotoEditImplCopyWithImpl(
-      _$PhotoEditImpl _value, $Res Function(_$PhotoEditImpl) _then)
+class __$$_PhotoEditCopyWithImpl<$Res>
+    extends _$PhotoEditCopyWithImpl<$Res, _$_PhotoEdit>
+    implements _$$_PhotoEditCopyWith<$Res> {
+  __$$_PhotoEditCopyWithImpl(
+      _$_PhotoEdit _value, $Res Function(_$_PhotoEdit) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -199,7 +198,7 @@ class __$$PhotoEditImplCopyWithImpl<$Res>
     Object? emojis = null,
     Object? selectedEmojiIndex = freezed,
   }) {
-    return _then(_$PhotoEditImpl(
+    return _then(_$_PhotoEdit(
       clipMode: null == clipMode
           ? _value.clipMode
           : clipMode // ignore: cast_nullable_to_non_nullable
@@ -262,8 +261,8 @@ class __$$PhotoEditImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PhotoEditImpl implements _PhotoEdit {
-  const _$PhotoEditImpl(
+class _$_PhotoEdit implements _PhotoEdit {
+  const _$_PhotoEdit(
       {this.clipMode = false,
       this.colorFilterMode = false,
       final List<ColorFilterPreview> colorFilterPreviewImages = const [],
@@ -350,7 +349,7 @@ class _$PhotoEditImpl implements _PhotoEdit {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PhotoEditImpl &&
+            other is _$_PhotoEdit &&
             (identical(other.clipMode, clipMode) ||
                 other.clipMode == clipMode) &&
             (identical(other.colorFilterMode, colorFilterMode) ||
@@ -400,8 +399,8 @@ class _$PhotoEditImpl implements _PhotoEdit {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PhotoEditImplCopyWith<_$PhotoEditImpl> get copyWith =>
-      __$$PhotoEditImplCopyWithImpl<_$PhotoEditImpl>(this, _$identity);
+  _$$_PhotoEditCopyWith<_$_PhotoEdit> get copyWith =>
+      __$$_PhotoEditCopyWithImpl<_$_PhotoEdit>(this, _$identity);
 }
 
 abstract class _PhotoEdit implements PhotoEdit {
@@ -419,7 +418,7 @@ abstract class _PhotoEdit implements PhotoEdit {
       final Size actualSize,
       final int angle,
       final List<EditedEmojiData> emojis,
-      final int? selectedEmojiIndex}) = _$PhotoEditImpl;
+      final int? selectedEmojiIndex}) = _$_PhotoEdit;
 
   @override
   bool get clipMode;
@@ -451,7 +450,7 @@ abstract class _PhotoEdit implements PhotoEdit {
   int? get selectedEmojiIndex;
   @override
   @JsonKey(ignore: true)
-  _$$PhotoEditImplCopyWith<_$PhotoEditImpl> get copyWith =>
+  _$$_PhotoEditCopyWith<_$_PhotoEdit> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -504,22 +503,22 @@ class _$ColorFilterPreviewCopyWithImpl<$Res, $Val extends ColorFilterPreview>
 }
 
 /// @nodoc
-abstract class _$$ColorFilterPreviewImplCopyWith<$Res>
+abstract class _$$_ColorFilterPreviewCopyWith<$Res>
     implements $ColorFilterPreviewCopyWith<$Res> {
-  factory _$$ColorFilterPreviewImplCopyWith(_$ColorFilterPreviewImpl value,
-          $Res Function(_$ColorFilterPreviewImpl) then) =
-      __$$ColorFilterPreviewImplCopyWithImpl<$Res>;
+  factory _$$_ColorFilterPreviewCopyWith(_$_ColorFilterPreview value,
+          $Res Function(_$_ColorFilterPreview) then) =
+      __$$_ColorFilterPreviewCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String name, Uint8List? image});
 }
 
 /// @nodoc
-class __$$ColorFilterPreviewImplCopyWithImpl<$Res>
-    extends _$ColorFilterPreviewCopyWithImpl<$Res, _$ColorFilterPreviewImpl>
-    implements _$$ColorFilterPreviewImplCopyWith<$Res> {
-  __$$ColorFilterPreviewImplCopyWithImpl(_$ColorFilterPreviewImpl _value,
-      $Res Function(_$ColorFilterPreviewImpl) _then)
+class __$$_ColorFilterPreviewCopyWithImpl<$Res>
+    extends _$ColorFilterPreviewCopyWithImpl<$Res, _$_ColorFilterPreview>
+    implements _$$_ColorFilterPreviewCopyWith<$Res> {
+  __$$_ColorFilterPreviewCopyWithImpl(
+      _$_ColorFilterPreview _value, $Res Function(_$_ColorFilterPreview) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -528,7 +527,7 @@ class __$$ColorFilterPreviewImplCopyWithImpl<$Res>
     Object? name = null,
     Object? image = freezed,
   }) {
-    return _then(_$ColorFilterPreviewImpl(
+    return _then(_$_ColorFilterPreview(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -543,8 +542,8 @@ class __$$ColorFilterPreviewImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ColorFilterPreviewImpl implements _ColorFilterPreview {
-  const _$ColorFilterPreviewImpl({required this.name, this.image});
+class _$_ColorFilterPreview implements _ColorFilterPreview {
+  const _$_ColorFilterPreview({required this.name, this.image});
 
   @override
   final String name;
@@ -560,7 +559,7 @@ class _$ColorFilterPreviewImpl implements _ColorFilterPreview {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ColorFilterPreviewImpl &&
+            other is _$_ColorFilterPreview &&
             (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality().equals(other.image, image));
   }
@@ -572,15 +571,15 @@ class _$ColorFilterPreviewImpl implements _ColorFilterPreview {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ColorFilterPreviewImplCopyWith<_$ColorFilterPreviewImpl> get copyWith =>
-      __$$ColorFilterPreviewImplCopyWithImpl<_$ColorFilterPreviewImpl>(
+  _$$_ColorFilterPreviewCopyWith<_$_ColorFilterPreview> get copyWith =>
+      __$$_ColorFilterPreviewCopyWithImpl<_$_ColorFilterPreview>(
           this, _$identity);
 }
 
 abstract class _ColorFilterPreview implements ColorFilterPreview {
   const factory _ColorFilterPreview(
       {required final String name,
-      final Uint8List? image}) = _$ColorFilterPreviewImpl;
+      final Uint8List? image}) = _$_ColorFilterPreview;
 
   @override
   String get name;
@@ -588,7 +587,7 @@ abstract class _ColorFilterPreview implements ColorFilterPreview {
   Uint8List? get image;
   @override
   @JsonKey(ignore: true)
-  _$$ColorFilterPreviewImplCopyWith<_$ColorFilterPreviewImpl> get copyWith =>
+  _$$_ColorFilterPreviewCopyWith<_$_ColorFilterPreview> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -654,11 +653,11 @@ class _$EditedEmojiDataCopyWithImpl<$Res, $Val extends EditedEmojiData>
 }
 
 /// @nodoc
-abstract class _$$EditedEmojiDataImplCopyWith<$Res>
+abstract class _$$_EditedEmojiDataCopyWith<$Res>
     implements $EditedEmojiDataCopyWith<$Res> {
-  factory _$$EditedEmojiDataImplCopyWith(_$EditedEmojiDataImpl value,
-          $Res Function(_$EditedEmojiDataImpl) then) =
-      __$$EditedEmojiDataImplCopyWithImpl<$Res>;
+  factory _$$_EditedEmojiDataCopyWith(
+          _$_EditedEmojiData value, $Res Function(_$_EditedEmojiData) then) =
+      __$$_EditedEmojiDataCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -666,11 +665,11 @@ abstract class _$$EditedEmojiDataImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$EditedEmojiDataImplCopyWithImpl<$Res>
-    extends _$EditedEmojiDataCopyWithImpl<$Res, _$EditedEmojiDataImpl>
-    implements _$$EditedEmojiDataImplCopyWith<$Res> {
-  __$$EditedEmojiDataImplCopyWithImpl(
-      _$EditedEmojiDataImpl _value, $Res Function(_$EditedEmojiDataImpl) _then)
+class __$$_EditedEmojiDataCopyWithImpl<$Res>
+    extends _$EditedEmojiDataCopyWithImpl<$Res, _$_EditedEmojiData>
+    implements _$$_EditedEmojiDataCopyWith<$Res> {
+  __$$_EditedEmojiDataCopyWithImpl(
+      _$_EditedEmojiData _value, $Res Function(_$_EditedEmojiData) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -681,7 +680,7 @@ class __$$EditedEmojiDataImplCopyWithImpl<$Res>
     Object? position = null,
     Object? angle = null,
   }) {
-    return _then(_$EditedEmojiDataImpl(
+    return _then(_$_EditedEmojiData(
       emoji: null == emoji
           ? _value.emoji
           : emoji // ignore: cast_nullable_to_non_nullable
@@ -704,8 +703,8 @@ class __$$EditedEmojiDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$EditedEmojiDataImpl implements _EditedEmojiData {
-  const _$EditedEmojiDataImpl(
+class _$_EditedEmojiData implements _EditedEmojiData {
+  const _$_EditedEmojiData(
       {required this.emoji,
       required this.scale,
       required this.position,
@@ -729,7 +728,7 @@ class _$EditedEmojiDataImpl implements _EditedEmojiData {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EditedEmojiDataImpl &&
+            other is _$_EditedEmojiData &&
             (identical(other.emoji, emoji) || other.emoji == emoji) &&
             (identical(other.scale, scale) || other.scale == scale) &&
             (identical(other.position, position) ||
@@ -743,9 +742,8 @@ class _$EditedEmojiDataImpl implements _EditedEmojiData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$EditedEmojiDataImplCopyWith<_$EditedEmojiDataImpl> get copyWith =>
-      __$$EditedEmojiDataImplCopyWithImpl<_$EditedEmojiDataImpl>(
-          this, _$identity);
+  _$$_EditedEmojiDataCopyWith<_$_EditedEmojiData> get copyWith =>
+      __$$_EditedEmojiDataCopyWithImpl<_$_EditedEmojiData>(this, _$identity);
 }
 
 abstract class _EditedEmojiData implements EditedEmojiData {
@@ -753,7 +751,7 @@ abstract class _EditedEmojiData implements EditedEmojiData {
       {required final MisskeyEmojiData emoji,
       required final double scale,
       required final Offset position,
-      required final double angle}) = _$EditedEmojiDataImpl;
+      required final double angle}) = _$_EditedEmojiData;
 
   @override
   MisskeyEmojiData get emoji;
@@ -765,6 +763,6 @@ abstract class _EditedEmojiData implements EditedEmojiData {
   double get angle;
   @override
   @JsonKey(ignore: true)
-  _$$EditedEmojiDataImplCopyWith<_$EditedEmojiDataImpl> get copyWith =>
+  _$$_EditedEmojiDataCopyWith<_$_EditedEmojiData> get copyWith =>
       throw _privateConstructorUsedError;
 }

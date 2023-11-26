@@ -128,11 +128,11 @@ class _$AntennaSettingsCopyWithImpl<$Res, $Val extends AntennaSettings>
 }
 
 /// @nodoc
-abstract class _$$AntennaSettingsImplCopyWith<$Res>
+abstract class _$$_AntennaSettingsCopyWith<$Res>
     implements $AntennaSettingsCopyWith<$Res> {
-  factory _$$AntennaSettingsImplCopyWith(_$AntennaSettingsImpl value,
-          $Res Function(_$AntennaSettingsImpl) then) =
-      __$$AntennaSettingsImplCopyWithImpl<$Res>;
+  factory _$$_AntennaSettingsCopyWith(
+          _$_AntennaSettings value, $Res Function(_$_AntennaSettings) then) =
+      __$$_AntennaSettingsCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -150,11 +150,11 @@ abstract class _$$AntennaSettingsImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$AntennaSettingsImplCopyWithImpl<$Res>
-    extends _$AntennaSettingsCopyWithImpl<$Res, _$AntennaSettingsImpl>
-    implements _$$AntennaSettingsImplCopyWith<$Res> {
-  __$$AntennaSettingsImplCopyWithImpl(
-      _$AntennaSettingsImpl _value, $Res Function(_$AntennaSettingsImpl) _then)
+class __$$_AntennaSettingsCopyWithImpl<$Res>
+    extends _$AntennaSettingsCopyWithImpl<$Res, _$_AntennaSettings>
+    implements _$$_AntennaSettingsCopyWith<$Res> {
+  __$$_AntennaSettingsCopyWithImpl(
+      _$_AntennaSettings _value, $Res Function(_$_AntennaSettings) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -172,7 +172,7 @@ class __$$AntennaSettingsImplCopyWithImpl<$Res>
     Object? notify = null,
     Object? localOnly = null,
   }) {
-    return _then(_$AntennaSettingsImpl(
+    return _then(_$_AntennaSettings(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -223,8 +223,8 @@ class __$$AntennaSettingsImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AntennaSettingsImpl extends _AntennaSettings {
-  const _$AntennaSettingsImpl(
+class _$_AntennaSettings extends _AntennaSettings {
+  const _$_AntennaSettings(
       {this.name = "",
       this.src = AntennaSource.all,
       this.userListId,
@@ -301,7 +301,7 @@ class _$AntennaSettingsImpl extends _AntennaSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AntennaSettingsImpl &&
+            other is _$_AntennaSettings &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.src, src) || other.src == src) &&
             (identical(other.userListId, userListId) ||
@@ -339,9 +339,8 @@ class _$AntennaSettingsImpl extends _AntennaSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AntennaSettingsImplCopyWith<_$AntennaSettingsImpl> get copyWith =>
-      __$$AntennaSettingsImplCopyWithImpl<_$AntennaSettingsImpl>(
-          this, _$identity);
+  _$$_AntennaSettingsCopyWith<_$_AntennaSettings> get copyWith =>
+      __$$_AntennaSettingsCopyWithImpl<_$_AntennaSettings>(this, _$identity);
 }
 
 abstract class _AntennaSettings extends AntennaSettings {
@@ -356,7 +355,7 @@ abstract class _AntennaSettings extends AntennaSettings {
       final bool withReplies,
       final bool withFile,
       final bool notify,
-      final bool localOnly}) = _$AntennaSettingsImpl;
+      final bool localOnly}) = _$_AntennaSettings;
   const _AntennaSettings._() : super._();
 
   @override
@@ -383,6 +382,6 @@ abstract class _AntennaSettings extends AntennaSettings {
   bool get localOnly;
   @override
   @JsonKey(ignore: true)
-  _$$AntennaSettingsImplCopyWith<_$AntennaSettingsImpl> get copyWith =>
+  _$$_AntennaSettingsCopyWith<_$_AntennaSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }

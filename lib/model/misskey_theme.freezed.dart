@@ -98,11 +98,11 @@ class _$MisskeyThemeCopyWithImpl<$Res, $Val extends MisskeyTheme>
 }
 
 /// @nodoc
-abstract class _$$MisskeyThemeImplCopyWith<$Res>
+abstract class _$$_MisskeyThemeCopyWith<$Res>
     implements $MisskeyThemeCopyWith<$Res> {
-  factory _$$MisskeyThemeImplCopyWith(
-          _$MisskeyThemeImpl value, $Res Function(_$MisskeyThemeImpl) then) =
-      __$$MisskeyThemeImplCopyWithImpl<$Res>;
+  factory _$$_MisskeyThemeCopyWith(
+          _$_MisskeyTheme value, $Res Function(_$_MisskeyTheme) then) =
+      __$$_MisskeyThemeCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -115,11 +115,11 @@ abstract class _$$MisskeyThemeImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$MisskeyThemeImplCopyWithImpl<$Res>
-    extends _$MisskeyThemeCopyWithImpl<$Res, _$MisskeyThemeImpl>
-    implements _$$MisskeyThemeImplCopyWith<$Res> {
-  __$$MisskeyThemeImplCopyWithImpl(
-      _$MisskeyThemeImpl _value, $Res Function(_$MisskeyThemeImpl) _then)
+class __$$_MisskeyThemeCopyWithImpl<$Res>
+    extends _$MisskeyThemeCopyWithImpl<$Res, _$_MisskeyTheme>
+    implements _$$_MisskeyThemeCopyWith<$Res> {
+  __$$_MisskeyThemeCopyWithImpl(
+      _$_MisskeyTheme _value, $Res Function(_$_MisskeyTheme) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -132,7 +132,7 @@ class __$$MisskeyThemeImplCopyWithImpl<$Res>
     Object? base = freezed,
     Object? props = null,
   }) {
-    return _then(_$MisskeyThemeImpl(
+    return _then(_$_MisskeyTheme(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -163,8 +163,8 @@ class __$$MisskeyThemeImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MisskeyThemeImpl implements _MisskeyTheme {
-  const _$MisskeyThemeImpl(
+class _$_MisskeyTheme implements _MisskeyTheme {
+  const _$_MisskeyTheme(
       {required this.id,
       required this.name,
       this.author,
@@ -173,8 +173,8 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
       required final Map<String, String> props})
       : _props = props;
 
-  factory _$MisskeyThemeImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MisskeyThemeImplFromJson(json);
+  factory _$_MisskeyTheme.fromJson(Map<String, dynamic> json) =>
+      _$$_MisskeyThemeFromJson(json);
 
   @override
   final String id;
@@ -203,7 +203,7 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MisskeyThemeImpl &&
+            other is _$_MisskeyTheme &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.author, author) || other.author == author) &&
@@ -220,12 +220,12 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MisskeyThemeImplCopyWith<_$MisskeyThemeImpl> get copyWith =>
-      __$$MisskeyThemeImplCopyWithImpl<_$MisskeyThemeImpl>(this, _$identity);
+  _$$_MisskeyThemeCopyWith<_$_MisskeyTheme> get copyWith =>
+      __$$_MisskeyThemeCopyWithImpl<_$_MisskeyTheme>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MisskeyThemeImplToJson(
+    return _$$_MisskeyThemeToJson(
       this,
     );
   }
@@ -238,10 +238,10 @@ abstract class _MisskeyTheme implements MisskeyTheme {
       final String? author,
       final String? desc,
       final String? base,
-      required final Map<String, String> props}) = _$MisskeyThemeImpl;
+      required final Map<String, String> props}) = _$_MisskeyTheme;
 
   factory _MisskeyTheme.fromJson(Map<String, dynamic> json) =
-      _$MisskeyThemeImpl.fromJson;
+      _$_MisskeyTheme.fromJson;
 
   @override
   String get id;
@@ -257,6 +257,6 @@ abstract class _MisskeyTheme implements MisskeyTheme {
   Map<String, String> get props;
   @override
   @JsonKey(ignore: true)
-  _$$MisskeyThemeImplCopyWith<_$MisskeyThemeImpl> get copyWith =>
+  _$$_MisskeyThemeCopyWith<_$_MisskeyTheme> get copyWith =>
       throw _privateConstructorUsedError;
 }

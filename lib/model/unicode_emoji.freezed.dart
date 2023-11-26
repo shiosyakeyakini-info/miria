@@ -80,22 +80,22 @@ class _$UnicodeEmojiCopyWithImpl<$Res, $Val extends UnicodeEmoji>
 }
 
 /// @nodoc
-abstract class _$$UnicodeEmojiImplCopyWith<$Res>
+abstract class _$$_UnicodeEmojiCopyWith<$Res>
     implements $UnicodeEmojiCopyWith<$Res> {
-  factory _$$UnicodeEmojiImplCopyWith(
-          _$UnicodeEmojiImpl value, $Res Function(_$UnicodeEmojiImpl) then) =
-      __$$UnicodeEmojiImplCopyWithImpl<$Res>;
+  factory _$$_UnicodeEmojiCopyWith(
+          _$_UnicodeEmoji value, $Res Function(_$_UnicodeEmoji) then) =
+      __$$_UnicodeEmojiCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String category, String char, String name, List<String> keywords});
 }
 
 /// @nodoc
-class __$$UnicodeEmojiImplCopyWithImpl<$Res>
-    extends _$UnicodeEmojiCopyWithImpl<$Res, _$UnicodeEmojiImpl>
-    implements _$$UnicodeEmojiImplCopyWith<$Res> {
-  __$$UnicodeEmojiImplCopyWithImpl(
-      _$UnicodeEmojiImpl _value, $Res Function(_$UnicodeEmojiImpl) _then)
+class __$$_UnicodeEmojiCopyWithImpl<$Res>
+    extends _$UnicodeEmojiCopyWithImpl<$Res, _$_UnicodeEmoji>
+    implements _$$_UnicodeEmojiCopyWith<$Res> {
+  __$$_UnicodeEmojiCopyWithImpl(
+      _$_UnicodeEmoji _value, $Res Function(_$_UnicodeEmoji) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -106,7 +106,7 @@ class __$$UnicodeEmojiImplCopyWithImpl<$Res>
     Object? name = null,
     Object? keywords = null,
   }) {
-    return _then(_$UnicodeEmojiImpl(
+    return _then(_$_UnicodeEmoji(
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -129,16 +129,16 @@ class __$$UnicodeEmojiImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UnicodeEmojiImpl implements _UnicodeEmoji {
-  const _$UnicodeEmojiImpl(
+class _$_UnicodeEmoji implements _UnicodeEmoji {
+  const _$_UnicodeEmoji(
       {required this.category,
       required this.char,
       required this.name,
       required final List<String> keywords})
       : _keywords = keywords;
 
-  factory _$UnicodeEmojiImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UnicodeEmojiImplFromJson(json);
+  factory _$_UnicodeEmoji.fromJson(Map<String, dynamic> json) =>
+      _$$_UnicodeEmojiFromJson(json);
 
   @override
   final String category;
@@ -163,7 +163,7 @@ class _$UnicodeEmojiImpl implements _UnicodeEmoji {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UnicodeEmojiImpl &&
+            other is _$_UnicodeEmoji &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.char, char) || other.char == char) &&
@@ -179,12 +179,12 @@ class _$UnicodeEmojiImpl implements _UnicodeEmoji {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UnicodeEmojiImplCopyWith<_$UnicodeEmojiImpl> get copyWith =>
-      __$$UnicodeEmojiImplCopyWithImpl<_$UnicodeEmojiImpl>(this, _$identity);
+  _$$_UnicodeEmojiCopyWith<_$_UnicodeEmoji> get copyWith =>
+      __$$_UnicodeEmojiCopyWithImpl<_$_UnicodeEmoji>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UnicodeEmojiImplToJson(
+    return _$$_UnicodeEmojiToJson(
       this,
     );
   }
@@ -195,10 +195,10 @@ abstract class _UnicodeEmoji implements UnicodeEmoji {
       {required final String category,
       required final String char,
       required final String name,
-      required final List<String> keywords}) = _$UnicodeEmojiImpl;
+      required final List<String> keywords}) = _$_UnicodeEmoji;
 
   factory _UnicodeEmoji.fromJson(Map<String, dynamic> json) =
-      _$UnicodeEmojiImpl.fromJson;
+      _$_UnicodeEmoji.fromJson;
 
   @override
   String get category;
@@ -210,6 +210,6 @@ abstract class _UnicodeEmoji implements UnicodeEmoji {
   List<String> get keywords;
   @override
   @JsonKey(ignore: true)
-  _$$UnicodeEmojiImplCopyWith<_$UnicodeEmojiImpl> get copyWith =>
+  _$$_UnicodeEmojiCopyWith<_$_UnicodeEmoji> get copyWith =>
       throw _privateConstructorUsedError;
 }

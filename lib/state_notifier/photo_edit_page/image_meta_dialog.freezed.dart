@@ -68,22 +68,21 @@ class _$ImageMetaCopyWithImpl<$Res, $Val extends ImageMeta>
 }
 
 /// @nodoc
-abstract class _$$ImageMetaImplCopyWith<$Res>
-    implements $ImageMetaCopyWith<$Res> {
-  factory _$$ImageMetaImplCopyWith(
-          _$ImageMetaImpl value, $Res Function(_$ImageMetaImpl) then) =
-      __$$ImageMetaImplCopyWithImpl<$Res>;
+abstract class _$$_ImageMetaCopyWith<$Res> implements $ImageMetaCopyWith<$Res> {
+  factory _$$_ImageMetaCopyWith(
+          _$_ImageMeta value, $Res Function(_$_ImageMeta) then) =
+      __$$_ImageMetaCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String fileName, bool isNsfw, String caption});
 }
 
 /// @nodoc
-class __$$ImageMetaImplCopyWithImpl<$Res>
-    extends _$ImageMetaCopyWithImpl<$Res, _$ImageMetaImpl>
-    implements _$$ImageMetaImplCopyWith<$Res> {
-  __$$ImageMetaImplCopyWithImpl(
-      _$ImageMetaImpl _value, $Res Function(_$ImageMetaImpl) _then)
+class __$$_ImageMetaCopyWithImpl<$Res>
+    extends _$ImageMetaCopyWithImpl<$Res, _$_ImageMeta>
+    implements _$$_ImageMetaCopyWith<$Res> {
+  __$$_ImageMetaCopyWithImpl(
+      _$_ImageMeta _value, $Res Function(_$_ImageMeta) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -93,7 +92,7 @@ class __$$ImageMetaImplCopyWithImpl<$Res>
     Object? isNsfw = null,
     Object? caption = null,
   }) {
-    return _then(_$ImageMetaImpl(
+    return _then(_$_ImageMeta(
       fileName: null == fileName
           ? _value.fileName
           : fileName // ignore: cast_nullable_to_non_nullable
@@ -112,8 +111,8 @@ class __$$ImageMetaImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ImageMetaImpl implements _ImageMeta {
-  const _$ImageMetaImpl(
+class _$_ImageMeta implements _ImageMeta {
+  const _$_ImageMeta(
       {required this.fileName, required this.isNsfw, required this.caption});
 
   @override
@@ -132,7 +131,7 @@ class _$ImageMetaImpl implements _ImageMeta {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ImageMetaImpl &&
+            other is _$_ImageMeta &&
             (identical(other.fileName, fileName) ||
                 other.fileName == fileName) &&
             (identical(other.isNsfw, isNsfw) || other.isNsfw == isNsfw) &&
@@ -145,15 +144,15 @@ class _$ImageMetaImpl implements _ImageMeta {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ImageMetaImplCopyWith<_$ImageMetaImpl> get copyWith =>
-      __$$ImageMetaImplCopyWithImpl<_$ImageMetaImpl>(this, _$identity);
+  _$$_ImageMetaCopyWith<_$_ImageMeta> get copyWith =>
+      __$$_ImageMetaCopyWithImpl<_$_ImageMeta>(this, _$identity);
 }
 
 abstract class _ImageMeta implements ImageMeta {
   const factory _ImageMeta(
       {required final String fileName,
       required final bool isNsfw,
-      required final String caption}) = _$ImageMetaImpl;
+      required final String caption}) = _$_ImageMeta;
 
   @override
   String get fileName;
@@ -163,6 +162,6 @@ abstract class _ImageMeta implements ImageMeta {
   String get caption;
   @override
   @JsonKey(ignore: true)
-  _$$ImageMetaImplCopyWith<_$ImageMetaImpl> get copyWith =>
+  _$$_ImageMetaCopyWith<_$_ImageMeta> get copyWith =>
       throw _privateConstructorUsedError;
 }

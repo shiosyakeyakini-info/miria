@@ -6,9 +6,8 @@ part of 'general_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
-        Map<String, dynamic> json) =>
-    _$GeneralSettingsImpl(
+_$_GeneralSettings _$$_GeneralSettingsFromJson(Map<String, dynamic> json) =>
+    _$_GeneralSettings(
       lightColorThemeId: json['lightColorThemeId'] as String? ?? "",
       darkColorThemeId: json['darkColorThemeId'] as String? ?? "",
       themeColorSystem: $enumDecodeNullable(
@@ -38,8 +37,7 @@ _$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
       fantasyFontName: json['fantasyFontName'] as String? ?? "",
     );
 
-Map<String, dynamic> _$$GeneralSettingsImplToJson(
-        _$GeneralSettingsImpl instance) =>
+Map<String, dynamic> _$$_GeneralSettingsToJson(_$_GeneralSettings instance) =>
     <String, dynamic>{
       'lightColorThemeId': instance.lightColorThemeId,
       'darkColorThemeId': instance.darkColorThemeId,

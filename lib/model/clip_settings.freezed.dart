@@ -69,22 +69,22 @@ class _$ClipSettingsCopyWithImpl<$Res, $Val extends ClipSettings>
 }
 
 /// @nodoc
-abstract class _$$ClipSettingsImplCopyWith<$Res>
+abstract class _$$_ClipSettingsCopyWith<$Res>
     implements $ClipSettingsCopyWith<$Res> {
-  factory _$$ClipSettingsImplCopyWith(
-          _$ClipSettingsImpl value, $Res Function(_$ClipSettingsImpl) then) =
-      __$$ClipSettingsImplCopyWithImpl<$Res>;
+  factory _$$_ClipSettingsCopyWith(
+          _$_ClipSettings value, $Res Function(_$_ClipSettings) then) =
+      __$$_ClipSettingsCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String name, String? description, bool isPublic});
 }
 
 /// @nodoc
-class __$$ClipSettingsImplCopyWithImpl<$Res>
-    extends _$ClipSettingsCopyWithImpl<$Res, _$ClipSettingsImpl>
-    implements _$$ClipSettingsImplCopyWith<$Res> {
-  __$$ClipSettingsImplCopyWithImpl(
-      _$ClipSettingsImpl _value, $Res Function(_$ClipSettingsImpl) _then)
+class __$$_ClipSettingsCopyWithImpl<$Res>
+    extends _$ClipSettingsCopyWithImpl<$Res, _$_ClipSettings>
+    implements _$$_ClipSettingsCopyWith<$Res> {
+  __$$_ClipSettingsCopyWithImpl(
+      _$_ClipSettings _value, $Res Function(_$_ClipSettings) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,7 +94,7 @@ class __$$ClipSettingsImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? isPublic = null,
   }) {
-    return _then(_$ClipSettingsImpl(
+    return _then(_$_ClipSettings(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -113,8 +113,8 @@ class __$$ClipSettingsImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ClipSettingsImpl extends _ClipSettings {
-  const _$ClipSettingsImpl(
+class _$_ClipSettings extends _ClipSettings {
+  const _$_ClipSettings(
       {this.name = "", this.description, this.isPublic = false})
       : super._();
 
@@ -136,7 +136,7 @@ class _$ClipSettingsImpl extends _ClipSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ClipSettingsImpl &&
+            other is _$_ClipSettings &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -150,15 +150,15 @@ class _$ClipSettingsImpl extends _ClipSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ClipSettingsImplCopyWith<_$ClipSettingsImpl> get copyWith =>
-      __$$ClipSettingsImplCopyWithImpl<_$ClipSettingsImpl>(this, _$identity);
+  _$$_ClipSettingsCopyWith<_$_ClipSettings> get copyWith =>
+      __$$_ClipSettingsCopyWithImpl<_$_ClipSettings>(this, _$identity);
 }
 
 abstract class _ClipSettings extends ClipSettings {
   const factory _ClipSettings(
       {final String name,
       final String? description,
-      final bool isPublic}) = _$ClipSettingsImpl;
+      final bool isPublic}) = _$_ClipSettings;
   const _ClipSettings._() : super._();
 
   @override
@@ -169,6 +169,6 @@ abstract class _ClipSettings extends ClipSettings {
   bool get isPublic;
   @override
   @JsonKey(ignore: true)
-  _$$ClipSettingsImplCopyWith<_$ClipSettingsImpl> get copyWith =>
+  _$$_ClipSettingsCopyWith<_$_ClipSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -6,13 +6,12 @@ part of 'tab_icon.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TabIconImpl _$$TabIconImplFromJson(Map<String, dynamic> json) =>
-    _$TabIconImpl(
+_$_TabIcon _$$_TabIconFromJson(Map<String, dynamic> json) => _$_TabIcon(
       codePoint: json['codePoint'] as int?,
       customEmojiName: json['customEmojiName'] as String?,
     );
 
-Map<String, dynamic> _$$TabIconImplToJson(_$TabIconImpl instance) =>
+Map<String, dynamic> _$$_TabIconToJson(_$_TabIcon instance) =>
     <String, dynamic>{
       'codePoint': instance.codePoint,
       'customEmojiName': instance.customEmojiName,

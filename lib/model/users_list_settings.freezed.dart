@@ -63,22 +63,22 @@ class _$UsersListSettingsCopyWithImpl<$Res, $Val extends UsersListSettings>
 }
 
 /// @nodoc
-abstract class _$$UsersListSettingsImplCopyWith<$Res>
+abstract class _$$_UsersListSettingsCopyWith<$Res>
     implements $UsersListSettingsCopyWith<$Res> {
-  factory _$$UsersListSettingsImplCopyWith(_$UsersListSettingsImpl value,
-          $Res Function(_$UsersListSettingsImpl) then) =
-      __$$UsersListSettingsImplCopyWithImpl<$Res>;
+  factory _$$_UsersListSettingsCopyWith(_$_UsersListSettings value,
+          $Res Function(_$_UsersListSettings) then) =
+      __$$_UsersListSettingsCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String name, bool isPublic});
 }
 
 /// @nodoc
-class __$$UsersListSettingsImplCopyWithImpl<$Res>
-    extends _$UsersListSettingsCopyWithImpl<$Res, _$UsersListSettingsImpl>
-    implements _$$UsersListSettingsImplCopyWith<$Res> {
-  __$$UsersListSettingsImplCopyWithImpl(_$UsersListSettingsImpl _value,
-      $Res Function(_$UsersListSettingsImpl) _then)
+class __$$_UsersListSettingsCopyWithImpl<$Res>
+    extends _$UsersListSettingsCopyWithImpl<$Res, _$_UsersListSettings>
+    implements _$$_UsersListSettingsCopyWith<$Res> {
+  __$$_UsersListSettingsCopyWithImpl(
+      _$_UsersListSettings _value, $Res Function(_$_UsersListSettings) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ class __$$UsersListSettingsImplCopyWithImpl<$Res>
     Object? name = null,
     Object? isPublic = null,
   }) {
-    return _then(_$UsersListSettingsImpl(
+    return _then(_$_UsersListSettings(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -102,8 +102,8 @@ class __$$UsersListSettingsImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UsersListSettingsImpl extends _UsersListSettings {
-  const _$UsersListSettingsImpl({this.name = "", this.isPublic = false})
+class _$_UsersListSettings extends _UsersListSettings {
+  const _$_UsersListSettings({this.name = "", this.isPublic = false})
       : super._();
 
   @override
@@ -122,7 +122,7 @@ class _$UsersListSettingsImpl extends _UsersListSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UsersListSettingsImpl &&
+            other is _$_UsersListSettings &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.isPublic, isPublic) ||
                 other.isPublic == isPublic));
@@ -134,14 +134,14 @@ class _$UsersListSettingsImpl extends _UsersListSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UsersListSettingsImplCopyWith<_$UsersListSettingsImpl> get copyWith =>
-      __$$UsersListSettingsImplCopyWithImpl<_$UsersListSettingsImpl>(
+  _$$_UsersListSettingsCopyWith<_$_UsersListSettings> get copyWith =>
+      __$$_UsersListSettingsCopyWithImpl<_$_UsersListSettings>(
           this, _$identity);
 }
 
 abstract class _UsersListSettings extends UsersListSettings {
   const factory _UsersListSettings({final String name, final bool isPublic}) =
-      _$UsersListSettingsImpl;
+      _$_UsersListSettings;
   const _UsersListSettings._() : super._();
 
   @override
@@ -150,6 +150,6 @@ abstract class _UsersListSettings extends UsersListSettings {
   bool get isPublic;
   @override
   @JsonKey(ignore: true)
-  _$$UsersListSettingsImplCopyWith<_$UsersListSettingsImpl> get copyWith =>
+  _$$_UsersListSettingsCopyWith<_$_UsersListSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }

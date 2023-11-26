@@ -6,9 +6,8 @@ part of 'exported_setting.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ExportedSettingImpl _$$ExportedSettingImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ExportedSettingImpl(
+_$_ExportedSetting _$$_ExportedSettingFromJson(Map<String, dynamic> json) =>
+    _$_ExportedSetting(
       accountSettings: (json['accountSettings'] as List<dynamic>?)
               ?.map((e) => AccountSettings.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -21,8 +20,7 @@ _$ExportedSettingImpl _$$ExportedSettingImplFromJson(
           const [],
     );
 
-Map<String, dynamic> _$$ExportedSettingImplToJson(
-        _$ExportedSettingImpl instance) =>
+Map<String, dynamic> _$$_ExportedSettingToJson(_$_ExportedSetting instance) =>
     <String, dynamic>{
       'accountSettings':
           instance.accountSettings.map((e) => e.toJson()).toList(),

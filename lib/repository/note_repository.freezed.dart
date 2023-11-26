@@ -93,11 +93,11 @@ class _$NoteStatusCopyWithImpl<$Res, $Val extends NoteStatus>
 }
 
 /// @nodoc
-abstract class _$$NoteStatusImplCopyWith<$Res>
+abstract class _$$_NoteStatusCopyWith<$Res>
     implements $NoteStatusCopyWith<$Res> {
-  factory _$$NoteStatusImplCopyWith(
-          _$NoteStatusImpl value, $Res Function(_$NoteStatusImpl) then) =
-      __$$NoteStatusImplCopyWithImpl<$Res>;
+  factory _$$_NoteStatusCopyWith(
+          _$_NoteStatus value, $Res Function(_$_NoteStatus) then) =
+      __$$_NoteStatusCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -110,11 +110,11 @@ abstract class _$$NoteStatusImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$NoteStatusImplCopyWithImpl<$Res>
-    extends _$NoteStatusCopyWithImpl<$Res, _$NoteStatusImpl>
-    implements _$$NoteStatusImplCopyWith<$Res> {
-  __$$NoteStatusImplCopyWithImpl(
-      _$NoteStatusImpl _value, $Res Function(_$NoteStatusImpl) _then)
+class __$$_NoteStatusCopyWithImpl<$Res>
+    extends _$NoteStatusCopyWithImpl<$Res, _$_NoteStatus>
+    implements _$$_NoteStatusCopyWith<$Res> {
+  __$$_NoteStatusCopyWithImpl(
+      _$_NoteStatus _value, $Res Function(_$_NoteStatus) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +127,7 @@ class __$$NoteStatusImplCopyWithImpl<$Res>
     Object? isIncludeMuteWord = null,
     Object? isMuteOpened = null,
   }) {
-    return _then(_$NoteStatusImpl(
+    return _then(_$_NoteStatus(
       isCwOpened: null == isCwOpened
           ? _value.isCwOpened
           : isCwOpened // ignore: cast_nullable_to_non_nullable
@@ -158,8 +158,8 @@ class __$$NoteStatusImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$NoteStatusImpl with DiagnosticableTreeMixin implements _NoteStatus {
-  const _$NoteStatusImpl(
+class _$_NoteStatus with DiagnosticableTreeMixin implements _NoteStatus {
+  const _$_NoteStatus(
       {required this.isCwOpened,
       required this.isLongVisible,
       required this.isReactionedRenote,
@@ -203,7 +203,7 @@ class _$NoteStatusImpl with DiagnosticableTreeMixin implements _NoteStatus {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$NoteStatusImpl &&
+            other is _$_NoteStatus &&
             (identical(other.isCwOpened, isCwOpened) ||
                 other.isCwOpened == isCwOpened) &&
             (identical(other.isLongVisible, isLongVisible) ||
@@ -232,8 +232,8 @@ class _$NoteStatusImpl with DiagnosticableTreeMixin implements _NoteStatus {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$NoteStatusImplCopyWith<_$NoteStatusImpl> get copyWith =>
-      __$$NoteStatusImplCopyWithImpl<_$NoteStatusImpl>(this, _$identity);
+  _$$_NoteStatusCopyWith<_$_NoteStatus> get copyWith =>
+      __$$_NoteStatusCopyWithImpl<_$_NoteStatus>(this, _$identity);
 }
 
 abstract class _NoteStatus implements NoteStatus {
@@ -243,7 +243,7 @@ abstract class _NoteStatus implements NoteStatus {
       required final bool isReactionedRenote,
       required final bool isLongVisibleInitialized,
       required final bool isIncludeMuteWord,
-      required final bool isMuteOpened}) = _$NoteStatusImpl;
+      required final bool isMuteOpened}) = _$_NoteStatus;
 
   @override
   bool get isCwOpened;
@@ -259,6 +259,6 @@ abstract class _NoteStatus implements NoteStatus {
   bool get isMuteOpened;
   @override
   @JsonKey(ignore: true)
-  _$$NoteStatusImplCopyWith<_$NoteStatusImpl> get copyWith =>
+  _$$_NoteStatusCopyWith<_$_NoteStatus> get copyWith =>
       throw _privateConstructorUsedError;
 }

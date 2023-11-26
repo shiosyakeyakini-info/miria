@@ -6,13 +6,12 @@ part of 'acct.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AcctImpl _$$AcctImplFromJson(Map<String, dynamic> json) => _$AcctImpl(
+_$_Acct _$$_AcctFromJson(Map<String, dynamic> json) => _$_Acct(
       host: json['host'] as String,
       username: json['username'] as String,
     );
 
-Map<String, dynamic> _$$AcctImplToJson(_$AcctImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$_AcctToJson(_$_Acct instance) => <String, dynamic>{
       'host': instance.host,
       'username': instance.username,
     };

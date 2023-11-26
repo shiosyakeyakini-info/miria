@@ -203,11 +203,11 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
 }
 
 /// @nodoc
-abstract class _$$GeneralSettingsImplCopyWith<$Res>
+abstract class _$$_GeneralSettingsCopyWith<$Res>
     implements $GeneralSettingsCopyWith<$Res> {
-  factory _$$GeneralSettingsImplCopyWith(_$GeneralSettingsImpl value,
-          $Res Function(_$GeneralSettingsImpl) then) =
-      __$$GeneralSettingsImplCopyWithImpl<$Res>;
+  factory _$$_GeneralSettingsCopyWith(
+          _$_GeneralSettings value, $Res Function(_$_GeneralSettings) then) =
+      __$$_GeneralSettingsCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -231,11 +231,11 @@ abstract class _$$GeneralSettingsImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$GeneralSettingsImplCopyWithImpl<$Res>
-    extends _$GeneralSettingsCopyWithImpl<$Res, _$GeneralSettingsImpl>
-    implements _$$GeneralSettingsImplCopyWith<$Res> {
-  __$$GeneralSettingsImplCopyWithImpl(
-      _$GeneralSettingsImpl _value, $Res Function(_$GeneralSettingsImpl) _then)
+class __$$_GeneralSettingsCopyWithImpl<$Res>
+    extends _$GeneralSettingsCopyWithImpl<$Res, _$_GeneralSettings>
+    implements _$$_GeneralSettingsCopyWith<$Res> {
+  __$$_GeneralSettingsCopyWithImpl(
+      _$_GeneralSettings _value, $Res Function(_$_GeneralSettings) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -259,7 +259,7 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
     Object? cursiveFontName = null,
     Object? fantasyFontName = null,
   }) {
-    return _then(_$GeneralSettingsImpl(
+    return _then(_$_GeneralSettings(
       lightColorThemeId: null == lightColorThemeId
           ? _value.lightColorThemeId
           : lightColorThemeId // ignore: cast_nullable_to_non_nullable
@@ -334,8 +334,8 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$GeneralSettingsImpl implements _GeneralSettings {
-  const _$GeneralSettingsImpl(
+class _$_GeneralSettings implements _GeneralSettings {
+  const _$_GeneralSettings(
       {this.lightColorThemeId = "",
       this.darkColorThemeId = "",
       this.themeColorSystem = ThemeColorSystem.system,
@@ -354,8 +354,8 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
       this.cursiveFontName = "",
       this.fantasyFontName = ""});
 
-  factory _$GeneralSettingsImpl.fromJson(Map<String, dynamic> json) =>
-      _$$GeneralSettingsImplFromJson(json);
+  factory _$_GeneralSettings.fromJson(Map<String, dynamic> json) =>
+      _$$_GeneralSettingsFromJson(json);
 
   @override
   @JsonKey()
@@ -446,7 +446,7 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GeneralSettingsImpl &&
+            other is _$_GeneralSettings &&
             (identical(other.lightColorThemeId, lightColorThemeId) ||
                 other.lightColorThemeId == lightColorThemeId) &&
             (identical(other.darkColorThemeId, darkColorThemeId) ||
@@ -510,13 +510,12 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>
-      __$$GeneralSettingsImplCopyWithImpl<_$GeneralSettingsImpl>(
-          this, _$identity);
+  _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>
+      __$$_GeneralSettingsCopyWithImpl<_$_GeneralSettings>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GeneralSettingsImplToJson(
+    return _$$_GeneralSettingsToJson(
       this,
     );
   }
@@ -540,10 +539,10 @@ abstract class _GeneralSettings implements GeneralSettings {
       final String serifFontName,
       final String monospaceFontName,
       final String cursiveFontName,
-      final String fantasyFontName}) = _$GeneralSettingsImpl;
+      final String fantasyFontName}) = _$_GeneralSettings;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
-      _$GeneralSettingsImpl.fromJson;
+      _$_GeneralSettings.fromJson;
 
   @override
   String get lightColorThemeId;
@@ -609,6 +608,6 @@ abstract class _GeneralSettings implements GeneralSettings {
   String get fantasyFontName;
   @override
   @JsonKey(ignore: true)
-  _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>
+  _$$_GeneralSettingsCopyWith<_$_GeneralSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }

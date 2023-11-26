@@ -88,11 +88,11 @@ class _$ExportedSettingCopyWithImpl<$Res, $Val extends ExportedSetting>
 }
 
 /// @nodoc
-abstract class _$$ExportedSettingImplCopyWith<$Res>
+abstract class _$$_ExportedSettingCopyWith<$Res>
     implements $ExportedSettingCopyWith<$Res> {
-  factory _$$ExportedSettingImplCopyWith(_$ExportedSettingImpl value,
-          $Res Function(_$ExportedSettingImpl) then) =
-      __$$ExportedSettingImplCopyWithImpl<$Res>;
+  factory _$$_ExportedSettingCopyWith(
+          _$_ExportedSetting value, $Res Function(_$_ExportedSetting) then) =
+      __$$_ExportedSettingCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -105,11 +105,11 @@ abstract class _$$ExportedSettingImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ExportedSettingImplCopyWithImpl<$Res>
-    extends _$ExportedSettingCopyWithImpl<$Res, _$ExportedSettingImpl>
-    implements _$$ExportedSettingImplCopyWith<$Res> {
-  __$$ExportedSettingImplCopyWithImpl(
-      _$ExportedSettingImpl _value, $Res Function(_$ExportedSettingImpl) _then)
+class __$$_ExportedSettingCopyWithImpl<$Res>
+    extends _$ExportedSettingCopyWithImpl<$Res, _$_ExportedSetting>
+    implements _$$_ExportedSettingCopyWith<$Res> {
+  __$$_ExportedSettingCopyWithImpl(
+      _$_ExportedSetting _value, $Res Function(_$_ExportedSetting) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -119,7 +119,7 @@ class __$$ExportedSettingImplCopyWithImpl<$Res>
     Object? generalSettings = null,
     Object? tabSettings = null,
   }) {
-    return _then(_$ExportedSettingImpl(
+    return _then(_$_ExportedSetting(
       accountSettings: null == accountSettings
           ? _value._accountSettings
           : accountSettings // ignore: cast_nullable_to_non_nullable
@@ -138,16 +138,16 @@ class __$$ExportedSettingImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ExportedSettingImpl implements _ExportedSetting {
-  const _$ExportedSettingImpl(
+class _$_ExportedSetting implements _ExportedSetting {
+  const _$_ExportedSetting(
       {final List<AccountSettings> accountSettings = const [],
       required this.generalSettings,
       final List<TabSetting> tabSettings = const []})
       : _accountSettings = accountSettings,
         _tabSettings = tabSettings;
 
-  factory _$ExportedSettingImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ExportedSettingImplFromJson(json);
+  factory _$_ExportedSetting.fromJson(Map<String, dynamic> json) =>
+      _$$_ExportedSettingFromJson(json);
 
   final List<AccountSettings> _accountSettings;
   @override
@@ -178,7 +178,7 @@ class _$ExportedSettingImpl implements _ExportedSetting {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ExportedSettingImpl &&
+            other is _$_ExportedSetting &&
             const DeepCollectionEquality()
                 .equals(other._accountSettings, _accountSettings) &&
             (identical(other.generalSettings, generalSettings) ||
@@ -198,13 +198,12 @@ class _$ExportedSettingImpl implements _ExportedSetting {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ExportedSettingImplCopyWith<_$ExportedSettingImpl> get copyWith =>
-      __$$ExportedSettingImplCopyWithImpl<_$ExportedSettingImpl>(
-          this, _$identity);
+  _$$_ExportedSettingCopyWith<_$_ExportedSetting> get copyWith =>
+      __$$_ExportedSettingCopyWithImpl<_$_ExportedSetting>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ExportedSettingImplToJson(
+    return _$$_ExportedSettingToJson(
       this,
     );
   }
@@ -214,10 +213,10 @@ abstract class _ExportedSetting implements ExportedSetting {
   const factory _ExportedSetting(
       {final List<AccountSettings> accountSettings,
       required final GeneralSettings generalSettings,
-      final List<TabSetting> tabSettings}) = _$ExportedSettingImpl;
+      final List<TabSetting> tabSettings}) = _$_ExportedSetting;
 
   factory _ExportedSetting.fromJson(Map<String, dynamic> json) =
-      _$ExportedSettingImpl.fromJson;
+      _$_ExportedSetting.fromJson;
 
   @override
   List<AccountSettings> get accountSettings;
@@ -227,6 +226,6 @@ abstract class _ExportedSetting implements ExportedSetting {
   List<TabSetting> get tabSettings;
   @override
   @JsonKey(ignore: true)
-  _$$ExportedSettingImplCopyWith<_$ExportedSettingImpl> get copyWith =>
+  _$$_ExportedSettingCopyWith<_$_ExportedSetting> get copyWith =>
       throw _privateConstructorUsedError;
 }
