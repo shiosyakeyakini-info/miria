@@ -40,6 +40,7 @@ class NoteModalSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final accounts = ref.watch(accountRepositoryProvider);
     return ListView(
       children: [
         ListTile(
@@ -115,14 +116,17 @@ class NoteModalSheet extends ConsumerWidget {
               Navigator.of(context).pop();
             },
           ),
-        ListTile(
-          leading: const Icon(Icons.open_in_new),
-          title: const Text("別のアカウントで開く"),
-          onTap: () => ref
-              .read(misskeyNoteNotifierProvider(account).notifier)
-              .openNoteInOtherAccount(context, targetNote)
-              .expectFailure(context),
-        ),
+        // ノートが連合なしのときは現在のアカウントと同じサーバーのアカウントが複数ある場合のみ表示する
+        if (!targetNote.localOnly ||
+            accounts.where((e) => e.host == account.host).length > 1)
+          ListTile(
+            leading: const Icon(Icons.open_in_new),
+            title: const Text("別のアカウントで開く"),
+            onTap: () => ref
+                .read(misskeyNoteNotifierProvider(account).notifier)
+                .openNoteInOtherAccount(context, targetNote)
+                .expectFailure(context),
+          ),
         ListTile(
           leading: const Icon(Icons.share),
           title: const Text("ノートを共有"),

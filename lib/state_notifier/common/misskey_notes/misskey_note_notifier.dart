@@ -144,7 +144,9 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
   Future<void> openNoteInOtherAccount(BuildContext context, Note note) async {
     final selectedAccount = await showDialog<Account?>(
       context: context,
-      builder: (context) => const AccountSelectDialog(),
+      builder: (context) => AccountSelectDialog(
+        host: note.localOnly ? _account.host : null,
+      ),
     );
     if (selectedAccount == null) return;
     if (!context.mounted) return;
