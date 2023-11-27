@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miria/view/common/error_detail.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorNotification extends StatelessWidget {
   final Object? error;
@@ -26,7 +27,7 @@ class ErrorNotification extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "エラーが発生しました",
+                S.of(context).thrownError,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               ErrorDetail(

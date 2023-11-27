@@ -41,7 +41,7 @@ class MyApp extends ConsumerWidget {
         ],
         scrollBehavior: AppScrollBehavior(),
         localizationsDelegates: const [
-          AppLocalizations.delegate,
+          S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

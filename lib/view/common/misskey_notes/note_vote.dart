@@ -69,7 +69,8 @@ class NoteVoteState extends ConsumerState<NoteVote> {
     final dialogValue = await showDialog<bool>(
         context: context,
         builder: (context2) => SimpleConfirmDialog(
-              message: S.of(context).confirmPoll(widget.poll.choices[choice].text}),
+              message:
+                  S.of(context).confirmPoll(widget.poll.choices[choice].text),
               primary: S.of(context).doVoting,
               secondary: S.of(context).cancel,
               isMfm: true,
@@ -180,7 +181,8 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                             )),
                             if (isOpened)
                               TextSpan(
-                                  text: S.of(context).votesCount(choice.element.votes.format()),
+                                  text: S.of(context).votesCount(
+                                      choice.element.votes.format()),
                                   style: Theme.of(context).textTheme.bodySmall),
                           ],
                         ),
@@ -213,7 +215,8 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                 child: Padding(
               padding: EdgeInsets.only(left: 10),
             )),
-            TextSpan(text: differ == null ? "" : S.of(context).remainDiffer(differ)),
+            TextSpan(
+                text: differ == null ? "" : S.of(context).remainDiffer(differ)),
           ],
           style: Theme.of(context).textTheme.bodySmall,
         ))
