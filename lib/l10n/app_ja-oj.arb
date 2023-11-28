@@ -7,5 +7,20 @@
     "cancel": "おやめしますわ",
     "pleaseInput": "お入れなさって",
     "pleaseSelect": "お選びになさって",
-    "confirmDeletingAntenna": "アンテナを削除いたしますこと？"
+    "confirmDeletingAntenna": "アンテナを削除いたしますこと？",
+    "willFavorite": "お気に入りに入れますわ",
+    "confirmDeleteClip": "クリップを削除いたしますこと？",
+    "clipDescription": "説明（なくてもよろしくてよ）",
+    "alreadyAddedClip": "こちらのノートすでにクリップに追加されていますわ",
+    "deleteClip": "クリップから削除しますわ",
+    "showCw": "ちょっとだけなか見てもよろしくて",
+    "confirmDeletedRecreate": "ノートを削除して作りなおすのかしら？ついたリアクションやRenote、返信は戻りませんわよ？",
+    "confirmDelete": "削除してもよろしくて？",
+    "doDeleting": "消しましてよ",
+    "confirmPoll": "{choiced}に投票いたしまして？",
+    "followedNotification": "{userName}からフォローされましてよ",
+    "followRequestAcceptedNotification": "{userName}がフォローしてもよくってよとお聞きいたしましたわ",
+    "receiveFollowRequestNotification": "{userName}がフォローさせてほしそういたしておりますわ",
+    "achievementEarnedNotification": "実績を解除いたしましてよ"
+
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
@@ -119,11 +118,11 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  S.of(context).channelJoinningCounts(data.usersCount.format()),
+                  S.of(context).channelJoinningCounts(data.usersCount),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
-                  S.of(context).channelNotes(data.notesCount.format()),
+                  S.of(context).channelNotes(data.notesCount),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 if (data.lastNotedAt != null)

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/search_page/note_search.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final noteSearchProvider = StateProvider.autoDispose((ref) => "");
 final noteSearchUserProvider = StateProvider.autoDispose<User?>((ref) => null);
@@ -56,11 +57,11 @@ class NoteSearchPageState extends ConsumerState<SearchPage> {
         account: widget.account,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("検索"),
-            bottom: const TabBar(
+            title: Text(S.of(context).search),
+            bottom: TabBar(
               tabs: [
-                Tab(text: "ノート"),
-                Tab(text: "ユーザー"),
+                Tab(text: S.of(context).note),
+                Tab(text: S.of(context).user),
               ],
             ),
           ),

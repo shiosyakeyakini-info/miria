@@ -5,6 +5,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExploreHighlight extends ConsumerStatefulWidget {
   const ExploreHighlight({
@@ -40,8 +41,14 @@ class ExploreHighlightState extends ConsumerState<ExploreHighlight> {
                   onPressed: (index) => setState(() {
                         isNote = index == 0;
                       }),
-                  isSelected: [isNote, !isNote],
-                  children: const [Text("ノート"), Text("アンケート")]),
+                  isSelected: [
+                    isNote,
+                    !isNote
+                  ],
+                  children: [
+                    Text(S.of(context).note),
+                    Text(S.of(context).searchVoteTab)
+                  ]),
             ),
           ),
           Expanded(

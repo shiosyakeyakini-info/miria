@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -62,10 +61,11 @@ class CommunityChannelView extends StatelessWidget {
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     S.of(context).channelStatics(
-                                        channel.notesCount.format(),
-                                        channel.usersCount.format(),
-                                        channel.lastNotedAt?.differenceNow ??
-                                            channel.createdAt.differenceNow,),
+                                          channel.notesCount,
+                                          channel.usersCount,
+                                          channel.lastNotedAt?.differenceNow ??
+                                              channel.createdAt.differenceNow,
+                                        ),
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
                                   ))),

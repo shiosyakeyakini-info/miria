@@ -6,7 +6,6 @@ import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
@@ -181,8 +180,9 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                             )),
                             if (isOpened)
                               TextSpan(
-                                  text: S.of(context).votesCount(
-                                      choice.element.votes.format()),
+                                  text: S
+                                      .of(context)
+                                      .votesCount(choice.element.votes),
                                   style: Theme.of(context).textTheme.bodySmall),
                           ],
                         ),
@@ -195,7 +195,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
         ],
         Text.rich(TextSpan(
           children: [
-            TextSpan(text: S.of(context).totalVotesCount(totalVotes.format())),
+            TextSpan(text: S.of(context).totalVotesCount(totalVotes)),
             TextSpan(
               text: isExpired
                   ? S.of(context).finished

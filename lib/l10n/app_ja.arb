@@ -20,11 +20,20 @@
     "notification": "通知",
     "list": "リスト",
     "explore": "みつける",
+    "highlight": "ハイライト",
+    "role": "ロール",
+    "page": "ページ",
+    "flush": "Play",
+    "hashtag": "ハッシュタグ",
+    "otherServers": "よそのサーバー",
     "follow": "フォロー",
     "following": "フォロー中",
     "managing": "管理中",
     "done": "ほい",
     "public": "パブリック",
+    "local": "ローカル",
+    "onlyLocal": "ローカルのみ",
+    "remote": "リモート",
     "@done": {
         "description": "わかった"
     },
@@ -59,7 +68,8 @@
         "description": "チャンネルの参加人数",
         "placeholders": {
             "usersCount": {
-                "type": "string"
+                "type": "int",
+                "format": "decimalPattern"
             }
         }
     },
@@ -68,7 +78,8 @@
         "description": "チャンネルのノート数",
         "placeholders": {
             "notesCount": {
-                "type": "string"
+                "type": "int",
+                "format": "decimalPattern"
             }
         }
     },
@@ -90,10 +101,12 @@
         "description": "チャンネルの統計情報",
         "placeholders": {
             "notesCount": {
-                "type": "string"
+                "type": "int",
+                "format": "decimalPattern"
             },
             "usersCount": {
-                "type": "string"
+                "type": "int",
+                "format": "decimalPattern"
             },
             "lastNotedAt": {
                 "type": "string"
@@ -139,7 +152,8 @@
     "@otherReactions": {
         "placeholders": {
             "reactionCounts": {
-                "type": "string"
+                "type": "int",
+                "format": "decimalPattern"
             }
         }
     },
@@ -176,14 +190,18 @@
     "@votesCount": {
         "placeholders": {
             "votes": {
-                "type": "string"
+                "type": "int",
+                "format": "decimalPattern"
             }
         }
     },
     "totalVotesCount": "計{votes}票・",
     "@totalVotesCount": {
-        "votes": {
-            "type": "string"
+        "placeholders": {
+            "votes": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
         }
     },
     "finished": "終了済み",
@@ -299,8 +317,40 @@
             }
         }
     },
+    "notificationAll": "みんな",
+    "notificationForMe": "自分宛て",
+    "notificationDirect": "ダイレクト",
 
+    "editPhoto": "写真編集",
+    "customEmojiLicensedBy": "このカスタム絵文字はこのようにライセンスされています。",
+    "customEmojiLicensedByNone": "※このカスタム絵文字に対してライセンスは設定されていません。",
+    "cancelEmojiChoosing": "わからへんからやめとく",
+    "doneEmojiChoosing": "使ってもだいじょうぶ",
+    "confirmSavingPhoto": "保存しよる？",
+    "doneEditingPhoto": "保存する",
+    "continueEditingPhoto": "もうちょっと続ける",
+    "disabledUsingSensitiveCustomEmoji": "ここでセンシティブなカスタム絵文字使われへんねやわ",
 
+    "disabledInHashtag": "これらはハッシュタグでは機能しません。",
+    "joiningHashtagUsers": "${usersCount}<small>人</small>",
+    "@joiningHashtagUsers": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "searchVoteTab": "アンケート",
+    "allocatedRolesCount": "${usersCount}<small>人</small>",
+    "@allocatedRolesCount": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
 
     "thrownConnectionError": "通信に失敗しました。",
     "thrownConnectionTimeout": "タイムアウトしました。",

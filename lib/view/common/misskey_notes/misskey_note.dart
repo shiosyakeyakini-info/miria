@@ -507,8 +507,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                             isAllReactionVisible = true;
                                           }),
                                       child: Text(S.of(context).otherReactions(
-                                          (displayNote.reactions.length - 16)
-                                              .format()))),
+                                          displayNote.reactions.length - 16))),
                               ],
                             ),
                           if (displayNote.channel != null)
