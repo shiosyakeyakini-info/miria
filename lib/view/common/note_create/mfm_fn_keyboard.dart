@@ -7,6 +7,7 @@ import 'package:miria/view/common/date_time_picker.dart';
 import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:miria/view/common/note_create/custom_keyboard_button.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
+import 'package:miria/view/common/note_create/font_type_select.dart';
 
 const mfmFn = [
   "tada",
@@ -78,6 +79,13 @@ class MfmFnKeyboard extends ConsumerWidget {
       if (result != null) {
         controller.insert(
             ".color=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ");
+      }
+    } else if (mfmFn == "font") {
+      final result = await showDialog(
+        context: parentContext,
+        builder: (context) => const FontTypeSelect());
+      if (result != null) {
+        controller.insert(".${result} ");
       }
     } else {
       controller.insert(" ");
