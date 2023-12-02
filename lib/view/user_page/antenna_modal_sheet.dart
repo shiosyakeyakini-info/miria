@@ -8,6 +8,7 @@ import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AntennaModalSheet extends ConsumerWidget {
   const AntennaModalSheet({
@@ -74,7 +75,7 @@ class AntennaModalSheet extends ConsumerWidget {
                   final settings = await showDialog<AntennaSettings>(
                     context: context,
                     builder: (context) => AntennaSettingsDialog(
-                      title: const Text("作成"),
+                      title: Text(S.of(context).create),
                       initialSettings: const AntennaSettings(
                         src: AntennaSource.users,
                       ),

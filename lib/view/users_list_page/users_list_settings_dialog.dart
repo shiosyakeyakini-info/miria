@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/users_list_settings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -90,14 +91,14 @@ class UsersListSettingsForm extends ConsumerWidget {
                 .updateName,
           ),
           CheckboxListTile(
-            title: const Text("パブリック"),
+            title: Text(S.of(context).public),
             value: settings.isPublic,
             onChanged: ref
                 .read(_usersListSettingsNotifierProvider.notifier)
                 .updateIsPublic,
           ),
           ElevatedButton(
-            child: const Text("決定"),
+            child: Text(S.of(context).done),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();

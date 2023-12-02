@@ -13,6 +13,8 @@
     "delete": "削除",
     "search": "検索",
     "detail": "詳細",
+    "save": "保存",
+    "hide": "隠す",
     "note": "ノート",
     "mention": "メンション",
     "renote": "Renote",
@@ -37,11 +39,17 @@
     "@done": {
         "description": "わかった"
     },
+    "software": "ソフトウェア",
+    "federatedPosts": "投稿",
+    "language": "言語",
+    "tos": "利用規約",
     "willDelete": "削除するで",
     "cancel": "やっぱやめる",
     "noneAction": "なにもしない",
     "pleaseInput": "入れてや",
     "pleaseSelect": "選んでや",
+    "login": "ログイン",
+    "page": "ページ",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",
@@ -143,7 +151,6 @@
             }
         }
     },
-    "hide": "隠す",
     "showCw": "隠してあるのんの続きを見して",
     "showReactionedNote": "続きを表示",
     "showLongText": "続きを表示",
@@ -162,7 +169,6 @@
     "renoted": "がRenote",
     "selfRenoted": "がセルフRenote",
 
-    "detail": "詳細",
     "copyContents": "内容をコピー",
     "copyLinks": "リンクをコピー",
     "copyName": "ユーザー名をコピー",
@@ -330,6 +336,10 @@
     "doneEditingPhoto": "保存する",
     "continueEditingPhoto": "もうちょっと続ける",
     "disabledUsingSensitiveCustomEmoji": "ここでセンシティブなカスタム絵文字使われへんねやわ",
+    "fileName": "ファイル名",
+    "markAsSensitive": "センシティブとしてマークする",
+    "caption": "キャプション",
+
 
     "disabledInHashtag": "これらはハッシュタグでは機能しません。",
     "joiningHashtagUsers": "${usersCount}<small>人</small>",
@@ -351,6 +361,30 @@
             }
         }
     },
+    "onlineUsers": "サーバーオンライン人数",
+    "onlineUsersCount": "${usersCount}<small>人</small>",
+    "@onlineUsersCount": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "cpuUsageRate": "CPU使用率",
+    "memoryUsageRate": "メモリ使用率",
+    "responseTime": "応答時間",
+    "inboxQueue": "ジョブキュー (Inbox queue)",
+    "inboxProcessQueue": "Process",
+    "inboxActiveQueue": "Active",
+    "inboxDelayedQueue": "Delayed",
+    "inboxWaitingQueue": "Waiting",
+    "deliverQueue": "ジョブキュー (Deliver queue)",
+    "deliverProcessQueue": "Process",
+    "deliverActiveQueue": "Active",
+    "deliverDelayedQueue": "Delayed",
+    "deliverWaitingQueue": "Waiting",
+
 
     "thrownConnectionError": "通信に失敗しました。",
     "thrownConnectionTimeout": "タイムアウトしました。",

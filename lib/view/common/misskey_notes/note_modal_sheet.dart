@@ -74,7 +74,7 @@ class NoteModalSheet extends ConsumerWidget {
         ),
         ListTile(
           leading: const Icon(Icons.person),
-          title: const Text("ユーザー"),
+          title: Text(S.of(context).user),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () async {
             final response = await ref
@@ -95,7 +95,7 @@ class NoteModalSheet extends ConsumerWidget {
         ),
         ListTile(
           leading: const Icon(Icons.open_in_browser),
-          title: const Text("ブラウザで開く"),
+          title: Text(S.of(context).openBrowsers),
           onTap: () async {
             launchUrlString(
               "https://${account.host}/notes/${targetNote.id}",
@@ -122,7 +122,7 @@ class NoteModalSheet extends ConsumerWidget {
             accounts.where((e) => e.host == account.host).length > 1)
           ListTile(
             leading: const Icon(Icons.open_in_new),
-            title: const Text("別のアカウントで開く"),
+            title: Text(S.of(context).openBrowsersAsRemote),
             onTap: () => ref
                 .read(misskeyNoteNotifierProvider(account).notifier)
                 .openNoteInOtherAccount(context, targetNote)

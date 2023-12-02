@@ -7,6 +7,7 @@ import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FederationAnnouncements extends ConsumerStatefulWidget {
   final String host;
@@ -192,7 +193,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
                           data = data.copyWith(isRead: true);
                         });
                       },
-                      child: const Text("ほい"))
+                      child: Text(S.of(context).done))
               ],
             ),
           ),

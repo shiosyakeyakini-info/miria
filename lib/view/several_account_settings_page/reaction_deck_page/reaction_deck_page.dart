@@ -12,6 +12,7 @@ import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart';
 import 'package:reorderables/reorderables.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ReactionDeckPageMenuType { addMany, copy, clear }
 
@@ -204,7 +205,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("コピーしました")),
+      SnackBar(content: Text(S.of(context).done)),
     );
   }
 
@@ -213,7 +214,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
             context: context,
             message: "すでに設定済みのリアクションデッキをいったんすべてクリアしますか？",
             primary: "クリアする",
-            secondary: "やっぱりやめる") ==
+            secondary: S.of(context).cancel) ==
         true) {
       setState(() {
         reactions.clear();

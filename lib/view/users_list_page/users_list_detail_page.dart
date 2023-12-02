@@ -13,6 +13,7 @@ import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
     _UsersListNotifier, UsersList, (Misskey, String)>(_UsersListNotifier.new);
@@ -125,7 +126,7 @@ class UsersListDetailPage extends ConsumerWidget {
                 final settings = await showDialog<UsersListSettings>(
                   context: context,
                   builder: (context) => UsersListSettingsDialog(
-                    title: const Text("編集"),
+                    title: Text(S.of(context).edit),
                     initialSettings: UsersListSettings.fromUsersList(list),
                   ),
                 );
@@ -192,7 +193,7 @@ class UsersListDetailPage extends ConsumerWidget {
                                   context: context,
                                   message: "このユーザーをリストから外しますか？",
                                   primary: "外す",
-                                  secondary: "やめる",
+                                  secondary: S.of(context).cancel,
                                 );
                                 if (!context.mounted) return;
                                 if (result ?? false) {

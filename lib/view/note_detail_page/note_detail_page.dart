@@ -9,6 +9,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class NoteDetailPage extends ConsumerStatefulWidget {
@@ -64,7 +65,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
     return AccountScope(
       account: widget.account,
       child: Scaffold(
-        appBar: AppBar(title: const Text("ノート")),
+        appBar: AppBar(title:  Text(S.of(context).note),
         body: Padding(
           padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
           child: isLoading

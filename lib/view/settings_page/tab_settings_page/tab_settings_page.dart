@@ -16,6 +16,7 @@ import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.da
 import 'package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class TabSettingsPage extends ConsumerStatefulWidget {
@@ -407,7 +408,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     if (!mounted) return;
                     Navigator.of(context).pop();
                   },
-                  child: const Text("ほい"),
+                  child: Text(S.of(context).done),
                 ),
               )
             ],

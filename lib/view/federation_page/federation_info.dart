@@ -11,6 +11,7 @@ import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FederationInfo extends ConsumerStatefulWidget {
   final String host;
@@ -178,8 +179,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const Text(
-                        "ユーザー",
+                      Text(
+                        S.of(context).user,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -191,8 +192,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const Text(
-                        "投稿",
+                      Text(
+                        S.of(context).federatedPosts,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -205,8 +206,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                 children: [
                   TableRow(
                     children: [
-                      const Text(
-                        "ソフトウェア",
+                      Text(
+                        S.of(context).software,
                         textAlign: TextAlign.center,
                       ),
                       Text(
@@ -216,15 +217,15 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                   ),
                   if (data.languages.isNotEmpty)
                     TableRow(children: [
-                      const Text("言語", textAlign: TextAlign.center),
+                      Text(S.of(context).language, textAlign: TextAlign.center),
                       Text(
                         data.languages.join(", "),
                       )
                     ]),
                   if (data.tosUrl != null)
                     TableRow(children: [
-                      const Text(
-                        "利用規約",
+                      Text(
+                        S.of(context).tos,
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(

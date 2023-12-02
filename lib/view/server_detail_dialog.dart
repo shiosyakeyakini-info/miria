@@ -10,6 +10,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/constants.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ServerDetailDialog extends ConsumerStatefulWidget {
   //TODO: 本当はサーバー情報取るのにアカウントいらない...
@@ -142,7 +143,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("サーバーオンライン人数"),
+              Text(S.of(context).onlineUsers),
               if (onlineUsers != null)
                 Text.rich(TextSpan(children: [
                   TextSpan(
@@ -159,7 +160,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("CPU使用率"),
+                        Text(S.of(context).cpuUsageRate),
                         if (currentStat != null)
                           Text.rich(TextSpan(children: [
                             TextSpan(
@@ -187,7 +188,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("メモリ使用率"),
+                        Text(S.of(context).memoryUsageRate),
                         if (currentStat != null && totalMemories != null)
                           Text.rich(
                             TextSpan(
@@ -226,7 +227,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        const Text("応答時間"),
+                        Text(S.of(context).responseTime),
                         if (ping != null)
                           Text.rich(
                             TextSpan(
@@ -253,12 +254,12 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
-              const Text("ジョブキュー (Inbox queue)"),
+              Text(S.of(context).inboxQueue),
               if (currentQueueStats != null) ...[
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Process")),
-                    Expanded(child: Text("Active")),
+                    Expanded(child: Text(S.of(context).inboxProcessQueue)),
+                    Expanded(child: Text(S.of(context).inboxActiveQueue)),
                   ],
                 ),
                 Row(
@@ -278,10 +279,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Delayed")),
-                    Expanded(child: Text("Waiting")),
+                    Expanded(child: Text(S.of(context).inboxDelayedQueue)),
+                    Expanded(child: Text(S.of(context).inboxWaitingQueue)),
                   ],
                 ),
                 Row(
@@ -303,12 +304,12 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                 )
               ],
               const Padding(padding: EdgeInsets.only(top: 10)),
-              const Text("ジョブキュー(Deliver queue)"),
+              Text(S.of(context).deliverQueue),
               if (currentQueueStats != null) ...[
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Process")),
-                    Expanded(child: Text("Active")),
+                    Expanded(child: Text(S.of(context).deliverProcessQueue)),
+                    Expanded(child: Text(S.of(context).deliverActiveQueue)),
                   ],
                 ),
                 Row(
@@ -328,10 +329,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Delayed")),
-                    Expanded(child: Text("Waiting")),
+                    Expanded(child: Text(S.of(context).deliverDelayedQueue)),
+                    Expanded(child: Text(S.of(context).deliverWaitingQueue)),
                   ],
                 ),
                 Row(

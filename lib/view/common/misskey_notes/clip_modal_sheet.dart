@@ -163,8 +163,8 @@ class ClipModalSheet extends ConsumerWidget {
                 onTap: () async {
                   final settings = await showDialog<ClipSettings>(
                     context: context,
-                    builder: (context) => const ClipSettingsDialog(
-                      title: Text("作成"),
+                    builder: (context) => ClipSettingsDialog(
+                      title: Text(S.of(context).create),
                     ),
                   );
                   if (!context.mounted) return;

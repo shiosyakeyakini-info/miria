@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class ImportExportPage extends ConsumerStatefulWidget {
@@ -115,7 +116,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                             .read(importExportRepository)
                             .export(context, account);
                       },
-                      child: const Text("保存")),
+                      child: Text(S.of(context).save)),
                 ],
               ),
             ]),
