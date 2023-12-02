@@ -65,7 +65,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
     return AccountScope(
       account: widget.account,
       child: Scaffold(
-        appBar: AppBar(title:  Text(S.of(context).note),
+        appBar: AppBar(title: Text(S.of(context).note)),
         body: Padding(
           padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
           child: isLoading

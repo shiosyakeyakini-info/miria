@@ -311,7 +311,7 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
             onPressed: () {
               Navigator.of(context).pop(selectedExpire);
             },
-            child:  Text(S.of(context).done)
+            child: Text(S.of(context).done))
       ],
     );
   }
