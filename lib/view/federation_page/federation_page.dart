@@ -10,6 +10,7 @@ import 'package:miria/view/federation_page/federation_custom_emojis.dart';
 import 'package:miria/view/federation_page/federation_info.dart';
 import 'package:miria/view/federation_page/federation_timeline.dart';
 import 'package:miria/view/federation_page/federation_users.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class FederationPage extends ConsumerStatefulWidget {
@@ -52,12 +53,13 @@ class FederationPageState extends ConsumerState<FederationPage> {
             bottom: TabBar(
               isScrollable: true,
               tabs: [
-                const Tab(text: "サーバー情報"),
-                if (isAnotherHost) const Tab(text: "ユーザー"),
-                if (adsAvailable) const Tab(text: "広告"),
-                if (isMisskey) const Tab(text: "お知らせ"),
-                if (isSupportedTimeline) const Tab(text: "カスタム絵文字"),
-                if (isSupportedTimeline) const Tab(text: "LTL")
+                Tab(text: S.of(context).serverInformation),
+                if (isAnotherHost) Tab(text: S.of(context).user),
+                if (adsAvailable) Tab(text: S.of(context).ad),
+                if (isMisskey) Tab(text: S.of(context).announcement),
+                if (isSupportedTimeline) Tab(text: S.of(context).customEmoji),
+                if (isSupportedTimeline)
+                  Tab(text: S.of(context).localTimelineAbbr)
               ],
               tabAlignment: TabAlignment.center,
             ),

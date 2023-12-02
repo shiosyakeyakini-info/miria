@@ -33,7 +33,9 @@
     "managing": "管理中",
     "done": "ほい",
     "public": "パブリック",
+    "home": "ホーム",
     "local": "ローカル",
+    "direct": "ダイレクト",
     "onlyLocal": "ローカルのみ",
     "remote": "リモート",
     "@done": {
@@ -50,6 +52,21 @@
     "pleaseSelect": "選んでや",
     "login": "ログイン",
     "page": "ページ",
+    "generalSetting": "設定",
+    "ad": "広告",
+    "customEmoji": "カスタム絵文字",
+    "localTimeline": "ローカルタイムライン",
+    "localTimelineAbbr": "LTL",
+    "homeTimeline": "ホームタイムライン",
+    "homeTimelineAbbr": "HTL",
+    "socialTimeline": "ソーシャルタイムライン",
+    "socialTimelineAbbr": "STL",
+    "roleTimeline": "ロールタイムライン",
+    "server": "サーバー",
+    "miAuth": "MiAuth",
+    "apiKey": "APIキー",
+    "contentWarning": "注釈",
+    "follower": "フォロワー",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",
@@ -122,6 +139,7 @@
         }
     },
 
+    "createClip": "クリップを作成",
     "confirmDeleteClip": "このクリップ削除してええか？",
     "clipName": "クリップ名",
     "clipDescription": "説明（省略してもええよ）",
@@ -139,6 +157,7 @@
     },
     "plaseInputReasonWhyAbuse": "通報理由の詳細を記入してください。対象のノートがある場合はそのURLも記入してください。",
     "doAbusing": "通報する",
+
 
     "closeTweet": "ツイートを閉じる",
     "closePlayer": "プレイヤーを閉じる",
@@ -168,6 +187,9 @@
     "cancelReaction": "取り消す",
     "renoted": "がRenote",
     "selfRenoted": "がセルフRenote",
+    "savedImage": "画像保存したで",
+    "tapToShow": "タップして表示",
+    
 
     "copyContents": "内容をコピー",
     "copyLinks": "リンクをコピー",
@@ -257,7 +279,18 @@
             }
         }
     },
-    "generalSetting": "設定",
+    "chooseFile": "ファイルを選択",
+    "uploadFile": "アップロード",
+    "fromDrive": "ドライブから",
+    "fileName": "ファイル名",
+    "randomizeFileName": "ファイル名をランダムにする",
+    "caption": "キャプション",
+    "sensitiveSubTitle": "閲覧注意の設定を外した場合でも、自動で閲覧注意にマークされることがあります。",
+    "replyNotePlaceholder": "何て送る？",
+    "defaultNotePlaceholder": "何してはる？",
+    "hasMediaButCannotEdit": "メディアがあります（編集はできません）",
+    "hasVoteButCannotEdit": "投票があります（編集はできません）",
+
 
     "followedNotification": "{userName}からフォローされたで",
     "@followedNotification": {
@@ -327,6 +360,7 @@
     "notificationForMe": "自分宛て",
     "notificationDirect": "ダイレクト",
 
+
     "editPhoto": "写真編集",
     "customEmojiLicensedBy": "このカスタム絵文字はこのようにライセンスされています。",
     "customEmojiLicensedByNone": "※このカスタム絵文字に対してライセンスは設定されていません。",
@@ -339,6 +373,15 @@
     "fileName": "ファイル名",
     "markAsSensitive": "センシティブとしてマークする",
     "caption": "キャプション",
+    "publicSubTitle": "みんなに公開",
+    "homeSubTitle": "ホームタイムラインのみに公開",
+    "followersSubTitle": "自分のフォロワーのみに公開",
+    "specifiedSubTitle": "選択したユーザーのみに公開",
+    "favoriteAll": "すべて",
+    "favoriteLikeOnly": "いいねのみ",
+    "favoriteLikeOnlyForRemote": "リモートからはいいねのみ",
+    "favoriteNonSentiveOnly": "非センシティブのみ",
+    "favoriteNonSensitiveOnlyAndLikeOnlyForRemote": "非センシティブのみ（リモートからはいいねのみ）",
 
 
     "disabledInHashtag": "これらはハッシュタグでは機能しません。",
@@ -361,6 +404,22 @@
             }
         }
     },
+
+
+    "pageWrittenBy": "このページ書きはった人",
+    "unsupportedPage": "Miriaが対応してないページやわ　ブラウザで見てな",
+    "canNotFavoriteMyPage": "自分のページにはふぁぼつけられへんねん",
+
+
+
+    "activeAnnouncements": "いまの",
+    "inactiveAnnouncements": "まえの",
+    "announcementsForYou": "あんた宛",
+    "confirmAnnouncementsRead": "「${title}」の内容ちゃんと読んだか？",
+    "readAnnouncement": "読んだ",
+    "didNotReadAnnouncement": "もうちょい待って",
+
+
     "onlineUsers": "サーバーオンライン人数",
     "onlineUsersCount": "${usersCount}<small>人</small>",
     "@onlineUsersCount": {
@@ -384,7 +443,27 @@
     "deliverActiveQueue": "Active",
     "deliverDelayedQueue": "Delayed",
     "deliverWaitingQueue": "Waiting",
+    "pinnedUser": "ピンどめ",
+    "sort": "並び順",
+    "joiningServerUsers": "${usersCount}人が参加中",
+    "@joiningServerUsers": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "serverInformation": "サーバー情報",
 
+    "loginAsMiAuth": "MiAuthでログイン",
+    "loginAsAPIKey": "APIキーでログイン",
+    "authorizate": "認証をする",
+    "reauthorizate": "再度認証をする",
+    "chooseLoginServer": "ログインするサーバーを選んでください",
+    "didAuthorize": "認証してきた",
+
+    
 
     "thrownConnectionError": "通信に失敗しました。",
     "thrownConnectionTimeout": "タイムアウトしました。",

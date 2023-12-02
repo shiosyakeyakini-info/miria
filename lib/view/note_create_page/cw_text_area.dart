@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/themes/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CwTextArea extends ConsumerStatefulWidget {
   const CwTextArea({super.key});
@@ -56,7 +57,8 @@ class CwTextAreaState extends ConsumerState<CwTextArea> {
           controller: cwController,
           keyboardType: TextInputType.multiline,
           decoration: AppTheme.of(context).noteTextStyle.copyWith(
-              hintText: "注釈", contentPadding: const EdgeInsets.all(5)),
+              hintText: S.of(context).contentWarning,
+              contentPadding: const EdgeInsets.all(5)),
         ),
       ),
     );
