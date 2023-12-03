@@ -88,7 +88,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                   itemBuilder: (context, item) {
                     return ListTile(
                       leading: const Icon(Icons.folder),
-                      title: Text(item.name ?? ""),
+                      title: Text(item.name),
                       onTap: () {
                         setState(() {
                           path.add(item);

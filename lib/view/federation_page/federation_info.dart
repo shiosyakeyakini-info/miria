@@ -59,6 +59,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                   softwareVersion: metaResponse.version,
                   languages: metaResponse.langs,
                   ads: metaResponse.ads,
+                  meta: metaResponse,
 
                   // 自分のサーバーが非対応ということはない
                   isSupportedAnnouncement: true,
@@ -126,6 +127,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
             isSupportedEmoji: isSupportedEmoji,
             isSupportedLocalTimeline: isSupportedLocalTimeline,
             isSupportedAnnouncement: isSupportedAnnouncement,
+            meta: misskeyMeta,
           );
         }
 

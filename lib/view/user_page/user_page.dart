@@ -19,17 +19,22 @@ class UserInfo {
   final UsersShowResponse? response;
   final String? remoteUserId;
   final UsersShowResponse? remoteResponse;
+  final MetaResponse? metaResponse;
 
   const UserInfo({
     required this.userId,
     required this.response,
     required this.remoteUserId,
     required this.remoteResponse,
+    required this.metaResponse,
   });
 }
 
-final userInfoProvider =
-    StateProvider.family.autoDispose<UserInfo?, String>((ref, userId) => null);
+final userInfoProvider = StateProvider.family.autoDispose<UserInfo?, String>((
+  ref,
+  userId,
+) =>
+    null);
 
 @RoutePage()
 class UserPage extends ConsumerStatefulWidget {
@@ -90,12 +95,14 @@ class UserPageState extends ConsumerState<UserPage> {
                     UserDetailTab(userId: widget.userId),
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: SingleChildScrollView(
                           child: UserDetail(
                             response: userInfo.remoteResponse!,
-                            account:
-                                Account.demoAccount(userInfo.response!.host!),
+                            account: Account.demoAccount(
+                                userInfo.response!.host!,
+                                userInfo.metaResponse!),
                             controlAccount: widget.account,
                           ),
                         ),
@@ -108,7 +115,8 @@ class UserPageState extends ConsumerState<UserPage> {
                     ),
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
@@ -133,7 +141,8 @@ class UserPageState extends ConsumerState<UserPage> {
                     // ページ
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserMisskeyPage(
@@ -148,7 +157,8 @@ class UserPageState extends ConsumerState<UserPage> {
                     // Play
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserPlays(userId: userInfo.remoteResponse!.id),
@@ -207,29 +217,33 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
           response: response,
           remoteUserId: null,
           remoteResponse: null,
+          metaResponse: null,
         );
 
         final remoteHost = response?.host;
         if (remoteHost != null) {
+          final meta = await MisskeyServer().meta(remoteHost);
           final remoteResponse = await ref
-              .read(misskeyProvider(Account.demoAccount(remoteHost)))
+              .read(misskeyProvider(Account.demoAccount(remoteHost, meta)))
               .users
               .showByName(
                 UsersShowByUserNameRequest(userName: response!.username),
               );
 
           await ref
-              .read(emojiRepositoryProvider(Account.demoAccount(remoteHost)))
+              .read(emojiRepositoryProvider(
+                  Account.demoAccount(remoteHost, meta)))
               .loadFromSourceIfNeed();
 
           ref
-              .read(notesProvider(Account.demoAccount(remoteHost)))
+              .read(notesProvider(Account.demoAccount(remoteHost, meta)))
               .registerAll(remoteResponse.pinnedNotes ?? []);
           ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
             userId: widget.userId,
             response: response,
             remoteUserId: remoteResponse.id,
             remoteResponse: remoteResponse,
+            metaResponse: meta,
           );
         }
       } catch (e, s) {

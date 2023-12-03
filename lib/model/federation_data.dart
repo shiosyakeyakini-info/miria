@@ -27,5 +27,6 @@ class FederationData with _$FederationData {
     required bool isSupportedEmoji,
     required bool isSupportedAnnouncement,
     required bool isSupportedLocalTimeline,
+    MetaResponse? meta,
   }) = _FederationData;
 }

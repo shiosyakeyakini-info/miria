@@ -10,8 +10,13 @@ import '../../model/account.dart';
 
 class FederationTimeline extends ConsumerStatefulWidget {
   final String host;
+  final MetaResponse meta;
 
-  const FederationTimeline({super.key, required this.host});
+  const FederationTimeline({
+    super.key,
+    required this.host,
+    required this.meta,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -21,8 +26,7 @@ class FederationTimeline extends ConsumerStatefulWidget {
 class FederationTimelineState extends ConsumerState<FederationTimeline> {
   @override
   Widget build(BuildContext context) {
-    //TODO: どうにかする
-    final demoAccount = Account.demoAccount(widget.host);
+    final demoAccount = Account.demoAccount(widget.host, widget.meta);
 
     return AccountScope(
       account: demoAccount,

@@ -49,6 +49,12 @@ class SeveralAccountSettingsPage extends StatelessWidget {
               context.pushRoute(InstanceMuteRoute(account: account));
             },
             title: const Text("インスタンスミュート"),
+          ),
+          ListTile(
+            onTap: () {
+              context.pushRoute(CacheManagementRoute(account: account));
+            },
+            title: const Text("キャッシュ設定"),
           )
         ],
       ),

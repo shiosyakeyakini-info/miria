@@ -14,6 +14,7 @@ class Account with _$Account {
     required String userId,
     String? token,
     required IResponse i,
+    required MetaResponse meta,
   }) = _Account;
 
   factory Account.fromJson(Map<String, Object?> json) =>
@@ -37,10 +38,11 @@ class Account with _$Account {
     );
   }
 
-  factory Account.demoAccount(String host) => Account(
+  factory Account.demoAccount(String host, MetaResponse meta) => Account(
       host: host,
       userId: "",
       token: null,
+      meta: meta,
       i: IResponse(
           id: "",
           username: "",

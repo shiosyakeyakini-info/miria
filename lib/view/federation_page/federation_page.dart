@@ -69,8 +69,11 @@ class FederationPageState extends ConsumerState<FederationPage> {
               if (adsAvailable) const FederationAds(),
               if (isMisskey) FederationAnnouncements(host: widget.host),
               if (isSupportedTimeline)
-                FederationCustomEmojis(host: widget.host),
-              if (isSupportedTimeline) FederationTimeline(host: widget.host),
+                FederationCustomEmojis(
+                    host: widget.host, meta: metaResponse!.meta!),
+              if (isSupportedTimeline)
+                FederationTimeline(
+                    host: widget.host, meta: metaResponse!.meta!),
             ],
           ),
         ),
