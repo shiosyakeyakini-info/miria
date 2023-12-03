@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/router/app_router.dart';
+import 'package:miria/view/several_account_settings_page/word_mute_page/word_mute_page.dart';
 
 @RoutePage()
 class SeveralAccountSettingsPage extends StatelessWidget {
@@ -31,9 +32,17 @@ class SeveralAccountSettingsPage extends StatelessWidget {
           // ListTile(onTap: () {}, title: const Text("ソフトミュート")),
           ListTile(
             onTap: () {
-              context.pushRoute(HardMuteRoute(account: account));
+              context.pushRoute(
+                  WordMuteRoute(account: account, muteType: MuteType.soft));
             },
             title: const Text("ワードミュート"),
+          ),
+          ListTile(
+            onTap: () {
+              context.pushRoute(
+                  WordMuteRoute(account: account, muteType: MuteType.hard));
+            },
+            title: const Text("ハードワードミュート"),
           ),
           ListTile(
             onTap: () {

@@ -7,17 +7,24 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/futurable.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-@RoutePage()
-class HardMutePage extends ConsumerStatefulWidget {
-  final Account account;
+enum MuteType { soft, hard }
 
-  const HardMutePage({super.key, required this.account});
+@RoutePage()
+class WordMutePage extends ConsumerStatefulWidget {
+  final Account account;
+  final MuteType muteType;
+
+  const WordMutePage({
+    super.key,
+    required this.account,
+    required this.muteType,
+  });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => HardMutePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => WordMutePageState();
 }
 
-class HardMutePageState extends ConsumerState<HardMutePage> {
+class WordMutePageState extends ConsumerState<WordMutePage> {
   final controller = TextEditingController();
 
   @override
@@ -53,10 +60,12 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
       }
     }).toList();
 
-    await ref
-        .read(misskeyProvider(widget.account))
-        .i
-        .update(IUpdateRequest(mutedWords: wordMutes));
+    await ref.read(misskeyProvider(widget.account)).i.update(
+          IUpdateRequest(
+            mutedWords: widget.muteType == MuteType.soft ? wordMutes : null,
+            hardMutedWords: widget.muteType == MuteType.hard ? wordMutes : null,
+          ),
+        );
     if (!mounted) return;
     Navigator.of(context).pop();
   }
@@ -71,7 +80,11 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
           child: CommonFuture<IResponse>(
             future: ref.read(misskeyProvider(widget.account)).i.i(),
             futureFinished: (data) {
-              controller.text = muteValueString(data.mutedWords);
+              controller.text = muteValueString(
+                widget.muteType == MuteType.soft
+                    ? data.mutedWords
+                    : data.hardMutedWords,
+              );
             },
             complete: (context, data) {
               return Column(

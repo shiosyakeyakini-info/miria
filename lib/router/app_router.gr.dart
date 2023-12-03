@@ -203,13 +203,14 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    HardMuteRoute.name: (routeData) {
-      final args = routeData.argsAs<HardMuteRouteArgs>();
+    WordMuteRoute.name: (routeData) {
+      final args = routeData.argsAs<WordMuteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: HardMutePage(
+        child: WordMutePage(
           key: args.key,
           account: args.account,
+          muteType: args.muteType,
         ),
       );
     },
@@ -1141,40 +1142,45 @@ class InstanceMuteRouteArgs {
 }
 
 /// generated route for
-/// [HardMutePage]
-class HardMuteRoute extends PageRouteInfo<HardMuteRouteArgs> {
-  HardMuteRoute({
+/// [WordMutePage]
+class WordMuteRoute extends PageRouteInfo<WordMuteRouteArgs> {
+  WordMuteRoute({
     Key? key,
     required Account account,
+    required MuteType muteType,
     List<PageRouteInfo>? children,
   }) : super(
-          HardMuteRoute.name,
-          args: HardMuteRouteArgs(
+          WordMuteRoute.name,
+          args: WordMuteRouteArgs(
             key: key,
             account: account,
+            muteType: muteType,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'HardMuteRoute';
+  static const String name = 'WordMuteRoute';
 
-  static const PageInfo<HardMuteRouteArgs> page =
-      PageInfo<HardMuteRouteArgs>(name);
+  static const PageInfo<WordMuteRouteArgs> page =
+      PageInfo<WordMuteRouteArgs>(name);
 }
 
-class HardMuteRouteArgs {
-  const HardMuteRouteArgs({
+class WordMuteRouteArgs {
+  const WordMuteRouteArgs({
     this.key,
     required this.account,
+    required this.muteType,
   });
 
   final Key? key;
 
   final Account account;
 
+  final MuteType muteType;
+
   @override
   String toString() {
-    return 'HardMuteRouteArgs{key: $key, account: $account}';
+    return 'WordMuteRouteArgs{key: $key, account: $account, muteType: $muteType}';
   }
 }
 
