@@ -83,7 +83,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
             try {
               // Misskeyサーバーかもしれなかったら追加の情報を取得
 
-              final misskeyServer = Misskey(host: widget.host, token: null);
+              final misskeyServer =
+                  ref.read(misskeyWithoutAccountProvider(widget.host));
               final endpoints = await misskeyServer.endpoints();
 
               if (endpoints.contains("announcement")) {

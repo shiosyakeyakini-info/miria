@@ -222,7 +222,8 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
 
         final remoteHost = response?.host;
         if (remoteHost != null) {
-          final meta = await MisskeyServer().meta(remoteHost);
+          final meta =
+              await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
           final remoteResponse = await ref
               .read(misskeyProvider(Account.demoAccount(remoteHost, meta)))
               .users

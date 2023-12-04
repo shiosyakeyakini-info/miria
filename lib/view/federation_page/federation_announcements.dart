@@ -74,8 +74,9 @@ class FederationAnnouncementsState
                       .read(misskeyProvider(account))
                       .announcements(request);
                 } else {
-                  response =
-                      await MisskeyServer().announcements(widget.host, request);
+                  response = await ref
+                      .read(misskeyWithoutAccountProvider(widget.host))
+                      .announcements(request);
                 }
                 return response.toList();
               },
@@ -92,8 +93,9 @@ class FederationAnnouncementsState
                       .read(misskeyProvider(account))
                       .announcements(request);
                 } else {
-                  response =
-                      await MisskeyServer().announcements(widget.host, request);
+                  response = await ref
+                      .read(misskeyWithoutAccountProvider(widget.host))
+                      .announcements(request);
                 }
                 return response.toList();
               },

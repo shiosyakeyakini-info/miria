@@ -31,14 +31,21 @@ class AccountRepository extends Notifier<List<Account>> {
     }
     try {
       final list = (jsonDecode(storedData) as List);
+      final resultList = List.of(list);
       for (final element in list) {
         if (element["meta"] == null) {
-          final meta = await MisskeyServer().meta(element["host"]);
-          element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
+          try {
+            final meta = await ref
+                .read(misskeyWithoutAccountProvider(element["host"]))
+                .meta();
+            element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
+          } catch (e) {
+            resultList.remove(element);
+          }
         }
       }
 
-      state = list.map((e) => Account.fromJson(e)).toList();
+      state = resultList.map((e) => Account.fromJson(e)).toList();
 
       _validatedAccts.clear();
     } catch (e) {
@@ -81,7 +88,9 @@ class AccountRepository extends Notifier<List<Account>> {
         updateI();
         break;
     }
-    ref.read(notesProvider(account)).updateMute(account.i.mutedWords);
+    ref
+        .read(notesProvider(account))
+        .updateMute(account.i.mutedWords, account.i.hardMutedWords);
 
     Future<void> updateMeta() async {
       _validateMetaAccts.add(acct);
@@ -181,12 +190,16 @@ class AccountRepository extends Notifier<List<Account>> {
 
     final version = nodeInfoResult["software"]["version"];
 
-    final meta = await MisskeyServer().meta(server);
+    try {
+      final meta = await ref.read(misskeyWithoutAccountProvider(server)).meta();
 
-    final endpoints = await ref
-        .read(misskeyProvider(Account.demoAccount(server, meta)))
-        .endpoints();
-    if (!endpoints.contains("emojis")) {
+      final endpoints = await ref
+          .read(misskeyProvider(Account.demoAccount(server, meta)))
+          .endpoints();
+      if (!endpoints.contains("emojis")) {
+        throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
+      }
+    } catch (e) {
       throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
     }
   }
