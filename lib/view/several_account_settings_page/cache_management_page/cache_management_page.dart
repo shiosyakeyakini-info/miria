@@ -26,6 +26,16 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
   CacheStrategy emojisCacheStrategy = CacheStrategy.whenLaunch;
   CacheStrategy metaCacheStrategy = CacheStrategy.whenOneDay;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final setting =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
+    iCacheStrategy = setting.iCacheStrategy;
+    emojisCacheStrategy = setting.emojiCacheStrategy;
+    metaCacheStrategy = setting.metaChacheStrategy;
+  }
+
   List<DropdownMenuItem> get buildCacheStrategyItems => const [
         DropdownMenuItem(
           value: CacheStrategy.whenTabChange,
