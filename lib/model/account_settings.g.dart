@@ -40,6 +40,7 @@ _$AccountSettingsImpl _$$AccountSettingsImplFromJson(
       latestMetaCached: json['latestMetaCached'] == null
           ? null
           : DateTime.parse(json['latestMetaCached'] as String),
+      forceShowAd: json['forceShowAd'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$AccountSettingsImplToJson(
@@ -61,6 +62,7 @@ Map<String, dynamic> _$$AccountSettingsImplToJson(
       'metaChacheStrategy':
           _$CacheStrategyEnumMap[instance.metaChacheStrategy]!,
       'latestMetaCached': instance.latestMetaCached?.toIso8601String(),
+      'forceShowAd': instance.forceShowAd,
     };
 
 const _$NoteVisibilityEnumMap = {

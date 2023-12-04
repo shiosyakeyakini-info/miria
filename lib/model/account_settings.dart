@@ -28,6 +28,7 @@ class AccountSettings with _$AccountSettings {
     DateTime? latestEmojiCached,
     @Default(CacheStrategy.whenOneDay) CacheStrategy metaChacheStrategy,
     DateTime? latestMetaCached,
+    @Default(false) bool forceShowAd,
   }) = _AccountSettings;
 
   factory AccountSettings.fromJson(Map<String, dynamic> json) =>

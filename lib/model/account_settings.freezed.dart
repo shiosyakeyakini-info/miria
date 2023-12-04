@@ -34,6 +34,7 @@ mixin _$AccountSettings {
   DateTime? get latestEmojiCached => throw _privateConstructorUsedError;
   CacheStrategy get metaChacheStrategy => throw _privateConstructorUsedError;
   DateTime? get latestMetaCached => throw _privateConstructorUsedError;
+  bool get forceShowAd => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +60,8 @@ abstract class $AccountSettingsCopyWith<$Res> {
       CacheStrategy emojiCacheStrategy,
       DateTime? latestEmojiCached,
       CacheStrategy metaChacheStrategy,
-      DateTime? latestMetaCached});
+      DateTime? latestMetaCached,
+      bool forceShowAd});
 }
 
 /// @nodoc
@@ -87,6 +89,7 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
     Object? latestEmojiCached = freezed,
     Object? metaChacheStrategy = null,
     Object? latestMetaCached = freezed,
+    Object? forceShowAd = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -137,6 +140,10 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
           ? _value.latestMetaCached
           : latestMetaCached // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      forceShowAd: null == forceShowAd
+          ? _value.forceShowAd
+          : forceShowAd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -161,7 +168,8 @@ abstract class _$$AccountSettingsImplCopyWith<$Res>
       CacheStrategy emojiCacheStrategy,
       DateTime? latestEmojiCached,
       CacheStrategy metaChacheStrategy,
-      DateTime? latestMetaCached});
+      DateTime? latestMetaCached,
+      bool forceShowAd});
 }
 
 /// @nodoc
@@ -187,6 +195,7 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
     Object? latestEmojiCached = freezed,
     Object? metaChacheStrategy = null,
     Object? latestMetaCached = freezed,
+    Object? forceShowAd = null,
   }) {
     return _then(_$AccountSettingsImpl(
       userId: null == userId
@@ -237,6 +246,10 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
           ? _value.latestMetaCached
           : latestMetaCached // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      forceShowAd: null == forceShowAd
+          ? _value.forceShowAd
+          : forceShowAd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -256,7 +269,8 @@ class _$AccountSettingsImpl extends _AccountSettings {
       this.emojiCacheStrategy = CacheStrategy.whenLaunch,
       this.latestEmojiCached,
       this.metaChacheStrategy = CacheStrategy.whenOneDay,
-      this.latestMetaCached})
+      this.latestMetaCached,
+      this.forceShowAd = false})
       : _reactions = reactions,
         super._();
 
@@ -300,10 +314,13 @@ class _$AccountSettingsImpl extends _AccountSettings {
   final CacheStrategy metaChacheStrategy;
   @override
   final DateTime? latestMetaCached;
+  @override
+  @JsonKey()
+  final bool forceShowAd;
 
   @override
   String toString() {
-    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance, iCacheStrategy: $iCacheStrategy, latestICached: $latestICached, emojiCacheStrategy: $emojiCacheStrategy, latestEmojiCached: $latestEmojiCached, metaChacheStrategy: $metaChacheStrategy, latestMetaCached: $latestMetaCached)';
+    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance, iCacheStrategy: $iCacheStrategy, latestICached: $latestICached, emojiCacheStrategy: $emojiCacheStrategy, latestEmojiCached: $latestEmojiCached, metaChacheStrategy: $metaChacheStrategy, latestMetaCached: $latestMetaCached, forceShowAd: $forceShowAd)';
   }
 
   @override
@@ -333,7 +350,9 @@ class _$AccountSettingsImpl extends _AccountSettings {
             (identical(other.metaChacheStrategy, metaChacheStrategy) ||
                 other.metaChacheStrategy == metaChacheStrategy) &&
             (identical(other.latestMetaCached, latestMetaCached) ||
-                other.latestMetaCached == latestMetaCached));
+                other.latestMetaCached == latestMetaCached) &&
+            (identical(other.forceShowAd, forceShowAd) ||
+                other.forceShowAd == forceShowAd));
   }
 
   @JsonKey(ignore: true)
@@ -351,7 +370,8 @@ class _$AccountSettingsImpl extends _AccountSettings {
       emojiCacheStrategy,
       latestEmojiCached,
       metaChacheStrategy,
-      latestMetaCached);
+      latestMetaCached,
+      forceShowAd);
 
   @JsonKey(ignore: true)
   @override
@@ -381,7 +401,8 @@ abstract class _AccountSettings extends AccountSettings {
       final CacheStrategy emojiCacheStrategy,
       final DateTime? latestEmojiCached,
       final CacheStrategy metaChacheStrategy,
-      final DateTime? latestMetaCached}) = _$AccountSettingsImpl;
+      final DateTime? latestMetaCached,
+      final bool forceShowAd}) = _$AccountSettingsImpl;
   const _AccountSettings._() : super._();
 
   factory _AccountSettings.fromJson(Map<String, dynamic> json) =
@@ -411,6 +432,8 @@ abstract class _AccountSettings extends AccountSettings {
   CacheStrategy get metaChacheStrategy;
   @override
   DateTime? get latestMetaCached;
+  @override
+  bool get forceShowAd;
   @override
   @JsonKey(ignore: true)
   _$$AccountSettingsImplCopyWith<_$AccountSettingsImpl> get copyWith =>
