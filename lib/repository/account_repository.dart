@@ -283,11 +283,9 @@ class AccountRepository extends Notifier<List<Account>> {
   }
 
   Future<void> _addIfTabSettingNothing() async {
-    if (state.length == 1) {
-      final account = state.first;
-      ref
-          .read(tabSettingsRepositoryProvider)
-          .initializeTabSettings(account.acct);
-    }
+    //if (state.length == 1) {
+    final account = state.first;
+    ref.read(tabSettingsRepositoryProvider).initializeTabSettings(account.acct);
+    //}
   }
 }
