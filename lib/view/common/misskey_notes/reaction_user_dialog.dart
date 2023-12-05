@@ -82,6 +82,7 @@ class ReactionUserDialog extends ConsumerWidget {
                   return response.toList();
                 },
                 itemBuilder: (context, item) => UserListItem(user: item.user),
+                showAd: false,
               )),
         ),
       ),

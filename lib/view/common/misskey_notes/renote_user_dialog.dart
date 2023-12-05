@@ -55,6 +55,7 @@ class RenoteUserDialog extends ConsumerWidget {
                     itemBuilder: (context, note) {
                       return UserListItem(user: note.user);
                     },
+                    showAd: false,
                   )),
             )));
   }
