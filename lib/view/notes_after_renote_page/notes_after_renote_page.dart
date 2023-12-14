@@ -33,7 +33,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     final misskey = ref.watch(misskeyProvider(widget.account));
 
     return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).renotedNotes)),
+      appBar: AppBar(title: Text(S.of(context).notesAfterRenote)),
       body: Padding(
         padding: const EdgeInsets.only(right: 10),
         child: PushableListView<Note>(

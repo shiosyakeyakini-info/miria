@@ -35,7 +35,7 @@ class ReactionAcceptanceDialog extends StatelessWidget {
           onTap: () =>
               Navigator.of(context).pop(ReactionAcceptance.nonSensitiveOnly),
           leading: const Icon(Icons.shield_outlined),
-          title: Text(S.of(context).favoriteNonSentiveOnly),
+          title: Text(S.of(context).favoriteNonSensitiveOnly),
         ),
         ListTile(
           onTap: () => Navigator.of(context).pop(

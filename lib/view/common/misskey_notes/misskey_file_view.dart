@@ -83,7 +83,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                 onPressed: () => setState(() {
                       isElipsed = !isElipsed;
                     }),
-                child: Text(S.of(context).showLongFiles))
+                child: Text(S.of(context).showMoreFiles))
         ],
       );
     }

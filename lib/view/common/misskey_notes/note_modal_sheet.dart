@@ -225,7 +225,7 @@ class NoteModalSheet extends ConsumerWidget {
         ),
         ListTile(
           leading: const Icon(Icons.repeat_rounded),
-          title: Text(S.of(context).renotedNotes),
+          title: Text(S.of(context).notesAfterRenote),
           onTap: () {
             context.pushRoute(
               NotesAfterRenoteRoute(
@@ -257,6 +257,7 @@ class NoteModalSheet extends ConsumerWidget {
               },
             ),
           ListTile(
+            leading: const Icon(Icons.delete),
             title: Text(S.of(context).delete),
             onTap: () async {
               if (await showDialog(
@@ -334,7 +335,7 @@ class NoteModalSheet extends ConsumerWidget {
                 baseNote.user.username != account.userId))
           ListTile(
             leading: const Icon(Icons.report),
-            title: Text(S.of(context).doAbusing),
+            title: Text(S.of(context).reportAbuse),
             onTap: () {
               Navigator.of(context).pop();
               showDialog(

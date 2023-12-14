@@ -25,7 +25,7 @@
     "highlight": "ハイライト",
     "role": "ロール",
     "page": "ページ",
-    "flush": "Play",
+    "flash": "Play",
     "hashtag": "ハッシュタグ",
     "otherServers": "よそのサーバー",
     "follow": "フォロー",
@@ -51,8 +51,7 @@
     "pleaseInput": "入れてや",
     "pleaseSelect": "選んでや",
     "login": "ログイン",
-    "page": "ページ",
-    "generalSetting": "設定",
+    "settings": "設定",
     "ad": "広告",
     "customEmoji": "カスタム絵文字",
     "localTimeline": "ローカルタイムライン",
@@ -74,20 +73,20 @@
     "antennaSourceAll": "ぜんぶ",
     "antennaSourceUser": "ユーザー",
     "antennaSourceList": "リスト",
-    "selectAntennas": "ソースを選択",
+    "selectAntennaSource": "ソースを選択",
     "selectList": "リストを選択",
     "antennaSourceUserHintText": "ユーザーネームを改行で区切って指定します",
     "addUser": "ユーザーを追加",
     "keywords": "キーワード",
     "antennaSourceKeywordsHintText": "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
     "excludeKeywords": "除外キーワード",
-    "antennaSOurceExcludeKeywordsHintText": "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
+    "antennaSourceExcludeKeywordsHintText": "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
     "discriminateUpperLower": "大文字と小文字を区別する",
     "receiveReplies": "リプライを受信する",
     "receiveOnlyFiles": "ファイル付きのノートのみ受信する",
     "receiveLocal": "ローカルのみ受信する",
     "confirmDeletingAntenna": "アンテナ削除するか？",
-    
+
     "channelJoinningCounts": "{usersCount}人が参加中",
     "@channelJoinningCounts": {
         "description": "チャンネルの参加人数",
@@ -113,7 +112,7 @@
         "description": "チャンネルのノート数",
         "placeholders": {
             "lastNotedAt": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -121,8 +120,8 @@
     "willFavorite": "お気に入りに入れるで",
     "willFollow": "フォローするで",
     "channelInformation": "チャンネル情報",
-    "channelStatics": "{notesCount} 投稿 / {usersCount} 人が参加中 / {lastNotedAt} に更新",
-    "@channelStatics": {
+    "channelStatistics": "{notesCount} 投稿 / {usersCount} 人が参加中 / {lastNotedAt} に更新",
+    "@channelStatistics": {
         "description": "チャンネルの統計情報",
         "placeholders": {
             "notesCount": {
@@ -134,7 +133,7 @@
                 "format": "decimalPattern"
             },
             "lastNotedAt": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -146,17 +145,17 @@
     "alreadyAddedClip": "すでにクリップに追加されてるノートみたいやねん",
     "deleteClip": "クリップから削除する",
 
-    "thanksForAbuse": "内容が送信されました。ご報告ありがとうございました。",
-    "abuseTo": "{userName} を通報する",
-    "@abuseTo": {
+    "thanksForReport": "内容が送信されました。ご報告ありがとうございました。",
+    "reportAbuseOf": "{userName} を通報する",
+    "@reportAbuseOf": {
         "placeholders": {
             "userName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
-    "plaseInputReasonWhyAbuse": "通報理由の詳細を記入してください。対象のノートがある場合はそのURLも記入してください。",
-    "doAbusing": "通報する",
+    "pleaseInputReasonWhyAbuse": "通報理由の詳細を記入してください。対象のノートがある場合はそのURLも記入してください。",
+    "reportAbuse": "通報する",
 
 
     "closeTweet": "ツイートを閉じる",
@@ -166,14 +165,14 @@
     "@mutedNotePlaceholder": {
         "placeholders": {
             "userName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
     "showCw": "隠してあるのんの続きを見して",
     "showReactionedNote": "続きを表示",
     "showLongText": "続きを表示",
-    "showLongFiles": "続きを表示",
+    "showMoreFiles": "続きを表示",
     "otherReactions": "ほか{reactionCounts}個",
     "@otherReactions": {
         "placeholders": {
@@ -185,11 +184,11 @@
     },
     "confirmDeleteReaction": "リアクション取り消してもええか？",
     "cancelReaction": "取り消す",
-    "renoted": "がRenote",
-    "selfRenoted": "がセルフRenote",
+    "renotedBy": "がRenote",
+    "selfRenotedBy": "がセルフRenote",
     "savedImage": "画像保存したで",
     "tapToShow": "タップして表示",
-    
+
 
     "copyContents": "内容をコピー",
     "copyLinks": "リンクをコピー",
@@ -199,7 +198,7 @@
     "openBrowsersAsRemote": "ブラウザでリモート先を開く",
     "shareNotes": "ノートを共有",
     "deleteFavorite": "お気に入り解除",
-    "renotedNotes": "リノート直後のノート",
+    "notesAfterRenote": "リノート直後のノート",
     "deletedRecreate": "削除してなおす",
     "confirmDeletedRecreate": "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
     "deleteRenote": "リノートを解除する",
@@ -210,7 +209,7 @@
     "@confirmPoll": {
         "placeholders": {
             "choiced": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -240,7 +239,7 @@
     "@remainDiffer": {
         "placeholders": {
             "differ": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -249,7 +248,7 @@
     "@renoteInSpecificChannel": {
         "placeholders": {
             "channelName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -257,11 +256,10 @@
     "@quotedRenoteInSpecificChannel": {
         "placeholders": {
             "channelName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
-    "quotedRenote": "引用Renote",
     "renoteInChannel": "チャンネルへRenote",
     "renoteInOtherChannel": "よそのチャンネルへRenote",
     "quotedRenoteInChannel": "チャンネルへ引用Renote",
@@ -275,7 +273,7 @@
     "@accountSetting": {
         "placeholders": {
             "accountName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -296,7 +294,7 @@
     "@followedNotification": {
         "placeholders": {
             "userName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -304,7 +302,7 @@
     "@followRequestAcceptedNotification": {
         "placeholders": {
             "userName": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -312,23 +310,23 @@
     "@receiveFollowRequestNotification": {
         "placeholders": {
             "userName": {
-                "type": "string"
+                "type": "String"
             }
         }
-    },    
+    },
     "achievementEarnedNotification": "実績を解除したみたいや",
     "testNotification": "テストやで",
     "renotedUsersInNotification": "リノートしてくれはった人",
     "reactionUsersInNotification": "リアクションしてくれはった人",
     "finishedVotedNotification": "投票が終わったみたいや",
-    "renoteAndReactionsNotification": "{renotedUser}さんたちがリアクションしはって、{reactionUser}さんたちがRenoteしはったで",
+    "renoteAndReactionsNotification": "{reactionUser}さんたちがリアクションしはって、{renotedUser}さんたちがRenoteしはったで",
     "@renoteAndReactionsNotification": {
         "placeholders": {
-            "renotedUser": {
-                "type": "string"
-            },
             "reactionUser": {
-                "type": "string"
+                "type": "String?"
+            },
+            "renotedUser": {
+                "type": "String?"
             }
         }
     },
@@ -336,7 +334,7 @@
     "@renoteNotification": {
         "placeholders": {
             "renoteUser": {
-                "type": "string"
+                "type": "String?"
             }
         }
     },
@@ -344,7 +342,7 @@
     "@reactionNotification": {
         "placeholders": {
             "reactionUser": {
-                "type": "string"
+                "type": "String?"
             }
         }
     },
@@ -352,7 +350,7 @@
     "@notedNotification": {
         "placeholders": {
             "notedUser": {
-                "type": "string"
+                "type": "String"
             }
         }
     },
@@ -370,9 +368,7 @@
     "doneEditingPhoto": "保存する",
     "continueEditingPhoto": "もうちょっと続ける",
     "disabledUsingSensitiveCustomEmoji": "ここでセンシティブなカスタム絵文字使われへんねやわ",
-    "fileName": "ファイル名",
     "markAsSensitive": "センシティブとしてマークする",
-    "caption": "キャプション",
     "publicSubTitle": "みんなに公開",
     "homeSubTitle": "ホームタイムラインのみに公開",
     "followersSubTitle": "自分のフォロワーのみに公開",
@@ -380,12 +376,12 @@
     "favoriteAll": "すべて",
     "favoriteLikeOnly": "いいねのみ",
     "favoriteLikeOnlyForRemote": "リモートからはいいねのみ",
-    "favoriteNonSentiveOnly": "非センシティブのみ",
+    "favoriteNonSensitiveOnly": "非センシティブのみ",
     "favoriteNonSensitiveOnlyAndLikeOnlyForRemote": "非センシティブのみ（リモートからはいいねのみ）",
 
 
     "disabledInHashtag": "これらはハッシュタグでは機能しません。",
-    "joiningHashtagUsers": "${usersCount}<small>人</small>",
+    "joiningHashtagUsers": "{usersCount}<small>人</small>",
     "@joiningHashtagUsers": {
         "placeholders": {
             "usersCount": {
@@ -395,7 +391,7 @@
         }
     },
     "searchVoteTab": "アンケート",
-    "allocatedRolesCount": "${usersCount}<small>人</small>",
+    "allocatedRolesCount": "{usersCount}<small>人</small>",
     "@allocatedRolesCount": {
         "placeholders": {
             "usersCount": {
@@ -415,13 +411,13 @@
     "activeAnnouncements": "いまの",
     "inactiveAnnouncements": "まえの",
     "announcementsForYou": "あんた宛",
-    "confirmAnnouncementsRead": "「${title}」の内容ちゃんと読んだか？",
+    "confirmAnnouncementsRead": "「{title}」の内容ちゃんと読んだか？",
     "readAnnouncement": "読んだ",
     "didNotReadAnnouncement": "もうちょい待って",
 
 
     "onlineUsers": "サーバーオンライン人数",
-    "onlineUsersCount": "${usersCount}<small>人</small>",
+    "onlineUsersCount": "{usersCount}<small>人</small>",
     "@onlineUsersCount": {
         "placeholders": {
             "usersCount": {
@@ -445,7 +441,7 @@
     "deliverWaitingQueue": "Waiting",
     "pinnedUser": "ピンどめ",
     "sort": "並び順",
-    "joiningServerUsers": "${usersCount}人が参加中",
+    "joiningServerUsers": "{usersCount}人が参加中",
     "@joiningServerUsers": {
         "placeholders": {
             "usersCount": {
@@ -463,7 +459,7 @@
     "chooseLoginServer": "ログインするサーバーを選んでください",
     "didAuthorize": "認証してきた",
 
-    
+
 
     "thrownConnectionError": "通信に失敗しました。",
     "thrownConnectionTimeout": "タイムアウトしました。",
@@ -472,7 +468,4 @@
     "thrownUnknownError": "不明なエラー",
     "thrownError": "エラーが起きたみたいや",
     "unsupportedServer": "非対応のサーバーです"
-    
-
-    
 }

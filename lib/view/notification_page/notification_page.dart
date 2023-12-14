@@ -415,24 +415,22 @@ class NotificationItem extends ConsumerWidget {
             ],
           ),
         );
-      case NoteNotification():
+      case NoteNotification(:final note):
+        final user = note?.user;
         return Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (notification.note?.user != null)
+              if (user != null)
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: SimpleMfmText(
-                    S.of(context).notedNotification(
-                        notification.note?.user.name ??
-                            notification.note?.user.username),
-                    emojis: notification.note?.user.emojis ?? {},
+                    S.of(context).notedNotification(user.name ?? user.username),
+                    emojis: user.emojis,
                   ),
                 ),
-              if (notification.note != null)
-                misskey_note.MisskeyNote(note: notification.note!)
+              if (note != null) misskey_note.MisskeyNote(note: note),
             ],
           ),
         );

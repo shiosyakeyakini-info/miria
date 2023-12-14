@@ -42,7 +42,7 @@ class ExplorePageState extends ConsumerState<ExplorePage> {
                   Tab(text: S.of(context).user),
                   Tab(text: S.of(context).role),
                   Tab(text: S.of(context).page),
-                  Tab(text: S.of(context).flush),
+                  Tab(text: S.of(context).flash),
                   Tab(text: S.of(context).hashtag),
                   Tab(text: S.of(context).otherServers),
                 ],
