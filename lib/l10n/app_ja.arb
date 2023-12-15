@@ -505,6 +505,49 @@
     "bottom": "下",
     "systemEmoji": "標準",
 
+    "invalidServer": "{server} はサーバーとして認識できませんでした。\nサーバーには、「misskey.io」などを入力してください。",
+    "@invalidServer": {
+        "placeholders": {
+            "server": {
+                "type": "String"
+            }
+        }
+    },
+    "serverIsNotMisskey": "{server} はMisskeyサーバーとして認識できませんでした。",
+    "@serverIsNotMisskey": {
+        "placeholders": {
+            "server": {
+                "type": "String"
+            }
+        }
+    },
+    "softwareNotSupported": "Miriaは{software}に未対応です。",
+    "@softwareNotSupported": {
+        "placeholders": {
+            "software": {
+                "type": "String"
+            }
+        }
+    },
+    "softwareNotCompatible": "Miriaと互換性のないソフトウェアです。\n{software} {version}",
+    "@softwareNotCompatible": {
+        "placeholders": {
+            "software": {
+                "type": "String"
+            },
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "alreadyLoggedIn": "{acct}で既にログインしています",
+    "@alreadyLoggedIn": {
+        "placeholders": {
+            "acct": {
+                "type": "String"
+            }
+        }
+    },
     "importFromThisFolder": "このフォルダーからインポートする",
     "exportedFileNotFound": "ここにMiriaの設定ファイルあれへんかったわ",
     "importCompleted": "インポート終わったで。",
@@ -514,6 +557,8 @@
     "exportedFileComment": "Miria設定ファイル",
     "exportCompleted": "エクスポート終わったで",
 
+    "cannotOpenLocalOnlyNoteFromRemote": "連合なしのノートを他のサーバーで開くことはできません",
+
     "unlimited": "無期限",
     "specifyByDate": "日時指定",
     "specifyByDuration": "期間指定",
@@ -521,6 +566,11 @@
     "minutes": "分",
     "hours": "時間",
     "days": "日",
+    "pleaseInputSomething": "なんか入れてや",
+    "pleaseAddVoteChoice": "投票の選択肢を2つ以上入れてや",
+    "pleaseSpecifyExpirationDate": "投票がいつまでか入れてや",
+    "pleaseSpecifyExpirationDuration": "投票期間を入れてや",
+    "cannotMentionToRemoteInLocalOnlyNote": "連合オフやのによそのサーバーの人がメンションに含まれてるで",
     "cannotPublicReplyToPrivateNote": "リプライが{visibility}やから、パブリックにでけへん",
     "@cannotPublicReplyToPrivateNote": {
         "placeholders": {

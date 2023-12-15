@@ -55,6 +55,18 @@ enum VoteExpireDurationType {
   }
 }
 
+sealed class NoteCreateException implements Exception {}
+
+class EmptyNoteException implements NoteCreateException {}
+
+class TooFewVoteChoiceException implements NoteCreateException {}
+
+class EmptyVoteExpireDateException implements NoteCreateException {}
+
+class EmptyVoteExpireDurationException implements NoteCreateException {}
+
+class MentionToRemoteInLocalOnlyNoteException implements NoteCreateException {}
+
 @freezed
 class NoteCreate with _$NoteCreate {
   const factory NoteCreate({
@@ -271,24 +283,24 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// ノートを投稿する
   Future<void> note() async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
-      throw SpecifiedException("なんか入れてや");
+      throw EmptyNoteException();
     }
 
     if (state.isVote &&
         state.voteContent.where((e) => e.isNotEmpty).length < 2) {
-      throw SpecifiedException("投票の選択肢を2つ以上入れてや");
+      throw TooFewVoteChoiceException();
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.date &&
         state.voteDate == null) {
-      throw SpecifiedException("投票がいつまでか入れてや");
+      throw EmptyVoteExpireDateException();
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.duration &&
         state.voteDuration == null) {
-      throw SpecifiedException("投票期間を入れてや");
+      throw EmptyVoteExpireDurationException();
     }
 
     try {
@@ -385,7 +397,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           userList.any((element) =>
               element.host != null &&
               element.host != misskey.apiService.host)) {
-        throw SpecifiedException("連合オフやのによそのサーバーの人がメンションに含まれてるで");
+        throw MentionToRemoteInLocalOnlyNoteException();
       }
 
       final mentionTargetUsers = [

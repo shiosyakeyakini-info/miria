@@ -3,15 +3,47 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/acct.dart';
 import 'package:miria/providers.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+
+sealed class ValidateMisskeyException implements Exception {}
+
+class InvalidServerException implements ValidateMisskeyException {
+  const InvalidServerException(this.server);
+
+  final String server;
+}
+
+class ServerIsNotMisskeyException implements ValidateMisskeyException {
+  const ServerIsNotMisskeyException(this.server);
+
+  final String server;
+}
+
+class SoftwareNotSupportedException implements ValidateMisskeyException {
+  const SoftwareNotSupportedException(this.software);
+
+  final String software;
+}
+
+class SoftwareNotCompatibleException implements ValidateMisskeyException {
+  const SoftwareNotCompatibleException(this.software, this.version);
+
+  final String software;
+  final String version;
+}
+
+class AlreadyLoggedInException implements ValidateMisskeyException {
+  const AlreadyLoggedInException(this.acct);
+
+  final String acct;
+}
 
 class AccountRepository extends Notifier<List<Account>> {
   final _validatedAccts = <Acct>{};
@@ -191,14 +223,13 @@ class AccountRepository extends Notifier<List<Account>> {
           host: server,
           pathSegments: [".well-known", "nodeinfo"]);
     } catch (e) {
-      throw SpecifiedException(
-          "$server はサーバーとして認識できませんでした。\nサーバーには、「misskey.io」などを入力してください。");
+      throw InvalidServerException(server);
     }
 
     try {
       nodeInfo = await ref.read(dioProvider).getUri(uri);
     } catch (e) {
-      throw SpecifiedException("$server はMisskeyサーバーとして認識できませんでした。");
+      throw ServerIsNotMisskeyException(server);
     }
     final nodeInfoHref = nodeInfo.data["links"][0]["href"];
     final nodeInfoHrefResponse = await ref.read(dioProvider).get(nodeInfoHref);
@@ -207,7 +238,7 @@ class AccountRepository extends Notifier<List<Account>> {
     final software = nodeInfoResult["software"]["name"];
     // these software already known as unavailable this app
     if (software == "mastodon" || software == "fedibird") {
-      throw SpecifiedException("Miriaは$softwareに未対応です。");
+      throw SoftwareNotSupportedException(software.toString());
     }
 
     final version = nodeInfoResult["software"]["version"];
@@ -219,10 +250,16 @@ class AccountRepository extends Notifier<List<Account>> {
           .read(misskeyProvider(Account.demoAccount(server, meta)))
           .endpoints();
       if (!endpoints.contains("emojis")) {
-        throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
+        throw SoftwareNotCompatibleException(
+          software.toString(),
+          version.toString(),
+        );
       }
     } catch (e) {
-      throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
+      throw SoftwareNotCompatibleException(
+        software.toString(),
+        version.toString(),
+      );
     }
   }
 
@@ -273,7 +310,7 @@ class AccountRepository extends Notifier<List<Account>> {
 
   Future<void> _addAccount(Account account) async {
     if (state.map((e) => e.acct).contains(account.acct)) {
-      throw SpecifiedException("${account.acct}で既にログインしています");
+      throw AlreadyLoggedInException(account.acct.toString());
     }
 
     state = [...state, account];
