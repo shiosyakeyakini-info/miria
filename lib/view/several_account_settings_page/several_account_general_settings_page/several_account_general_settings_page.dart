@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm/mfm.dart';
+import 'package:miria/extensions/note_visibility_extension.dart';
+import 'package:miria/extensions/reaction_acceptance_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/account_settings.dart';
 import 'package:miria/providers.dart';
@@ -109,8 +111,10 @@ class SeveralAccountGeneralSettingsPageState
                               for (final noteVisibility
                                   in NoteVisibility.values)
                                 DropdownMenuItem(
-                                    value: noteVisibility,
-                                    child: Text(noteVisibility.displayName))
+                                  value: noteVisibility,
+                                  child:
+                                      Text(noteVisibility.displayName(context)),
+                                ),
                             ],
                             value: defaultNoteVisibility,
                             onChanged: (value) {
@@ -144,8 +148,9 @@ class SeveralAccountGeneralSettingsPageState
                               for (final acceptance
                                   in ReactionAcceptance.values)
                                 DropdownMenuItem(
-                                    value: acceptance,
-                                    child: Text(acceptance.displayName))
+                                  value: acceptance,
+                                  child: Text(acceptance.displayName(context)),
+                                ),
                             ],
                             value: defaultReactionAppearance,
                             onChanged: (value) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/origin_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -95,8 +96,9 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
               children: [
                 for (final element in Origin.values)
                   Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Text(element.displayName))
+                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                    child: Text(element.displayName(context)),
+                  ),
               ],
             );
           },

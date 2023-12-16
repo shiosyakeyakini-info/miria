@@ -944,5 +944,15 @@
     },
     "confirmRemoveUser": "このユーザーをリストから外しますか？",
     "removeUser": "外す",
-    "confirmDeleteList": "このリストを削除しますか？"
+    "confirmDeleteList": "このリストを削除しますか？",
+
+    "homeOnly": "ホームのみ",
+    "followersOnly": "フォロワーのみ",
+    "originCombined": "全て",
+    "followerAscendingOrder": "フォロワーが少ない順",
+    "followerDescendingOrder": "フォロワーが多い順",
+    "createdAtAscendingOrder": "古い順",
+    "createdAtDescendingOrder": "新しい順",
+    "updatedAtAscendingOrder": "更新されていない順",
+    "updatedAtDescendingOrder": "更新された順"
 }
