@@ -48,6 +48,7 @@ class TabSettingsRepository extends ChangeNotifier {
 
   Future<void> initializeTabSettings(Acct acct) async {
     await save([
+      ..._tabSettings,
       TabSetting(
         icon: TabIcon(codePoint: Icons.home.codePoint),
         tabType: TabType.homeTimeline,
