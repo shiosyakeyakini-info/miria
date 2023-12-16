@@ -308,6 +308,14 @@ class UserInformationState extends ConsumerState<UserInformation> {
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!),
                   height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  loadingBuilder: (context, widget, event) => SizedBox(
+                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      height:
+                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  errorBuilder: (context, e, s) => SizedBox(
+                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      height:
+                          DefaultTextStyle.of(context).style.fontSize ?? 22),
                 ),
               ),
             )
