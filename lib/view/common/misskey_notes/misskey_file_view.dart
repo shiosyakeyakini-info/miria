@@ -42,8 +42,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                 maxHeight: widget.height, maxWidth: double.infinity),
             child: MisskeyImage(
               isSensitive: targetFile.isSensitive,
-              thumbnailUrl:
-                  (targetFile.thumbnailUrl ?? targetFile.url).toString(),
+              thumbnailUrl: targetFile.thumbnailUrl,
               targetFiles: [targetFile.url.toString()],
               fileType: targetFile.type,
               name: targetFile.name,
@@ -70,7 +69,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                     width: double.infinity,
                     child: MisskeyImage(
                       isSensitive: targetFile.element.isSensitive,
-                      thumbnailUrl: targetFile.element.thumbnailUrl?.toString(),
+                      thumbnailUrl: targetFile.element.thumbnailUrl,
                       targetFiles: targetFiles.map((e) => e.url).toList(),
                       fileType: targetFile.element.type,
                       name: targetFile.element.name,
