@@ -24,7 +24,7 @@ class UsersListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("リスト"),
+        title: Text(S.of(context).list),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -61,7 +61,7 @@ class UsersListPage extends ConsumerWidget {
                     onPressed: () async {
                       final result = await SimpleConfirmDialog.show(
                         context: context,
-                        message: "このリストを削除しますか？",
+                        message: S.of(context).confirmDeleteList,
                         primary: S.of(context).doDeleting,
                         secondary: S.of(context).cancel,
                       );

@@ -145,13 +145,20 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
             children: [
               Text(S.of(context).onlineUsers),
               if (onlineUsers != null)
-                Text.rich(TextSpan(children: [
+                Text.rich(
                   TextSpan(
-                      text: onlineUsers.format(),
-                      style: Theme.of(context).textTheme.headlineSmall),
-                  TextSpan(
-                      text: " 人", style: Theme.of(context).textTheme.bodyMedium)
-                ])),
+                    children: [
+                      TextSpan(
+                        text: onlineUsers.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      TextSpan(
+                        text: " ${S.of(context).persons}",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 children: [
@@ -238,9 +245,9 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                                         .textTheme
                                         .headlineSmall),
                                 TextSpan(
-                                    text: " ミリ秒",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
+                                  text: " ${S.of(context).milliSeconds}",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                                 WidgetSpan(
                                     alignment: PlaceholderAlignment.middle,
                                     child: IconButton(

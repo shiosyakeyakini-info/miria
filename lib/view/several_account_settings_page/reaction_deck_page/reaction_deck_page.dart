@@ -53,7 +53,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("リアクションデッキ"),
+        title: Text(S.of(context).reactionDeck),
         actions: [
           PopupMenuButton(
             onSelected: (type) => switch (type) {
@@ -63,18 +63,18 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
               ReactionDeckPageMenuType.clear =>
                 clearReactions(context: context),
             },
-            itemBuilder: (context) => const [
+            itemBuilder: (context) => [
               PopupMenuItem(
                 value: ReactionDeckPageMenuType.addMany,
-                child: Text("一括追加"),
+                child: Text(S.of(context).bulkAddReactions),
               ),
               PopupMenuItem(
                 value: ReactionDeckPageMenuType.clear,
-                child: Text("クリア"),
+                child: Text(S.of(context).clear),
               ),
               PopupMenuItem(
                 value: ReactionDeckPageMenuType.copy,
-                child: Text("コピー"),
+                child: Text(S.of(context).copy),
               ),
             ],
           )
@@ -121,28 +121,31 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
               Row(
                 children: [
                   IconButton(
-                      onPressed: () async {
-                        final reaction = await showDialog<MisskeyEmojiData?>(
-                          context: context,
-                          builder: (context) => ReactionPickerDialog(
-                            account: widget.account,
-                            isAcceptSensitive: true,
-                          ),
-                        );
-                        if (reaction == null) return;
-                        if (reactions.any(
-                          (element) => element.baseName == reaction.baseName,
-                        )) {
-                          // already added.
-                          return;
-                        }
-                        setState(() {
-                          reactions.add(reaction);
-                          save();
-                        });
-                      },
-                      icon: const Icon(Icons.add)),
-                  const Expanded(child: Text("長押しして並び変え、押して削除、＋を押して追加します。"))
+                    onPressed: () async {
+                      final reaction = await showDialog<MisskeyEmojiData?>(
+                        context: context,
+                        builder: (context) => ReactionPickerDialog(
+                          account: widget.account,
+                          isAcceptSensitive: true,
+                        ),
+                      );
+                      if (reaction == null) return;
+                      if (reactions.any(
+                        (element) => element.baseName == reaction.baseName,
+                      )) {
+                        // already added.
+                        return;
+                      }
+                      setState(() {
+                        reactions.add(reaction);
+                        save();
+                      });
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
+                  Expanded(
+                    child: Text(S.of(context).editReactionDeckDescription),
+                  ),
                 ],
               )
             ],
@@ -205,16 +208,17 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(S.of(context).done)),
+      SnackBar(content: Text(S.of(context).doneCopy)),
     );
   }
 
   Future<void> clearReactions({required BuildContext context}) async {
     if (await SimpleConfirmDialog.show(
-            context: context,
-            message: "すでに設定済みのリアクションデッキをいったんすべてクリアしますか？",
-            primary: "クリアする",
-            secondary: S.of(context).cancel) ==
+          context: context,
+          message: S.of(context).confirmClearReactionDeck,
+          primary: S.of(context).clearReactionDeck,
+          secondary: S.of(context).cancel,
+        ) ==
         true) {
       setState(() {
         reactions.clear();

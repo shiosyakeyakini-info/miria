@@ -105,10 +105,11 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
 
   Future<void> blockingCreate() async {
     if (await SimpleConfirmDialog.show(
-            context: context,
-            message: "ブロックしてもええか？",
-            primary: "ブロックする",
-            secondary: S.of(context).cancel) !=
+          context: context,
+          message: S.of(context).confirmCreateBlock,
+          primary: S.of(context).createBlock,
+          secondary: S.of(context).cancel,
+        ) !=
         true) {
       return;
     }
@@ -207,7 +208,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           ),
         ListTile(
           leading: const Icon(Icons.open_in_new),
-          title: Text(S.of(context).openAsOtherAccount),
+          title: Text(S.of(context).openInAnotherAccount),
           onTap: () => ref
               .read(misskeyNoteNotifierProvider(widget.account).notifier)
               .openUserInOtherAccount(context, widget.response.toUser())
@@ -215,49 +216,49 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ),
         ListTile(
           leading: const Icon(Icons.list),
-          title: const Text("リストに追加"),
+          title: Text(S.of(context).addToList),
           onTap: addToList,
         ),
         ListTile(
           leading: const Icon(Icons.settings_input_antenna),
-          title: const Text("アンテナに追加"),
+          title: Text(S.of(context).addToAntenna),
           onTap: addToAntenna,
         ),
         if (!widget.isMe) ...[
           if (widget.response.isRenoteMuted ?? false)
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
-              title: const Text("Renoteのミュート解除する"),
+              title: Text(S.of(context).deleteRenoteMute),
               onTap: renoteMuteDelete.expectFailure(context),
             )
           else
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
-              title: const Text("Renoteをミュートする"),
+              title: Text(S.of(context).createRenoteMute),
               onTap: renoteMuteCreate.expectFailure(context),
             ),
           if (widget.response.isMuted ?? false)
             ListTile(
               leading: const Icon(Icons.visibility),
-              title: const Text("ミュート解除する"),
+              title: Text(S.of(context).deleteMute),
               onTap: muteDelete.expectFailure(context),
             )
           else
             ListTile(
               leading: const Icon(Icons.visibility_off),
-              title: const Text("ミュートする"),
+              title: Text(S.of(context).createMute),
               onTap: muteCreate.expectFailure(context),
             ),
           if (widget.response.isBlocking ?? false)
             ListTile(
               leading: const Icon(Icons.block),
-              title: const Text("ブロックを解除する"),
+              title: Text(S.of(context).deleteBlock),
               onTap: blockingDelete.expectFailure(context),
             )
           else
             ListTile(
               leading: const Icon(Icons.block),
-              title: const Text("ブロックする"),
+              title: Text(S.of(context).createBlock),
               onTap: blockingCreate.expectFailure(context),
             ),
         ],
@@ -274,16 +275,25 @@ class ExpireSelectDialog extends StatefulWidget {
 }
 
 enum Expire {
-  indefinite(null, "無期限"),
-  minutes_10(Duration(minutes: 10), "10分間"),
-  hours_1(Duration(hours: 1), "1時間"),
-  day_1(Duration(days: 1), "1日"),
-  week_1(Duration(days: 7), "1週間");
+  indefinite(null),
+  minutes_10(Duration(minutes: 10)),
+  hours_1(Duration(hours: 1)),
+  day_1(Duration(days: 1)),
+  week_1(Duration(days: 7));
 
   final Duration? expires;
-  final String name;
 
-  const Expire(this.expires, this.name);
+  const Expire(this.expires);
+
+  String displayName(BuildContext context) {
+    return switch (this) {
+      Expire.indefinite => S.of(context).unlimited,
+      Expire.minutes_10 => S.of(context).minutes10,
+      Expire.hours_1 => S.of(context).hours1,
+      Expire.day_1 => S.of(context).day1,
+      Expire.week_1 => S.of(context).week1,
+    };
+  }
 }
 
 class ExpireSelectDialogState extends State<ExpireSelectDialog> {
@@ -292,7 +302,7 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("期限を選択してください。"),
+      title: Text(S.of(context).selectDuration),
       content: Container(
         child: DropdownButton<Expire>(
           items: [

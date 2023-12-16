@@ -325,7 +325,7 @@ class AntennaSettingsForm extends ConsumerWidget {
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveLocal),
-            subtitle: const Text("ローカルのみの指定はMisskey 2023.10.2以降で有効です。"),
+            subtitle: Text(S.of(context).receiveLocalAvailability),
             value: settings.localOnly,
             onChanged: ref
                 .read(_antennaSettingsNotifierProvider.notifier)

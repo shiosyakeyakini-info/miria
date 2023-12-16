@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:file/file.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -25,23 +26,33 @@ part 'note_create_state_notifier.freezed.dart';
 enum NoteSendStatus { sending, finished, error }
 
 enum VoteExpireType {
-  unlimited("無期限"),
-  date("日時指定"),
-  duration("期間指定");
+  unlimited,
+  date,
+  duration;
 
-  final String displayText;
-
-  const VoteExpireType(this.displayText);
+  String displayText(BuildContext context) {
+    return switch (this) {
+      VoteExpireType.unlimited => S.of(context).unlimited,
+      VoteExpireType.date => S.of(context).specifyByDate,
+      VoteExpireType.duration => S.of(context).specifyByDuration,
+    };
+  }
 }
 
 enum VoteExpireDurationType {
-  seconds("秒"),
-  minutes("分"),
-  hours("時間"),
-  day("日");
+  seconds,
+  minutes,
+  hours,
+  day;
 
-  final String displayText;
-  const VoteExpireDurationType(this.displayText);
+  String displayText(BuildContext context) {
+    return switch (this) {
+      VoteExpireDurationType.seconds => S.of(context).seconds,
+      VoteExpireDurationType.minutes => S.of(context).minutes,
+      VoteExpireDurationType.hours => S.of(context).hours,
+      VoteExpireDurationType.day => S.of(context).days,
+    };
+  }
 }
 
 @freezed
@@ -645,11 +656,18 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
       SimpleMessageDialog.show(
-          context, "リプライが${replyVisibility!.displayName}やから、パブリックにでけへん");
+        context,
+        S.of(context).cannotPublicReplyToPrivateNote(
+              replyVisibility!.displayName,
+            ),
+      );
       return false;
     }
     if (state.account.i.isSilenced == true) {
-      SimpleMessageDialog.show(context, "サイレンスロールになっているため、パブリックで投稿することはできません。");
+      SimpleMessageDialog.show(
+        context,
+        S.of(context).cannotPublicNoteBySilencedUser,
+      );
       return false;
     }
     return true;
@@ -664,20 +682,22 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   void toggleLocalOnly(BuildContext context) {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      errorNotifier.state =
-          (SpecifiedException("チャンネルのノートを連合にすることはでけへんねん。"), context);
+      errorNotifier.state = (
+        SpecifiedException(S.of(context).cannotFederateNoteToChannel),
+        context
+      );
       return;
     }
     if (state.reply?.localOnly == true) {
       errorNotifier.state = (
-        SpecifiedException("リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
+        SpecifiedException(S.of(context).cannotFederateReplyToLocalOnlyNote),
         context
       );
       return;
     }
     if (state.renote?.localOnly == true) {
       errorNotifier.state = (
-        SpecifiedException("リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
+        SpecifiedException(S.of(context).cannotFederateRenoteToLocalOnlyNote),
         context
       );
       return;

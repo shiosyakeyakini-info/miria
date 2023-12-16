@@ -120,8 +120,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                     ]),
                   if (data.maintainerName != null)
                     TableRow(children: [
-                      const Text(
-                        "管理者",
+                      Text(
+                        S.of(context).administrator,
                         textAlign: TextAlign.center,
                       ),
                       Text(
@@ -130,8 +130,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                     ]),
                   if (data.maintainerEmail != null)
                     TableRow(children: [
-                      const Text(
-                        "連絡先",
+                      Text(
+                        S.of(context).contact,
                         textAlign: TextAlign.center,
                       ),
                       Text(
@@ -140,8 +140,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                     ]),
                   if (data.serverRules.isNotEmpty)
                     TableRow(children: [
-                      const Text(
-                        "サーバーのきめごと",
+                      Text(
+                        S.of(context).serverRules,
                         textAlign: TextAlign.center,
                       ),
                       Column(
@@ -169,8 +169,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                     ]),
                   if (data.privacyPolicyUrl != null)
                     TableRow(children: [
-                      const Text(
-                        "プライバシーポリシー",
+                      Text(
+                        S.of(context).privacyPolicy,
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
@@ -184,8 +184,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                     ]),
                   if (data.impressumUrl != null)
                     TableRow(children: [
-                      const Text(
-                        "運営者情報",
+                      Text(
+                        S.of(context).impressum,
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(

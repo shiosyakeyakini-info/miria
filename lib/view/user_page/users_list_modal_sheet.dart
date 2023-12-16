@@ -54,7 +54,7 @@ class UsersListModalSheet extends ConsumerWidget {
             } else {
               return ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text("リストを作成"),
+                title: Text(S.of(context).createList),
                 onTap: () async {
                   final settings = await showDialog<UsersListSettings>(
                     context: context,

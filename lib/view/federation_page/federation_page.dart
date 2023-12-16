@@ -188,7 +188,7 @@ class FederationPageState extends ConsumerState<FederationPage> {
                 if (isSupportedTimeline) Tab(text: S.of(context).customEmoji),
                 if (isSupportedTimeline)
                   Tab(text: S.of(context).localTimelineAbbr),
-                if (enableSearch) const Tab(text: "検索")
+                if (enableSearch) Tab(text: S.of(context).search),
               ],
               tabAlignment: TabAlignment.center,
             ),

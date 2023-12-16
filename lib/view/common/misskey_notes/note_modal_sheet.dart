@@ -108,7 +108,7 @@ class NoteModalSheet extends ConsumerWidget {
         if (targetNote.user.host != null)
           ListTile(
             leading: const Icon(Icons.rocket_launch),
-            title: Text(S.of(context).openBrowsers),
+            title: Text(S.of(context).openBrowsersAsRemote),
             onTap: () async {
               final uri = targetNote.url ?? targetNote.uri;
               if (uri == null) return;
@@ -122,7 +122,7 @@ class NoteModalSheet extends ConsumerWidget {
             accounts.where((e) => e.host == account.host).length > 1)
           ListTile(
             leading: const Icon(Icons.open_in_new),
-            title: Text(S.of(context).openBrowsersAsRemote),
+            title: Text(S.of(context).openInAnotherAccount),
             onTap: () => ref
                 .read(misskeyNoteNotifierProvider(account).notifier)
                 .openNoteInOtherAccount(context, targetNote)

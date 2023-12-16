@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -22,7 +23,7 @@ class ReplyToArea extends ConsumerWidget {
       child: Wrap(
         children: [
           Text(
-            "返信先：",
+            "${S.of(context).replyTo}：",
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const Padding(padding: EdgeInsets.only(left: 10)),

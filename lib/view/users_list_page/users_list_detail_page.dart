@@ -152,12 +152,15 @@ class UsersListDetailPage extends ConsumerWidget {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text("メンバー"),
+                    title: Text(S.of(context).members),
                     subtitle: Text(
-                      "${users.length}/${account.i.policies.userEachUserListsLimit} 人",
+                      S.of(context).listCapacity(
+                            users.length,
+                            account.i.policies.userEachUserListsLimit,
+                          ),
                     ),
                     trailing: ElevatedButton(
-                      child: const Text("ユーザーを追加"),
+                      child: Text(S.of(context).addUser),
                       onPressed: () async {
                         final user = await showDialog<User>(
                           context: context,
@@ -191,8 +194,8 @@ class UsersListDetailPage extends ConsumerWidget {
                               onPressed: () async {
                                 final result = await SimpleConfirmDialog.show(
                                   context: context,
-                                  message: "このユーザーをリストから外しますか？",
-                                  primary: "外す",
+                                  message: S.of(context).confirmRemoveUser,
+                                  primary: S.of(context).removeUser,
                                   secondary: S.of(context).cancel,
                                 );
                                 if (!context.mounted) return;
