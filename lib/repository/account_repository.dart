@@ -105,15 +105,15 @@ class AccountRepository extends Notifier<List<Account>> {
 
     switch (setting.metaChacheStrategy) {
       case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) updateMeta();
+        if (!_validatedAccts.contains(acct)) await updateMeta();
         break;
       case CacheStrategy.whenOneDay:
         final latestUpdated = setting.latestMetaCached;
         if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          updateMeta();
+          await updateMeta();
         }
       case CacheStrategy.whenTabChange:
-        updateMeta();
+        await updateMeta();
         break;
     }
 
