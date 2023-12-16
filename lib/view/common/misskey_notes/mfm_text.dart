@@ -156,7 +156,8 @@ class MfmTextState extends ConsumerState<MfmText> {
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
       mentionTap: (userName, host, acct) => const LinkNavigator()
-          .onMentionTap(context, ref, acct, widget.host)
+          .onMentionTap(
+              context, ref, AccountScope.of(context), acct, widget.host)
           .expectFailure(context),
       hashtagTap: onHashtagTap,
       searchTap: onSearch,
