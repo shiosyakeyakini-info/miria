@@ -163,7 +163,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text(data.createdAt.format),
+                  child: Text(data.createdAt.format(context)),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
                 MfmText(

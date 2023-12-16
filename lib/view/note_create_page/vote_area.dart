@@ -243,7 +243,7 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
                     const Padding(padding: EdgeInsets.only(left: 10)),
                     Expanded(
                       child: Text(
-                        date?.formatUntilSeconds ?? "",
+                        date?.formatUntilSeconds(context) ?? "",
                       ),
                     ),
                   ]),

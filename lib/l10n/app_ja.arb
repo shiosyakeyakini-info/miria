@@ -424,6 +424,24 @@
 
 
     "pageWrittenBy": "このページ書きはった人",
+    "pageCreatedAt": "作成日: {createdAt}",
+    "@pageCreatedAt": {
+        "placeholders": {
+            "createdAt": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            }
+        }
+    },
+    "pageUpdatedAt": "更新日: {updatedAt}",
+    "@pageUpdatedAt": {
+        "placeholders": {
+            "updatedAt": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            }
+        }
+    },
     "unsupportedPage": "Miriaが対応してないページやわ　ブラウザで見てな",
     "canNotFavoriteMyPage": "自分のページにはふぁぼつけられへんねん",
 
@@ -491,6 +509,135 @@
     "thrownUnknownError": "不明なエラー",
     "thrownError": "エラーが起きたみたいや",
     "unsupportedServer": "非対応のサーバーです",
+
+    "future": "未来",
+    "justNow": "たったいま",
+    "secondsAgo": "{n}秒前",
+    "@secondsAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "minutesAgo": "{n}分前",
+    "@minutesAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "hoursAgo": "{n}時間前",
+    "@hoursAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "daysAgo": "{n}日前",
+    "@daysAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "yearsAgo": "{n}年前",
+    "@yearsAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inSeconds": "{n}秒後",
+    "@inSeconds": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inMinutes": "{n}分後",
+    "@inMinutes": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inHours": "{n}時間後",
+    "@inHours": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inDays": "{n}日後",
+    "@inDays": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inYears": "{n}年後",
+    "@inYears": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nSeconds": "{n, plural, other {{n}秒}}",
+    "@nSeconds": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nMinutes": "{n, plural, other {{n}分}}",
+    "@nMinutes": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nHours": "{n, plural, other {{n}時間}}",
+    "@nHours": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nDays": "{n, plural, other {{n}日}}",
+    "@nDays": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
 
     "lightMode": "ライトモード",
     "darkMode": "ダークモード",
@@ -583,6 +730,15 @@
     "cannotFederateNoteToChannel": "チャンネルのノートを連合にすることはでけへんねん。",
     "cannotFederateReplyToLocalOnlyNote": "リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。",
     "cannotFederateRenoteToLocalOnlyNote": "リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。",
+
+    "noteCreatedAt": "投稿時間: {createdAt}",
+    "@noteCreatedAt": {
+        "placeholders": {
+            "createdAt": {
+                "type": "String"
+            }
+        }
+    },
 
     "accept": "許可",
     "reject": "拒否",

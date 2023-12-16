@@ -127,9 +127,9 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
                 ),
                 if (data.lastNotedAt != null)
                   Text(
-                    S
-                        .of(context)
-                        .channelLastNotedAt(data.lastNotedAt!.differenceNow),
+                    S.of(context).channelLastNotedAt(
+                          data.lastNotedAt!.differenceNow(context),
+                        ),
                     style: Theme.of(context).textTheme.bodySmall,
                   )
               ],

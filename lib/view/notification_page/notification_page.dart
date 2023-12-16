@@ -215,7 +215,7 @@ class NotificationItem extends ConsumerWidget {
                             emojis:
                                 notification.renoteUsers.first?.emojis ?? {}),
                       ),
-                    Text(notification.createdAt.differenceNow)
+                    Text(notification.createdAt.differenceNow(context)),
                   ],
                 ),
               ),
@@ -328,7 +328,7 @@ class NotificationItem extends ConsumerWidget {
                       emojis: user?.emojis ?? {},
                     ),
                   ),
-                  Text(notification.createdAt.differenceNow),
+                  Text(notification.createdAt.differenceNow(context)),
                 ],
               ),
               if (user != null) UserListItem(user: user),
@@ -389,7 +389,7 @@ class NotificationItem extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(child: Text(notification.text)),
-              Text(notification.createdAt.differenceNow),
+              Text(notification.createdAt.differenceNow(context)),
             ],
           ),
         );
@@ -404,7 +404,7 @@ class NotificationItem extends ConsumerWidget {
                   children: [
                     Expanded(
                         child: Text(S.of(context).finishedVotedNotification)),
-                    Text(notification.createdAt.differenceNow),
+                    Text(notification.createdAt.differenceNow(context)),
                   ],
                 ),
               ),

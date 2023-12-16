@@ -63,8 +63,10 @@ class CommunityChannelView extends StatelessWidget {
                                     S.of(context).channelStatistics(
                                           channel.notesCount,
                                           channel.usersCount,
-                                          channel.lastNotedAt?.differenceNow ??
-                                              channel.createdAt.differenceNow,
+                                          channel.lastNotedAt
+                                                  ?.differenceNow(context) ??
+                                              channel.createdAt
+                                                  .differenceNow(context),
                                         ),
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
