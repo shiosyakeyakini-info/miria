@@ -376,6 +376,11 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       SimpleMessageDialog.show(context, "アンテナを指定してください。");
                       return;
                     }
+                    if (tabType == TabType.roleTimeline &&
+                        selectedRole == null) {
+                      SimpleMessageDialog.show(context, "ロールを指定してください。");
+                      return;
+                    }
 
                     final list = ref
                         .read(tabSettingsRepositoryProvider)
