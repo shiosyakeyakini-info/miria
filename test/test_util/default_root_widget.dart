@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miria/main.dart';
 import 'package:miria/router/app_router.dart';
@@ -35,6 +36,7 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
       ],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
+        S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -72,6 +74,7 @@ class DefaultRootNoRouterWidget extends StatelessWidget {
       home: child,
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
+        S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/repository/account_repository.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/mockito.dart';
 
@@ -20,7 +20,7 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(() => accountRepository.openMiAuth("https://misskey.io/"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<InvalidServerException>()));
   });
 
   test("Activity Pub非対応サーバーの場合、エラーを返すこと", () {
@@ -31,7 +31,7 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(() async => await accountRepository.openMiAuth("sawakai.space"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<ServerIsNotMisskeyException>()));
     verify(dio.getUri(argThat(equals(Uri(
         scheme: "https",
         host: "sawakai.space",
@@ -55,7 +55,7 @@ void main() {
 
     await expectLater(
         () async => await accountRepository.openMiAuth("calckey.jp"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<SoftwareNotCompatibleException>()));
 
     verifyInOrder([
       dio.getUri(argThat(equals(Uri(
@@ -89,6 +89,6 @@ void main() {
 
     await expectLater(
         () async => await accountRepository.openMiAuth("misskey.dev"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<SoftwareNotCompatibleException>()));
   });
 }
