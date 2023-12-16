@@ -166,6 +166,8 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
 
         if (index != 0 && (index == 3 || index % 30 == 0) && widget.showAd) {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
               widget.itemBuilder(context, items[index]),
               const MisskeyAd(),
