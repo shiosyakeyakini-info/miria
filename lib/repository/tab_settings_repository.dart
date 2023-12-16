@@ -46,27 +46,29 @@ class TabSettingsRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initializeTabSettings(Acct acct) async {
+  Future<void> initializeTabSettings(Account account) async {
     await save([
       ..._tabSettings,
       TabSetting(
         icon: TabIcon(codePoint: Icons.home.codePoint),
         tabType: TabType.homeTimeline,
         name: "ホームタイムライン",
-        acct: acct,
+        acct: account.acct,
       ),
-      TabSetting(
-        icon: TabIcon(codePoint: Icons.public.codePoint),
-        tabType: TabType.localTimeline,
-        name: "ローカルタイムライン",
-        acct: acct,
-      ),
-      TabSetting(
-        icon: TabIcon(codePoint: Icons.rocket_launch.codePoint),
-        tabType: TabType.globalTimeline,
-        name: "グローバルタイムライン",
-        acct: acct,
-      ),
+      if (account.i.policies.ltlAvailable)
+        TabSetting(
+          icon: TabIcon(codePoint: Icons.public.codePoint),
+          tabType: TabType.localTimeline,
+          name: "ローカルタイムライン",
+          acct: account.acct,
+        ),
+      if (account.i.policies.gtlAvailable)
+        TabSetting(
+          icon: TabIcon(codePoint: Icons.rocket_launch.codePoint),
+          tabType: TabType.globalTimeline,
+          name: "グローバルタイムライン",
+          acct: account.acct,
+        ),
     ]);
   }
 }
