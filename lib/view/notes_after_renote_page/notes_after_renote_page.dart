@@ -36,6 +36,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
       body: Padding(
         padding: const EdgeInsets.only(right: 10),
         child: PushableListView<Note>(
+          showAd: false,
           initializeFuture: () async {
             final (
               notesAfterRenote,
