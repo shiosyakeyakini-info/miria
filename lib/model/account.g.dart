@@ -12,7 +12,9 @@ _$AccountImpl _$$AccountImplFromJson(Map<String, dynamic> json) =>
       userId: json['userId'] as String,
       token: json['token'] as String?,
       i: IResponse.fromJson(json['i'] as Map<String, dynamic>),
-      meta: MetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
+      meta: json['meta'] == null
+          ? null
+          : MetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AccountImplToJson(_$AccountImpl instance) =>
@@ -21,5 +23,5 @@ Map<String, dynamic> _$$AccountImplToJson(_$AccountImpl instance) =>
       'userId': instance.userId,
       'token': instance.token,
       'i': instance.i.toJson(),
-      'meta': instance.meta.toJson(),
+      'meta': instance.meta?.toJson(),
     };

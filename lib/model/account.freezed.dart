@@ -24,7 +24,7 @@ mixin _$Account {
   String get userId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   IResponse get i => throw _privateConstructorUsedError;
-  MetaResponse get meta => throw _privateConstructorUsedError;
+  MetaResponse? get meta => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,10 +41,10 @@ abstract class $AccountCopyWith<$Res> {
       String userId,
       String? token,
       IResponse i,
-      MetaResponse meta});
+      MetaResponse? meta});
 
   $IResponseCopyWith<$Res> get i;
-  $MetaResponseCopyWith<$Res> get meta;
+  $MetaResponseCopyWith<$Res>? get meta;
 }
 
 /// @nodoc
@@ -64,7 +64,7 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     Object? userId = null,
     Object? token = freezed,
     Object? i = null,
-    Object? meta = null,
+    Object? meta = freezed,
   }) {
     return _then(_value.copyWith(
       host: null == host
@@ -83,10 +83,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
               as IResponse,
-      meta: null == meta
+      meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
-              as MetaResponse,
+              as MetaResponse?,
     ) as $Val);
   }
 
@@ -100,8 +100,12 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
 
   @override
   @pragma('vm:prefer-inline')
-  $MetaResponseCopyWith<$Res> get meta {
-    return $MetaResponseCopyWith<$Res>(_value.meta, (value) {
+  $MetaResponseCopyWith<$Res>? get meta {
+    if (_value.meta == null) {
+      return null;
+    }
+
+    return $MetaResponseCopyWith<$Res>(_value.meta!, (value) {
       return _then(_value.copyWith(meta: value) as $Val);
     });
   }
@@ -119,12 +123,12 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
       String userId,
       String? token,
       IResponse i,
-      MetaResponse meta});
+      MetaResponse? meta});
 
   @override
   $IResponseCopyWith<$Res> get i;
   @override
-  $MetaResponseCopyWith<$Res> get meta;
+  $MetaResponseCopyWith<$Res>? get meta;
 }
 
 /// @nodoc
@@ -142,7 +146,7 @@ class __$$AccountImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? token = freezed,
     Object? i = null,
-    Object? meta = null,
+    Object? meta = freezed,
   }) {
     return _then(_$AccountImpl(
       host: null == host
@@ -161,10 +165,10 @@ class __$$AccountImplCopyWithImpl<$Res>
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
               as IResponse,
-      meta: null == meta
+      meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
-              as MetaResponse,
+              as MetaResponse?,
     ));
   }
 }
@@ -177,7 +181,7 @@ class _$AccountImpl extends _Account {
       required this.userId,
       this.token,
       required this.i,
-      required this.meta})
+      this.meta})
       : super._();
 
   factory _$AccountImpl.fromJson(Map<String, dynamic> json) =>
@@ -192,7 +196,7 @@ class _$AccountImpl extends _Account {
   @override
   final IResponse i;
   @override
-  final MetaResponse meta;
+  final MetaResponse? meta;
 
   @override
   String toString() {
@@ -219,7 +223,7 @@ abstract class _Account extends Account {
       required final String userId,
       final String? token,
       required final IResponse i,
-      required final MetaResponse meta}) = _$AccountImpl;
+      final MetaResponse? meta}) = _$AccountImpl;
   const _Account._() : super._();
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$AccountImpl.fromJson;
@@ -233,7 +237,7 @@ abstract class _Account extends Account {
   @override
   IResponse get i;
   @override
-  MetaResponse get meta;
+  MetaResponse? get meta;
   @override
   @JsonKey(ignore: true)
   _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>

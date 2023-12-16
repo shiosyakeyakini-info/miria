@@ -31,7 +31,7 @@ class MisskeyAdState extends ConsumerState<MisskeyAd> {
       return;
     }
 
-    final ads = AccountScope.of(context).meta.ads;
+    final ads = AccountScope.of(context).meta?.ads ?? [];
     final totalRatio = ads.map((e) => e.ratio).sum;
     final choosenRatio = Random().nextDouble() * totalRatio;
 

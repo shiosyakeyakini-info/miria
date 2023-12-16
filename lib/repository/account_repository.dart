@@ -39,9 +39,7 @@ class AccountRepository extends Notifier<List<Account>> {
                 .read(misskeyWithoutAccountProvider(element["host"]))
                 .meta();
             element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
-          } catch (e) {
-            resultList.remove(element);
-          }
+          } catch (e) {}
         }
       }
 
