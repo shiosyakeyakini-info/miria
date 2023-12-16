@@ -2,9 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:miria/const.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/themes/built_in_color_themes.dart';
 
 @RoutePage()
@@ -351,7 +353,11 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           for (final font in choosableFonts)
                             DropdownMenuItem(
                               value: font,
-                              child: Text(font.displayName),
+                              child: Text(
+                                font.displayName,
+                                style: GoogleFonts.asMap()[font.actualName]
+                                    ?.call(),
+                              ),
                             )
                         ],
                         value: choosableFonts.firstWhereOrNull(
@@ -371,7 +377,12 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           for (final font in choosableFonts)
                             DropdownMenuItem(
                               value: font,
-                              child: Text(font.displayName),
+                              child: Text(
+                                font.displayName,
+                                style: GoogleFonts.asMap()[font.actualName]
+                                        ?.call() ??
+                                    AppTheme.of(context).serifStyle,
+                              ),
                             )
                         ],
                         value: choosableFonts.firstWhereOrNull(
@@ -391,7 +402,12 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           for (final font in choosableFonts)
                             DropdownMenuItem(
                               value: font,
-                              child: Text(font.displayName),
+                              child: Text(
+                                font.displayName,
+                                style: GoogleFonts.asMap()[font.actualName]
+                                        ?.call() ??
+                                    AppTheme.of(context).monospaceStyle,
+                              ),
                             )
                         ],
                         value: choosableFonts.firstWhereOrNull(
@@ -409,7 +425,12 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           for (final font in choosableFonts)
                             DropdownMenuItem(
                               value: font,
-                              child: Text(font.displayName),
+                              child: Text(
+                                font.displayName,
+                                style: GoogleFonts.asMap()[font.actualName]
+                                        ?.call() ??
+                                    AppTheme.of(context).cursiveStyle,
+                              ),
                             )
                         ],
                         value: choosableFonts.firstWhereOrNull(
@@ -429,7 +450,12 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                           for (final font in choosableFonts)
                             DropdownMenuItem(
                               value: font,
-                              child: Text(font.displayName),
+                              child: Text(
+                                font.displayName,
+                                style: GoogleFonts.asMap()[font.actualName]
+                                        ?.call() ??
+                                    AppTheme.of(context).fantasyStyle,
+                              ),
                             )
                         ],
                         value: choosableFonts.firstWhereOrNull(

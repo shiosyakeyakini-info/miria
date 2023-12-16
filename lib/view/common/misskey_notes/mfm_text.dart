@@ -156,7 +156,8 @@ class MfmTextState extends ConsumerState<MfmText> {
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
       mentionTap: (userName, host, acct) => const LinkNavigator()
-          .onMentionTap(context, ref, acct, widget.host)
+          .onMentionTap(
+              context, ref, AccountScope.of(context), acct, widget.host)
           .expectFailure(context),
       hashtagTap: onHashtagTap,
       searchTap: onSearch,
@@ -308,6 +309,14 @@ class UserInformationState extends ConsumerState<UserInformation> {
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!),
                   height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  loadingBuilder: (context, widget, event) => SizedBox(
+                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      height:
+                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  errorBuilder: (context, e, s) => SizedBox(
+                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      height:
+                          DefaultTextStyle.of(context).style.fontSize ?? 22),
                 ),
               ),
             )

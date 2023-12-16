@@ -2,7 +2,7 @@ name: miria
 description: Miria is Misskey Client for Mobile App.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.13+86
+version: 1.0.13+87
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -17,7 +17,7 @@ dependencies:
   flutter_riverpod: ^2.3.2
   misskey_dart:
     git: https://github.com/shiosyakeyakini-info/misskey_dart.git
-  mfm: ^1.0.2
+  mfm: ^1.0.5
   tuple: ^2.0.1
   path_provider: ^2.0.14
   dio: ^5.1.1

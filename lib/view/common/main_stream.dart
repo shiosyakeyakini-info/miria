@@ -18,19 +18,16 @@ class MainStreamState extends ConsumerState<MainStream> {
   }
 
   var isConnected = false;
+  var latestAccountCount = 0;
 
   @override
   Widget build(BuildContext context) {
     final accounts = ref.watch(accountsProvider);
-
-    if (isConnected) {
-      for (final account in accounts) {
-        ref.read(mainStreamRepositoryProvider(account)).reconnect();
-      }
-    } else {
+    if (accounts.length != latestAccountCount) {
       for (final account in accounts) {
         ref.read(mainStreamRepositoryProvider(account)).connect();
       }
+      latestAccountCount = accounts.length;
     }
 
     return widget.child;

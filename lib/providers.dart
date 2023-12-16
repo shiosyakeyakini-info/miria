@@ -44,6 +44,11 @@ final misskeyProvider = Provider.family<Misskey, Account>(
     socketConnectionTimeout: const Duration(seconds: 20),
   ),
 );
+final misskeyWithoutAccountProvider = Provider.family<Misskey, String>(
+    (ref, host) => Misskey(
+        host: host,
+        token: null,
+        socketConnectionTimeout: const Duration(seconds: 20)));
 
 final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -207,6 +212,12 @@ final accountRepositoryProvider =
 
 final accountsProvider =
     Provider<List<Account>>((ref) => ref.watch(accountRepositoryProvider));
+
+final iProvider = Provider.family<IResponse, Acct>((ref, acct) {
+  final accounts = ref.watch(accountsProvider);
+  final account = accounts.firstWhere((account) => account.acct == acct);
+  return account.i;
+});
 
 final accountProvider = Provider.family<Account, Acct>(
   (ref, acct) => ref.watch(

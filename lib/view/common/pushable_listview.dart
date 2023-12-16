@@ -4,6 +4,7 @@ import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/error_notification.dart';
+import 'package:miria/view/common/misskey_ad.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
@@ -13,6 +14,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final Object listKey;
   final bool shrinkWrap;
   final ScrollPhysics? physics;
+  final bool showAd;
 
   const PushableListView({
     super.key,
@@ -23,6 +25,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
     this.shrinkWrap = false,
     this.physics,
     this.additionalErrorInfo,
+    this.showAd = true,
   });
 
   @override
@@ -160,7 +163,19 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
             ],
           );
         }
-        return widget.itemBuilder(context, items[index]);
+
+        if (index != 0 && (index == 3 || index % 30 == 0) && widget.showAd) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              widget.itemBuilder(context, items[index]),
+              const MisskeyAd(),
+            ],
+          );
+        } else {
+          return widget.itemBuilder(context, items[index]);
+        }
       },
     );
   }

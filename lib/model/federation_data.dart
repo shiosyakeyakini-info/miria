@@ -9,8 +9,14 @@ class FederationData with _$FederationData {
     String? bannerUrl,
     String? faviconUrl,
     String? tosUrl,
+    String? privacyPolicyUrl,
+    String? impressumUrl,
+    String? repositoryUrl,
+    @Default([]) List<String> serverRules,
     @Default("") String name,
     @Default("") String description,
+    String? maintainerName,
+    String? maintainerEmail,
     int? usersCount,
     int? notesCount,
     int? reactionCount,
@@ -21,5 +27,6 @@ class FederationData with _$FederationData {
     required bool isSupportedEmoji,
     required bool isSupportedAnnouncement,
     required bool isSupportedLocalTimeline,
+    MetaResponse? meta,
   }) = _FederationData;
 }

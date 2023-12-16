@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../test_util/mock.mocks.dart';
@@ -42,7 +45,6 @@ void main() {
     when(dio.get(any)).thenAnswer((realInvocation) async => Response(
         requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo2));
     final mockMisskey = MockMisskey();
-    when(mockMisskey.endpoints()).thenAnswer((_) async => []);
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
@@ -74,10 +76,13 @@ void main() {
         data: AuthTestData.oldVerMisskeyNodeInfo2));
     final mockMisskey = MockMisskey();
     when(mockMisskey.endpoints()).thenAnswer((_) async => []);
+    when(mockMisskey.meta()).thenAnswer((_) async =>
+        MetaResponse.fromJson(jsonDecode(AuthTestData.oldVerMisskeyMeta)));
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
         misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+        misskeyWithoutAccountProvider.overrideWith((ref, arg) => mockMisskey),
       ],
     );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);

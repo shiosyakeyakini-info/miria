@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/acct.dart';
 import 'package:miria/providers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,6 +15,7 @@ import 'package:uuid/uuid.dart';
 
 class AccountRepository extends Notifier<List<Account>> {
   final _validatedAccts = <Acct>{};
+  final _validateMetaAccts = <Acct>{};
   String _sessionId = "";
 
   @override
@@ -28,9 +30,21 @@ class AccountRepository extends Notifier<List<Account>> {
       return;
     }
     try {
-      state = (jsonDecode(storedData) as List)
-          .map((e) => Account.fromJson(e))
-          .toList();
+      final list = (jsonDecode(storedData) as List);
+      final resultList = List.of(list);
+      for (final element in list) {
+        if (element["meta"] == null) {
+          try {
+            final meta = await ref
+                .read(misskeyWithoutAccountProvider(element["host"]))
+                .meta();
+            element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
+          } catch (e) {}
+        }
+      }
+
+      state = resultList.map((e) => Account.fromJson(e)).toList();
+
       _validatedAccts.clear();
     } catch (e) {
       if (kDebugMode) {
@@ -39,19 +53,77 @@ class AccountRepository extends Notifier<List<Account>> {
     }
   }
 
-  Future<void> loadFromSourceIfNeed(Acct acct) async {
-    if (_validatedAccts.contains(acct)) return;
+  Future<void> updateI(Account account) async {
+    final setting =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    _validatedAccts.add(account.acct);
 
-    final index = state.indexWhere((e) => e.acct == acct);
-    if (index < 0) return;
-    final account = state[index];
     final i = await ref.read(misskeyProvider(account)).i.i();
-    ref.read(notesProvider(account)).updateMute(i.mutedWords);
+    ref
+        .read(accountSettingsRepositoryProvider)
+        .save(setting.copyWith(latestICached: DateTime.now()));
 
     final accounts = List.of(state);
+    final index = state.indexWhere((e) => e.acct == account.acct);
+    if (index < 0) return;
     accounts[index] = account.copyWith(i: i);
     state = accounts;
-    _validatedAccts.add(acct);
+
+    ref.read(notesProvider(account)).updateMute(i.mutedWords, i.hardMutedWords);
+  }
+
+  Future<void> updateMeta(Account account) async {
+    final setting =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    _validateMetaAccts.add(account.acct);
+
+    final meta = await ref.read(misskeyProvider(account)).meta();
+    ref
+        .read(accountSettingsRepositoryProvider)
+        .save(setting.copyWith(latestMetaCached: DateTime.now()));
+
+    final accounts = List.of(state);
+    final index = state.indexWhere((e) => e.acct == account.acct);
+    if (index < 0) return;
+
+    accounts[index] = account.copyWith(meta: meta);
+    state = accounts;
+  }
+
+  Future<void> loadFromSourceIfNeed(Acct acct) async {
+    final setting = ref.read(accountSettingsRepositoryProvider).fromAcct(acct);
+
+    final account = state.firstWhere((element) => element.acct == acct);
+
+    switch (setting.iCacheStrategy) {
+      case CacheStrategy.whenLaunch:
+        if (!_validatedAccts.contains(acct)) updateI(account);
+        break;
+      case CacheStrategy.whenOneDay:
+        final latestUpdated = setting.latestICached;
+        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
+          updateI(account);
+        }
+      case CacheStrategy.whenTabChange:
+        updateI(account);
+        break;
+    }
+
+    switch (setting.metaChacheStrategy) {
+      case CacheStrategy.whenLaunch:
+        if (!_validatedAccts.contains(acct)) await updateMeta(account);
+        break;
+      case CacheStrategy.whenOneDay:
+        final latestUpdated = setting.latestMetaCached;
+        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
+          await updateMeta(account);
+        }
+      case CacheStrategy.whenTabChange:
+        await updateMeta(account);
+        break;
+    }
+
+    await _save();
   }
 
   Future<void> createUnreadAnnouncement(
@@ -76,6 +148,24 @@ class AccountRepository extends Notifier<List<Account>> {
     final i = state[index].i.copyWith(
       unreadAnnouncements: [],
     );
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
+  Future<void> addUnreadNotification(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadNotification: true);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
+  Future<void> readAllNotification(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadNotification: false);
 
     final accounts = List.of(state);
     accounts[index] = account.copyWith(i: i);
@@ -122,10 +212,16 @@ class AccountRepository extends Notifier<List<Account>> {
 
     final version = nodeInfoResult["software"]["version"];
 
-    final endpoints = await ref
-        .read(misskeyProvider(Account.demoAccount(server)))
-        .endpoints();
-    if (!endpoints.contains("emojis")) {
+    try {
+      final meta = await ref.read(misskeyWithoutAccountProvider(server)).meta();
+
+      final endpoints = await ref
+          .read(misskeyProvider(Account.demoAccount(server, meta)))
+          .endpoints();
+      if (!endpoints.contains("emojis")) {
+        throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
+      }
+    } catch (e) {
       throw SpecifiedException("Miriaと互換性のないソフトウェアです。\n$software $version");
     }
   }
@@ -135,14 +231,19 @@ class AccountRepository extends Notifier<List<Account>> {
     final token =
         await MisskeyServer().loginAsPassword(server, userId, password);
     final i = await Misskey(token: token, host: server).i.i();
-    final account = Account(host: server, token: token, userId: userId, i: i);
+    final meta = await Misskey(token: token, host: server).meta();
+    final account =
+        Account(host: server, token: token, userId: userId, i: i, meta: meta);
     _addAccount(account);
   }
 
   Future<void> loginAsToken(String server, String token) async {
     await _validateMisskey(server);
-    final i = await Misskey(token: token, host: server).i.i();
-    _addAccount(Account(host: server, userId: i.username, token: token, i: i));
+    final misskey = Misskey(token: token, host: server);
+    final i = await misskey.i.i();
+    final meta = await misskey.meta();
+    _addAccount(Account(
+        host: server, userId: i.username, token: token, i: i, meta: meta));
   }
 
   Future<void> openMiAuth(String server) async {
@@ -162,9 +263,11 @@ class AccountRepository extends Notifier<List<Account>> {
 
   Future<void> validateMiAuth(String server) async {
     final token = await MisskeyServer().checkMiAuthToken(server, _sessionId);
-    final i = await Misskey(token: token, host: server).i.i();
+    final misskey = Misskey(token: token, host: server);
+    final i = await misskey.i.i();
+    final meta = await misskey.meta();
     await _addAccount(
-      Account(host: server, userId: i.username, token: token, i: i),
+      Account(host: server, userId: i.username, token: token, i: i, meta: meta),
     );
   }
 
@@ -178,7 +281,10 @@ class AccountRepository extends Notifier<List<Account>> {
     await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
 
     await _save();
-    await _addIfTabSettingNothing();
+    await ref
+        .read(tabSettingsRepositoryProvider)
+        .initializeTabSettings(account);
+    ();
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
@@ -199,14 +305,5 @@ class AccountRepository extends Notifier<List<Account>> {
       key: "accounts",
       value: jsonEncode(state.map((e) => e.toJson()).toList()),
     );
-  }
-
-  Future<void> _addIfTabSettingNothing() async {
-    if (state.length == 1) {
-      final account = state.first;
-      ref
-          .read(tabSettingsRepositoryProvider)
-          .initializeTabSettings(account.acct);
-    }
   }
 }

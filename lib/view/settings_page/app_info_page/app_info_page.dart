@@ -35,7 +35,7 @@ class AppInfoPageState extends ConsumerState<AppInfoPage> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: AccountScope(
-            account: Account.demoAccount(""),
+            account: Account.demoAccount("", null),
             child: Column(
               children: [
                 MfmText(mfmText: '''

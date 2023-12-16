@@ -51,6 +51,8 @@ void main() {
         await tester.pumpWidget(ProviderScope(
           overrides: [
             misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+            misskeyWithoutAccountProvider
+                .overrideWith((ref, arg) => mockMisskey),
             emojiRepositoryProvider.overrideWith((ref, arg) => emojiRepository)
           ],
           child: DefaultRootWidget(
