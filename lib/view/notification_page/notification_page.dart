@@ -1,18 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
 import 'package:miria/view/notification_page/notification_page_data.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart' as mfm_text;
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart'
     as misskey_note;
@@ -56,15 +52,11 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                     final result = await misskey.i
                         .notifications(const INotificationsRequest(
                       limit: 50,
+                      markAsRead: true,
                     ));
                     ref
                         .read(notesProvider(widget.account))
                         .registerAll(result.map((e) => e.note).whereNotNull());
-                    if (result.isNotEmpty) {
-                      ref
-                          .read(mainStreamRepositoryProvider(widget.account))
-                          .latestMarkAs(result.first.id);
-                    }
                     return result.toNotificationData();
                   },
                   nextFuture: (lastElement, _) async {
