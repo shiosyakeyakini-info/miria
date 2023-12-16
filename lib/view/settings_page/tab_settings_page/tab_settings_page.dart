@@ -61,7 +61,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       final channelId = tabSetting.channelId;
       final listId = tabSetting.listId;
       final antennaId = tabSetting.antennaId;
-      nameController.text = tabSetting.name;
+      nameController.text =
+          tabSetting.name ?? tabSetting.tabType.displayName(context);
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
       isSubscribe = tabSetting.isSubscribe;

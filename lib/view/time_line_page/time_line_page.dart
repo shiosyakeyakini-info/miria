@@ -238,7 +238,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         top: 5,
                         bottom: 5,
                       ),
-                      child: Text(currentTabSetting.name),
+                      child: Text(
+                        currentTabSetting.name ??
+                            currentTabSetting.tabType.displayName(context),
+                      ),
                     ),
                   ),
                   const Nyanpuppu(),
