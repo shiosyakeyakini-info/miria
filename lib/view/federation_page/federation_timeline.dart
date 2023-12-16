@@ -34,9 +34,6 @@ class FederationTimelineState extends ConsumerState<FederationTimeline> {
         padding: const EdgeInsets.only(right: 10),
         child: PushableListView(
             initializeFuture: () async {
-              await ref
-                  .read(emojiRepositoryProvider(demoAccount))
-                  .loadFromSourceIfNeed();
               final result = await ref
                   .read(misskeyProvider(demoAccount))
                   .notes

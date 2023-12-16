@@ -34,7 +34,7 @@ class FederationCustomEmojisState
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    Future(() async {5
+    Future(() async {
       final result = await ref
           .read(misskeyProvider(Account.demoAccount(widget.host, widget.meta)))
           .emojis();
