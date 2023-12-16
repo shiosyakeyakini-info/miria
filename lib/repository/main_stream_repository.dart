@@ -22,8 +22,7 @@ class MainStreamRepository extends ChangeNotifier {
   );
 
   Future<void> confirmNotification() async {
-    final i = await misskey.i.i();
-    hasUnreadNotification = i.hasUnreadNotification;
+    await accountRepository.updateI(account);
 
     notifyListeners();
   }
@@ -31,13 +30,10 @@ class MainStreamRepository extends ChangeNotifier {
   Future<void> connect() async {
     socketController = misskey.mainStream(
       onReadAllNotifications: () {
-        hasUnreadNotification = false;
-
-        notifyListeners();
+        accountRepository.readAllNotification(account);
       },
       onUnreadNotification: (_) {
-        hasUnreadNotification = true;
-        notifyListeners();
+        accountRepository.addUnreadNotification(account);
       },
       onReadAllAnnouncements: () {
         accountRepository.removeUnreadAnnouncement(account);
@@ -58,7 +54,7 @@ class MainStreamRepository extends ChangeNotifier {
 
   Future<void> reconnect() async {
     if (isReconnecting) {
-      // 排他制御
+      // 排他制御11
       while (isReconnecting) {
         await Future.delayed(const Duration(milliseconds: 100));
       }

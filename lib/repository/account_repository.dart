@@ -53,67 +53,73 @@ class AccountRepository extends Notifier<List<Account>> {
     }
   }
 
-  Future<void> loadFromSourceIfNeed(Acct acct) async {
-    final index = state.indexWhere((e) => e.acct == acct);
-    if (index < 0) return;
-    final account = state[index];
+  Future<void> updateI(Account account) async {
     final setting =
         ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    _validatedAccts.add(account.acct);
 
-    Future<void> updateI() async {
-      _validatedAccts.add(acct);
+    final i = await ref.read(misskeyProvider(account)).i.i();
+    ref
+        .read(accountSettingsRepositoryProvider)
+        .save(setting.copyWith(latestICached: DateTime.now()));
 
-      final i = await ref.read(misskeyProvider(account)).i.i();
-      ref
-          .read(accountSettingsRepositoryProvider)
-          .save(setting.copyWith(latestICached: DateTime.now()));
+    final accounts = List.of(state);
+    final index = state.indexWhere((e) => e.acct == account.acct);
+    if (index < 0) return;
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
 
-      final accounts = List.of(state);
-      accounts[index] = account.copyWith(i: i);
-      state = accounts;
-    }
+    ref.read(notesProvider(account)).updateMute(i.mutedWords, i.hardMutedWords);
+  }
+
+  Future<void> updateMeta(Account account) async {
+    final setting =
+        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    _validateMetaAccts.add(account.acct);
+
+    final meta = await ref.read(misskeyProvider(account)).meta();
+    ref
+        .read(accountSettingsRepositoryProvider)
+        .save(setting.copyWith(latestMetaCached: DateTime.now()));
+
+    final accounts = List.of(state);
+    final index = state.indexWhere((e) => e.acct == account.acct);
+    if (index < 0) return;
+
+    accounts[index] = account.copyWith(meta: meta);
+    state = accounts;
+  }
+
+  Future<void> loadFromSourceIfNeed(Acct acct) async {
+    final setting = ref.read(accountSettingsRepositoryProvider).fromAcct(acct);
+
+    final account = state.firstWhere((element) => element.acct == acct);
 
     switch (setting.iCacheStrategy) {
       case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) updateI();
+        if (!_validatedAccts.contains(acct)) updateI(account);
         break;
       case CacheStrategy.whenOneDay:
         final latestUpdated = setting.latestICached;
         if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          updateI();
+          updateI(account);
         }
       case CacheStrategy.whenTabChange:
-        updateI();
+        updateI(account);
         break;
-    }
-    ref
-        .read(notesProvider(account))
-        .updateMute(account.i.mutedWords, account.i.hardMutedWords);
-
-    Future<void> updateMeta() async {
-      _validateMetaAccts.add(acct);
-
-      final meta = await ref.read(misskeyProvider(account)).meta();
-      ref
-          .read(accountSettingsRepositoryProvider)
-          .save(setting.copyWith(latestMetaCached: DateTime.now()));
-
-      final accounts = List.of(state);
-      accounts[index] = account.copyWith(meta: meta);
-      state = accounts;
     }
 
     switch (setting.metaChacheStrategy) {
       case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) await updateMeta();
+        if (!_validatedAccts.contains(acct)) await updateMeta(account);
         break;
       case CacheStrategy.whenOneDay:
         final latestUpdated = setting.latestMetaCached;
         if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          await updateMeta();
+          await updateMeta(account);
         }
       case CacheStrategy.whenTabChange:
-        await updateMeta();
+        await updateMeta(account);
         break;
     }
 
@@ -142,6 +148,24 @@ class AccountRepository extends Notifier<List<Account>> {
     final i = state[index].i.copyWith(
       unreadAnnouncements: [],
     );
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
+  Future<void> addUnreadNotification(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadNotification: true);
+
+    final accounts = List.of(state);
+    accounts[index] = account.copyWith(i: i);
+    state = accounts;
+  }
+
+  Future<void> readAllNotification(Account account) async {
+    final index = state.indexOf(account);
+    final i = state[index].i.copyWith(hasUnreadNotification: false);
 
     final accounts = List.of(state);
     accounts[index] = account.copyWith(i: i);
