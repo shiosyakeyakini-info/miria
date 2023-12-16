@@ -259,7 +259,7 @@ class AccountRepository extends Notifier<List<Account>> {
     await _save();
     await ref
         .read(tabSettingsRepositoryProvider)
-        .initializeTabSettings(account.acct);
+        .initializeTabSettings(account);
     ();
   }
 

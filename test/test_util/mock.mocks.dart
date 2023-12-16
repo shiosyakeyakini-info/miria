@@ -7,7 +7,7 @@ import 'dart:async' as _i17;
 import 'dart:collection' as _i30;
 import 'dart:io' as _i12;
 import 'dart:typed_data' as _i27;
-import 'dart:ui' as _i19;
+import 'dart:ui' as _i18;
 
 import 'package:dio/dio.dart' as _i11;
 import 'package:file/file.dart' as _i13;
@@ -16,12 +16,12 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart' as _i14;
 import 'package:flutter_riverpod/flutter_riverpod.dart' as _i4;
 import 'package:miria/model/account.dart' as _i6;
 import 'package:miria/model/account_settings.dart' as _i2;
-import 'package:miria/model/acct.dart' as _i18;
+import 'package:miria/model/acct.dart' as _i20;
 import 'package:miria/model/general_settings.dart' as _i3;
 import 'package:miria/model/misskey_emoji_data.dart' as _i22;
 import 'package:miria/model/tab_setting.dart' as _i16;
 import 'package:miria/repository/account_repository.dart' as _i24;
-import 'package:miria/repository/account_settings_repository.dart' as _i20;
+import 'package:miria/repository/account_settings_repository.dart' as _i19;
 import 'package:miria/repository/emoji_repository.dart' as _i21;
 import 'package:miria/repository/general_settings_repository.dart' as _i23;
 import 'package:miria/repository/note_repository.dart' as _i25;
@@ -768,18 +768,18 @@ class MockTabSettingsRepository extends _i1.Mock
       ) as _i17.Future<void>);
 
   @override
-  _i17.Future<void> initializeTabSettings(_i18.Acct? acct) =>
+  _i17.Future<void> initializeTabSettings(_i6.Account? account) =>
       (super.noSuchMethod(
         Invocation.method(
           #initializeTabSettings,
-          [acct],
+          [account],
         ),
         returnValue: _i17.Future<void>.value(),
         returnValueForMissingStub: _i17.Future<void>.value(),
       ) as _i17.Future<void>);
 
   @override
-  void addListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -788,7 +788,7 @@ class MockTabSettingsRepository extends _i1.Mock
       );
 
   @override
-  void removeListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -819,7 +819,7 @@ class MockTabSettingsRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAccountSettingsRepository extends _i1.Mock
-    implements _i20.AccountSettingsRepository {
+    implements _i19.AccountSettingsRepository {
   @override
   Iterable<_i2.AccountSettings> get accountSettings => (super.noSuchMethod(
         Invocation.getter(#accountSettings),
@@ -865,7 +865,7 @@ class MockAccountSettingsRepository extends _i1.Mock
       ) as _i17.Future<void>);
 
   @override
-  _i2.AccountSettings fromAcct(_i18.Acct? acct) => (super.noSuchMethod(
+  _i2.AccountSettings fromAcct(_i20.Acct? acct) => (super.noSuchMethod(
         Invocation.method(
           #fromAcct,
           [acct],
@@ -909,7 +909,7 @@ class MockAccountSettingsRepository extends _i1.Mock
       ) as _i2.AccountSettings);
 
   @override
-  void addListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -918,7 +918,7 @@ class MockAccountSettingsRepository extends _i1.Mock
       );
 
   @override
-  void removeListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1066,7 +1066,7 @@ class MockGeneralSettingsRepository extends _i1.Mock
       ) as _i17.Future<void>);
 
   @override
-  void addListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1075,7 +1075,7 @@ class MockGeneralSettingsRepository extends _i1.Mock
       );
 
   @override
-  void removeListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -1157,7 +1157,7 @@ class MockAccountRepository extends _i1.Mock implements _i24.AccountRepository {
       ) as _i17.Future<void>);
 
   @override
-  _i17.Future<void> loadFromSourceIfNeed(_i18.Acct? acct) =>
+  _i17.Future<void> loadFromSourceIfNeed(_i20.Acct? acct) =>
       (super.noSuchMethod(
         Invocation.method(
           #loadFromSourceIfNeed,
@@ -1447,7 +1447,7 @@ class MockNoteRepository extends _i1.Mock implements _i25.NoteRepository {
       );
 
   @override
-  void addListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -1456,7 +1456,7 @@ class MockNoteRepository extends _i1.Mock implements _i25.NoteRepository {
       );
 
   @override
-  void removeListener(_i19.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],

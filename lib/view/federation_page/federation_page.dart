@@ -160,9 +160,9 @@ class FederationPageState extends ConsumerState<FederationPage> {
     final isSupportedTimeline =
         isMisskey && metaResponse?.isSupportedLocalTimeline == true;
     final enableLocalTimeline = isSupportedTimeline &&
-        metaResponse?.meta?.policies.ltlAvailable == true;
+        metaResponse?.meta?.policies?.ltlAvailable == true;
     final enableSearch = isSupportedTimeline &&
-        metaResponse?.meta?.policies.canSearchNotes == true;
+        metaResponse?.meta?.policies?.canSearchNotes == true;
 
     return AccountScope(
       account: widget.account,
