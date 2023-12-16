@@ -257,7 +257,10 @@ class AccountRepository extends Notifier<List<Account>> {
     await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
 
     await _save();
-    await _addIfTabSettingNothing();
+    await ref
+        .read(tabSettingsRepositoryProvider)
+        .initializeTabSettings(account.acct);
+    ();
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
@@ -278,12 +281,5 @@ class AccountRepository extends Notifier<List<Account>> {
       key: "accounts",
       value: jsonEncode(state.map((e) => e.toJson()).toList()),
     );
-  }
-
-  Future<void> _addIfTabSettingNothing() async {
-    //if (state.length == 1) {
-    final account = state.first;
-    ref.read(tabSettingsRepositoryProvider).initializeTabSettings(account.acct);
-    //}
   }
 }
