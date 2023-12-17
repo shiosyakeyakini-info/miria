@@ -355,8 +355,8 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               value: font,
                               child: Text(
                                 font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                    ?.call(),
+                                // style: GoogleFonts.asMap()[font.actualName]
+                                //     ?.call(),
                               ),
                             )
                         ],
@@ -379,9 +379,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               value: font,
                               child: Text(
                                 font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).serifStyle,
+                                // style: GoogleFonts.asMap()[font.actualName]
+                                //         ?.call() ??
+                                //     AppTheme.of(context).serifStyle,
                               ),
                             )
                         ],
@@ -404,9 +404,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               value: font,
                               child: Text(
                                 font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).monospaceStyle,
+                                // style: GoogleFonts.asMap()[font.actualName]
+                                //         ?.call() ??
+                                //     AppTheme.of(context).monospaceStyle,
                               ),
                             )
                         ],
@@ -452,9 +452,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               value: font,
                               child: Text(
                                 font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).fantasyStyle,
+                                // style: GoogleFonts.asMap()[font.actualName]
+                                //         ?.call() ??
+                                //     AppTheme.of(context).fantasyStyle,
                               ),
                             )
                         ],
