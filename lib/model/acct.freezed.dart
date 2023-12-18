@@ -115,7 +115,7 @@ class _$AcctImpl extends _Acct {
   final String username;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AcctImpl &&

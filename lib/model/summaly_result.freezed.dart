@@ -239,7 +239,7 @@ class _$SummalyResultImpl implements _SummalyResult {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SummalyResultImpl &&
@@ -454,7 +454,7 @@ class _$PlayerImpl implements _Player {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PlayerImpl &&

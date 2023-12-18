@@ -129,7 +129,7 @@ class _$ImageMetaImpl implements _ImageMeta {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ImageMetaImpl &&

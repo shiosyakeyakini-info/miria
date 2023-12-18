@@ -487,7 +487,7 @@ class _$FederationDataImpl implements _FederationData {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FederationDataImpl &&

@@ -567,7 +567,7 @@ class _$NoteCreateImpl implements _NoteCreate {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoteCreateImpl &&
@@ -829,7 +829,7 @@ class _$NoteCreateChannelImpl implements _NoteCreateChannel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoteCreateChannelImpl &&
