@@ -405,6 +405,18 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               });
             },
           ),
+        if (accountContext.postAccount.i.policies.canUseTranslator &&
+            (accountContext.postAccount.meta?.translatorAvailable ?? false))
+          ListTile(
+            leading: const Icon(Icons.translate),
+            title: Text(S.of(context).translateNote),
+            onTap: () async => await context.pushRoute(
+              TranslateNoteModalRoute(
+                accountContext: accountContext,
+                note: targetNote,
+              ),
+            ),
+          ),
         if (accountContext.isSame)
           switch (noteStatus) {
             null => const SizedBox.shrink(),

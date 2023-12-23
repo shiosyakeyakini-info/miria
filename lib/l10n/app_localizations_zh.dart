@@ -463,6 +463,14 @@ class SZh extends S {
   String get shareNotes => '分享帖子';
 
   @override
+  String get translateNote => 'ノートを翻訳';
+
+  @override
+  String translatedFrom(String lang) {
+    return '$langから翻訳';
+  }
+
+  @override
   String get deleteFavorite => '取消收藏';
 
   @override

@@ -37,6 +37,7 @@ import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
+import "package:miria/view/common/misskey_notes/translate_note_modal_sheet.dart";
 import "package:miria/view/drafts_page/drafts_dialog.dart";
 import "package:miria/view/drafts_page/drafts_page.dart";
 import "package:miria/view/explore_page/explore_page.dart";
@@ -198,6 +199,7 @@ class AppRouter extends RootStackRouter {
     AutoModalRouteSheet(page: AntennaModalRoute.page),
     AutoModalRouteSheet(page: ClipModalRoute.page),
     AutoModalRouteSheet(page: UsersListModalRoute.page),
+    AutoModalRouteSheet(page: TranslateNoteModalRoute.page),
     AutoModalRouteSheet<DriveModalSheetReturnValue>(page: DriveModalRoute.page),
     AutoModalRouteSheet<ChatMessageMenuAction>(page: ChatMessageMenuRoute.page),
   ];
