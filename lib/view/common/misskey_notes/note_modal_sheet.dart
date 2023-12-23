@@ -12,6 +12,7 @@ import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
+import 'package:miria/view/common/misskey_notes/translate_note_modal_sheet.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
 import 'package:miria/view/user_page/user_control_dialog.dart';
@@ -171,6 +172,22 @@ class NoteModalSheet extends ConsumerWidget {
             });
           },
         ),
+        if (account.i.policies.canUseTranslator &&
+            (account.meta?.translatorAvailable ?? false))
+          ListTile(
+            leading: const Icon(Icons.translate),
+            title: const Text("ノートを翻訳"),
+            onTap: () {
+              Navigator.of(context).pop();
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (context) => TranslateNoteModalSheet(
+                  account: account,
+                  note: targetNote,
+                ),
+              );
+            },
+          ),
         FutureBuilder(
           future: ref
               .read(misskeyProvider(account))
