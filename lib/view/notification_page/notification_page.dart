@@ -422,6 +422,20 @@ class NotificationItem extends ConsumerWidget {
             ],
           ),
         );
+      case RoleNotification():
+        return Padding(
+          padding:
+              const EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: SimpleMfmText(
+                  "ロール「${notification.role?.name}」に入れられたみたいや",
+                ),
+              ),
+            ],
+          ),
+        );
     }
   }
 
