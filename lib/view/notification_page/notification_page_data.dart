@@ -214,10 +214,18 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
         case NotificationType.test:
           resultList.add(SimpleNotificationData(
               text: "テストやで", createdAt: element.createdAt, id: element.id));
+          break;
 
         case NotificationType.note:
           resultList.add(NoteNotification(
               note: element.note,
+              createdAt: element.createdAt,
+              id: element.id));
+          break;
+
+        case NotificationType.roleAssigned:
+          resultList.add(SimpleNotificationData(
+              text: "ロールに入れられたみたいや",
               createdAt: element.createdAt,
               id: element.id));
 
