@@ -70,6 +70,11 @@ class FederationPageState extends ConsumerState<FederationPage> {
                   isSupportedAnnouncement: true,
                   isSupportedEmoji: true,
                   isSupportedLocalTimeline: true);
+
+          await ref
+              .read(emojiRepositoryProvider(
+                  Account.demoAccount(widget.host, metaResponse)))
+              .loadFromSourceIfNeed();
         } else {
           final federation = await ref
               .read(misskeyProvider(widget.account))
