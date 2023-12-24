@@ -2,7 +2,7 @@ name: miria
 description: Miria is Misskey Client for Mobile App.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.14+95
+version: 1.0.14+96
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
