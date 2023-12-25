@@ -191,19 +191,15 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           fontFamily: "Segoe UI Emoji",
           fontFamilyFallback: [
             "Segoe UI Emoji",
-            "Noto Color Emoji",
             "Meiryo"
           ]);
-    } else if (defaultTargetPlatform == TargetPlatform.android ||
-      defaultTargetPlatform == TargetPlatform.linux ) {
+    } else {
       return const TextStyle(
           fontFamily: "Noto Color Emoji",
           fontFamilyFallback: [
             "Noto Color Emoji",
             "Droid Sans Fallback"
           ]);
-    } else {
-      fontName = null;
     }
     return const TextStyle();
   }
