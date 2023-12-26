@@ -88,17 +88,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         "Hiragino Maru Gothic ProN",
         "Apple Color Emoji",
       ];
-    } else if (defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.linux) {
+    } else {
       return [
         if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
         "Noto Color Emoji",
-        "Droid Sans Fallback",
-      ];
-    } else if (defaultTargetPlatform == TargetPlatform.windows ) {
-      return [
-        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
-        "Yu Gothic UI",
       ];
     }
     return [];
@@ -111,24 +104,19 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       fontName = "Hiragino Mincho ProN";
-      fallback.addAll(const ["Apple Color Emoji"]);
-    } else if (defaultTargetPlatform == TargetPlatform.windows ){
-      fontName = "Noto Serif JP";
-      fallback.addAll(const ["Segoe UI Emoji"]);
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      fontName = "Noto Serif JP";
       fallback.addAll(const [
-        "Noto Color Emoji",
-        "Droid Sans Fallback"
-      ]);
-    } else if (defaultTargetPlatform == TargetPlatform.linux) {
-      fontName = "Noto Serif CJK JP";
-      fallback.addAll(const [
-        "Noto Color Emoji",
-        "Droid Sans Fallback"
+        "Apple Color Emoji"
       ]);
     } else {
-      fontName = null;
+      if (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.windows) {
+        fontName = "Noto Serif JP";
+      } else {
+        fontName = "Noto Serif CJK JP";
+      }
+      fallback.addAll(const [
+        "Noto Color Emoji"
+      ]);
     }
     return (serifFontName.isNotEmpty
             ? (fromGoogleFont(serifFontName) ??
@@ -143,32 +131,27 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
 
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
-      fontName = "Monaco";
+        if (defaultTargetPlatform == TargetPlatform.iOS) {
+          fontName = "Menlo";
+        } else {
+          fontName = "Monaco";
+        }
       fallback.addAll(const [
         "Apple Color Emoji",
         "Hiragino Maru Gothic ProN"
       ]);
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      fontName = "Consolas";
-      fallback.addAll(const [
-        "Segoe UI Emoji",
-        "Noto Color Emoji",
-        "Meiryo"
-      ]);
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      fontName = "Droid Sans Mono";
-      fallback.addAll(const [
-        "Noto Color Emoji",
-        "Noto Sans JP"
-      ]);
-    } else if (defaultTargetPlatform == TargetPlatform.linux) {
-      fontName = "Noto Sans Mono CJK JP";
-      fallback.addAll(const [
-        "Noto Color Emoji",
-        "Droid Sans Fallback"
-      ]);
     } else {
-      fontName = null;
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        fontName = "Droid Sans Mono";
+      } else if (defaultTargetPlatform == TargetPlatform.windows) {
+        fontName = "Consolas";
+      } else {
+        fontName = "Noto Sans Mono CJK JP";
+      }
+      fallback.addAll(const [
+        "Noto Color Emoji",
+        "Noto Mono"
+      ]);
     }
     return (monospaceFontName.isNotEmpty
             ? (fromGoogleFont(monospaceFontName) ??
@@ -183,23 +166,14 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       return const TextStyle(
           fontFamily: "Apple Color Emoji",
           fontFamilyFallback: [
-            "Apple Color Emoji",
             "Hiragino Maru Gothic ProN"
-          ]);
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      return const TextStyle(
-          fontFamily: "Segoe UI Emoji",
-          fontFamilyFallback: [
-            "Segoe UI Emoji",
-            "Meiryo"
           ]);
     } else {
       return const TextStyle(
-          fontFamily: "Noto Color Emoji",
-          fontFamilyFallback: [
-            "Noto Color Emoji",
-            "Droid Sans Fallback"
-          ]);
+        fontFamily: "Noto Color Emoji",
+        fontFamilyFallback: [
+          "Noto Sans"
+        ]);
     }
     return const TextStyle();
   }
