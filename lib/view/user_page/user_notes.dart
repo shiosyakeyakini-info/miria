@@ -57,9 +57,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
                           switch (value) {
                             case 0:
                               withReply = !withReply;
+                              if (withReply) {
+                                isFileOnly = false;
+                              }
                               highlight = false;
                             case 1:
                               isFileOnly = !isFileOnly;
+                              if (isFileOnly) {
+                                withReply = false;
+                              }
                               highlight = false;
                             case 2:
                               renote = !renote;
