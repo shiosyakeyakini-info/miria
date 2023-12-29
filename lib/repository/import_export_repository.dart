@@ -63,7 +63,7 @@ class ImportExportRepository extends ChangeNotifier {
       return;
     }
 
-    final importFile = alreadyExists.first;
+    final importFile = alreadyExists.sortedBy((file) => file.createdAt).last;
 
     final response = await reader(dioProvider)
         .get(importFile.url, options: Options(responseType: ResponseType.json));
