@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
@@ -15,6 +15,7 @@ import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/settings_page/import_export_page/folder_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ImportExportRepository extends ChangeNotifier {
   final T Function<T>(ProviderListenable<T> provider) reader;
@@ -143,12 +144,21 @@ class ImportExportRepository extends ChangeNotifier {
       }
     }
 
-    final data = ExportedSetting(
-      generalSettings: reader(generalSettingsRepositoryProvider).settings,
-      tabSettings: reader(tabSettingsRepositoryProvider).tabSettings.toList(),
-      accountSettings:
-          reader(accountSettingsRepositoryProvider).accountSettings.toList(),
-    ).toJson();
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    final data = {
+      ...ExportedSetting(
+        generalSettings: reader(generalSettingsRepositoryProvider).settings,
+        tabSettings: reader(tabSettingsRepositoryProvider).tabSettings.toList(),
+        accountSettings:
+            reader(accountSettingsRepositoryProvider).accountSettings.toList(),
+      ).toJson(),
+      "metadata": {
+        "createdAt": DateTime.now().toUtc().toIso8601String(),
+        "packageInfo": packageInfo.data,
+        "platform": defaultTargetPlatform.name,
+      },
+    };
 
     await reader(misskeyProvider(account)).drive.files.createAsBinary(
           DriveFilesCreateRequest(
