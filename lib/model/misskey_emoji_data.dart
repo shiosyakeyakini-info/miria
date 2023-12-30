@@ -9,6 +9,10 @@ sealed class MisskeyEmojiData {
     this.isSensitive,
   );
 
+  static final customEmojiRegExp = RegExp(r":(.+?)@(.+?):");
+  static final hostIncludedRegExp = RegExp(r":(.+?):");
+  static final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
+
   factory MisskeyEmojiData.fromEmojiName({
     required String emojiName,
     Map<String, String>? emojiInfo,
@@ -18,9 +22,6 @@ sealed class MisskeyEmojiData {
     if (!emojiName.startsWith(":")) {
       return UnicodeEmojiData(char: emojiName);
     }
-
-    final customEmojiRegExp = RegExp(r":(.+?)@(.+?):");
-    final hostIncludedRegExp = RegExp(r":(.+?):");
 
     // よそのサーバー
     if (emojiInfo != null && emojiInfo.isNotEmpty) {
@@ -44,32 +45,21 @@ sealed class MisskeyEmojiData {
     // 自分のサーバー :ai@.:
     if (customEmojiRegExp.hasMatch(emojiName)) {
       assert(repository != null);
-      final EmojiRepositoryData? found = repository!.emoji?.firstWhereOrNull(
-          (e) =>
-              e.emoji.baseName ==
-              (customEmojiRegExp.firstMatch(emojiName)?.group(1) ?? emojiName));
-      if (found != null) {
-        return found.emoji;
-      } else {
-        return NotEmojiData(name: emojiName);
-      }
+      final name =
+          (customEmojiRegExp.firstMatch(emojiName)?.group(1) ?? emojiName);
+      final EmojiRepositoryData? found = repository!.emojiMap?[name];
+
+      return found?.emoji ?? NotEmojiData(name: emojiName);
     }
 
     // 自分のサーバー　:ai:
-    final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
     if (customEmojiRegExp2.hasMatch(emojiName)) {
       assert(repository != null);
-      final EmojiRepositoryData? found = repository!.emoji?.firstWhereOrNull(
-          (e) =>
-              e.emoji.baseName ==
-              (customEmojiRegExp2.firstMatch(emojiName)?.group(1) ??
-                  emojiName));
+      final name =
+          (customEmojiRegExp2.firstMatch(emojiName)?.group(1) ?? emojiName);
+      final EmojiRepositoryData? found = repository!.emojiMap?[name];
 
-      if (found != null) {
-        return found.emoji;
-      } else {
-        return NotEmojiData(name: emojiName);
-      }
+      return found?.emoji ?? NotEmojiData(name: emojiName);
     }
 
     return NotEmojiData(name: emojiName);

@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class EmojiRepository {
   List<EmojiRepositoryData>? emoji;
+  Map<String, EmojiRepositoryData>? emojiMap;
   Future<void> loadFromSourceIfNeed();
   Future<void> loadFromSource();
 
@@ -143,6 +145,12 @@ class EmojiRepositoryImpl extends EmojiRepository {
             ))
         .toList();
     emoji!.addAll(unicodeEmojis);
+
+    emojiMap = HashMap();
+    for(var e in emoji!)
+    {
+      emojiMap![e.emoji.baseName] = e;
+    }
   }
 
   bool emojiSearchCondition(
