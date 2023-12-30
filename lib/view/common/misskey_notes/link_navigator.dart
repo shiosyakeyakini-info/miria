@@ -105,6 +105,7 @@ class LinkNavigator {
         UsersShowByUserNameRequest(
             userName: regResult?.group(1) ?? "", host: finalHost));
 
-    context.pushRoute(UserRoute(userId: response.id, account: account));
+    if (!context.mounted) return;
+    context.pushRoute(UserRoute(user: response.toUser(), account: account));
   }
 }

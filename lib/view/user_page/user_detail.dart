@@ -3,41 +3,33 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/extensions/users_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/constants.dart';
+import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/user_page/update_memo_dialog.dart';
-import 'package:miria/view/user_page/user_control_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserDetail extends ConsumerStatefulWidget {
-  final Account account;
-  final Account? controlAccount;
-  final UsersShowResponse response;
+  final String userId;
 
-  const UserDetail({
-    super.key,
-    required this.response,
-    required this.account,
-    required this.controlAccount,
-  });
+  const UserDetail({super.key, required this.userId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserDetailState();
 }
 
 class UserDetailState extends ConsumerState<UserDetail> {
-  late UsersShowResponse response;
   bool isFollowEditing = false;
-  String memo = "";
 
   Future<void> followCreate() async {
     if (isFollowEditing) return;
@@ -46,16 +38,15 @@ class UserDetailState extends ConsumerState<UserDetail> {
     });
     try {
       await ref
-          .read(misskeyProvider(AccountScope.of(context)))
-          .following
-          .create(FollowingCreateRequest(userId: response.id));
+          .read(
+            userDetailedNotifierProvider(
+              (AccountScope.of(context), widget.userId),
+            ).notifier,
+          )
+          .createFollow();
       if (!mounted) return;
       setState(() {
         isFollowEditing = false;
-        response = response.copyWith(
-          isFollowing: !response.requiresFollowRequest,
-          hasPendingFollowRequestFromYou: response.requiresFollowRequest,
-        );
       });
     } catch (e) {
       if (!mounted) return;
@@ -82,13 +73,15 @@ class UserDetailState extends ConsumerState<UserDetail> {
     });
     try {
       await ref
-          .read(misskeyProvider(account))
-          .following
-          .delete(FollowingDeleteRequest(userId: response.id));
+          .read(
+            userDetailedNotifierProvider(
+              (account, widget.userId),
+            ).notifier,
+          )
+          .deleteFollow();
       if (!mounted) return;
       setState(() {
         isFollowEditing = false;
-        response = response.copyWith(isFollowing: false);
       });
     } catch (e) {
       if (!mounted) return;
@@ -106,14 +99,15 @@ class UserDetailState extends ConsumerState<UserDetail> {
     });
     try {
       await ref
-          .read(misskeyProvider(AccountScope.of(context)))
-          .following
-          .requests
-          .cancel(FollowingRequestsCancelRequest(userId: response.id));
+          .read(
+            userDetailedNotifierProvider(
+              (AccountScope.of(context), widget.userId),
+            ).notifier,
+          )
+          .cancelFollowRequest();
       if (!mounted) return;
       setState(() {
         isFollowEditing = false;
-        response = response.copyWith(hasPendingFollowRequestFromYou: false);
       });
     } catch (e) {
       if (!mounted) return;
@@ -124,166 +118,99 @@ class UserDetailState extends ConsumerState<UserDetail> {
     }
   }
 
-  Future<void> userControl(bool isMe) async {
-    final result = await showModalBottomSheet<UserControl?>(
-        context: context,
-        builder: (context) => UserControlDialog(
-              account: widget.account,
-              response: response,
-              isMe: isMe,
-            ));
-    if (result == null) return;
-
-    switch (result) {
-      case UserControl.createMute:
-        setState(() {
-          response = response.copyWith(isMuted: true);
-        });
-        break;
-      case UserControl.deleteMute:
-        setState(() {
-          response = response.copyWith(isMuted: false);
-        });
-        break;
-      case UserControl.createRenoteMute:
-        setState(() {
-          response = response.copyWith(isRenoteMuted: true);
-        });
-        break;
-      case UserControl.deleteRenoteMute:
-        setState(() {
-          response = response.copyWith(isRenoteMuted: false);
-        });
-        break;
-      case UserControl.createBlock:
-        setState(() {
-          response = response.copyWith(isBlocking: true);
-        });
-        break;
-      case UserControl.deleteBlock:
-        setState(() {
-          response = response.copyWith(isBlocking: false);
-        });
-        break;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    response = widget.response;
-    memo = response.memo ?? "";
-  }
-
-  Widget buildContent() {
-    final userName =
-        "${response.username}${response.host != null ? "@${response.host ?? ""}" : ""}";
-    final isMe = (widget.response.host == null &&
-        widget.response.username == AccountScope.of(context).userId);
+  Widget buildContent(UsersShowResponse response) {
+    final account = AccountScope.of(context);
+    final host = response.host;
+    final memo = response.memo;
 
     return Column(children: [
-      if (widget.controlAccount == null)
+      if (account.hasToken) ...[
         Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isMe)
-                  const Spacer()
-                else
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 10),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  if (response.isRenoteMuted ?? false)
+                    const Card(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            if (response.isRenoteMuted ?? false)
-                              const Card(
-                                  child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text("Renoteのミュート中"),
-                              )),
-                            if (response.isMuted ?? false)
-                              const Card(
-                                  child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text("ミュート中"),
-                              )),
-                            if (response.isBlocking ?? false)
-                              const Card(
-                                  child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text("ブロック中"),
-                              )),
-                            if ((response.isFollowed ?? false))
-                              const Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Card(
-                                    child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Text("フォローされています"),
-                                )),
-                              ),
-                            if (!isFollowEditing)
-                              (response.isFollowing ?? false)
-                                  ? ElevatedButton(
-                                      onPressed:
-                                          followDelete.expectFailure(context),
-                                      child: const Text("フォロー解除"),
-                                    )
-                                  : (response.hasPendingFollowRequestFromYou ??
-                                          false)
-                                      ? ElevatedButton(
-                                          onPressed: followRequestCancel
-                                              .expectFailure(context),
-                                          child: const Text("フォロー許可待ち"),
-                                        )
-                                      : OutlinedButton(
-                                          onPressed: followCreate
-                                              .expectFailure(context),
-                                          child: Text(
-                                            (response.requiresFollowRequest)
-                                                ? "フォロー申請"
-                                                : "フォローする",
-                                          ),
-                                        )
-                            else
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton.icon(
-                                    onPressed: () {},
-                                    icon: SizedBox(
-                                        width: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.fontSize ??
-                                            22,
-                                        height: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.fontSize ??
-                                            22,
-                                        child:
-                                            const CircularProgressIndicator()),
-                                    label: const Text("更新中")),
-                              ),
-                          ],
+                        padding: EdgeInsets.all(10),
+                        child: Text("Renoteのミュート中"),
+                      ),
+                    ),
+                  if (response.isMuted ?? false)
+                    const Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text("ミュート中"),
+                      ),
+                    ),
+                  if (response.isBlocking ?? false)
+                    const Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text("ブロック中"),
+                      ),
+                    ),
+                  if (response.isFollowed ?? false)
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text("フォローされています"),
                         ),
                       ),
                     ),
-                  ),
-                Align(
-                  alignment: Alignment.center,
-                  child: IconButton(
-                      onPressed: () => userControl(isMe),
-                      icon: const Icon(Icons.more_vert)),
-                )
-              ],
-            )),
-      const Divider(),
+                  if (!isFollowEditing)
+                    (response.isFollowing ?? false)
+                        ? ElevatedButton(
+                            onPressed: followDelete.expectFailure(context),
+                            child: const Text("フォロー解除"),
+                          )
+                        : (response.hasPendingFollowRequestFromYou ?? false)
+                            ? ElevatedButton(
+                                onPressed:
+                                    followRequestCancel.expectFailure(context),
+                                child: const Text("フォロー許可待ち"),
+                              )
+                            : OutlinedButton(
+                                onPressed: followCreate.expectFailure(context),
+                                child: Text(
+                                  response.isLocked ? "フォロー申請" : "フォローする",
+                                ),
+                              )
+                  else
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        onPressed: () {},
+                        icon: SizedBox(
+                          width: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.fontSize ??
+                              22,
+                          height: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.fontSize ??
+                              22,
+                          child: const CircularProgressIndicator(),
+                        ),
+                        label: const Text("更新中"),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const Divider(),
+      ],
       Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
         child: Column(children: [
@@ -297,8 +224,6 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MfmText(
@@ -307,47 +232,45 @@ class UserDetailState extends ConsumerState<UserDetail> {
                         emoji: response.emojis ?? {},
                       ),
                       Text(
-                        "@$userName",
+                        response.acct,
                         style: Theme.of(context).textTheme.bodyLarge,
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
           const Padding(padding: EdgeInsets.only(top: 5)),
-          if (widget.controlAccount == null)
+          if (account.hasToken)
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Text(
-                        memo.isNotEmpty ? memo : "なんかメモることあったら書いとき",
-                        style: memo.isNotEmpty
+                        memo != null && memo.isNotEmpty
+                            ? memo
+                            : "なんかメモることあったら書いとき",
+                        style: memo != null && memo.isNotEmpty
                             ? null
                             : Theme.of(context).inputDecorationTheme.hintStyle,
                       ),
                     ),
                     IconButton(
-                        onPressed: () async {
-                          final result = await showDialog(
-                              context: context,
-                              builder: (context) => UpdateMemoDialog(
-                                    account: widget.account,
-                                    initialMemo: memo,
-                                    userId: response.id,
-                                  ));
-                          if (result != null) {
-                            setState(() {
-                              memo = result;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.edit)),
+                      onPressed: () {
+                        showDialog<void>(
+                          context: context,
+                          builder: (context) => UpdateMemoDialog(
+                            account: account,
+                            initialMemo: memo ?? "",
+                            userId: response.id,
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.edit),
+                    ),
                   ],
                 ),
               ),
@@ -357,46 +280,84 @@ class UserDetailState extends ConsumerState<UserDetail> {
             spacing: 5,
             runSpacing: 5,
             children: [
-              for (final role in response.roles ?? [])
+              for (final role in response.roles ?? <UserRole>[])
                 Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Theme.of(context).dividerColor)),
-                    padding: const EdgeInsets.all(5),
-                    child: Text(role.name)),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Theme.of(context).dividerColor),
+                  ),
+                  padding: const EdgeInsets.all(5),
+                  child: Text(role.name),
+                ),
             ],
           ),
           const Padding(padding: EdgeInsets.only(top: 5)),
-          if (response.host != null)
+          if (host != null)
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Row(
                       children: [
                         Icon(Icons.warning_amber_rounded),
-                        Text("リモートユーザーのため、情報が不完全です。")
+                        Text("リモートユーザーのため、情報が不完全です。"),
                       ],
                     ),
-                    GestureDetector(
-                      onTap: () => context.pushRoute(FederationRoute(
-                          account: AccountScope.of(context),
-                          host: response.host!)),
-                      child: Text(
-                        "サーバー情報を表示",
-                        style: AppTheme.of(context).linkStyle,
-                      ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.pushRoute(
+                            FederationRoute(
+                              account: account,
+                              host: host,
+                            ),
+                          ),
+                          child: Text(
+                            "サーバー情報を表示",
+                            style: AppTheme.of(context).linkStyle,
+                          ),
+                        ),
+                        FutureBuilder(
+                          future: Future(() async {
+                            // 絵文字を取得することでソフトウェアの判定を行う
+                            await ref
+                                .read(
+                                  emojiRepositoryProvider(
+                                    Account.demoAccount(host, null),
+                                  ),
+                                )
+                                .loadFromSourceIfNeed();
+                            return true;
+                          }),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return TextButton(
+                                onPressed: () => ref
+                                    .read(
+                                      misskeyNoteNotifierProvider(account)
+                                          .notifier,
+                                    )
+                                    .navigateToUserPage(
+                                      context,
+                                      response.toUser(),
+                                      Account.demoAccount(host, null),
+                                    )
+                                    .expectFailure(context),
+                                child: const Text("リモートで表示"),
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
           Align(
-            alignment: Alignment.center,
             child: MfmText(
               mfmText: response.description ?? "",
               emoji: response.emojis ?? {},
@@ -511,35 +472,41 @@ class UserDetailState extends ConsumerState<UserDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return BirthdayConfetti(
-      response: widget.response,
-      child: Column(
-        children: [
-          if (response.bannerUrl != null)
-            Image.network(response.bannerUrl.toString()),
-          Align(
-            alignment: Alignment.center,
-            child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: buildContent()),
+    final account = AccountScope.of(context);
+    final user =
+        ref.watch(userDetailedNotifierProvider((account, widget.userId)));
+    return user.when(
+      data: (user) => SingleChildScrollView(
+        child: BirthdayConfetti(
+          response: user,
+          child: Column(
+            children: [
+              if (user.bannerUrl != null)
+                Image.network(user.bannerUrl.toString()),
+              Align(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: buildContent(user),
+                ),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 20)),
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    for (final note in user.pinnedNotes ?? <Note>[])
+                      MisskeyNote(note: note),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (final note in response.pinnedNotes ?? [])
-                  MisskeyNote(
-                    note: note,
-                    loginAs: widget.controlAccount,
-                  ),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
+      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -587,12 +554,5 @@ class BirthdayConfettiState extends State<BirthdayConfetti> {
     }
 
     return widget.child;
-  }
-}
-
-extension on UsersShowResponse {
-  bool get requiresFollowRequest {
-    return isLocked &&
-        !((isFollowed ?? false) && (autoAcceptFollowed ?? false));
   }
 }

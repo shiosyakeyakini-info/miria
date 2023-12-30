@@ -24,6 +24,7 @@ class AvatarIcon extends StatefulWidget {
       user: User(
         id: response.id,
         username: response.username,
+        name: response.name,
         avatarUrl: response.avatarUrl,
         avatarBlurhash: response.avatarBlurhash,
         avatarDecorations: response.avatarDecorations,
@@ -39,15 +40,7 @@ class AvatarIcon extends StatefulWidget {
     double height = 48,
   }) {
     return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
+      user: response.toUser(),
       height: height,
     );
   }
@@ -91,8 +84,7 @@ class AvatarIconState extends State<AvatarIcon> {
       onTap: widget.onTap ??
           () {
             context.pushRoute(
-              UserRoute(
-                  userId: widget.user.id, account: AccountScope.of(context)),
+              UserRoute(user: widget.user, account: AccountScope.of(context)),
             );
           },
       child: Padding(

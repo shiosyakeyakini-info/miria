@@ -76,18 +76,11 @@ class NoteModalSheet extends ConsumerWidget {
           title: const Text("ユーザー"),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () async {
-            final response = await ref
-                .read(misskeyProvider(account))
-                .users
-                .show(UsersShowRequest(userId: targetNote.userId));
-            if (!context.mounted) return;
             showModalBottomSheet<void>(
               context: context,
               builder: (context) => UserControlDialog(
                 account: account,
-                response: response,
-                isMe: targetNote.user.host == null &&
-                    targetNote.user.username == account.userId,
+                userId: targetNote.userId,
               ),
             );
           },
@@ -117,8 +110,10 @@ class NoteModalSheet extends ConsumerWidget {
             },
           ),
         // ノートが連合なしのときは現在のアカウントと同じサーバーのアカウントが複数ある場合のみ表示する
+        // 非ログイン時は同じサーバーのアカウントが一つでもあれば表示する
         if (!targetNote.localOnly ||
-            accounts.where((e) => e.host == account.host).length > 1)
+            accounts.where((e) => e.host == account.host).length >
+                (account.hasToken ? 1 : 0))
           ListTile(
             leading: const Icon(Icons.open_in_new),
             title: const Text("別のアカウントで開く"),
@@ -166,60 +161,62 @@ class NoteModalSheet extends ConsumerWidget {
             });
           },
         ),
-        FutureBuilder(
-          future: ref
-              .read(misskeyProvider(account))
-              .notes
-              .state(NotesStateRequest(noteId: targetNote.id)),
-          builder: (_, snapshot) {
-            final data = snapshot.data;
-            return (data == null)
-                ? const Center(child: CircularProgressIndicator())
-                : ListTile(
-                    leading: const Icon(Icons.star_rounded),
-                    onTap: () async {
-                      if (data.isFavorited) {
-                        ref
-                            .read(misskeyProvider(account))
-                            .notes
-                            .favorites
-                            .delete(
-                              NotesFavoritesDeleteRequest(
-                                noteId: targetNote.id,
-                              ),
-                            );
+        if (account.hasToken) ...[
+          FutureBuilder(
+            future: ref
+                .read(misskeyProvider(account))
+                .notes
+                .state(NotesStateRequest(noteId: targetNote.id)),
+            builder: (_, snapshot) {
+              final data = snapshot.data;
+              return (data == null)
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListTile(
+                      leading: const Icon(Icons.star_rounded),
+                      onTap: () async {
+                        if (data.isFavorited) {
+                          ref
+                              .read(misskeyProvider(account))
+                              .notes
+                              .favorites
+                              .delete(
+                                NotesFavoritesDeleteRequest(
+                                  noteId: targetNote.id,
+                                ),
+                              );
 
-                        Navigator.of(context).pop();
-                      } else {
-                        ref
-                            .read(misskeyProvider(account))
-                            .notes
-                            .favorites
-                            .create(
-                              NotesFavoritesCreateRequest(
-                                noteId: targetNote.id,
-                              ),
-                            );
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    title: Text(data.isFavorited ? "お気に入り解除" : "お気に入り"),
-                  );
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.attach_file),
-          title: const Text("クリップ"),
-          onTap: () {
-            Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        } else {
+                          ref
+                              .read(misskeyProvider(account))
+                              .notes
+                              .favorites
+                              .create(
+                                NotesFavoritesCreateRequest(
+                                  noteId: targetNote.id,
+                                ),
+                              );
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      title: Text(data.isFavorited ? "お気に入り解除" : "お気に入り"),
+                    );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.attach_file),
+            title: const Text("クリップ"),
+            onTap: () {
+              Navigator.of(context).pop();
 
-            showModalBottomSheet(
-              context: context,
-              builder: (context2) =>
-                  ClipModalSheet(account: account, noteId: targetNote.id),
-            );
-          },
-        ),
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (context2) =>
+                    ClipModalSheet(account: account, noteId: targetNote.id),
+              );
+            },
+          ),
+        ],
         ListTile(
           leading: const Icon(Icons.repeat_rounded),
           title: const Text("リノートの直後のノート"),
@@ -232,120 +229,122 @@ class NoteModalSheet extends ConsumerWidget {
             );
           },
         ),
-        if (baseNote.user.host == null &&
-            baseNote.user.username == account.userId &&
-            !(baseNote.text == null &&
-                baseNote.renote != null &&
-                baseNote.poll == null &&
-                baseNote.files.isEmpty)) ...[
-          if (account.i.policies.canEditNote)
+        if (account.hasToken) ...[
+          if (baseNote.user.host == null &&
+              baseNote.user.username == account.userId &&
+              !(baseNote.text == null &&
+                  baseNote.renote != null &&
+                  baseNote.poll == null &&
+                  baseNote.files.isEmpty)) ...[
+            if (account.i.policies.canEditNote)
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text("編集する"),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  context.pushRoute(
+                    NoteCreateRoute(
+                      initialAccount: account,
+                      note: targetNote,
+                      noteCreationMode: NoteCreationMode.update,
+                    ),
+                  );
+                },
+              ),
             ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text("編集する"),
+              leading: const Icon(Icons.delete),
+              title: const Text("削除する"),
               onTap: () async {
-                Navigator.of(context).pop();
-                context.pushRoute(
-                  NoteCreateRoute(
-                    initialAccount: account,
-                    note: targetNote,
-                    noteCreationMode: NoteCreationMode.update,
-                  ),
-                );
+                if (await showDialog<bool>(
+                      context: context,
+                      builder: (context) => const SimpleConfirmDialog(
+                        message: "ほんまに消してええな？",
+                        primary: "消す！",
+                        secondary: "消さへん",
+                      ),
+                    ) ==
+                    true) {
+                  await ref
+                      .read(misskeyProvider(account))
+                      .notes
+                      .delete(NotesDeleteRequest(noteId: baseNote.id));
+                  ref.read(notesProvider(account)).delete(baseNote.id);
+                  if (!context.mounted) return;
+                  Navigator.of(context).pop();
+                }
               },
             ),
-          ListTile(
-            leading: const Icon(Icons.delete),
-            title: const Text("削除する"),
-            onTap: () async {
-              if (await showDialog(
-                    context: context,
-                    builder: (context) => const SimpleConfirmDialog(
-                      message: "ほんまに消してええな？",
-                      primary: "消す！",
-                      secondary: "消さへん",
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text("削除してなおす"),
+              onTap: () async {
+                if (await showDialog<bool>(
+                      context: context,
+                      builder: (context) => const SimpleConfirmDialog(
+                        message: "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
+                        primary: "消す！",
+                        secondary: "消さへん",
+                      ),
+                    ) ==
+                    true) {
+                  await ref
+                      .read(misskeyProvider(account))
+                      .notes
+                      .delete(NotesDeleteRequest(noteId: targetNote.id));
+                  ref.read(notesProvider(account)).delete(targetNote.id);
+                  if (!context.mounted) return;
+                  Navigator.of(context).pop();
+                  context.pushRoute(
+                    NoteCreateRoute(
+                      initialAccount: account,
+                      note: targetNote,
+                      noteCreationMode: NoteCreationMode.recreate,
                     ),
-                  ) ==
-                  true) {
+                  );
+                }
+              },
+            ),
+          ],
+          if (baseNote.user.host == null &&
+              baseNote.user.username == account.userId &&
+              baseNote.renote != null &&
+              baseNote.files.isEmpty &&
+              baseNote.poll == null) ...[
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text("リノートを解除する"),
+              onTap: () async {
                 await ref
                     .read(misskeyProvider(account))
                     .notes
+                    // unrenote ではないらしい
                     .delete(NotesDeleteRequest(noteId: baseNote.id));
                 ref.read(notesProvider(account)).delete(baseNote.id);
                 if (!context.mounted) return;
                 Navigator.of(context).pop();
-              }
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.edit_outlined),
-            title: const Text("削除してなおす"),
-            onTap: () async {
-              if (await showDialog(
-                    context: context,
-                    builder: (context) => const SimpleConfirmDialog(
-                      message: "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
-                      primary: "消す！",
-                      secondary: "消さへん",
-                    ),
-                  ) ==
-                  true) {
-                await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .delete(NotesDeleteRequest(noteId: targetNote.id));
-                ref.read(notesProvider(account)).delete(targetNote.id);
-                if (!context.mounted) return;
+              },
+            ),
+          ],
+          if (baseNote.user.host != null ||
+              (baseNote.user.host == null &&
+                  baseNote.user.username != account.userId))
+            ListTile(
+              leading: const Icon(Icons.report),
+              title: const Text("通報する"),
+              onTap: () {
                 Navigator.of(context).pop();
-                context.pushRoute(
-                  NoteCreateRoute(
-                    initialAccount: account,
-                    note: targetNote,
-                    noteCreationMode: NoteCreationMode.recreate,
+                showDialog<bool>(
+                  context: context,
+                  builder: (context) => AbuseDialog(
+                    account: account,
+                    targetUser: targetNote.user,
+                    defaultText:
+                        "Note:\nhttps://${account.host}/notes/${targetNote.id}\n-----",
                   ),
                 );
-              }
-            },
-          ),
+              },
+            ),
         ],
-        if (baseNote.user.host == null &&
-            baseNote.user.username == account.userId &&
-            baseNote.renote != null &&
-            baseNote.files.isEmpty &&
-            baseNote.poll == null) ...[
-          ListTile(
-            leading: const Icon(Icons.delete),
-            title: const Text("リノートを解除する"),
-            onTap: () async {
-              await ref
-                  .read(misskeyProvider(account))
-                  .notes
-                  // unrenote ではないらしい
-                  .delete(NotesDeleteRequest(noteId: baseNote.id));
-              ref.read(notesProvider(account)).delete(baseNote.id);
-              if (!context.mounted) return;
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-        if (baseNote.user.host != null ||
-            (baseNote.user.host == null &&
-                baseNote.user.username != account.userId))
-          ListTile(
-            leading: const Icon(Icons.report),
-            title: const Text("通報する"),
-            onTap: () {
-              Navigator.of(context).pop();
-              showDialog(
-                context: context,
-                builder: (context) => AbuseDialog(
-                  account: account,
-                  targetUser: targetNote.user,
-                  defaultText:
-                      "Note:\nhttps://${account.host}/notes/${targetNote.id}\n-----",
-                ),
-              );
-            },
-          ),
       ],
     );
   }

@@ -10,6 +10,7 @@ class TestData {
   static Account account = Account(
       host: "example.miria.shiosyakeyakini.info",
       userId: "ai",
+      token: "token",
       i: i1,
       meta: meta);
 
@@ -379,8 +380,8 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
-  
+}
+
   '''));
 
   static Note note2 = Note.fromJson(JSON5.parse(r'''
@@ -418,7 +419,7 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
+}
   '''));
 
   /// 自身でないノート１
@@ -463,7 +464,7 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
+}
   '''));
 
   /// 自身のノート（投票込みのノート）
@@ -644,7 +645,7 @@ class TestData {
   replyId: null,
   renoteId: null,
   myReaction: ':ultra_igyo@.:',
-}  
+}
   '''));
 
   /// Renote
@@ -779,7 +780,7 @@ class TestData {
     folder: null,
     userId: null,
     user: null,
-  }  
+  }
   '''));
 
   static DriveFile drive2AsVideo = DriveFile.fromJson(JSON5.parse(r'''
@@ -1217,8 +1218,8 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  
-  
+}
+
   '''));
 
   static UsersShowResponse usersShowResponse2 =
@@ -1391,8 +1392,8 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  
-  
+}
+
   '''));
 
   static UsersShowResponse usersShowResponse3AsRemoteUser =
@@ -1676,7 +1677,7 @@ class TestData {
   isFollowing: true,
   isFavorited: true,
   hasUnreadNote: false,
-}  
+}
   '''));
 
   // アンテナ

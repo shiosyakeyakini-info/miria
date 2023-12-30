@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:miria/const.dart';
-import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -18,7 +17,6 @@ class ReactionButton extends ConsumerStatefulWidget {
   final int reactionCount;
   final String? myReaction;
   final String noteId;
-  final Account? loginAs;
 
   const ReactionButton({
     super.key,
@@ -26,7 +24,6 @@ class ReactionButton extends ConsumerStatefulWidget {
     required this.reactionCount,
     required this.myReaction,
     required this.noteId,
-    required this.loginAs,
   });
 
   @override
@@ -66,9 +63,11 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
     return ElevatedButton(
       onPressed: () async {
-        if (widget.loginAs != null) return;
-        // リアクション取り消し
         final account = AccountScope.of(context);
+        if (!account.hasToken) {
+          return;
+        }
+        // リアクション取り消し
         if (isMyReaction) {
           if (await SimpleConfirmDialog.show(
                   context: context,
