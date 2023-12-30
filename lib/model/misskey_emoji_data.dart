@@ -9,10 +9,6 @@ sealed class MisskeyEmojiData {
     this.isSensitive,
   );
 
-  static final customEmojiRegExp = RegExp(r":(.+?)@(.+?):");
-  static final hostIncludedRegExp = RegExp(r":(.+?):");
-  static final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
-
   factory MisskeyEmojiData.fromEmojiName({
     required String emojiName,
     Map<String, String>? emojiInfo,
@@ -22,6 +18,9 @@ sealed class MisskeyEmojiData {
     if (!emojiName.startsWith(":")) {
       return UnicodeEmojiData(char: emojiName);
     }
+
+    final customEmojiRegExp = RegExp(r":(.+?)@(.+?):");
+    final hostIncludedRegExp = RegExp(r":(.+?):");
 
     // よそのサーバー
     if (emojiInfo != null && emojiInfo.isNotEmpty) {
@@ -53,6 +52,7 @@ sealed class MisskeyEmojiData {
     }
 
     // 自分のサーバー　:ai:
+    final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
     if (customEmojiRegExp2.hasMatch(emojiName)) {
       assert(repository != null);
       final name =
