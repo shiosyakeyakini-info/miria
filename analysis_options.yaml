@@ -5,5 +5,5 @@ linter:
 
 analyzer:
   exclude:
-    - /**/*.freezed.dart
-    - /**/*.g.dart
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"
