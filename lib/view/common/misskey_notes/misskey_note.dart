@@ -498,39 +498,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                TextButton.icon(
-                                  onPressed: () {
-                                    context.pushRoute(
-                                      NoteCreateRoute(
-                                        reply: displayNote,
-                                        initialAccount: account,
-                                      ),
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                  label: Text(
-                                    displayNote.repliesCount == 0
-                                        ? ""
-                                        : displayNote.repliesCount.format(),
-                                  ),
-                                  icon: Icon(
-                                    Icons.reply,
-                                    size: MediaQuery.textScalerOf(context)
-                                        .scale(16),
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.color,
-                                  ),
-                                ),
-                                RenoteButton(
-                                  displayNote: displayNote,
-                                ),
+                                ReplyButton(displayNote: displayNote),
+                                RenoteButton(displayNote: displayNote),
                                 FooterReactionButton(
                                   onPressed: () => reactionControl(
                                     ref,
@@ -593,9 +562,21 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     MisskeyEmojiData? requestEmoji,
   }) async {
     final account = AccountScope.of(context);
-
-    // 他のサーバーからログインしている場合は不可
-    if (!account.hasToken) return;
+    if (requestEmoji != null &&
+        !ref
+            .read(generalSettingsRepositoryProvider)
+            .settings
+            .enableDirectReaction) {
+      // カスタム絵文字押下でのリアクション無効
+      return;
+    }
+    // 他のサーバーからログインしている場合は他のアカウントで開く
+    if (!account.hasToken) {
+      ref
+          .read(misskeyNoteNotifierProvider(account).notifier)
+          .openNoteInOtherAccount(context, displayNote);
+      return;
+    }
 
     final isLikeOnly =
         (displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
@@ -604,14 +585,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                 displayNote.user.host != null));
     if (displayNote.myReaction != null && requestEmoji != null) {
       // すでにリアクション済み
-      return;
-    }
-    if (requestEmoji != null &&
-        !ref
-            .read(generalSettingsRepositoryProvider)
-            .settings
-            .enableDirectReaction) {
-      // カスタム絵文字押下でのリアクション無効
       return;
     }
     if (requestEmoji != null && isLikeOnly) {
@@ -843,7 +816,46 @@ class NoteChannelView extends StatelessWidget {
   }
 }
 
-class RenoteButton extends StatelessWidget {
+class ReplyButton extends ConsumerWidget {
+  const ReplyButton({super.key, required this.displayNote});
+
+  final Note displayNote;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = AccountScope.of(context);
+    return TextButton.icon(
+      onPressed: () {
+        if (account.hasToken) {
+          context.pushRoute(
+            NoteCreateRoute(reply: displayNote, initialAccount: account),
+          );
+        } else {
+          ref
+              .read(
+                misskeyNoteNotifierProvider(account).notifier,
+              )
+              .openNoteInOtherAccount(context, displayNote);
+        }
+      },
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      label: Text(
+        displayNote.repliesCount == 0 ? "" : displayNote.repliesCount.format(),
+      ),
+      icon: Icon(
+        Icons.reply,
+        size: MediaQuery.textScalerOf(context).scale(16),
+        color: Theme.of(context).textTheme.bodySmall?.color,
+      ),
+    );
+  }
+}
+
+class RenoteButton extends ConsumerWidget {
   final Note displayNote;
   const RenoteButton({
     super.key,
@@ -851,7 +863,7 @@ class RenoteButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
 
     // 他人のノートで、ダイレクトまたはフォロワーのみへの公開の場合、リノート不可
@@ -867,14 +879,26 @@ class RenoteButton extends StatelessWidget {
     }
 
     return TextButton.icon(
-      onPressed: () => showModalBottomSheet(
-          context: context,
-          builder: (innerContext) =>
-              RenoteModalSheet(note: displayNote, account: account)),
-      onLongPress: () => showDialog(
-          context: context,
-          builder: (context) =>
-              RenoteUserDialog(account: account, noteId: displayNote.id)),
+      onPressed: () {
+        if (account.hasToken) {
+          showModalBottomSheet<void>(
+            context: context,
+            builder: (innerContext) => RenoteModalSheet(
+              note: displayNote,
+              account: account,
+            ),
+          );
+        } else {
+          ref
+              .read(misskeyNoteNotifierProvider(account).notifier)
+              .openNoteInOtherAccount(context, displayNote);
+        }
+      },
+      onLongPress: () => showDialog<void>(
+        context: context,
+        builder: (context) =>
+            RenoteUserDialog(account: account, noteId: displayNote.id),
+      ),
       icon: Icon(
         Icons.repeat_rounded,
         size: MediaQuery.textScalerOf(context).scale(16),

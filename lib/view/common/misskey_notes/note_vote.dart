@@ -59,6 +59,13 @@ class NoteVoteState extends ConsumerState<NoteVote> {
       return;
     }
     final account = AccountScope.of(context);
+    // 非ログイン時は他のアカウントを開く
+    if (!account.hasToken) {
+      await ref
+          .read(misskeyNoteNotifierProvider(account).notifier)
+          .openNoteInOtherAccount(context, widget.displayNote);
+      return;
+    }
 
     final dialogValue = await showDialog<bool>(
         context: context,
