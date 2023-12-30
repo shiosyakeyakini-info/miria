@@ -2040,8 +2040,8 @@ class TestData {
 '''));
 
   // Dio
-  static DioError response404 = DioError(
+  static DioException response404 = DioException(
       requestOptions: RequestOptions(),
       response: Response(requestOptions: RequestOptions(), statusCode: 404),
-      type: DioErrorType.unknown);
+      type: DioExceptionType.unknown);
 }

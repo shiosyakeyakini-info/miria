@@ -333,7 +333,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
                     await FlutterImageCompress.compressWithList(file.data);
               }
             } catch (e) {
-              print("failed to compress file");
+              debugPrint("failed to compress file");
             }
 
             final response = await misskey.drive.files.createAsBinary(

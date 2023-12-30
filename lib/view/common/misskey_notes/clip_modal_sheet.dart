@@ -109,7 +109,7 @@ class ClipModalSheet extends ConsumerWidget {
             .addToClip(clip);
       } catch (e) {
         // TODO: あとでなおす
-        if (e is DioError && e.response?.data != null) {
+        if (e is DioException && e.response?.data != null) {
           if ((e.response?.data as Map?)?["error"]?["code"] ==
               "ALREADY_CLIPPED") {
             if (!context.mounted) return;

@@ -18,13 +18,13 @@ class ErrorDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final e = error;
-    if (e is DioError) {
+    if (e is DioException) {
       final response = e.response;
-      if (e.type == DioErrorType.connectionError) {
+      if (e.type == DioExceptionType.connectionError) {
         return Text(S.of(context).thrownConnectionError);
-      } else if (e.type == DioErrorType.connectionTimeout ||
-          e.type == DioErrorType.receiveTimeout ||
-          e.type == DioErrorType.sendTimeout) {
+      } else if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
         return Text(S.of(context).thrownConnectionTimeout);
       } else if (response != null) {
         return Text("[${response.statusCode}] ${response.data}");

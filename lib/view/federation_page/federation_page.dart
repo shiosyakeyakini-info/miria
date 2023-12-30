@@ -116,8 +116,7 @@ class FederationPageState extends ConsumerState<FederationPage> {
                   .read(emojiRepositoryProvider(
                       Account.demoAccount(widget.host, misskeyMeta)))
                   .loadFromSourceIfNeed();
-            } catch (e) {}
-            ;
+            } catch (_) {}
           }
 
           ref.read(federationPageFederationDataProvider.notifier).state =
@@ -150,8 +149,8 @@ class FederationPageState extends ConsumerState<FederationPage> {
         if (!mounted) return;
         setState(() {});
       } catch (e, s) {
-        print(e);
-        print(s);
+        debugPrint(e.toString());
+        debugPrint(s.toString());
         if (!mounted) return;
       }
     });

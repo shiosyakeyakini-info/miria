@@ -29,8 +29,8 @@ class ChannelDetailPage extends ConsumerWidget {
         account: account,
         child: Scaffold(
           appBar: AppBar(
-            title:  Text(S.of(context).channel),
-            bottom:  TabBar(tabs: [
+            title: Text(S.of(context).channel),
+            bottom: TabBar(tabs: [
               Tab(child: Text(S.of(context).channelInformation)),
               Tab(child: Text(S.of(context).timeline))
             ]),
@@ -53,6 +53,7 @@ class ChannelDetailPage extends ConsumerWidget {
                   .read(misskeyProvider(account))
                   .channels
                   .show(ChannelsShowRequest(channelId: channelId));
+              if (!context.mounted) return;
               context.pushRoute(NoteCreateRoute(
                 initialAccount: account,
                 channel: communityChannel,

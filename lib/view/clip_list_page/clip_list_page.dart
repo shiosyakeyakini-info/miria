@@ -25,14 +25,14 @@ class ClipListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text(S.of(context).clip),
+        title: Text(S.of(context).clip),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
               final settings = await showDialog<ClipSettings>(
                 context: context,
-                builder: (context) =>  ClipSettingsDialog(
+                builder: (context) => ClipSettingsDialog(
                   title: Text(S.of(context).create),
                 ),
               );

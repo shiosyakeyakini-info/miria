@@ -167,7 +167,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 ),
               );
 
-      print(reactions);
+      debugPrint(reactions.toString());
     } catch (e) {
       final endpoints =
           await ref.read(misskeyProvider(widget.account)).endpoints();

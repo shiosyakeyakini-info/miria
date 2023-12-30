@@ -20,7 +20,7 @@ class ErrorDialogListener extends ConsumerWidget {
       final error = next.$1;
       if (error == null) return;
       if (error is Exception) {
-        if (error is DioError) {
+        if (error is DioException) {
           SimpleMessageDialog.show(next.$2!,
               "${S.of(context).thrownError}\n${error.type} [${error.response?.statusCode ?? "---"}] ${error.response?.data ?? ""}");
         } else if (error is SpecifiedException) {
@@ -57,10 +57,12 @@ class ErrorDialogListener extends ConsumerWidget {
           };
           SimpleMessageDialog.show(next.$2!, message);
         } else {
-          SimpleMessageDialog.show(next.$2!, "${S.of(context).thrownError}\n$next");
+          SimpleMessageDialog.show(
+              next.$2!, "${S.of(context).thrownError}\n$next");
         }
       } else if (error is Error) {
-        SimpleMessageDialog.show(next.$2!, "${S.of(context).thrownError}\n$next");
+        SimpleMessageDialog.show(
+            next.$2!, "${S.of(context).thrownError}\n$next");
       }
     });
 
