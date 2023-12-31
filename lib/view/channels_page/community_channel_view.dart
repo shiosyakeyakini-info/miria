@@ -8,16 +8,22 @@ import 'package:misskey_dart/misskey_dart.dart';
 
 class CommunityChannelView extends StatelessWidget {
   final CommunityChannel channel;
+  final void Function()? onTap;
 
-  const CommunityChannelView({super.key, required this.channel});
+  const CommunityChannelView({
+    super.key,
+    required this.channel,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(10),
         child: GestureDetector(
-          onTap: () => context.pushRoute(ChannelDetailRoute(
-              account: AccountScope.of(context), channelId: channel.id)),
+          onTap: onTap ??
+              () => context.pushRoute(ChannelDetailRoute(
+                  account: AccountScope.of(context), channelId: channel.id)),
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(color: Theme.of(context).dividerColor)),
@@ -33,6 +39,7 @@ class CommunityChannelView extends StatelessWidget {
                     child: Image.network(
                       channel.bannerUrl!.toString(),
                       fit: BoxFit.fitWidth,
+                      errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                     ),
                   ),
                 Padding(
