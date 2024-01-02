@@ -4,6 +4,7 @@ import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -133,6 +134,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
   @override
   Widget build(BuildContext context) {
     final icon = data.icon;
+    final imageUrl = data.imageUrl;
     return Padding(
         padding: const EdgeInsets.all(10),
         child: Card(
@@ -171,6 +173,16 @@ class AnnouncementState extends ConsumerState<Announcement> {
                       ? null
                       : widget.host,
                 ),
+                if (imageUrl != null)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: NetworkImageView(
+                        url: imageUrl.toString(),
+                        type: ImageType.image,
+                      ),
+                    ),
+                  ),
                 if (AccountScope.of(context).host == widget.host &&
                     data.isRead == false)
                   ElevatedButton(
