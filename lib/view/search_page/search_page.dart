@@ -89,7 +89,7 @@ class NoteSearchPageState extends ConsumerState<SearchPage> {
                       focusNode: focusNodes[1],
                       onSelected: (item) => context.pushRoute(
                         UserRoute(
-                          userId: item.id,
+                          user: item,
                           account: widget.account,
                         ),
                       ),

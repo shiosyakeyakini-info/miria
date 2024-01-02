@@ -31,6 +31,7 @@ import 'package:miria/state_notifier/common/misskey_server_list_notifier.dart';
 import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
 import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
 import 'package:miria/state_notifier/user_list_page/users_lists_notifier.dart';
+import 'package:miria/state_notifier/user_page/user_detailed_notifier.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -299,3 +300,8 @@ final antennasNotifierProvider = AsyncNotifierProvider.autoDispose
 
 final clipsNotifierProvider = AsyncNotifierProvider.autoDispose
     .family<ClipsNotifier, List<Clip>, Misskey>(ClipsNotifier.new);
+
+final userDetailedNotifierProvider = AsyncNotifierProvider.autoDispose
+    .family<UserDetailedNotifier, UsersShowResponse, (Account, String)>(
+  UserDetailedNotifier.new,
+);

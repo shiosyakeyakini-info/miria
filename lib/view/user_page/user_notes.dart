@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/user_page/user_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
-  final String? remoteUserId;
-  final Account? actualAccount;
 
   const UserNotes({
     super.key,
     required this.userId,
-    this.remoteUserId,
-    this.actualAccount,
-  }) : assert((remoteUserId == null) == (actualAccount == null));
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserNotesState();
@@ -34,12 +28,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
   DateTime? untilDate;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final account = AccountScope.of(context);
     return Column(
       children: [
         Padding(
@@ -96,16 +86,17 @@ class UserNotesState extends ConsumerState<UserNotes> {
               ),
               IconButton(
                 onPressed: () async {
-                  final userInfo = ref.read(userInfoProvider(widget.userId));
-                  final firstDate = widget.actualAccount == null
-                      ? userInfo?.response?.createdAt
-                      : userInfo?.remoteResponse?.createdAt;
-
+                  final userDetailed = await ref.read(
+                    userDetailedNotifierProvider((account, widget.userId))
+                        .future,
+                  );
+                  final firstDate = userDetailed.createdAt;
+                  if (!mounted) return;
                   final result = await showDatePicker(
                     context: context,
                     initialDate: untilDate ?? DateTime.now(),
                     helpText: "この日までを表示",
-                    firstDate: firstDate ?? DateTime.now(),
+                    firstDate: firstDate,
                     lastDate: DateTime.now(),
                   );
                   if (result != null) {
@@ -137,13 +128,12 @@ class UserNotesState extends ConsumerState<UserNotes> {
               final Iterable<Note> notes;
               if (highlight) {
                 notes = await misskey.users.featuredNotes(
-                  UsersFeaturedNotesRequest(
-                      userId: widget.remoteUserId ?? widget.userId),
+                  UsersFeaturedNotesRequest(userId: widget.userId),
                 );
               } else {
                 notes = await misskey.users.notes(
                   UsersNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
+                    userId: widget.userId,
                     withFiles: isFileOnly,
                     // 後方互換性のため
                     includeReplies: withReply,
@@ -166,14 +156,14 @@ class UserNotesState extends ConsumerState<UserNotes> {
               if (highlight) {
                 notes = await misskey.users.featuredNotes(
                   UsersFeaturedNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
+                    userId: widget.userId,
                     untilId: lastElement.id,
                   ),
                 );
               } else {
                 notes = await misskey.users.notes(
                   UsersNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
+                    userId: widget.userId,
                     untilId: lastElement.id,
                     withFiles: isFileOnly,
                     includeReplies: withReply,
@@ -192,10 +182,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
               return notes.toList();
             },
             itemBuilder: (context, element) {
-              return MisskeyNote(
-                note: element,
-                loginAs: widget.actualAccount,
-              );
+              return MisskeyNote(note: element);
             },
           ),
         ),

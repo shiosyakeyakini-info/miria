@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/users_show_response_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/user_page/antenna_modal_sheet.dart';
@@ -11,256 +12,244 @@ import 'package:miria/view/user_page/users_list_modal_sheet.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-enum UserControl {
-  createMute,
-  deleteMute,
-  createRenoteMute,
-  deleteRenoteMute,
-  createBlock,
-  deleteBlock,
-}
-
-class UserControlDialog extends ConsumerStatefulWidget {
+class UserControlDialog extends ConsumerWidget {
   final Account account;
-  final UsersShowResponse response;
-  final bool isMe;
+  final String userId;
 
   const UserControlDialog({
     super.key,
     required this.account,
-    required this.response,
-    required this.isMe,
+    required this.userId,
   });
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      UserControlDialogState();
-}
-
-class UserControlDialogState extends ConsumerState<UserControlDialog> {
-  Future<void> addToList() async {
+  Future<void> addToList(BuildContext context, User user) async {
     return showModalBottomSheet(
       context: context,
       builder: (context) => UsersListModalSheet(
-        account: widget.account,
-        user: widget.response.toUser(),
+        account: account,
+        user: user,
       ),
     );
   }
 
-  Future<void> addToAntenna() async {
+  Future<void> addToAntenna(BuildContext context, User user) async {
     return showModalBottomSheet(
       context: context,
       builder: (context) => AntennaModalSheet(
-        account: widget.account,
-        user: widget.response.toUser(),
+        account: account,
+        user: user,
       ),
     );
   }
 
-  Future<Expire?> getExpire() async {
+  Future<Expire?> getExpire(BuildContext context) async {
     return await showDialog<Expire?>(
         context: context, builder: (context) => const ExpireSelectDialog());
   }
 
-  Future<void> renoteMuteCreate() async {
+  Future<void> renoteMuteCreate(BuildContext context, WidgetRef ref) async {
     await ref
-        .read(misskeyProvider(widget.account))
-        .renoteMute
-        .create(RenoteMuteCreateRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createRenoteMute);
+        .read(userDetailedNotifierProvider((account, userId)).notifier)
+        .createRenoteMute();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
-  Future<void> renoteMuteDelete() async {
+  Future<void> renoteMuteDelete(BuildContext context, WidgetRef ref) async {
     await ref
-        .read(misskeyProvider(widget.account))
-        .renoteMute
-        .delete(RenoteMuteDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteRenoteMute);
+        .read(userDetailedNotifierProvider((account, userId)).notifier)
+        .deleteRenoteMute();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
-  Future<void> muteCreate() async {
-    final expires = await getExpire();
+  Future<void> muteCreate(BuildContext context, WidgetRef ref) async {
+    final expires = await getExpire(context);
     if (expires == null) return;
-    final expiresDate = expires == Expire.indefinite
-        ? null
-        : DateTime.now().add(expires.expires!);
-    await ref.read(misskeyProvider(widget.account)).mute.create(
-        MuteCreateRequest(userId: widget.response.id, expiresAt: expiresDate));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createMute);
-  }
-
-  Future<void> muteDelete() async {
     await ref
-        .read(misskeyProvider(widget.account))
-        .mute
-        .delete(MuteDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteMute);
+        .read(userDetailedNotifierProvider((account, userId)).notifier)
+        .createMute(expires.expires);
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
-  Future<void> blockingCreate() async {
+  Future<void> muteDelete(BuildContext context, WidgetRef ref) async {
+    await ref
+        .read(
+          userDetailedNotifierProvider((account, userId)).notifier,
+        )
+        .deleteMute();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+  }
+
+  Future<void> blockingCreate(BuildContext context, WidgetRef ref) async {
     if (await SimpleConfirmDialog.show(
-            context: context,
-            message: "ブロックしてもええか？",
-            primary: "ブロックする",
-            secondary: "やっぱりやめる") !=
-        true) {
+          context: context,
+          message: "ブロックしてもええか？",
+          primary: "ブロックする",
+          secondary: "やっぱりやめる",
+        ) ??
+        false) {
       return;
     }
 
     await ref
-        .read(misskeyProvider(widget.account))
-        .blocking
-        .create(BlockCreateRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createBlock);
+        .read(userDetailedNotifierProvider((account, userId)).notifier)
+        .createBlock();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
-  Future<void> blockingDelete() async {
+  Future<void> blockingDelete(BuildContext context, WidgetRef ref) async {
     await ref
-        .read(misskeyProvider(widget.account))
-        .blocking
-        .delete(BlockDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteBlock);
+        .read(userDetailedNotifierProvider((account, userId)).notifier)
+        .deleteBlock();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ListTile(
-          leading: const Icon(Icons.copy),
-          title: const Text("名前をコピー"),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: widget.response.name ?? widget.response.username,
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("コピーしました")),
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.alternate_email),
-          title: const Text("ユーザー名をコピー"),
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: widget.response.acct));
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("コピーしました")),
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.link),
-          title: const Text("リンクをコピー"),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: Uri(
-                  scheme: "https",
-                  host: widget.account.host,
-                  path: widget.response.acct,
-                ).toString(),
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("コピーしました")),
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.open_in_browser),
-          title: const Text("ブラウザで開く"),
-          onTap: () {
-            launchUrl(
-              Uri(
-                scheme: "https",
-                host: widget.account.host,
-                path: widget.response.acct,
-              ),
-              mode: LaunchMode.inAppWebView,
-            );
-            Navigator.of(context).pop();
-          },
-        ),
-        if (widget.response.host != null)
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userDetailedNotifierProvider((account, userId)));
+    return user.when(
+      data: (user) => ListView(
+        children: [
           ListTile(
-            leading: const Icon(Icons.rocket_launch),
-            title: const Text("ブラウザでリモート先を開く"),
+            leading: const Icon(Icons.copy),
+            title: const Text("名前をコピー"),
             onTap: () {
-              final uri = widget.response.uri ?? widget.response.url;
-              if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.inAppWebView);
+              Clipboard.setData(
+                ClipboardData(text: user.name ?? user.username),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("コピーしました")),
+              );
               Navigator.of(context).pop();
             },
           ),
-        ListTile(
-          leading: const Icon(Icons.open_in_new),
-          title: const Text("別のアカウントで開く"),
-          onTap: () => ref
-              .read(misskeyNoteNotifierProvider(widget.account).notifier)
-              .openUserInOtherAccount(context, widget.response.toUser())
-              .expectFailure(context),
-        ),
-        ListTile(
-          leading: const Icon(Icons.list),
-          title: const Text("リストに追加"),
-          onTap: addToList,
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings_input_antenna),
-          title: const Text("アンテナに追加"),
-          onTap: addToAntenna,
-        ),
-        if (!widget.isMe) ...[
-          if (widget.response.isRenoteMuted ?? false)
+          ListTile(
+            leading: const Icon(Icons.alternate_email),
+            title: const Text("ユーザー名をコピー"),
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: user.acct));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("コピーしました")),
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.link),
+            title: const Text("リンクをコピー"),
+            onTap: () {
+              Clipboard.setData(
+                ClipboardData(
+                  text: Uri(
+                    scheme: "https",
+                    host: user.host,
+                    path: user.acct,
+                  ).toString(),
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("コピーしました")),
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.open_in_browser),
+            title: const Text("ブラウザで開く"),
+            onTap: () {
+              launchUrl(
+                Uri(
+                  scheme: "https",
+                  host: user.host,
+                  path: user.acct,
+                ),
+                mode: LaunchMode.inAppWebView,
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+          if (user.host != null)
             ListTile(
-              leading: const Icon(Icons.repeat_rounded),
-              title: const Text("Renoteのミュート解除する"),
-              onTap: renoteMuteDelete.expectFailure(context),
-            )
-          else
-            ListTile(
-              leading: const Icon(Icons.repeat_rounded),
-              title: const Text("Renoteをミュートする"),
-              onTap: renoteMuteCreate.expectFailure(context),
+              leading: const Icon(Icons.rocket_launch),
+              title: const Text("ブラウザでリモート先を開く"),
+              onTap: () {
+                final uri = user.uri ?? user.url;
+                if (uri == null) return;
+                launchUrl(uri, mode: LaunchMode.inAppWebView);
+                Navigator.of(context).pop();
+              },
             ),
-          if (widget.response.isMuted ?? false)
+          ListTile(
+            leading: const Icon(Icons.open_in_new),
+            title: const Text("別のアカウントで開く"),
+            onTap: () => ref
+                .read(misskeyNoteNotifierProvider(account).notifier)
+                .openUserInOtherAccount(context, user.toUser())
+                .expectFailure(context),
+          ),
+          if (account.hasToken) ...[
             ListTile(
-              leading: const Icon(Icons.visibility),
-              title: const Text("ミュート解除する"),
-              onTap: muteDelete.expectFailure(context),
-            )
-          else
-            ListTile(
-              leading: const Icon(Icons.visibility_off),
-              title: const Text("ミュートする"),
-              onTap: muteCreate.expectFailure(context),
+              leading: const Icon(Icons.list),
+              title: const Text("リストに追加"),
+              onTap: () => addToList(context, user.toUser()),
             ),
-          if (widget.response.isBlocking ?? false)
             ListTile(
-              leading: const Icon(Icons.block),
-              title: const Text("ブロックを解除する"),
-              onTap: blockingDelete.expectFailure(context),
-            )
-          else
-            ListTile(
-              leading: const Icon(Icons.block),
-              title: const Text("ブロックする"),
-              onTap: blockingCreate.expectFailure(context),
+              leading: const Icon(Icons.settings_input_antenna),
+              title: const Text("アンテナに追加"),
+              onTap: () => addToAntenna(context, user.toUser()),
             ),
+            if (user.host != null || user.username != account.userId) ...[
+              if (user.isRenoteMuted ?? false)
+                ListTile(
+                  leading: const Icon(Icons.repeat_rounded),
+                  title: const Text("Renoteのミュート解除する"),
+                  onTap: () =>
+                      renoteMuteDelete(context, ref).expectFailure(context),
+                )
+              else
+                ListTile(
+                  leading: const Icon(Icons.repeat_rounded),
+                  title: const Text("Renoteをミュートする"),
+                  onTap: () =>
+                      renoteMuteCreate(context, ref).expectFailure(context),
+                ),
+              if (user.isMuted ?? false)
+                ListTile(
+                  leading: const Icon(Icons.visibility),
+                  title: const Text("ミュート解除する"),
+                  onTap: () => muteDelete(context, ref).expectFailure(context),
+                )
+              else
+                ListTile(
+                  leading: const Icon(Icons.visibility_off),
+                  title: const Text("ミュートする"),
+                  onTap: () => muteCreate(context, ref).expectFailure(context),
+                ),
+              if (user.isBlocking ?? false)
+                ListTile(
+                  leading: const Icon(Icons.block),
+                  title: const Text("ブロックを解除する"),
+                  onTap: () =>
+                      blockingDelete(context, ref).expectFailure(context),
+                )
+              else
+                ListTile(
+                  leading: const Icon(Icons.block),
+                  title: const Text("ブロックする"),
+                  onTap: () =>
+                      blockingCreate(context, ref).expectFailure(context),
+                ),
+            ],
+          ],
         ],
-      ],
+      ),
+      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

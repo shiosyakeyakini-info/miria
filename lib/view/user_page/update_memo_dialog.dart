@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 
 class UpdateMemoDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -26,10 +25,14 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
   final controller = TextEditingController();
 
   Future<void> memoSave() async {
-    await ref.read(misskeyProvider(widget.account)).users.updateMemo(
-        UsersUpdateMemoRequest(userId: widget.userId, memo: controller.text));
+    await ref
+        .read(
+          userDetailedNotifierProvider((widget.account, widget.userId))
+              .notifier,
+        )
+        .updateMemo(controller.text);
     if (!mounted) return;
-    Navigator.of(context).pop(controller.text);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -62,7 +65,8 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
             },
             child: const Text("やめる")),
         ElevatedButton(
-            onPressed: memoSave.expectFailure(context), child: const Text("保存する"))
+            onPressed: memoSave.expectFailure(context),
+            child: const Text("保存する"))
       ],
     );
   }

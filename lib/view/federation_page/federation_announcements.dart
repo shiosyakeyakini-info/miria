@@ -132,6 +132,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
 
   @override
   Widget build(BuildContext context) {
+    final account = AccountScope.of(context);
     final icon = data.icon;
     return Padding(
         padding: const EdgeInsets.all(10),
@@ -167,15 +168,13 @@ class AnnouncementState extends ConsumerState<Announcement> {
                 const Padding(padding: EdgeInsets.only(top: 10)),
                 MfmText(
                   mfmText: data.text,
-                  host: AccountScope.of(context).host == widget.host
-                      ? null
-                      : widget.host,
+                  host: account.host == widget.host ? null : widget.host,
                 ),
-                if (AccountScope.of(context).host == widget.host &&
+                if (account.hasToken &&
+                    account.host == widget.host &&
                     data.isRead == false)
                   ElevatedButton(
                       onPressed: () async {
-                        final account = AccountScope.of(context);
                         if (data.needConfirmationToRead == true) {
                           final isConfirmed = await SimpleConfirmDialog.show(
                               context: context,

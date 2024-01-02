@@ -135,7 +135,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
     if (!context.mounted) return;
     context.pushRoute(
       UserRoute(
-        userId: foundUser.id,
+        user: foundUser,
         account: loginAs ?? _account,
       ),
     );
