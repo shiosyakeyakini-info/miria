@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:miria/view/common/cat_ear.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -56,8 +57,12 @@ class AvatarIcon extends StatefulWidget {
   State<StatefulWidget> createState() => AvatarIconState();
 }
 
-class AvatarIconState extends State<AvatarIcon> {
+class AvatarIconState extends State<AvatarIcon>
+    with SingleTickerProviderStateMixin {
+  Animation<double>? animation;
+  AnimationController? controller;
   Color? catEarColor;
+  bool loopAnimation = false;
 
   Color? averageColor() {
     // https://github.com/woltapp/blurhash/blob/master/Algorithm.md
@@ -80,7 +85,45 @@ class AvatarIconState extends State<AvatarIcon> {
   void initState() {
     super.initState();
 
-    catEarColor = (widget.user.isCat ? averageColor() : null);
+    if (widget.user.isCat) {
+      catEarColor = averageColor();
+      controller = AnimationController(
+        duration: const Duration(seconds: 1),
+        vsync: this,
+      );
+      // 37.6deg -> 10deg -> 20deg -> 0deg -> 37.6deg
+      animation = TweenSequence([
+        TweenSequenceItem(
+          tween: Tween(begin: 0.65624379, end: 0.17453292),
+          weight: 30,
+        ),
+        TweenSequenceItem(
+          tween: Tween(begin: 0.17453292, end: 0.34906585),
+          weight: 25,
+        ),
+        TweenSequenceItem(
+          tween: Tween(begin: 0.34906585, end: 0.0),
+          weight: 20,
+        ),
+        TweenSequenceItem(
+          tween: Tween(begin: 0.0, end: 0.65624379),
+          weight: 25,
+        ),
+      ]).animate(controller!)
+        ..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            if (loopAnimation) {
+              controller?.forward(from: 0);
+            }
+          }
+        });
+    }
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -95,6 +138,23 @@ class AvatarIconState extends State<AvatarIcon> {
                   userId: widget.user.id, account: AccountScope.of(context)),
             );
           },
+      onLongPressStart: widget.user.isCat
+          ? (_) {
+              if (!loopAnimation) {
+                controller?.forward(from: 0);
+              }
+              setState(() {
+                loopAnimation = true;
+              });
+            }
+          : null,
+      onLongPressEnd: widget.user.isCat
+          ? (_) {
+              setState(() {
+                loopAnimation = false;
+              });
+            }
+          : null,
       child: Padding(
         padding: EdgeInsets.only(
           top: 3,
@@ -103,48 +163,25 @@ class AvatarIconState extends State<AvatarIcon> {
         ),
         child: Stack(
           children: [
-            if (widget.user.isCat)
-              Positioned(
-                left: 0,
-                top: 0,
-                width: baseHeight,
-                height: baseHeight,
-                child: Transform.rotate(
-                  angle: -0 * pi / 180,
-                  child: Transform.translate(
-                    offset: Offset(
-                      -baseHeight * 0.333,
-                      -baseHeight * 0.3,
-                    ),
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      color: catEarColor ?? Theme.of(context).primaryColor,
-                      size: baseHeight,
-                    ),
-                  ),
+            if (widget.user.isCat) ...[
+              Transform.translate(
+                offset: Offset(baseHeight * 0.25, baseHeight * 0.25),
+                child: CatEar(
+                  listenable: animation!,
+                  color: catEarColor ?? Theme.of(context).primaryColor,
+                  height: baseHeight * 0.5,
                 ),
               ),
-            if (widget.user.isCat)
-              Positioned(
-                left: 0,
-                top: 0,
-                width: baseHeight,
-                height: baseHeight,
-                child: Transform.translate(
-                  offset: Offset(
-                    baseHeight * 1.333,
-                    -baseHeight * 0.3,
-                  ),
-                  child: Transform(
-                    transform: Matrix4.rotationY(pi),
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      color: catEarColor ?? Theme.of(context).primaryColor,
-                      size: baseHeight,
-                    ),
-                  ),
+              Transform.translate(
+                offset: Offset(baseHeight * 0.75, baseHeight * 0.25),
+                child: CatEar(
+                  listenable: animation!,
+                  color: catEarColor ?? Theme.of(context).primaryColor,
+                  height: baseHeight * 0.5,
+                  flipped: true,
                 ),
               ),
+            ],
             ClipRRect(
               borderRadius: BorderRadius.circular(baseHeight),
               child: SizedBox(
