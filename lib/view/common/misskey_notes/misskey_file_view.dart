@@ -173,7 +173,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           imageUrlList: widget.targetFiles,
                           initialPage: widget.position,
                         ));
-              } else if (widget.fileType.startsWith("video")) {
+              } else if (widget.fileType.startsWith(RegExp("video|audio"))) {
                 showDialog(
                   context: context,
                   builder: (context) => VideoDialog(
@@ -248,7 +248,8 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           ),
                         ),
                       );
-                    } else if (widget.fileType.startsWith("video")) {
+                    } else if (widget.fileType
+                        .startsWith(RegExp("video|audio"))) {
                       cachedWidget = Stack(
                         children: [
                           Positioned.fill(
