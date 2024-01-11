@@ -39,7 +39,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
               context.pushRoute(WordMuteRoute(account: account, muteType: MuteType.soft));
             },
             title: const Text("ワードミュート"),
-            leading: const Icon(Icons.volume_off),
+            leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
@@ -47,7 +47,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
               context.pushRoute(WordMuteRoute(account: account, muteType: MuteType.hard));
             },
             title: const Text("ハードワードミュート"),
-            leading: const Icon(Icons.volume_off),
+            leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
@@ -55,7 +55,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
               context.pushRoute(InstanceMuteRoute(account: account));
             },
             title: const Text("インスタンスミュート"),
-            leading: const Icon(Icons.volume_off),
+            leading: const Icon(Icons.visibility_off),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
