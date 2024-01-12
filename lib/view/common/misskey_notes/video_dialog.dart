@@ -117,6 +117,7 @@ class _VideoDialogState extends State<VideoDialog> {
                 behavior: HitTestBehavior.translucent,
                 onPointerDown: (event) {
                   if (isAudioFile) return;
+                  timer?.cancel();
                   int now = DateTime.now().millisecondsSinceEpoch;
                   int elap = now - lastTapTime;
                   lastTapTime = now;
