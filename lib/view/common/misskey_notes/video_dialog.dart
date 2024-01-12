@@ -315,7 +315,7 @@ class _VideoControlState extends State<_VideoControls> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 15, right: 15),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       width: MediaQuery.of(context).size.width,
       height: 100,
       decoration: BoxDecoration(
@@ -324,51 +324,46 @@ class _VideoControlState extends State<_VideoControls> {
                 top: BorderSide(
               color: Theme.of(context).primaryColor,
             ))),
-        child: Column(children: [
-          Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(position.label(reference: duration),
-                    textAlign: TextAlign.center),
-                Expanded(
-                    child: SliderTheme(
-                        data: const SliderThemeData(
-                            trackHeight: 2.0,
-                            thumbShape:
-                                RoundSliderThumbShape(enabledThumbRadius: 6.0)),
-                        child: Slider(
-                          thumbColor: Theme.of(context).primaryColor,
-                          activeColor: Theme.of(context).primaryColor,
-                          value: position.inMilliseconds.toDouble(),
-                          secondaryTrackValue:
-                              bufferPosition.inMilliseconds.toDouble(),
-                          min: 0,
-                          max: duration.inMilliseconds.toDouble(),
-                          onChangeStart: (double value) {
-                            isSeeking = true;
-                          },
-                          onChanged: (double value) {
-                            setState(() {
-                              position = Duration(milliseconds: value.toInt());
-                            });
-                          },
-                          onChangeEnd: (double value) {
-                            widget.controller.player.seek(position);
-                            isSeeking = false;
-                          },
-                        ))),
-                Text(duration.label(reference: duration))
-              ]),
-          Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
+      child: Column(children: [
+        Padding(
+            padding: const EdgeInsets.only(left: 0, right: 0, bottom: 10),
+            child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Row(children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          iconSize: widget.iconSize,
+                          onPressed: () =>
+                              widget.controller.player.playOrPause(),
+                          icon: StreamBuilder(
+                              stream: widget.controller.player.stream.playing,
+                              builder: (context, playing) => Icon(
+                                    playing.data == true
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                  )),
+                        ),
+                      ),
+                      Text(
+                        position.label(reference: duration),
+                        textAlign: TextAlign.center
+                        ),
+                      const Text(" / "),
+                      Text(
+                        duration.label(reference: duration),
+                        textAlign: TextAlign.center
+                        ),
+                    ]),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 5),
+                  ),
+                  IconButton(
                       iconSize: widget.iconSize,
                       onPressed: () async {
                         await widget.controller.player
@@ -382,26 +377,48 @@ class _VideoControlState extends State<_VideoControls> {
                               ? Icons.volume_off
                               : Icons.volume_up,
                         ),
-                      ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      iconSize: widget.iconSize,
-                      onPressed: () => widget.controller.player.playOrPause(),
-                      icon: StreamBuilder(
-                        stream: widget.controller.player.stream.playing,
-                        builder: (context, playing) => Icon(
-                          playing.data == true ? Icons.pause : Icons.play_arrow,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: widget.onMenuPressed,
-                      icon: const Icon(Icons.more_horiz),
-                      iconSize: widget.iconSize,
-                    )
-                  ])),
-        ]));
+                      )),
+                  IconButton(
+                    onPressed: widget.onMenuPressed,
+                    icon: const Icon(Icons.more_horiz),
+                    iconSize: widget.iconSize,
+                  )
+                ])),
+        Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: SliderTheme(
+                      data: SliderThemeData(
+                          overlayShape: SliderComponentShape.noOverlay,
+                          trackHeight: 3.0,
+                          thumbShape: const RoundSliderThumbShape(
+                              enabledThumbRadius: 6.0)),
+                      child: Slider(
+                        thumbColor: Theme.of(context).primaryColor,
+                        activeColor: Theme.of(context).primaryColor,
+                        value: position.inMilliseconds.toDouble(),
+                        secondaryTrackValue:
+                            bufferPosition.inMilliseconds.toDouble(),
+                        min: 0,
+                        max: duration.inMilliseconds.toDouble(),
+                        onChangeStart: (double value) {
+                          isSeeking = true;
+                        },
+                        onChanged: (double value) {
+                          setState(() {
+                            position = Duration(milliseconds: value.toInt());
+                          });
+                        },
+                        onChangeEnd: (double value) {
+                          widget.controller.player.seek(position);
+                          isSeeking = false;
+                        },
+                      )))
+            ])
+      ]),
+    );
   }
 }
