@@ -1607,7 +1607,7 @@ packages:
     source: hosted
     version: "0.4.0+2"
   volume_controller:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: volume_controller
       sha256: "189bdc7a554f476b412e4c8b2f474562b09d74bc458c23667356bce3ca1d48c9"
