@@ -94,7 +94,6 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         "Noto Color Emoji",
       ];
     }
-    return [];
   }
 
   TextStyle resolveFontFamilySerif(String serifFontName) {
@@ -175,7 +174,6 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           "Noto Sans"
         ]);
     }
-    return const TextStyle();
   }
 
   TextTheme applyGoogleFont(TextTheme textTheme, String? fontName) {
