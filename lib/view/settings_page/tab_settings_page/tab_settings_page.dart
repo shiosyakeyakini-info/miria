@@ -340,14 +340,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   title: const Text("返信も入れる"),
                   subtitle: const Text("Misskey v2023.10.1以降の機能です。"),
                   value: isIncludeReply,
-                  onChanged: (value) =>
-                      setState(() => isIncludeReply = !isIncludeReply),
+                  enabled: !isMediaOnly,
+                  onChanged: (value) => setState(() {
+                    isIncludeReply = !isIncludeReply;
+                    if (value ?? false) {
+                      isMediaOnly = false;
+                    }
+                  }),
                 ),
               CheckboxListTile(
                 title: const Text("ファイルのみにする"),
                 value: isMediaOnly,
-                onChanged: (value) =>
-                    setState(() => isMediaOnly = !isMediaOnly),
+                enabled: !isIncludeReply,
+                onChanged: (value) => setState(() {
+                  isMediaOnly = !isMediaOnly;
+                  if (value ?? false) {
+                    isIncludeReply = false;
+                  }
+                }),
               ),
               CheckboxListTile(
                 title: const Text("リアクションや投票数を自動更新する"),
