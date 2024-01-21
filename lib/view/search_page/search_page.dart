@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,20 +19,20 @@ final noteSearchLocalOnlyProvider = StateProvider.autoDispose((ref) => false);
 
 @RoutePage()
 class SearchPage extends ConsumerStatefulWidget {
-  final String? initialSearchText;
+  final NoteSearchCondition? initialNoteSearchCondition;
   final Account account;
 
   const SearchPage({
     super.key,
-    this.initialSearchText,
+    this.initialNoteSearchCondition,
     required this.account,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => NoteSearchPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => SearchPageState();
 }
 
-class NoteSearchPageState extends ConsumerState<SearchPage> {
+class SearchPageState extends ConsumerState<SearchPage> {
   late final List<FocusNode> focusNodes;
   int tabIndex = 0;
 
@@ -80,7 +81,7 @@ class NoteSearchPageState extends ConsumerState<SearchPage> {
                 controller: tabController,
                 children: [
                   NoteSearch(
-                    initialSearchText: widget.initialSearchText,
+                    initialCondition: widget.initialNoteSearchCondition,
                     focusNode: focusNodes[0],
                   ),
                   Padding(

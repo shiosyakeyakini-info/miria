@@ -21,10 +21,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
       child: Scaffold(
           appBar: AppBar(
             title: Text(S.of(context).login),
-            bottom: TabBar(isScrollable: true, tabs: [
-              Tab(text: S.of(context).loginAsMiAuth),
-              Tab(text: S.of(context).loginAsAPIKey),
-            ]),
+            bottom: TabBar(
+              isScrollable: true,
+              tabs: [
+                Tab(text: S.of(context).loginAsMiAuth),
+                Tab(text: S.of(context).loginAsAPIKey),
+              ],
+              tabAlignment: TabAlignment.center,
+            ),
           ),
           body: const TabBarView(
             children: [MiAuthLogin(), ApiKeyLogin()],

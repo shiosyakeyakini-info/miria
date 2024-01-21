@@ -593,9 +593,20 @@ class _FakeNotesStateResponse_50 extends _i1.SmartFake
         );
 }
 
-class _FakeRolesListResponse_51 extends _i1.SmartFake
+class _FakeNotesTranslateResponse_51 extends _i1.SmartFake
+    implements _i5.NotesTranslateResponse {
+  _FakeNotesTranslateResponse_51(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeRolesListResponse_52 extends _i1.SmartFake
     implements _i5.RolesListResponse {
-  _FakeRolesListResponse_51(
+  _FakeRolesListResponse_52(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -604,9 +615,9 @@ class _FakeRolesListResponse_51 extends _i1.SmartFake
         );
 }
 
-class _FakeMisskeyUsersLists_52 extends _i1.SmartFake
+class _FakeMisskeyUsersLists_53 extends _i1.SmartFake
     implements _i5.MisskeyUsersLists {
-  _FakeMisskeyUsersLists_52(
+  _FakeMisskeyUsersLists_53(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -615,9 +626,9 @@ class _FakeMisskeyUsersLists_52 extends _i1.SmartFake
         );
 }
 
-class _FakeUsersShowResponse_53 extends _i1.SmartFake
+class _FakeUsersShowResponse_54 extends _i1.SmartFake
     implements _i5.UsersShowResponse {
-  _FakeUsersShowResponse_53(
+  _FakeUsersShowResponse_54(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -626,8 +637,8 @@ class _FakeUsersShowResponse_53 extends _i1.SmartFake
         );
 }
 
-class _FakeBaseOptions_54 extends _i1.SmartFake implements _i11.BaseOptions {
-  _FakeBaseOptions_54(
+class _FakeBaseOptions_55 extends _i1.SmartFake implements _i11.BaseOptions {
+  _FakeBaseOptions_55(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -636,9 +647,9 @@ class _FakeBaseOptions_54 extends _i1.SmartFake implements _i11.BaseOptions {
         );
 }
 
-class _FakeHttpClientAdapter_55 extends _i1.SmartFake
+class _FakeHttpClientAdapter_56 extends _i1.SmartFake
     implements _i11.HttpClientAdapter {
-  _FakeHttpClientAdapter_55(
+  _FakeHttpClientAdapter_56(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -647,8 +658,8 @@ class _FakeHttpClientAdapter_55 extends _i1.SmartFake
         );
 }
 
-class _FakeTransformer_56 extends _i1.SmartFake implements _i11.Transformer {
-  _FakeTransformer_56(
+class _FakeTransformer_57 extends _i1.SmartFake implements _i11.Transformer {
+  _FakeTransformer_57(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -657,8 +668,8 @@ class _FakeTransformer_56 extends _i1.SmartFake implements _i11.Transformer {
         );
 }
 
-class _FakeInterceptors_57 extends _i1.SmartFake implements _i11.Interceptors {
-  _FakeInterceptors_57(
+class _FakeInterceptors_58 extends _i1.SmartFake implements _i11.Interceptors {
+  _FakeInterceptors_58(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -667,8 +678,8 @@ class _FakeInterceptors_57 extends _i1.SmartFake implements _i11.Interceptors {
         );
 }
 
-class _FakeResponse_58<T1> extends _i1.SmartFake implements _i11.Response<T1> {
-  _FakeResponse_58(
+class _FakeResponse_59<T1> extends _i1.SmartFake implements _i11.Response<T1> {
+  _FakeResponse_59(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -677,8 +688,8 @@ class _FakeResponse_58<T1> extends _i1.SmartFake implements _i11.Response<T1> {
         );
 }
 
-class _FakeDuration_59 extends _i1.SmartFake implements Duration {
-  _FakeDuration_59(
+class _FakeDuration_60 extends _i1.SmartFake implements Duration {
+  _FakeDuration_60(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -687,9 +698,9 @@ class _FakeDuration_59 extends _i1.SmartFake implements Duration {
         );
 }
 
-class _FakeHttpClientRequest_60 extends _i1.SmartFake
+class _FakeHttpClientRequest_61 extends _i1.SmartFake
     implements _i12.HttpClientRequest {
-  _FakeHttpClientRequest_60(
+  _FakeHttpClientRequest_61(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -4719,11 +4730,11 @@ class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
   @override
   _i5.MisskeyUsersLists get list => (super.noSuchMethod(
         Invocation.getter(#list),
-        returnValue: _FakeMisskeyUsersLists_52(
+        returnValue: _FakeMisskeyUsersLists_53(
           this,
           Invocation.getter(#list),
         ),
-        returnValueForMissingStub: _FakeMisskeyUsersLists_52(
+        returnValueForMissingStub: _FakeMisskeyUsersLists_53(
           this,
           Invocation.getter(#list),
         ),
@@ -4966,11 +4977,11 @@ class MockDio extends _i1.Mock implements _i11.Dio {
   @override
   _i11.BaseOptions get options => (super.noSuchMethod(
         Invocation.getter(#options),
-        returnValue: _FakeBaseOptions_54(
+        returnValue: _FakeBaseOptions_55(
           this,
           Invocation.getter(#options),
         ),
-        returnValueForMissingStub: _FakeBaseOptions_54(
+        returnValueForMissingStub: _FakeBaseOptions_55(
           this,
           Invocation.getter(#options),
         ),
@@ -4988,11 +4999,11 @@ class MockDio extends _i1.Mock implements _i11.Dio {
   @override
   _i11.HttpClientAdapter get httpClientAdapter => (super.noSuchMethod(
         Invocation.getter(#httpClientAdapter),
-        returnValue: _FakeHttpClientAdapter_55(
+        returnValue: _FakeHttpClientAdapter_56(
           this,
           Invocation.getter(#httpClientAdapter),
         ),
-        returnValueForMissingStub: _FakeHttpClientAdapter_55(
+        returnValueForMissingStub: _FakeHttpClientAdapter_56(
           this,
           Invocation.getter(#httpClientAdapter),
         ),
@@ -5011,11 +5022,11 @@ class MockDio extends _i1.Mock implements _i11.Dio {
   @override
   _i11.Transformer get transformer => (super.noSuchMethod(
         Invocation.getter(#transformer),
-        returnValue: _FakeTransformer_56(
+        returnValue: _FakeTransformer_57(
           this,
           Invocation.getter(#transformer),
         ),
-        returnValueForMissingStub: _FakeTransformer_56(
+        returnValueForMissingStub: _FakeTransformer_57(
           this,
           Invocation.getter(#transformer),
         ),
@@ -5033,11 +5044,11 @@ class MockDio extends _i1.Mock implements _i11.Dio {
   @override
   _i11.Interceptors get interceptors => (super.noSuchMethod(
         Invocation.getter(#interceptors),
-        returnValue: _FakeInterceptors_57(
+        returnValue: _FakeInterceptors_58(
           this,
           Invocation.getter(#interceptors),
         ),
-        returnValueForMissingStub: _FakeInterceptors_57(
+        returnValueForMissingStub: _FakeInterceptors_58(
           this,
           Invocation.getter(#interceptors),
         ),
@@ -5939,11 +5950,11 @@ class MockHttpClient extends _i1.Mock implements _i12.HttpClient {
   @override
   Duration get idleTimeout => (super.noSuchMethod(
         Invocation.getter(#idleTimeout),
-        returnValue: _FakeDuration_59(
+        returnValue: _FakeDuration_60(
           this,
           Invocation.getter(#idleTimeout),
         ),
-        returnValueForMissingStub: _FakeDuration_59(
+        returnValueForMissingStub: _FakeDuration_60(
           this,
           Invocation.getter(#idleTimeout),
         ),
