@@ -120,7 +120,7 @@ class _$_TabIcon implements _TabIcon {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_TabIcon &&

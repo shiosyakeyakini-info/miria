@@ -112,7 +112,7 @@ class _$_Acct extends _Acct {
   final String username;
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Acct &&

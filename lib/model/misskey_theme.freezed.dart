@@ -200,7 +200,7 @@ class _$_MisskeyTheme implements _MisskeyTheme {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MisskeyTheme &&
