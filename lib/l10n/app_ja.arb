@@ -192,8 +192,8 @@
     },
     "confirmDeleteReaction": "リアクション取り消してもええか？",
     "cancelReaction": "取り消す",
-    "renotedBy": "がRenote",
-    "selfRenotedBy": "がセルフRenote",
+    "renotedBy": "がリノート",
+    "selfRenotedBy": "がセルフリノート",
     "savedImage": "画像保存したで",
     "tapToShow": "タップして表示",
 
@@ -252,7 +252,7 @@
             }
         }
     },
-    "renoted": "Renoteしました。",
+    "renoted": "リノートしました。",
     "renoteInSpecificChannel": "{channelName}内にRenote",
     "@renoteInSpecificChannel": {
         "placeholders": {
@@ -937,7 +937,7 @@
                 "format": "decimalPattern"
             },
             "limit": {
-                "type": "int",
+                "type": "double",
                 "format": "decimalPattern"
             }
         }
