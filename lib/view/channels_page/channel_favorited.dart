@@ -7,16 +7,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ChannelFavorited extends ConsumerWidget {
-  const ChannelFavorited({super.key});
+  const ChannelFavorited({super.key, this.onChannelSelected});
+
+  final void Function(CommunityChannel channel)? onChannelSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
     return FutureListView(
-        future: ref
-            .read(misskeyProvider(account))
-            .channels
-            .myFavorite(const ChannelsMyFavoriteRequest()),
-        builder: (context, item) => CommunityChannelView(channel: item));
+      future: ref
+          .read(misskeyProvider(account))
+          .channels
+          .myFavorite(const ChannelsMyFavoriteRequest()),
+      builder: (context, item) => CommunityChannelView(
+        channel: item,
+        onTap: onChannelSelected != null
+            ? () => onChannelSelected?.call(item)
+            : null,
+      ),
+    );
   }
 }
