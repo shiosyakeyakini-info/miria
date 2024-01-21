@@ -72,6 +72,13 @@ const Map<String, List<MfmFnArg>> mfmFn = {
   "bg": [
     MfmFnArg(name: "color"),
   ],
+  "border": [
+    MfmFnArg(name: "style", defaultValue: "solid"),
+    MfmFnArg(name: "color"),
+    MfmFnArg(name: "width", defaultValue: "1"),
+    MfmFnArg(name: "radius", defaultValue: "1"),
+    MfmFnArg(name: "noclip"),
+  ],
   "font": [
     MfmFnArg(name: "serif"),
     MfmFnArg(name: "monospace"),
