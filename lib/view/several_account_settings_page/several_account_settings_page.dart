@@ -13,48 +13,58 @@ class SeveralAccountSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          AppBar(title: Text("${account.i.name ?? account.i.username} の設定")),
+      appBar: AppBar(title: Text("${account.i.name ?? account.i.username} の設定")),
       body: ListView(
         children: [
           ListTile(
             onTap: () {
-              context.pushRoute(
-                  SeveralAccountGeneralSettingsRoute(account: account));
+              context.pushRoute(SeveralAccountGeneralSettingsRoute(account: account));
             },
             title: const Text("全般設定"),
+            leading: const Icon(Icons.settings),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-              onTap: () {
-                context.pushRoute(ReactionDeckRoute(account: account));
-              },
-              title: const Text("リアクションデッキ")),
+            onTap: () {
+              context.pushRoute(ReactionDeckRoute(account: account));
+            },
+            title: const Text("リアクションデッキ"),
+            // ハートのアイコン
+            leading: const Icon(Icons.favorite),
+            trailing: const Icon(Icons.chevron_right),
+          ),
           // ListTile(onTap: () {}, title: const Text("ソフトミュート")),
           ListTile(
             onTap: () {
-              context.pushRoute(
-                  WordMuteRoute(account: account, muteType: MuteType.soft));
+              context.pushRoute(WordMuteRoute(account: account, muteType: MuteType.soft));
             },
             title: const Text("ワードミュート"),
+            leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
-              context.pushRoute(
-                  WordMuteRoute(account: account, muteType: MuteType.hard));
+              context.pushRoute(WordMuteRoute(account: account, muteType: MuteType.hard));
             },
             title: const Text("ハードワードミュート"),
+            leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
               context.pushRoute(InstanceMuteRoute(account: account));
             },
             title: const Text("インスタンスミュート"),
+            leading: const Icon(Icons.visibility_off),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
               context.pushRoute(CacheManagementRoute(account: account));
             },
             title: const Text("キャッシュ設定"),
+            leading: const Icon(Icons.cached),
+            trailing: const Icon(Icons.chevron_right),
           )
         ],
       ),
