@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/users_sort_type_extension.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/pushable_listview.dart';
@@ -106,8 +107,9 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                           items: [
                             for (final sortType in UsersSortType.values)
                               DropdownMenuItem(
-                                  value: sortType,
-                                  child: Text(sortType.displayName))
+                                value: sortType,
+                                child: Text(sortType.displayName(context)),
+                              ),
                           ],
                           value: sortType,
                           onChanged: (e) {

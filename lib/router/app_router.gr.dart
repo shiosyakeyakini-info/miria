@@ -203,13 +203,14 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    HardMuteRoute.name: (routeData) {
-      final args = routeData.argsAs<HardMuteRouteArgs>();
+    WordMuteRoute.name: (routeData) {
+      final args = routeData.argsAs<WordMuteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: HardMutePage(
+        child: WordMutePage(
           key: args.key,
           account: args.account,
+          muteType: args.muteType,
         ),
       );
     },
@@ -415,6 +416,16 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
+    CacheManagementRoute.name: (routeData) {
+      final args = routeData.argsAs<CacheManagementRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CacheManagementPage(
           key: args.key,
           account: args.account,
         ),
@@ -1141,40 +1152,45 @@ class InstanceMuteRouteArgs {
 }
 
 /// generated route for
-/// [HardMutePage]
-class HardMuteRoute extends PageRouteInfo<HardMuteRouteArgs> {
-  HardMuteRoute({
+/// [WordMutePage]
+class WordMuteRoute extends PageRouteInfo<WordMuteRouteArgs> {
+  WordMuteRoute({
     Key? key,
     required Account account,
+    required MuteType muteType,
     List<PageRouteInfo>? children,
   }) : super(
-          HardMuteRoute.name,
-          args: HardMuteRouteArgs(
+          WordMuteRoute.name,
+          args: WordMuteRouteArgs(
             key: key,
             account: account,
+            muteType: muteType,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'HardMuteRoute';
+  static const String name = 'WordMuteRoute';
 
-  static const PageInfo<HardMuteRouteArgs> page =
-      PageInfo<HardMuteRouteArgs>(name);
+  static const PageInfo<WordMuteRouteArgs> page =
+      PageInfo<WordMuteRouteArgs>(name);
 }
 
-class HardMuteRouteArgs {
-  const HardMuteRouteArgs({
+class WordMuteRouteArgs {
+  const WordMuteRouteArgs({
     this.key,
     required this.account,
+    required this.muteType,
   });
 
   final Key? key;
 
   final Account account;
 
+  final MuteType muteType;
+
   @override
   String toString() {
-    return 'HardMuteRouteArgs{key: $key, account: $account}';
+    return 'WordMuteRouteArgs{key: $key, account: $account, muteType: $muteType}';
   }
 }
 
@@ -1912,5 +1928,43 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [CacheManagementPage]
+class CacheManagementRoute extends PageRouteInfo<CacheManagementRouteArgs> {
+  CacheManagementRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CacheManagementRoute.name,
+          args: CacheManagementRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CacheManagementRoute';
+
+  static const PageInfo<CacheManagementRouteArgs> page =
+      PageInfo<CacheManagementRouteArgs>(name);
+}
+
+class CacheManagementRouteArgs {
+  const CacheManagementRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'CacheManagementRouteArgs{key: $key, account: $account}';
   }
 }

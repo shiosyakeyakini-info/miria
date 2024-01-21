@@ -70,7 +70,7 @@ class AntennaModalSheet extends ConsumerWidget {
             } else {
               return ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text("アンテナを作成"),
+                title: Text(S.of(context).createAntenna),
                 onTap: () async {
                   final settings = await showDialog<AntennaSettings>(
                     context: context,

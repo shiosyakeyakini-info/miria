@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class ChannelSelectDialog extends ConsumerStatefulWidget {
@@ -48,7 +49,7 @@ class ChannelSelectDialogState extends ConsumerState<ChannelSelectDialog> {
     return AccountScope(
       account: widget.account,
       child: AlertDialog(
-        title: const Text("チャンネル選択"),
+        title: Text(S.of(context).selectChannel),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
@@ -57,7 +58,7 @@ class ChannelSelectDialogState extends ConsumerState<ChannelSelectDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "フォロー中",
+                  S.of(context).following,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(
@@ -73,7 +74,7 @@ class ChannelSelectDialogState extends ConsumerState<ChannelSelectDialog> {
                     }),
                 const Padding(padding: EdgeInsets.only(top: 30)),
                 Text(
-                  "お気に入り",
+                  S.of(context).favorite,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(

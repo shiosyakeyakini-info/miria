@@ -48,23 +48,25 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("メモ"),
+      title: Text(S.of(context).memo),
       content: TextField(
         controller: controller,
         maxLines: null,
-        decoration: const InputDecoration(
-          hintText: "なんかメモることあったら書いとき",
+        decoration: InputDecoration(
+          hintText: S.of(context).memoDescription,
         ),
       ),
       actions: [
         OutlinedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(S.of(context).cancel)),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(S.of(context).cancel),
+        ),
         ElevatedButton(
-            onPressed: memoSave.expectFailure(context),
-            child: const Text("保存する"))
+          onPressed: memoSave.expectFailure(context),
+          child: Text(S.of(context).save),
+        ),
       ],
     );
   }

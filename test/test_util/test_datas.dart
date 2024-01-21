@@ -7,8 +7,11 @@ import 'package:misskey_dart/misskey_dart.dart';
 import 'package:json5/json5.dart';
 
 class TestData {
-  static Account account =
-      Account(host: "example.miria.shiosyakeyakini.info", userId: "ai", i: i1);
+  static Account account = Account(
+      host: "example.miria.shiosyakeyakini.info",
+      userId: "ai",
+      i: i1,
+      meta: meta);
 
   // i
   static IResponse i1 = IResponse.fromJson(JSON5.parse(r"""
@@ -1938,6 +1941,100 @@ class TestData {
     attachedLocalUsersCount: 2,
     attachedRemoteUsersCount: 65,
   }
+'''));
+
+  static MetaResponse meta = MetaResponse.fromJson(JSON5.parse(r'''
+{
+  maintainerName: 'そらいろ',
+  maintainerEmail: 'sorairo@shiosyakeyakini.info',
+  version: '2023.12.0-beta.1',
+  name: 'Miria検証環境サーバー',
+  shortName: null,
+  uri: 'https://stg.miria.shiosyakeyakini.info',
+  description: 'このサーバーはMiria ( https://shiosyakeyakini.info/miria_web/index.html ) の検証と、ストア審査用の環境です。',
+  langs: [],
+  tosUrl: null,
+  repositoryUrl: 'https://github.com/misskey-dev/misskey',
+  feedbackUrl: 'https://github.com/misskey-dev/misskey/issues/new',
+  impressumUrl: null,
+  privacyPolicyUrl: null,
+  disableRegistration: true,
+  emailRequiredForSignup: false,
+  enableHcaptcha: false,
+  hcaptchaSiteKey: null,
+  enableRecaptcha: false,
+  recaptchaSiteKey: null,
+  enableTurnstile: false,
+  turnstileSiteKey: null,
+  swPublickey: null,
+  themeColor: null,
+  mascotImageUrl: '/assets/ai.png',
+  bannerUrl: null,
+  infoImageUrl: null,
+  serverErrorImageUrl: null,
+  notFoundImageUrl: null,
+  iconUrl: null,
+  backgroundImageUrl: null,
+  logoImageUrl: null,
+  maxNoteTextLength: 3000,
+  defaultLightTheme: null,
+  defaultDarkTheme: null,
+  ads: [
+    {
+      id: '9i5sueefva',
+      url: 'https://shiosyakeyakini.info/miria_web/index.html',
+      place: 'square',
+      ratio: 1,
+      imageUrl: 'https://shiosyakeyakini.info/miria_web/ad.png',
+      dayOfWeek: 0,
+    },
+  ],
+  notesPerOneAd: 0,
+  enableEmail: false,
+  enableServiceWorker: false,
+  translatorAvailable: false,
+  serverRules: [],
+  policies: {
+    gtlAvailable: true,
+    ltlAvailable: true,
+    canPublicNote: true,
+    canInvite: false,
+    inviteLimit: 0,
+    inviteLimitCycle: 10080,
+    inviteExpirationTime: 0,
+    canManageCustomEmojis: false,
+    canManageAvatarDecorations: false,
+    canSearchNotes: false,
+    canUseTranslator: true,
+    canHideAds: false,
+    driveCapacityMb: 100,
+    alwaysMarkNsfw: false,
+    pinLimit: 5,
+    antennaLimit: 5,
+    wordMuteLimit: 200,
+    webhookLimit: 3,
+    clipLimit: 10,
+    noteEachClipsLimit: 200,
+    userListLimit: 10,
+    userEachUserListsLimit: 50,
+    rateLimitFactor: 1,
+  },
+  mediaProxy: 'https://stg.miria.shiosyakeyakini.info/proxy',
+  cacheRemoteFiles: false,
+  cacheRemoteSensitiveFiles: true,
+  requireSetup: false,
+  proxyAccountName: null,
+  features: {
+    registration: false,
+    emailRequiredForSignup: false,
+    hcaptcha: false,
+    recaptcha: false,
+    turnstile: false,
+    objectStorage: false,
+    serviceWorker: false,
+    miauth: true,
+  },
+}
 '''));
 
   // Dio

@@ -159,8 +159,13 @@ class AvatarIconState extends State<AvatarIcon> {
             ),
             for (final decoration in widget.user.avatarDecorations)
               Transform.scale(
-                  scaleX: 2,
-                  scaleY: 2,
+                scaleX: 2,
+                scaleY: 2,
+                child: Transform.translate(
+                  offset: Offset(
+                    baseHeight * decoration.offsetX,
+                    baseHeight * decoration.offsetY,
+                  ),
                   child: Transform.rotate(
                     angle: (decoration.angle ?? 0) * 2 * pi,
                     alignment: Alignment.center,
@@ -178,7 +183,9 @@ class AvatarIconState extends State<AvatarIcon> {
                             child: NetworkImageView(
                                 url: decoration.url,
                                 type: ImageType.avatarDecoration)),
-                  )),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

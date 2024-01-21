@@ -21,6 +21,25 @@ _$_AccountSettings _$$_AccountSettingsFromJson(Map<String, dynamic> json) =>
       defaultReactionAcceptance: $enumDecodeNullable(
               _$ReactionAcceptanceEnumMap, json['defaultReactionAcceptance']) ??
           null,
+      iCacheStrategy:
+          $enumDecodeNullable(_$CacheStrategyEnumMap, json['iCacheStrategy']) ??
+              CacheStrategy.whenTabChange,
+      latestICached: json['latestICached'] == null
+          ? null
+          : DateTime.parse(json['latestICached'] as String),
+      emojiCacheStrategy: $enumDecodeNullable(
+              _$CacheStrategyEnumMap, json['emojiCacheStrategy']) ??
+          CacheStrategy.whenLaunch,
+      latestEmojiCached: json['latestEmojiCached'] == null
+          ? null
+          : DateTime.parse(json['latestEmojiCached'] as String),
+      metaChacheStrategy: $enumDecodeNullable(
+              _$CacheStrategyEnumMap, json['metaChacheStrategy']) ??
+          CacheStrategy.whenOneDay,
+      latestMetaCached: json['latestMetaCached'] == null
+          ? null
+          : DateTime.parse(json['latestMetaCached'] as String),
+      forceShowAd: json['forceShowAd'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_AccountSettingsToJson(_$_AccountSettings instance) =>
@@ -33,6 +52,15 @@ Map<String, dynamic> _$$_AccountSettingsToJson(_$_AccountSettings instance) =>
       'defaultIsLocalOnly': instance.defaultIsLocalOnly,
       'defaultReactionAcceptance':
           _$ReactionAcceptanceEnumMap[instance.defaultReactionAcceptance],
+      'iCacheStrategy': _$CacheStrategyEnumMap[instance.iCacheStrategy]!,
+      'latestICached': instance.latestICached?.toIso8601String(),
+      'emojiCacheStrategy':
+          _$CacheStrategyEnumMap[instance.emojiCacheStrategy]!,
+      'latestEmojiCached': instance.latestEmojiCached?.toIso8601String(),
+      'metaChacheStrategy':
+          _$CacheStrategyEnumMap[instance.metaChacheStrategy]!,
+      'latestMetaCached': instance.latestMetaCached?.toIso8601String(),
+      'forceShowAd': instance.forceShowAd,
     };
 
 const _$NoteVisibilityEnumMap = {
@@ -48,4 +76,10 @@ const _$ReactionAcceptanceEnumMap = {
   ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote:
       'nonSensitiveOnlyForLocalLikeOnlyForRemote',
   ReactionAcceptance.likeOnly: 'likeOnly',
+};
+
+const _$CacheStrategyEnumMap = {
+  CacheStrategy.whenTabChange: 'whenTabChange',
+  CacheStrategy.whenLaunch: 'whenLaunch',
+  CacheStrategy.whenOneDay: 'whenOneDay',
 };

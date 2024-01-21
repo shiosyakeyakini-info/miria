@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -32,7 +32,12 @@ class UserPlays extends ConsumerWidget {
       },
       itemBuilder: (context, play) {
         return ListTile(
-          title: MfmText(mfmText: play.title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+          title: MfmText(
+              mfmText: play.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold)),
           subtitle: MfmText(mfmText: play.summary),
           onTap: () {
             launchUrl(
@@ -45,7 +50,7 @@ class UserPlays extends ConsumerWidget {
         );
       },
       additionalErrorInfo: (context, e) {
-        return const Text("この機能はMisskey 2023.9以降でのみ使用できます。");
+        return Text(S.of(context).userPlaysAvailability);
       },
     );
   }

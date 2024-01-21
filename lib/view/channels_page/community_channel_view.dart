@@ -60,11 +60,13 @@ class CommunityChannelView extends StatelessWidget {
                               child: Padding(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
-                                    S.of(context).channelStatics(
+                                    S.of(context).channelStatistics(
                                           channel.notesCount,
                                           channel.usersCount,
-                                          channel.lastNotedAt?.differenceNow ??
-                                              channel.createdAt.differenceNow,
+                                          channel.lastNotedAt
+                                                  ?.differenceNow(context) ??
+                                              channel.createdAt
+                                                  .differenceNow(context),
                                         ),
                                     style:
                                         Theme.of(context).textTheme.bodySmall,

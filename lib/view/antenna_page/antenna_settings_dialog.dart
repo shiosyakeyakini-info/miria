@@ -205,7 +205,7 @@ class AntennaSettingsForm extends ConsumerWidget {
                 )
                 .toList(),
             value: settings.src,
-            hint: Text(S.of(context).selectAntennas),
+            hint: Text(S.of(context).selectAntennaSource),
             onChanged:
                 ref.read(_antennaSettingsNotifierProvider.notifier).updateSrc,
           ),
@@ -293,7 +293,7 @@ class AntennaSettingsForm extends ConsumerWidget {
             maxLines: 20,
             decoration: InputDecoration(
               labelText: S.of(context).excludeKeywords,
-              helperText: S.of(context).antennaSOurceExcludeKeywordsHintText,
+              helperText: S.of(context).antennaSourceExcludeKeywordsHintText,
               helperMaxLines: 5,
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
@@ -325,7 +325,7 @@ class AntennaSettingsForm extends ConsumerWidget {
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveLocal),
-            subtitle: const Text("ローカルのみの指定はMisskey 2023.10.2以降で有効です。"),
+            subtitle: Text(S.of(context).receiveLocalAvailability),
             value: settings.localOnly,
             onChanged: ref
                 .read(_antennaSettingsNotifierProvider.notifier)

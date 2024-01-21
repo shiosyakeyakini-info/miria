@@ -1,54 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'general_settings.freezed.dart';
 part 'general_settings.g.dart';
 
 enum ThemeColorSystem {
-  forceLight("ライトモード"),
-  forceDark("ダークモード"),
-  system("デバイスの設定にしたがう");
+  forceLight,
+  forceDark,
+  system;
 
-  final String displayName;
-
-  const ThemeColorSystem(this.displayName);
+  String displayName(BuildContext context) {
+    return switch (this) {
+      ThemeColorSystem.forceLight => S.of(context).lightMode,
+      ThemeColorSystem.forceDark => S.of(context).darkMode,
+      ThemeColorSystem.system => S.of(context).syncWithSystem,
+    };
+  }
 }
 
 enum NSFWInherit {
-  inherit("閲覧注意のメディアは隠す"),
-  ignore("閲覧注意のメディアを隠さない"),
-  allHidden("常にメディアを隠す"),
-  removeNsfw("TLで閲覧注意つきのノートを表示しない");
+  inherit,
+  ignore,
+  allHidden,
+  removeNsfw;
 
-  final String displayName;
-
-  const NSFWInherit(this.displayName);
+  String displayName(BuildContext context) {
+    return switch (this) {
+      NSFWInherit.inherit => S.of(context).hideSensitiveMedia,
+      NSFWInherit.ignore => S.of(context).showSensitiveMedia,
+      NSFWInherit.allHidden => S.of(context).hideAllMedia,
+      NSFWInherit.removeNsfw => S.of(context).removeSensitiveNotes,
+    };
+  }
 }
 
 enum AutomaticPush {
-  automatic("自動で次を読み込む"),
-  none("自動で読み込まない");
+  automatic,
+  none;
 
-  final String displayName;
-
-  const AutomaticPush(this.displayName);
+  String displayName(BuildContext context) {
+    return switch (this) {
+      AutomaticPush.automatic => S.of(context).enableInfiniteScroll,
+      AutomaticPush.none => S.of(context).disableInfiniteScroll,
+    };
+  }
 }
 
 enum TabPosition {
-  top("上"),
-  bottom("下");
+  top,
+  bottom;
 
-  final String displayName;
-
-  const TabPosition(this.displayName);
+  String displayName(BuildContext context) {
+    return switch (this) {
+      TabPosition.top => S.of(context).top,
+      TabPosition.bottom => S.of(context).bottom,
+    };
+  }
 }
 
 enum EmojiType {
-  twemoji("Twemoji"),
-  system("標準");
+  twemoji,
+  system;
 
-  final String displayName;
-
-  const EmojiType(this.displayName);
+  String displayName(BuildContext context) {
+    return switch (this) {
+      EmojiType.twemoji => "Twemoji",
+      EmojiType.system => S.of(context).systemEmoji,
+    };
+  }
 }
 
 @freezed

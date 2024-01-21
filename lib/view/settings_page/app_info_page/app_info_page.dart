@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -30,27 +31,29 @@ class AppInfoPageState extends ConsumerState<AppInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("このアプリについて")),
+      appBar: AppBar(title: Text(S.of(context).aboutMiria)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: AccountScope(
-            account: Account.demoAccount(""),
+            account: Account.demoAccount("", null),
             child: Column(
               children: [
-                MfmText(mfmText: '''
+                MfmText(
+                  mfmText: '''
 <center>\$[x3 Miria]</center>
-パッケージ名：${packageInfo?.packageName ?? ""}
-バージョン:${packageInfo?.version ?? ""}+${packageInfo?.buildNumber.toString() ?? ""}
+${S.of(context).packageName}: ${packageInfo?.packageName ?? ""}
+${S.of(context).version}: ${packageInfo?.version ?? ""}+${packageInfo?.buildNumber ?? ""}
 
-開発者：@shiosyakeyakini@misskey.io
+${S.of(context).developer}: @shiosyakeyakini@misskey.io
 
-\$[x2 **このアプリについて**]
-[公式ページ](https://shiosyakeyakini.info/miria_web/index.html)
+\$[x2 **${S.of(context).aboutMiria}**]
+[${S.of(context).officialWebSite}](https://shiosyakeyakini.info/miria_web/index.html)
 [GitHub](https://github.com/shiosyakeyakini-info/miria)
 
-\$[x2 **オープンソースライセンス**]
-                '''),
+\$[x2 **${S.of(context).openSourceLicense}**]
+''',
+                ),
                 ElevatedButton(
                   onPressed: () async {
                     showLicensePage(
@@ -61,8 +64,8 @@ class AppInfoPageState extends ConsumerState<AppInfoPage> {
                           "${packageInfo?.version ?? ""}+${packageInfo?.buildNumber.toString() ?? ""}",
                     );
                   },
-                  child: const Text("ライセンスを表示する"),
-                )
+                  child: Text(S.of(context).showLicense),
+                ),
               ],
             ),
           ),

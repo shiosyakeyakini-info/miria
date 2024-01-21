@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 import 'package:kana_kit/kana_kit.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/model/unicode_emoji.dart';
 import 'package:miria/repository/account_settings_repository.dart';
@@ -46,7 +47,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
     required this.accountSettingsRepository,
   });
 
-  bool isNeedLoading = false;
+  bool thisLaunchLoaded = false;
 
   String format(String emojiName) {
     return emojiName
@@ -73,13 +74,30 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
         "emojis@${account.host}", jsonEncode(serverFetchData));
-    isNeedLoading = true;
+    await accountSettingsRepository.save(accountSettingsRepository
+        .fromAccount(account)
+        .copyWith(latestEmojiCached: DateTime.now()));
+    thisLaunchLoaded = true;
   }
 
   @override
   Future<void> loadFromSourceIfNeed() async {
-    if (isNeedLoading) return;
-    await loadFromSource();
+    final settings = accountSettingsRepository.fromAccount(account);
+    final latestUpdated = settings.latestEmojiCached;
+    switch (settings.emojiCacheStrategy) {
+      case CacheStrategy.whenTabChange:
+        await loadFromSource();
+        break;
+      case CacheStrategy.whenLaunch:
+        if (thisLaunchLoaded) return;
+        await loadFromSource();
+        break;
+      case CacheStrategy.whenOneDay:
+        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
+          await loadFromSource();
+        }
+        break;
+    }
   }
 
   String toHiraganaSafe(String text) {

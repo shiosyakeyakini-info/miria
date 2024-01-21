@@ -51,6 +51,8 @@ void main() {
         await tester.pumpWidget(ProviderScope(
           overrides: [
             misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+            misskeyWithoutAccountProvider
+                .overrideWith((ref, arg) => mockMisskey),
             emojiRepositoryProvider.overrideWith((ref, arg) => emojiRepository)
           ],
           child: DefaultRootWidget(
@@ -279,7 +281,7 @@ void main() {
         await tester.pumpAndSettle();
 
         await tester.enterText(find.byType(TextField).hitTestable(), "藍ちゃん吸う");
-        await tester.tap(find.text("保存する"));
+        await tester.tap(find.text("保存"));
         await tester.pumpAndSettle();
 
         verify(mockUser.updateMemo(argThat(equals(UsersUpdateMemoRequest(

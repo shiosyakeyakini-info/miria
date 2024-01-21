@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:miria/router/app_router.dart';
 
 @RoutePage()
@@ -13,23 +14,23 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            title: const Text("全般設定"),
+            title: Text(S.of(context).generalSettings),
             onTap: () => context.pushRoute(const GeneralSettingsRoute()),
           ),
           ListTile(
-            title: const Text("アカウント設定"),
+            title: Text(S.of(context).accountSettings),
             onTap: () => context.pushRoute(const AccountListRoute()),
           ),
           ListTile(
-            title: const Text("タブ設定"),
+            title: Text(S.of(context).tabSettings),
             onTap: () => context.pushRoute(const TabSettingsListRoute()),
           ),
           ListTile(
-            title: const Text("設定のインポート・エクスポート"),
+            title: Text(S.of(context).settingsImportAndExport),
             onTap: () => context.pushRoute(const ImportExportRoute()),
           ),
           ListTile(
-            title: const Text("このアプリについて"),
+            title: Text(S.of(context).aboutMiria),
             onTap: () => context.pushRoute(const AppInfoRoute()),
           )
         ],

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -122,7 +123,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     for (final element in NoteVisibility.values.where(
                         (element) => element != NoteVisibility.specified))
                       DropdownMenuItem(
-                          value: element, child: Text(element.displayName))
+                        value: element,
+                        child: Text(element.displayName(context)),
+                      ),
                   ],
                   value: visibility,
                   onChanged: (value) => setState(() {

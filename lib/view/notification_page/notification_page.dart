@@ -54,15 +54,11 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                     final result = await misskey.i
                         .notifications(const INotificationsRequest(
                       limit: 50,
+                      markAsRead: true,
                     ));
                     ref
                         .read(notesProvider(widget.account))
                         .registerAll(result.map((e) => e.note).whereNotNull());
-                    if (result.isNotEmpty) {
-                      ref
-                          .read(mainStreamRepositoryProvider(widget.account))
-                          .latestMarkAs(result.first.id);
-                    }
                     return result.toNotificationData(localize);
                   },
                   nextFuture: (lastElement, _) async {
@@ -219,7 +215,7 @@ class NotificationItem extends ConsumerWidget {
                             emojis:
                                 notification.renoteUsers.first?.emojis ?? {}),
                       ),
-                    Text(notification.createdAt.differenceNow)
+                    Text(notification.createdAt.differenceNow(context)),
                   ],
                 ),
               ),
@@ -332,7 +328,7 @@ class NotificationItem extends ConsumerWidget {
                       emojis: user?.emojis ?? {},
                     ),
                   ),
-                  Text(notification.createdAt.differenceNow),
+                  Text(notification.createdAt.differenceNow(context)),
                 ],
               ),
               if (user != null) UserListItem(user: user),
@@ -357,7 +353,7 @@ class NotificationItem extends ConsumerWidget {
                                   accept: true,
                                   userId: user.id,
                                 ).expectFailure(context),
-                                child: const Text("許可"),
+                                child: Text(S.of(context).accept),
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -371,7 +367,7 @@ class NotificationItem extends ConsumerWidget {
                                   accept: false,
                                   userId: user.id,
                                 ).expectFailure(context),
-                                child: const Text("拒否"),
+                                child: Text(S.of(context).reject),
                               ),
                             ),
                             const Spacer(flex: 3),
@@ -393,7 +389,7 @@ class NotificationItem extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(child: Text(notification.text)),
-              Text(notification.createdAt.differenceNow),
+              Text(notification.createdAt.differenceNow(context)),
             ],
           ),
         );
@@ -408,7 +404,7 @@ class NotificationItem extends ConsumerWidget {
                   children: [
                     Expanded(
                         child: Text(S.of(context).finishedVotedNotification)),
-                    Text(notification.createdAt.differenceNow),
+                    Text(notification.createdAt.differenceNow(context)),
                   ],
                 ),
               ),
@@ -419,24 +415,22 @@ class NotificationItem extends ConsumerWidget {
             ],
           ),
         );
-      case NoteNotification():
+      case NoteNotification(:final note):
+        final user = note?.user;
         return Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (notification.note?.user != null)
+              if (user != null)
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: SimpleMfmText(
-                    S.of(context).notedNotification(
-                        notification.note?.user.name ??
-                            notification.note?.user.username),
-                    emojis: notification.note?.user.emojis ?? {},
+                    S.of(context).notedNotification(user.name ?? user.username),
+                    emojis: user.emojis,
                   ),
                 ),
-              if (notification.note != null)
-                misskey_note.MisskeyNote(note: notification.note!)
+              if (note != null) misskey_note.MisskeyNote(note: note),
             ],
           ),
         );

@@ -238,7 +238,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         top: 5,
                         bottom: 5,
                       ),
-                      child: Text(currentTabSetting.name),
+                      child: Text(
+                        currentTabSetting.name ??
+                            currentTabSetting.tabType.displayName(context),
+                      ),
                     ),
                   ),
                   const Nyanpuppu(),
@@ -445,8 +448,8 @@ class AnnoucementInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasUnread = ref.watch(
-      accountProvider(tabSetting.acct)
-          .select((account) => account.i.unreadAnnouncements.isNotEmpty),
+      iProvider(tabSetting.acct)
+          .select((i) => i.unreadAnnouncements.isNotEmpty),
     );
 
     if (hasUnread) {

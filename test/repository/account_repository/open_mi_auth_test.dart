@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/repository/account_repository.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../test_util/mock.mocks.dart';
@@ -17,7 +20,7 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(() => accountRepository.openMiAuth("https://misskey.io/"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<InvalidServerException>()));
   });
 
   test("Activity Pub非対応サーバーの場合、エラーを返すこと", () {
@@ -28,7 +31,7 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(() async => await accountRepository.openMiAuth("sawakai.space"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<ServerIsNotMisskeyException>()));
     verify(dio.getUri(argThat(equals(Uri(
         scheme: "https",
         host: "sawakai.space",
@@ -42,7 +45,6 @@ void main() {
     when(dio.get(any)).thenAnswer((realInvocation) async => Response(
         requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo2));
     final mockMisskey = MockMisskey();
-    when(mockMisskey.endpoints()).thenAnswer((_) async => []);
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
@@ -53,7 +55,7 @@ void main() {
 
     await expectLater(
         () async => await accountRepository.openMiAuth("calckey.jp"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<SoftwareNotCompatibleException>()));
 
     verifyInOrder([
       dio.getUri(argThat(equals(Uri(
@@ -74,16 +76,19 @@ void main() {
         data: AuthTestData.oldVerMisskeyNodeInfo2));
     final mockMisskey = MockMisskey();
     when(mockMisskey.endpoints()).thenAnswer((_) async => []);
+    when(mockMisskey.meta()).thenAnswer((_) async =>
+        MetaResponse.fromJson(jsonDecode(AuthTestData.oldVerMisskeyMeta)));
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
         misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+        misskeyWithoutAccountProvider.overrideWith((ref, arg) => mockMisskey),
       ],
     );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     await expectLater(
         () async => await accountRepository.openMiAuth("misskey.dev"),
-        throwsA(isA<SpecifiedException>()));
+        throwsA(isA<SoftwareNotCompatibleException>()));
   });
 }

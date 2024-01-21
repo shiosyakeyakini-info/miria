@@ -3,7 +3,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_parser/mfm_parser.dart' hide MfmText;
-import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/extensions/list_mfm_node_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -99,8 +98,8 @@ class MisskeyPagePage extends ConsumerWidget {
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("作成日: ${page.createdAt.format}"),
-                            Text("更新日: ${page.updatedAt.format}")
+                            Text(S.of(context).pageCreatedAt(page.createdAt)),
+                            Text(S.of(context).pageUpdatedAt(page.updatedAt)),
                           ],
                         ),
                       ),

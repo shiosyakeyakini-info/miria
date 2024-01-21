@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 extension DateTimeExtension on DateTime {
@@ -7,63 +9,76 @@ extension DateTimeExtension on DateTime {
   operator >(DateTime other) => compareTo(other) > 0;
   operator >=(DateTime other) => compareTo(other) >= 0;
 
-  String get format => DateFormat("yyyy 年 M 月 d 日").format(toUtc().toLocal());
+  String format(BuildContext context) {
+    final localeName = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMMMd(localeName).format(toUtc().toLocal());
+  }
 
-  String get formatUntilSeconds =>
-      "${year < 0 ? "-" : ""}${DateFormat("yyyy 年 M 月 d 日 HH:mm:ss").format(toUtc().toLocal())}";
+  String formatUntilSeconds(BuildContext context) {
+    final localeName = Localizations.localeOf(context).toLanguageTag();
+    final formattedDate =
+        DateFormat.yMMMd(localeName).add_Hms().format(toUtc().toLocal());
+    return "${year < 0 ? "-" : ""}$formattedDate";
+  }
 
-  String get formatUntilMilliSeconds =>
-      "${year < 0 ? "-" : ""}${DateFormat("yyyy/MM/dd HH:mm:ss", "ja_jp").format(toUtc().toLocal())}.${millisecond.toString().padLeft(3, '0')}";
+  String formatUntilMilliSeconds(BuildContext context) {
+    final localeName = Localizations.localeOf(context).toLanguageTag();
+    final formattedDate = DateFormat.yMd(localeName)
+        .add_Hms()
+        .addPattern("S", ".")
+        .format(toUtc().toLocal());
+    return "${year < 0 ? "-" : ""}$formattedDate";
+  }
 
-  String get differenceNowDetail {
+  String differenceNowDetail(BuildContext context) {
     final differ = this - DateTime.now();
-    if (differ <= const Duration(seconds: 0)) {
-      return differenceNow;
+    if (differ <= Duration.zero) {
+      return differenceNow(context);
     } else if (differ >= const Duration(days: 365)) {
-      return "${differ.inDays ~/ 365}年後";
+      return S.of(context).inYears(differ.inDays ~/ 365);
     } else if (differ >= const Duration(days: 1)) {
-      return "${differ.inDays}日後";
+      return S.of(context).inDays(differ.inDays);
     } else if (differ >= const Duration(hours: 1)) {
-      return "${differ.inHours}時間後";
+      return S.of(context).inHours(differ.inHours);
     } else if (differ >= const Duration(minutes: 1)) {
-      return "${differ.inMinutes}分後";
+      return S.of(context).inMinutes(differ.inMinutes);
     } else if (differ >= const Duration(seconds: 1)) {
-      return "${differ.inSeconds}秒後";
+      return S.of(context).inSeconds(differ.inSeconds);
     } else {
-      return "たったいま";
+      return S.of(context).justNow;
     }
   }
 
-  String get differenceNow {
+  String differenceNow(BuildContext context) {
     final differ = DateTime.now() - this;
     if (DateTime.now() < this) {
-      return "未来";
+      return S.of(context).future;
     } else if (differ < const Duration(seconds: 1)) {
-      return "たったいま";
+      return S.of(context).justNow;
     } else if (differ < const Duration(minutes: 1)) {
-      return "${differ.inSeconds}秒前";
+      return S.of(context).secondsAgo(differ.inSeconds);
     } else if (differ < const Duration(hours: 1)) {
-      return "${differ.inMinutes}分前";
+      return S.of(context).minutesAgo(differ.inMinutes);
     } else if (differ < const Duration(days: 1)) {
-      return "${differ.inHours}時間前";
+      return S.of(context).hoursAgo(differ.inHours);
     } else if (differ <= const Duration(days: 365)) {
-      return "${differ.inDays}日前";
+      return S.of(context).daysAgo(differ.inDays);
     } else {
-      return "${differ.inDays ~/ 365}年前";
+      return S.of(context).yearsAgo(differ.inDays ~/ 365);
     }
   }
 }
 
 extension DurationExtenion on Duration {
-  String get format {
+  String format(BuildContext context) {
     if (this < const Duration(minutes: 1)) {
-      return "$inSeconds秒";
+      return S.of(context).nSeconds(inSeconds);
     } else if (this < const Duration(hours: 1)) {
-      return "$inMinutes分";
+      return S.of(context).nMinutes(inMinutes);
     } else if (this < const Duration(days: 1)) {
-      return "$inHours時間";
+      return S.of(context).nHours(inHours);
     } else {
-      return "$inDays日";
+      return S.of(context).nDays(inDays);
     }
   }
 }

@@ -11,8 +11,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FederationCustomEmojis extends ConsumerStatefulWidget {
   final String host;
+  final MetaResponse meta;
 
-  const FederationCustomEmojis({super.key, required this.host});
+  const FederationCustomEmojis({
+    super.key,
+    required this.host,
+    required this.meta,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -32,7 +37,7 @@ class FederationCustomEmojisState
 
     Future(() async {
       final result = await ref
-          .read(misskeyProvider(Account.demoAccount(widget.host)))
+          .read(misskeyProvider(Account.demoAccount(widget.host, widget.meta)))
           .emojis();
       emojis
         ..clear()

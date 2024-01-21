@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/exported_setting.dart';
@@ -27,7 +28,7 @@ class ImportExportRepository extends ChangeNotifier {
       builder: (context2) => FolderSelectDialog(
         account: account,
         fileShowTarget: const ["miria.json", "miria.json.unknown"],
-        confirmationText: "このフォルダーからインポートする",
+        confirmationText: S.of(context).importFromThisFolder,
       ),
     );
     if (result == null) return;
@@ -53,7 +54,10 @@ class ImportExportRepository extends ChangeNotifier {
 
       if (!context.mounted) return;
       if (alreadyExists.isEmpty) {
-        await SimpleMessageDialog.show(context, "ここにMiriaの設定ファイルあれへんかったわ");
+        await SimpleMessageDialog.show(
+          context,
+          S.of(context).exportedFileNotFound,
+        );
         return;
       }
     }
@@ -96,7 +100,7 @@ class ImportExportRepository extends ChangeNotifier {
     reader(tabSettingsRepositoryProvider).save(tabSettings);
 
     if (!context.mounted) return;
-    await SimpleMessageDialog.show(context, "インポート終わったで。");
+    await SimpleMessageDialog.show(context, S.of(context).importCompleted);
 
     if (!context.mounted) return;
     context.router
@@ -110,7 +114,7 @@ class ImportExportRepository extends ChangeNotifier {
       builder: (context2) => FolderSelectDialog(
         account: account,
         fileShowTarget: const ["miria.json", "miria.json.unknown"],
-        confirmationText: "このフォルダーに保存する",
+        confirmationText: S.of(context).exportToThisFolder,
       ),
     );
     if (result == null) return;
@@ -129,9 +133,9 @@ class ImportExportRepository extends ChangeNotifier {
     if (alreadyExists.isNotEmpty) {
       final alreadyConfirm = await SimpleConfirmDialog.show(
         context: context,
-        message: "ここにもうあるけど上書きするか？",
-        primary: "上書きする",
-        secondary: "やっぱやめた",
+        message: S.of(context).confirmOverwrite,
+        primary: S.of(context).overwrite,
+        secondary: S.of(context).cancel,
       );
       if (alreadyConfirm != true) return;
 
@@ -150,17 +154,18 @@ class ImportExportRepository extends ChangeNotifier {
           reader(accountSettingsRepositoryProvider).accountSettings.toList(),
     ).toJson();
 
+    if (!context.mounted) return;
     await reader(misskeyProvider(account)).drive.files.createAsBinary(
           DriveFilesCreateRequest(
             folderId: folder?.id,
             name: "miria.json",
-            comment: "Miria設定ファイル",
+            comment: S.of(context).exportedFileComment,
             force: true,
           ),
           Uint8List.fromList(utf8.encode(jsonEncode(data))),
         );
 
     if (!context.mounted) return;
-    await SimpleMessageDialog.show(context, "エクスポート終わったで");
+    await SimpleMessageDialog.show(context, S.of(context).exportCompleted);
   }
 }

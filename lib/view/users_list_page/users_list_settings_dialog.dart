@@ -76,13 +76,13 @@ class UsersListSettingsForm extends ConsumerWidget {
           TextFormField(
             initialValue: initialSettings.name,
             maxLength: 100,
-            decoration: const InputDecoration(
-              labelText: "リスト名",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+            decoration: InputDecoration(
+              labelText: S.of(context).listName,
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "入力してください";
+                return S.of(context).pleaseInput;
               }
               return null;
             },

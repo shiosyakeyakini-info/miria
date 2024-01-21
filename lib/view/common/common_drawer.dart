@@ -119,7 +119,7 @@ class CommonDrawer extends ConsumerWidget {
             ],
             ListTile(
               leading: const Icon(Icons.settings),
-              title: Text(S.of(context).generalSetting),
+              title: Text(S.of(context).settings),
               onTap: () {
                 Navigator.of(context).pop();
                 context.pushRoute(const SettingsRoute());

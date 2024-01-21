@@ -95,7 +95,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
     final isExpired = expiresAt != null && expiresAt < DateTime.now();
     final differ = isExpired
         ? null
-        : widget.poll.expiresAt?.difference(DateTime.now()).format;
+        : widget.poll.expiresAt?.difference(DateTime.now()).format(context);
     final colorTheme = AppTheme.of(context).colorTheme;
 
     return Column(

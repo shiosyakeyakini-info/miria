@@ -20,26 +20,45 @@ class NoteStatus with _$NoteStatus {
 
 class NoteRepository extends ChangeNotifier {
   final Misskey misskey;
+  final Account account;
   final Map<String, Note> _notes = {};
   final Map<String, NoteStatus> _noteStatuses = {};
 
-  final List<List<String>> muteWordContents = [];
-  final List<RegExp> muteWordRegExps = [];
+  final List<List<String>> softMuteWordContents = [];
+  final List<RegExp> softMuteWordRegExps = [];
 
-  NoteRepository(this.misskey, Account account) {
-    updateMute(account.i.mutedWords);
+  final List<List<String>> hardMuteWordContents = [];
+  final List<RegExp> hardMuteWordRegExps = [];
+
+  NoteRepository(this.misskey, this.account) {
+    updateMute(account.i.mutedWords, account.i.hardMutedWords);
   }
 
-  void updateMute(List<MuteWord> mutedWords) {
-    for (final muteWord in mutedWords) {
+  void updateMute(List<MuteWord> softMuteWords, List<MuteWord> hardMuteWords) {
+    for (final muteWord in softMuteWords) {
       final content = muteWord.content;
       final regExp = muteWord.regExp;
       if (content != null) {
-        muteWordContents.add(content);
+        softMuteWordContents.add(content);
       }
       if (regExp != null) {
         try {
-          muteWordRegExps.add(RegExp(regExp.substring(1, regExp.length - 1)));
+          softMuteWordRegExps
+              .add(RegExp(regExp.substring(1, regExp.length - 1)));
+        } catch (e) {}
+      }
+    }
+
+    for (final muteWord in hardMuteWords) {
+      final content = muteWord.content;
+      final regExp = muteWord.regExp;
+      if (content != null) {
+        hardMuteWordContents.add(content);
+      }
+      if (regExp != null) {
+        try {
+          hardMuteWordRegExps
+              .add(RegExp(regExp.substring(1, regExp.length - 1)));
         } catch (e) {}
       }
     }
@@ -57,6 +76,22 @@ class NoteRepository extends ChangeNotifier {
   }
 
   void _registerNote(Note note) {
+    bool isMuteTarget(Pattern target) {
+      if (note.isEmptyRenote) {
+        return note.renote?.text?.contains(target) == true ||
+            note.renote?.cw?.contains(target) == true;
+      } else {
+        return note.text?.contains(target) == true ||
+            note.cw?.contains(target) == true;
+      }
+    }
+
+    if ((note.user.host != null || note.user.id != account.i.id) &&
+            hardMuteWordContents.any((e) => e.every(isMuteTarget)) ||
+        hardMuteWordRegExps.any(isMuteTarget)) {
+      return;
+    }
+
     final registeredNote = _notes[note.id];
     _notes[note.id] = note.copyWith(
       renote: note.renote ?? _notes[note.renoteId],
@@ -72,24 +107,10 @@ class NoteRepository extends ChangeNotifier {
         isLongVisible: false,
         isReactionedRenote: false,
         isLongVisibleInitialized: false,
-        isIncludeMuteWord: muteWordContents.any((e) => e.every((e2) {
-                  if (note.isEmptyRenote) {
-                    return note.renote?.text?.contains(e2) == true ||
-                        note.renote?.cw?.contains(e2) == true;
-                  } else {
-                    return note.text?.contains(e2) == true ||
-                        note.cw?.contains(e2) == true;
-                  }
-                })) ||
-            muteWordRegExps.any((e) {
-              if (note.isEmptyRenote) {
-                return note.renote?.text?.contains(e) == true ||
-                    note.renote?.cw?.contains(e) == true;
-              } else {
-                return note.text?.contains(e) == true ||
-                    note.cw?.contains(e) == true;
-              }
-            }),
+        isIncludeMuteWord:
+            (note.user.host != null || note.user.id != account.i.id) &&
+                    softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
+                softMuteWordRegExps.any(isMuteTarget),
         isMuteOpened: false);
     final renote = note.renote;
     final reply = note.reply;
