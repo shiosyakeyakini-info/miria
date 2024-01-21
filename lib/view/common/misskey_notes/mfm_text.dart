@@ -167,6 +167,7 @@ class MfmTextState extends ConsumerState<MfmText> {
       suffixSpan: widget.suffixSpan,
       prefixSpan: widget.prefixSpan,
       isUseAnimation: widget.isEnableAnimatedMFM,
+      defaultBorderColor: Theme.of(context).primaryColor,
     );
   }
 }
