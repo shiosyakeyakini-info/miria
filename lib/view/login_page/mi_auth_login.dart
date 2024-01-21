@@ -7,6 +7,7 @@ import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/login_page/centraing_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MiAuthLogin extends ConsumerStatefulWidget {
   const MiAuthLogin({super.key});
@@ -59,7 +60,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
           },
           children: [
             TableRow(children: [
-              const Text("サーバー"),
+              Text(S.of(context).server),
               TextField(
                 controller: serverController,
                 decoration: InputDecoration(
@@ -93,7 +94,9 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     isAuthed = true;
                   });
                 },
-                child: Text(isAuthed ? "再度認証をする" : "認証をする"),
+                child: Text(isAuthed
+                    ? S.of(context).reauthorizate
+                    : S.of(context).authorizate),
               ),
             ]),
             TableRow(children: [
@@ -105,7 +108,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                 Container(),
                 ElevatedButton(
                   onPressed: () => login().expectFailure(context),
-                  child: const Text("認証してきた"),
+                  child: Text(S.of(context).didAuthorize),
                 ),
               ]),
           ],

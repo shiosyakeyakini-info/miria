@@ -4,6 +4,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/avatar_icon.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountSelectDialog extends ConsumerWidget {
   const AccountSelectDialog({super.key, this.host});
@@ -15,7 +16,7 @@ class AccountSelectDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountsProvider);
     return AlertDialog(
-      title: const Text("開くアカウント選んでや"),
+      title: Text(S.of(context).openAsOtherAccount),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.8,

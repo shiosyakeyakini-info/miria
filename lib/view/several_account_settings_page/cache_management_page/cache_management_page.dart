@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/account_settings.dart';
@@ -36,15 +37,19 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
     metaCacheStrategy = setting.metaChacheStrategy;
   }
 
-  List<DropdownMenuItem> get buildCacheStrategyItems => const [
+  List<DropdownMenuItem> get buildCacheStrategyItems => [
         DropdownMenuItem(
           value: CacheStrategy.whenTabChange,
-          child: Text("タブ切替時に毎回読み込む"),
+          child: Text(S.of(context).refreshOnTabChange),
         ),
         DropdownMenuItem(
-            value: CacheStrategy.whenLaunch, child: Text("起動時に毎回読み込む")),
+          value: CacheStrategy.whenLaunch,
+          child: Text(S.of(context).refreshOnLaunch),
+        ),
         DropdownMenuItem(
-            value: CacheStrategy.whenOneDay, child: Text("1日に1回読み込む"))
+          value: CacheStrategy.whenOneDay,
+          child: Text(S.of(context).refreshOnceADay),
+        ),
       ];
   Future<void> save() async {
     await ref.read(accountSettingsRepositoryProvider).save(ref
@@ -60,7 +65,7 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("キャッシュ管理")),
+      appBar: AppBar(title: Text(S.of(context).cacheSettings)),
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(10),
@@ -69,7 +74,7 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "自分自身の情報（通知などを含みます）",
+                  S.of(context).userCache,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 DropdownButton(
@@ -83,7 +88,7 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
                 Text(
-                  "絵文字の情報",
+                  S.of(context).emojiCache,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 DropdownButton(
@@ -97,7 +102,7 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 ),
                 const Padding(padding: EdgeInsets.only(top: 10)),
                 Text(
-                  "サーバーの情報",
+                  S.of(context).serverCache,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 DropdownButton(

@@ -16,6 +16,7 @@ import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.da
 import 'package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class TabSettingsPage extends ConsumerStatefulWidget {
@@ -71,7 +72,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       final channelId = tabSetting.channelId;
       final listId = tabSetting.listId;
       final antennaId = tabSetting.antennaId;
-      nameController.text = tabSetting.name;
+      nameController.text =
+          tabSetting.name ?? tabSetting.tabType.displayName(context);
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
       isSubscribe = tabSetting.isSubscribe;
@@ -132,7 +134,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
     final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("タブ設定"),
+        title: Text(S.of(context).tabSettings),
         actions: [
           if (widget.tabIndex != null)
             IconButton(
@@ -157,7 +159,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Text("アカウント"),
+              Text(S.of(context).account),
               DropdownButton<Account>(
                 items: [
                   for (final account in accounts)
@@ -185,14 +187,14 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 value: selectedAccount,
               ),
               const Padding(padding: EdgeInsets.all(10)),
-              const Text("タブの種類"),
+              Text(S.of(context).tabType),
               DropdownButton<TabType>(
                 items: [
                   for (final tabType in TabType.values)
                     if (isTabTypeAvailable(tabType))
                       DropdownMenuItem(
                         value: tabType,
-                        child: Text(tabType.displayName),
+                        child: Text(tabType.displayName(context)),
                       ),
                 ],
                 onChanged: (value) {
@@ -204,7 +206,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               ),
               const Padding(padding: EdgeInsets.all(10)),
               if (selectedTabType == TabType.roleTimeline) ...[
-                const Text("ロールタイムライン"),
+                Text(S.of(context).roleTimeline),
                 Row(
                   children: [
                     Expanded(child: Text(selectedRole?.name ?? "")),
@@ -227,7 +229,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 )
               ],
               if (selectedTabType == TabType.channel) ...[
-                const Text("チャンネル"),
+                Text(S.of(context).channel),
                 Row(
                   children: [
                     Expanded(child: Text(selectedChannel?.name ?? "")),
@@ -250,7 +252,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 )
               ],
               if (selectedTabType == TabType.userList) ...[
-                const Text("リスト"),
+                Text(S.of(context).list),
                 Row(
                   children: [
                     Expanded(child: Text(selectedUserList?.name ?? "")),
@@ -273,7 +275,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 )
               ],
               if (selectedTabType == TabType.antenna) ...[
-                const Text("アンテナ"),
+                Text(S.of(context).antenna),
                 Row(
                   children: [
                     Expanded(child: Text(selectedAntenna?.name ?? "")),
@@ -296,13 +298,13 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 )
               ],
               const Padding(padding: EdgeInsets.all(10)),
-              const Text("タブの名前"),
+              Text(S.of(context).tabName),
               TextField(
                 decoration: const InputDecoration(prefixIcon: Icon(Icons.edit)),
                 controller: nameController,
               ),
               const Padding(padding: EdgeInsets.all(10)),
-              const Text("アイコン"),
+              Text(S.of(context).icon),
               Row(
                 children: [
                   Expanded(
@@ -330,15 +332,15 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 ],
               ),
               CheckboxListTile(
-                title: const Text("リノートを表示する"),
+                title: Text(S.of(context).displayRenotes),
                 value: renoteDisplay,
                 onChanged: (value) =>
                     setState(() => renoteDisplay = !renoteDisplay),
               ),
               if (availableIncludeReply)
                 CheckboxListTile(
-                  title: const Text("返信も入れる"),
-                  subtitle: const Text("Misskey v2023.10.1以降の機能です。"),
+                  title: Text(S.of(context).includeReplies),
+                  subtitle: Text(S.of(context).includeRepliesAvailability),
                   value: isIncludeReply,
                   enabled: !isMediaOnly,
                   onChanged: (value) => setState(() {
@@ -349,7 +351,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   }),
                 ),
               CheckboxListTile(
-                title: const Text("ファイルのみにする"),
+                title: Text(S.of(context).mediaOnly),
                 value: isMediaOnly,
                 enabled: !isIncludeReply,
                 onChanged: (value) => setState(() {
@@ -360,9 +362,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 }),
               ),
               CheckboxListTile(
-                title: const Text("リアクションや投票数を自動更新する"),
-                subtitle: const Text(
-                    "オフにすると、リアクションや投票数が自動更新されませんが、バッテリー消費を抑えられることがあります。"),
+                title: Text(S.of(context).subscribeNotes),
+                subtitle: Text(S.of(context).subscribeNotesDescription),
                 value: isSubscribe,
                 onChanged: (value) =>
                     setState(() => isSubscribe = !isSubscribe),
@@ -372,40 +373,61 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   onPressed: () async {
                     final account = selectedAccount;
                     if (account == null) {
-                      SimpleMessageDialog.show(context, "アカウントを選択してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectAccount,
+                      );
                       return;
                     }
 
                     final tabType = selectedTabType;
                     if (tabType == null) {
-                      SimpleMessageDialog.show(context, "タブの種類を選択してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectTabType,
+                      );
                       return;
                     }
 
                     final icon = selectedIcon;
                     if (icon == null) {
-                      SimpleMessageDialog.show(context, "アイコンを選択してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectIcon,
+                      );
                       return;
                     }
 
                     if (tabType == TabType.channel && selectedChannel == null) {
-                      SimpleMessageDialog.show(context, "チャンネルを指定してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectChannel,
+                      );
                       return;
                     }
 
                     if (tabType == TabType.userList &&
                         selectedUserList == null) {
-                      SimpleMessageDialog.show(context, "リストを指定してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectList,
+                      );
                       return;
                     }
 
                     if (tabType == TabType.antenna && selectedAntenna == null) {
-                      SimpleMessageDialog.show(context, "アンテナを指定してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectAntenna,
+                      );
                       return;
                     }
                     if (tabType == TabType.roleTimeline &&
                         selectedRole == null) {
-                      SimpleMessageDialog.show(context, "ロールを指定してください。");
+                      SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectRole,
+                      );
                       return;
                     }
 
@@ -439,7 +461,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     if (!mounted) return;
                     Navigator.of(context).pop();
                   },
-                  child: const Text("ほい"),
+                  child: Text(S.of(context).done),
                 ),
               )
             ],

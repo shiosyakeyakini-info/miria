@@ -11,6 +11,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReactionPickerContent extends ConsumerStatefulWidget {
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
@@ -177,7 +178,7 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             if (disabled) {
               SimpleMessageDialog.show(
                 context,
-                "ここでセンシティブなカスタム絵文字を使われへんねやわ",
+                S.of(context).disabledUsingSensitiveCustomEmoji,
               );
             } else {
               widget.onTap.call(widget.emoji);

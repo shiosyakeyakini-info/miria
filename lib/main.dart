@@ -8,6 +8,7 @@ import 'package:miria/view/common/error_dialog_listener.dart';
 import 'package:miria/view/common/sharing_intent_listener.dart';
 import 'package:miria/view/themes/app_theme_scope.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,7 @@ class MyApp extends ConsumerWidget {
       ],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
+        S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

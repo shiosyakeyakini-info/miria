@@ -17,7 +17,7 @@ _$TabSettingImpl _$$TabSettingImplFromJson(Map<String, dynamic> json) =>
       isSubscribe: json['isSubscribe'] as bool? ?? true,
       isIncludeReplies: json['isIncludeReplies'] as bool? ?? true,
       isMediaOnly: json['isMediaOnly'] as bool? ?? false,
-      name: json['name'] as String,
+      name: json['name'] as String?,
       acct: Acct.fromJson(_readAcct(json, 'acct') as Map<String, dynamic>),
       renoteDisplay: json['renoteDisplay'] as bool? ?? true,
     );

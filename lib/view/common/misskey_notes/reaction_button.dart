@@ -12,6 +12,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/misskey_notes/reaction_user_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReactionButton extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -72,9 +73,9 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         if (isMyReaction) {
           if (await SimpleConfirmDialog.show(
                   context: context,
-                  message: "リアクション取り消してもええか？",
-                  primary: "取り消す",
-                  secondary: "やっぱりやめる") !=
+                  message: S.of(context).confirmDeleteReaction,
+                  primary: S.of(context).cancelReaction,
+                  secondary: S.of(context).cancel) !=
               true) {
             return;
           }

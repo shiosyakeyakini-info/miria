@@ -9,6 +9,7 @@ import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/misskey_notes/video_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MisskeyFileView extends ConsumerStatefulWidget {
   final List<DriveFile> files;
@@ -82,7 +83,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                 onPressed: () => setState(() {
                       isElipsed = !isElipsed;
                     }),
-                child: const Text("続きを表示"))
+                child: Text(S.of(context).showMoreFiles))
         ],
       );
     }
@@ -204,12 +205,12 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                "閲覧注意",
-                                style: TextStyle(color: Colors.white),
+                              Text(
+                                S.of(context).sensitive,
+                                style: const TextStyle(color: Colors.white),
                               ),
                               Text(
-                                "タップして表示",
+                                S.of(context).tapToShow,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: Theme.of(context)

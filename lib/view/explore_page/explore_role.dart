@@ -5,10 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/futable_list_builder.dart';
+import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExploreRole extends ConsumerWidget {
   const ExploreRole({super.key});
@@ -72,12 +73,8 @@ class RoleListItem extends StatelessWidget {
         ]),
       ),
       subtitle: Text(item.description ?? ""),
-      trailing: Text.rich(
-        TextSpan(children: [
-          TextSpan(text: item.usersCount.format()),
-          TextSpan(text: "人", style: Theme.of(context).textTheme.bodySmall)
-        ]),
-      ),
+      trailing:
+          MfmText(mfmText: S.of(context).allocatedRolesCount(item.usersCount)),
     );
   }
 }

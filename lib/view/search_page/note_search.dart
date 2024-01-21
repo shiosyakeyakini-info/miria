@@ -10,6 +10,7 @@ import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final noteSearchProvider =
     StateProvider.autoDispose((ref) => const NoteSearchCondition());
@@ -105,7 +106,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        "これらはハッシュタグでは機能しません。",
+                        S.of(context).disabledInHashtag,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Table(
@@ -116,20 +117,19 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                         defaultVerticalAlignment:
                             TableCellVerticalAlignment.middle,
                         children: [
-                          TableRow(
-                            children: [
-                              const Text("ユーザー"),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: selectedUser == null
-                                        ? Container()
-                                        : UserListItem(user: selectedUser),
-                                  ),
-                                  IconButton(
+                          TableRow(children: [
+                            Text(S.of(context).user),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  child: selectedUser == null
+                                      ? Container()
+                                      : UserListItem(user: selectedUser),
+                                ),
+                                IconButton(
                                     onPressed: () async {
                                       final selected = await showDialog<User?>(
                                         context: context,
@@ -145,15 +145,13 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                       );
                                     },
                                     icon:
-                                        const Icon(Icons.keyboard_arrow_right),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                        const Icon(Icons.keyboard_arrow_right))
+                              ],
+                            )
+                          ]),
                           TableRow(
                             children: [
-                              const Text("チャンネル"),
+                              Text(S.of(context).channel),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,7 +189,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                           ),
                           TableRow(
                             children: [
-                              const Text("ローカルのみ"),
+                              Text(S.of(context).onlyLocal),
                               Row(
                                 children: [
                                   Checkbox(

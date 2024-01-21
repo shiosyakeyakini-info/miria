@@ -3,6 +3,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/view/channels_page/channel_detail_info.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChannelDialog extends ConsumerWidget {
   final String channelId;
@@ -20,9 +21,9 @@ class ChannelDialog extends ConsumerWidget {
                 padding: const EdgeInsets.all(10),
                 decoration:
                     BoxDecoration(color: Theme.of(context).primaryColorDark),
-                child: const Text(
-                  "チャンネル情報",
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  S.of(context).channelInformation,
+                  style: const TextStyle(color: Colors.white),
                 )),
             content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,

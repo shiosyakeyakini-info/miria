@@ -9,6 +9,7 @@ import 'package:miria/view/clip_list_page/clip_detail_note_list.dart';
 import 'package:miria/view/clip_list_page/clip_settings_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class ClipDetailPage extends ConsumerWidget {
@@ -39,7 +40,7 @@ class ClipDetailPage extends ConsumerWidget {
                   final settings = await showDialog<ClipSettings>(
                     context: context,
                     builder: (context) => ClipSettingsDialog(
-                      title: const Text("編集"),
+                      title: Text(S.of(context).edit),
                       initialSettings: ClipSettings.fromClip(clip),
                     ),
                   );

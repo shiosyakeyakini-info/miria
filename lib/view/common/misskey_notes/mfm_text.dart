@@ -139,9 +139,10 @@ class MfmTextState extends ConsumerState<MfmText> {
             child: Text.rich(
               textScaler: TextScaler.noScaling,
               TextSpan(
-                  style: style,
-                  text:
-                      "${unixtime?.formatUntilSeconds ?? "？？？"} (${unixtime?.differenceNowDetail ?? "？？？"})"),
+                style: style,
+                text:
+                    "${unixtime?.formatUntilSeconds(context) ?? "？？？"} (${unixtime?.differenceNowDetail(context) ?? "？？？"})",
+              ),
             ),
           ),
         );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/view/channels_page/channel_favorited.dart';
 import 'package:miria/view/channels_page/channel_followed.dart';
@@ -14,7 +15,7 @@ class ChannelSelectDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("チャンネル選択"),
+      title: Text(S.of(context).selectChannel),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.8,
@@ -30,13 +31,13 @@ class ChannelSelectDialog extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                   ),
-                  child: const Align(
+                  child: Align(
                     child: TabBar(
                       tabs: [
                         Tab(text: "検索"),
                         Tab(text: "トレンド"),
-                        Tab(text: "お気に入り"),
-                        Tab(text: "フォロー中"),
+                        Tab(text: S.of(context).favorite),
+                        Tab(text: S.of(context).following),
                       ],
                       isScrollable: true,
                       tabAlignment: TabAlignment.center,

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:miria/extensions/date_time_extension.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChannelDetailInfo extends ConsumerStatefulWidget {
   final String channelId;
@@ -118,16 +118,18 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "${data.usersCount.format()}人が参加中",
+                  S.of(context).channelJoinningCounts(data.usersCount),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
-                  "${data.notesCount.format()}投稿",
+                  S.of(context).channelNotes(data.notesCount),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 if (data.lastNotedAt != null)
                   Text(
-                    "${data.lastNotedAt!.differenceNow} に更新",
+                    S.of(context).channelLastNotedAt(
+                          data.lastNotedAt!.differenceNow(context),
+                        ),
                     style: Theme.of(context).textTheme.bodySmall,
                   )
               ],
@@ -142,9 +144,9 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
               child: DecoratedBox(
                 decoration:
                     BoxDecoration(color: Theme.of(context).primaryColor),
-                child: const Text(
-                  " センシティブ ",
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  " ${S.of(context).sensitive} ",
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -159,20 +161,20 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
                       ? ElevatedButton.icon(
                           onPressed: unfavorite.expectFailure(context),
                           icon: const Icon(Icons.favorite_border),
-                          label: const Text("お気に入り中"))
+                          label: Text(S.of(context).favorite))
                       : OutlinedButton(
                           onPressed: favorite.expectFailure(context),
-                          child: const Text("お気に入りにいれる")),
+                          child: Text(S.of(context).willFavorite)),
                 const Padding(padding: EdgeInsets.only(left: 10)),
                 if (isFollowing != null)
                   isFollowing
                       ? ElevatedButton.icon(
                           onPressed: unfollow.expectFailure(context),
                           icon: const Icon(Icons.check),
-                          label: const Text("フォローしています"))
+                          label: Text(S.of(context).following))
                       : OutlinedButton(
                           onPressed: follow.expectFailure(context),
-                          child: const Text("フォローする"))
+                          child: Text(S.of(context).willFollow))
               ],
             )),
         MfmText(mfmText: data.description ?? ""),
