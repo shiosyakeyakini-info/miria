@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -13,6 +14,7 @@ import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:miria/view/user_page/update_memo_dialog.dart';
@@ -366,13 +368,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
             spacing: 5,
             runSpacing: 5,
             children: [
-              for (final role in response.roles ?? [])
-                Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Theme.of(context).dividerColor)),
-                    padding: const EdgeInsets.all(5),
-                    child: Text(role.name)),
+              for (final role in response.roles ?? []) RoleChip(role: role),
             ],
           ),
           const Padding(padding: EdgeInsets.only(top: 5)),
@@ -599,6 +595,64 @@ class BirthdayConfettiState extends State<BirthdayConfetti> {
     }
 
     return widget.child;
+  }
+}
+
+class RoleChip extends ConsumerWidget {
+  const RoleChip({super.key, required this.role});
+
+  final UserRole role;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = AccountScope.of(context);
+    final textStyle = Theme.of(context).textTheme.bodyMedium;
+    final height = MediaQuery.textScalerOf(context)
+        .scale((textStyle?.fontSize ?? 14) * (textStyle?.height ?? 1));
+    return Tooltip(
+      message: role.description,
+      child: GestureDetector(
+        onTap: () async {
+          final response = await ref
+              .read(misskeyProvider(account))
+              .roles
+              .show(RolesShowRequest(roleId: role.id));
+          if (response.isPublic && response.isExplorable) {
+            if (!context.mounted) return;
+            context.pushRoute(
+              ExploreRoleUsersRoute(item: response, account: account),
+            );
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: role.color?.toColor() ?? Theme.of(context).dividerColor,
+            ),
+            borderRadius: BorderRadius.circular(height),
+          ),
+          padding: const EdgeInsets.symmetric(
+            vertical: 5,
+            horizontal: 10,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (role.iconUrl != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: NetworkImageView(
+                    url: role.iconUrl!.toString(),
+                    type: ImageType.role,
+                    height: height,
+                  ),
+                ),
+              Text(role.name),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

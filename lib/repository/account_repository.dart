@@ -279,8 +279,9 @@ class AccountRepository extends Notifier<List<Account>> {
     final misskey = Misskey(token: token, host: server);
     final i = await misskey.i.i();
     final meta = await misskey.meta();
-    _addAccount(Account(
-        host: server, userId: i.username, token: token, i: i, meta: meta));
+    await _addAccount(
+      Account(host: server, userId: i.username, token: token, i: i, meta: meta),
+    );
   }
 
   Future<void> openMiAuth(String server) async {

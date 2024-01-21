@@ -9,6 +9,7 @@ import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
+import 'package:miria/view/themes/app_theme.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -164,11 +165,12 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             ? BoxDecoration(color: Theme.of(context).disabledColor)
             : const BoxDecoration(),
         child: ElevatedButton(
-          style: const ButtonStyle(
+          style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(Colors.transparent),
             padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
             elevation: MaterialStatePropertyAll(0),
             minimumSize: MaterialStatePropertyAll(Size.zero),
+            overlayColor: MaterialStatePropertyAll(AppTheme.of(context).colorTheme.accentedBackground),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           onPressed: () async {

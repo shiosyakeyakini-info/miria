@@ -59,6 +59,10 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                     ref
                         .read(notesProvider(widget.account))
                         .registerAll(result.map((e) => e.note).whereNotNull());
+
+                    ref
+                        .read(accountRepositoryProvider.notifier)
+                        .readAllNotification(widget.account);
                     return result.toNotificationData(localize);
                   },
                   nextFuture: (lastElement, _) async {
@@ -431,6 +435,20 @@ class NotificationItem extends ConsumerWidget {
                   ),
                 ),
               if (note != null) misskey_note.MisskeyNote(note: note),
+            ],
+          ),
+        );
+      case RoleNotification():
+        return Padding(
+          padding:
+              const EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: SimpleMfmText(
+                  "ロール「${notification.role?.name}」に入れられたみたいや",
+                ),
+              ),
             ],
           ),
         );

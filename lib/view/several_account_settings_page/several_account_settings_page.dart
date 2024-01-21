@@ -27,12 +27,16 @@ class SeveralAccountSettingsPage extends StatelessWidget {
                   SeveralAccountGeneralSettingsRoute(account: account));
             },
             title: Text(S.of(context).generalSettings),
+            leading: const Icon(Icons.settings),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
               context.pushRoute(ReactionDeckRoute(account: account));
             },
-            title: Text(S.of(context).reactionDeck),
+            title: const Text("リアクションデッキ"),
+            leading: const Icon(Icons.favorite),
+            trailing: const Icon(Icons.chevron_right),
           ),
           // ListTile(onTap: () {}, title: const Text("ソフトミュート")),
           ListTile(
@@ -41,6 +45,8 @@ class SeveralAccountSettingsPage extends StatelessWidget {
                   WordMuteRoute(account: account, muteType: MuteType.soft));
             },
             title: Text(S.of(context).wordMute),
+            leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
@@ -48,18 +54,24 @@ class SeveralAccountSettingsPage extends StatelessWidget {
                   WordMuteRoute(account: account, muteType: MuteType.hard));
             },
             title: Text(S.of(context).hardWordMute),
+            leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
               context.pushRoute(InstanceMuteRoute(account: account));
             },
             title: Text(S.of(context).instanceMute),
+            leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
             onTap: () {
               context.pushRoute(CacheManagementRoute(account: account));
             },
             title: Text(S.of(context).cacheSettings),
+            leading: const Icon(Icons.cached),
+            trailing: const Icon(Icons.chevron_right),
           )
         ],
       ),

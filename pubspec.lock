@@ -141,26 +141,26 @@ packages:
     dependency: "direct main"
     description:
       name: cached_network_image
-      sha256: f98972704692ba679db144261172a8e20feb145636c617af0eb4022132a6797f
+      sha256: fd3d0dc1d451f9a252b32d95d3f0c3c487bc41a75eba2e6097cb0b9c71491b15
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0"
+    version: "3.2.3"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
       name: cached_network_image_platform_interface
-      sha256: "56aa42a7a01e3c9db8456d9f3f999931f1e05535b5a424271e9a38cabf066613"
+      sha256: bb2b8403b4ccdc60ef5f25c70dead1f3d32d24b9d6117cfc087f496b178594a7
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "2.0.0"
   cached_network_image_web:
     dependency: transitive
     description:
       name: cached_network_image_web
-      sha256: "759b9a9f8f6ccbb66c185df805fac107f05730b1dab9c64626d1008cca532257"
+      sha256: b8eb814ebfcb4dea049680f8c1ffb2df399e4d03bf7a352c775e26fa06e02fa0
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.0.2"
   change:
     dependency: transitive
     description:
@@ -382,6 +382,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_blurhash:
+    dependency: transitive
+    description:
+      name: flutter_blurhash
+      sha256: "05001537bd3fac7644fa6558b09ec8c0a3f2eba78c0765f88912882b1331a5c6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -876,10 +884,10 @@ packages:
     dependency: "direct main"
     description:
       name: mfm
-      sha256: b60cde9c69144d3c97cf18fa1a8df55c5da3febeed5994e9c54351b01664a5aa
+      sha256: "239bf1671acac3466e66dc4eb6b6e8ee3601cb138ce129bd7c192364e7633fd0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.6"
   mfm_parser:
     dependency: "direct main"
     description:
@@ -901,7 +909,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "639e89bb6dfa05b9ac34ebe86f063dcd61b840fe"
+      resolved-ref: "0516cfc428b6ef038b337f82637bf139899b173f"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
@@ -925,10 +933,10 @@ packages:
     dependency: transitive
     description:
       name: octo_image
-      sha256: "45b40f99622f11901238e18d48f5f12ea36426d8eced9f4cbf58479c7aa2430d"
+      sha256: "107f3ed1330006a3bea63615e81cf637433f5135a52466c7caa0e7152bca9143"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "1.0.2"
   package_config:
     dependency: transitive
     description:
@@ -1607,7 +1615,7 @@ packages:
     source: hosted
     version: "0.4.0+2"
   volume_controller:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: volume_controller
       sha256: "189bdc7a554f476b412e4c8b2f474562b09d74bc458c23667356bce3ca1d48c9"

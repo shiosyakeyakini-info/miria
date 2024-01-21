@@ -47,6 +47,16 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       selectedTabType == TabType.localTimeline ||
       selectedTabType == TabType.hybridTimeline;
 
+  bool isTabTypeAvailable(TabType tabType) {
+    return switch (tabType) {
+      TabType.localTimeline =>
+        selectedAccount?.i.policies.ltlAvailable ?? false,
+      TabType.globalTimeline =>
+        selectedAccount?.i.policies.gtlAvailable ?? false,
+      _ => true,
+    };
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -56,7 +66,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       final tabSetting =
           ref.read(tabSettingsRepositoryProvider).tabSettings.toList()[tab];
       selectedAccount = ref.read(accountProvider(tabSetting.acct));
-      selectedTabType = tabSetting.tabType;
+      selectedTabType =
+          isTabTypeAvailable(tabSetting.tabType) ? tabSetting.tabType : null;
       final roleId = tabSetting.roleId;
       final channelId = tabSetting.channelId;
       final listId = tabSetting.listId;
@@ -158,8 +169,13 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     ),
                 ],
                 onChanged: (value) {
+                  final tabType = selectedTabType;
                   setState(() {
                     selectedAccount = value;
+                    selectedTabType =
+                        tabType != null && isTabTypeAvailable(tabType)
+                            ? tabType
+                            : null;
                     selectedAntenna = null;
                     selectedUserList = null;
                     selectedChannel = null;
@@ -175,10 +191,11 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               DropdownButton<TabType>(
                 items: [
                   for (final tabType in TabType.values)
-                    DropdownMenuItem(
-                      value: tabType,
-                      child: Text(tabType.displayName(context)),
-                    ),
+                    if (isTabTypeAvailable(tabType))
+                      DropdownMenuItem(
+                        value: tabType,
+                        child: Text(tabType.displayName(context)),
+                      ),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -325,14 +342,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   title: Text(S.of(context).includeReplies),
                   subtitle: Text(S.of(context).includeRepliesAvailability),
                   value: isIncludeReply,
-                  onChanged: (value) =>
-                      setState(() => isIncludeReply = !isIncludeReply),
+                  enabled: !isMediaOnly,
+                  onChanged: (value) => setState(() {
+                    isIncludeReply = !isIncludeReply;
+                    if (value ?? false) {
+                      isMediaOnly = false;
+                    }
+                  }),
                 ),
               CheckboxListTile(
                 title: Text(S.of(context).mediaOnly),
                 value: isMediaOnly,
-                onChanged: (value) =>
-                    setState(() => isMediaOnly = !isMediaOnly),
+                enabled: !isIncludeReply,
+                onChanged: (value) => setState(() {
+                  isMediaOnly = !isMediaOnly;
+                  if (value ?? false) {
+                    isIncludeReply = false;
+                  }
+                }),
               ),
               CheckboxListTile(
                 title: Text(S.of(context).subscribeNotes),

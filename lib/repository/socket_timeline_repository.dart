@@ -82,7 +82,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Future<void> startTimeLine() async {
     try {
       await emojiRepository.loadFromSourceIfNeed();
-      await accountRepository.loadFromSourceIfNeed(tabSetting.acct);
+      // api/iおよびapi/metaはawaitしない
+      unawaited(Future(() async {
+        await accountRepository.loadFromSourceIfNeed(tabSetting.acct);
+      }));
       await mainStreamRepository.reconnect();
       isLoading = false;
       error = null;
@@ -159,23 +162,25 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             text: value.text, cw: value.cw, updatedAt: DateTime.now()));
       },
     );
-    await misskey.startStreaming();
-    Future(() async {
-      if (olderNotes.isEmpty) {
-        try {
-          final resultNotes = await requestNotes();
-          olderNotes.addAll(resultNotes);
-          notifyListeners();
-        } catch (e, s) {
-          if (kDebugMode) {
-            print(e);
-            print(s);
+    Future.wait([
+      Future(() async => await misskey.startStreaming()),
+      Future(() async {
+        if (olderNotes.isEmpty) {
+          try {
+            final resultNotes = await requestNotes();
+            olderNotes.addAll(resultNotes);
+            notifyListeners();
+          } catch (e, s) {
+            if (kDebugMode) {
+              print(e);
+              print(s);
+            }
           }
+        } else {
+          reloadLatestNotes();
         }
-      } else {
-        reloadLatestNotes();
-      }
-    });
+      })
+    ]);
   }
 
   @override

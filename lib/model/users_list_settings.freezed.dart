@@ -119,7 +119,7 @@ class _$_UsersListSettings extends _UsersListSettings {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_UsersListSettings &&

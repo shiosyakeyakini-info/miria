@@ -1321,6 +1321,32 @@ void main() {
           );
         });
 
+        testWidgets("MFMの関数の引数の入力補完が可能なこと", (tester) async {
+          await tester.pumpWidget(
+            ProviderScope(
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.enterText(
+            find.byType(TextField).hitTestable(),
+            r"$[spin.s",
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("speed"));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("x"));
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .textEditingController(find.byType(TextField).hitTestable())
+                .text,
+            r"$[spin.speed=1.5s,x",
+          );
+        });
+
         testWidgets("ハッシュタグの入力補完が可能なこと", (tester) async {
           final mockMisskey = MockMisskey();
           final mockHashtags = MockMisskeyHashtags();

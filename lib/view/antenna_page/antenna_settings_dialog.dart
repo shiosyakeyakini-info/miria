@@ -198,6 +198,7 @@ class AntennaSettingsForm extends ConsumerWidget {
                         AntennaSource.home => S.of(context).antennaSourceHome,
                         AntennaSource.all => S.of(context).antennaSourceAll,
                         AntennaSource.users => S.of(context).antennaSourceUser,
+                        AntennaSource.usersBlackList => "指定したユーザー以外",
                         AntennaSource.list => S.of(context).antennaSourceList,
                       },
                     ),
@@ -233,7 +234,8 @@ class AntennaSettingsForm extends ConsumerWidget {
                   .read(_antennaSettingsNotifierProvider.notifier)
                   .updateUserList,
             ),
-          if (settings.src == AntennaSource.users) ...[
+          if (settings.src == AntennaSource.users ||
+              settings.src == AntennaSource.usersBlackList) ...[
             TextFormField(
               controller: controller,
               minLines: 2,

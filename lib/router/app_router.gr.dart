@@ -214,6 +214,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    CacheManagementRoute.name: (routeData) {
+      final args = routeData.argsAs<CacheManagementRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CacheManagementPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     ReactionDeckRoute.name: (routeData) {
       final args = routeData.argsAs<ReactionDeckRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -416,16 +426,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    CacheManagementRoute.name: (routeData) {
-      final args = routeData.argsAs<CacheManagementRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: CacheManagementPage(
           key: args.key,
           account: args.account,
         ),
@@ -1195,6 +1195,44 @@ class WordMuteRouteArgs {
 }
 
 /// generated route for
+/// [CacheManagementPage]
+class CacheManagementRoute extends PageRouteInfo<CacheManagementRouteArgs> {
+  CacheManagementRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CacheManagementRoute.name,
+          args: CacheManagementRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CacheManagementRoute';
+
+  static const PageInfo<CacheManagementRouteArgs> page =
+      PageInfo<CacheManagementRouteArgs>(name);
+}
+
+class CacheManagementRouteArgs {
+  const CacheManagementRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'CacheManagementRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
 /// [ReactionDeckPage]
 class ReactionDeckRoute extends PageRouteInfo<ReactionDeckRouteArgs> {
   ReactionDeckRoute({
@@ -1928,43 +1966,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [CacheManagementPage]
-class CacheManagementRoute extends PageRouteInfo<CacheManagementRouteArgs> {
-  CacheManagementRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          CacheManagementRoute.name,
-          args: CacheManagementRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'CacheManagementRoute';
-
-  static const PageInfo<CacheManagementRouteArgs> page =
-      PageInfo<CacheManagementRouteArgs>(name);
-}
-
-class CacheManagementRouteArgs {
-  const CacheManagementRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'CacheManagementRouteArgs{key: $key, account: $account}';
   }
 }

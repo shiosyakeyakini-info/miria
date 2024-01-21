@@ -394,7 +394,7 @@ class _$_ColorTheme implements _ColorTheme {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ColorTheme &&

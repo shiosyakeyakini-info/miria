@@ -68,17 +68,20 @@ sealed class FollowNotificationDataType {
 
 class _Follow implements FollowNotificationDataType {
   @override
-  get name => (context, userName) => S.of(context).followedNotification(userName);
+  get name =>
+      (context, userName) => S.of(context).followedNotification(userName);
 }
 
 class _FollowRequestAccepted implements FollowNotificationDataType {
   @override
-  get name => (context, userName) => S.of(context).followRequestAcceptedNotification(userName);
+  get name => (context, userName) =>
+      S.of(context).followRequestAcceptedNotification(userName);
 }
 
 class _ReceiveFollowRequest implements FollowNotificationDataType {
   @override
-  get name => (context, userName) => S.of(context).receiveFollowRequestNotification(userName);
+  get name => (context, userName) =>
+      S.of(context).receiveFollowRequestNotification(userName);
 }
 
 class FollowNotificationData extends NotificationData {
@@ -116,6 +119,15 @@ class NoteNotification extends NotificationData {
   final Note? note;
   NoteNotification({
     required this.note,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
+class RoleNotification extends NotificationData {
+  final RolesListResponse? role;
+  RoleNotification({
+    required this.role,
     required super.createdAt,
     required super.id,
   });
@@ -245,12 +257,21 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               text: localize.testNotification,
               createdAt: element.createdAt,
               id: element.id));
+          break;
 
         case NotificationType.note:
           resultList.add(NoteNotification(
               note: element.note,
               createdAt: element.createdAt,
               id: element.id));
+          break;
+
+        case NotificationType.roleAssigned:
+          resultList.add(RoleNotification(
+              role: element.role,
+              createdAt: element.createdAt,
+              id: element.id));
+          break;
 
         default:
           break;
