@@ -311,7 +311,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 2, right: 2),
                   child: Text(
-                    "NSFW",
+                    S.of(context).sensitive,
                     style: TextStyle(color: Colors.white.withAlpha(170)),
                   ),
                 ),

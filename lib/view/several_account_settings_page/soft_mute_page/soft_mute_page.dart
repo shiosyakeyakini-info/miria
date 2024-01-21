@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/futurable.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SoftMutePage extends ConsumerStatefulWidget {
   const SoftMutePage({super.key});
@@ -13,7 +14,7 @@ class SoftMuteState extends ConsumerState<SoftMutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ミュート")),
+      appBar: AppBar(title: Text(S.of(context).wordMute)),
       body: SingleChildScrollView(
         child: CommonFuture(
           future: () async {
@@ -22,13 +23,13 @@ class SoftMuteState extends ConsumerState<SoftMutePage> {
           complete: (context, data) {
             return Row(
               children: [
-                const Card(child: Text("指定した条件のノートをタイムラインから隠します。")),
+                Card(child: Text(S.of(context).hideConditionalNotes)),
                 const TextField(
                   maxLines: null,
                   minLines: 5,
                 ),
                 Text(
-                  "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。",
+                  S.of(context).muteSettingDescription,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],

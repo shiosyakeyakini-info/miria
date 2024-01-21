@@ -219,7 +219,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ),
         ListTile(
           leading: const Icon(Icons.search),
-          title: const Text("ノートを検索"),
+          title: Text(S.of(context).searchNote),
           onTap: () => context.pushRoute(
             SearchRoute(
               account: widget.account,

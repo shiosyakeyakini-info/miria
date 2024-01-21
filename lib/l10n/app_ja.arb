@@ -363,6 +363,14 @@
             }
         }
     },
+    "roleAssignedNotification": "ロール「{role}」に入れられたみたいや",
+    "@roleAssignedNotification": {
+        "placeholders": {
+            "role": {
+                "type": "String"
+            }
+        }
+    },
     "notificationAll": "みんな",
     "notificationForMe": "自分宛て",
     "notificationDirect": "ダイレクト",
@@ -838,6 +846,8 @@
     "hardWordMute": "ハードワードミュート",
     "instanceMute": "インスタンスミュート",
     "cacheSettings": "キャッシュ設定",
+    "hideConditionalNotes": "指定した条件のノートをタイムラインから隠します。",
+    "muteSettingDescription": "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。",
     "refreshOnTabChange": "タブ切替時に毎回読み込む",
     "refreshOnLaunch": "起動時に毎回読み込む",
     "refreshOnceADay": "1日に1回読み込む",
@@ -884,6 +894,7 @@
     "createBlock": "ブロックする",
     "addToList": "リストに追加",
     "addToAntenna": "アンテナに追加",
+    "searchNote": "ノートを検索",
     "deleteRenoteMute": "Renoteのミュートを解除する",
     "createRenoteMute": "Renoteをミュートする",
     "deleteMute": "ミュートを解除する",

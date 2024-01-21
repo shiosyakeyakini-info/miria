@@ -445,9 +445,9 @@ class NotificationItem extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(
-                child: SimpleMfmText(
-                  "ロール「${notification.role?.name}」に入れられたみたいや",
-                ),
+                child: SimpleMfmText(S
+                    .of(context)
+                    .roleAssignedNotification(notification.role?.name ?? "")),
               ),
             ],
           ),
