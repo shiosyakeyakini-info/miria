@@ -66,6 +66,9 @@ mixin _$GeneralSettings {
   /// `$[font.fantasy のフォント名
   String get fantasyFontName => throw _privateConstructorUsedError;
 
+  /// ユーザーのアバターを隠す
+  bool get hideAvatar => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
@@ -95,7 +98,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       String serifFontName,
       String monospaceFontName,
       String cursiveFontName,
-      String fantasyFontName});
+      String fantasyFontName,
+      bool hideAvatar});
 }
 
 /// @nodoc
@@ -128,6 +132,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? monospaceFontName = null,
     Object? cursiveFontName = null,
     Object? fantasyFontName = null,
+    Object? hideAvatar = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -198,6 +203,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.fantasyFontName
           : fantasyFontName // ignore: cast_nullable_to_non_nullable
               as String,
+      hideAvatar: null == hideAvatar
+          ? _value.hideAvatar
+          : hideAvatar // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -227,7 +236,8 @@ abstract class _$$GeneralSettingsImplCopyWith<$Res>
       String serifFontName,
       String monospaceFontName,
       String cursiveFontName,
-      String fantasyFontName});
+      String fantasyFontName,
+      bool hideAvatar});
 }
 
 /// @nodoc
@@ -258,6 +268,7 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
     Object? monospaceFontName = null,
     Object? cursiveFontName = null,
     Object? fantasyFontName = null,
+    Object? hideAvatar = null,
   }) {
     return _then(_$GeneralSettingsImpl(
       lightColorThemeId: null == lightColorThemeId
@@ -328,6 +339,10 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
           ? _value.fantasyFontName
           : fantasyFontName // ignore: cast_nullable_to_non_nullable
               as String,
+      hideAvatar: null == hideAvatar
+          ? _value.hideAvatar
+          : hideAvatar // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -352,7 +367,8 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
       this.serifFontName = "",
       this.monospaceFontName = "",
       this.cursiveFontName = "",
-      this.fantasyFontName = ""});
+      this.fantasyFontName = "",
+      this.hideAvatar = false});
 
   factory _$GeneralSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$GeneralSettingsImplFromJson(json);
@@ -437,9 +453,14 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
   @JsonKey()
   final String fantasyFontName;
 
+  /// ユーザーのアバターを隠す
+  @override
+  @JsonKey()
+  final bool hideAvatar;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType, defaultFontName: $defaultFontName, serifFontName: $serifFontName, monospaceFontName: $monospaceFontName, cursiveFontName: $cursiveFontName, fantasyFontName: $fantasyFontName)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType, defaultFontName: $defaultFontName, serifFontName: $serifFontName, monospaceFontName: $monospaceFontName, cursiveFontName: $cursiveFontName, fantasyFontName: $fantasyFontName, hideAvatar: $hideAvatar)';
   }
 
   @override
@@ -482,7 +503,9 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
             (identical(other.cursiveFontName, cursiveFontName) ||
                 other.cursiveFontName == cursiveFontName) &&
             (identical(other.fantasyFontName, fantasyFontName) ||
-                other.fantasyFontName == fantasyFontName));
+                other.fantasyFontName == fantasyFontName) &&
+            (identical(other.hideAvatar, hideAvatar) ||
+                other.hideAvatar == hideAvatar));
   }
 
   @JsonKey(ignore: true)
@@ -505,7 +528,8 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
       serifFontName,
       monospaceFontName,
       cursiveFontName,
-      fantasyFontName);
+      fantasyFontName,
+      hideAvatar);
 
   @JsonKey(ignore: true)
   @override
@@ -540,7 +564,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final String serifFontName,
       final String monospaceFontName,
       final String cursiveFontName,
-      final String fantasyFontName}) = _$GeneralSettingsImpl;
+      final String fantasyFontName,
+      final bool hideAvatar}) = _$GeneralSettingsImpl;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$GeneralSettingsImpl.fromJson;
@@ -607,6 +632,10 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// `$[font.fantasy のフォント名
   String get fantasyFontName;
+  @override
+
+  /// ユーザーのアバターを隠す
+  bool get hideAvatar;
   @override
   @JsonKey(ignore: true)
   _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>

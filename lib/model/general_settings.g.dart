@@ -36,6 +36,7 @@ _$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
       monospaceFontName: json['monospaceFontName'] as String? ?? "",
       cursiveFontName: json['cursiveFontName'] as String? ?? "",
       fantasyFontName: json['fantasyFontName'] as String? ?? "",
+      hideAvatar: json['hideAvatar'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$GeneralSettingsImplToJson(
@@ -58,6 +59,7 @@ Map<String, dynamic> _$$GeneralSettingsImplToJson(
       'monospaceFontName': instance.monospaceFontName,
       'cursiveFontName': instance.cursiveFontName,
       'fantasyFontName': instance.fantasyFontName,
+      'hideAvatar': instance.hideAvatar,
     };
 
 const _$ThemeColorSystemEnumMap = {

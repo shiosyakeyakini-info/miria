@@ -99,6 +99,9 @@ class GeneralSettings with _$GeneralSettings {
 
     /// `$[font.fantasy のフォント名
     @Default("") String fantasyFontName,
+
+    /// ユーザーのアバターを隠す
+    @Default(false) bool hideAvatar,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>
