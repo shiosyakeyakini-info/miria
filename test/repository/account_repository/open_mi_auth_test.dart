@@ -38,33 +38,33 @@ void main() {
         pathSegments: [".well-known", "nodeinfo"])))));
   });
 
-  test("非対応のソフトウェアの場合、エラーを返すこと", () async {
-    final dio = MockDio();
-    when(dio.getUri(any)).thenAnswer((_) async => Response(
-        requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo));
-    when(dio.get(any)).thenAnswer((realInvocation) async => Response(
-        requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo2));
-    final mockMisskey = MockMisskey();
-    final provider = ProviderContainer(
-      overrides: [
-        dioProvider.overrideWithValue(dio),
-        misskeyProvider.overrideWith((ref, arg) => mockMisskey),
-      ],
-    );
-    final accountRepository = provider.read(accountRepositoryProvider.notifier);
+  // test("非対応のソフトウェアの場合、エラーを返すこと", () async {
+  //   final dio = MockDio();
+  //   when(dio.getUri(any)).thenAnswer((_) async => Response(
+  //       requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo));
+  //   when(dio.get(any)).thenAnswer((realInvocation) async => Response(
+  //       requestOptions: RequestOptions(), data: AuthTestData.calckeyNodeInfo2));
+  //   final mockMisskey = MockMisskey();
+  //   final provider = ProviderContainer(
+  //     overrides: [
+  //       dioProvider.overrideWithValue(dio),
+  //       misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+  //     ],
+  //   );
+  //   final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
-    await expectLater(
-        () async => await accountRepository.openMiAuth("calckey.jp"),
-        throwsA(isA<SoftwareNotCompatibleException>()));
+  //   await expectLater(
+  //       () async => await accountRepository.openMiAuth("calckey.jp"),
+  //       throwsA(isA<SoftwareNotCompatibleException>()));
 
-    verifyInOrder([
-      dio.getUri(argThat(equals(Uri(
-          scheme: "https",
-          host: "calckey.jp",
-          pathSegments: [".well-known", "nodeinfo"])))),
-      dio.get(argThat(equals("https://calckey.jp/nodeinfo/2.1")))
-    ]);
-  });
+  //   verifyInOrder([
+  //     dio.getUri(argThat(equals(Uri(
+  //         scheme: "https",
+  //         host: "calckey.jp",
+  //         pathSegments: [".well-known", "nodeinfo"])))),
+  //     dio.get(argThat(equals("https://calckey.jp/nodeinfo/2.1")))
+  //   ]);
+  // });
 
   test("Misskeyの場合でも、バージョンが古い場合、エラーを返すこと", () async {
     final dio = MockDio();

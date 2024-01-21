@@ -61,7 +61,7 @@ void main() {
                 findRichText: true),
             findsOneWidget);
         expect(
-            find.textContaining("がRenote", findRichText: true), findsOneWidget);
+            find.textContaining("がリノート", findRichText: true), findsOneWidget);
       });
 
       testWidgets("引用Renoteの場合、引用Renoteの表示が行われること", (tester) async {
