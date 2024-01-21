@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -128,45 +129,46 @@ class NoteModalSheet extends ConsumerWidget {
                 .openNoteInOtherAccount(context, targetNote)
                 .expectFailure(context),
           ),
-        ListTile(
-          leading: const Icon(Icons.share),
-          title: Text(S.of(context).shareNotes),
-          onTap: () {
-            ref.read(noteModalSheetSharingModeProviding.notifier).state = true;
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              Future(() async {
-                final box = context.findRenderObject() as RenderBox?;
-                final boundary = noteBoundaryKey.currentContext
-                    ?.findRenderObject() as RenderRepaintBoundary;
-                final image = await boundary.toImage(
-                  pixelRatio: View.of(context).devicePixelRatio,
-                );
-                final byteData =
-                    await image.toByteData(format: ImageByteFormat.png);
-                ref.read(noteModalSheetSharingModeProviding.notifier).state =
-                    false;
+        if (defaultTargetPlatform != TargetPlatform.linux)
+          ListTile(
+            leading: const Icon(Icons.share),
+            title: Text(S.of(context).shareNotes),
+            onTap: () {
+              ref.read(noteModalSheetSharingModeProviding.notifier).state = true;
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                Future(() async {
+                  final box = context.findRenderObject() as RenderBox?;
+                  final boundary = noteBoundaryKey.currentContext
+                      ?.findRenderObject() as RenderRepaintBoundary;
+                  final image = await boundary.toImage(
+                    pixelRatio: View.of(context).devicePixelRatio,
+                  );
+                  final byteData =
+                      await image.toByteData(format: ImageByteFormat.png);
+                  ref.read(noteModalSheetSharingModeProviding.notifier).state =
+                      false;
 
-                final path =
-                    "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
-                final file = File(path);
-                await file.writeAsBytes(
-                  byteData!.buffer.asUint8List(
-                    byteData.offsetInBytes,
-                    byteData.lengthInBytes,
-                  ),
-                );
+                  final path =
+                      "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
+                  final file = File(path);
+                  await file.writeAsBytes(
+                    byteData!.buffer.asUint8List(
+                      byteData.offsetInBytes,
+                      byteData.lengthInBytes,
+                    ),
+                  );
 
-                final xFile = XFile(path, mimeType: "image/png");
-                await Share.shareXFiles(
-                  [xFile],
-                  text: "https://${account.host}/notes/${targetNote.id}",
-                  sharePositionOrigin:
-                      box!.localToGlobal(Offset.zero) & box.size,
-                );
+                  final xFile = XFile(path, mimeType: "image/png");
+                  await Share.shareXFiles(
+                    [xFile],
+                    text: "https://${account.host}/notes/${targetNote.id}",
+                    sharePositionOrigin:
+                        box!.localToGlobal(Offset.zero) & box.size,
+                  );
+                });
               });
-            });
-          },
-        ),
+            },
+          ),
         FutureBuilder(
           future: ref
               .read(misskeyProvider(account))
