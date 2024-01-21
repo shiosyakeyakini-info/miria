@@ -178,6 +178,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                   context: context,
                   builder: (context) => VideoDialog(
                     url: widget.targetFiles[widget.position],
+                    fileType: widget.fileType,
                   ),
                 );
               } else {
