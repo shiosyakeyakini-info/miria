@@ -21,6 +21,27 @@ class ImportExportRepository extends ChangeNotifier {
 
   ImportExportRepository(this.reader);
 
+  Future<Iterable<DriveFile>> findExportedFiles(
+    Account account,
+    String? folderId,
+  ) async {
+    final files = await Future.wait([
+      reader(misskeyProvider(account)).drive.files.find(
+            DriveFilesFindRequest(
+              name: "miria.json",
+              folderId: folderId,
+            ),
+          ),
+      reader(misskeyProvider(account)).drive.files.find(
+            DriveFilesFindRequest(
+              name: "miria.json.unknown",
+              folderId: folderId,
+            ),
+          ),
+    ]);
+    return files.flattened;
+  }
+
   Future<void> import(BuildContext context, Account account) async {
     final result = await showDialog<FolderResult>(
       context: context,
@@ -34,31 +55,15 @@ class ImportExportRepository extends ChangeNotifier {
 
     final folder = result.folder;
 
-    Iterable<DriveFile> alreadyExists =
-        await reader(misskeyProvider(account)).drive.files.find(
-              DriveFilesFindRequest(
-                name: "miria.json",
-                folderId: folder?.id,
-              ),
-            );
+    final alreadyExists = await findExportedFiles(account, folder?.id);
 
     if (!context.mounted) return;
     if (alreadyExists.isEmpty) {
-      alreadyExists = await reader(misskeyProvider(account)).drive.files.find(
-            DriveFilesFindRequest(
-              name: "miria.json.unknown",
-              folderId: folder?.id,
-            ),
-          );
-
-      if (!context.mounted) return;
-      if (alreadyExists.isEmpty) {
-        await SimpleMessageDialog.show(context, "ここにMiriaの設定ファイルあれへんかったわ");
-        return;
-      }
+      await SimpleMessageDialog.show(context, "ここにMiriaの設定ファイルあれへんかったわ");
+      return;
     }
 
-    final importFile = alreadyExists.first;
+    final importFile = alreadyExists.sortedBy((file) => file.createdAt).last;
 
     final response = await reader(dioProvider)
         .get(importFile.url, options: Options(responseType: ResponseType.json));
@@ -117,13 +122,7 @@ class ImportExportRepository extends ChangeNotifier {
 
     final folder = result.folder;
 
-    final alreadyExists =
-        await reader(misskeyProvider(account)).drive.files.find(
-              DriveFilesFindRequest(
-                name: "miria.json.unknown",
-                folderId: folder?.id,
-              ),
-            );
+    final alreadyExists = await findExportedFiles(account, folder?.id);
 
     if (!context.mounted) return;
     if (alreadyExists.isNotEmpty) {
