@@ -66,9 +66,42 @@
     "testNotification": "テストですわよ",
     "renotedUsersInNotification": "リノートされた方",
     "reactionUsersInNotification": "リアクションされた人",
-    "finishedVotedNotification": "投票結果が出たそうですわよ"
+    "finishedVotedNotification": "投票結果が出たそうですわよ",
+    "renoteAndReactionsNotification": "{reactionUser}らがリアクションを、{renotedUser}らがリノートをされましたのよ",
+    "renoteNotification": "{renoteUser}らがリノートされましてよ",
+    "reactionNotification": "{reactionUser}らがリアクションされましてよ",
+    "notedNotification": "{notedUser}らがノートいたしましてよ",
+    "roleAssignedNotification": "ロール「{role}」に入れられましてよ",
 
+    "cancelEmojiChoosing": "やめておきますわ",
+    "doneEmojiChoosing": "使いますわ",
+    "confirmSavingPhoto": "保存いたしますこと？",
+    "doneEditingPhoto": "保存する",
+    "continueEditingPhoto": "もうしばらく続けますわ",
+    "disabledUsingSensitiveCustomEmoji": "ここではセンシティブなカスタム絵文字を使えないのでして",
 
+    "pageWrittenBy": "このページを書きなさった方",
+
+    "unsupportedPage": "Miriaが対応してないページのようですわ　ブラウザをお使いになさって",
+    "canNotFavoriteMyPage": "自分のページにいいねはできないのですわ",
+
+    "announcementsForYou": "あなたさま宛",
+    "confirmAnnouncementsRead": "「{title}」の内容をお読みになさったこと？",
+    "readAnnouncement": "読みましたわ",
+    "didNotReadAnnouncement": "まだですわ",
+
+    "thrownError": "なにか様子がおかしいですわね…",
+
+    "exportedFileNotFound": "ここにMiriaの設定ファイル見つかりませんでしたわよ",
+    "importCompleted": "インポート終わりましたわ。",
+    "confirmOverwrite": "ここにもうあるようですけれど……上書きいたしますの？",
+
+    "pleaseInputSomething": "なにか入れてくださいまし？",
+    "pleaseAddVoteChoice": "投票の選択肢を2つ以上入れてくださまいし？",
+    "pleaseSpecifyExpirationDate": "投票がいつまでか入れてくださいまし？",
+    "pleaseSpecifyExpirationDuration": "投票期間を入れてくださいまし？",
+    "cannotMentionToRemoteInLocalOnlyNote": "連合切られているのに他のサーバーの人がメンションに含まれているようですわ",
+    "cannotPublicReplyToPrivateNote": "リプライが{visibility}のようでして……パブリックにはできませんこと"
 
 
 

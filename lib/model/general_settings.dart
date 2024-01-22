@@ -71,6 +71,17 @@ enum EmojiType {
   }
 }
 
+enum Languages {
+  jaJP("日本語", "ja", "JP"),
+  jaOJ("日本語（お嬢様）", "ja", "OJ");
+
+  final String displayName;
+  final String countryCode;
+  final String languageCode;
+
+  const Languages(this.displayName, this.countryCode, this.languageCode);
+}
+
 @freezed
 class GeneralSettings with _$GeneralSettings {
   const factory GeneralSettings({
@@ -119,6 +130,9 @@ class GeneralSettings with _$GeneralSettings {
 
     /// `$[font.fantasy のフォント名
     @Default("") String fantasyFontName,
+
+    /// 言語設定
+    @Default(Languages.jaJP) Languages languages,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

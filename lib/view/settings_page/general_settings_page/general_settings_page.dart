@@ -37,6 +37,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   String monospaceFontName = "";
   String cursiveFontName = "";
   String fantasyFontName = "";
+  Languages language = Languages.jaJP;
 
   @override
   void initState() {
@@ -77,30 +78,31 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       monospaceFontName = settings.monospaceFontName;
       cursiveFontName = settings.cursiveFontName;
       fantasyFontName = settings.fantasyFontName;
+      language = settings.languages;
     });
   }
 
   Future<void> save() async {
     ref.read(generalSettingsRepositoryProvider).update(
           GeneralSettings(
-            lightColorThemeId: lightModeTheme,
-            darkColorThemeId: darkModeTheme,
-            themeColorSystem: colorSystem,
-            nsfwInherit: nsfwInherit,
-            enableDirectReaction: enableDirectReaction,
-            automaticPush: automaticPush,
-            enableAnimatedMFM: enableAnimatedMFM,
-            enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
-            enableLongTextElipsed: enableLongTextElipsed,
-            tabPosition: tabPosition,
-            emojiType: emojiType,
-            textScaleFactor: textScaleFactor,
-            defaultFontName: defaultFontName,
-            serifFontName: serifFontName,
-            monospaceFontName: monospaceFontName,
-            cursiveFontName: cursiveFontName,
-            fantasyFontName: fantasyFontName,
-          ),
+              lightColorThemeId: lightModeTheme,
+              darkColorThemeId: darkModeTheme,
+              themeColorSystem: colorSystem,
+              nsfwInherit: nsfwInherit,
+              enableDirectReaction: enableDirectReaction,
+              automaticPush: automaticPush,
+              enableAnimatedMFM: enableAnimatedMFM,
+              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
+              enableLongTextElipsed: enableLongTextElipsed,
+              tabPosition: tabPosition,
+              emojiType: emojiType,
+              textScaleFactor: textScaleFactor,
+              defaultFontName: defaultFontName,
+              serifFontName: serifFontName,
+              monospaceFontName: monospaceFontName,
+              cursiveFontName: cursiveFontName,
+              fantasyFontName: fantasyFontName,
+              languages: language),
         );
   }
 
@@ -127,6 +129,25 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                       Text(
                         S.of(context).general,
                         style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).language),
+                      DropdownButton<Languages>(
+                        isExpanded: true,
+                        items: [
+                          for (final element in Languages.values)
+                            DropdownMenuItem(
+                              value: element,
+                              child: Text(element.displayName),
+                            ),
+                        ],
+                        value: language,
+                        onChanged: (value) => setState(
+                          () {
+                            language = value ?? Languages.jaJP;
+                            save();
+                          },
+                        ),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).displayOfSensitiveNotes),
