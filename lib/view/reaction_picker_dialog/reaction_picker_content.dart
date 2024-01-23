@@ -29,7 +29,6 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
 }
 
 class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
-  final emojis = <MisskeyEmojiData>[];
   final categoryList = <String>[];
   EmojiRepository get emojiRepository =>
       ref.read(emojiRepositoryProvider(AccountScope.of(context)));
@@ -37,8 +36,6 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    emojis.clear();
-    emojis.addAll(emojiRepository.defaultEmojis().toList());
 
     categoryList
       ..clear()
@@ -55,38 +52,9 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          TextField(
-            decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-            autofocus: true,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) {
-              Future(() async {
-                final result = await emojiRepository.searchEmojis(value);
-                if (!mounted) return;
-                setState(() {
-                  emojis.clear();
-                  emojis.addAll(result);
-                });
-              });
-            },
-          ),
-          const Padding(padding: EdgeInsets.only(top: 10)),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              crossAxisAlignment: WrapCrossAlignment.start,
-              children: [
-                for (final emoji in emojis)
-                  EmojiButton(
-                    emoji: emoji,
-                    onTap: widget.onTap,
-                    isForceVisible: true,
-                    isAcceptSensitive: widget.isAcceptSensitive,
-                  )
-              ],
-            ),
+          EmojiSearch(
+            onTap: widget.onTap,
+            isAcceptSensitive: widget.isAcceptSensitive,
           ),
           ListView.builder(
             shrinkWrap: true,
@@ -196,5 +164,72 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
         ),
       ),
     );
+  }
+}
+
+class EmojiSearch extends ConsumerStatefulWidget {
+  final FutureOr Function(MisskeyEmojiData emoji) onTap;
+  final bool isAcceptSensitive;
+
+  const EmojiSearch({
+    super.key,
+    required this.onTap,
+    required this.isAcceptSensitive,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      EmojiSearchState();
+}
+
+class EmojiSearchState extends ConsumerState<EmojiSearch> {
+  final emojis = <MisskeyEmojiData>[];
+
+  EmojiRepository get emojiRepository =>
+      ref.read(emojiRepositoryProvider(AccountScope.of(context)));
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    emojis.clear();
+    emojis.addAll(emojiRepository.defaultEmojis().toList());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      TextField(
+        decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+        autofocus: true,
+        keyboardType: TextInputType.emailAddress,
+        onChanged: (value) {
+          Future(() async {
+            final result = await emojiRepository.searchEmojis(value);
+            if (!mounted) return;
+            setState(() {
+              emojis.clear();
+              emojis.addAll(result);
+            });
+          });
+        },
+      ),
+      const Padding(padding: EdgeInsets.only(top: 10)),
+      Align(
+          alignment: Alignment.topLeft,
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            children: [
+              for (final emoji in emojis)
+                EmojiButton(
+                  emoji: emoji,
+                  onTap: widget.onTap,
+                  isForceVisible: true,
+                  isAcceptSensitive: widget.isAcceptSensitive,
+                )
+            ],
+          ))
+    ]);
   }
 }
