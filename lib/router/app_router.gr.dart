@@ -431,6 +431,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    MisskeyGamesRoute.name: (routeData) {
+      final args = routeData.argsAs<MisskeyGamesRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MisskeyGamesPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
   };
 }
 
@@ -1966,5 +1976,43 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
+/// [MisskeyGamesPage]
+class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
+  MisskeyGamesRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MisskeyGamesRoute.name,
+          args: MisskeyGamesRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MisskeyGamesRoute';
+
+  static const PageInfo<MisskeyGamesRouteArgs> page =
+      PageInfo<MisskeyGamesRouteArgs>(name);
+}
+
+class MisskeyGamesRouteArgs {
+  const MisskeyGamesRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'MisskeyGamesRouteArgs{key: $key, account: $account}';
   }
 }

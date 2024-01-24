@@ -11,6 +11,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart';
+import 'package:misskey_dart/misskey_dart.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -156,38 +157,51 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   }
 
   Future<void> showAddReactionsDialog({required BuildContext context}) async {
-    final endpoints =
-        await ref.read(misskeyProvider(widget.account)).endpoints();
-    final domain =
-        endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
-    if (!mounted) return;
-    final emojiNames = await showDialog<List<String>>(
-      context: context,
-      builder: (context) => AddReactionsDialog(
-        account: widget.account,
-        domain: domain,
-      ),
-    );
-    if (emojiNames == null) {
-      return;
+    try {
+      final reactions =
+          await ref.read(misskeyProvider(widget.account)).i.registry.getDetail(
+                const IRegistryGetDetailRequest(
+                  scope: ["client", "base"],
+                  key: "reactions",
+                  domain: null,
+                ),
+              );
+
+      print(reactions);
+    } catch (e) {
+      final endpoints =
+          await ref.read(misskeyProvider(widget.account)).endpoints();
+      final domain =
+          endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
+      if (!mounted) return;
+      final emojiNames = await showDialog<List<String>>(
+        context: context,
+        builder: (context) => AddReactionsDialog(
+          account: widget.account,
+          domain: domain,
+        ),
+      );
+      if (emojiNames == null) {
+        return;
+      }
+      final emojis = emojiNames
+          .map(
+            (emojiName) => MisskeyEmojiData.fromEmojiName(
+              emojiName: emojiName,
+              repository: ref.watch(emojiRepositoryProvider(widget.account)),
+            ),
+          )
+          .where((emoji) => emoji.runtimeType != NotEmojiData)
+          .where(
+            (emoji) => !reactions.any(
+              (element) => element.baseName == emoji.baseName,
+            ),
+          );
+      setState(() {
+        reactions.addAll(emojis);
+        save();
+      });
     }
-    final emojis = emojiNames
-        .map(
-          (emojiName) => MisskeyEmojiData.fromEmojiName(
-            emojiName: emojiName,
-            repository: ref.watch(emojiRepositoryProvider(widget.account)),
-          ),
-        )
-        .where((emoji) => emoji.runtimeType != NotEmojiData)
-        .where(
-          (emoji) => !reactions.any(
-            (element) => element.baseName == emoji.baseName,
-          ),
-        );
-    setState(() {
-      reactions.addAll(emojis);
-      save();
-    });
   }
 
   void copyReactions({required BuildContext context}) {

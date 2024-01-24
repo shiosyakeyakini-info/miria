@@ -965,5 +965,22 @@
     "createdAtAscendingOrder": "古い順",
     "createdAtDescendingOrder": "新しい順",
     "updatedAtAscendingOrder": "更新されていない順",
-    "updatedAtDescendingOrder": "更新された順"
+    "updatedAtDescendingOrder": "更新された順",
+
+    "misskeyGames": "Misskey Games",
+    "cookieCliker": "Cookie Cliker",
+    "bubbleGame": "Bubble Game",
+    "reversi": "リバーシ",
+    "loading": "読み込み中...",
+
+    "invitedReversi": "{users}から招待されとるで",
+    "@invitedReversi": {
+        "placeholders": {
+            "users": {
+                "type": "String"
+            }
+        }
+    },
+    "nonInvitedReversi": "招待はされとらへんみたいや"
+
 }

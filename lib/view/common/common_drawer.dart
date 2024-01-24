@@ -103,6 +103,14 @@ class CommonDrawer extends ConsumerWidget {
                       },
                     ),
                     ListTile(
+                      leading: const Icon(Icons.gamepad),
+                      title: Text(S.of(context).misskeyGames),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        context.pushRoute(MisskeyGamesRoute(account: account));
+                      },
+                    ),
+                    ListTile(
                       leading: const Icon(Icons.settings),
                       title: Text(S.of(context).accountSetting(
                           account.i.name ?? account.i.username)),

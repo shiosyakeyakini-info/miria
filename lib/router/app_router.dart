@@ -15,6 +15,7 @@ import 'package:miria/view/explore_page/explore_page.dart';
 import 'package:miria/view/explore_page/explore_role_users_page.dart';
 import 'package:miria/view/favorited_note_page/favorited_note_page.dart';
 import 'package:miria/view/federation_page/federation_page.dart';
+import 'package:miria/view/games_page/misskey_games_page.dart';
 import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/misskey_page_page/misskey_page_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
@@ -98,6 +99,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: CacheManagementRoute.page),
     AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
     AutoRoute(page: SharingAccountSelectRoute.page),
+    AutoRoute(page: MisskeyGamesRoute.page),
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
   ];
