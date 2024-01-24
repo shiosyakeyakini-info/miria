@@ -535,12 +535,15 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 const Padding(padding: EdgeInsets.only(top: 20))
                 ]))),
         if (response.pinnedNotes != null)
-          SliverList.builder(
-            itemCount: response.pinnedNotes!.length,
-            itemBuilder: (context, index) => 
-              MisskeyNote(
-                note: response.pinnedNotes![index],
-                loginAs: widget.controlAccount))
+          SliverPadding(
+            padding: const EdgeInsets.only(right: 10),
+            sliver: SliverList.builder(
+              itemCount: response.pinnedNotes!.length,
+              itemBuilder: (context, index) => 
+                MisskeyNote(
+                  note: response.pinnedNotes![index],
+                  loginAs: widget.controlAccount)
+            ))
       ]);
   }
 }
