@@ -257,7 +257,7 @@ System.out.println("@ai uneune");
             NotesReactionsResponse(
                 id: "reaction1",
                 createdAt: DateTime.now(),
-                user: TestData.detailedUser2,
+                user: UserLite.fromJson(TestData.detailedUser2.toJson()),
                 type: ":ai_yay:")
           ]);
       await tester.pumpWidget(buildTestWidget(

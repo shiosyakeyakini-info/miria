@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/date_time_extension.dart';
+import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -24,7 +25,7 @@ import 'package:misskey_dart/misskey_dart.dart';
 class UserDetail extends ConsumerStatefulWidget {
   final Account account;
   final Account? controlAccount;
-  final UsersShowResponse response;
+  final UserDetailed response;
 
   const UserDetail({
     super.key,
@@ -38,12 +39,18 @@ class UserDetail extends ConsumerStatefulWidget {
 }
 
 class UserDetailState extends ConsumerState<UserDetail> {
-  late UsersShowResponse response;
+  late UserDetailed response;
   bool isFollowEditing = false;
   String memo = "";
 
   Future<void> followCreate() async {
     if (isFollowEditing) return;
+
+    final user = response;
+    if (user is! UserDetailedNotMeWithRelations) {
+      return;
+    }
+
     setState(() {
       isFollowEditing = true;
     });
@@ -51,13 +58,14 @@ class UserDetailState extends ConsumerState<UserDetail> {
       await ref
           .read(misskeyProvider(AccountScope.of(context)))
           .following
-          .create(FollowingCreateRequest(userId: response.id));
+          .create(FollowingCreateRequest(userId: user.id));
       if (!mounted) return;
+      final requiresFollowRequest = user.isLocked && !user.isFollowed;
       setState(() {
         isFollowEditing = false;
-        response = response.copyWith(
-          isFollowing: !response.requiresFollowRequest,
-          hasPendingFollowRequestFromYou: response.requiresFollowRequest,
+        response = user.copyWith(
+          isFollowing: !requiresFollowRequest,
+          hasPendingFollowRequestFromYou: requiresFollowRequest,
         );
       });
     } catch (e) {
@@ -71,6 +79,12 @@ class UserDetailState extends ConsumerState<UserDetail> {
 
   Future<void> followDelete() async {
     if (isFollowEditing) return;
+
+    final user = response;
+    if (user is! UserDetailedNotMeWithRelations) {
+      return;
+    }
+
     final account = AccountScope.of(context);
     if (await SimpleConfirmDialog.show(
           context: context,
@@ -88,11 +102,11 @@ class UserDetailState extends ConsumerState<UserDetail> {
       await ref
           .read(misskeyProvider(account))
           .following
-          .delete(FollowingDeleteRequest(userId: response.id));
+          .delete(FollowingDeleteRequest(userId: user.id));
       if (!mounted) return;
       setState(() {
         isFollowEditing = false;
-        response = response.copyWith(isFollowing: false);
+        response = user.copyWith(isFollowing: false);
       });
     } catch (e) {
       if (!mounted) return;
@@ -105,6 +119,12 @@ class UserDetailState extends ConsumerState<UserDetail> {
 
   Future<void> followRequestCancel() async {
     if (isFollowEditing) return;
+
+    final user = response;
+    if (user is! UserDetailedNotMeWithRelations) {
+      return;
+    }
+
     setState(() {
       isFollowEditing = true;
     });
@@ -113,11 +133,11 @@ class UserDetailState extends ConsumerState<UserDetail> {
           .read(misskeyProvider(AccountScope.of(context)))
           .following
           .requests
-          .cancel(FollowingRequestsCancelRequest(userId: response.id));
+          .cancel(FollowingRequestsCancelRequest(userId: user.id));
       if (!mounted) return;
       setState(() {
         isFollowEditing = false;
-        response = response.copyWith(hasPendingFollowRequestFromYou: false);
+        response = user.copyWith(hasPendingFollowRequestFromYou: false);
       });
     } catch (e) {
       if (!mounted) return;
@@ -128,45 +148,50 @@ class UserDetailState extends ConsumerState<UserDetail> {
     }
   }
 
-  Future<void> userControl(bool isMe) async {
+  Future<void> userControl() async {
     final result = await showModalBottomSheet<UserControl?>(
-        context: context,
-        builder: (context) => UserControlDialog(
-              account: widget.account,
-              response: response,
-              isMe: isMe,
-            ));
+      context: context,
+      builder: (context) => UserControlDialog(
+        account: widget.account,
+        response: response,
+      ),
+    );
     if (result == null) return;
+
+    final user = response;
+    if (user is! UserDetailedNotMeWithRelations) {
+      return;
+    }
 
     switch (result) {
       case UserControl.createMute:
         setState(() {
-          response = response.copyWith(isMuted: true);
+          response = user.copyWith(isMuted: true);
         });
         break;
       case UserControl.deleteMute:
         setState(() {
-          response = response.copyWith(isMuted: false);
+          response = user.copyWith(isMuted: false);
         });
         break;
       case UserControl.createRenoteMute:
         setState(() {
-          response = response.copyWith(isRenoteMuted: true);
+          response = user.copyWith(isRenoteMuted: true);
         });
         break;
       case UserControl.deleteRenoteMute:
         setState(() {
-          response = response.copyWith(isRenoteMuted: false);
+          response = user.copyWith(isRenoteMuted: false);
         });
         break;
       case UserControl.createBlock:
         setState(() {
-          response = response.copyWith(isBlocking: true);
+          response = user.copyWith(isBlocking: true);
         });
         break;
       case UserControl.deleteBlock:
         setState(() {
-          response = response.copyWith(isBlocking: false);
+          response = user.copyWith(isBlocking: false);
         });
         break;
     }
@@ -180,10 +205,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
   }
 
   Widget buildContent() {
-    final userName =
-        "${response.username}${response.host != null ? "@${response.host ?? ""}" : ""}";
-    final isMe = (widget.response.host == null &&
-        widget.response.username == AccountScope.of(context).userId);
+    final user = response;
 
     return Column(children: [
       if (widget.controlAccount == null)
@@ -193,9 +215,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (isMe)
-                  const Spacer()
-                else
+                if (user is UserDetailedNotMeWithRelations)
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -204,28 +224,28 @@ class UserDetailState extends ConsumerState<UserDetail> {
                         child: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
-                            if (response.isRenoteMuted ?? false)
+                            if (user.isRenoteMuted)
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Text(S.of(context).renoteMuting),
                                 ),
                               ),
-                            if (response.isMuted ?? false)
+                            if (user.isMuted)
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Text(S.of(context).muting),
                                 ),
                               ),
-                            if (response.isBlocking ?? false)
+                            if (user.isBlocking)
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Text(S.of(context).blocking),
                                 ),
                               ),
-                            if (response.isFollowed ?? false)
+                            if (user.isFollowed)
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: Card(
@@ -236,30 +256,30 @@ class UserDetailState extends ConsumerState<UserDetail> {
                                 ),
                               ),
                             if (!isFollowEditing)
-                              (response.isFollowing ?? false)
-                                  ? ElevatedButton(
-                                      onPressed:
-                                          followDelete.expectFailure(context),
-                                      child: Text(S.of(context).unfollow),
-                                    )
-                                  : (response.hasPendingFollowRequestFromYou ??
-                                          false)
-                                      ? ElevatedButton(
-                                          onPressed: followRequestCancel
-                                              .expectFailure(context),
-                                          child: Text(
-                                            S.of(context).followRequestPending,
-                                          ),
-                                        )
-                                      : OutlinedButton(
-                                          onPressed: followCreate
-                                              .expectFailure(context),
-                                          child: Text(
-                                            (response.requiresFollowRequest)
-                                                ? S.of(context).followRequest
-                                                : S.of(context).createFollow,
-                                          ),
-                                        )
+                              if (user.isFollowing)
+                                ElevatedButton(
+                                  onPressed:
+                                      followDelete.expectFailure(context),
+                                  child: Text(S.of(context).unfollow),
+                                )
+                              else if (user.hasPendingFollowRequestFromYou)
+                                ElevatedButton(
+                                  onPressed: followRequestCancel
+                                      .expectFailure(context),
+                                  child: Text(
+                                    S.of(context).followRequestPending,
+                                  ),
+                                )
+                              else
+                                OutlinedButton(
+                                  onPressed:
+                                      followCreate.expectFailure(context),
+                                  child: Text(
+                                    user.isLocked
+                                        ? S.of(context).followRequest
+                                        : S.of(context).createFollow,
+                                  ),
+                                )
                             else
                               Align(
                                 alignment: Alignment.centerRight,
@@ -285,12 +305,15 @@ class UserDetailState extends ConsumerState<UserDetail> {
                         ),
                       ),
                     ),
-                  ),
+                  )
+                else
+                  const Spacer(),
                 Align(
                   alignment: Alignment.center,
                   child: IconButton(
-                      onPressed: () => userControl(isMe),
-                      icon: const Icon(Icons.more_vert)),
+                    onPressed: userControl,
+                    icon: const Icon(Icons.more_vert),
+                  ),
                 )
               ],
             )),
@@ -300,8 +323,8 @@ class UserDetailState extends ConsumerState<UserDetail> {
         child: Column(children: [
           Row(
             children: [
-              AvatarIcon.fromUserResponse(
-                response,
+              AvatarIcon(
+                user: response,
                 height: 80,
               ),
               Expanded(
@@ -315,16 +338,16 @@ class UserDetailState extends ConsumerState<UserDetail> {
                       MfmText(
                         mfmText: response.name ?? response.username,
                         style: Theme.of(context).textTheme.headlineSmall,
-                        emoji: response.emojis ?? {},
+                        emoji: response.emojis,
                       ),
                       Text(
-                        "@$userName",
+                        response.acct,
                         style: Theme.of(context).textTheme.bodyLarge,
-                      )
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
           const Padding(padding: EdgeInsets.only(top: 5)),
@@ -404,7 +427,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
             alignment: Alignment.center,
             child: MfmText(
               mfmText: response.description ?? "",
-              emoji: response.emojis ?? {},
+              emoji: response.emojis,
             ),
           ),
           const Padding(padding: EdgeInsets.only(top: 20)),
@@ -458,13 +481,13 @@ class UserDetailState extends ConsumerState<UserDetail> {
                     TableCell(
                       child: MfmText(
                         mfmText: field.name,
-                        emoji: response.emojis ?? {},
+                        emoji: response.emojis,
                       ),
                     ),
                     TableCell(
                         child: MfmText(
                       mfmText: field.value,
-                      emoji: response.emojis ?? {},
+                      emoji: response.emojis,
                     )),
                   ])
               ],
@@ -482,35 +505,37 @@ class UserDetailState extends ConsumerState<UserDetail> {
                 )
               ],
             ),
-            InkWell(
-              onTap: () => context.pushRoute(UserFolloweeRoute(
-                  userId: response.id, account: AccountScope.of(context))),
-              child: Column(
-                children: [
-                  Text(response.followingCount.format(),
-                      style: Theme.of(context).textTheme.titleMedium),
-                  Text(
-                    S.of(context).follow,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )
-                ],
+            if (widget.response.isFollowingVisibleForMe)
+              InkWell(
+                onTap: () => context.pushRoute(UserFolloweeRoute(
+                    userId: response.id, account: AccountScope.of(context))),
+                child: Column(
+                  children: [
+                    Text(response.followingCount.format(),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      S.of(context).follow,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )
+                  ],
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () => context.pushRoute(UserFollowerRoute(
-                  userId: response.id, account: AccountScope.of(context))),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(response.followersCount.format(),
-                      style: Theme.of(context).textTheme.titleMedium),
-                  Text(
-                    S.of(context).follower,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )
-                ],
+            if (widget.response.isFollowersVisibleForMe)
+              InkWell(
+                onTap: () => context.pushRoute(UserFollowerRoute(
+                    userId: response.id, account: AccountScope.of(context))),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(response.followersCount.format(),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      S.of(context).follower,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )
+                  ],
+                ),
               ),
-            ),
           ]),
         ]),
       ),
@@ -553,7 +578,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
 }
 
 class BirthdayConfetti extends StatefulWidget {
-  final UsersShowResponse response;
+  final UserDetailed response;
   final Widget child;
 
   const BirthdayConfetti({
@@ -653,12 +678,5 @@ class RoleChip extends ConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-extension on UsersShowResponse {
-  bool get requiresFollowRequest {
-    return isLocked &&
-        !((isFollowed ?? false) && (autoAcceptFollowed ?? false));
   }
 }

@@ -78,14 +78,12 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
     final host = user.host ?? _account.host;
 
     try {
-      final response =
-          await ref.read(misskeyProvider(account)).users.showByName(
-                UsersShowByUserNameRequest(
-                  userName: user.username,
-                  host: host,
-                ),
-              );
-      return response.toUser();
+      return ref.read(misskeyProvider(account)).users.showByName(
+            UsersShowByUserNameRequest(
+              userName: user.username,
+              host: host,
+            ),
+          );
     } catch (e) {
       // 最終手段として、連合で照会する
       // `users/show` で自動的に照会されるから必要ない
@@ -98,7 +96,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
               ),
             ),
           );
-      return UsersShowResponse.fromJson(response.object).toUser();
+      return UserDetailed.fromJson(response.object);
     }
   }
 

@@ -35,7 +35,6 @@ abstract class $NoteSearchConditionCopyWith<$Res> {
   $Res call(
       {String? query, User? user, CommunityChannel? channel, bool localOnly});
 
-  $UserCopyWith<$Res>? get user;
   $CommunityChannelCopyWith<$Res>? get channel;
 }
 
@@ -79,18 +78,6 @@ class _$NoteSearchConditionCopyWithImpl<$Res, $Val extends NoteSearchCondition>
 
   @override
   @pragma('vm:prefer-inline')
-  $UserCopyWith<$Res>? get user {
-    if (_value.user == null) {
-      return null;
-    }
-
-    return $UserCopyWith<$Res>(_value.user!, (value) {
-      return _then(_value.copyWith(user: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
   $CommunityChannelCopyWith<$Res>? get channel {
     if (_value.channel == null) {
       return null;
@@ -113,8 +100,6 @@ abstract class _$$NoteSearchConditionImplCopyWith<$Res>
   $Res call(
       {String? query, User? user, CommunityChannel? channel, bool localOnly});
 
-  @override
-  $UserCopyWith<$Res>? get user;
   @override
   $CommunityChannelCopyWith<$Res>? get channel;
 }
