@@ -366,14 +366,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
-    TimeLineRoute.name: (routeData) {
-      final args = routeData.argsAs<TimeLineRouteArgs>();
+    TimelineRoute.name: (routeData) {
+      final args = routeData.argsAs<TimelineRouteArgs>(
+          orElse: () => const TimelineRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: TimeLinePage(
-          key: args.key,
-          initialTabSetting: args.initialTabSetting,
-        ),
+        child: TimelinePage(key: args.key),
       );
     },
     UsersListDetailRoute.name: (routeData) {
@@ -1728,40 +1726,31 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TimeLinePage]
-class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
-  TimeLineRoute({
+/// [TimelinePage]
+class TimelineRoute extends PageRouteInfo<TimelineRouteArgs> {
+  TimelineRoute({
     Key? key,
-    required TabSetting initialTabSetting,
     List<PageRouteInfo>? children,
   }) : super(
-          TimeLineRoute.name,
-          args: TimeLineRouteArgs(
-            key: key,
-            initialTabSetting: initialTabSetting,
-          ),
+          TimelineRoute.name,
+          args: TimelineRouteArgs(key: key),
           initialChildren: children,
         );
 
-  static const String name = 'TimeLineRoute';
+  static const String name = 'TimelineRoute';
 
-  static const PageInfo<TimeLineRouteArgs> page =
-      PageInfo<TimeLineRouteArgs>(name);
+  static const PageInfo<TimelineRouteArgs> page =
+      PageInfo<TimelineRouteArgs>(name);
 }
 
-class TimeLineRouteArgs {
-  const TimeLineRouteArgs({
-    this.key,
-    required this.initialTabSetting,
-  });
+class TimelineRouteArgs {
+  const TimelineRouteArgs({this.key});
 
   final Key? key;
 
-  final TabSetting initialTabSetting;
-
   @override
   String toString() {
-    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
+    return 'TimelineRouteArgs{key: $key}';
   }
 }
 
