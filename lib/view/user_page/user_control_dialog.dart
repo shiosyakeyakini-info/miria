@@ -224,7 +224,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             SearchRoute(
               account: widget.account,
               initialNoteSearchCondition: NoteSearchCondition(
-                user: widget.response.toUser(),
+                user: widget.response,
               ),
             ),
           ),
