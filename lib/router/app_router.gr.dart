@@ -188,6 +188,7 @@ abstract class _$AppRouter extends RootStackRouter {
           initialAccount: args.initialAccount,
           initialText: args.initialText,
           initialMediaFiles: args.initialMediaFiles,
+          initialDriveFiles: args.initialDriveFiles,
           channel: args.channel,
           reply: args.reply,
           renote: args.renote,
@@ -366,16 +367,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
-    TimeLineRoute.name: (routeData) {
-      final args = routeData.argsAs<TimeLineRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TimeLinePage(
-          key: args.key,
-          initialTabSetting: args.initialTabSetting,
-        ),
-      );
-    },
     UsersListDetailRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -438,6 +429,40 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           userId: args.userId,
           account: args.account,
+        ),
+      );
+    },
+    TimeLineRoute.name: (routeData) {
+      final args = routeData.argsAs<TimeLineRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: TimeLinePage(
+          key: args.key,
+          initialTabSetting: args.initialTabSetting,
+        ),
+      );
+    },
+    DriveRoute.name: (routeData) {
+      final args = routeData.argsAs<DriveRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DrivePage(
+          key: args.key,
+          account: args.account,
+          title: args.title,
+          floatingActionButtonBuilder: args.floatingActionButtonBuilder,
+          tapToSelect: args.tapToSelect,
+        ),
+      );
+    },
+    DriveFileRoute.name: (routeData) {
+      final args = routeData.argsAs<DriveFileRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DriveFilePage(
+          key: args.key,
+          account: args.account,
+          file: args.file,
         ),
       );
     },
@@ -1076,6 +1101,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     required Account initialAccount,
     String? initialText,
     List<String>? initialMediaFiles,
+    List<DriveFile>? initialDriveFiles,
     CommunityChannel? channel,
     Note? reply,
     Note? renote,
@@ -1089,6 +1115,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
             initialAccount: initialAccount,
             initialText: initialText,
             initialMediaFiles: initialMediaFiles,
+            initialDriveFiles: initialDriveFiles,
             channel: channel,
             reply: reply,
             renote: renote,
@@ -1110,6 +1137,7 @@ class NoteCreateRouteArgs {
     required this.initialAccount,
     this.initialText,
     this.initialMediaFiles,
+    this.initialDriveFiles,
     this.channel,
     this.reply,
     this.renote,
@@ -1125,6 +1153,8 @@ class NoteCreateRouteArgs {
 
   final List<String>? initialMediaFiles;
 
+  final List<DriveFile>? initialDriveFiles;
+
   final CommunityChannel? channel;
 
   final Note? reply;
@@ -1137,7 +1167,7 @@ class NoteCreateRouteArgs {
 
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
+    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, initialDriveFiles: $initialDriveFiles, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
   }
 }
 
@@ -1728,44 +1758,6 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TimeLinePage]
-class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
-  TimeLineRoute({
-    Key? key,
-    required TabSetting initialTabSetting,
-    List<PageRouteInfo>? children,
-  }) : super(
-          TimeLineRoute.name,
-          args: TimeLineRouteArgs(
-            key: key,
-            initialTabSetting: initialTabSetting,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'TimeLineRoute';
-
-  static const PageInfo<TimeLineRouteArgs> page =
-      PageInfo<TimeLineRouteArgs>(name);
-}
-
-class TimeLineRouteArgs {
-  const TimeLineRouteArgs({
-    this.key,
-    required this.initialTabSetting,
-  });
-
-  final Key? key;
-
-  final TabSetting initialTabSetting;
-
-  @override
-  String toString() {
-    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
-  }
-}
-
-/// generated route for
 /// [UsersListDetailPage]
 class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
   UsersListDetailRoute({
@@ -2014,5 +2006,138 @@ class UserRouteArgs {
   @override
   String toString() {
     return 'UserRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [TimeLinePage]
+class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
+  TimeLineRoute({
+    Key? key,
+    required TabSetting initialTabSetting,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TimeLineRoute.name,
+          args: TimeLineRouteArgs(
+            key: key,
+            initialTabSetting: initialTabSetting,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TimeLineRoute';
+
+  static const PageInfo<TimeLineRouteArgs> page =
+      PageInfo<TimeLineRouteArgs>(name);
+}
+
+class TimeLineRouteArgs {
+  const TimeLineRouteArgs({
+    this.key,
+    required this.initialTabSetting,
+  });
+
+  final Key? key;
+
+  final TabSetting initialTabSetting;
+
+  @override
+  String toString() {
+    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
+  }
+}
+
+/// generated route for
+/// [DrivePage]
+class DriveRoute extends PageRouteInfo<DriveRouteArgs> {
+  DriveRoute({
+    Key? key,
+    required Account account,
+    Widget? title,
+    Widget Function(BuildContext)? floatingActionButtonBuilder,
+    bool tapToSelect = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DriveRoute.name,
+          args: DriveRouteArgs(
+            key: key,
+            account: account,
+            title: title,
+            floatingActionButtonBuilder: floatingActionButtonBuilder,
+            tapToSelect: tapToSelect,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DriveRoute';
+
+  static const PageInfo<DriveRouteArgs> page = PageInfo<DriveRouteArgs>(name);
+}
+
+class DriveRouteArgs {
+  const DriveRouteArgs({
+    this.key,
+    required this.account,
+    this.title,
+    this.floatingActionButtonBuilder,
+    this.tapToSelect = false,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final Widget? title;
+
+  final Widget Function(BuildContext)? floatingActionButtonBuilder;
+
+  final bool tapToSelect;
+
+  @override
+  String toString() {
+    return 'DriveRouteArgs{key: $key, account: $account, title: $title, floatingActionButtonBuilder: $floatingActionButtonBuilder, tapToSelect: $tapToSelect}';
+  }
+}
+
+/// generated route for
+/// [DriveFilePage]
+class DriveFileRoute extends PageRouteInfo<DriveFileRouteArgs> {
+  DriveFileRoute({
+    Key? key,
+    required Account account,
+    required DriveFile file,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DriveFileRoute.name,
+          args: DriveFileRouteArgs(
+            key: key,
+            account: account,
+            file: file,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DriveFileRoute';
+
+  static const PageInfo<DriveFileRouteArgs> page =
+      PageInfo<DriveFileRouteArgs>(name);
+}
+
+class DriveFileRouteArgs {
+  const DriveFileRouteArgs({
+    this.key,
+    required this.account,
+    required this.file,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  final DriveFile file;
+
+  @override
+  String toString() {
+    return 'DriveFileRouteArgs{key: $key, account: $account, file: $file}';
   }
 }

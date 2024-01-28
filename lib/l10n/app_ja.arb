@@ -72,6 +72,7 @@
     "apiKey": "APIキー",
     "contentWarning": "注釈",
     "follower": "フォロワー",
+    "drive": "ドライブ",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",
@@ -966,6 +967,60 @@
     "createdAtDescendingOrder": "新しい順",
     "updatedAtAscendingOrder": "更新されていない順",
     "updatedAtDescendingOrder": "更新された順",
+
+    "confirm": "決定",
+
+    "createFolder": "フォルダを作成",
+    "folderName": "フォルダ名",
+    "fileDownloaded": "ファイルを保存しました",
+    "moved": "移動しました",
+    "confirmDeleteFile": "このファイルを削除しますか？",
+    "deleted": "削除しました",
+    "editFile": "ファイルを編集",
+    "editImage": "画像を編集",
+    "createNoteFromThisFile": "このファイルからノートを作成",
+    "download": "ダウンロード",
+    "move": "移動",
+    "changeFolderName": "フォルダ名を変更",
+    "confirmDeleteFolder": "このフォルダを削除しますか？",
+    "selectedFiles": "選択中 ({n})",
+    "@selectedFiles": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "noFiles": "ファイルがありません",
+    "confirmDeleteFiles": "{n, plural, other {{n}個のファイルを削除しますか？}}",
+    "@confirmDeleteFiles": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nFiles": "{n, plural, other {{n}個のファイル}}",
+    "@nFiles": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "changeFileName": "ファイル名を変更",
+    "changeCaption": "キャプションを変更",
+    "none": "なし",
+    "fileCreatedAt": "作成日時",
+    "fileType": "ファイルタイプ",
+    "fileSize": "ファイルサイズ",
+    "noAttachedNotes": "添付されているノートがありません",
+    "fileDetails": "ファイルの詳細",
+    "info": "情報",
+    "attachedNotes": "添付されているノート",
 
     "misskeyGames": "Misskey Games",
     "cookieCliker": "Cookie Cliker",

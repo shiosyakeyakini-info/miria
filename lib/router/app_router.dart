@@ -11,6 +11,8 @@ import 'package:miria/view/antenna_page/antenna_page.dart';
 import 'package:miria/view/channels_page/channels_page.dart';
 import 'package:miria/view/clip_list_page/clip_detail_page.dart';
 import 'package:miria/view/clip_list_page/clip_list_page.dart';
+import 'package:miria/view/drive_page/drive_file_page/drive_file_page.dart';
+import 'package:miria/view/drive_page/drive_page.dart';
 import 'package:miria/view/explore_page/explore_page.dart';
 import 'package:miria/view/explore_page/explore_role_users_page.dart';
 import 'package:miria/view/favorited_note_page/favorited_note_page.dart';
@@ -102,5 +104,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: MisskeyGamesRoute.page),
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
+    AutoRoute(page: DriveRoute.page),
+    AutoRoute(page: DriveFileRoute.page),
   ];
 }

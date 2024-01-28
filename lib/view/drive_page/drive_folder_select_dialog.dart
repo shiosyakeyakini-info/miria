@@ -6,8 +6,8 @@ import 'package:miria/providers.dart';
 import 'package:miria/state_notifier/drive_page/drive_page_notifier.dart';
 import 'package:miria/view/drive_page/drive_page.dart';
 
-class DriveFileSelectDialog extends StatelessWidget {
-  const DriveFileSelectDialog({
+class DriveFolderSelectDialog extends StatelessWidget {
+  const DriveFolderSelectDialog({
     super.key,
     required this.account,
   });
@@ -23,25 +23,26 @@ class DriveFileSelectDialog extends StatelessWidget {
       child: Dialog(
         child: DrivePage(
           account: account,
-          title: Text(S.of(context).chooseFile),
-          tapToSelect: true,
+          title: Text(S.of(context).selectFolder),
           floatingActionButtonBuilder: (context) =>
-              const DriveFileSelectDialogFloatingActionButton(),
+              const DriveFolderSelectDialogFloatingActionButton(),
         ),
       ),
     );
   }
 }
 
-class DriveFileSelectDialogFloatingActionButton extends ConsumerWidget {
-  const DriveFileSelectDialogFloatingActionButton({super.key});
+class DriveFolderSelectDialogFloatingActionButton extends ConsumerWidget {
+  const DriveFolderSelectDialogFloatingActionButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final files = ref.watch(drivePageNotifierProvider).selectedFiles;
     return FloatingActionButton.extended(
-      onPressed:
-          files.isNotEmpty ? () => Navigator.of(context).pop(files) : null,
+      onPressed: () {
+        final folder =
+            ref.read(drivePageNotifierProvider).breadcrumbs.lastOrNull;
+        Navigator.of(context).pop((folder,));
+      },
       label: Text(S.of(context).select),
       icon: const Icon(Icons.check),
     );
