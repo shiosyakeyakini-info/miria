@@ -366,16 +366,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
-    TimeLineRoute.name: (routeData) {
-      final args = routeData.argsAs<TimeLineRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TimeLinePage(
-          key: args.key,
-          initialTabSetting: args.initialTabSetting,
-        ),
-      );
-    },
     UsersListDetailRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -439,6 +429,22 @@ abstract class _$AppRouter extends RootStackRouter {
           userId: args.userId,
           account: args.account,
         ),
+      );
+    },
+    TimeLineRoute.name: (routeData) {
+      final args = routeData.argsAs<TimeLineRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: TimeLinePage(
+          key: args.key,
+          initialTabSetting: args.initialTabSetting,
+        ),
+      );
+    },
+    InstalledThemesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const InstalledThemesPage(),
       );
     },
   };
@@ -1728,44 +1734,6 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TimeLinePage]
-class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
-  TimeLineRoute({
-    Key? key,
-    required TabSetting initialTabSetting,
-    List<PageRouteInfo>? children,
-  }) : super(
-          TimeLineRoute.name,
-          args: TimeLineRouteArgs(
-            key: key,
-            initialTabSetting: initialTabSetting,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'TimeLineRoute';
-
-  static const PageInfo<TimeLineRouteArgs> page =
-      PageInfo<TimeLineRouteArgs>(name);
-}
-
-class TimeLineRouteArgs {
-  const TimeLineRouteArgs({
-    this.key,
-    required this.initialTabSetting,
-  });
-
-  final Key? key;
-
-  final TabSetting initialTabSetting;
-
-  @override
-  String toString() {
-    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
-  }
-}
-
-/// generated route for
 /// [UsersListDetailPage]
 class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
   UsersListDetailRoute({
@@ -2015,4 +1983,56 @@ class UserRouteArgs {
   String toString() {
     return 'UserRouteArgs{key: $key, userId: $userId, account: $account}';
   }
+}
+
+/// generated route for
+/// [TimeLinePage]
+class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
+  TimeLineRoute({
+    Key? key,
+    required TabSetting initialTabSetting,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TimeLineRoute.name,
+          args: TimeLineRouteArgs(
+            key: key,
+            initialTabSetting: initialTabSetting,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TimeLineRoute';
+
+  static const PageInfo<TimeLineRouteArgs> page =
+      PageInfo<TimeLineRouteArgs>(name);
+}
+
+class TimeLineRouteArgs {
+  const TimeLineRouteArgs({
+    this.key,
+    required this.initialTabSetting,
+  });
+
+  final Key? key;
+
+  final TabSetting initialTabSetting;
+
+  @override
+  String toString() {
+    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
+  }
+}
+
+/// generated route for
+/// [InstalledThemesPage]
+class InstalledThemesRoute extends PageRouteInfo<void> {
+  const InstalledThemesRoute({List<PageRouteInfo>? children})
+      : super(
+          InstalledThemesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'InstalledThemesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
