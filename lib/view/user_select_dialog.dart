@@ -122,16 +122,21 @@ class UsersSelectContentList extends ConsumerWidget {
     final query = ref.watch(usersSelectDialogQueryProvider);
     final origin = ref.watch(usersSelectDialogOriginProvider);
 
-    if (query.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return PushableListView(
       listKey: ObjectKey(Object.hashAll([
         query,
         origin,
       ])),
       initializeFuture: () async {
+        if (query.isEmpty) {
+          final response = await ref
+              .read(misskeyProvider(AccountScope.of(context)))
+              .users
+              .getFrequentlyRepliedUsers(UsersGetFrequentlyRepliedUsersRequest(
+                  userId: AccountScope.of(context).i.id));
+          return response.map((e) => e.user).toList();
+        }
+
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users
@@ -139,6 +144,9 @@ class UsersSelectContentList extends ConsumerWidget {
         return response.toList();
       },
       nextFuture: (lastItem, length) async {
+        if (query.isEmpty) {
+          return [];
+        }
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users

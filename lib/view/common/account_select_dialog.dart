@@ -27,7 +27,7 @@ class AccountSelectDialog extends ConsumerWidget {
                 (account) => AccountScope(
                   account: account,
                   child: ListTile(
-                    leading: AvatarIcon.fromIResponse(account.i),
+                    leading: AvatarIcon(user: account.i),
                     title: SimpleMfmText(
                       account.i.name ?? account.i.username,
                       style: Theme.of(context).textTheme.titleMedium,

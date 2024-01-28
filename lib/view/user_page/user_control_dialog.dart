@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/users_show_response_extension.dart';
+import 'package:miria/extensions/user_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/providers.dart';
@@ -26,14 +26,12 @@ enum UserControl {
 
 class UserControlDialog extends ConsumerStatefulWidget {
   final Account account;
-  final UsersShowResponse response;
-  final bool isMe;
+  final UserDetailed response;
 
   const UserControlDialog({
     super.key,
     required this.account,
     required this.response,
-    required this.isMe,
   });
 
   @override
@@ -47,7 +45,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
       context: context,
       builder: (context) => UsersListModalSheet(
         account: widget.account,
-        user: widget.response.toUser(),
+        user: widget.response,
       ),
     );
   }
@@ -57,7 +55,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
       context: context,
       builder: (context) => AntennaModalSheet(
         account: widget.account,
-        user: widget.response.toUser(),
+        user: widget.response,
       ),
     );
   }
@@ -136,6 +134,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final user = widget.response;
     return ListView(
       children: [
         ListTile(
@@ -214,7 +213,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           title: Text(S.of(context).openInAnotherAccount),
           onTap: () => ref
               .read(misskeyNoteNotifierProvider(widget.account).notifier)
-              .openUserInOtherAccount(context, widget.response.toUser())
+              .openUserInOtherAccount(context, user)
               .expectFailure(context),
         ),
         ListTile(
@@ -239,8 +238,8 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           title: Text(S.of(context).addToAntenna),
           onTap: addToAntenna,
         ),
-        if (!widget.isMe) ...[
-          if (widget.response.isRenoteMuted ?? false)
+        if (user is UserDetailedNotMeWithRelations) ...[
+          if (user.isRenoteMuted)
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).deleteRenoteMute),
@@ -252,7 +251,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               title: Text(S.of(context).createRenoteMute),
               onTap: renoteMuteCreate.expectFailure(context),
             ),
-          if (widget.response.isMuted ?? false)
+          if (user.isMuted)
             ListTile(
               leading: const Icon(Icons.visibility),
               title: Text(S.of(context).deleteMute),
@@ -264,7 +263,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               title: Text(S.of(context).createMute),
               onTap: muteCreate.expectFailure(context),
             ),
-          if (widget.response.isBlocking ?? false)
+          if (user.isBlocking)
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).deleteBlock),
@@ -324,7 +323,7 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
             for (final value in Expire.values)
               DropdownMenuItem<Expire>(
                 value: value,
-                child: Text(value.name),
+                child: Text(value.displayName(context)),
               )
           ],
           onChanged: (value) => setState(() => selectedExpire = value),

@@ -129,6 +129,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                 itemCount: pinnedUser.length,
                 itemBuilder: (context, index) => UserListItem(
                   user: pinnedUser[index],
+                  isDetail: true,
                 ),
               ),
             )
@@ -163,7 +164,10 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                       ));
                   return response.toList();
                 },
-                itemBuilder: (context, user) => UserListItem(user: user),
+                itemBuilder: (context, user) => UserListItem(
+                  user: user,
+                  isDetail: true,
+                ),
               ),
             )
         ],

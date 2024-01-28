@@ -138,11 +138,12 @@ void main() {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
-          when(mockUser.show(any)).thenAnswer((_) async =>
-              TestData.usersShowResponse2.copyWith(
-                  isFollowing: false,
-                  isLocked: false,
-                  autoAcceptFollowed: true));
+          when(mockUser.show(any)).thenAnswer(
+            (_) async => TestData.usersShowResponse2.copyWith(
+              isFollowing: false,
+              isLocked: false,
+            ),
+          );
 
           await tester.pumpWidget(ProviderScope(
             overrides: [
@@ -163,13 +164,14 @@ void main() {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
-          when(mockUser.show(any)).thenAnswer((_) async =>
-              TestData.usersShowResponse2.copyWith(
-                  isFollowing: false,
-                  hasPendingFollowRequestFromYou: false,
-                  isLocked: true,
-                  isFollowed: false,
-                  autoAcceptFollowed: false));
+          when(mockUser.show(any)).thenAnswer(
+            (_) async => TestData.usersShowResponse2.copyWith(
+              isFollowing: false,
+              hasPendingFollowRequestFromYou: false,
+              isLocked: true,
+              isFollowed: false,
+            ),
+          );
 
           await tester.pumpWidget(ProviderScope(
             overrides: [
@@ -519,7 +521,6 @@ void main() {
                 followeeId: TestData.usersShowResponse2.id,
                 followerId: TestData.account.i.id,
                 followee: TestData.detailedUser2,
-                follower: TestData.user1,
               )
             ]);
 
@@ -557,7 +558,6 @@ void main() {
                 createdAt: DateTime.now(),
                 followeeId: TestData.account.i.id,
                 followerId: TestData.usersShowResponse2.id,
-                followee: TestData.user1,
                 follower: TestData.detailedUser2,
               )
             ]);

@@ -7,13 +7,10 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VideoDialog extends StatefulWidget {
-  const VideoDialog({
-    super.key, 
-    required this.url,
-    required this.fileType
-  });
+  const VideoDialog({super.key, required this.url, required this.fileType});
 
   final String url;
   final String fileType;
@@ -105,15 +102,16 @@ class _VideoDialogState extends State<VideoDialog> {
         automaticallyImplySkipPreviousButton: false);
 
     return AlertDialog(
-        backgroundColor: Colors.transparent,
-        titlePadding: EdgeInsets.zero,
-        contentPadding: EdgeInsets.zero,
-        actionsPadding: EdgeInsets.zero,
-        insetPadding: EdgeInsets.zero,
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(children: [
+      backgroundColor: Colors.transparent,
+      titlePadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
+      actionsPadding: EdgeInsets.zero,
+      insetPadding: EdgeInsets.zero,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
             Positioned.fill(
               child: Listener(
                 behavior: HitTestBehavior.translucent,
@@ -128,8 +126,11 @@ class _VideoDialogState extends State<VideoDialog> {
                       isEnabledButton = true;
                       isVisibleControlBar = true;
                     } else if (elap > 500 &&
-                        (event.localPosition.dy + 100 < MediaQuery.of(context).size.height &&
-                        max(event.localPosition.dx, event.localPosition.dy) >= 45)) {
+                        (event.localPosition.dy + 100 <
+                                MediaQuery.of(context).size.height &&
+                            max(event.localPosition.dx,
+                                    event.localPosition.dy) >=
+                                45)) {
                       isVisibleControlBar = false;
                     }
                   });
@@ -150,108 +151,140 @@ class _VideoDialogState extends State<VideoDialog> {
                   direction: DismissDirection.vertical,
                   resizeDuration: null,
                   onDismissed: (_) => {Navigator.of(context).pop()},
-                  child: Stack(children: [
-                    Align(
-                      child: AspectRatio(
-                        aspectRatio: aspectRatio,
-                        child: MaterialVideoControlsTheme(
-                          normal: themeData,
-                          fullscreen: themeDataFull,
-                          child: MaterialDesktopVideoControlsTheme(
-                            normal: themeDataDesktop,
-                            fullscreen: themeDataDesktopFull,
-                            child: Video(
-                              key: videoKey,
-                              controller: controller,
-                              controls: AdaptiveVideoControls,
-                              fill: Colors.transparent,
-                              onEnterFullscreen: () async {
-                                await defaultEnterNativeFullscreen();
-                                videoKey.currentState?.update(
-                                  fill: Colors.black
-                                  );
-                              },
-                              onExitFullscreen: () async {
-                                await defaultExitNativeFullscreen();
-                                videoKey.currentState?.update(
-                                  fill: Colors.transparent
-                                  );
-                              },
-                          )),
-                      ))),
-                    AnimatedOpacity(
-                      curve: Curves.easeInOut,
-                      opacity: isVisibleControlBar ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 500),
-                      onEnd: () {
-                        if (mounted && !isVisibleControlBar) {
-                          setState(() {
-                            isEnabledButton = false;
-                          });
-                        }
-                      },
-                      child: Visibility(
-                        maintainState: true,
-                        maintainAnimation: true,
-                        visible: isEnabledButton,
-                        child: Stack(children: [
-                          Positioned(
-                            bottom: 0,
-                            child: _VideoControls(
-                              controller: controller,
-                              isAudioFile: isAudioFile,
-                              onMenuPressed: () => {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (innerContext) {
-                                    return ListView(children: [
-                                      ListTile(
-                                        leading: const Icon(Icons.open_in_browser),
-                                        title: const Text("ブラウザで開く"),
-                                        onTap: () async {
-                                          Navigator.of(innerContext).pop();
-                                          Navigator.of(context).pop();
-                                          launchUrlString(
-                                            widget.url,
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        }),
-                                        if (!isAudioFile) ListTile(
-                                          leading: const Icon(Icons.fullscreen),
-                                          title: const Text("フルスクリーンに切り替え"),
-                                          onTap: () async {
-                                            Navigator.of(innerContext).pop();
-                                            videoKey.currentState?.enterFullscreen();
-                                        })
-                                      ]);
-                                  })
-                          })),
-                          Positioned(
-                              left: 10,
-                              top: 10,
-                              child: RawMaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                constraints: 
-                                    const BoxConstraints(minWidth: 0, minHeight: 0),
-                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                padding: EdgeInsets.zero,
-                                fillColor: Theme.of(context)
-                                    .scaffoldBackgroundColor
-                                    .withAlpha(200),
-                                shape: const CircleBorder(),
-                                child: Padding(
+                  child: Stack(
+                    children: [
+                      Align(
+                          child: AspectRatio(
+                              aspectRatio: aspectRatio,
+                              child: MaterialVideoControlsTheme(
+                                normal: themeData,
+                                fullscreen: themeDataFull,
+                                child: MaterialDesktopVideoControlsTheme(
+                                    normal: themeDataDesktop,
+                                    fullscreen: themeDataDesktopFull,
+                                    child: Video(
+                                      key: videoKey,
+                                      controller: controller,
+                                      controls: AdaptiveVideoControls,
+                                      fill: Colors.transparent,
+                                      onEnterFullscreen: () async {
+                                        await defaultEnterNativeFullscreen();
+                                        videoKey.currentState
+                                            ?.update(fill: Colors.black);
+                                      },
+                                      onExitFullscreen: () async {
+                                        await defaultExitNativeFullscreen();
+                                        videoKey.currentState
+                                            ?.update(fill: Colors.transparent);
+                                      },
+                                    )),
+                              ))),
+                      AnimatedOpacity(
+                        curve: Curves.easeInOut,
+                        opacity: isVisibleControlBar ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 500),
+                        onEnd: () {
+                          if (mounted && !isVisibleControlBar) {
+                            setState(() {
+                              isEnabledButton = false;
+                            });
+                          }
+                        },
+                        child: Visibility(
+                          maintainState: true,
+                          maintainAnimation: true,
+                          visible: isEnabledButton,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                bottom: 0,
+                                child: _VideoControls(
+                                  controller: controller,
+                                  isAudioFile: isAudioFile,
+                                  onMenuPressed: () => {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (innerContext) {
+                                        return ListView(
+                                          children: [
+                                            ListTile(
+                                                leading: const Icon(
+                                                    Icons.open_in_browser),
+                                                title: Text(
+                                                    S.of(context).openBrowsers),
+                                                onTap: () async {
+                                                  Navigator.of(innerContext)
+                                                      .pop();
+                                                  Navigator.of(context).pop();
+                                                  launchUrlString(
+                                                    widget.url,
+                                                    mode: LaunchMode
+                                                        .externalApplication,
+                                                  );
+                                                }),
+                                            if (!isAudioFile)
+                                              ListTile(
+                                                leading: const Icon(
+                                                    Icons.fullscreen),
+                                                title: Text(S
+                                                    .of(context)
+                                                    .changeFullScreen),
+                                                onTap: () async {
+                                                  Navigator.of(innerContext)
+                                                      .pop();
+                                                  videoKey.currentState
+                                                      ?.enterFullscreen();
+                                                },
+                                              )
+                                          ],
+                                        );
+                                      },
+                                    )
+                                  },
+                                ),
+                              ),
+                              Positioned(
+                                left: 10,
+                                top: 10,
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  constraints: const BoxConstraints(
+                                      minWidth: 0, minHeight: 0),
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  padding: EdgeInsets.zero,
+                                  fillColor: Theme.of(context)
+                                      .scaffoldBackgroundColor
+                                      .withAlpha(200),
+                                  shape: const CircleBorder(),
+                                  child: Padding(
                                     padding: const EdgeInsets.all(5),
-                                    child: Icon(Icons.close,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.color
-                                            ?.withAlpha(200))))),
-                      ])))
-              ]))))
-      ])));
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withAlpha(200),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -261,11 +294,10 @@ class _VideoControls extends StatefulWidget {
   final VoidCallback? onMenuPressed;
   final bool isAudioFile;
 
-  const _VideoControls({
-    required this.controller,
-    required this.isAudioFile,
-    this.onMenuPressed
-    });
+  const _VideoControls(
+      {required this.controller,
+      required this.isAudioFile,
+      this.onMenuPressed});
 
   @override
   State<_VideoControls> createState() => _VideoControlState();
@@ -322,11 +354,11 @@ class _VideoControlState extends State<_VideoControls> {
       width: MediaQuery.of(context).size.width,
       height: 100,
       decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border(
-                top: BorderSide(
-              color: Theme.of(context).primaryColor,
-            ))),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border(
+              top: BorderSide(
+            color: Theme.of(context).primaryColor,
+          ))),
       child: Column(children: [
         Padding(
             padding: const EdgeInsets.only(left: 0, right: 0, bottom: 10),
@@ -352,15 +384,11 @@ class _VideoControlState extends State<_VideoControls> {
                                   )),
                         ),
                       ),
-                      Text(
-                        position.label(reference: duration),
-                        textAlign: TextAlign.center
-                        ),
+                      Text(position.label(reference: duration),
+                          textAlign: TextAlign.center),
                       const Text(" / "),
-                      Text(
-                        duration.label(reference: duration),
-                        textAlign: TextAlign.center
-                        ),
+                      Text(duration.label(reference: duration),
+                          textAlign: TextAlign.center),
                     ]),
                   ),
                   const Padding(

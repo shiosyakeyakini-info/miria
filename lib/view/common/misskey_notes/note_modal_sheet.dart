@@ -87,8 +87,6 @@ class NoteModalSheet extends ConsumerWidget {
               builder: (context) => UserControlDialog(
                 account: account,
                 response: response,
-                isMe: targetNote.user.host == null &&
-                    targetNote.user.username == account.userId,
               ),
             );
           },
