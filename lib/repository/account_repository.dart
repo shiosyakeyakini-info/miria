@@ -91,7 +91,7 @@ class AccountRepository extends Notifier<List<Account>> {
     _validatedAccts.add(account.acct);
 
     final i = await ref.read(misskeyProvider(account)).i.i();
-    ref
+    await ref
         .read(accountSettingsRepositoryProvider)
         .save(setting.copyWith(latestICached: DateTime.now()));
 
@@ -110,7 +110,7 @@ class AccountRepository extends Notifier<List<Account>> {
     _validateMetaAccts.add(account.acct);
 
     final meta = await ref.read(misskeyProvider(account)).meta();
-    ref
+    await ref
         .read(accountSettingsRepositoryProvider)
         .save(setting.copyWith(latestMetaCached: DateTime.now()));
 
@@ -127,33 +127,40 @@ class AccountRepository extends Notifier<List<Account>> {
 
     final account = state.firstWhere((element) => element.acct == acct);
 
-    switch (setting.iCacheStrategy) {
-      case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) updateI(account);
-        break;
-      case CacheStrategy.whenOneDay:
-        final latestUpdated = setting.latestICached;
-        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          updateI(account);
+    await Future.wait([
+      Future(() async {
+        switch (setting.iCacheStrategy) {
+          case CacheStrategy.whenLaunch:
+            if (!_validatedAccts.contains(acct)) await updateI(account);
+            break;
+          case CacheStrategy.whenOneDay:
+            final latestUpdated = setting.latestICached;
+            if (latestUpdated == null ||
+                latestUpdated.day != DateTime.now().day) {
+              await updateI(account);
+            }
+          case CacheStrategy.whenTabChange:
+            await updateI(account);
+            break;
         }
-      case CacheStrategy.whenTabChange:
-        updateI(account);
-        break;
-    }
-
-    switch (setting.metaChacheStrategy) {
-      case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) await updateMeta(account);
-        break;
-      case CacheStrategy.whenOneDay:
-        final latestUpdated = setting.latestMetaCached;
-        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          await updateMeta(account);
+      }),
+      Future(() async {
+        switch (setting.metaChacheStrategy) {
+          case CacheStrategy.whenLaunch:
+            if (!_validateMetaAccts.contains(acct)) await updateMeta(account);
+            break;
+          case CacheStrategy.whenOneDay:
+            final latestUpdated = setting.latestMetaCached;
+            if (latestUpdated == null ||
+                latestUpdated.day != DateTime.now().day) {
+              await updateMeta(account);
+            }
+          case CacheStrategy.whenTabChange:
+            await updateMeta(account);
+            break;
         }
-      case CacheStrategy.whenTabChange:
-        await updateMeta(account);
-        break;
-    }
+      })
+    ]);
 
     await _save();
   }
