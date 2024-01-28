@@ -20,6 +20,7 @@ extension FutureExtension<T> on Future<T> {
 
 extension FutureFunctionExtension<T> on Future<T> Function() {
   Future<T> Function() expectFailure(BuildContext context) {
+    // ignore: body_might_complete_normally_catch_error
     return () => this.call().catchError((e) {
           final widgetRef = ProviderScope.containerOf(context, listen: false);
 

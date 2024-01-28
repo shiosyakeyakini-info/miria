@@ -67,6 +67,8 @@ dependencies:
   media_kit_libs_video: ^1.0.3
   flutter_colorpicker: ^1.0.3
   volume_controller: ^2.0.7
+  flutter_cache_manager: ^3.3.1
+  stack_trace: ^1.11.1
 
 dependency_overrides:
   image_editor:
@@ -95,6 +97,8 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   mockito: ^5.4.2
   cider: ^0.2.3
+  plugin_platform_interface: ^2.1.7
+  url_launcher_platform_interface: ^2.2.0
 
 flutter:
   uses-material-design: true

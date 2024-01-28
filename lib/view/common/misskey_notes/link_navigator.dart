@@ -47,6 +47,7 @@ class LinkNavigator {
       }
     }
 
+    if (!context.mounted) return;
     if (uri.pathSegments.length == 2 && uri.pathSegments.first == "clips") {
       // クリップはクリップの画面で開く
       context.pushRoute(
@@ -61,12 +62,14 @@ class LinkNavigator {
           .read(misskeyProvider(account))
           .notes
           .show(NotesShowRequest(noteId: uri.pathSegments[1]));
+      if (!context.mounted) return;
       context.pushRoute(NoteDetailRoute(account: account, note: note));
     } else if (uri.pathSegments.length == 3 && uri.pathSegments[1] == "pages") {
       final page = await ref.read(misskeyProvider(account)).pages.show(
           PagesShowRequest(
               name: uri.pathSegments[2],
               username: uri.pathSegments[0].substring(1)));
+      if (!context.mounted) return;
       context.pushRoute(MisskeyRouteRoute(account: account, page: page));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
@@ -105,6 +108,7 @@ class LinkNavigator {
         UsersShowByUserNameRequest(
             userName: regResult?.group(1) ?? "", host: finalHost));
 
+    if (!context.mounted) return;
     context.pushRoute(UserRoute(userId: response.id, account: account));
   }
 }

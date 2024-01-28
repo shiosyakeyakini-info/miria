@@ -317,18 +317,16 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(S.of(context).selectDuration),
-      content: Container(
-        child: DropdownButton<Expire>(
-          items: [
-            for (final value in Expire.values)
-              DropdownMenuItem<Expire>(
-                value: value,
-                child: Text(value.name),
-              )
-          ],
-          onChanged: (value) => setState(() => selectedExpire = value),
-          value: selectedExpire,
-        ),
+      content: DropdownButton<Expire>(
+        items: [
+          for (final value in Expire.values)
+            DropdownMenuItem<Expire>(
+              value: value,
+              child: Text(value.name),
+            )
+        ],
+        onChanged: (value) => setState(() => selectedExpire = value),
+        value: selectedExpire,
       ),
       actions: [
         ElevatedButton(

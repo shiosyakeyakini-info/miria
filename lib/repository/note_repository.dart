@@ -45,7 +45,7 @@ class NoteRepository extends ChangeNotifier {
         try {
           softMuteWordRegExps
               .add(RegExp(regExp.substring(1, regExp.length - 1)));
-        } catch (e) {}
+        } catch (_) {}
       }
     }
 
@@ -59,7 +59,7 @@ class NoteRepository extends ChangeNotifier {
         try {
           hardMuteWordRegExps
               .add(RegExp(regExp.substring(1, regExp.length - 1)));
-        } catch (e) {}
+        } catch (_) {}
       }
     }
   }

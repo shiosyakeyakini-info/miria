@@ -153,7 +153,9 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     userId: widget.remoteUserId ?? widget.userId,
                     withFiles: isFileOnly,
                     // 後方互換性のため
+                    // ignore: deprecated_member_use
                     includeReplies: withReply,
+                    // ignore: deprecated_member_use
                     includeMyRenotes: renote,
                     withReplies: withReply,
                     withRenotes: renote,
@@ -183,7 +185,9 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     userId: widget.remoteUserId ?? widget.userId,
                     untilId: lastElement.id,
                     withFiles: isFileOnly,
+                    // ignore: deprecated_member_use
                     includeReplies: withReply,
+                    // ignore: deprecated_member_use
                     includeMyRenotes: renote,
                     withReplies: withReply,
                     withRenotes: renote,

@@ -1,11 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group("MiAuth", () {
-    
-  });
+  group("MiAuth", () {});
 
-  group("APIキー", () {
-
-  });
+  group("APIキー", () {});
 }

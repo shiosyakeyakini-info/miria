@@ -268,6 +268,7 @@ ColorOption _sepia(double value) {
   ]);
 }
 
+// ignore: unused_element
 ColorOption _invert() {
   return ColorOption(matrix: [
     -1,
@@ -293,6 +294,7 @@ ColorOption _invert() {
   ]);
 }
 
+// ignore: unused_element
 ColorOption _hue(double value) {
   value = value * pi;
 

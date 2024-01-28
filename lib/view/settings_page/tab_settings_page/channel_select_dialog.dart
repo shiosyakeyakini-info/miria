@@ -34,8 +34,8 @@ class ChannelSelectDialog extends StatelessWidget {
                   child: Align(
                     child: TabBar(
                       tabs: [
-                        Tab(text: "検索"),
-                        Tab(text: "トレンド"),
+                        Tab(text: S.of(context).search),
+                        Tab(text: S.of(context).trend),
                         Tab(text: S.of(context).favorite),
                         Tab(text: S.of(context).following),
                       ],

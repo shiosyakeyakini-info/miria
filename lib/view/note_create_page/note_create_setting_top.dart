@@ -31,7 +31,10 @@ class NoteCreateSettingTop extends ConsumerWidget {
       case null:
         return SvgPicture.asset(
           "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
-          color: Theme.of(context).textTheme.bodyMedium!.color,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).textTheme.bodyMedium!.color!,
+            BlendMode.srcIn,
+          ),
           width: 28,
           height: 28,
         );

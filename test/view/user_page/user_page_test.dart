@@ -318,6 +318,7 @@ void main() {
         verify(mockUser.notes(argThat(predicate<UsersNotesRequest>((request) =>
             request.withReplies == false &&
             request.withFiles == false &&
+            // ignore: deprecated_member_use
             request.includeMyRenotes == true)))).called(1);
 
         await tester.pageNation();
@@ -325,6 +326,7 @@ void main() {
         verify(mockUser.notes(argThat(predicate<UsersNotesRequest>((request) =>
             request.withReplies == false &&
             request.withFiles == false &&
+            // ignore: deprecated_member_use
             request.includeMyRenotes == true &&
             request.untilId == TestData.note1.id)))).called(1);
       });
@@ -404,6 +406,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(mockUser.notes(argThat(predicate<UsersNotesRequest>(
+            // ignore: deprecated_member_use
             (request) => request.includeMyRenotes == false)))).called(1);
       });
       testWidgets("「ハイライト」をタップすると、ハイライトのノートのみが表示されること", (tester) async {
