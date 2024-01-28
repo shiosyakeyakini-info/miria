@@ -16,7 +16,7 @@ dependencies:
   flutter_html: 3.0.0-alpha.6
   flutter_riverpod: ^2.3.2
   misskey_dart:
-    path: ../misskey_dart/
+    git: https://github.com/shiosyakeyakini-info/misskey_dart.git
   mfm: ^1.0.5
   tuple: ^2.0.1
   path_provider: ^2.0.14
