@@ -42,7 +42,10 @@ class UserFolloweePage extends ConsumerWidget {
                     userId: userId, untilId: lastItem.id));
             return response.toList();
           },
-          itemBuilder: (context, item) => UserListItem(user: item.followee!),
+          itemBuilder: (context, item) => UserListItem(
+            user: item.followee!,
+            isDetail: true,
+          ),
         ),
       ),
     );

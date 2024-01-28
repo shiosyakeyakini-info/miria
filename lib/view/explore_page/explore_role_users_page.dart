@@ -57,7 +57,10 @@ class ExploreRoleUsersPage extends ConsumerWidget {
                           );
                   return response.toList();
                 },
-                itemBuilder: (context, item) => UserListItem(user: item.user),
+                itemBuilder: (context, item) => UserListItem(
+                  user: item.user,
+                  isDetail: true,
+                ),
               ),
               PushableListView(
                 initializeFuture: () async {
