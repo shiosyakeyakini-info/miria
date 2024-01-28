@@ -544,36 +544,32 @@ class UserDetailState extends ConsumerState<UserDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return BirthdayConfetti(
-      response: widget.response,
-      child: Column(
-        children: [
-          if (response.bannerUrl != null)
-            Image.network(response.bannerUrl.toString()),
-          Align(
-            alignment: Alignment.center,
-            child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: buildContent()),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
-          Padding(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+            child: BirthdayConfetti(
+              response: widget.response,
+              child:Column(children: [
+                if (response.bannerUrl != null)
+                  Image.network(response.bannerUrl.toString()),
+                Align(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 800),
+                        child: buildContent())),
+                const Padding(padding: EdgeInsets.only(top: 20))
+                ]))),
+        if (response.pinnedNotes != null)
+          SliverPadding(
             padding: const EdgeInsets.only(right: 10),
-            child: ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (final note in response.pinnedNotes ?? [])
-                  MisskeyNote(
-                    note: note,
-                    loginAs: widget.controlAccount,
-                  ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+            sliver: SliverList.builder(
+              itemCount: response.pinnedNotes!.length,
+              itemBuilder: (context, index) => 
+                MisskeyNote(
+                  note: response.pinnedNotes![index],
+                  loginAs: widget.controlAccount)
+            ))
+      ]);
   }
 }
 

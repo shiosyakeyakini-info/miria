@@ -97,14 +97,12 @@ class UserPageState extends ConsumerState<UserPage> {
                       AccountScope(
                         account: Account.demoAccount(
                             userInfo!.response!.host!, userInfo.metaResponse!),
-                        child: SingleChildScrollView(
-                          child: UserDetail(
-                            response: userInfo.remoteResponse!,
-                            account: Account.demoAccount(
-                                userInfo.response!.host!,
-                                userInfo.metaResponse!),
-                            controlAccount: widget.account,
-                          ),
+                        child: UserDetail(
+                          response: userInfo.remoteResponse!,
+                          account: Account.demoAccount(
+                              userInfo.response!.host!,
+                              userInfo.metaResponse!),
+                          controlAccount: widget.account,
                         ),
                       ),
                     Padding(
@@ -259,12 +257,10 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
   @override
   Widget build(BuildContext context) {
     if (response != null) {
-      return SingleChildScrollView(
-        child: UserDetail(
-          response: response!,
-          account: AccountScope.of(context),
-          controlAccount: null,
-        ),
+      return UserDetail(
+        response: response!,
+        account: AccountScope.of(context),
+        controlAccount: null,
       );
     }
     if (error != null) {
