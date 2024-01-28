@@ -5007,17 +5007,22 @@ class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
       ) as _i17.Future<Iterable<_i5.User>>);
 
   @override
-  _i17.Future<Iterable<_i5.User>> getFrequentlyRepliedUsers(
-          _i5.UsersGetFrequentlyRepliedUsersRequest? request) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getFrequentlyRepliedUsers,
-          [request],
-        ),
-        returnValue: _i17.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
-        returnValueForMissingStub:
-            _i17.Future<Iterable<_i5.User>>.value(<_i5.User>[]),
-      ) as _i17.Future<Iterable<_i5.User>>);
+  _i17.Future<Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>>
+      getFrequentlyRepliedUsers(
+              _i5.UsersGetFrequentlyRepliedUsersRequest? request) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #getFrequentlyRepliedUsers,
+              [request],
+            ),
+            returnValue: _i17.Future<
+                    Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>>.value(
+                <_i5.UsersGetFrequentlyRepliedUsersResponse>[]),
+            returnValueForMissingStub: _i17.Future<
+                    Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>>.value(
+                <_i5.UsersGetFrequentlyRepliedUsersResponse>[]),
+          ) as _i17
+              .Future<Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>>);
 
   @override
   _i17.Future<Iterable<_i5.User>> recommendation(
