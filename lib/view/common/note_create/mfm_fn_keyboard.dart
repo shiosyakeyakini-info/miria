@@ -177,6 +177,8 @@ class MfmFnKeyboard extends ConsumerWidget {
       if (result != null) {
         controller.insert(
             ".color=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ");
+      } else {
+        controller.insert(" ");
       }
     } else {
       controller.insert(" ");
@@ -215,10 +217,10 @@ class MfmFnKeyboard extends ConsumerWidget {
       );
       if (result != null) {
         controller.insert(
-          "=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")}",
+          "=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ",
         );
       } else {
-        controller.insert("=f00");
+        controller.insert("=f00 ");
       }
     } else if (arg.defaultValue != null) {
       controller.insert("=${arg.defaultValue}");
