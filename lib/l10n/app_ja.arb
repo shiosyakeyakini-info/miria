@@ -726,6 +726,7 @@
     "pleaseAddVoteChoice": "投票の選択肢を2つ以上入れてや",
     "pleaseSpecifyExpirationDate": "投票がいつまでか入れてや",
     "pleaseSpecifyExpirationDuration": "投票期間を入れてや",
+    "tooManyFiles": "ファイルは16個以下にしてください",
     "cannotMentionToRemoteInLocalOnlyNote": "連合オフやのによそのサーバーの人がメンションに含まれてるで",
     "cannotPublicReplyToPrivateNote": "リプライが{visibility}やから、パブリックにでけへん",
     "@cannotPublicReplyToPrivateNote": {

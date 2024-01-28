@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file/file.dart';
 import 'package:file_picker/file_picker.dart';
@@ -66,6 +67,8 @@ class TooFewVoteChoiceException implements NoteCreateException {}
 class EmptyVoteExpireDateException implements NoteCreateException {}
 
 class EmptyVoteExpireDurationException implements NoteCreateException {}
+
+class TooManyFilesException implements NoteCreateException {}
 
 class MentionToRemoteInLocalOnlyNoteException implements NoteCreateException {}
 
@@ -281,69 +284,12 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       throw EmptyVoteExpireDurationException();
     }
 
+    if (state.files.length > 16) {
+      throw TooManyFilesException();
+    }
+
     try {
       state = state.copyWith(isNoteSending: NoteSendStatus.sending);
-
-      final fileIds = <String>[];
-
-      for (final file in state.files) {
-        switch (file) {
-          case PostFile():
-            Uint8List contents = await file.file.readAsBytes();
-            if (["image/jpeg", "image/tiff"].contains(file.type)) {
-              try {
-                contents =
-                    await FlutterImageCompress.compressWithList(contents);
-              } catch (e) {
-                debugPrint("failed to compress file");
-              }
-            }
-            final response = await misskey.drive.files.createAsBinary(
-              DriveFilesCreateRequest(
-                force: true,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ),
-              contents,
-            );
-            if (response.isSensitive == true &&
-                !file.isNsfw &&
-                !state.account.i.alwaysMarkNsfw) {
-              if (context.mounted) {
-                final confirmResult = await SimpleConfirmDialog.show(
-                  context: context,
-                  message: S.of(context).unexpectedSensitive,
-                  primary: S.of(context).staySensitive,
-                  secondary: S.of(context).unsetSensitive,
-                );
-                if (confirmResult == false) {
-                  await misskey.drive.files.update(
-                    DriveFilesUpdateRequest(
-                      fileId: response.id,
-                      isSensitive: false,
-                    ),
-                  );
-                }
-              }
-            }
-            fileIds.add(response.id);
-          case AlreadyPostedFile():
-            if (file.isEdited) {
-              await misskey.drive.files.update(
-                DriveFilesUpdateRequest(
-                  fileId: file.file.id,
-                  name: file.fileName,
-                  isSensitive: file.isNsfw,
-                  comment: file.caption,
-                ),
-              );
-            }
-            fileIds.add(file.file.id);
-        }
-      }
-
-      if (!mounted) return;
 
       final nodes = const MfmParser().parse(state.text);
       final userList = <MfmMention>[];
@@ -365,6 +311,73 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               element.host != null &&
               element.host != misskey.apiService.host)) {
         throw MentionToRemoteInLocalOnlyNoteException();
+      }
+
+      final files = await Future.wait(
+        state.files.map(
+          (file) async {
+            switch (file) {
+              case PostFile():
+                Uint8List contents = await file.file.readAsBytes();
+                if (["image/jpeg", "image/tiff"].contains(file.type)) {
+                  try {
+                    contents =
+                        await FlutterImageCompress.compressWithList(contents);
+                  } catch (e) {
+                    debugPrint("failed to compress file");
+                  }
+                }
+                final response = await misskey.drive.files.createAsBinary(
+                  DriveFilesCreateRequest(
+                    force: true,
+                    name: file.fileName,
+                    isSensitive: file.isNsfw,
+                    comment: file.caption,
+                  ),
+                  contents,
+                );
+                return response;
+              case AlreadyPostedFile():
+                if (file.isEdited) {
+                  return await misskey.drive.files.update(
+                    DriveFilesUpdateRequest(
+                      fileId: file.file.id,
+                      name: file.fileName,
+                      isSensitive: file.isNsfw,
+                      comment: file.caption,
+                    ),
+                  );
+                } else {
+                  return file.file;
+                }
+            }
+          },
+        ),
+      );
+      final autoSensitiveFiles = files.whereIndexed(
+        (index, file) => file.isSensitive && !state.files[index].isNsfw,
+      );
+      if (autoSensitiveFiles.isNotEmpty && !state.account.i.alwaysMarkNsfw) {
+        if (context.mounted) {
+          final confirmResult = await SimpleConfirmDialog.show(
+            context: context,
+            message: S.of(context).unexpectedSensitive,
+            primary: S.of(context).staySensitive,
+            secondary: S.of(context).unsetSensitive,
+          );
+          if (confirmResult == false) {
+            await Future.wait(
+              autoSensitiveFiles.map(
+                (file) => misskey.drive.files.update(
+                  DriveFilesUpdateRequest(
+                    fileId: file.id,
+                    isSensitive: false,
+                  ),
+                ),
+              ),
+            );
+          }
+        }
       }
 
       final mentionTargetUsers = [
@@ -423,7 +436,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           replyId: state.reply?.id,
           renoteId: state.renote?.id,
           channelId: state.channel?.id,
-          fileIds: fileIds.isEmpty ? null : fileIds,
+          fileIds: files.isEmpty ? null : files.map((file) => file.id).toList(),
           visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
           reactionAcceptance: state.reactionAcceptance,
           poll: state.isVote ? poll : null,
