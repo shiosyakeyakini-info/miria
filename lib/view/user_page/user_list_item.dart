@@ -43,59 +43,47 @@ class UserListItem extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: UserInformation(user: user),
-                        ),
-                        if (user is UserDetailedNotMeWithRelations &&
-                            isDetail) ...[
-                          if ((user as UserDetailedNotMeWithRelations)
-                              .isFollowing)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 2, right: 2),
-                                  child: Text(
-                                    S.of(context).following,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if ((user as UserDetailedNotMeWithRelations)
-                              .isFollowed)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 2, right: 2),
-                                  child: Text(
-                                    S.of(context).followed,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if ((user as UserDetailedNotMeWithRelations).isMuted)
-                            Text(" ${S.of(context).muting} "),
-                          if ((user as UserDetailedNotMeWithRelations)
-                              .isBlocked)
-                            Text(" ${S.of(context).blocking} "),
-                        ]
-                      ],
-                    ),
+                    UserInformation(user: user),
                     Text(
                       "@${user.username}${user.host != null ? "@${user.host}" : ""}",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
+                    if (user is UserDetailedNotMeWithRelations && isDetail)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Wrap(
+                          alignment: WrapAlignment.end,
+                          runAlignment: WrapAlignment.end,
+                          runSpacing: 5.0,
+                          spacing: 5.0,
+                          children: [
+                            if ((user as UserDetailedNotMeWithRelations)
+                                .isFollowing)
+                              Text(
+                                S.of(context).following,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            if ((user as UserDetailedNotMeWithRelations)
+                                .isFollowed)
+                              Text(
+                                S.of(context).followed,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            if ((user as UserDetailedNotMeWithRelations)
+                                .isMuted)
+                              Text(
+                                " ${S.of(context).muting} ",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            if ((user as UserDetailedNotMeWithRelations)
+                                .isBlocked)
+                              Text(
+                                " ${S.of(context).blocking} ",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                          ],
+                        ),
+                      ),
                     if (user is UserDetailed && isDetail)
                       MfmText(
                         mfmText: (user as UserDetailed).description ?? "",

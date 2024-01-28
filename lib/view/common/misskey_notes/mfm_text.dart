@@ -39,8 +39,11 @@ InlineSpan _unicodeEmojiBuilder(BuildContext builderContext, String emoji,
         onTap: MfmBlurScope.of(builderContext) ? null : () => onTap,
         child: Twemoji(
           emoji: emoji,
-          width: style?.fontSize,
-          height: style?.fontSize,
+          width: style?.fontSize ??
+              DefaultTextStyle.of(builderContext).style.fontSize,
+          height: style?.fontSize ??
+              DefaultTextStyle.of(builderContext).style.fontSize ??
+              22,
         ),
       ),
     );
