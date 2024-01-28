@@ -323,7 +323,7 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
             for (final value in Expire.values)
               DropdownMenuItem<Expire>(
                 value: value,
-                child: Text(value.name),
+                child: Text(value.displayName(context)),
               )
           ],
           onChanged: (value) => setState(() => selectedExpire = value),

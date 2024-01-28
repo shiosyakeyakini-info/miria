@@ -205,6 +205,7 @@
     "openBrowsers": "ブラウザで開く",
     "openBrowsersAsRemote": "ブラウザでリモート先を開く",
     "openInAnotherAccount": "別のアカウントで開く",
+    "changeFullScreen": "フルスクリーンに切り替え",
     "shareNotes": "ノートを共有",
     "deleteFavorite": "お気に入り解除",
     "notesAfterRenote": "リノート直後のノート",
