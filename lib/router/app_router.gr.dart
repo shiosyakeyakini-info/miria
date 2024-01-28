@@ -223,7 +223,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: PhotoEditPage(
           account: args.account,
-          file: args.file,
+          initialImage: args.initialImage,
           onSubmit: args.onSubmit,
           key: args.key,
         ),
@@ -366,16 +366,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
-    TimeLineRoute.name: (routeData) {
-      final args = routeData.argsAs<TimeLineRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TimeLinePage(
-          key: args.key,
-          initialTabSetting: args.initialTabSetting,
-        ),
-      );
-    },
     UsersListDetailRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -438,6 +428,16 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           userId: args.userId,
           account: args.account,
+        ),
+      );
+    },
+    TimeLineRoute.name: (routeData) {
+      final args = routeData.argsAs<TimeLineRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: TimeLinePage(
+          key: args.key,
+          initialTabSetting: args.initialTabSetting,
         ),
       );
     },
@@ -1227,7 +1227,7 @@ class NotificationRouteArgs {
 class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
   PhotoEditRoute({
     required Account account,
-    required MisskeyPostFile file,
+    required Uint8List initialImage,
     required void Function(Uint8List) onSubmit,
     Key? key,
     List<PageRouteInfo>? children,
@@ -1235,7 +1235,7 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
           PhotoEditRoute.name,
           args: PhotoEditRouteArgs(
             account: account,
-            file: file,
+            initialImage: initialImage,
             onSubmit: onSubmit,
             key: key,
           ),
@@ -1251,14 +1251,14 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
 class PhotoEditRouteArgs {
   const PhotoEditRouteArgs({
     required this.account,
-    required this.file,
+    required this.initialImage,
     required this.onSubmit,
     this.key,
   });
 
   final Account account;
 
-  final MisskeyPostFile file;
+  final Uint8List initialImage;
 
   final void Function(Uint8List) onSubmit;
 
@@ -1266,7 +1266,7 @@ class PhotoEditRouteArgs {
 
   @override
   String toString() {
-    return 'PhotoEditRouteArgs{account: $account, file: $file, onSubmit: $onSubmit, key: $key}';
+    return 'PhotoEditRouteArgs{account: $account, initialImage: $initialImage, onSubmit: $onSubmit, key: $key}';
   }
 }
 
@@ -1728,44 +1728,6 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TimeLinePage]
-class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
-  TimeLineRoute({
-    Key? key,
-    required TabSetting initialTabSetting,
-    List<PageRouteInfo>? children,
-  }) : super(
-          TimeLineRoute.name,
-          args: TimeLineRouteArgs(
-            key: key,
-            initialTabSetting: initialTabSetting,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'TimeLineRoute';
-
-  static const PageInfo<TimeLineRouteArgs> page =
-      PageInfo<TimeLineRouteArgs>(name);
-}
-
-class TimeLineRouteArgs {
-  const TimeLineRouteArgs({
-    this.key,
-    required this.initialTabSetting,
-  });
-
-  final Key? key;
-
-  final TabSetting initialTabSetting;
-
-  @override
-  String toString() {
-    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
-  }
-}
-
-/// generated route for
 /// [UsersListDetailPage]
 class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
   UsersListDetailRoute({
@@ -2014,5 +1976,43 @@ class UserRouteArgs {
   @override
   String toString() {
     return 'UserRouteArgs{key: $key, userId: $userId, account: $account}';
+  }
+}
+
+/// generated route for
+/// [TimeLinePage]
+class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
+  TimeLineRoute({
+    Key? key,
+    required TabSetting initialTabSetting,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TimeLineRoute.name,
+          args: TimeLineRouteArgs(
+            key: key,
+            initialTabSetting: initialTabSetting,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TimeLineRoute';
+
+  static const PageInfo<TimeLineRouteArgs> page =
+      PageInfo<TimeLineRouteArgs>(name);
+}
+
+class TimeLineRouteArgs {
+  const TimeLineRouteArgs({
+    this.key,
+    required this.initialTabSetting,
+  });
+
+  final Key? key;
+
+  final TabSetting initialTabSetting;
+
+  @override
+  String toString() {
+    return 'TimeLineRouteArgs{key: $key, initialTabSetting: $initialTabSetting}';
   }
 }

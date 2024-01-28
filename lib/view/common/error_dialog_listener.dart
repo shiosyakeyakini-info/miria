@@ -52,6 +52,7 @@ class ErrorDialogListener extends ConsumerWidget {
               S.of(context).pleaseSpecifyExpirationDate,
             EmptyVoteExpireDurationException() =>
               S.of(context).pleaseSpecifyExpirationDuration,
+            TooManyFilesException() => S.of(context).tooManyFiles,
             MentionToRemoteInLocalOnlyNoteException() =>
               S.of(context).cannotMentionToRemoteInLocalOnlyNote,
           };
