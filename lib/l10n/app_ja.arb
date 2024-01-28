@@ -981,6 +981,6 @@
             }
         }
     },
-    "nonInvitedReversi": "招待はされとらへんみたいや"
-
+    "nonInvitedReversi": "招待はされとらへんみたいや",
+    "help": "ヘルプ"
 }
