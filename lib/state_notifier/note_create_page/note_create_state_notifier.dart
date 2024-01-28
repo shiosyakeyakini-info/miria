@@ -66,6 +66,8 @@ class EmptyVoteExpireDateException implements NoteCreateException {}
 
 class EmptyVoteExpireDurationException implements NoteCreateException {}
 
+class TooManyFilesException implements NoteCreateException {}
+
 class MentionToRemoteInLocalOnlyNoteException implements NoteCreateException {}
 
 @freezed
@@ -280,49 +282,12 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       throw EmptyVoteExpireDurationException();
     }
 
+    if (state.files.length > 16) {
+      throw TooManyFilesException();
+    }
+
     try {
       state = state.copyWith(isNoteSending: NoteSendStatus.sending);
-
-      final fileIds = <String>[];
-
-      for (final file in state.files) {
-        switch (file) {
-          case PostFile():
-            Uint8List contents = await file.file.readAsBytes();
-            if (["image/jpeg", "image/tiff"].contains(file.type)) {
-              try {
-                contents =
-                    await FlutterImageCompress.compressWithList(contents);
-              } catch (e) {
-                debugPrint("failed to compress file");
-              }
-            }
-            final response = await misskey.drive.files.createAsBinary(
-              DriveFilesCreateRequest(
-                force: true,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ),
-              contents,
-            );
-            fileIds.add(response.id);
-          case AlreadyPostedFile():
-            if (file.isEdited) {
-              await misskey.drive.files.update(
-                DriveFilesUpdateRequest(
-                  fileId: file.file.id,
-                  name: file.fileName,
-                  isSensitive: file.isNsfw,
-                  comment: file.caption,
-                ),
-              );
-            }
-            fileIds.add(file.file.id);
-        }
-      }
-
-      if (!mounted) return;
 
       final nodes = const MfmParser().parse(state.text);
       final userList = <MfmMention>[];
@@ -345,6 +310,45 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               element.host != misskey.apiService.host)) {
         throw MentionToRemoteInLocalOnlyNoteException();
       }
+
+      final fileIds = await Future.wait(
+        state.files.map((file) async {
+          switch (file) {
+            case PostFile():
+              Uint8List contents = await file.file.readAsBytes();
+              if (["image/jpeg", "image/tiff"].contains(file.type)) {
+                try {
+                  contents =
+                      await FlutterImageCompress.compressWithList(contents);
+                } catch (e) {
+                  debugPrint("failed to compress file");
+                }
+              }
+              final response = await misskey.drive.files.createAsBinary(
+                DriveFilesCreateRequest(
+                  force: true,
+                  name: file.fileName,
+                  isSensitive: file.isNsfw,
+                  comment: file.caption,
+                ),
+                contents,
+              );
+              return response.id;
+            case AlreadyPostedFile():
+              if (file.isEdited) {
+                await misskey.drive.files.update(
+                  DriveFilesUpdateRequest(
+                    fileId: file.file.id,
+                    name: file.fileName,
+                    isSensitive: file.isNsfw,
+                    comment: file.caption,
+                  ),
+                );
+              }
+              return file.file.id;
+          }
+        }),
+      );
 
       final mentionTargetUsers = [
         for (final user in userList)
