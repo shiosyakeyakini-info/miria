@@ -740,6 +740,10 @@
     "cannotFederateReplyToLocalOnlyNote": "リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。",
     "cannotFederateRenoteToLocalOnlyNote": "リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。",
 
+    "unexpectedSensitive": "上げようとしたファイルがサーバーから、センシティブと思われたんやけどどないする？",
+    "staySensitive": "センシティブのままにしとく",
+    "unsetSensitive": "センシティブやめる",
+
     "noteCreatedAt": "投稿時間: {createdAt}",
     "@noteCreatedAt": {
         "placeholders": {

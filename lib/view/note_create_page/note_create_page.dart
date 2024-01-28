@@ -147,7 +147,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           actions: [
             IconButton(
                 onPressed: () async =>
-                    await notifier.note().expectFailure(context),
+                    await notifier.note(context).expectFailure(context),
                 icon: const Icon(Icons.send))
           ],
         ),

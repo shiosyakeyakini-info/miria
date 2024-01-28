@@ -14,6 +14,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
@@ -292,7 +293,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   }
 
   /// ノートを投稿する
-  Future<void> note() async {
+  Future<void> note(BuildContext context) async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
       throw EmptyNoteException();
     }
@@ -320,6 +321,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final fileIds = <String>[];
 
       for (final file in state.files) {
+        DriveFile? response;
+
         switch (file) {
           case ImageFile():
             final fileName = file.fileName.toLowerCase();
@@ -336,7 +339,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               print("failed to compress file");
             }
 
-            final response = await misskey.drive.files.createAsBinary(
+            response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -349,7 +352,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
             break;
           case UnknownFile():
-            final response = await misskey.drive.files.createAsBinary(
+            response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -374,7 +377,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             break;
           case ImageFileAlreadyPostedFile():
             if (file.isEdited) {
-              await misskey.drive.files.update(DriveFilesUpdateRequest(
+              response =
+                  await misskey.drive.files.update(DriveFilesUpdateRequest(
                 fileId: file.id,
                 name: file.fileName,
                 isSensitive: file.isNsfw,
@@ -384,6 +388,27 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
             fileIds.add(file.id);
             break;
+        }
+
+        if (response?.isSensitive == true &&
+            !file.isNsfw &&
+            !state.account.i.alwaysMarkNsfw) {
+          if (context.mounted) {
+            final confirmResult = await SimpleConfirmDialog.show(
+              context: context,
+              message: S.of(context).unexpectedSensitive,
+              primary: S.of(context).staySensitive,
+              secondary: S.of(context).unsetSensitive,
+            );
+            if (confirmResult == false) {
+              await misskey.drive.files.update(
+                DriveFilesUpdateRequest(
+                  fileId: fileIds.last,
+                  isSensitive: false,
+                ),
+              );
+            }
+          }
         }
       }
 
