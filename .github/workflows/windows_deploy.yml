@@ -34,8 +34,11 @@ jobs:
         run: |
           flutter build windows --release
 
+      - run: |
+          curl -o D:\a\miria\miria\build\Korean.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Korean.isl
+
       - name: Compile .ISS to .EXE Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.1.0
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.3
         with:
           path: windows/innosetup.iss
           options: /dMyAppVersion="${{ env.version }}"
