@@ -127,10 +127,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                 Expanded(
                                   child: selectedUser == null
                                       ? Container()
-                                      : UserListItem(
-                                          user: selectedUser,
-                                          isDetail: true,
-                                        ),
+                                      : UserListItem(user: selectedUser),
                                 ),
                                 IconButton(
                                     onPressed: () async {

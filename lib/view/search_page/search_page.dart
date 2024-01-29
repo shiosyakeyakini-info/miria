@@ -89,6 +89,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
                         const EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: UserSelectContent(
                       focusNode: focusNodes[1],
+                      isDetail: true,
                       onSelected: (item) => context.pushRoute(
                         UserRoute(
                           userId: item.id,

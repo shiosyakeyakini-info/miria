@@ -33,11 +33,13 @@ class UserSelectDialog extends StatelessWidget {
 class UserSelectContent extends ConsumerStatefulWidget {
   final void Function(User) onSelected;
   final FocusNode? focusNode;
+  final bool isDetail;
 
   const UserSelectContent({
     super.key,
     required this.onSelected,
     this.focusNode,
+    this.isDetail = false,
   });
 
   @override
@@ -106,6 +108,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
         Expanded(
           child: UsersSelectContentList(
             onSelected: widget.onSelected,
+            isDetail: widget.isDetail,
           ),
         )
       ],
@@ -114,8 +117,13 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
 }
 
 class UsersSelectContentList extends ConsumerWidget {
-  const UsersSelectContentList({super.key, required this.onSelected});
+  const UsersSelectContentList({
+    super.key,
+    required this.onSelected,
+    required this.isDetail,
+  });
   final void Function(User) onSelected;
+  final bool isDetail;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -159,6 +167,7 @@ class UsersSelectContentList extends ConsumerWidget {
       },
       itemBuilder: (context2, item) => UserListItem(
         user: item,
+        isDetail: isDetail,
         onTap: () => onSelected.call(item),
       ),
     );
