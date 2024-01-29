@@ -48,7 +48,7 @@ mixin _$TabSetting {
   bool get isMediaOnly => throw _privateConstructorUsedError;
 
   /// タブ名
-  String get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
 
   /// アカウント情報
 // https://github.com/rrousselGit/freezed/issues/488
@@ -81,7 +81,7 @@ abstract class $TabSettingCopyWith<$Res> {
       bool isSubscribe,
       bool isIncludeReplies,
       bool isMediaOnly,
-      String name,
+      String? name,
       @JsonKey(readValue: _readAcct) Acct acct,
       bool renoteDisplay});
 
@@ -111,7 +111,7 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? isSubscribe = null,
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
-    Object? name = null,
+    Object? name = freezed,
     Object? acct = null,
     Object? renoteDisplay = null,
   }) {
@@ -152,10 +152,10 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.isMediaOnly
           : isMediaOnly // ignore: cast_nullable_to_non_nullable
               as bool,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       acct: null == acct
           ? _value.acct
           : acct // ignore: cast_nullable_to_non_nullable
@@ -202,7 +202,7 @@ abstract class _$$TabSettingImplCopyWith<$Res>
       bool isSubscribe,
       bool isIncludeReplies,
       bool isMediaOnly,
-      String name,
+      String? name,
       @JsonKey(readValue: _readAcct) Acct acct,
       bool renoteDisplay});
 
@@ -232,7 +232,7 @@ class __$$TabSettingImplCopyWithImpl<$Res>
     Object? isSubscribe = null,
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
-    Object? name = null,
+    Object? name = freezed,
     Object? acct = null,
     Object? renoteDisplay = null,
   }) {
@@ -273,10 +273,10 @@ class __$$TabSettingImplCopyWithImpl<$Res>
           ? _value.isMediaOnly
           : isMediaOnly // ignore: cast_nullable_to_non_nullable
               as bool,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       acct: null == acct
           ? _value.acct
           : acct // ignore: cast_nullable_to_non_nullable
@@ -302,7 +302,7 @@ class _$TabSettingImpl extends _TabSetting {
       this.isSubscribe = true,
       this.isIncludeReplies = true,
       this.isMediaOnly = false,
-      required this.name,
+      this.name,
       @JsonKey(readValue: _readAcct) required this.acct,
       this.renoteDisplay = true})
       : super._();
@@ -351,7 +351,7 @@ class _$TabSettingImpl extends _TabSetting {
 
   /// タブ名
   @override
-  final String name;
+  final String? name;
 
   /// アカウント情報
 // https://github.com/rrousselGit/freezed/issues/488
@@ -437,7 +437,7 @@ abstract class _TabSetting extends TabSetting {
       final bool isSubscribe,
       final bool isIncludeReplies,
       final bool isMediaOnly,
-      required final String name,
+      final String? name,
       @JsonKey(readValue: _readAcct) required final Acct acct,
       final bool renoteDisplay}) = _$TabSettingImpl;
   const _TabSetting._() : super._();
@@ -483,7 +483,7 @@ abstract class _TabSetting extends TabSetting {
   @override
 
   /// タブ名
-  String get name;
+  String? get name;
   @override
 
   /// アカウント情報

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/origin_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -95,8 +96,9 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
               children: [
                 for (final element in Origin.values)
                   Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Text(element.displayName))
+                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                    child: Text(element.displayName(context)),
+                  ),
               ],
             );
           },
@@ -120,16 +122,21 @@ class UsersSelectContentList extends ConsumerWidget {
     final query = ref.watch(usersSelectDialogQueryProvider);
     final origin = ref.watch(usersSelectDialogOriginProvider);
 
-    if (query.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return PushableListView(
       listKey: ObjectKey(Object.hashAll([
         query,
         origin,
       ])),
       initializeFuture: () async {
+        if (query.isEmpty) {
+          final response = await ref
+              .read(misskeyProvider(AccountScope.of(context)))
+              .users
+              .getFrequentlyRepliedUsers(UsersGetFrequentlyRepliedUsersRequest(
+                  userId: AccountScope.of(context).i.id));
+          return response.map((e) => e.user).toList();
+        }
+
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users
@@ -137,6 +144,9 @@ class UsersSelectContentList extends ConsumerWidget {
         return response.toList();
       },
       nextFuture: (lastItem, length) async {
+        if (query.isEmpty) {
+          return [];
+        }
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users

@@ -1,11 +1,12 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 @RoutePage()
@@ -24,7 +25,7 @@ class UserFollowerPage extends ConsumerWidget {
     return AccountScope(
       account: account,
       child: Scaffold(
-        appBar: AppBar(title: const Text("フォロワー")),
+        appBar: AppBar(title: Text(S.of(context).follower)),
         body: PushableListView<Following>(
           initializeFuture: () async {
             final response = await ref
@@ -41,7 +42,10 @@ class UserFollowerPage extends ConsumerWidget {
                     userId: userId, untilId: lastItem.id));
             return response.toList();
           },
-          itemBuilder: (context, item) => UserListItem(user: item.follower!),
+          itemBuilder: (context, item) => UserListItem(
+            user: item.follower!,
+            isDetail: true,
+          ),
         ),
       ),
     );

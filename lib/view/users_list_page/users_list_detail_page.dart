@@ -13,6 +13,7 @@ import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
     _UsersListNotifier, UsersList, (Misskey, String)>(_UsersListNotifier.new);
@@ -66,7 +67,7 @@ class _UsersListUsers
         userIds: list.userIds,
       ),
     );
-    return response.map((e) => e.toUser()).toList();
+    return response.toList();
   }
 
   Misskey get _misskey => arg.$1;
@@ -125,7 +126,7 @@ class UsersListDetailPage extends ConsumerWidget {
                 final settings = await showDialog<UsersListSettings>(
                   context: context,
                   builder: (context) => UsersListSettingsDialog(
-                    title: const Text("編集"),
+                    title: Text(S.of(context).edit),
                     initialSettings: UsersListSettings.fromUsersList(list),
                   ),
                 );
@@ -151,12 +152,15 @@ class UsersListDetailPage extends ConsumerWidget {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text("メンバー"),
+                    title: Text(S.of(context).members),
                     subtitle: Text(
-                      "${users.length}/${account.i.policies.userEachUserListsLimit} 人",
+                      S.of(context).listCapacity(
+                            users.length,
+                            account.i.policies.userEachUserListsLimit,
+                          ),
                     ),
                     trailing: ElevatedButton(
-                      child: const Text("ユーザーを追加"),
+                      child: Text(S.of(context).addUser),
                       onPressed: () async {
                         final user = await showDialog<User>(
                           context: context,
@@ -190,9 +194,9 @@ class UsersListDetailPage extends ConsumerWidget {
                               onPressed: () async {
                                 final result = await SimpleConfirmDialog.show(
                                   context: context,
-                                  message: "このユーザーをリストから外しますか？",
-                                  primary: "外す",
-                                  secondary: "やめる",
+                                  message: S.of(context).confirmRemoveUser,
+                                  primary: S.of(context).removeUser,
+                                  secondary: S.of(context).cancel,
                                 );
                                 if (!context.mounted) return;
                                 if (result ?? false) {

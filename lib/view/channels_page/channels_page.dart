@@ -6,6 +6,7 @@ import 'package:miria/view/channels_page/channel_followed.dart';
 import 'package:miria/view/channels_page/channel_search.dart';
 import 'package:miria/view/channels_page/channel_trend.dart';
 import 'package:miria/view/common/account_scope.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class ChannelsPage extends StatelessWidget {
@@ -20,14 +21,14 @@ class ChannelsPage extends StatelessWidget {
       initialIndex: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("チャンネル"),
-          bottom: const TabBar(
+          title: Text(S.of(context).channel),
+          bottom: TabBar(
             tabs: [
-              Tab(text: "検索"),
-              Tab(text: "トレンド"),
-              Tab(text: "お気に入り"),
-              Tab(text: "フォロー中"),
-              Tab(text: "管理中")
+              Tab(text: S.of(context).search),
+              Tab(text: S.of(context).trend),
+              Tab(text: S.of(context).favorite),
+              Tab(text: S.of(context).following),
+              Tab(text: S.of(context).managing)
             ],
             isScrollable: true,
             tabAlignment: TabAlignment.center,
@@ -35,21 +36,21 @@ class ChannelsPage extends StatelessWidget {
         ),
         body: AccountScope(
             account: account,
-            child: const TabBarView(children: [
-              Padding(
+            child: TabBarView(children: [
+              const Padding(
                   padding: EdgeInsets.only(left: 10, right: 10),
                   child: ChannelSearch()),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 10, right: 10),
                 child: ChannelTrend(),
               ),
-              Padding(
+              const Padding(
                   padding: EdgeInsets.only(left: 10, right: 10),
                   child: ChannelFavorited()),
-              Padding(
+              const Padding(
                   padding: EdgeInsets.only(left: 10, right: 10),
                   child: ChannelFollowed()),
-              Text("作成中")
+              Text(S.of(context).notImplemented),
             ])),
       ),
     );

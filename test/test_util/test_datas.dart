@@ -14,7 +14,7 @@ class TestData {
       meta: meta);
 
   // i
-  static IResponse i1 = IResponse.fromJson(JSON5.parse(r"""
+  static MeDetailed i1 = MeDetailed.fromJson(JSON5.parse(r"""
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -379,8 +379,8 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
-  
+}
+
   '''));
 
   static Note note2 = Note.fromJson(JSON5.parse(r'''
@@ -418,7 +418,7 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
+}
   '''));
 
   /// 自身でないノート１
@@ -463,7 +463,7 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
+}
   '''));
 
   /// 自身のノート（投票込みのノート）
@@ -644,7 +644,7 @@ class TestData {
   replyId: null,
   renoteId: null,
   myReaction: ':ultra_igyo@.:',
-}  
+}
   '''));
 
   /// Renote
@@ -779,7 +779,7 @@ class TestData {
     folder: null,
     userId: null,
     user: null,
-  }  
+  }
   '''));
 
   static DriveFile drive2AsVideo = DriveFile.fromJson(JSON5.parse(r'''
@@ -812,7 +812,7 @@ class TestData {
       data: await binaryImage);
 
   // ユーザー情報
-  static User user1 = User.fromJson(JSON5.parse(r'''
+  static UserLite user1 = UserLite.fromJson(JSON5.parse(r'''
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -828,7 +828,8 @@ class TestData {
 }'''));
   static String user1ExpectId = "7rkr3b1c1c";
 
-  static User detailedUser1 = User.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations detailedUser1 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -997,7 +998,8 @@ class TestData {
   isRenoteMuted: false,
 }  '''));
 
-  static User detailedUser2 = User.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations detailedUser2 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '9gbzuv2cze',
   name: '藍ちゃんにおじさん構文でメンションを送るbot',
@@ -1109,8 +1111,8 @@ class TestData {
   static String detailedUser2ExpectedId = "9gbzuv2cze";
 
   // ユーザー情報
-  static UsersShowResponse usersShowResponse1 =
-      UsersShowResponse.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations usersShowResponse1 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -1217,12 +1219,12 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  
-  
+}
+
   '''));
 
-  static UsersShowResponse usersShowResponse2 =
-      UsersShowResponse.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations usersShowResponse2 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -1391,12 +1393,12 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  
-  
+}
+
   '''));
 
-  static UsersShowResponse usersShowResponse3AsRemoteUser =
-      UsersShowResponse.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations usersShowResponse3AsRemoteUser =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '9i08deo0vj',
   name: 'あけおめらんか～',
@@ -1476,8 +1478,8 @@ class TestData {
 }
 '''));
 
-  static UsersShowResponse usersShowResponse3AsLocalUser =
-      UsersShowResponse.fromJson(JSON5.parse('''
+  static UserDetailedNotMeWithRelations usersShowResponse3AsLocalUser =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse('''
 {
   id: '9i07ia9bf0',
   name: 'あけおめらんか～',
@@ -1676,7 +1678,7 @@ class TestData {
   isFollowing: true,
   isFavorited: true,
   hasUnreadNote: false,
-}  
+}
   '''));
 
   // アンテナ

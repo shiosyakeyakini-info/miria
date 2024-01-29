@@ -4,14 +4,17 @@ import 'package:dio/dio.dart';
 import 'package:file/file.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mfm_parser/mfm_parser.dart';
+import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
 import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
@@ -25,24 +28,46 @@ part 'note_create_state_notifier.freezed.dart';
 enum NoteSendStatus { sending, finished, error }
 
 enum VoteExpireType {
-  unlimited("無期限"),
-  date("日時指定"),
-  duration("期間指定");
+  unlimited,
+  date,
+  duration;
 
-  final String displayText;
-
-  const VoteExpireType(this.displayText);
+  String displayText(BuildContext context) {
+    return switch (this) {
+      VoteExpireType.unlimited => S.of(context).unlimited,
+      VoteExpireType.date => S.of(context).specifyByDate,
+      VoteExpireType.duration => S.of(context).specifyByDuration,
+    };
+  }
 }
 
 enum VoteExpireDurationType {
-  seconds("秒"),
-  minutes("分"),
-  hours("時間"),
-  day("日");
+  seconds,
+  minutes,
+  hours,
+  day;
 
-  final String displayText;
-  const VoteExpireDurationType(this.displayText);
+  String displayText(BuildContext context) {
+    return switch (this) {
+      VoteExpireDurationType.seconds => S.of(context).seconds,
+      VoteExpireDurationType.minutes => S.of(context).minutes,
+      VoteExpireDurationType.hours => S.of(context).hours,
+      VoteExpireDurationType.day => S.of(context).days,
+    };
+  }
 }
+
+sealed class NoteCreateException implements Exception {}
+
+class EmptyNoteException implements NoteCreateException {}
+
+class TooFewVoteChoiceException implements NoteCreateException {}
+
+class EmptyVoteExpireDateException implements NoteCreateException {}
+
+class EmptyVoteExpireDurationException implements NoteCreateException {}
+
+class MentionToRemoteInLocalOnlyNoteException implements NoteCreateException {}
 
 @freezed
 class NoteCreate with _$NoteCreate {
@@ -181,6 +206,14 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       }
       final deletedNoteChannel = note.channel;
 
+      final replyTo = <User>[];
+      if (note.mentions.isNotEmpty) {
+        replyTo.addAll(
+          await misskey.users
+              .showByIds(UsersShowByIdsRequest(userIds: note.mentions)),
+        );
+      }
+
       resultState = resultState.copyWith(
         noteVisibility: note.visibility,
         localOnly: note.localOnly,
@@ -193,11 +226,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         isCw: note.cw?.isNotEmpty == true,
         text: note.text ?? "",
         reactionAcceptance: note.reactionAcceptance,
-        replyTo: [
-          for (final userId in note.mentions)
-            (await misskey.users.show(UsersShowRequest(userId: userId)))
-                .toUser()
-        ],
+        replyTo: replyTo.toList(),
         isVote: note.poll != null,
         isVoteMultiple: note.poll?.multiple ?? false,
         voteExpireType: note.poll?.expiresAt == null
@@ -223,6 +252,14 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     }
 
     if (reply != null) {
+      final replyTo = <User>[];
+      if (reply.mentions.isNotEmpty) {
+        replyTo.addAll(
+          await misskey.users
+              .showByIds(UsersShowByIdsRequest(userIds: reply.mentions)),
+        );
+      }
+
       resultState = resultState.copyWith(
         reply: reply,
         noteVisibility:
@@ -231,9 +268,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         isCw: reply.cw?.isNotEmpty == true,
         replyTo: [
           reply.user,
-          for (final userId in reply.mentions)
-            (await misskey.users.show(UsersShowRequest(userId: userId)))
-                .toUser()
+          ...replyTo,
         ]..removeWhere((element) => element.id == state.account.i.id),
       );
     }
@@ -258,26 +293,26 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   }
 
   /// ノートを投稿する
-  Future<void> note() async {
+  Future<void> note(BuildContext context) async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
-      throw SpecifiedException("なんか入れてや");
+      throw EmptyNoteException();
     }
 
     if (state.isVote &&
         state.voteContent.where((e) => e.isNotEmpty).length < 2) {
-      throw SpecifiedException("投票の選択肢を2つ以上入れてや");
+      throw TooFewVoteChoiceException();
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.date &&
         state.voteDate == null) {
-      throw SpecifiedException("投票がいつまでか入れてや");
+      throw EmptyVoteExpireDateException();
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.duration &&
         state.voteDuration == null) {
-      throw SpecifiedException("投票期間を入れてや");
+      throw EmptyVoteExpireDurationException();
     }
 
     try {
@@ -286,6 +321,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final fileIds = <String>[];
 
       for (final file in state.files) {
+        DriveFile? response;
+
         switch (file) {
           case ImageFile():
             final fileName = file.fileName.toLowerCase();
@@ -302,7 +339,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               print("failed to compress file");
             }
 
-            final response = await misskey.drive.files.createAsBinary(
+            response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -315,7 +352,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
             break;
           case UnknownFile():
-            final response = await misskey.drive.files.createAsBinary(
+            response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -340,7 +377,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             break;
           case ImageFileAlreadyPostedFile():
             if (file.isEdited) {
-              await misskey.drive.files.update(DriveFilesUpdateRequest(
+              response =
+                  await misskey.drive.files.update(DriveFilesUpdateRequest(
                 fileId: file.id,
                 name: file.fileName,
                 isSensitive: file.isNsfw,
@@ -350,6 +388,27 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
             fileIds.add(file.id);
             break;
+        }
+
+        if (response?.isSensitive == true &&
+            !file.isNsfw &&
+            !state.account.i.alwaysMarkNsfw) {
+          if (context.mounted) {
+            final confirmResult = await SimpleConfirmDialog.show(
+              context: context,
+              message: S.of(context).unexpectedSensitive,
+              primary: S.of(context).staySensitive,
+              secondary: S.of(context).unsetSensitive,
+            );
+            if (confirmResult == false) {
+              await misskey.drive.files.update(
+                DriveFilesUpdateRequest(
+                  fileId: fileIds.last,
+                  isSensitive: false,
+                ),
+              );
+            }
+          }
         }
       }
 
@@ -374,7 +433,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           userList.any((element) =>
               element.host != null &&
               element.host != misskey.apiService.host)) {
-        throw SpecifiedException("連合オフやのによそのサーバーの人がメンションに含まれてるで");
+        throw MentionToRemoteInLocalOnlyNoteException();
       }
 
       final mentionTargetUsers = [
@@ -645,11 +704,18 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
       SimpleMessageDialog.show(
-          context, "リプライが${replyVisibility!.displayName}やから、パブリックにでけへん");
+        context,
+        S.of(context).cannotPublicReplyToPrivateNote(
+              replyVisibility!.displayName(context),
+            ),
+      );
       return false;
     }
     if (state.account.i.isSilenced == true) {
-      SimpleMessageDialog.show(context, "サイレンスロールになっているため、パブリックで投稿することはできません。");
+      SimpleMessageDialog.show(
+        context,
+        S.of(context).cannotPublicNoteBySilencedUser,
+      );
       return false;
     }
     return true;
@@ -664,20 +730,22 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   void toggleLocalOnly(BuildContext context) {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      errorNotifier.state =
-          (SpecifiedException("チャンネルのノートを連合にすることはでけへんねん。"), context);
+      errorNotifier.state = (
+        SpecifiedException(S.of(context).cannotFederateNoteToChannel),
+        context
+      );
       return;
     }
     if (state.reply?.localOnly == true) {
       errorNotifier.state = (
-        SpecifiedException("リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
+        SpecifiedException(S.of(context).cannotFederateReplyToLocalOnlyNote),
         context
       );
       return;
     }
     if (state.renote?.localOnly == true) {
       errorNotifier.state = (
-        SpecifiedException("リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
+        SpecifiedException(S.of(context).cannotFederateRenoteToLocalOnlyNote),
         context
       );
       return;

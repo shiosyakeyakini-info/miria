@@ -62,8 +62,8 @@ class NoteCreateSettingTop extends ConsumerWidget {
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 5)),
-        AvatarIcon.fromIResponse(
-          AccountScope.of(context).i,
+        AvatarIcon(
+          user: AccountScope.of(context).i,
           height:
               Theme.of(context).iconButtonTheme.style?.iconSize?.resolve({}) ??
                   32,

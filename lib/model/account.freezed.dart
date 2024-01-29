@@ -23,7 +23,7 @@ mixin _$Account {
   String get host => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
-  IResponse get i => throw _privateConstructorUsedError;
+  MeDetailed get i => throw _privateConstructorUsedError;
   MetaResponse? get meta => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,10 +40,10 @@ abstract class $AccountCopyWith<$Res> {
       {String host,
       String userId,
       String? token,
-      IResponse i,
+      MeDetailed i,
       MetaResponse? meta});
 
-  $IResponseCopyWith<$Res> get i;
+  $MeDetailedCopyWith<$Res> get i;
   $MetaResponseCopyWith<$Res>? get meta;
 }
 
@@ -82,7 +82,7 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
-              as IResponse,
+              as MeDetailed,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -92,8 +92,8 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
 
   @override
   @pragma('vm:prefer-inline')
-  $IResponseCopyWith<$Res> get i {
-    return $IResponseCopyWith<$Res>(_value.i, (value) {
+  $MeDetailedCopyWith<$Res> get i {
+    return $MeDetailedCopyWith<$Res>(_value.i, (value) {
       return _then(_value.copyWith(i: value) as $Val);
     });
   }
@@ -122,11 +122,11 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
       {String host,
       String userId,
       String? token,
-      IResponse i,
+      MeDetailed i,
       MetaResponse? meta});
 
   @override
-  $IResponseCopyWith<$Res> get i;
+  $MeDetailedCopyWith<$Res> get i;
   @override
   $MetaResponseCopyWith<$Res>? get meta;
 }
@@ -164,7 +164,7 @@ class __$$AccountImplCopyWithImpl<$Res>
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
-              as IResponse,
+              as MeDetailed,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -194,7 +194,7 @@ class _$AccountImpl extends _Account {
   @override
   final String? token;
   @override
-  final IResponse i;
+  final MeDetailed i;
   @override
   final MetaResponse? meta;
 
@@ -222,7 +222,7 @@ abstract class _Account extends Account {
       {required final String host,
       required final String userId,
       final String? token,
-      required final IResponse i,
+      required final MeDetailed i,
       final MetaResponse? meta}) = _$AccountImpl;
   const _Account._() : super._();
 
@@ -235,7 +235,7 @@ abstract class _Account extends Account {
   @override
   String? get token;
   @override
-  IResponse get i;
+  MeDetailed get i;
   @override
   MetaResponse? get meta;
   @override

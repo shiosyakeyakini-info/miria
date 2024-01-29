@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/extensions/users_sort_type_extension.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExploreUsers extends ConsumerStatefulWidget {
   const ExploreUsers({super.key});
@@ -73,10 +75,10 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                               for (final element in ExploreUserType.values)
                                 element == exploreUserType
                             ],
-                            children: const [
-                              Text("ピンどめ"),
-                              Text("ローカル"),
-                              Text("リモート"),
+                            children: [
+                              Text(S.of(context).pinnedUser),
+                              Text(S.of(context).local),
+                              Text(S.of(context).remote),
                             ]),
                       ),
                     ),
@@ -97,15 +99,17 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
               if (isDetailOpen) ...[
                 Row(
                   children: [
-                    const Expanded(
-                        child: Text("並び順", textAlign: TextAlign.center)),
+                    Expanded(
+                        child: Text(S.of(context).sort,
+                            textAlign: TextAlign.center)),
                     Expanded(
                       child: DropdownButton<UsersSortType>(
                           items: [
                             for (final sortType in UsersSortType.values)
                               DropdownMenuItem(
-                                  value: sortType,
-                                  child: Text(sortType.displayName))
+                                value: sortType,
+                                child: Text(sortType.displayName(context)),
+                              ),
                           ],
                           value: sortType,
                           onChanged: (e) {
@@ -125,6 +129,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                 itemCount: pinnedUser.length,
                 itemBuilder: (context, index) => UserListItem(
                   user: pinnedUser[index],
+                  isDetail: true,
                 ),
               ),
             )
@@ -159,7 +164,10 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                       ));
                   return response.toList();
                 },
-                itemBuilder: (context, user) => UserListItem(user: user),
+                itemBuilder: (context, user) => UserListItem(
+                  user: user,
+                  isDetail: true,
+                ),
               ),
             )
         ],

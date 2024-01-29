@@ -4,6 +4,7 @@ import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UpdateMemoDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -47,22 +48,25 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("メモ"),
+      title: Text(S.of(context).memo),
       content: TextField(
         controller: controller,
         maxLines: null,
-        decoration: const InputDecoration(
-          hintText: "なんかメモることあったら書いとき",
+        decoration: InputDecoration(
+          hintText: S.of(context).memoDescription,
         ),
       ),
       actions: [
         OutlinedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("やめる")),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(S.of(context).cancel),
+        ),
         ElevatedButton(
-            onPressed: memoSave.expectFailure(context), child: const Text("保存する"))
+          onPressed: memoSave.expectFailure(context),
+          child: Text(S.of(context).save),
+        ),
       ],
     );
   }

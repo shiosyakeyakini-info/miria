@@ -60,8 +60,8 @@ void main() {
             find.textContaining(TestData.note6AsRenote.renote!.text!,
                 findRichText: true),
             findsOneWidget);
-        expect(find.textContaining("が Renote", findRichText: true),
-            findsOneWidget);
+        expect(
+            find.textContaining("がリノート", findRichText: true), findsOneWidget);
       });
 
       testWidgets("引用Renoteの場合、引用Renoteの表示が行われること", (tester) async {
@@ -75,7 +75,7 @@ void main() {
         expect(find.textContaining("こころがふたつある〜", findRichText: true),
             findsOneWidget);
         expect(
-            find.textContaining("が Renote", findRichText: true), findsNothing);
+            find.textContaining("がRenote", findRichText: true), findsNothing);
       });
     });
 
@@ -225,14 +225,14 @@ System.out.println("@ai uneune");
 
           await tester.pumpAndSettle();
 
-          expect(find.text("閲覧注意"), findsOneWidget);
+          expect(find.text("センシティブ"), findsOneWidget);
 
           expect(
               find.byWidgetPredicate((e) =>
                   e is NetworkImageView && e.type == ImageType.imageThumbnail),
               findsNothing);
 
-          await tester.tap(find.text("閲覧注意"));
+          await tester.tap(find.text("センシティブ"));
           await tester.pumpAndSettle();
           await Future.delayed(const Duration(seconds: 1));
           await tester.pumpAndSettle();
@@ -257,7 +257,7 @@ System.out.println("@ai uneune");
             NotesReactionsResponse(
                 id: "reaction1",
                 createdAt: DateTime.now(),
-                user: TestData.detailedUser2,
+                user: UserLite.fromJson(TestData.detailedUser2.toJson()),
                 type: ":ai_yay:")
           ]);
       await tester.pumpWidget(buildTestWidget(

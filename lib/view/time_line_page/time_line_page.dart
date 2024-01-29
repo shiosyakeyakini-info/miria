@@ -238,7 +238,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         top: 5,
                         bottom: 5,
                       ),
-                      child: Text(currentTabSetting.name),
+                      child: Text(
+                        currentTabSetting.name ??
+                            currentTabSetting.tabType.displayName(context),
+                      ),
                     ),
                   ),
                   const Nyanpuppu(),
@@ -394,38 +397,44 @@ class BannerArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bannerAnnouncement = ref.watch(
-      accountProvider(tabSetting.acct)
-          .select((account) => account.i.unreadAnnouncements),
+      iProvider(tabSetting.acct)
+          .select((account) => account.unreadAnnouncements),
     );
 
     // ダイアログの実装が大変なので（状態管理とか）いったんバナーと一緒に扱う
-    final bannerData = bannerAnnouncement
-        .where((element) =>
-            element.display == AnnouncementDisplayType.banner ||
-            element.display == AnnouncementDisplayType.dialog)
-        .lastOrNull;
+    final bannerDatas = bannerAnnouncement.where((element) =>
+        element.display == AnnouncementDisplayType.banner ||
+        element.display == AnnouncementDisplayType.dialog);
 
-    if (bannerData == null) return const SizedBox.shrink();
+    if (bannerDatas.isEmpty) return const SizedBox.shrink();
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(left: 10, top: 3, bottom: 3),
       decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          if (bannerData.icon != null)
-            AnnouncementIcon(iconType: bannerData.icon!),
-          const Padding(padding: EdgeInsets.only(left: 10)),
-          Expanded(
-            child: Text(
-              "${bannerData.title}　${bannerData.text.replaceAll("\n", "　")}",
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Colors.white),
+          for (final bannerData in bannerDatas)
+            Row(
+              children: [
+                if (bannerData.icon != null)
+                  AnnouncementIcon(iconType: bannerData.icon!),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                Expanded(
+                  child: Text(
+                    "${bannerData.title}　${bannerData.text.replaceAll("\n", "　")}",
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
-          ),
         ],
       ),
     );

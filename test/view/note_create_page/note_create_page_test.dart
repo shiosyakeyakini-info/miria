@@ -904,8 +904,8 @@ void main() {
         final misskey = MockMisskey();
         final users = MockMisskeyUsers();
         when(misskey.users).thenReturn(users);
-        when(users.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(users.showByIds(any))
+            .thenAnswer((_) async => [TestData.usersShowResponse2]);
 
         await tester.pumpWidget(ProviderScope(
             overrides: [
@@ -941,8 +941,8 @@ void main() {
         final misskey = MockMisskey();
         final users = MockMisskeyUsers();
         when(misskey.users).thenReturn(users);
-        when(users.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse1);
+        when(users.showByIds(any))
+            .thenAnswer((_) async => [TestData.usersShowResponse1]);
         await tester.pumpWidget(ProviderScope(
             overrides: [
               misskeyProvider.overrideWith((ref, arg) => misskey),
@@ -1318,6 +1318,32 @@ void main() {
                 .textEditingController(find.byType(TextField).hitTestable())
                 .text,
             r"$[rainbow ",
+          );
+        });
+
+        testWidgets("MFMの関数の引数の入力補完が可能なこと", (tester) async {
+          await tester.pumpWidget(
+            ProviderScope(
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.enterText(
+            find.byType(TextField).hitTestable(),
+            r"$[spin.s",
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("speed"));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text("x"));
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .textEditingController(find.byType(TextField).hitTestable())
+                .text,
+            r"$[spin.speed=1.5s,x",
           );
         });
 

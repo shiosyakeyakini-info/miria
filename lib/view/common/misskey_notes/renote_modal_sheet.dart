@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'local_only_icon.dart';
 
@@ -52,6 +54,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
             onTap: () async {
               final scaffoldMessenger = ScaffoldMessenger.of(context);
               final navigator = Navigator.of(context);
+              final localize = S.of(context);
               await ref
                   .read(misskeyProvider(widget.account))
                   .notes
@@ -61,12 +64,12 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     channelId: channel.id,
                   ));
               scaffoldMessenger
-                  .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
+                  .showSnackBar(SnackBar(content: Text(localize.renoted)));
               navigator.pop();
             }.expectFailure(context),
             title: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Text("${channel.name}内にRenote"),
+              child: Text(S.of(context).renoteInSpecificChannel(channel.name)),
             ),
           ),
           ListTile(
@@ -85,7 +88,8 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
             }.expectFailure(context),
             title: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Text("${channel.name}内に引用Renote"),
+              child: Text(
+                  S.of(context).quotedRenoteInSpecificChannel(channel.name)),
             ),
           ),
         ],
@@ -94,6 +98,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
             onTap: () async {
               final scaffoldMessenger = ScaffoldMessenger.of(context);
               final navigator = Navigator.of(context);
+              final localize = S.of(context);
               await ref
                   .read(misskeyProvider(widget.account))
                   .notes
@@ -103,7 +108,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     visibility: visibility,
                   ));
               scaffoldMessenger
-                  .showSnackBar(const SnackBar(content: Text("Renoteしました。")));
+                  .showSnackBar(SnackBar(content: Text(localize.renoted)));
               navigator.pop();
             }.expectFailure(context),
             title: const Padding(
@@ -118,7 +123,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     for (final element in NoteVisibility.values.where(
                         (element) => element != NoteVisibility.specified))
                       DropdownMenuItem(
-                          value: element, child: Text(element.displayName))
+                        value: element,
+                        child: Text(element.displayName(context)),
+                      ),
                   ],
                   value: visibility,
                   onChanged: (value) => setState(() {
@@ -142,11 +149,12 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     renote: widget.note, initialAccount: widget.account));
                 navigator.pop();
               },
-              title: const Text("引用Renote")),
+              title: Text(S.of(context).quotedRenote)),
           ListTile(
               onTap: () async {
                 final scaffoldMessenger = ScaffoldMessenger.of(context);
                 final navigator = Navigator.of(context);
+                final localize = S.of(context);
                 final selected = await showDialog<CommunityChannel?>(
                     context: context,
                     builder: (context) =>
@@ -161,13 +169,14 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                         localOnly: true,
                       ));
 
-                  scaffoldMessenger.showSnackBar(
-                      const SnackBar(content: Text("Renoteしました。")));
+                  scaffoldMessenger
+                      .showSnackBar(SnackBar(content: Text(localize.renoted)));
                   navigator.pop();
                 }
               }.expectFailure(context),
-              title: Text(
-                  "${widget.note.channel != null ? "ほかの" : ""}チャンネルへRenote")),
+              title: Text(widget.note.channel != null
+                  ? S.of(context).renoteInOtherChannel
+                  : S.of(context).renoteInChannel)),
           ListTile(
               onTap: () async {
                 final navigator = Navigator.of(context);
@@ -184,8 +193,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   navigator.pop();
                 }
               },
-              title: Text(
-                  "${widget.note.channel != null ? "ほかの" : ""}チャンネルへ引用Renote")),
+              title: Text(widget.note.channel != null
+                  ? S.of(context).quotedRenoteInOtherChannel
+                  : S.of(context).quotedRenoteInOtherChannel)),
         ]
       ],
     );

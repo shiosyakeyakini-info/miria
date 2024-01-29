@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:miria/extensions/color_extension.dart';
+import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/misskey_theme.dart';
 
 part 'color_theme.freezed.dart';
@@ -80,34 +81,9 @@ class ColorTheme with _$ColorTheme {
         return Color.fromRGBO(rgb[0], rgb[1], rgb[2], opacity);
       }
 
-      final code = (input.startsWith("#") ? input.substring(1) : input);
-
-      if (code.length == 3) {
-        final rgb = code
-            .split("")
-            .map((c) => int.parse(c, radix: 16))
-            .map((i) => i * 16 + i)
-            .toList();
-        return Color.fromRGBO(rgb[0], rgb[1], rgb[2], 1);
-      }
-      if (code.length == 4) {
-        final argb = code
-            .split("")
-            .map((c) => int.parse(c, radix: 16))
-            .map((i) => i * 16 + i)
-            .toList();
-        return Color.fromARGB(argb[0], argb[1], argb[2], argb[3]);
-      }
-      if (code.length == 6) {
-        return Color(int.parse(code, radix: 16) + 0xFF000000);
-      }
-      if (code.length == 8) {
-        return Color(
-          int.parse(
-            "${code.substring(6)}${code.substring(0, 6)}",
-            radix: 16,
-          ),
-        );
+      final color = input.toColor();
+      if (color != null) {
+        return color;
       }
 
       throw FormatException("invalid color format", val);
