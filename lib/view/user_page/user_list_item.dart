@@ -76,7 +76,7 @@ class UserListItem extends ConsumerWidget {
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             if ((user as UserDetailedNotMeWithRelations)
-                                .isBlocked)
+                                .isBlocking)
                               Text(
                                 " ${S.of(context).blocking} ",
                                 style: Theme.of(context).textTheme.bodySmall,
