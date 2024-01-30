@@ -107,6 +107,7 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                         child: PushableListView(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
+                            hideIsEmpty: true,
                             initializeFuture: () async {
                               final repliesResult = await ref
                                   .read(misskeyProvider(widget.account))

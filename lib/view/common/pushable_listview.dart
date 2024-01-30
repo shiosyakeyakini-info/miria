@@ -15,6 +15,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final bool shrinkWrap;
   final ScrollPhysics? physics;
   final bool showAd;
+  final bool hideIsEmpty;
 
   const PushableListView({
     super.key,
@@ -26,6 +27,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
     this.physics,
     this.additionalErrorInfo,
     this.showAd = true,
+    this.hideIsEmpty = false,
   });
 
   @override
@@ -45,11 +47,13 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
     isLoading = true;
     Future(() async {
       try {
+        final result = await widget.initializeFuture();
         items
           ..clear()
-          ..addAll(await widget.initializeFuture());
+          ..addAll(result);
         if (!mounted) return;
         setState(() {
+          isFinalPage = result.isEmpty;
           isLoading = false;
         });
         scrollController.animateTo(-scrollController.position.pixels,
@@ -96,10 +100,10 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
           isLoading = true;
         });
         final result = await widget.nextFuture(items.last, items.length);
-        if (result.isEmpty) isFinalPage = true;
         items.addAll(result);
         if (!mounted) return;
         setState(() {
+          isFinalPage = result.isEmpty;
           isLoading = false;
         });
       } catch (e) {
@@ -123,6 +127,14 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
       itemBuilder: (context, index) {
         if (items.length == index) {
           if (isFinalPage) {
+            if (items.isEmpty && !widget.hideIsEmpty) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("ありません"),
+                ),
+              );
+            }
             return Container();
           }
 
