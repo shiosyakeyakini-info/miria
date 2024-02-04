@@ -54,33 +54,47 @@ class UserListItem extends ConsumerWidget {
                         child: Wrap(
                           alignment: WrapAlignment.end,
                           runAlignment: WrapAlignment.end,
-                          runSpacing: 5.0,
-                          spacing: 5.0,
                           children: [
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isFollowing)
-                              Text(
-                                S.of(context).following,
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      S.of(context).following,
+                                      style: Theme.of(context).textTheme.bodySmall),
+                                    ),
+                                  ),
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isFollowed)
-                              Text(
-                                S.of(context).followed,
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      S.of(context).followed,
+                                      style: Theme.of(context).textTheme.bodySmall),
+                                    ),
+                                  ),
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isMuted)
-                              Text(
-                                " ${S.of(context).muting} ",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      S.of(context).muting,
+                                      style: Theme.of(context).textTheme.bodySmall),
+                                    ),
+                                  ),
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isBlocking)
-                              Text(
-                                " ${S.of(context).blocking} ",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      S.of(context).blocking,
+                                      style: Theme.of(context).textTheme.bodySmall),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),
