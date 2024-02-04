@@ -1257,6 +1257,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  shared_preference_app_group:
+    dependency: "direct main"
+    description:
+      name: shared_preference_app_group
+      sha256: e08d8a6b69648a1ca84c821993ad8dd8d358c17c25055ef33852014147583265
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+1"
   shared_preferences:
     dependency: "direct main"
     description:

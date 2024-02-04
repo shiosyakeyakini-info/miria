@@ -35,6 +35,7 @@ import 'package:miria/view/several_account_settings_page/instance_mute_page/inst
 import 'package:miria/view/several_account_settings_page/reaction_deck_page/reaction_deck_page.dart';
 import 'package:miria/view/several_account_settings_page/several_account_general_settings_page/several_account_general_settings_page.dart';
 import 'package:miria/view/several_account_settings_page/several_account_settings_page.dart';
+import 'package:miria/view/share_extension_page/share_extension_page.dart';
 import 'package:miria/view/sharing_account_select_page/account_select_page.dart';
 import 'package:miria/view/time_line_page/time_line_page.dart';
 import 'package:miria/view/user_page/user_followee.dart';
@@ -102,5 +103,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: MisskeyGamesRoute.page),
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
+
+    AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page)
   ];
 }
