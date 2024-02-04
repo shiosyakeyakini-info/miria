@@ -34,6 +34,10 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  target 'ShareExtension' do
+    inherit! :search_paths
+  end
 end
 
 post_install do |installer|
@@ -48,8 +52,4 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
   end
-end
-target :ShareExtension do
-  use_frameworks!
-  pod 'shared_preference_app_group', path: '.symlinks/plugins/shared_preference_app_group/ios'
 end
