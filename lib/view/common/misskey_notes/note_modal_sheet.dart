@@ -58,6 +58,9 @@ class NoteModalSheet extends ConsumerWidget {
           onTap: () {
             Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
             Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+            );
           },
         ),
         ListTile(
@@ -70,6 +73,9 @@ class NoteModalSheet extends ConsumerWidget {
               ),
             );
             Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+            );
           },
         ),
         ListTile(
