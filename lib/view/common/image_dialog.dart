@@ -189,7 +189,8 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                           await ImageGallerySaver.saveImage(response.data);
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(S.of(context).savedImage)));
+                              content: Text(S.of(context).savedImage),
+                              duration: const Duration(seconds: 1)));
                         },
                         constraints:
                             const BoxConstraints(minWidth: 0, minHeight: 0),

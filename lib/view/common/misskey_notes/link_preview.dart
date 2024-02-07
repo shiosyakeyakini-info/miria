@@ -195,7 +195,7 @@ class LinkPreviewTile extends ConsumerWidget {
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: link));
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(S.of(context).doneCopy)),
+            SnackBar(content: Text(S.of(context).doneCopy),duration: const Duration(seconds: 1)),
           );
         },
         child: DecoratedBox(

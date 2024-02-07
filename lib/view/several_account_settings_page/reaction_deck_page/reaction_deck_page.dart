@@ -222,7 +222,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(S.of(context).doneCopy)),
+      SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
     );
   }
 

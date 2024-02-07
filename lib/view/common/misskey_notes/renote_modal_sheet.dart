@@ -64,7 +64,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     channelId: channel.id,
                   ));
               scaffoldMessenger
-                  .showSnackBar(SnackBar(content: Text(localize.renoted)));
+                  .showSnackBar(SnackBar(content: Text(localize.renoted), duration: const Duration(seconds: 1)));
               navigator.pop();
             }.expectFailure(context),
             title: Padding(
@@ -108,7 +108,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     visibility: visibility,
                   ));
               scaffoldMessenger
-                  .showSnackBar(SnackBar(content: Text(localize.renoted)));
+                  .showSnackBar(SnackBar(content: Text(localize.renoted), duration: const Duration(seconds: 1)));
               navigator.pop();
             }.expectFailure(context),
             title: const Padding(
@@ -170,7 +170,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                       ));
 
                   scaffoldMessenger
-                      .showSnackBar(SnackBar(content: Text(localize.renoted)));
+                      .showSnackBar(SnackBar(content: Text(localize.renoted), duration: const Duration(seconds: 1)));
                   navigator.pop();
                 }
               }.expectFailure(context),
