@@ -78,16 +78,18 @@ extension TextEditingControllerExtension on TextEditingController {
   }
 
   void insert(String insertText, {String? afterText}) {
-    final currentPosition = selection.base.offset;
-    final before = text.isEmpty ? "" : text.substring(0, currentPosition);
-    final after = (currentPosition == text.length || currentPosition == -1)
-        ? ""
-        : text.substring(currentPosition, text.length);
+    final start = selection.start < 0 ? 0 : selection.start;
+    final end = selection.end < 0 ? 0 : selection.end;
+    final before = text.substring(0, start);
+    final selectedText = text.substring(start, end);
+    final after = text.substring(end);
 
     value = TextEditingValue(
-        text: "$before$insertText${afterText ?? ""}$after",
-        selection: TextSelection.collapsed(
-            offset: (currentPosition == -1 ? 0 : currentPosition) +
-                insertText.length));
+      text: "$before$insertText$selectedText${afterText ?? ""}$after",
+      selection: TextSelection(
+        baseOffset: start + insertText.length,
+        extentOffset: end + insertText.length,
+      ),
+    );
   }
 }
