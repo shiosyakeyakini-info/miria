@@ -87,50 +87,57 @@ class InputComplementState extends ConsumerState<InputComplement> {
       return Container();
     }
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: Theme.of(context).primaryColor))),
-      child: Row(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                child: switch (inputCompletionType) {
-                  Basic() => BasicKeyboard(
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
-                  Emoji() => EmojiKeyboard(
-                      account: account,
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
-                  MfmFn() => MfmFnKeyboard(
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                      parentContext: context,
-                    ),
-                  Hashtag() => HashtagKeyboard(
-                      account: account,
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
-                },
+    return TextFieldTapRegion(
+      onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Theme.of(context).primaryColor),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                  ),
+                  child: switch (inputCompletionType) {
+                    Basic() => BasicKeyboard(
+                        controller: widget.controller,
+                        focusNode: focusNode,
+                      ),
+                    Emoji() => EmojiKeyboard(
+                        account: account,
+                        controller: widget.controller,
+                        focusNode: focusNode,
+                      ),
+                    MfmFn() => MfmFnKeyboard(
+                        controller: widget.controller,
+                        focusNode: focusNode,
+                        parentContext: context,
+                      ),
+                    Hashtag() => HashtagKeyboard(
+                        account: account,
+                        controller: widget.controller,
+                        focusNode: focusNode,
+                      ),
+                  },
+                ),
               ),
             ),
-          ),
-          if (defaultTargetPlatform == TargetPlatform.android ||
-              defaultTargetPlatform == TargetPlatform.iOS)
-            IconButton(
+            if (defaultTargetPlatform == TargetPlatform.android ||
+                defaultTargetPlatform == TargetPlatform.iOS)
+              IconButton(
                 onPressed: () {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
-                icon: const Icon(Icons.keyboard_arrow_down)),
-        ],
+                icon: const Icon(Icons.keyboard_arrow_down),
+              ),
+          ],
+        ),
       ),
     );
   }
