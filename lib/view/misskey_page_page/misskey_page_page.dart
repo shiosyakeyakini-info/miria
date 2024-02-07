@@ -144,18 +144,19 @@ class PageContent extends ConsumerWidget {
       );
     }
     if (content is misskey.PageImage) {
-      final url = page.attachedFiles
-          .firstWhereOrNull((e) => e.id == content.fileId)
-          ?.url;
-      final thumbnailUrl = page.attachedFiles
-          .firstWhereOrNull((e) => e.id == content.fileId)
-          ?.thumbnailUrl;
-      if (url != null) {
+      final file =
+          page.attachedFiles.firstWhereOrNull((e) => e.id == content.fileId);
+      if (file != null) {
+        final url = file.url;
+        final thumbnailUrl = file.thumbnailUrl;
         return GestureDetector(
             onTap: () => showDialog(
-                context: context,
-                builder: (context) =>
-                    ImageDialog(imageUrlList: [url], initialPage: 0)),
+                  context: context,
+                  builder: (context) => ImageDialog(
+                    driveFiles: [file],
+                    initialPage: 0,
+                  ),
+                ),
             child: NetworkImageView(
                 url: thumbnailUrl ?? url, type: ImageType.image));
       } else {
