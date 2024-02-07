@@ -138,6 +138,128 @@ class NoteRepository extends ChangeNotifier {
     });
   }
 
+  void addReaction(String noteId, TimelineReacted reaction) {
+    final registeredNote = _notes[noteId];
+    if (registeredNote == null) return;
+
+    final isMyReaction = reaction.userId == account.i.id;
+    if (isMyReaction && registeredNote.myReaction == reaction.reaction) {
+      return;
+    }
+
+    final reactions = Map.of(registeredNote.reactions);
+    reactions[reaction.reaction] = (reactions[reaction.reaction] ?? 0) + 1;
+    final emoji = reaction.emoji;
+    final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+    if (emoji != null && !reaction.reaction.endsWith("@.:")) {
+      reactionEmojis[emoji.name] = emoji.url;
+    }
+
+    registerNote(
+      registeredNote.copyWith(
+        reactions: reactions,
+        reactionEmojis: reactionEmojis,
+        myReaction:
+            isMyReaction ? reaction.reaction : registeredNote.myReaction,
+      ),
+    );
+  }
+
+  void addMyReaction(String noteId, String reaction) {
+    addReaction(
+      noteId,
+      TimelineReacted(
+        reaction: reaction,
+        emoji: null,
+        userId: account.i.id,
+      ),
+    );
+  }
+
+  void removeReaction(String noteId, TimelineReacted reaction) {
+    final registeredNote = _notes[noteId];
+    if (registeredNote == null) return;
+
+    final isMyReaction = reaction.userId == account.i.id;
+    if (isMyReaction && registeredNote.myReaction == null) {
+      return;
+    }
+
+    final reactions = Map.of(registeredNote.reactions);
+    final reactionCount = reactions[reaction.reaction];
+    if (reactionCount == null) {
+      return;
+    }
+    if (reactionCount <= 1) {
+      reactions.remove(reaction.reaction);
+    } else {
+      reactions[reaction.reaction] = reactionCount - 1;
+    }
+
+    registerNote(
+      registeredNote.copyWith(
+        reactions: reactions,
+        myReaction: isMyReaction ? "" : registeredNote.myReaction,
+      ),
+    );
+  }
+
+  void removeMyReaction(String noteId) {
+    final myReaction = _notes[noteId]?.myReaction;
+    if (myReaction == null) return;
+
+    removeReaction(
+      noteId,
+      TimelineReacted(
+        reaction: myReaction,
+        emoji: null,
+        userId: account.i.id,
+      ),
+    );
+  }
+
+  void addVote(String noteId, TimelineVoted vote) {
+    final registeredNote = _notes[noteId];
+    if (registeredNote == null) return;
+
+    final poll = registeredNote.poll;
+    if (poll == null) return;
+
+    final isMyVote = vote.userId == account.i.id;
+    if (isMyVote && poll.choices[vote.choice].isVoted) {
+      return;
+    }
+
+    final choices = poll.choices.toList();
+    choices[vote.choice] = choices[vote.choice].copyWith(
+      votes: choices[vote.choice].votes + 1,
+      isVoted: isMyVote,
+    );
+
+    registerNote(
+      registeredNote.copyWith(
+        poll: poll.copyWith(choices: choices),
+      ),
+    );
+  }
+
+  void addMyVote(String noteId, int choice) {
+    addVote(noteId, TimelineVoted(choice: choice, userId: account.i.id));
+  }
+
+  void updateNote(String noteId, NoteEdited note) {
+    final registeredNote = _notes[noteId];
+    if (registeredNote == null) return;
+
+    registerNote(
+      registeredNote.copyWith(
+        text: note.text,
+        cw: note.cw,
+        updatedAt: DateTime.now(),
+      ),
+    );
+  }
+
   Future<void> refresh(String noteId) async {
     final note = await misskey.notes.show(NotesShowRequest(noteId: noteId));
     registerNote(note.copyWith(myReaction: note.myReaction ?? ""));

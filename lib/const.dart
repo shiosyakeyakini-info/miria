@@ -1,5 +1,3 @@
-const misskeyIOReactionDelay = 1500;
-
 class Font {
   final String displayName;
   final String actualName;
