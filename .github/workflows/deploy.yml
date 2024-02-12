@@ -23,7 +23,7 @@ jobs:
             channel: 'stable'
             cache: true
 
-        - uses: actions/setup-java@v3
+        - uses: actions/setup-java@v4
           with:
             distribution: 'zulu'
             java-version: '11'
