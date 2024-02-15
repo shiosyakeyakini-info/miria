@@ -73,7 +73,8 @@ enum EmojiType {
 
 enum Languages {
   jaJP("日本語", "ja", "JP"),
-  jaOJ("日本語（お嬢様）", "ja", "OJ");
+  jaOJ("日本語（お嬢様）", "ja", "OJ"),
+  zhCN("简体中文", "zh", "CN");
 
   final String displayName;
   final String countryCode;
@@ -132,7 +133,7 @@ class GeneralSettings with _$GeneralSettings {
     @Default("") String fantasyFontName,
 
     /// 言語設定
-    @Default(Languages.jaJP) Languages languages,
+    @Default(Languages.zhCN) Languages languages,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>
