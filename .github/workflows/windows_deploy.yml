@@ -1,6 +1,6 @@
 name: デプロイ(windows zip)
 
-on: 
+on:
   workflow_dispatch:
   release:
     types: [published]
@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -29,27 +29,25 @@ jobs:
       - name: Get App Version
         run:  |
           echo "version=$(flutter pub run cider version)" >> $env:GITHUB_ENV
+          echo "builddir=$(pwd)" >> $env:GITHUB_ENV
 
       - name: Build for Windows
         run: |
           flutter build windows --release
 
-      - name: Copy DLL
-        run: |
-          cp C:\Windows\System32\msvcp140.dll build\windows\x64\runner\Release\
-          cp C:\Windows\System32\vcruntime140.dll build\windows\x64\runner\Release\
-          cp C:\Windows\System32\vcruntime140_1.dll build\windows\x64\runner\Release\
+      - run: |
+          curl -o ${{ env.builddir }}\Korean.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Korean.isl
 
       - name: Compile .ISS to .EXE Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.1.0
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.3
         with:
           path: windows/innosetup.iss
-          options: /dMyAppVersion="${{ env.version }}"
+          options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}"
 
       - name: Rename .EXE Installer
         run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe
 
-      - name: Zip files
+      - name: Compress files
         run: |
           ren build\windows\x64\runner\Release Miria
           Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath miria_${env:version}_windows-x64.zip -Force

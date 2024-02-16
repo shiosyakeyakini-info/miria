@@ -9,6 +9,7 @@ import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _notesClipsNotifierProvider = AsyncNotifierProvider.autoDispose
     .family<_NotesClipsNotifier, List<Clip>, (Misskey, String)>(
@@ -108,15 +109,15 @@ class ClipModalSheet extends ConsumerWidget {
             .addToClip(clip);
       } catch (e) {
         // TODO: あとでなおす
-        if (e is DioException && e.response?.data != null) {
+        if (e is DioError && e.response?.data != null) {
           if ((e.response?.data as Map?)?["error"]?["code"] ==
               "ALREADY_CLIPPED") {
             if (!context.mounted) return;
             final result = await SimpleConfirmDialog.show(
               context: context,
-              message: "すでにクリップに追加されたノートのようです。",
-              primary: "クリップから削除する",
-              secondary: "なにもしない",
+              message: S.of(context).alreadyAddedClip,
+              primary: S.of(context).deleteClip,
+              secondary: S.of(context).noneAction,
             );
             if (result == true) {
               await ref
@@ -158,12 +159,12 @@ class ClipModalSheet extends ConsumerWidget {
             } else {
               return ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text("クリップを作成"),
+                title: Text(S.of(context).createClip),
                 onTap: () async {
                   final settings = await showDialog<ClipSettings>(
                     context: context,
-                    builder: (context) => const ClipSettingsDialog(
-                      title: Text("作成"),
+                    builder: (context) => ClipSettingsDialog(
+                      title: Text(S.of(context).create),
                     ),
                   );
                   if (!context.mounted) return;

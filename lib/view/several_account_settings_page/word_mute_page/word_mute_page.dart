@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -73,11 +74,16 @@ class WordMutePageState extends ConsumerState<WordMutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ワードミュート")),
+      appBar: AppBar(
+        title: Text(switch (widget.muteType) {
+          MuteType.soft => S.of(context).wordMute,
+          MuteType.hard => S.of(context).hardWordMute,
+        }),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: CommonFuture<IResponse>(
+          child: CommonFuture<MeDetailed>(
             future: ref.read(misskeyProvider(widget.account)).i.i(),
             futureFinished: (data) {
               controller.text = muteValueString(
@@ -99,13 +105,14 @@ class WordMutePageState extends ConsumerState<WordMutePage> {
                     autofocus: true,
                   ),
                   Text(
-                    "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。\nただし、Misskey Webと正規表現の仕様が異なるため、Miriaで動作する正規表現がMisskey Webで動作しなかったり、その逆が発生することがあります。",
+                    S.of(context).wordMuteDescription,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   ElevatedButton.icon(
-                      onPressed: save,
-                      icon: const Icon(Icons.save),
-                      label: const Text("保存"))
+                    onPressed: save,
+                    icon: const Icon(Icons.save),
+                    label: Text(S.of(context).save),
+                  ),
                 ],
               );
             },

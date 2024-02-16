@@ -7,6 +7,7 @@ import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class NotesAfterRenotePage extends ConsumerStatefulWidget {
@@ -32,7 +33,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     final misskey = ref.watch(misskeyProvider(widget.account));
 
     return Scaffold(
-      appBar: AppBar(title: const Text("リノートの直後のノート")),
+      appBar: AppBar(title: Text(S.of(context).notesAfterRenote)),
       body: Padding(
         padding: const EdgeInsets.only(right: 10),
         child: PushableListView<Note>(

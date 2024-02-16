@@ -213,7 +213,7 @@ final accountRepositoryProvider =
 final accountsProvider =
     Provider<List<Account>>((ref) => ref.watch(accountRepositoryProvider));
 
-final iProvider = Provider.family<IResponse, Acct>((ref, acct) {
+final iProvider = Provider.family<MeDetailed, Acct>((ref, acct) {
   final accounts = ref.watch(accountsProvider);
   final account = accounts.firstWhere((account) => account.acct == acct);
   return account.i;

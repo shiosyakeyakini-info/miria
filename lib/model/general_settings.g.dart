@@ -36,6 +36,8 @@ _$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
       monospaceFontName: json['monospaceFontName'] as String? ?? "",
       cursiveFontName: json['cursiveFontName'] as String? ?? "",
       fantasyFontName: json['fantasyFontName'] as String? ?? "",
+      languages: $enumDecodeNullable(_$LanguagesEnumMap, json['languages']) ??
+          Languages.jaJP,
     );
 
 Map<String, dynamic> _$$GeneralSettingsImplToJson(
@@ -58,6 +60,7 @@ Map<String, dynamic> _$$GeneralSettingsImplToJson(
       'monospaceFontName': instance.monospaceFontName,
       'cursiveFontName': instance.cursiveFontName,
       'fantasyFontName': instance.fantasyFontName,
+      'languages': _$LanguagesEnumMap[instance.languages]!,
     };
 
 const _$ThemeColorSystemEnumMap = {
@@ -86,4 +89,9 @@ const _$TabPositionEnumMap = {
 const _$EmojiTypeEnumMap = {
   EmojiType.twemoji: 'twemoji',
   EmojiType.system: 'system',
+};
+
+const _$LanguagesEnumMap = {
+  Languages.jaJP: 'jaJP',
+  Languages.jaOJ: 'jaOJ',
 };

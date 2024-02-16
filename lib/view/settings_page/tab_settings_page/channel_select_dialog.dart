@@ -1,94 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
+import 'package:miria/view/channels_page/channel_favorited.dart';
+import 'package:miria/view/channels_page/channel_followed.dart';
+import 'package:miria/view/channels_page/channel_search.dart';
+import 'package:miria/view/channels_page/channel_trend.dart';
 import 'package:miria/view/common/account_scope.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 
-class ChannelSelectDialog extends ConsumerStatefulWidget {
+class ChannelSelectDialog extends StatelessWidget {
   final Account account;
 
   const ChannelSelectDialog({super.key, required this.account});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      ChannelSelectDialogState();
-}
-
-class ChannelSelectDialogState extends ConsumerState<ChannelSelectDialog> {
-  final favoritedChannels = <CommunityChannel>[];
-  final followedChannels = <CommunityChannel>[];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future(() async {
-      final myFavorites = await ref
-          .read(misskeyProvider(widget.account))
-          .channels
-          .myFavorite(const ChannelsMyFavoriteRequest(limit: 100));
-      favoritedChannels
-        ..clear()
-        ..addAll(myFavorites);
-
-      final followed = await ref
-          .read(misskeyProvider(widget.account))
-          .channels
-          .followed(const ChannelsFollowedRequest(limit: 100));
-      followedChannels
-        ..clear()
-        ..addAll(followed);
-      if (!mounted) return;
-      setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AccountScope(
-      account: widget.account,
-      child: AlertDialog(
-        title: const Text("チャンネル選択"),
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "フォロー中",
-                  style: Theme.of(context).textTheme.titleMedium,
+    return AlertDialog(
+      title: Text(S.of(context).selectChannel),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: DefaultTabController(
+          length: 4,
+          initialIndex: 2,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Align(
+                    child: TabBar(
+                      tabs: [
+                        Tab(text: S.of(context).search),
+                        Tab(text: S.of(context).trend),
+                        Tab(text: S.of(context).favorite),
+                        Tab(text: S.of(context).following),
+                      ],
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.center,
+                    ),
+                  ),
                 ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: followedChannels.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(followedChannels[index]);
-                          },
-                          title: Text(followedChannels[index].name));
-                    }),
-                const Padding(padding: EdgeInsets.only(top: 30)),
-                Text(
-                  "お気に入り",
-                  style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Expanded(
+                child: AccountScope(
+                  account: account,
+                  child: TabBarView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ChannelSearch(
+                          onChannelSelected: (channel) =>
+                              Navigator.of(context).pop(channel),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ChannelTrend(
+                          onChannelSelected: (channel) =>
+                              Navigator.of(context).pop(channel),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ChannelFavorited(
+                          onChannelSelected: (channel) =>
+                              Navigator.of(context).pop(channel),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ChannelFollowed(
+                          onChannelSelected: (channel) =>
+                              Navigator.of(context).pop(channel),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: favoritedChannels.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(favoritedChannels[index]);
-                          },
-                          title: Text(favoritedChannels[index].name));
-                    }),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

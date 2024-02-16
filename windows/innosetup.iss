@@ -4,6 +4,7 @@
 #define MyAppName "Miria"
 #define MyAppExeName "miria.exe"
 ;#define MyAppVersion "1.0.13+86"
+;#define MyWorkDir "D:\a\miria\miria"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -21,13 +22,13 @@ ArchitecturesInstallIn64BitMode=x64
 CloseApplications=yes
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=D:\a\miria\miria\LICENSE
+LicenseFile={#MyWorkDir}\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=D:\a\miria\miria
+OutputDir={#MyWorkDir}
 OutputBaseFilename=miria-installer
-SetupIconFile=D:\a\miria\miria\windows\runner\resources\app_icon.ico
+SetupIconFile={#MyWorkDir}\windows\runner\resources\app_icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -35,13 +36,14 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Languages]
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
+Name: "korean"; MessagesFile: "{#MyWorkDir}\Korean.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\a\miria\miria\build\windows\x64\runner\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\a\miria\miria\build\windows\x64\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MyWorkDir}\build\windows\x64\runner\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyWorkDir}\build\windows\x64\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

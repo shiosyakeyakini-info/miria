@@ -37,7 +37,7 @@ extension TextEditingControllerExtension on TextEditingController {
       return null;
     }
     final query = textBeforeSelection.substring(lastOpenTagIndex + 2);
-    if (RegExp(r"^[a-z234]*$").hasMatch(query)) {
+    if (RegExp(r"^[a-zA-Z0-9_.,-=]*$").hasMatch(query)) {
       return query;
     } else {
       return null;

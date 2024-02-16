@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm/mfm.dart';
+import 'package:miria/extensions/note_visibility_extension.dart';
+import 'package:miria/extensions/reaction_acceptance_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/account_settings.dart';
 import 'package:miria/providers.dart';
@@ -74,8 +77,12 @@ class SeveralAccountGeneralSettingsPageState
       account: widget.account,
       child: Scaffold(
         appBar: AppBar(
-            title: SimpleMfm(
-                "${widget.account.i.name ?? widget.account.i.username} 全般設定")),
+          title: SimpleMfm(
+            S.of(context).accountGeneralSettings(
+                  widget.account.i.name ?? widget.account.i.username,
+                ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -92,18 +99,22 @@ class SeveralAccountGeneralSettingsPageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text("プライバシー",
-                            style: Theme.of(context).textTheme.titleLarge),
-                        const Text("デフォルトの公開範囲を設定します。"),
+                        Text(
+                          S.of(context).privacy,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(S.of(context).setDefaultNoteVisibility),
                         const Padding(padding: EdgeInsets.only(top: 10)),
-                        const Text("ノート公開範囲"),
+                        Text(S.of(context).noteVisibility),
                         DropdownButton<NoteVisibility>(
                             items: [
                               for (final noteVisibility
                                   in NoteVisibility.values)
                                 DropdownMenuItem(
-                                    value: noteVisibility,
-                                    child: Text(noteVisibility.displayName))
+                                  value: noteVisibility,
+                                  child:
+                                      Text(noteVisibility.displayName(context)),
+                                ),
                             ],
                             value: defaultNoteVisibility,
                             onChanged: (value) {
@@ -115,27 +126,31 @@ class SeveralAccountGeneralSettingsPageState
                             }),
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         CheckboxListTile(
-                            value: defaultIsLocalOnly,
-                            title: const Text("連合をなしにします"),
-                            subtitle: const Text(
-                                "連合をなしにしても、非公開になりません。ほとんどの場合、連合なしにする必要はありません。"),
-                            onChanged: (value) {
-                              setState(() {
-                                defaultIsLocalOnly = !defaultIsLocalOnly;
-                                save();
-                              });
-                            }),
+                          value: defaultIsLocalOnly,
+                          title: Text(S.of(context).disableFederation),
+                          subtitle:
+                              Text(S.of(context).disableFederationDescription),
+                          onChanged: (value) {
+                            setState(() {
+                              defaultIsLocalOnly = !defaultIsLocalOnly;
+                              save();
+                            });
+                          },
+                        ),
                         const Padding(padding: EdgeInsets.only(top: 10)),
-                        const Text("リアクションの受け入れ"),
+                        Text(S.of(context).reactionAcceptance),
                         DropdownButton<ReactionAcceptance?>(
                             items: [
-                              const DropdownMenuItem(
-                                  value: null, child: Text("全部")),
+                              DropdownMenuItem(
+                                child:
+                                    Text(S.of(context).reactionAcceptanceAll),
+                              ),
                               for (final acceptance
                                   in ReactionAcceptance.values)
                                 DropdownMenuItem(
-                                    value: acceptance,
-                                    child: Text(acceptance.displayName))
+                                  value: acceptance,
+                                  child: Text(acceptance.displayName(context)),
+                                ),
                             ],
                             value: defaultReactionAppearance,
                             onChanged: (value) {
@@ -145,10 +160,10 @@ class SeveralAccountGeneralSettingsPageState
                               });
                             }),
                         const Padding(padding: EdgeInsets.only(top: 10)),
-                        const Text("広告"),
+                        Text(S.of(context).ad),
                         CheckboxListTile(
                           value: forceShowAd,
-                          title: const Text("広告を常に表示する"),
+                          title: Text(S.of(context).forceShowAds),
                           enabled: widget.account.i.policies.canHideAds,
                           onChanged: (value) => setState(
                             () {

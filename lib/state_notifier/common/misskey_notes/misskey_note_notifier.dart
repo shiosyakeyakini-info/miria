@@ -5,8 +5,9 @@ import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/account_select_dialog.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+
+class OpenLocalOnlyNoteFromRemoteException implements Exception {}
 
 class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
   @override
@@ -26,7 +27,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
     }
 
     if (note.localOnly) {
-      throw SpecifiedException("連合なしのノートを他のサーバーで開くことはできません");
+      throw OpenLocalOnlyNoteFromRemoteException();
     }
 
     final host = note.user.host ?? _account.host;
@@ -77,14 +78,12 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
     final host = user.host ?? _account.host;
 
     try {
-      final response =
-          await ref.read(misskeyProvider(account)).users.showByName(
-                UsersShowByUserNameRequest(
-                  userName: user.username,
-                  host: host,
-                ),
-              );
-      return response.toUser();
+      return ref.read(misskeyProvider(account)).users.showByName(
+            UsersShowByUserNameRequest(
+              userName: user.username,
+              host: host,
+            ),
+          );
     } catch (e) {
       // 最終手段として、連合で照会する
       // `users/show` で自動的に照会されるから必要ない
@@ -97,7 +96,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
               ),
             ),
           );
-      return UsersShowResponse.fromJson(response.object).toUser();
+      return UserDetailed.fromJson(response.object);
     }
   }
 

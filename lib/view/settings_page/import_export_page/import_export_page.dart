@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class ImportExportPage extends ConsumerStatefulWidget {
@@ -23,7 +25,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
     final accounts = ref.watch(accountsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("設定のインポート・エクスポート")),
+      appBar: AppBar(title: Text(S.of(context).settingsImportAndExport)),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
@@ -31,12 +33,10 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "設定のインポート",
+                S.of(context).importSettings,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const Text(
-                "設定ファイルをドライブから読み込みます。設定ファイルには保存されたときのすべてのアカウントの設定情報が記録されていますが、そのうちこの端末でログインしているアカウントの情報のみを読み込みます。",
-              ),
+              Text(S.of(context).importSettingsDescription),
               Row(
                 children: [
                   Expanded(
@@ -61,26 +61,28 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                     onPressed: () async {
                       final account = selectedImportAccount;
                       if (account == null) {
-                        await SimpleMessageDialog.show(context, "アカウントを選んでや");
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).pleaseSelectAccount,
+                        );
                         return;
                       }
                       await ref
                           .read(importExportRepository)
-                          .import(context, account);
+                          .import(context, account)
+                          .expectFailure(context);
                     },
-                    child: const Text("選択"),
+                    child: Text(S.of(context).select),
                   ),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 30)),
               Text(
-                "設定のエクスポート",
+                S.of(context).exportSettings,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const Text(
-                "設定ファイルをドライブに保存します。設定ファイルにはこの端末でログインしているすべてのアカウントの、ログイン情報以外の情報が記録されます。",
-              ),
-              const Text("設定ファイルは1回のエクスポートにつき1つのアカウントに対して保存します。"),
+              Text(S.of(context).exportSettingsDescription1),
+              Text(S.of(context).exportSettingsDescription2),
               Row(
                 children: [
                   Expanded(
@@ -107,15 +109,16 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                         if (account == null) {
                           SimpleMessageDialog.show(
                             context,
-                            "設定ファイルを保存するアカウントを選んでや",
+                            S.of(context).pleaseSelectAccountToExportSettings,
                           );
                           return;
                         }
                         ref
                             .read(importExportRepository)
-                            .export(context, account);
+                            .export(context, account)
+                            .expectFailure(context);
                       },
-                      child: const Text("保存")),
+                      child: Text(S.of(context).save)),
                 ],
               ),
             ]),

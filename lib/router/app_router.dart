@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:miria/model/account.dart';
 import 'package:miria/model/image_file.dart';
+import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/view/announcements_page/announcements_page.dart';
 import 'package:miria/view/antenna_page/antenna_page.dart';
@@ -14,6 +15,7 @@ import 'package:miria/view/explore_page/explore_page.dart';
 import 'package:miria/view/explore_page/explore_role_users_page.dart';
 import 'package:miria/view/favorited_note_page/favorited_note_page.dart';
 import 'package:miria/view/federation_page/federation_page.dart';
+import 'package:miria/view/games_page/misskey_games_page.dart';
 import 'package:miria/view/hashtag_page/hashtag_page.dart';
 import 'package:miria/view/misskey_page_page/misskey_page_page.dart';
 import 'package:miria/view/note_create_page/note_create_page.dart';
@@ -97,6 +99,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: CacheManagementRoute.page),
     AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
     AutoRoute(page: SharingAccountSelectRoute.page),
+    AutoRoute(page: MisskeyGamesRoute.page),
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
   ];

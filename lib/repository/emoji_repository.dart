@@ -71,12 +71,14 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final serverFetchData = await misskey.emojis();
     await _setEmojiData(serverFetchData);
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        "emojis@${account.host}", jsonEncode(serverFetchData));
-    await accountSettingsRepository.save(accountSettingsRepository
-        .fromAccount(account)
-        .copyWith(latestEmojiCached: DateTime.now()));
+    if (account.token != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+          "emojis@${account.host}", jsonEncode(serverFetchData));
+      await accountSettingsRepository.save(accountSettingsRepository
+          .fromAccount(account)
+          .copyWith(latestEmojiCached: DateTime.now()));
+    }
     thisLaunchLoaded = true;
   }
 

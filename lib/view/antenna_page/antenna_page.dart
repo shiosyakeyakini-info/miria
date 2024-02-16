@@ -8,6 +8,7 @@ import 'package:miria/view/antenna_page/antenna_list.dart';
 import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class AntennaPage extends ConsumerWidget {
@@ -23,7 +24,7 @@ class AntennaPage extends ConsumerWidget {
       account: account,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("アンテナ"),
+          title: Text(S.of(context).antenna),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -31,7 +32,7 @@ class AntennaPage extends ConsumerWidget {
                 final settings = await showDialog<AntennaSettings>(
                   context: context,
                   builder: (context) => AntennaSettingsDialog(
-                    title: const Text("作成"),
+                    title: Text(S.of(context).create),
                     account: account,
                   ),
                 );

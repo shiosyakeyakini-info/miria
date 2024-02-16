@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/tab_icon_view.dart';
 
@@ -25,7 +26,7 @@ class TabSettingsListPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: const Text("タブ設定"),
+        title: Text(S.of(context).tabSettings),
         actions: [
           IconButton(
             onPressed: () {
@@ -84,7 +85,7 @@ class TabSettingsListPage extends ConsumerWidget {
                     ..removeWhere((route) => true)
                     ..push(const SplashRoute());
                 },
-                child: const Text("反映する"),
+                child: Text(S.of(context).apply),
               ),
             ),
           ),
@@ -112,9 +113,9 @@ class TabSettingsListItem extends ConsumerWidget {
         account: account,
         child: TabIconView(icon: tabSetting.icon),
       ),
-      title: Text(tabSetting.name),
+      title: Text(tabSetting.name ?? tabSetting.tabType.displayName(context)),
       subtitle: Text(
-        "${tabSetting.tabType.displayName} / ${tabSetting.acct}",
+        "${tabSetting.tabType.displayName(context)} / ${tabSetting.acct}",
       ),
       trailing: const Icon(Icons.drag_handle),
       onTap: () => context.pushRoute(TabSettingsRoute(tabIndex: index)),

@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mfm_parser/mfm_parser.dart';
+import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/search_page/search_page.dart';
 import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:miria/view/user_select_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+final noteSearchProvider =
+    StateProvider.autoDispose((ref) => const NoteSearchCondition());
 
 class NoteSearch extends ConsumerStatefulWidget {
-  final String? initialSearchText;
+  final NoteSearchCondition? initialCondition;
   final FocusNode? focusNode;
 
   const NoteSearch({
     super.key,
-    required this.initialSearchText,
+    this.initialCondition,
     this.focusNode,
   });
 
@@ -27,13 +31,14 @@ class NoteSearch extends ConsumerStatefulWidget {
 
 class NoteSearchState extends ConsumerState<NoteSearch> {
   var isDetail = false;
-  late final controller =
-      TextEditingController(text: widget.initialSearchText ?? "");
+  late final controller = TextEditingController(
+    text: widget.initialCondition?.query,
+  );
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final initial = widget.initialSearchText;
+    final initial = widget.initialCondition;
     if (initial != null) {
       Future(() {
         ref.read(noteSearchProvider.notifier).state = initial;
@@ -49,8 +54,10 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedUser = ref.watch(noteSearchUserProvider);
-    final selectedChannel = ref.watch(noteSearchChannelProvider);
+    final condition = ref.watch(noteSearchProvider);
+    final selectedUser = condition.user;
+    final selectedChannel = condition.channel;
+
     return Column(
       children: [
         Padding(
@@ -59,26 +66,29 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
             children: [
               Expanded(
                 child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                    ),
-                    focusNode: widget.focusNode,
-                    autofocus: true,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (value) {
-                      ref.read(noteSearchProvider.notifier).state = value;
-                    }),
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                  focusNode: widget.focusNode,
+                  autofocus: true,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (value) {
+                    ref.read(noteSearchProvider.notifier).state =
+                        condition.copyWith(query: value);
+                  },
+                ),
               ),
               IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isDetail = !isDetail;
-                    });
-                  },
-                  icon: isDetail
-                      ? const Icon(Icons.keyboard_arrow_up)
-                      : const Icon(Icons.keyboard_arrow_down))
+                onPressed: () {
+                  setState(() {
+                    isDetail = !isDetail;
+                  });
+                },
+                icon: isDetail
+                    ? const Icon(Icons.keyboard_arrow_up)
+                    : const Icon(Icons.keyboard_arrow_down),
+              ),
             ],
           ),
         ),
@@ -96,7 +106,7 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        "これらはハッシュタグでは機能しません。",
+                        S.of(context).disabledInHashtag,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Table(
@@ -108,81 +118,94 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                             TableCellVerticalAlignment.middle,
                         children: [
                           TableRow(children: [
-                            const Text("ユーザー"),
+                            Text(S.of(context).user),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Expanded(
-                                    child: selectedUser == null
-                                        ? Container()
-                                        : UserListItem(user: selectedUser)),
+                                  child: selectedUser == null
+                                      ? Container()
+                                      : UserListItem(user: selectedUser),
+                                ),
                                 IconButton(
                                     onPressed: () async {
                                       final selected = await showDialog<User?>(
-                                          context: context,
-                                          builder: (context2) =>
-                                              UserSelectDialog(
-                                                account:
-                                                    AccountScope.of(context),
-                                              ));
+                                        context: context,
+                                        builder: (context2) => UserSelectDialog(
+                                          account: AccountScope.of(context),
+                                        ),
+                                      );
 
                                       ref
-                                          .read(noteSearchUserProvider.notifier)
-                                          .state = selected;
+                                          .read(noteSearchProvider.notifier)
+                                          .state = condition.copyWith(
+                                        user: selected,
+                                      );
                                     },
                                     icon:
                                         const Icon(Icons.keyboard_arrow_right))
                               ],
                             )
                           ]),
-                          TableRow(children: [
-                            const Text("チャンネル"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
+                          TableRow(
+                            children: [
+                              Text(S.of(context).channel),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
                                     child: selectedChannel == null
                                         ? Container()
-                                        : Text(selectedChannel.name)),
-                                IconButton(
+                                        : Text(selectedChannel.name),
+                                  ),
+                                  IconButton(
                                     onPressed: () async {
                                       final selected =
                                           await showDialog<CommunityChannel?>(
-                                              context: context,
-                                              builder: (context2) =>
-                                                  ChannelSelectDialog(
-                                                    account: AccountScope.of(
-                                                        context),
-                                                  ));
+                                        context: context,
+                                        builder: (context2) =>
+                                            ChannelSelectDialog(
+                                          account: AccountScope.of(
+                                            context,
+                                          ),
+                                        ),
+                                      );
                                       ref
-                                          .read(noteSearchChannelProvider
-                                              .notifier)
-                                          .state = selected;
+                                          .read(noteSearchProvider.notifier)
+                                          .state = condition.copyWith(
+                                        channel: selected,
+                                      );
                                     },
                                     icon:
-                                        const Icon(Icons.keyboard_arrow_right))
-                              ],
-                            )
-                          ]),
-                          TableRow(children: [
-                            const Text("ローカルのみ"),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: ref.watch(noteSearchLocalOnlyProvider),
-                                  onChanged: (value) => ref
-                                          .read(noteSearchLocalOnlyProvider
-                                              .notifier)
-                                          .state =
-                                      !ref.read(noteSearchLocalOnlyProvider),
-                                ),
-                              ],
-                            )
-                          ])
+                                        const Icon(Icons.keyboard_arrow_right),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: [
+                              Text(S.of(context).onlyLocal),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: condition.localOnly,
+                                    onChanged: (value) => ref
+                                        .read(
+                                          noteSearchProvider.notifier,
+                                        )
+                                        .state = condition.copyWith(
+                                      localOnly: !condition.localOnly,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ],
@@ -192,8 +215,11 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
             ),
           ),
         const Expanded(
-            child: Padding(
-                padding: EdgeInsets.only(right: 10), child: NoteSearchList()))
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: NoteSearchList(),
+          ),
+        ),
       ],
     );
   }
@@ -204,67 +230,66 @@ class NoteSearchList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchValue = ref.watch(noteSearchProvider);
-    final channel = ref.watch(noteSearchChannelProvider);
-    final user = ref.watch(noteSearchUserProvider);
-    final localOnly = ref.watch(noteSearchLocalOnlyProvider);
+    final condition = ref.watch(noteSearchProvider);
     final account = AccountScope.of(context);
-    final parsedSearchValue = const MfmParser().parse(searchValue);
+    final parsedSearchValue = const MfmParser().parse(condition.query ?? "");
     final isHashtagOnly =
         parsedSearchValue.length == 1 && parsedSearchValue[0] is MfmHashTag;
 
-    if (searchValue.isEmpty && channel == null && user == null) {
+    if (condition.isEmpty) {
       return Container();
     }
 
     return PushableListView(
-        listKey: Object.hashAll([
-          searchValue,
-          user?.id,
-          channel?.id,
-          localOnly,
-        ]),
-        initializeFuture: () async {
-          final Iterable<Note> notes;
-          if (isHashtagOnly) {
-            notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+      listKey: condition.hashCode,
+      initializeFuture: () async {
+        final Iterable<Note> notes;
+        if (isHashtagOnly) {
+          notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
                 NotesSearchByTagRequest(
-                    tag: (parsedSearchValue[0] as MfmHashTag).hashTag));
-          } else {
-            notes = await ref.read(misskeyProvider(account)).notes.search(
+                  tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
+                ),
+              );
+        } else {
+          notes = await ref.read(misskeyProvider(account)).notes.search(
                 NotesSearchRequest(
-                    query: searchValue,
-                    userId: user?.id,
-                    channelId: channel?.id,
-                    host: localOnly ? "." : null));
-          }
+                  query: condition.query ?? "",
+                  userId: condition.user?.id,
+                  channelId: condition.channel?.id,
+                  host: condition.localOnly ? "." : null,
+                ),
+              );
+        }
 
-          ref.read(notesProvider(account)).registerAll(notes);
-          return notes.toList();
-        },
-        nextFuture: (lastItem, _) async {
-          final Iterable<Note> notes;
-          if (isHashtagOnly) {
-            notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
-                  NotesSearchByTagRequest(
-                    tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
-                    untilId: lastItem.id,
-                  ),
-                );
-          } else {
-            notes = await ref.read(misskeyProvider(account)).notes.search(
+        ref.read(notesProvider(account)).registerAll(notes);
+        return notes.toList();
+      },
+      nextFuture: (lastItem, _) async {
+        final Iterable<Note> notes;
+        if (isHashtagOnly) {
+          notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+                NotesSearchByTagRequest(
+                  tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
+                  untilId: lastItem.id,
+                ),
+              );
+        } else {
+          notes = await ref.read(misskeyProvider(account)).notes.search(
                 NotesSearchRequest(
-                    query: searchValue,
-                    userId: user?.id,
-                    channelId: channel?.id,
-                    untilId: lastItem.id,
-                    host: localOnly ? "." : null));
-          }
-          ref.read(notesProvider(account)).registerAll(notes);
-          return notes.toList();
-        },
-        itemBuilder: (context, item) {
-          return MisskeyNote(note: item);
-        });
+                  query: condition.query ?? "",
+                  userId: condition.user?.id,
+                  channelId: condition.channel?.id,
+                  host: condition.localOnly ? "." : null,
+                  untilId: lastItem.id,
+                ),
+              );
+        }
+        ref.read(notesProvider(account)).registerAll(notes);
+        return notes.toList();
+      },
+      itemBuilder: (context, item) {
+        return MisskeyNote(note: item);
+      },
+    );
   }
 }

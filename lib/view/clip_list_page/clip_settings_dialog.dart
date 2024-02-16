@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/clip_settings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -83,13 +84,13 @@ class UsersListSettingsForm extends ConsumerWidget {
           TextFormField(
             initialValue: initialSettings.name,
             maxLength: 100,
-            decoration: const InputDecoration(
-              labelText: "クリップ名",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+            decoration: InputDecoration(
+              labelText: S.of(context).clipName,
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "入力してください";
+                return S.of(context).pleaseInput;
               }
               return null;
             },
@@ -101,22 +102,22 @@ class UsersListSettingsForm extends ConsumerWidget {
             initialValue: initialSettings.description,
             minLines: 2,
             maxLines: null,
-            decoration: const InputDecoration(
-              labelText: "説明（省略可）",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+            decoration: InputDecoration(
+              labelText: S.of(context).clipDescription,
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             onSaved: ref
                 .read(_clipSettingsNotifierProvider.notifier)
                 .updateDescription,
           ),
           CheckboxListTile(
-            title: const Text("パブリック"),
+            title: Text(S.of(context).public),
             value: settings.isPublic,
             onChanged:
                 ref.read(_clipSettingsNotifierProvider.notifier).updateIsPublic,
           ),
           ElevatedButton(
-            child: const Text("決定"),
+            child: Text(S.of(context).done),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();

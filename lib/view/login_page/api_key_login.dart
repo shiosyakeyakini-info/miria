@@ -7,6 +7,7 @@ import 'package:miria/view/common/modal_indicator.dart';
 import 'package:miria/view/login_page/centraing_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ApiKeyLogin extends ConsumerStatefulWidget {
   const ApiKeyLogin({super.key});
@@ -58,7 +59,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
             },
             children: [
               TableRow(children: [
-                const Text("サーバー"),
+                Text(S.of(context).server),
                 TextField(
                   controller: serverController,
                   decoration: InputDecoration(
@@ -81,9 +82,9 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                 Container()
               ]),
               TableRow(children: [
-                const Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Text("APIキー"),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Text(S.of(context).apiKey),
                 ),
                 TextField(
                   controller: apiKeyController,
@@ -100,7 +101,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                       onPressed: () {
                         login().expectFailure(context);
                       },
-                      child: const Text("ログイン")),
+                      child: Text(S.of(context).login)),
                 )
               ])
             ],

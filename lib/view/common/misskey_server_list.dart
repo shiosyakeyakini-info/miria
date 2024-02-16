@@ -4,6 +4,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MisskeyServerList extends ConsumerWidget {
   final bool isDisableUnloginable;
@@ -92,7 +93,8 @@ class MisskeyServerList extends ConsumerWidget {
                             ),
                             const Padding(padding: EdgeInsets.only(top: 10)),
                             Text(
-                              "${server.nodeInfo?.usage?.users?.total.format()}人が参加中",
+                              S.of(context).joiningServerUsers(
+                                  server.nodeInfo?.usage?.users?.total ?? 0),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const Padding(padding: EdgeInsets.only(top: 10)),
@@ -108,7 +110,7 @@ class MisskeyServerList extends ConsumerWidget {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  "非対応のサーバーです",
+                                  S.of(context).unsupportedServer,
                                   style: Theme.of(context).textTheme.bodySmall,
                                   textAlign: TextAlign.right,
                                 ),

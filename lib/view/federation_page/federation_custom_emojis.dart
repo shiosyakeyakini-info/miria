@@ -7,6 +7,7 @@ import 'package:miria/providers.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FederationCustomEmojis extends ConsumerStatefulWidget {
   final String host;
@@ -106,7 +107,7 @@ class FederationCustomEmojisState
                                   padding:
                                       const EdgeInsets.only(left: 3, right: 3),
                                   child: Text(
-                                    "センシティブ",
+                                    S.of(context).sensitive,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

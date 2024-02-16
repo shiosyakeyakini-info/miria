@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:misskey_dart/misskey_dart.dart';
@@ -114,20 +115,21 @@ void main() {
       await tester.tap(find.byIcon(Icons.keyboard_arrow_right).at(1));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text(TestData.channel1.name));
+      await tester.tap(find.text(TestData.channel2.name));
       await tester.pumpAndSettle();
 
-      // 指定したユーザーが表示されていること
+      // 指定したチャンネルが表示されていること
       expect(
           find.descendant(
-              of: find.byType(Card),
-              matching: find.text(TestData.channel1.name)),
+            of: find.byType(Card),
+            matching: find.text(TestData.channel2.name),
+          ),
           findsOneWidget);
 
       // ノートが表示されていること
       expect(find.text(TestData.note1.text!), findsOneWidget);
       verify(mockNote.search(argThat(equals(
-              NotesSearchRequest(query: "", channelId: TestData.channel1.id)))))
+              NotesSearchRequest(query: "", channelId: TestData.channel2.id)))))
           .called(1);
     });
 
@@ -297,7 +299,10 @@ void main() {
         overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
         child: DefaultRootWidget(
           initialRoute: SearchRoute(
-              account: TestData.account, initialSearchText: "Misskey"),
+            account: TestData.account,
+            initialNoteSearchCondition:
+                const NoteSearchCondition(query: "Misskey"),
+          ),
         ),
       ));
       await tester.pumpAndSettle();

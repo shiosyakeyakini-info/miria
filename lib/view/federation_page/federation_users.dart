@@ -17,20 +17,24 @@ class FederationUsers extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
     return PushableListView(
-        initializeFuture: () async {
-          final response = await ref
-              .read(misskeyProvider(account))
-              .federation
-              .users(FederationUsersRequest(host: host));
-          return response.toList();
-        },
-        nextFuture: (lastItem, _) async {
-          final response = await ref
-              .read(misskeyProvider(account))
-              .federation
-              .users(FederationUsersRequest(host: host, untilId: lastItem.id));
-          return response.toList();
-        },
-        itemBuilder: (context, user) => UserListItem(user: user));
+      initializeFuture: () async {
+        final response = await ref
+            .read(misskeyProvider(account))
+            .federation
+            .users(FederationUsersRequest(host: host));
+        return response.toList();
+      },
+      nextFuture: (lastItem, _) async {
+        final response = await ref
+            .read(misskeyProvider(account))
+            .federation
+            .users(FederationUsersRequest(host: host, untilId: lastItem.id));
+        return response.toList();
+      },
+      itemBuilder: (context, user) => UserListItem(
+        user: user,
+        isDetail: true,
+      ),
+    );
   }
 }

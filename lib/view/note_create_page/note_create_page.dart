@@ -19,6 +19,7 @@ import 'package:miria/view/note_create_page/note_emoji.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'channel_area.dart';
 import 'cw_text_area.dart';
@@ -133,8 +134,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
 
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
           hintText: (widget.renote != null || widget.reply != null)
-              ? "何て送る？"
-              : "何してはる？",
+              ? S.of(context).replyNotePlaceholder
+              : S.of(context).defaultNotePlaceholder,
           contentPadding: const EdgeInsets.all(5),
         );
 
@@ -142,11 +143,11 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       account: widget.initialAccount,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("ノート"),
+          title: Text(S.of(context).note),
           actions: [
             IconButton(
                 onPressed: () async =>
-                    await notifier.note().expectFailure(context),
+                    await notifier.note(context).expectFailure(context),
                 icon: const Icon(Icons.send))
           ],
         ),
@@ -239,12 +240,12 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       if (widget.noteCreationMode != NoteCreationMode.update)
                         const FilePreview()
                       else if (widget.note?.files.isNotEmpty == true)
-                        const Text("メディアがあります（編集はできません）"),
+                        Text(S.of(context).hasMediaButCannotEdit),
                       const RenoteArea(),
                       if (widget.noteCreationMode != NoteCreationMode.update)
                         const VoteArea()
                       else if (widget.note?.poll != null)
-                        const Text("投票があります（編集はできません）"),
+                        Text(S.of(context).hasVoteButCannotEdit),
                     ],
                   ),
                 ),
