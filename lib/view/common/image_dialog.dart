@@ -213,6 +213,7 @@ class ScaleNotifierInteractiveViewerState
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.95,
         child: InteractiveViewer(
+          maxScale: 8.0,
           // ピンチイン・ピンチアウト終了後の処理
           transformationController: widget.controller,
           onInteractionEnd: (details) {
