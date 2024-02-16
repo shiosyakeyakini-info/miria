@@ -8,6 +8,7 @@ import 'package:miria/model/note_search_condition.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/user_page/antenna_modal_sheet.dart';
 import 'package:miria/view/user_page/users_list_modal_sheet.dart';
@@ -275,6 +276,18 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               title: Text(S.of(context).createBlock),
               onTap: blockingCreate.expectFailure(context),
             ),
+          ListTile(
+            leading: const Icon(Icons.report),
+            title: Text(S.of(context).reportAbuse),
+            onTap: () {
+              Navigator.of(context).pop();
+              showDialog(
+                context: context,
+                builder: (context) => AbuseDialog(
+                  account: widget.account,
+                  targetUser: widget.response));
+            },
+          )
         ],
       ],
     );
