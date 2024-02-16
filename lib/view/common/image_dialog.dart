@@ -28,22 +28,14 @@ class ImageDialog extends ConsumerStatefulWidget {
 class ImageDialogState extends ConsumerState<ImageDialog> {
   var scale = 1.0;
   late final pageController = PageController(initialPage: widget.initialPage);
-  var verticalDragX = 0.0;
-  var verticalDragY = 0.0;
-  int? listeningId;
+  int pointersCount = 0;
+
   final TransformationController _transformationController =
       TransformationController();
 
   @override
   void initState() {
     super.initState();
-    pageController.addListener(() {
-      setState(() {
-        verticalDragX = 0;
-        verticalDragY = 0;
-        listeningId = null;
-      });
-    });
   }
 
   @override
@@ -55,66 +47,45 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
         actionsPadding: EdgeInsets.zero,
         insetPadding: EdgeInsets.zero,
         content: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: Listener(
-                      onPointerDown: (event) {
-                        if (listeningId != null) {
-                          setState(() {
-                            verticalDragX = 0;
-                            verticalDragY = 0;
-                          });
-                          listeningId = null;
-                          return;
-                        }
-                        if (scale != 1.0) return;
-                        listeningId = event.pointer;
-                      },
-                      onPointerMove: (event) {
-                        if (listeningId != null) {
-                          setState(() {
-                            verticalDragX += event.delta.dx;
-                            verticalDragY += event.delta.dy;
-                          });
-                        }
-                      },
-                      onPointerUp: (event) {
-                        final angle =
-                            (atan2(verticalDragY, verticalDragX).abs() /
-                                pi *
-                                180);
-                        if (listeningId != null &&
-                            verticalDragY.abs() > 10 &&
-                            (angle > 60 && angle < 120)) {
-                          Navigator.of(context).pop();
-                        } else {
-                          listeningId = null;
-                        }
-                      },
-                      child: GestureDetector(
-                          onDoubleTapDown: (details) {
-                            listeningId = null;
-                            if (scale != 1.0) {
-                              _transformationController.value =
-                                  Matrix4.identity();
-                              scale = 1.0;
-                            } else {
-                              final position = details.localPosition;
-                              _transformationController
-                                  .value = Matrix4.identity()
-                                ..translate(-position.dx * 2, -position.dy * 2)
-                                ..scale(3.0);
-                              scale = 3.0;
-                            }
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Dismissible(
+              key: const ValueKey(""),
+              behavior: HitTestBehavior.translucent,
+              direction: (scale == 1.0 && pointersCount <= 1)
+                  ? DismissDirection.vertical
+                  : DismissDirection.none,
+              resizeDuration: null,
+              onDismissed: (_) => {Navigator.of(context).pop()},
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                      child: Listener(
+                          onPointerDown: (event) {
+                            setState(() => pointersCount++);
                           },
-                          child: Transform.translate(
-                            offset: Offset(verticalDragX, verticalDragY),
+                          onPointerUp: (event) {
+                            setState(() => pointersCount--);
+                          },
+                          child: GestureDetector(
+                            onDoubleTapDown: (details) {
+                              if (scale != 1.0) {
+                                _transformationController.value =
+                                    Matrix4.identity();
+                                scale = 1.0;
+                              } else {
+                                final position = details.localPosition;
+                                _transformationController.value =
+                                    Matrix4.identity()
+                                      ..translate(
+                                          -position.dx * 2, -position.dy * 2)
+                                      ..scale(3.0);
+                                scale = 3.0;
+                              }
+                            },
                             child: PageView(
                               controller: pageController,
-                              physics: scale == 1.0
+                              physics: (scale == 1.0 && pointersCount <= 1)
                                   ? const ScrollPhysics()
                                   : const NeverScrollableScrollPhysics(),
                               children: [
@@ -129,67 +100,13 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                   ),
                               ],
                             ),
-                          )))),
-              Positioned(
-                left: 10,
-                top: 10,
-                child: RawMaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    constraints:
-                        const BoxConstraints(minWidth: 0, minHeight: 0),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: EdgeInsets.zero,
-                    fillColor: Theme.of(context)
-                        .scaffoldBackgroundColor
-                        .withAlpha(200),
-                    shape: const CircleBorder(),
-                    child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Icon(Icons.close,
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.color
-                                ?.withAlpha(200)))),
-              ),
-              if (defaultTargetPlatform == TargetPlatform.android ||
-                  defaultTargetPlatform == TargetPlatform.iOS)
-                Positioned(
-                    right: 10,
+                          ))),
+                  Positioned(
+                    left: 10,
                     top: 10,
                     child: RawMaterialButton(
-                        onPressed: () async {
-                          final page = pageController.page?.toInt();
-                          if (page == null) return;
-                          final response = await ref.read(dioProvider).get(
-                              widget.imageUrlList[page],
-                              options:
-                                  Options(responseType: ResponseType.bytes));
-
-                          if (defaultTargetPlatform == TargetPlatform.android) {
-                            final androidInfo =
-                                await DeviceInfoPlugin().androidInfo;
-                            if (androidInfo.version.sdkInt <= 32) {
-                              final permissionStatus =
-                                  await Permission.storage.status;
-                              if (permissionStatus.isDenied) {
-                                await Permission.storage.request();
-                              }
-                            } else {
-                              final permissionStatus =
-                                  await Permission.photos.status;
-                              if (permissionStatus.isDenied) {
-                                await Permission.photos.request();
-                              }
-                            }
-                          }
-
-                          await ImageGallerySaver.saveImage(response.data);
-                          if (!mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(S.of(context).savedImage)));
+                        onPressed: () {
+                          Navigator.of(context).pop();
                         },
                         constraints:
                             const BoxConstraints(minWidth: 0, minHeight: 0),
@@ -201,15 +118,72 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                         shape: const CircleBorder(),
                         child: Padding(
                             padding: const EdgeInsets.all(5),
-                            child: Icon(Icons.save,
+                            child: Icon(Icons.close,
                                 color: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
                                     ?.color
-                                    ?.withAlpha(200))))),
-            ],
-          ),
-        ));
+                                    ?.withAlpha(200)))),
+                  ),
+                  if (defaultTargetPlatform == TargetPlatform.android ||
+                      defaultTargetPlatform == TargetPlatform.iOS)
+                    Positioned(
+                        right: 10,
+                        top: 10,
+                        child: RawMaterialButton(
+                            onPressed: () async {
+                              final page = pageController.page?.toInt();
+                              if (page == null) return;
+                              final response = await ref.read(dioProvider).get(
+                                  widget.imageUrlList[page],
+                                  options: Options(
+                                      responseType: ResponseType.bytes));
+
+                              if (defaultTargetPlatform ==
+                                  TargetPlatform.android) {
+                                final androidInfo =
+                                    await DeviceInfoPlugin().androidInfo;
+                                if (androidInfo.version.sdkInt <= 32) {
+                                  final permissionStatus =
+                                      await Permission.storage.status;
+                                  if (permissionStatus.isDenied) {
+                                    await Permission.storage.request();
+                                  }
+                                } else {
+                                  final permissionStatus =
+                                      await Permission.photos.status;
+                                  if (permissionStatus.isDenied) {
+                                    await Permission.photos.request();
+                                  }
+                                }
+                              }
+
+                              await ImageGallerySaver.saveImage(response.data);
+                              if (!mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(S.of(context).savedImage)));
+                            },
+                            constraints:
+                                const BoxConstraints(minWidth: 0, minHeight: 0),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            padding: EdgeInsets.zero,
+                            fillColor: Theme.of(context)
+                                .scaffoldBackgroundColor
+                                .withAlpha(200),
+                            shape: const CircleBorder(),
+                            child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Icon(Icons.save,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withAlpha(200))))),
+                ],
+              ),
+            )));
   }
 }
 
