@@ -27,6 +27,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     required String monospaceFontName,
     required String cursiveFontName,
     required String fantasyFontName,
+    required Languages languages,
   }) {
     return AppThemeData(
       colorTheme: theme,
@@ -43,8 +44,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       linkStyle: TextStyle(color: theme.link),
       hashtagStyle: TextStyle(color: theme.hashtag),
       mentionStyle: TextStyle(color: theme.mention),
-      serifStyle: resolveFontFamilySerif(serifFontName),
-      monospaceStyle: resolveFontFamilyMonospace(monospaceFontName),
+      serifStyle: resolveFontFamilySerif(serifFontName, languages),
+      monospaceStyle: resolveFontFamilyMonospace(monospaceFontName, languages),
       cursiveStyle: cursiveFontName.isNotEmpty
           ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
           : const TextStyle(),
@@ -62,10 +63,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       currentDisplayTabColor:
           theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
       unicodeEmojiStyle: resolveUnicodeEmojiStyle(),
+      languages: languages,
     );
   }
 
-  String resolveFontFamilyName(String defaultFontName) {
+  resolveFontFamilyName(String defaultFontName, Languages languages) {
     if (defaultFontName.isNotEmpty) {
       return defaultFontName;
     }
@@ -74,29 +76,37 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       return "SF Pro Text";
     } else if (defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.windows) {
-      return "Noto Sans JP";
+      if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+        return "Noto Sans JP";
+      } else {
+        return "Noto Sans";
+      }
     } else {
-      return "Noto Sans CJK JP";
+      if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+        return "Noto Sans CJK JP";
+      } else {
+        return "Noto Sans";
+      }
     }
   }
 
-  List<String> resolveFontFamilyFallback(String defaultFontName) {
+  List<String> resolveFontFamilyFallback(String defaultFontName, Languages languages) {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return [
-        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
+        if (defaultFontName.isNotEmpty) resolveFontFamilyName("", languages),
         "Hiragino Maru Gothic ProN",
         "Apple Color Emoji",
       ];
     } else {
       return [
-        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
+        if (defaultFontName.isNotEmpty) resolveFontFamilyName("", languages),
         "Noto Color Emoji",
       ];
     }
   }
 
-  TextStyle resolveFontFamilySerif(String serifFontName) {
+  TextStyle resolveFontFamilySerif(String serifFontName, Languages languages) {
     final String? fontName;
     final fallback = <String>[];
 
@@ -109,9 +119,17 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     } else {
       if (defaultTargetPlatform == TargetPlatform.android ||
           defaultTargetPlatform == TargetPlatform.windows) {
-        fontName = "Noto Serif JP";
+        if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+          fontName = "Noto Serif JP";
+        } else {
+          fontName = "Noto Serif";
+        }
       } else {
-        fontName = "Noto Serif CJK JP";
+        if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+          fontName = "Noto Serif CJK JP";
+        } else {
+          fontName = "Noto Serif";
+        }
       }
       fallback.addAll(const [
         "Noto Color Emoji"
@@ -124,7 +142,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         .copyWith(fontFamilyFallback: fallback);
   }
 
-  TextStyle resolveFontFamilyMonospace(String monospaceFontName) {
+  TextStyle resolveFontFamilyMonospace(String monospaceFontName, Languages languages) {
     final String? fontName;
     final fallback = <String>[];
 
@@ -145,7 +163,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       } else if (defaultTargetPlatform == TargetPlatform.windows) {
         fontName = "Consolas";
       } else {
-        fontName = "Noto Sans Mono CJK JP";
+        if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+          fontName = "Noto Sans Mono CJK JP";
+        } else {
+          fontName = "Noto Sans";
+        }
       }
       fallback.addAll(const [
         "Noto Color Emoji",
@@ -194,6 +216,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     required BuildContext context,
     required ColorTheme theme,
     required String defaultFontName,
+    required Languages languages,
   }) {
     final textThemePre = applyGoogleFont(
         Theme.of(context).textTheme.merge((theme.isDarkTheme
@@ -201,8 +224,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
                 : ThemeData.light())
             .textTheme
             .apply(
-                fontFamily: resolveFontFamilyName(defaultFontName),
-                fontFamilyFallback: resolveFontFamilyFallback(defaultFontName),
+                fontFamily: resolveFontFamilyName(defaultFontName, languages),
+                fontFamilyFallback: resolveFontFamilyFallback(defaultFontName, languages),
                 bodyColor: theme.foreground)),
         defaultFontName);
     final textTheme = textThemePre.copyWith(
@@ -376,6 +399,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         .select((value) => value.settings.cursiveFontName));
     final fantasyFontName = ref.watch(generalSettingsRepositoryProvider
         .select((value) => value.settings.fantasyFontName));
+    final languages = ref.watch(generalSettingsRepositoryProvider
+        .select((value) => value.settings.languages));
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -398,6 +423,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         context: context,
         theme: foundColorTheme,
         defaultFontName: defaultFontName,
+        languages: languages,
       ),
       child: AppTheme(
         themeData: buildDarkAppThemeData(
@@ -406,7 +432,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
             serifFontName: serifFontName,
             monospaceFontName: monospaceFontName,
             cursiveFontName: cursiveFontName,
-            fantasyFontName: fantasyFontName),
+            fantasyFontName: fantasyFontName,
+            languages: languages),
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: true,
