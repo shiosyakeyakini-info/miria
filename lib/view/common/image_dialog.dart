@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
+import 'package:miria/view/common/interactive_viewer.dart' as iv;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -232,7 +233,7 @@ class ScaleNotifierInteractiveViewerState
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.95,
-        child: InteractiveViewer(
+        child: iv.InteractiveViewer(
           maxScale: 8.0,
           // ピンチイン・ピンチアウト終了後の処理
           transformationController: widget.controller,
