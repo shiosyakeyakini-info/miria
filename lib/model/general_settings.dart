@@ -133,7 +133,7 @@ class GeneralSettings with _$GeneralSettings {
     @Default("") String fantasyFontName,
 
     /// 言語設定
-    @Default(Languages.zhCN) Languages languages,
+    @Default(Languages.jaJP) Languages languages,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>
