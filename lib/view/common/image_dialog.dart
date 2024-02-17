@@ -243,7 +243,14 @@ class ScaleNotifierInteractiveViewerState
           child: NetworkImageView(
             url: widget.imageUrl,
             type: ImageType.image,
-          ),
+            loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const SizedBox(
+                    height: 48.0,
+                    width: 48.0,
+                    child: Center(child: CircularProgressIndicator()));
+              }),
         ));
   }
 }
