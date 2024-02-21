@@ -67,6 +67,8 @@ dependencies:
   media_kit_libs_video: ^1.0.3
   flutter_colorpicker: ^1.0.3
   volume_controller: ^2.0.7
+  window_manager: ^0.3.8
+
 
 dependency_overrides:
   image_editor:
