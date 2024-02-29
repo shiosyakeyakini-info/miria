@@ -343,6 +343,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    MisskeyGamesRoute.name: (routeData) {
+      final args = routeData.argsAs<MisskeyGamesRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MisskeyGamesPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     ImportExportRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -421,21 +431,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ShareExtensionRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ShareExtensionPage(),
+      );
+    },
     FavoritedNoteRoute.name: (routeData) {
       final args = routeData.argsAs<FavoritedNoteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    MisskeyGamesRoute.name: (routeData) {
-      final args = routeData.argsAs<MisskeyGamesRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: MisskeyGamesPage(
           key: args.key,
           account: args.account,
         ),
@@ -1701,6 +1707,44 @@ class MisskeyRouteRouteArgs {
 }
 
 /// generated route for
+/// [MisskeyGamesPage]
+class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
+  MisskeyGamesRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MisskeyGamesRoute.name,
+          args: MisskeyGamesRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MisskeyGamesRoute';
+
+  static const PageInfo<MisskeyGamesRouteArgs> page =
+      PageInfo<MisskeyGamesRouteArgs>(name);
+}
+
+class MisskeyGamesRouteArgs {
+  const MisskeyGamesRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'MisskeyGamesRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
 /// [ImportExportPage]
 class ImportExportRoute extends PageRouteInfo<void> {
   const ImportExportRoute({List<PageRouteInfo>? children})
@@ -1942,6 +1986,20 @@ class TimeLineRouteArgs {
 }
 
 /// generated route for
+/// [ShareExtensionPage]
+class ShareExtensionRoute extends PageRouteInfo<void> {
+  const ShareExtensionRoute({List<PageRouteInfo>? children})
+      : super(
+          ShareExtensionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ShareExtensionRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [FavoritedNotePage]
 class FavoritedNoteRoute extends PageRouteInfo<FavoritedNoteRouteArgs> {
   FavoritedNoteRoute({
@@ -1976,43 +2034,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [MisskeyGamesPage]
-class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
-  MisskeyGamesRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          MisskeyGamesRoute.name,
-          args: MisskeyGamesRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'MisskeyGamesRoute';
-
-  static const PageInfo<MisskeyGamesRouteArgs> page =
-      PageInfo<MisskeyGamesRouteArgs>(name);
-}
-
-class MisskeyGamesRouteArgs {
-  const MisskeyGamesRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'MisskeyGamesRouteArgs{key: $key, account: $account}';
   }
 }
