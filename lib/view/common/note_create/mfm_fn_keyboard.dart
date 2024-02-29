@@ -210,7 +210,7 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(arg.name.substring(queryLength));
       }
     }
-    if ((mfmFnName == "fg" || mfmFnName == "bg") && arg.name == "color") {
+    if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") && arg.name == "color") {
       final result = await showDialog<Color?>(
         context: parentContext,
         builder: (context) => const ColorPickerDialog(),
