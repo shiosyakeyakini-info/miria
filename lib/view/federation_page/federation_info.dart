@@ -9,6 +9,8 @@ import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FederationInfo extends ConsumerStatefulWidget {
   final String host;
@@ -30,7 +32,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
   Widget build(BuildContext context) {
     final data = ref.watch(federationPageFederationDataProvider);
     if (data != null) {
-      final description = data.description.replaceAll(htmlTagRemove, "");
+      final description = data.description;
       return SingleChildScrollView(
         child: Padding(
           padding:
@@ -63,7 +65,13 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 5)),
-              Text(description),
+              Html(
+                data: description,
+                style: {"a": Style(color: AppTheme.of(context).linkStyle.color)},
+                onLinkTap: (url, _, __, ___) {
+                  launchUrlString(url.toString());
+                } 
+              ),
               const Padding(padding: EdgeInsets.only(top: 5)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -149,7 +157,13 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           for (final rule in data.serverRules.indexed)
-                            Text("${(rule.$1 + 1)}. ${rule.$2}\n")
+                            Html(
+                              data: "${(rule.$1 + 1)}. ${rule.$2}<br>",
+                              style: {"a": Style(color: AppTheme.of(context).linkStyle.color)},
+                              onLinkTap: (url, _, __, ___) {
+                                launchUrlString(url.toString());
+                              }
+                            )
                         ],
                       )
                     ]),
