@@ -111,9 +111,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   .showSnackBar(SnackBar(content: Text(localize.renoted)));
               navigator.pop();
             }.expectFailure(context),
-            title: const Padding(
-              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Text("Renote"),
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text(S.of(context).renote),
             ),
             subtitle: Row(children: [
               Expanded(
