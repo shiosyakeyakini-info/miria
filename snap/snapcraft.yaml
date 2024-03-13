@@ -1,0 +1,279 @@
+name: miria # 'snapcraft register miria'で名前を予約する必要があります。
+title: Miria
+type: app
+summary: Misskey Client App # 79文字まで
+description: |
+  **NOTE: Allow access to `password-manager-service` after installation.**
+
+  ```
+  $ snap connect miria:password-manager-service
+  ```
+
+  Miria is Misskey Client App for iOS, Android and many targets which made by Flutter.
+
+  Miria includes these features.
+
+  - Login, Logout, Management multiple servers and accounts
+  - Show home, local, hybrid(social), global timelines, list, antenna and channel
+  - Show note with MFM (Completely Supported).
+  - Note, Renote, Quoted renote, renote to any channel
+  - Reaction
+  - Show Notifications
+  - Edit antenna and list
+  - Explore
+  - Announcements
+  - Favorite
+  - Search notes and users
+  - Page (show only)
+  - Show Server Information (online users, job queue, ads, custom emojis)
+license: AGPL-3.0
+website: https://shiosyakeyakini.info/miria_web
+source-code: https://github.com/shiosyakeyakini-info/miria
+issues: https://github.com/shiosyakeyakini-info/miria/issues
+donation: https://shiosyakeyakini.fanbox.cc
+contact: sorairo@shiosyakeyakini.info
+icon: assets/images/icon.png
+adopt-info: miria
+base: core22
+grade: stable
+confinement: strict
+compression: lzo
+
+apps:
+  miria:
+    command: usr/share/miria/miria
+    extensions: [gnome]
+    plugs:
+      - home
+      - unity7
+      - network
+      - audio-playback
+      # 以下はユーザーが接続を許可するまで使用不可（password-manager-serviceは必須）
+      - removable-media
+      - password-manager-service
+    environment:
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/lapack
+parts:
+  flutter-git:
+    plugin: nil
+    source: https://github.com/flutter/flutter.git
+    source-branch: stable
+    source-depth: 1
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin
+      mkdir -p $CRAFT_PART_INSTALL/usr/libexec
+      cp -r $CRAFT_PART_SRC $CRAFT_PART_INSTALL/usr/libexec/flutter
+      ln -s $CRAFT_PART_INSTALL/usr/libexec/flutter/bin/flutter $CRAFT_PART_INSTALL/usr/bin/flutter
+      ln -s $SNAPCRAFT_PART_INSTALL/usr/libexec/flutter/bin/dart $SNAPCRAFT_PART_INSTALL/usr/bin/dart
+      $CRAFT_PART_INSTALL/usr/bin/flutter doctor
+    build-packages:
+      - clang
+      - cmake
+      - curl
+      - libgtk-3-dev
+      - ninja-build
+      - unzip
+      - xz-utils
+      - zip
+    override-prime: ''
+
+  miria:
+    source: .
+    after: [flutter-git]
+    plugin: nil
+    build-packages:
+      - libmpv-dev
+      - libsecret-1-dev
+    build-environment:
+      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/gnome-42-2204-sdk/current/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/gnome-42-2204-sdk/current/usr/lib:/snap/gnome-42-2204-sdk/current/usr/lib/vala-current:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pulseaudio${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/miria
+      mkdir -p $CRAFT_PART_INSTALL/meta/gui
+      set +e
+      flutter pub get
+      set -eux
+      flutter build linux --release
+      cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/usr/share/miria/
+      cp macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png $CRAFT_PART_INSTALL/meta/gui/miria.png
+      craftctl set version=$(flutter pub run cider version)
+
+  deps:
+    # https://github.com/ubuntu-flutter-community/musicpod/blob/ace85f0a85f9d3f191c98c54276a29b2f32f51b0/snap/snapcraft.yaml#L100C1-L209C36
+    plugin: nil
+    stage-packages:
+      - libaom3
+      - libass9
+      - libblas3
+      - libbluray2
+      - libbs2b0
+      - libchromaprint1
+      - libcodec2-1.0
+      - libflite1
+      - libgme0
+      - libgsm1
+      - liblapack3
+      - liblilv-0-0
+      - libmysofa1
+      - libnorm1
+      - libnuma1
+      - libopenmpt0
+      - libpgm-5.3-0
+      - libpocketsphinx3
+      - librabbitmq4
+      - librubberband2
+      - libserd-0-0
+      - libshine3
+      - libsnappy1v5
+      - libsodium23
+      - libsord-0-0
+      - libsoxr0
+      - libsphinxbase3
+      - libsratom-0-0
+      - libssh-gcrypt-4
+      - libudfread0
+      # - libva-drm2
+      # - libva-x11-2
+      - libvdpau1
+      - libvidstab1.1
+      - libx265-199
+      - libxvidcore4
+      - libzimg2
+      - libzmq5
+      - libzvbi0
+      - libavfilter7
+      - libavformat58
+      - libpostproc55
+      - libswscale5
+      - libsrt1.4-gnutls
+      - ocl-icd-libopencl1
+      - on amd64:
+        - libmfx1
+      # manual
+      - liblua5.2-0
+      - libmpv1
+      - libmujs1
+      - libopenal1
+      - libplacebo192
+      - libsixel1
+      - libsndio7.0
+      - libuchardet0
+      - libusb-1.0-0
+      - libvulkan1
+      - libxcb-shape0
+      - libcdio19
+      - libcdio-cdda2
+      - libcdio-paranoia2
+      - libdc1394-25
+      - libdecor-0-0
+      - libdvdnav4
+      - libdvdread8
+      - libsdl2-2.0-0
+      - libxss1
+      - libxv1
+      - libavdevice58
+      - libsecret-1-0 # flutter_secure_storage
+      - zenity # Snapとファイル選択ダイアログの統合のため https://forum.snapcraft.io/t/integrate-custom-dialogs-in-your-snap/10825
+    prime:
+      - usr/lib/*/blas/libblas.so*
+      - usr/lib/*/lapack/liblapack.so*
+      - usr/lib/*/libaom.so*
+      - usr/lib/*/libass.so*
+      - usr/lib/*/libbluray.so*
+      - usr/lib/*/libbs2b.so*
+      - usr/lib/*/libchromaprint.so*
+      - usr/lib/*/libcodec2.so*
+      - usr/lib/*/libflite_cmulex.so*
+      - usr/lib/*/libflite_cmu_us_awb.so*
+      - usr/lib/*/libflite_cmu_us_kal16.so*
+      - usr/lib/*/libflite_cmu_us_kal.so*
+      - usr/lib/*/libflite_cmu_us_rms.so*
+      - usr/lib/*/libflite_cmu_us_slt.so*
+      - usr/lib/*/libflite.so*
+      - usr/lib/*/libflite_usenglish.so*
+      - usr/lib/*/libgme.so*
+      - usr/lib/*/libgsm.so*
+      - usr/lib/*/liblilv-0.so*
+      - usr/lib/*/libmfx.so*
+      - usr/lib/*/libmysofa.so*
+      - usr/lib/*/libnorm.so*
+      - usr/lib/*/libnuma.so*
+      - usr/lib/*/libOpenCL.so*
+      - usr/lib/*/libopenmpt.so*
+      - usr/lib/*/libpgm-5.3.so*
+      - usr/lib/*/libpocketsphinx.so*
+      - usr/lib/*/librabbitmq.so*
+      - usr/lib/*/librubberband.so*
+      - usr/lib/*/libserd-0.so*
+      - usr/lib/*/libshine.so*
+      - usr/lib/*/libsnappy.so*
+      - usr/lib/*/libsodium.so*
+      - usr/lib/*/libsord-0.so*
+      - usr/lib/*/libsoxr.so*
+      - usr/lib/*/libsphinxbase.so*
+      - usr/lib/*/libsratom-0.so*
+      - usr/lib/*/libssh-gcrypt.so*
+      - usr/lib/*/libudfread.so*
+      # - usr/lib/*/libva-drm.so*
+      # - usr/lib/*/libva-x11.so*
+      - usr/lib/*/libvdpau.so*
+      - usr/lib/*/libvidstab.so*
+      - usr/lib/*/libx265.so*
+      - usr/lib/*/libxvidcore.so*
+      - usr/lib/*/libzimg.so*
+      - usr/lib/*/libzmq.so*
+      - usr/lib/*/libzvbi.so*
+      - usr/lib/*/libx264.so*
+      - usr/lib/*/libswscale.so*
+      - usr/lib/*/libavfilter.so*
+      - usr/lib/*/libavformat.so*
+      - usr/lib/*/libpostproc.so*
+      - usr/lib/*/libsrt*.so*
+      - usr/lib/*/libda*.so*
+      - usr/lib/*/libgfortran.so*
+      - usr/lib/*/libavcodec.so*
+      - usr/lib/*/libavutil.so*
+      - usr/lib/*/libswresample.so*
+      # manual
+      - usr/lib/*/liblua5.2.so*
+      - usr/lib/*/libmpv.so*
+      - usr/lib/*/libmujs.so*
+      - usr/lib/*/libopenal.so*
+      - usr/lib/*/libplacebo.so*
+      - usr/lib/*/libsixel.so*
+      - usr/lib/*/libsndio.so*
+      - usr/lib/*/libuchardet.so*
+      - usr/lib/*/libusb-1.0.so*
+      - usr/lib/*/libvulkan.so*
+      - usr/lib/*/libxcb-shape.so*
+      - usr/lib/*/libcdio.so*
+      - usr/lib/*/libcdio_cdda.so*
+      - usr/lib/*/libcdio_paranoia.so*
+      - usr/lib/*/libdc1394.so*
+      - usr/lib/*/libdecor-0.so*
+      - usr/lib/*/libdvdnav.so*
+      - usr/lib/*/libdvdread.so*
+      - usr/lib/*/libSDL2-2.0.so*
+      - usr/lib/*/libXss.so*
+      - usr/lib/*/libXv.so*
+      - usr/lib/*/libavdevice.so*
+      - usr/lib/*/libsecret-1.so* # flutter_secure_storage
+      - usr/bin/zenity # Snapとファイル選択ダイアログの統合のため
+      - usr/share/zenity/*
+
+  cleanup:
+    after: [miria, deps]  # Make this part run last; list all your other parts here
+    plugin: nil
+    build-snaps: [gnome-42-2204, gtk-common-themes, core22]  # List all content-snaps you're using here
+    override-prime: |
+      set -eux
+      for snap in "gnome-42-2204" "gtk-common-themes" "core22"; do  # List all content-snaps you're using here
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" "$SNAPCRAFT_PRIME/usr/{}" \;
+      done
+      for CRUFT in bug lintian man; do
+        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
+      done
+      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
+  lint:
+    ignore:
+      - library:
+        - usr/share/miria/lib/libmedia_kit_native_event_loop.so
