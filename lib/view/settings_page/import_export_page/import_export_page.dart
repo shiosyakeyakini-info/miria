@@ -33,6 +33,11 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                S.of(context).settingsFileManagement,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(S.of(context).importAndExportSettingsDescription),
+              Text(
                 S.of(context).importSettings,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
@@ -81,8 +86,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                 S.of(context).exportSettings,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Text(S.of(context).exportSettingsDescription1),
-              Text(S.of(context).exportSettingsDescription2),
+              Text(S.of(context).exportSettingsDescription),
               Row(
                 children: [
                   Expanded(
