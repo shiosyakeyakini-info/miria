@@ -40,6 +40,12 @@ I'm planning to deploy from F-Droid.
   - There are cases in which Miria's MFM appearance is different from browsers.
   - Custom CSS didn't support.
 
+## Contribute
+
+### Localization
+
+See [Issue #164](https://github.com/shiosyakeyakini-info/miria/issues/164).
+
 ## License
 
 ### About Miria Icon

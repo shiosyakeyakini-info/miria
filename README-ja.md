@@ -43,6 +43,12 @@ MiriaはiOS, Android向けMisskeyクライアントです。Windowsでも動作�
   - MFMの見た目がブラウザと異なる場合があります。
   - カスタムCSSは実装できません。
 
+## コントリビュート
+
+### ローカライズ
+
+[Issue #164](https://github.com/shiosyakeyakini-info/miria/issues/164)を確認してください。
+
 ## ライセンス
 
 ### アイコンについて
