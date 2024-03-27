@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,11 +25,14 @@ class SharingAccountSelectPage extends ConsumerWidget {
           final account = accounts[index];
           return ListTile(
             onTap: () {
-              context.replaceRoute(NoteCreateRoute(
-                initialAccount: account,
-                initialText: sharingText,
-                initialMediaFiles: filePath,
-              ));
+              context.replaceRoute(
+                NoteCreateRoute(
+                  initialAccount: account,
+                  initialText: sharingText,
+                  initialMediaFiles: filePath,
+                  exitOnNoted: defaultTargetPlatform == TargetPlatform.iOS,
+                ),
+              );
             },
             leading: AvatarIcon(user: account.i),
             title: Text(account.i.name ?? account.i.username,

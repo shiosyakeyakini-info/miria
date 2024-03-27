@@ -16,23 +16,24 @@ class ShareViewController: UIViewController, FlutterPluginRegistry {
     private var shareText: [String] = []
     private var shareFiles: [SharedMediaFile] = []
     
-    private let flutterViewController: FlutterViewController = FlutterViewController(project: nil, initialRoute: "/share-extension", nibName: nil, bundle: nil)
+    private var flutterViewController: FlutterViewController?;
     
     
     @objc func registrar(forPlugin pluginKey: String) -> FlutterPluginRegistrar? {
-        return flutterViewController.registrar(forPlugin: pluginKey)
+        return flutterViewController!.registrar(forPlugin: pluginKey)
     }
     
     @objc func hasPlugin(_ pluginKey: String) -> Bool {
-        return flutterViewController.hasPlugin(pluginKey)
+        return flutterViewController!.hasPlugin(pluginKey)
     }
     
     @objc func valuePublished(byPlugin pluginKey: String) -> NSObject? {
-        return flutterViewController.valuePublished(byPlugin: pluginKey)
+        return flutterViewController!.valuePublished(byPlugin: pluginKey)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        flutterViewController = FlutterViewController(project: nil, initialRoute: "/share-extension", nibName: nil, bundle: nil);
         
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
         if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
@@ -55,11 +56,24 @@ class ShareViewController: UIViewController, FlutterPluginRegistry {
 
             }
         }
+        
+        let shareExtensionChannel = FlutterMethodChannel(name: "info.shiosyakeyakini.miria/share_extension", binaryMessenger: flutterViewController as! FlutterBinaryMessenger)
+        shareExtensionChannel.setMethodCallHandler({
+            (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+            switch call.method {
+            case "exit":
+                self.extensionContext!.completeRequest(returningItems: nil)
+            default:
+                result(FlutterMethodNotImplemented)
+            }
+            
+        })
+        
         ShareExtensionPluginRegistrant.register(with: self)
         
-        addChild(flutterViewController)
-        view.addSubview(flutterViewController.view)
-        flutterViewController.view.frame = view.bounds
+        addChild(flutterViewController!)
+        view.addSubview(flutterViewController!.view)
+        flutterViewController!.view.frame = view.bounds
     }
     
     private func save() {

@@ -14,10 +14,17 @@
 @import shared_preference_app_group;
 #endif
 
+#if __has_include(<sqflite/SqflitePlugin.h>)
+#import <sqflite/SqflitePlugin.h>
+#else
+@import sqflite;
+#endif
+
 @implementation ShareExtensionPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
     
     [SharedPreferenceAppGroupPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferenceAppGroupPlugin"]];
+    [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
 }
 @end
