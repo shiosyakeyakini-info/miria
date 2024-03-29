@@ -82,6 +82,7 @@ class InteractiveViewer extends StatefulWidget {
     this.transformationController,
     this.alignment,
     this.trackpadScrollCausesScale = false,
+    this.isEnableScale = true,
     required Widget this.child,
   }) : assert(minScale > 0),
        assert(interactionEndFrictionCoefficient > 0),
@@ -130,6 +131,7 @@ class InteractiveViewer extends StatefulWidget {
     this.transformationController,
     this.alignment,
     this.trackpadScrollCausesScale = false,
+    this.isEnableScale = true,
     required InteractiveViewerWidgetBuilder this.builder,
   }) : assert(minScale > 0),
        assert(interactionEndFrictionCoefficient > 0),
@@ -405,6 +407,8 @@ class InteractiveViewer extends StatefulWidget {
   ///  * [ValueNotifier], the parent class of TransformationController.
   ///  * [TextEditingController] for an example of another similar pattern.
   final TransformationController? transformationController;
+
+  final bool isEnableScale;
 
   // Used as the coefficient of friction in the inertial translation animation.
   // This value was eyeballed to give a feel similar to Google Photos.
@@ -1221,15 +1225,16 @@ class _InteractiveViewerState extends State<InteractiveViewer> with TickerProvid
     final scale = _transformationController!.value.getMaxScaleOnAxis();
 
     final isDesktop = !(Platform.isAndroid || Platform.isIOS);
+    final isEnableScale = (widget.isEnableScale && !(isDesktop && scale == 1.0));
 
     return Listener(
       key: _parentKey,
       onPointerSignal: _receivedPointerSignal,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque, // Necessary when panning off screen.
-        onScaleEnd: (isDesktop && scale == 1.0) ? null : _onScaleEnd,
-        onScaleStart: (isDesktop && scale == 1.0) ? null : _onScaleStart,
-        onScaleUpdate: (isDesktop && scale == 1.0) ? null : _onScaleUpdate,
+        onScaleEnd: (isEnableScale) ? _onScaleEnd : null,
+        onScaleStart: (isEnableScale) ? _onScaleStart : null,
+        onScaleUpdate: (isEnableScale) ? _onScaleUpdate : null,
         trackpadScrollCausesScale: widget.trackpadScrollCausesScale,
         trackpadScrollToScaleFactor: Offset(0, -1 / widget.scaleFactor),
         child: child,

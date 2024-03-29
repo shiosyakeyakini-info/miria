@@ -32,12 +32,23 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
   late final pageController = PageController(initialPage: widget.initialPage);
   int pointersCount = 0;
 
+  double maxScale = 8.0;
+  double lastScale = 1.0;
+
+  bool isDoubleTap = false;
+  TapDownDetails? lastDoubleTapDetails;
+
   final TransformationController _transformationController =
       TransformationController();
 
   @override
   void initState() {
     super.initState();
+  }
+
+  void _resetScale() {
+    _transformationController.value = Matrix4.identity();
+    scale = 1.0;
   }
 
   @override
@@ -52,26 +63,26 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: CallbackShortcuts(
-                bindings: {
-                  const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
-                    _transformationController.value = Matrix4.identity();
-                    scale = 1.0;
-                    pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease);
-                  },
-                  const SingleActivator(LogicalKeyboardKey.arrowRight): () {
-                    _transformationController.value = Matrix4.identity();
-                    scale = 1.0;
-                    pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease);
-                  },
+              bindings: {
+                const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
+                  _resetScale();
+                  pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease);
                 },
-                child: Dismissible(
+                const SingleActivator(LogicalKeyboardKey.arrowRight): () {
+                  _resetScale();
+                  pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease);
+                },
+              },
+              child: Dismissible(
                   key: const ValueKey(""),
                   behavior: HitTestBehavior.translucent,
-                  direction: (scale == 1.0 && pointersCount <= 1)
+                  direction: (isDoubleTap == false &&
+                          scale == 1.0 &&
+                          pointersCount <= 1)
                       ? DismissDirection.vertical
                       : DismissDirection.none,
                   resizeDuration: null,
@@ -86,16 +97,57 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                     setState(() => pointersCount++);
                                   },
                                   onPointerUp: (event) {
-                                    setState(() => pointersCount--);
+                                    setState(() {
+                                      pointersCount--;
+                                      if (isDoubleTap) {
+                                        if (scale == 1.0) {
+                                          _resetScale();
+                                        }
+                                        isDoubleTap = false;
+                                      }
+                                    });
+                                  },
+                                  onPointerMove: (event) {
+                                    if (isDoubleTap && pointersCount == 1) {
+                                      final position =
+                                          lastDoubleTapDetails!.localPosition;
+                                      final delta =
+                                          event.localPosition - position;
+
+                                      scale = max(
+                                          min(lastScale + (delta.dy / 75.0),
+                                              maxScale),
+                                          1.0);
+                                      final v = _transformationController
+                                          .toScene(position);
+
+                                      _transformationController.value =
+                                          Matrix4.identity()..scale(scale);
+
+                                      final v2 = _transformationController
+                                              .toScene(position) -
+                                          v;
+
+                                      _transformationController.value =
+                                          _transformationController.value
+                                              .clone()
+                                            ..translate(v2.dx, v2.dy);
+                                    }
                                   },
                                   child: GestureDetector(
                                     onDoubleTapDown: (details) {
+                                      setState(() {
+                                        isDoubleTap = true;
+                                        lastDoubleTapDetails = details;
+                                        lastScale = scale;
+                                      });
+                                    },
+                                    onDoubleTap: () {
                                       if (scale != 1.0) {
-                                        _transformationController.value =
-                                            Matrix4.identity();
-                                        scale = 1.0;
-                                      } else {
-                                        final position = details.localPosition;
+                                        _resetScale();
+                                      } else if (lastDoubleTapDetails != null) {
+                                        final position =
+                                            lastDoubleTapDetails!.localPosition;
                                         _transformationController.value =
                                             Matrix4.identity()
                                             ..translate(
@@ -103,10 +155,15 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                               ..scale(3.0);
                                         scale = 3.0;
                                       }
+                                      setState(() {
+                                        isDoubleTap = false;
+                                      });
                                     },
                                     child: PageView(
                                       controller: pageController,
-                                      physics: (scale == 1.0 && pointersCount <= 1)
+                                      physics: (isDoubleTap == false &&
+                                              scale == 1.0 &&
+                                              pointersCount <= 1)
                                           ? const ScrollPhysics()
                                           : const NeverScrollableScrollPhysics(),
                                       children: [
@@ -118,6 +175,8 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                                 setState(() {
                                               scale = scaleUpdated;
                                             }),
+                                            maxScale: maxScale,
+                                            isEnableScale: !isDoubleTap,
                                           ),
                                       ],
                                     ),
@@ -212,12 +271,16 @@ class ScaleNotifierInteractiveViewer extends StatefulWidget {
   final String imageUrl;
   final TransformationController controller;
   final void Function(double) onScaleChanged;
+  final double maxScale;
+  final bool isEnableScale;
 
   const ScaleNotifierInteractiveViewer({
     super.key,
     required this.imageUrl,
     required this.controller,
     required this.onScaleChanged,
+    required this.maxScale,
+    required this.isEnableScale,
   });
 
   @override
@@ -234,7 +297,8 @@ class ScaleNotifierInteractiveViewerState
         width: MediaQuery.of(context).size.width * 0.95,
         height: MediaQuery.of(context).size.height * 0.95,
         child: iv.InteractiveViewer(
-          maxScale: 8.0,
+          maxScale: widget.maxScale,
+          isEnableScale: widget.isEnableScale,
           // ピンチイン・ピンチアウト終了後の処理
           transformationController: widget.controller,
           onInteractionEnd: (details) {
