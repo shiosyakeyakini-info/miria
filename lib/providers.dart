@@ -9,6 +9,7 @@ import 'package:miria/repository/account_repository.dart';
 import 'package:miria/repository/account_settings_repository.dart';
 import 'package:miria/repository/antenna_timeline_repository.dart';
 import 'package:miria/repository/channel_time_line_repository.dart';
+import 'package:miria/repository/desktop_settings_repository.dart';
 import 'package:miria/repository/emoji_repository.dart';
 import 'package:miria/repository/favorite_repository.dart';
 import 'package:miria/repository/general_settings_repository.dart';
@@ -240,6 +241,9 @@ final accountSettingsRepositoryProvider =
 
 final generalSettingsRepositoryProvider =
     ChangeNotifierProvider((ref) => GeneralSettingsRepository());
+
+final desktopSettingsRepositoryProvider =
+    ChangeNotifierProvider((ref) => DesktopSettingsRepository());
 
 final errorEventProvider =
     StateProvider<(Object? error, BuildContext? context)>(
