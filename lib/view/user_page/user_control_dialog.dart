@@ -148,7 +148,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               ),
             );
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy)),
+              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
             );
             Navigator.of(context).pop();
           },
@@ -159,7 +159,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           onTap: () {
             Clipboard.setData(ClipboardData(text: widget.response.acct));
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy)),
+              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
             );
             Navigator.of(context).pop();
           },
@@ -178,7 +178,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               ),
             );
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy)),
+              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
             );
             Navigator.of(context).pop();
           },
