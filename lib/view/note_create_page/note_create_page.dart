@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -43,6 +46,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
   final Account initialAccount;
   final String? initialText;
   final List<String>? initialMediaFiles;
+  final bool exitOnNoted;
   final CommunityChannel? channel;
   final Note? reply;
   final Note? renote;
@@ -54,6 +58,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
     required this.initialAccount,
     this.initialText,
     this.initialMediaFiles,
+    this.exitOnNoted = false,
     this.channel,
     this.reply,
     this.renote,
@@ -72,6 +77,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   NoteCreate get data => ref.read(noteCreateProvider(widget.initialAccount));
   NoteCreateNotifier get notifier =>
       ref.read(noteCreateProvider(widget.initialAccount).notifier);
+
+  static const shareExtensionMethodChannel =
+      MethodChannel("info.shiosyakeyakini.miria/share_extension");
 
   @override
   void initState() {
@@ -122,7 +130,12 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           break;
         case NoteSendStatus.finished:
           IndicatorView.hideIndicator(context);
-          Navigator.of(context).pop();
+          if (widget.exitOnNoted) {
+            shareExtensionMethodChannel.invokeMethod("exit");
+          } else {
+            Navigator.of(context).pop();
+          }
+
           break;
         case NoteSendStatus.error:
           IndicatorView.hideIndicator(context);

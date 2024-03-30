@@ -13,8 +13,8 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		B6577A912B6DA683001CF804 /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6577A902B6DA683001CF804 /* Flutter.xcframework */; };
-		B6577A922B6DA683001CF804 /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B6577A902B6DA683001CF804 /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B670FC9B2BB4D1230071C2AC /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B670FC932BB4CC110071C2AC /* Flutter.xcframework */; };
+		B670FC9C2BB4D1230071C2AC /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B670FC932BB4CC110071C2AC /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B6A604652B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A604642B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m */; };
 		B6E32F982A29F16500F51621 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E32F972A29F16500F51621 /* ShareViewController.swift */; };
 		B6E32F9B2A29F16500F51621 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6E32F992A29F16500F51621 /* MainInterface.storyboard */; };
@@ -44,13 +44,13 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B6577A932B6DA683001CF804 /* Embed Frameworks */ = {
+		B670FC9D2BB4D1230071C2AC /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B6577A922B6DA683001CF804 /* Flutter.xcframework in Embed Frameworks */,
+				B670FC9C2BB4D1230071C2AC /* Flutter.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,7 +86,10 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF6575481D38F1E3908DF820 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		B6577A902B6DA683001CF804 /* Flutter.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = ../../../flutter/bin/cache/artifacts/engine/ios/extension_safe/Flutter.xcframework; sourceTree = "<group>"; };
+		B6577A902B6DA683001CF804 /* Flutter.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:S8QB4VV633:FLUTTER.IO LLC"; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = ../../../flutter/bin/cache/artifacts/engine/ios/extension_safe/Flutter.xcframework; sourceTree = "<group>"; };
+		B670FC8F2BB22A680071C2AC /* Flutter.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:S8QB4VV633:FLUTTER.IO LLC"; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = "../../../flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework"; sourceTree = "<group>"; };
+		B670FC932BB4CC110071C2AC /* Flutter.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:S8QB4VV633:FLUTTER.IO LLC"; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = "../../../flutter/bin/cache/artifacts/engine/ios-release/extension_safe/Flutter.xcframework"; sourceTree = "<group>"; };
+		B670FC972BB4CEA30071C2AC /* Flutter.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:S8QB4VV633:FLUTTER.IO LLC"; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = "../../../flutter/bin/cache/artifacts/engine/ios-profile/extension_safe/Flutter.xcframework"; sourceTree = "<group>"; };
 		B6A6044E2B6F3F4C00DF5E0A /* shared_preference_app_group.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = shared_preference_app_group.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A604592B6F41A100DF5E0A /* shared_preference_app_group.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = shared_preference_app_group.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A604632B6F862900DF5E0A /* ShareExtensionPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareExtensionPluginRegistrant.h; sourceTree = "<group>"; };
@@ -117,7 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B6577A912B6DA683001CF804 /* Flutter.xcframework in Frameworks */,
+				B670FC9B2BB4D1230071C2AC /* Flutter.xcframework in Frameworks */,
 				F92D0DC1549688E298B84F03 /* Pods_ShareExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,6 +192,9 @@
 		A4C9FFCDD3C0E6ACDCD23018 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B670FC8F2BB22A680071C2AC /* Flutter.xcframework */,
+				B670FC932BB4CC110071C2AC /* Flutter.xcframework */,
+				B670FC972BB4CEA30071C2AC /* Flutter.xcframework */,
 				B6A604592B6F41A100DF5E0A /* shared_preference_app_group.framework */,
 				B6A6044E2B6F3F4C00DF5E0A /* shared_preference_app_group.framework */,
 				B6577A902B6DA683001CF804 /* Flutter.xcframework */,
@@ -247,7 +253,7 @@
 				B6E32F912A29F16500F51621 /* Sources */,
 				B6E32F922A29F16500F51621 /* Frameworks */,
 				B6E32F932A29F16500F51621 /* Resources */,
-				B6577A932B6DA683001CF804 /* Embed Frameworks */,
+				B670FC9D2BB4D1230071C2AC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -265,7 +271,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
@@ -514,7 +520,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -599,7 +605,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -648,7 +654,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
