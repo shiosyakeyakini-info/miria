@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -30,6 +31,7 @@ class _VideoDialogState extends State<VideoDialog> {
   int lastTapTime = 0;
   bool isVisibleControlBar = false;
   bool isEnabledButton = false;
+  bool isFullScreen = false;
   Timer? timer;
 
   @override
@@ -50,13 +52,26 @@ class _VideoDialogState extends State<VideoDialog> {
       isVisibleControlBar = true;
       isEnabledButton = true;
     }
+    ServicesBinding.instance.keyboard.addHandler(_onKey);
   }
 
   @override
   void dispose() {
     player.dispose();
+    ServicesBinding.instance.keyboard.removeHandler(_onKey);
     VolumeController().removeListener();
     super.dispose();
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.escape) {
+      if (!isFullScreen) {
+        Navigator.of(context).pop();
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -168,12 +183,14 @@ class _VideoDialogState extends State<VideoDialog> {
                                       controls: AdaptiveVideoControls,
                                       fill: Colors.transparent,
                                       onEnterFullscreen: () async {
+                                        isFullScreen = true;
                                         await defaultEnterNativeFullscreen();
                                         videoKey.currentState
                                             ?.update(fill: Colors.black);
                                       },
                                       onExitFullscreen: () async {
                                         await defaultExitNativeFullscreen();
+                                        isFullScreen = false;
                                         videoKey.currentState
                                             ?.update(fill: Colors.transparent);
                                       },
