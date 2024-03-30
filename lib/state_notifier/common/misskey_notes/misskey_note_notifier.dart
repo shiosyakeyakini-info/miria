@@ -44,7 +44,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
       final userNotes = await ref.read(misskeyProvider(account)).users.notes(
             UsersNotesRequest(
               userId: user.id,
-              untilDate: note.createdAt.millisecondsSinceEpoch + 1,
+              untilDate: note.createdAt.add(const Duration(seconds: 1)),
             ),
           );
 
