@@ -62,8 +62,8 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                     final confirm = await SimpleConfirmDialog.show(
                         context: context,
                         message: S.of(context).confirmSavingPhoto,
-                        primary: S.of(context).confirmSavingPhoto,
-                        secondary: S.of(context).doneEditingPhoto);
+                        primary: S.of(context).doneEditingPhoto,
+                        secondary: S.of(context).continueEditingPhoto);
 
                     final result =
                         await photoEdit.createSaveData(renderingAreaKey);
