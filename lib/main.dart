@@ -128,7 +128,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
       title: 'Miria',
       debugShowCheckedModeBanner: false,
       locale: Locale(language.countryCode, language.languageCode),
-      supportedLocales: const [Locale("ja", "JP"), Locale("ja", "OJ")],
+      supportedLocales: const [Locale("ja", "JP"), Locale("ja", "OJ"), Locale("zh", "CN")],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,
