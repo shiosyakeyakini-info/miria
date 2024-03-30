@@ -150,7 +150,7 @@
     "alreadyAddedClip": "它看起来像是已经添加到便签中的帖子",
     "deleteClip": "从便签中删除",
     "thanksForReport": "您的内容已发送。感谢您的举报。",
-    "reportAbuseOf": "举报 {name}",
+    "reportAbuseOf": "举报 {userName}",
     "@reportAbuseOf": {
         "placeholders": {
             "userName": {
@@ -186,7 +186,7 @@
     },
     "confirmDeleteReaction": "要取消回应吗？",
     "cancelReaction": "取消",
-    "renotedBy": "{user} 转发了",
+    "renotedBy": " 转发了",
     "selfRenotedBy": "自转发了",
     "savedImage": "图片已保存",
     "tapToShow": "点击查看",
