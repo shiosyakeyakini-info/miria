@@ -193,7 +193,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
                 host: widget.account.host,
                 path: widget.response.acct,
               ),
-              mode: LaunchMode.inAppWebView,
+              mode: LaunchMode.externalApplication,
             );
             Navigator.of(context).pop();
           },
@@ -205,7 +205,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             onTap: () {
               final uri = widget.response.uri ?? widget.response.url;
               if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.inAppWebView);
+              launchUrl(uri, mode: LaunchMode.externalApplication);
               Navigator.of(context).pop();
             },
           ),
