@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:miria/extensions/text_editing_controller_extension.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
@@ -19,6 +22,7 @@ import 'package:miria/view/note_create_page/note_emoji.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'channel_area.dart';
 import 'cw_text_area.dart';
@@ -42,6 +46,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
   final Account initialAccount;
   final String? initialText;
   final List<String>? initialMediaFiles;
+  final bool exitOnNoted;
   final CommunityChannel? channel;
   final Note? reply;
   final Note? renote;
@@ -53,6 +58,7 @@ class NoteCreatePage extends ConsumerStatefulWidget {
     required this.initialAccount,
     this.initialText,
     this.initialMediaFiles,
+    this.exitOnNoted = false,
     this.channel,
     this.reply,
     this.renote,
@@ -71,6 +77,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   NoteCreate get data => ref.read(noteCreateProvider(widget.initialAccount));
   NoteCreateNotifier get notifier =>
       ref.read(noteCreateProvider(widget.initialAccount).notifier);
+
+  static const shareExtensionMethodChannel =
+      MethodChannel("info.shiosyakeyakini.miria/share_extension");
 
   @override
   void initState() {
@@ -121,7 +130,12 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           break;
         case NoteSendStatus.finished:
           IndicatorView.hideIndicator(context);
-          Navigator.of(context).pop();
+          if (widget.exitOnNoted) {
+            shareExtensionMethodChannel.invokeMethod("exit");
+          } else {
+            Navigator.of(context).pop();
+          }
+
           break;
         case NoteSendStatus.error:
           IndicatorView.hideIndicator(context);
@@ -133,8 +147,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
 
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
           hintText: (widget.renote != null || widget.reply != null)
-              ? "何て送る？"
-              : "何してはる？",
+              ? S.of(context).replyNotePlaceholder
+              : S.of(context).defaultNotePlaceholder,
           contentPadding: const EdgeInsets.all(5),
         );
 
@@ -142,11 +156,11 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       account: widget.initialAccount,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("ノート"),
+          title: Text(S.of(context).note),
           actions: [
             IconButton(
                 onPressed: () async =>
-                    await notifier.note().expectFailure(context),
+                    await notifier.note(context).expectFailure(context),
                 icon: const Icon(Icons.send))
           ],
         ),
@@ -239,12 +253,12 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       if (widget.noteCreationMode != NoteCreationMode.update)
                         const FilePreview()
                       else if (widget.note?.files.isNotEmpty == true)
-                        const Text("メディアがあります（編集はできません）"),
+                        Text(S.of(context).hasMediaButCannotEdit),
                       const RenoteArea(),
                       if (widget.noteCreationMode != NoteCreationMode.update)
                         const VoteArea()
                       else if (widget.note?.poll != null)
-                        const Text("投票があります（編集はできません）"),
+                        Text(S.of(context).hasVoteButCannotEdit),
                     ],
                   ),
                 ),

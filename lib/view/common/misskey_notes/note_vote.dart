@@ -10,6 +10,7 @@ import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NoteVote extends ConsumerStatefulWidget {
   const NoteVote({
@@ -67,9 +68,10 @@ class NoteVoteState extends ConsumerState<NoteVote> {
     final dialogValue = await showDialog<bool>(
         context: context,
         builder: (context2) => SimpleConfirmDialog(
-              message: "${widget.poll.choices[choice].text} に投票しますか？",
-              primary: "投票する",
-              secondary: "やっぱせえへん",
+              message:
+                  S.of(context).confirmPoll(widget.poll.choices[choice].text),
+              primary: S.of(context).doVoting,
+              secondary: S.of(context).cancel,
               isMfm: true,
               account: AccountScope.of(context),
             ));
@@ -93,7 +95,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
     final isExpired = expiresAt != null && expiresAt < DateTime.now();
     final differ = isExpired
         ? null
-        : widget.poll.expiresAt?.difference(DateTime.now()).format;
+        : widget.poll.expiresAt?.difference(DateTime.now()).format(context);
     final colorTheme = AppTheme.of(context).colorTheme;
 
     return Column(
@@ -178,7 +180,9 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                             )),
                             if (isOpened)
                               TextSpan(
-                                  text: "(${choice.element.votes}票)",
+                                  text: S
+                                      .of(context)
+                                      .votesCount(choice.element.votes),
                                   style: Theme.of(context).textTheme.bodySmall),
                           ],
                         ),
@@ -191,15 +195,15 @@ class NoteVoteState extends ConsumerState<NoteVote> {
         ],
         Text.rich(TextSpan(
           children: [
-            TextSpan(text: "計$totalVotes票・"),
+            TextSpan(text: S.of(context).totalVotesCount(totalVotes)),
             TextSpan(
               text: isExpired
-                  ? "終了済み"
+                  ? S.of(context).finished
                   : !isOpened
-                      ? "結果を見る"
+                      ? S.of(context).openResult
                       : isAnyVotable()
-                          ? "投票する"
-                          : "投票済み",
+                          ? S.of(context).doVoting
+                          : S.of(context).alreadyVoted,
               recognizer: TapGestureRecognizer()
                 ..onTap = () => setState(() {
                       setState(() {
@@ -211,7 +215,8 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                 child: Padding(
               padding: EdgeInsets.only(left: 10),
             )),
-            TextSpan(text: differ == null ? "" : "あと$differ"),
+            TextSpan(
+                text: differ == null ? "" : S.of(context).remainDiffer(differ)),
           ],
           style: Theme.of(context).textTheme.bodySmall,
         ))

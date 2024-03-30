@@ -13,7 +13,8 @@ class Account with _$Account {
     required String host,
     required String userId,
     String? token,
-    required IResponse i,
+    required MeDetailed i,
+    MetaResponse? meta,
   }) = _Account;
 
   factory Account.fromJson(Map<String, Object?> json) =>
@@ -37,11 +38,12 @@ class Account with _$Account {
     );
   }
 
-  factory Account.demoAccount(String host) => Account(
+  factory Account.demoAccount(String host, MetaResponse? meta) => Account(
       host: host,
       userId: "",
       token: null,
-      i: IResponse(
+      meta: meta,
+      i: MeDetailed(
           id: "",
           username: "",
           createdAt: DateTime.now(),
@@ -56,7 +58,6 @@ class Account with _$Account {
           followersCount: 0,
           notesCount: 0,
           publicReactions: false,
-          ffVisibility: "",
           twoFactorEnabled: false,
           usePasswordLessLogin: false,
           securityKeys: false,

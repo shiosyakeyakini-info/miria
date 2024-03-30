@@ -6,6 +6,7 @@ import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/user_page/user_list_item.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RenoteUserDialog extends ConsumerWidget {
   final Account account;
@@ -22,7 +23,7 @@ class RenoteUserDialog extends ConsumerWidget {
     return AccountScope(
         account: account,
         child: AlertDialog(
-            title: const Text("Renoteしたユーザー"),
+            title:  Text(S.of(context).renotedUsers),
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.width * 0.8,
@@ -55,6 +56,7 @@ class RenoteUserDialog extends ConsumerWidget {
                     itemBuilder: (context, note) {
                       return UserListItem(user: note.user);
                     },
+                    showAd: false,
                   )),
             )));
   }

@@ -7,6 +7,7 @@ import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class FavoritedNotePage extends ConsumerWidget {
@@ -18,7 +19,7 @@ class FavoritedNotePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("お気に入り"),
+          title: Text(S.of(context).favorite),
         ),
         body: AccountScope(
             account: account,

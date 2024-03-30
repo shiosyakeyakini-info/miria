@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
@@ -9,27 +11,31 @@ import 'package:miria/view/user_page/user_clips.dart';
 import 'package:miria/view/user_page/user_detail.dart';
 import 'package:miria/view/user_page/user_misskey_page.dart';
 import 'package:miria/view/user_page/user_notes.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/user_page/user_plays.dart';
 import 'package:miria/view/user_page/user_reactions.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
 class UserInfo {
   final String userId;
-  final UsersShowResponse? response;
+  final UserDetailed? response;
   final String? remoteUserId;
-  final UsersShowResponse? remoteResponse;
+  final UserDetailed? remoteResponse;
+  final MetaResponse? metaResponse;
 
   const UserInfo({
     required this.userId,
     required this.response,
     required this.remoteUserId,
     required this.remoteResponse,
+    required this.metaResponse,
   });
 }
 
-final userInfoProvider =
-    StateProvider.family.autoDispose<UserInfo?, String>((ref, userId) => null);
+final userInfoProvider = StateProvider.family.autoDispose<UserInfo?, String>((
+  ref,
+  userId,
+) =>
+    null);
 
 @RoutePage()
 class UserPage extends ConsumerStatefulWidget {
@@ -63,20 +69,19 @@ class UserPageState extends ConsumerState<UserPage> {
             actions: const [],
             bottom: TabBar(
               tabs: [
-                Tab(
-                  text:
-                      "アカウント情報${userInfo?.remoteResponse != null ? "（ローカル）" : ""}",
-                ),
-                if (isRemoteUser) const Tab(text: "アカウント情報（リモート）"),
-                Tab(
-                  text:
-                      "ノート${userInfo?.remoteResponse != null ? "（ローカル）" : ""}",
-                ),
-                if (isRemoteUser) const Tab(text: "ノート（リモート）"),
-                const Tab(text: "クリップ"),
-                if (isReactionAvailable) const Tab(text: "リアクション"),
-                const Tab(text: "ページ"),
-                const Tab(text: "Play"),
+                if (!isRemoteUser) ...[
+                  Tab(text: S.of(context).userInfomation),
+                  Tab(text: S.of(context).userNotes),
+                ] else ...[
+                  Tab(text: S.of(context).userInfomationLocal),
+                  Tab(text: S.of(context).userInfomationRemote),
+                  Tab(text: S.of(context).userNotesLocal),
+                  Tab(text: S.of(context).userNotesRemote),
+                ],
+                Tab(text: S.of(context).clip),
+                if (isReactionAvailable) Tab(text: S.of(context).userReactions),
+                Tab(text: S.of(context).userPages),
+                Tab(text: S.of(context).userPlays),
               ],
               isScrollable: true,
               tabAlignment: TabAlignment.center,
@@ -90,14 +95,14 @@ class UserPageState extends ConsumerState<UserPage> {
                     UserDetailTab(userId: widget.userId),
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
-                        child: SingleChildScrollView(
-                          child: UserDetail(
-                            response: userInfo.remoteResponse!,
-                            account:
-                                Account.demoAccount(userInfo.response!.host!),
-                            controlAccount: widget.account,
-                          ),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
+                        child: UserDetail(
+                          response: userInfo.remoteResponse!,
+                          account: Account.demoAccount(
+                              userInfo.response!.host!,
+                              userInfo.metaResponse!),
+                          controlAccount: widget.account,
                         ),
                       ),
                     Padding(
@@ -108,7 +113,8 @@ class UserPageState extends ConsumerState<UserPage> {
                     ),
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
@@ -133,7 +139,8 @@ class UserPageState extends ConsumerState<UserPage> {
                     // ページ
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserMisskeyPage(
@@ -148,7 +155,8 @@ class UserPageState extends ConsumerState<UserPage> {
                     // Play
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                            userInfo!.response!.host!, userInfo.metaResponse!),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserPlays(userId: userInfo.remoteResponse!.id),
@@ -180,8 +188,8 @@ class UserDetailTab extends ConsumerStatefulWidget {
 }
 
 class UserDetailTabState extends ConsumerState<UserDetailTab> {
-  UsersShowResponse? response;
-  UsersShowResponse? remoteResponse;
+  UserDetailed? response;
+  UserDetailed? remoteResponse;
   (Object?, StackTrace)? error;
 
   @override
@@ -207,29 +215,34 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
           response: response,
           remoteUserId: null,
           remoteResponse: null,
+          metaResponse: null,
         );
 
         final remoteHost = response?.host;
         if (remoteHost != null) {
+          final meta =
+              await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
           final remoteResponse = await ref
-              .read(misskeyProvider(Account.demoAccount(remoteHost)))
+              .read(misskeyProvider(Account.demoAccount(remoteHost, meta)))
               .users
               .showByName(
                 UsersShowByUserNameRequest(userName: response!.username),
               );
 
           await ref
-              .read(emojiRepositoryProvider(Account.demoAccount(remoteHost)))
+              .read(emojiRepositoryProvider(
+                  Account.demoAccount(remoteHost, meta)))
               .loadFromSourceIfNeed();
 
           ref
-              .read(notesProvider(Account.demoAccount(remoteHost)))
+              .read(notesProvider(Account.demoAccount(remoteHost, meta)))
               .registerAll(remoteResponse.pinnedNotes ?? []);
           ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
             userId: widget.userId,
             response: response,
             remoteUserId: remoteResponse.id,
             remoteResponse: remoteResponse,
+            metaResponse: meta,
           );
         }
       } catch (e, s) {
@@ -244,12 +257,10 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
   @override
   Widget build(BuildContext context) {
     if (response != null) {
-      return SingleChildScrollView(
-        child: UserDetail(
-          response: response!,
-          account: AccountScope.of(context),
-          controlAccount: null,
-        ),
+      return UserDetail(
+        response: response!,
+        account: AccountScope.of(context),
+        controlAccount: null,
       );
     }
     if (error != null) {

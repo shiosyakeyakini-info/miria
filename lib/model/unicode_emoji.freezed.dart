@@ -160,7 +160,7 @@ class _$UnicodeEmojiImpl implements _UnicodeEmoji {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UnicodeEmojiImpl &&

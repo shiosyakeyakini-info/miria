@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -37,7 +38,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
     return AlertDialog(
       title: Column(
         children: [
-          const Text("フォルダー選択"),
+          Text(S.of(context).selectFolder),
           Row(
             children: [
               if (path.isNotEmpty)
@@ -63,6 +64,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
               PushableListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
+                showAd: false,
                 initializeFuture: () async {
                   final misskey = ref.read(misskeyProvider(widget.account));
                   final response = await misskey.drive.folders.folders(
@@ -86,7 +88,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                 itemBuilder: (context, item) {
                   return ListTile(
                     leading: const Icon(Icons.folder),
-                    title: Text(item.name ?? ""),
+                    title: Text(item.name),
                     onTap: () {
                       setState(() {
                         path.add(item);

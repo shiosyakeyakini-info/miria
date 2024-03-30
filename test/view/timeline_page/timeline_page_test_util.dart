@@ -4,6 +4,7 @@ import 'package:miria/model/tab_icon.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
 import 'package:miria/providers.dart';
+import 'package:miria/repository/account_repository.dart';
 import 'package:miria/router/app_router.dart';
 import 'package:mockito/mockito.dart';
 
@@ -49,6 +50,7 @@ class TimelinePageTest {
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
     when(mockMisskey.streamingService).thenReturn(mockStreamingService);
     when(mockMisskey.i).thenReturn(mockMisskeyI);
+    when(mockMisskey.meta()).thenAnswer((_) async => TestData.meta);
 
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
 
@@ -58,12 +60,20 @@ class TimelinePageTest {
   Widget buildWidget({
     List<Override> overrides = const [],
   }) {
+    final mockAccountRepository = AccountRepository();
+
     return ProviderScope(
       overrides: [
         misskeyProvider.overrideWith((ref, arg) => mockMisskey),
         tabSettingsRepositoryProvider
             .overrideWith((ref) => mockTabSettingsRepository),
         accountsProvider.overrideWith((ref) => [TestData.account]),
+        accountRepositoryProvider.overrideWith(() {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            mockAccountRepository.state = [TestData.account];
+          });
+          return mockAccountRepository;
+        }),
         emojiRepositoryProvider
             .overrideWith((ref, arg) => MockEmojiRepository())
       ],

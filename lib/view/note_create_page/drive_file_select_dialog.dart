@@ -6,6 +6,7 @@ import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/pushable_listview.dart';
 import 'package:miria/view/themes/app_theme.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DriveFileSelectDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -41,7 +42,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
           icon: const Icon(Icons.arrow_back),
         ),
         title: path.isEmpty
-            ? const Text("ファイルを選択")
+            ? Text(S.of(context).chooseFile)
             : Text(path.map((e) => e.name).join("/")),
         actions: [
           if (files.isNotEmpty)
@@ -69,6 +70,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
               PushableListView(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
+                  showAd: false,
                   initializeFuture: () async {
                     final misskey = ref.read(misskeyProvider(widget.account));
                     final response = await misskey.drive.folders.folders(
@@ -88,7 +90,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                   itemBuilder: (context, item) {
                     return ListTile(
                       leading: const Icon(Icons.folder),
-                      title: Text(item.name ?? ""),
+                      title: Text(item.name),
                       onTap: () {
                         setState(() {
                           path.add(item);
@@ -99,6 +101,7 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
               PushableListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
+                showAd: false,
                 initializeFuture: () async {
                   final misskey = ref.read(misskeyProvider(widget.account));
                   final response = await misskey.drive.files.files(

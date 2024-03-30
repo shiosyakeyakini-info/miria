@@ -1,23 +1,31 @@
 import 'package:auto_route/annotations.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/futurable.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
-@RoutePage()
-class HardMutePage extends ConsumerStatefulWidget {
-  final Account account;
+enum MuteType { soft, hard }
 
-  const HardMutePage({super.key, required this.account});
+@RoutePage()
+class WordMutePage extends ConsumerStatefulWidget {
+  final Account account;
+  final MuteType muteType;
+
+  const WordMutePage({
+    super.key,
+    required this.account,
+    required this.muteType,
+  });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => HardMutePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => WordMutePageState();
 }
 
-class HardMutePageState extends ConsumerState<HardMutePage> {
+class WordMutePageState extends ConsumerState<WordMutePage> {
   final controller = TextEditingController();
 
   @override
@@ -53,10 +61,12 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
       }
     }).toList();
 
-    await ref
-        .read(misskeyProvider(widget.account))
-        .i
-        .update(IUpdateRequest(mutedWords: wordMutes));
+    await ref.read(misskeyProvider(widget.account)).i.update(
+          IUpdateRequest(
+            mutedWords: widget.muteType == MuteType.soft ? wordMutes : null,
+            hardMutedWords: widget.muteType == MuteType.hard ? wordMutes : null,
+          ),
+        );
     if (!mounted) return;
     Navigator.of(context).pop();
   }
@@ -64,14 +74,23 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ワードミュート")),
+      appBar: AppBar(
+        title: Text(switch (widget.muteType) {
+          MuteType.soft => S.of(context).wordMute,
+          MuteType.hard => S.of(context).hardWordMute,
+        }),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: CommonFuture<IResponse>(
+          child: CommonFuture<MeDetailed>(
             future: ref.read(misskeyProvider(widget.account)).i.i(),
             futureFinished: (data) {
-              controller.text = muteValueString(data.mutedWords);
+              controller.text = muteValueString(
+                widget.muteType == MuteType.soft
+                    ? data.mutedWords
+                    : data.hardMutedWords,
+              );
             },
             complete: (context, data) {
               return Column(
@@ -86,13 +105,14 @@ class HardMutePageState extends ConsumerState<HardMutePage> {
                     autofocus: true,
                   ),
                   Text(
-                    "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。\nただし、Misskey Webと正規表現の仕様が異なるため、Miriaで動作する正規表現がMisskey Webで動作しなかったり、その逆が発生することがあります。",
+                    S.of(context).wordMuteDescription,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   ElevatedButton.icon(
-                      onPressed: save,
-                      icon: const Icon(Icons.save),
-                      label: const Text("保存"))
+                    onPressed: save,
+                    icon: const Icon(Icons.save),
+                    label: Text(S.of(context).save),
+                  ),
                 ],
               );
             },

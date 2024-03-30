@@ -12,6 +12,7 @@ import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
 import 'package:miria/view/photo_edit_page/clip_mode.dart';
 import 'package:miria/view/photo_edit_page/color_filter_image_preview.dart';
 import 'package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage<Uint8List?>()
 class PhotoEditPage extends ConsumerStatefulWidget {
@@ -49,7 +50,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
         canPop: false,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("写真編集"),
+            title: Text(S.of(context).editPhoto),
             leading: IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.arrow_back_ios_new),
@@ -60,9 +61,9 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                     photoEdit.clearSelectMode();
                     final confirm = await SimpleConfirmDialog.show(
                         context: context,
-                        message: "保存しよる？",
-                        primary: "保存する",
-                        secondary: "もうちょっと続ける");
+                        message: S.of(context).confirmSavingPhoto,
+                        primary: S.of(context).doneEditingPhoto,
+                        secondary: S.of(context).continueEditingPhoto);
 
                     final result =
                         await photoEdit.createSaveData(renderingAreaKey);

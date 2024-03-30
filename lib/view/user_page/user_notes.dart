@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/misskey_notes/misskey_note.dart';
 import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/user_page/user_page.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 
@@ -57,9 +58,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
                           switch (value) {
                             case 0:
                               withReply = !withReply;
+                              if (withReply) {
+                                isFileOnly = false;
+                              }
                               highlight = false;
                             case 1:
                               isFileOnly = !isFileOnly;
+                              if (isFileOnly) {
+                                withReply = false;
+                              }
                               highlight = false;
                             case 2:
                               renote = !renote;
@@ -72,23 +79,23 @@ class UserNotesState extends ConsumerState<UserNotes> {
                           }
                         });
                       },
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("返信つき"),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).includeRepliesShort),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("ファイルつき"),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).mediaOnlyShort),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("リノートも"),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).displayRenotesShort),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("ハイライト"),
-                        )
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).highlight),
+                        ),
                       ],
                     ),
                   ),
@@ -104,7 +111,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   final result = await showDatePicker(
                     context: context,
                     initialDate: untilDate ?? DateTime.now(),
-                    helpText: "この日までを表示",
+                    helpText: S.of(context).showNotesBeforeThisDate,
                     firstDate: firstDate ?? DateTime.now(),
                     lastDate: DateTime.now(),
                   );
@@ -131,7 +138,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
             listKey: Object.hashAll(
                 [isFileOnly, withReply, renote, untilDate, highlight]),
             additionalErrorInfo: highlight
-                ? (context, e) => const Text("ハイライトはMisskey 2023.10.0以降の機能です。")
+                ? (context, e) => Text(S.of(context).userHighlightAvailability)
                 : null,
             initializeFuture: () async {
               final Iterable<Note> notes;

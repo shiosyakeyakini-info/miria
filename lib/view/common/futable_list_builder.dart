@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FutureListView<T> extends StatefulWidget {
   final Future<Iterable<T>> future;
@@ -34,7 +35,7 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
               print(snapshot.error);
               print(snapshot.stackTrace);
             }
-            return const Text("エラー： データなし");
+            return Text("${S.of(context).thrownError}\n${snapshot.error}");
           }
           final list = data.toList();
 
@@ -49,7 +50,7 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
             print(snapshot.error);
             print(snapshot.stackTrace);
           }
-          return Text("エラー： ${snapshot.error}");
+          return Text("${S.of(context).thrownError}： ${snapshot.error}");
         } else {
           return const Center(child: CircularProgressIndicator());
         }

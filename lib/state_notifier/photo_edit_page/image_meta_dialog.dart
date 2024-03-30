@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'image_meta_dialog.freezed.dart';
 
@@ -44,7 +45,7 @@ class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
           height: MediaQuery.of(context).size.height * 0.8,
           child: Column(
             children: [
-              const Text("ファイル名"),
+              Text(S.of(context).fileName),
               TextField(
                 controller: fileNameController,
                 decoration:
@@ -55,9 +56,9 @@ class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
                 onChanged: (value) => setState(() {
                   isNsfw = !isNsfw;
                 }),
-                title: const Text("閲覧注意としてマークする"),
+                title: Text(S.of(context).markAsSensitive),
               ),
-              const Text("キャプション"),
+              Text(S.of(context).caption),
               TextField(
                 controller: fileNameController,
                 decoration:

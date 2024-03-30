@@ -28,6 +28,13 @@ mixin _$AccountSettings {
   bool get defaultIsLocalOnly => throw _privateConstructorUsedError;
   ReactionAcceptance? get defaultReactionAcceptance =>
       throw _privateConstructorUsedError;
+  CacheStrategy get iCacheStrategy => throw _privateConstructorUsedError;
+  DateTime? get latestICached => throw _privateConstructorUsedError;
+  CacheStrategy get emojiCacheStrategy => throw _privateConstructorUsedError;
+  DateTime? get latestEmojiCached => throw _privateConstructorUsedError;
+  CacheStrategy get metaChacheStrategy => throw _privateConstructorUsedError;
+  DateTime? get latestMetaCached => throw _privateConstructorUsedError;
+  bool get forceShowAd => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +54,14 @@ abstract class $AccountSettingsCopyWith<$Res> {
       List<String> reactions,
       NoteVisibility defaultNoteVisibility,
       bool defaultIsLocalOnly,
-      ReactionAcceptance? defaultReactionAcceptance});
+      ReactionAcceptance? defaultReactionAcceptance,
+      CacheStrategy iCacheStrategy,
+      DateTime? latestICached,
+      CacheStrategy emojiCacheStrategy,
+      DateTime? latestEmojiCached,
+      CacheStrategy metaChacheStrategy,
+      DateTime? latestMetaCached,
+      bool forceShowAd});
 }
 
 /// @nodoc
@@ -69,6 +83,13 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
     Object? defaultNoteVisibility = null,
     Object? defaultIsLocalOnly = null,
     Object? defaultReactionAcceptance = freezed,
+    Object? iCacheStrategy = null,
+    Object? latestICached = freezed,
+    Object? emojiCacheStrategy = null,
+    Object? latestEmojiCached = freezed,
+    Object? metaChacheStrategy = null,
+    Object? latestMetaCached = freezed,
+    Object? forceShowAd = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -95,6 +116,34 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
           ? _value.defaultReactionAcceptance
           : defaultReactionAcceptance // ignore: cast_nullable_to_non_nullable
               as ReactionAcceptance?,
+      iCacheStrategy: null == iCacheStrategy
+          ? _value.iCacheStrategy
+          : iCacheStrategy // ignore: cast_nullable_to_non_nullable
+              as CacheStrategy,
+      latestICached: freezed == latestICached
+          ? _value.latestICached
+          : latestICached // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      emojiCacheStrategy: null == emojiCacheStrategy
+          ? _value.emojiCacheStrategy
+          : emojiCacheStrategy // ignore: cast_nullable_to_non_nullable
+              as CacheStrategy,
+      latestEmojiCached: freezed == latestEmojiCached
+          ? _value.latestEmojiCached
+          : latestEmojiCached // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      metaChacheStrategy: null == metaChacheStrategy
+          ? _value.metaChacheStrategy
+          : metaChacheStrategy // ignore: cast_nullable_to_non_nullable
+              as CacheStrategy,
+      latestMetaCached: freezed == latestMetaCached
+          ? _value.latestMetaCached
+          : latestMetaCached // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      forceShowAd: null == forceShowAd
+          ? _value.forceShowAd
+          : forceShowAd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -113,7 +162,14 @@ abstract class _$$AccountSettingsImplCopyWith<$Res>
       List<String> reactions,
       NoteVisibility defaultNoteVisibility,
       bool defaultIsLocalOnly,
-      ReactionAcceptance? defaultReactionAcceptance});
+      ReactionAcceptance? defaultReactionAcceptance,
+      CacheStrategy iCacheStrategy,
+      DateTime? latestICached,
+      CacheStrategy emojiCacheStrategy,
+      DateTime? latestEmojiCached,
+      CacheStrategy metaChacheStrategy,
+      DateTime? latestMetaCached,
+      bool forceShowAd});
 }
 
 /// @nodoc
@@ -133,6 +189,13 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
     Object? defaultNoteVisibility = null,
     Object? defaultIsLocalOnly = null,
     Object? defaultReactionAcceptance = freezed,
+    Object? iCacheStrategy = null,
+    Object? latestICached = freezed,
+    Object? emojiCacheStrategy = null,
+    Object? latestEmojiCached = freezed,
+    Object? metaChacheStrategy = null,
+    Object? latestMetaCached = freezed,
+    Object? forceShowAd = null,
   }) {
     return _then(_$AccountSettingsImpl(
       userId: null == userId
@@ -159,6 +222,34 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
           ? _value.defaultReactionAcceptance
           : defaultReactionAcceptance // ignore: cast_nullable_to_non_nullable
               as ReactionAcceptance?,
+      iCacheStrategy: null == iCacheStrategy
+          ? _value.iCacheStrategy
+          : iCacheStrategy // ignore: cast_nullable_to_non_nullable
+              as CacheStrategy,
+      latestICached: freezed == latestICached
+          ? _value.latestICached
+          : latestICached // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      emojiCacheStrategy: null == emojiCacheStrategy
+          ? _value.emojiCacheStrategy
+          : emojiCacheStrategy // ignore: cast_nullable_to_non_nullable
+              as CacheStrategy,
+      latestEmojiCached: freezed == latestEmojiCached
+          ? _value.latestEmojiCached
+          : latestEmojiCached // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      metaChacheStrategy: null == metaChacheStrategy
+          ? _value.metaChacheStrategy
+          : metaChacheStrategy // ignore: cast_nullable_to_non_nullable
+              as CacheStrategy,
+      latestMetaCached: freezed == latestMetaCached
+          ? _value.latestMetaCached
+          : latestMetaCached // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      forceShowAd: null == forceShowAd
+          ? _value.forceShowAd
+          : forceShowAd // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -172,7 +263,14 @@ class _$AccountSettingsImpl extends _AccountSettings {
       final List<String> reactions = const [],
       this.defaultNoteVisibility = NoteVisibility.public,
       this.defaultIsLocalOnly = false,
-      this.defaultReactionAcceptance = null})
+      this.defaultReactionAcceptance = null,
+      this.iCacheStrategy = CacheStrategy.whenTabChange,
+      this.latestICached,
+      this.emojiCacheStrategy = CacheStrategy.whenLaunch,
+      this.latestEmojiCached,
+      this.metaChacheStrategy = CacheStrategy.whenOneDay,
+      this.latestMetaCached,
+      this.forceShowAd = false})
       : _reactions = reactions,
         super._();
 
@@ -201,14 +299,32 @@ class _$AccountSettingsImpl extends _AccountSettings {
   @override
   @JsonKey()
   final ReactionAcceptance? defaultReactionAcceptance;
+  @override
+  @JsonKey()
+  final CacheStrategy iCacheStrategy;
+  @override
+  final DateTime? latestICached;
+  @override
+  @JsonKey()
+  final CacheStrategy emojiCacheStrategy;
+  @override
+  final DateTime? latestEmojiCached;
+  @override
+  @JsonKey()
+  final CacheStrategy metaChacheStrategy;
+  @override
+  final DateTime? latestMetaCached;
+  @override
+  @JsonKey()
+  final bool forceShowAd;
 
   @override
   String toString() {
-    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance)';
+    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance, iCacheStrategy: $iCacheStrategy, latestICached: $latestICached, emojiCacheStrategy: $emojiCacheStrategy, latestEmojiCached: $latestEmojiCached, metaChacheStrategy: $metaChacheStrategy, latestMetaCached: $latestMetaCached, forceShowAd: $forceShowAd)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AccountSettingsImpl &&
@@ -222,7 +338,21 @@ class _$AccountSettingsImpl extends _AccountSettings {
                 other.defaultIsLocalOnly == defaultIsLocalOnly) &&
             (identical(other.defaultReactionAcceptance,
                     defaultReactionAcceptance) ||
-                other.defaultReactionAcceptance == defaultReactionAcceptance));
+                other.defaultReactionAcceptance == defaultReactionAcceptance) &&
+            (identical(other.iCacheStrategy, iCacheStrategy) ||
+                other.iCacheStrategy == iCacheStrategy) &&
+            (identical(other.latestICached, latestICached) ||
+                other.latestICached == latestICached) &&
+            (identical(other.emojiCacheStrategy, emojiCacheStrategy) ||
+                other.emojiCacheStrategy == emojiCacheStrategy) &&
+            (identical(other.latestEmojiCached, latestEmojiCached) ||
+                other.latestEmojiCached == latestEmojiCached) &&
+            (identical(other.metaChacheStrategy, metaChacheStrategy) ||
+                other.metaChacheStrategy == metaChacheStrategy) &&
+            (identical(other.latestMetaCached, latestMetaCached) ||
+                other.latestMetaCached == latestMetaCached) &&
+            (identical(other.forceShowAd, forceShowAd) ||
+                other.forceShowAd == forceShowAd));
   }
 
   @JsonKey(ignore: true)
@@ -234,7 +364,14 @@ class _$AccountSettingsImpl extends _AccountSettings {
       const DeepCollectionEquality().hash(_reactions),
       defaultNoteVisibility,
       defaultIsLocalOnly,
-      defaultReactionAcceptance);
+      defaultReactionAcceptance,
+      iCacheStrategy,
+      latestICached,
+      emojiCacheStrategy,
+      latestEmojiCached,
+      metaChacheStrategy,
+      latestMetaCached,
+      forceShowAd);
 
   @JsonKey(ignore: true)
   @override
@@ -253,13 +390,19 @@ class _$AccountSettingsImpl extends _AccountSettings {
 
 abstract class _AccountSettings extends AccountSettings {
   const factory _AccountSettings(
-          {required final String userId,
-          required final String host,
-          final List<String> reactions,
-          final NoteVisibility defaultNoteVisibility,
-          final bool defaultIsLocalOnly,
-          final ReactionAcceptance? defaultReactionAcceptance}) =
-      _$AccountSettingsImpl;
+      {required final String userId,
+      required final String host,
+      final List<String> reactions,
+      final NoteVisibility defaultNoteVisibility,
+      final bool defaultIsLocalOnly,
+      final ReactionAcceptance? defaultReactionAcceptance,
+      final CacheStrategy iCacheStrategy,
+      final DateTime? latestICached,
+      final CacheStrategy emojiCacheStrategy,
+      final DateTime? latestEmojiCached,
+      final CacheStrategy metaChacheStrategy,
+      final DateTime? latestMetaCached,
+      final bool forceShowAd}) = _$AccountSettingsImpl;
   const _AccountSettings._() : super._();
 
   factory _AccountSettings.fromJson(Map<String, dynamic> json) =
@@ -277,6 +420,20 @@ abstract class _AccountSettings extends AccountSettings {
   bool get defaultIsLocalOnly;
   @override
   ReactionAcceptance? get defaultReactionAcceptance;
+  @override
+  CacheStrategy get iCacheStrategy;
+  @override
+  DateTime? get latestICached;
+  @override
+  CacheStrategy get emojiCacheStrategy;
+  @override
+  DateTime? get latestEmojiCached;
+  @override
+  CacheStrategy get metaChacheStrategy;
+  @override
+  DateTime? get latestMetaCached;
+  @override
+  bool get forceShowAd;
   @override
   @JsonKey(ignore: true)
   _$$AccountSettingsImplCopyWith<_$AccountSettingsImpl> get copyWith =>

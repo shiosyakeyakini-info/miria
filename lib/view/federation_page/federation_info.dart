@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/extensions/string_extensions.dart';
 import 'package:miria/model/federation_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/constants.dart';
 import 'package:miria/view/common/error_detail.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/federation_page/federation_page.dart';
 import 'package:miria/view/themes/app_theme.dart';
-import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FederationInfo extends ConsumerStatefulWidget {
   final String host;
@@ -27,107 +25,6 @@ class FederationInfo extends ConsumerStatefulWidget {
 class FederationInfoState extends ConsumerState<FederationInfo> {
   (Object?, StackTrace)? error;
   FederationData? data;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future(() async {
-      try {
-        final account = AccountScope.of(context);
-        if (widget.host == account.host) {
-          // 自分のサーバーの場合
-          final metaResponse = await ref.read(misskeyProvider(account)).meta();
-          final statsResponse =
-              await ref.read(misskeyProvider(account)).stats();
-          ref.read(federationPageFederationDataProvider.notifier).state =
-              FederationData(
-                  bannerUrl: metaResponse.bannerUrl?.toString(),
-                  faviconUrl: metaResponse.iconUrl?.toString(),
-                  tosUrl: metaResponse.tosUrl?.toString(),
-                  name: metaResponse.name ?? "",
-                  description: metaResponse.description ?? "",
-                  usersCount: statsResponse.originalUsersCount,
-                  notesCount: statsResponse.originalNotesCount,
-                  reactionCount: statsResponse.reactionsCount,
-                  softwareName: "misskey",
-                  softwareVersion: metaResponse.version,
-                  languages: metaResponse.langs,
-                  ads: metaResponse.ads,
-
-                  // 自分のサーバーが非対応ということはない
-                  isSupportedAnnouncement: true,
-                  isSupportedEmoji: true,
-                  isSupportedLocalTimeline: true);
-        } else {
-          final federation = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .federation
-              .showInstance(FederationShowInstanceRequest(host: widget.host));
-          MetaResponse? misskeyMeta;
-
-          bool isSupportedEmoji = false;
-          bool isSupportedAnnouncement = false;
-          bool isSupportedLocalTimeline = false;
-
-          if (federation.softwareName == "fedibird" ||
-              federation.softwareName == "mastodon") {
-            // already known unsupported software.
-          } else {
-            try {
-              // Misskeyサーバーかもしれなかったら追加の情報を取得
-
-              final misskeyServer = Misskey(host: widget.host, token: null);
-              final endpoints = await misskeyServer.endpoints();
-
-              if (endpoints.contains("announcement")) {
-                isSupportedAnnouncement = true;
-              }
-
-              // 絵文字が取得できなければローカルタイムラインを含め非対応
-              if (endpoints.contains("emojis")) {
-                isSupportedEmoji = true;
-
-                if (endpoints.contains("notes/local-timeline")) {
-                  isSupportedLocalTimeline = true;
-                }
-              }
-
-              misskeyMeta = await misskeyServer.meta();
-            } catch (e) {}
-            ;
-          }
-
-          ref.read(federationPageFederationDataProvider.notifier).state =
-              FederationData(
-            bannerUrl: (misskeyMeta?.bannerUrl)?.toString(),
-            faviconUrl: (federation.faviconUrl)?.toString(),
-            tosUrl: (misskeyMeta?.tosUrl)?.toString(),
-            name: misskeyMeta?.name ?? federation.name,
-            description: misskeyMeta?.description ?? federation.description,
-            usersCount: federation.usersCount,
-            notesCount: federation.notesCount,
-            softwareName: federation.softwareName ?? "",
-            softwareVersion: federation.softwareVersion ?? "",
-            languages: misskeyMeta?.langs ?? [],
-            ads: misskeyMeta?.ads ?? [],
-            isSupportedEmoji: isSupportedEmoji,
-            isSupportedLocalTimeline: isSupportedLocalTimeline,
-            isSupportedAnnouncement: isSupportedAnnouncement,
-          );
-        }
-
-        if (!mounted) return;
-        setState(() {});
-      } catch (e, s) {
-        print(e);
-        print(s);
-        if (!mounted) return;
-        setState(() {
-          error = (e, s);
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +75,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const Text(
-                        "ユーザー",
+                      Text(
+                        S.of(context).user,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -191,8 +88,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const Text(
-                        "投稿",
+                      Text(
+                        S.of(context).federatedPosts,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -205,8 +102,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                 children: [
                   TableRow(
                     children: [
-                      const Text(
-                        "ソフトウェア",
+                      Text(
+                        S.of(context).software,
                         textAlign: TextAlign.center,
                       ),
                       Text(
@@ -216,15 +113,50 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                   ),
                   if (data.languages.isNotEmpty)
                     TableRow(children: [
-                      const Text("言語", textAlign: TextAlign.center),
+                      Text(S.of(context).language, textAlign: TextAlign.center),
                       Text(
                         data.languages.join(", "),
                       )
                     ]),
+                  if (data.maintainerName != null)
+                    TableRow(children: [
+                      Text(
+                        S.of(context).administrator,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${data.maintainerName}",
+                      )
+                    ]),
+                  if (data.maintainerEmail != null)
+                    TableRow(children: [
+                      Text(
+                        S.of(context).contact,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "${data.maintainerEmail}",
+                      )
+                    ]),
+                  if (data.serverRules.isNotEmpty)
+                    TableRow(children: [
+                      Text(
+                        S.of(context).serverRules,
+                        textAlign: TextAlign.center,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (final rule in data.serverRules.indexed)
+                            Text("${(rule.$1 + 1)}. ${rule.$2}\n")
+                        ],
+                      )
+                    ]),
                   if (data.tosUrl != null)
                     TableRow(children: [
-                      const Text(
-                        "利用規約",
+                      Text(
+                        S.of(context).tos,
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
@@ -234,7 +166,36 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                           style: AppTheme.of(context).linkStyle,
                         ),
                       )
-                    ])
+                    ]),
+                  if (data.privacyPolicyUrl != null)
+                    TableRow(children: [
+                      Text(
+                        S.of(context).privacyPolicy,
+                        textAlign: TextAlign.center,
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            launchUrl(Uri.parse(data.privacyPolicyUrl!)),
+                        child: Text(
+                          data.privacyPolicyUrl!.toString().tight,
+                          style: AppTheme.of(context).linkStyle,
+                        ),
+                      )
+                    ]),
+                  if (data.impressumUrl != null)
+                    TableRow(children: [
+                      Text(
+                        S.of(context).impressum,
+                        textAlign: TextAlign.center,
+                      ),
+                      GestureDetector(
+                        onTap: () => launchUrl(Uri.parse(data.impressumUrl!)),
+                        child: Text(
+                          data.impressumUrl!.toString().tight,
+                          style: AppTheme.of(context).linkStyle,
+                        ),
+                      )
+                    ]),
                 ],
               ),
             ],

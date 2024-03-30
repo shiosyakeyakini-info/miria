@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/image_file.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FileSettingsDialogResult {
   final String fileName;
@@ -52,7 +53,7 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.all(10),
+      contentPadding: const EdgeInsets.all(10),
       content: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -62,7 +63,7 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("ファイル名"),
+              Text(S.of(context).fileName),
               TextField(
                 controller: fileNameController,
                 decoration: const InputDecoration(
@@ -78,17 +79,17 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
                           fileNameController.text.substring(period);
                     }
                   },
-                  child: const Text("ファイル名をランダムにする")),
+                  child: Text(S.of(context).randomizeFileName)),
               const Padding(padding: EdgeInsets.only(top: 10)),
               CheckboxListTile(
                 value: isNsfw,
-                title: const Text("閲覧注意にする"),
-                subtitle: const Text("閲覧注意の設定を外した場合でも、自動で閲覧注意にマークされることがあります。"),
+                title: Text(S.of(context).markAsSensitive),
+                subtitle: Text(S.of(context).sensitiveSubTitle),
                 onChanged: (value) => setState(() => isNsfw = !isNsfw),
                 controlAffinity: ListTileControlAffinity.leading,
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
-              const Text("キャプション"),
+              Text(S.of(context).caption),
               TextField(
                 controller: captionController,
                 maxLines: null,
@@ -109,7 +110,7 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
                 caption: captionController.text,
               ));
             },
-            child: const Text("これでええわ")),
+            child: Text(S.of(context).done)),
       ],
     );
   }

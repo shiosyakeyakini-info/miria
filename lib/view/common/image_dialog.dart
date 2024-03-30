@@ -9,6 +9,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:miria/providers.dart';
 import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageDialog extends ConsumerStatefulWidget {
   final List<String> imageUrlList;
@@ -187,8 +188,9 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
 
                           await ImageGallerySaver.saveImage(response.data);
                           if (!mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("画像保存したで")));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(S.of(context).savedImage),
+                              duration: const Duration(seconds: 1)));
                         },
                         constraints:
                             const BoxConstraints(minWidth: 0, minHeight: 0),

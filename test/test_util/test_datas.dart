@@ -7,11 +7,14 @@ import 'package:misskey_dart/misskey_dart.dart';
 import 'package:json5/json5.dart';
 
 class TestData {
-  static Account account =
-      Account(host: "example.miria.shiosyakeyakini.info", userId: "ai", i: i1);
+  static Account account = Account(
+      host: "example.miria.shiosyakeyakini.info",
+      userId: "ai",
+      i: i1,
+      meta: meta);
 
   // i
-  static IResponse i1 = IResponse.fromJson(JSON5.parse(r"""
+  static MeDetailed i1 = MeDetailed.fromJson(JSON5.parse(r"""
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -376,8 +379,8 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
-  
+}
+
   '''));
 
   static Note note2 = Note.fromJson(JSON5.parse(r'''
@@ -415,7 +418,7 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
+}
   '''));
 
   /// 自身でないノート１
@@ -460,7 +463,7 @@ class TestData {
   files: [],
   replyId: null,
   renoteId: null,
-}  
+}
   '''));
 
   /// 自身のノート（投票込みのノート）
@@ -641,7 +644,7 @@ class TestData {
   replyId: null,
   renoteId: null,
   myReaction: ':ultra_igyo@.:',
-}  
+}
   '''));
 
   /// Renote
@@ -776,7 +779,7 @@ class TestData {
     folder: null,
     userId: null,
     user: null,
-  }  
+  }
   '''));
 
   static DriveFile drive2AsVideo = DriveFile.fromJson(JSON5.parse(r'''
@@ -809,7 +812,7 @@ class TestData {
       data: await binaryImage);
 
   // ユーザー情報
-  static User user1 = User.fromJson(JSON5.parse(r'''
+  static UserLite user1 = UserLite.fromJson(JSON5.parse(r'''
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -825,7 +828,8 @@ class TestData {
 }'''));
   static String user1ExpectId = "7rkr3b1c1c";
 
-  static User detailedUser1 = User.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations detailedUser1 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -994,7 +998,8 @@ class TestData {
   isRenoteMuted: false,
 }  '''));
 
-  static User detailedUser2 = User.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations detailedUser2 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '9gbzuv2cze',
   name: '藍ちゃんにおじさん構文でメンションを送るbot',
@@ -1106,8 +1111,8 @@ class TestData {
   static String detailedUser2ExpectedId = "9gbzuv2cze";
 
   // ユーザー情報
-  static UsersShowResponse usersShowResponse1 =
-      UsersShowResponse.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations usersShowResponse1 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -1214,12 +1219,12 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  
-  
+}
+
   '''));
 
-  static UsersShowResponse usersShowResponse2 =
-      UsersShowResponse.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations usersShowResponse2 =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -1388,12 +1393,12 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  
-  
+}
+
   '''));
 
-  static UsersShowResponse usersShowResponse3AsRemoteUser =
-      UsersShowResponse.fromJson(JSON5.parse(r'''
+  static UserDetailedNotMeWithRelations usersShowResponse3AsRemoteUser =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
 {
   id: '9i08deo0vj',
   name: 'あけおめらんか～',
@@ -1473,8 +1478,8 @@ class TestData {
 }
 '''));
 
-  static UsersShowResponse usersShowResponse3AsLocalUser =
-      UsersShowResponse.fromJson(JSON5.parse('''
+  static UserDetailedNotMeWithRelations usersShowResponse3AsLocalUser =
+      UserDetailedNotMeWithRelations.fromJson(JSON5.parse('''
 {
   id: '9i07ia9bf0',
   name: 'あけおめらんか～',
@@ -1673,7 +1678,7 @@ class TestData {
   isFollowing: true,
   isFavorited: true,
   hasUnreadNote: false,
-}  
+}
   '''));
 
   // アンテナ
@@ -1938,6 +1943,100 @@ class TestData {
     attachedLocalUsersCount: 2,
     attachedRemoteUsersCount: 65,
   }
+'''));
+
+  static MetaResponse meta = MetaResponse.fromJson(JSON5.parse(r'''
+{
+  maintainerName: 'そらいろ',
+  maintainerEmail: 'sorairo@shiosyakeyakini.info',
+  version: '2023.12.0-beta.1',
+  name: 'Miria検証環境サーバー',
+  shortName: null,
+  uri: 'https://stg.miria.shiosyakeyakini.info',
+  description: 'このサーバーはMiria ( https://shiosyakeyakini.info/miria_web/index.html ) の検証と、ストア審査用の環境です。',
+  langs: [],
+  tosUrl: null,
+  repositoryUrl: 'https://github.com/misskey-dev/misskey',
+  feedbackUrl: 'https://github.com/misskey-dev/misskey/issues/new',
+  impressumUrl: null,
+  privacyPolicyUrl: null,
+  disableRegistration: true,
+  emailRequiredForSignup: false,
+  enableHcaptcha: false,
+  hcaptchaSiteKey: null,
+  enableRecaptcha: false,
+  recaptchaSiteKey: null,
+  enableTurnstile: false,
+  turnstileSiteKey: null,
+  swPublickey: null,
+  themeColor: null,
+  mascotImageUrl: '/assets/ai.png',
+  bannerUrl: null,
+  infoImageUrl: null,
+  serverErrorImageUrl: null,
+  notFoundImageUrl: null,
+  iconUrl: null,
+  backgroundImageUrl: null,
+  logoImageUrl: null,
+  maxNoteTextLength: 3000,
+  defaultLightTheme: null,
+  defaultDarkTheme: null,
+  ads: [
+    {
+      id: '9i5sueefva',
+      url: 'https://shiosyakeyakini.info/miria_web/index.html',
+      place: 'square',
+      ratio: 1,
+      imageUrl: 'https://shiosyakeyakini.info/miria_web/ad.png',
+      dayOfWeek: 0,
+    },
+  ],
+  notesPerOneAd: 0,
+  enableEmail: false,
+  enableServiceWorker: false,
+  translatorAvailable: false,
+  serverRules: [],
+  policies: {
+    gtlAvailable: true,
+    ltlAvailable: true,
+    canPublicNote: true,
+    canInvite: false,
+    inviteLimit: 0,
+    inviteLimitCycle: 10080,
+    inviteExpirationTime: 0,
+    canManageCustomEmojis: false,
+    canManageAvatarDecorations: false,
+    canSearchNotes: false,
+    canUseTranslator: true,
+    canHideAds: false,
+    driveCapacityMb: 100,
+    alwaysMarkNsfw: false,
+    pinLimit: 5,
+    antennaLimit: 5,
+    wordMuteLimit: 200,
+    webhookLimit: 3,
+    clipLimit: 10,
+    noteEachClipsLimit: 200,
+    userListLimit: 10,
+    userEachUserListsLimit: 50,
+    rateLimitFactor: 1,
+  },
+  mediaProxy: 'https://stg.miria.shiosyakeyakini.info/proxy',
+  cacheRemoteFiles: false,
+  cacheRemoteSensitiveFiles: true,
+  requireSetup: false,
+  proxyAccountName: null,
+  features: {
+    registration: false,
+    emailRequiredForSignup: false,
+    hcaptcha: false,
+    recaptcha: false,
+    turnstile: false,
+    objectStorage: false,
+    serviceWorker: false,
+    miauth: true,
+  },
+}
 '''));
 
   // Dio

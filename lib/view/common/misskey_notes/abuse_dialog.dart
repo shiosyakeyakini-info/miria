@@ -7,6 +7,7 @@ import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:miria/view/dialogs/simple_message_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AbuseDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -46,7 +47,7 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
     showDialog(
         context: context,
         builder: (context) =>
-            const SimpleMessageDialog(message: "内容が送信されました。ご報告ありがとうございました。"));
+            SimpleMessageDialog(message: S.of(context).thanksForReport));
   }
 
   @override
@@ -55,12 +56,15 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
       account: widget.account,
       child: AlertDialog(
         title: SimpleMfmText(
-            "${widget.targetUser.name ?? widget.targetUser.username} を通報する"),
+          S.of(context).reportAbuseOf(
+                widget.targetUser.name ?? widget.targetUser.username,
+              ),
+        ),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("詳細"),
+              Text(S.of(context).detail),
               TextField(
                 controller: controller,
                 maxLines: null,
@@ -68,7 +72,7 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
                 autofocus: true,
               ),
               Text(
-                "通報理由の詳細を記入してください。対象のノートがある場合はそのURLも記入してください。",
+                S.of(context).pleaseInputReasonWhyAbuse,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -77,7 +81,7 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
         actions: [
           ElevatedButton(
               onPressed: abuse.expectFailure(context),
-              child: const Text("通報する"))
+              child: Text(S.of(context).reportAbuse))
         ],
       ),
     );

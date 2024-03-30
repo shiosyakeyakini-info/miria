@@ -347,7 +347,7 @@ class _$PhotoEditImpl implements _PhotoEdit {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PhotoEditImpl &&
@@ -557,7 +557,7 @@ class _$ColorFilterPreviewImpl implements _ColorFilterPreview {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ColorFilterPreviewImpl &&
@@ -726,7 +726,7 @@ class _$EditedEmojiDataImpl implements _EditedEmojiData {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$EditedEmojiDataImpl &&

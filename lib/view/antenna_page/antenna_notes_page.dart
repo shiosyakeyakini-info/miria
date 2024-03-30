@@ -10,6 +10,7 @@ import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
 import 'package:miria/view/common/account_scope.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:misskey_dart/misskey_dart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @RoutePage()
 class AntennaNotesPage extends ConsumerWidget {
@@ -42,7 +43,7 @@ class AntennaNotesPage extends ConsumerWidget {
                 final settings = await showDialog<AntennaSettings>(
                   context: context,
                   builder: (context) => AntennaSettingsDialog(
-                    title: const Text("編集"),
+                    title: Text(S.of(context).edit),
                     initialSettings: AntennaSettings.fromAntenna(antenna),
                     account: account,
                   ),

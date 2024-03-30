@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SimpleMessageDialog extends StatelessWidget {
   final String message;
@@ -22,7 +23,7 @@ class SimpleMessageDialog extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("ほい"))
+            child: Text(S.of(context).done))
       ],
     );
   }

@@ -8,6 +8,7 @@ import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
 import 'package:miria/view/common/note_create/basic_keyboard.dart';
 import 'package:miria/view/common/note_create/input_completation.dart';
 import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _filteredEmojisProvider = NotifierProvider.autoDispose
     .family<_FilteredEmojis, List<MisskeyEmojiData>, Account>(
@@ -119,7 +120,7 @@ class EmojiKeyboard extends ConsumerWidget {
             }
           },
           icon: const Icon(Icons.add_reaction_outlined),
-          label: const Text("他のん"),
+          label: Text(S.of(context).otherComplementReactions),
         ),
       ],
     );

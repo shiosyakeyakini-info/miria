@@ -4,11 +4,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 import 'package:kana_kit/kana_kit.dart';
 import 'package:miria/model/account.dart';
+import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/model/unicode_emoji.dart';
 import 'package:miria/repository/account_settings_repository.dart';
+import 'package:miria/repository/shared_preference_controller.dart';
 import 'package:misskey_dart/misskey_dart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class EmojiRepository {
   List<EmojiRepositoryData>? emoji;
@@ -40,13 +41,15 @@ class EmojiRepositoryImpl extends EmojiRepository {
   final Misskey misskey;
   final Account account;
   final AccountSettingsRepository accountSettingsRepository;
+  final SharedPreferenceController sharePreferenceController;
   EmojiRepositoryImpl({
     required this.misskey,
     required this.account,
     required this.accountSettingsRepository,
+    required this.sharePreferenceController,
   });
 
-  bool isNeedLoading = false;
+  bool thisLaunchLoaded = false;
 
   String format(String emojiName) {
     return emojiName
@@ -57,8 +60,8 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   Future<void> loadFromLocalCache() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedData = prefs.getString("emojis@${account.host}");
+    final storedData =
+        await sharePreferenceController.getString("emojis@${account.host}");
     if (storedData == null || storedData.isEmpty) {
       return;
     }
@@ -70,16 +73,37 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final serverFetchData = await misskey.emojis();
     await _setEmojiData(serverFetchData);
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        "emojis@${account.host}", jsonEncode(serverFetchData));
-    isNeedLoading = true;
+    if (account.token != null) {
+      await sharePreferenceController.setString(
+        "emojis@${account.host}",
+        jsonEncode(serverFetchData),
+      );
+
+      await accountSettingsRepository.save(accountSettingsRepository
+          .fromAccount(account)
+          .copyWith(latestEmojiCached: DateTime.now()));
+    }
+    thisLaunchLoaded = true;
   }
 
   @override
   Future<void> loadFromSourceIfNeed() async {
-    if (isNeedLoading) return;
-    await loadFromSource();
+    final settings = accountSettingsRepository.fromAccount(account);
+    final latestUpdated = settings.latestEmojiCached;
+    switch (settings.emojiCacheStrategy) {
+      case CacheStrategy.whenTabChange:
+        await loadFromSource();
+        break;
+      case CacheStrategy.whenLaunch:
+        if (thisLaunchLoaded) return;
+        await loadFromSource();
+        break;
+      case CacheStrategy.whenOneDay:
+        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
+          await loadFromSource();
+        }
+        break;
+    }
   }
 
   String toHiraganaSafe(String text) {

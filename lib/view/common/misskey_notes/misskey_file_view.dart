@@ -9,6 +9,7 @@ import 'package:miria/view/common/misskey_notes/network_image.dart';
 import 'package:miria/view/common/misskey_notes/video_dialog.dart';
 import 'package:misskey_dart/misskey_dart.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MisskeyFileView extends ConsumerStatefulWidget {
   final List<DriveFile> files;
@@ -42,8 +43,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                 maxHeight: widget.height, maxWidth: double.infinity),
             child: MisskeyImage(
               isSensitive: targetFile.isSensitive,
-              thumbnailUrl:
-                  (targetFile.thumbnailUrl ?? targetFile.url).toString(),
+              thumbnailUrl: targetFile.thumbnailUrl,
               targetFiles: [targetFile.url.toString()],
               fileType: targetFile.type,
               name: targetFile.name,
@@ -70,7 +70,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                     width: double.infinity,
                     child: MisskeyImage(
                       isSensitive: targetFile.element.isSensitive,
-                      thumbnailUrl: targetFile.element.thumbnailUrl?.toString(),
+                      thumbnailUrl: targetFile.element.thumbnailUrl,
                       targetFiles: targetFiles.map((e) => e.url).toList(),
                       fileType: targetFile.element.type,
                       name: targetFile.element.name,
@@ -83,7 +83,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                 onPressed: () => setState(() {
                       isElipsed = !isElipsed;
                     }),
-                child: const Text("続きを表示"))
+                child: Text(S.of(context).showMoreFiles))
         ],
       );
     }
@@ -174,11 +174,12 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           imageUrlList: widget.targetFiles,
                           initialPage: widget.position,
                         ));
-              } else if (widget.fileType.startsWith("video")) {
+              } else if (widget.fileType.startsWith(RegExp("video|audio"))) {
                 showDialog(
                   context: context,
                   builder: (context) => VideoDialog(
                     url: widget.targetFiles[widget.position],
+                    fileType: widget.fileType,
                   ),
                 );
               } else {
@@ -204,12 +205,12 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                "閲覧注意",
-                                style: TextStyle(color: Colors.white),
+                              Text(
+                                S.of(context).sensitive,
+                                style: const TextStyle(color: Colors.white),
                               ),
                               Text(
-                                "タップして表示",
+                                S.of(context).tapToShow,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: Theme.of(context)
@@ -249,22 +250,26 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                           ),
                         ),
                       );
-                    } else if (widget.thumbnailUrl != null) {
+                    } else if (widget.fileType
+                        .startsWith(RegExp("video|audio"))) {
                       cachedWidget = Stack(
                         children: [
                           Positioned.fill(
                             child: SizedBox(
                               height: 200,
-                              child: NetworkImageView(
-                                url: widget.thumbnailUrl!,
-                                type: ImageType.imageThumbnail,
-                                loadingBuilder: (context, widget, chunkEvent) =>
-                                    SizedBox(
-                                  width: double.infinity,
-                                  height: 200,
-                                  child: widget,
-                                ),
-                              ),
+                              child: widget.thumbnailUrl != null
+                                  ? NetworkImageView(
+                                      url: widget.thumbnailUrl!,
+                                      type: ImageType.imageThumbnail,
+                                      loadingBuilder:
+                                          (context, widget, chunkEvent) =>
+                                              SizedBox(
+                                        width: double.infinity,
+                                        height: 200,
+                                        child: widget,
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
                             ),
                           ),
                           const Positioned.fill(
@@ -306,7 +311,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 2, right: 2),
                   child: Text(
-                    "NSFW",
+                    S.of(context).sensitive,
                     style: TextStyle(color: Colors.white.withAlpha(170)),
                   ),
                 ),

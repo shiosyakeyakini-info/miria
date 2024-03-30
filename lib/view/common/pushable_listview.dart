@@ -4,6 +4,7 @@ import 'package:miria/model/general_settings.dart';
 import 'package:miria/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/error_notification.dart';
+import 'package:miria/view/common/misskey_ad.dart';
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
@@ -13,6 +14,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final Object listKey;
   final bool shrinkWrap;
   final ScrollPhysics? physics;
+  final bool showAd;
 
   const PushableListView({
     super.key,
@@ -23,6 +25,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
     this.shrinkWrap = false,
     this.physics,
     this.additionalErrorInfo,
+    this.showAd = true,
   });
 
   @override
@@ -112,56 +115,77 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: widget.shrinkWrap,
-      physics: widget.physics,
-      itemCount: items.length + 1,
-      controller: scrollController,
-      itemBuilder: (context, index) {
-        if (items.length == index) {
-          if (isFinalPage) {
-            return Container();
-          }
-
-          if (ref.read(generalSettingsRepositoryProvider
-                  .select((value) => value.settings.automaticPush)) ==
-              AutomaticPush.automatic) {
-            nextLoad();
-          }
-
-          return Column(
-            children: [
-              if (error != null)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ErrorNotification(
-                      error: error?.$1,
-                      stackTrace: error?.$2,
-                    ),
-                    widget.additionalErrorInfo?.call(context, error) ??
-                        const SizedBox.shrink()
-                  ],
-                ),
-              Center(
-                child: !isLoading
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: IconButton(
-                          onPressed: nextLoad,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                        ),
-                      )
-                    : const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: CircularProgressIndicator()),
-              )
-            ],
-          );
-        }
-        return widget.itemBuilder(context, items[index]);
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          items.clear();
+          isLoading = true;
+        });
+        initialize();
       },
+      child: ListView.builder(
+        shrinkWrap: widget.shrinkWrap,
+        physics: widget.physics,
+        itemCount: items.length + 1,
+        controller: scrollController,
+        itemBuilder: (context, index) {
+          if (items.length == index) {
+            if (isFinalPage) {
+              return Container();
+            }
+
+            if (ref.read(generalSettingsRepositoryProvider
+                    .select((value) => value.settings.automaticPush)) ==
+                AutomaticPush.automatic) {
+              nextLoad();
+            }
+
+            return Column(
+              children: [
+                if (error != null)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ErrorNotification(
+                        error: error?.$1,
+                        stackTrace: error?.$2,
+                      ),
+                      widget.additionalErrorInfo?.call(context, error) ??
+                          const SizedBox.shrink()
+                    ],
+                  ),
+                Center(
+                  child: !isLoading
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: IconButton(
+                            onPressed: nextLoad,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                          ),
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator()),
+                )
+              ],
+            );
+          }
+
+          if (index != 0 && (index == 3 || index % 30 == 0) && widget.showAd) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                widget.itemBuilder(context, items[index]),
+                const MisskeyAd(),
+              ],
+            );
+          } else {
+            return widget.itemBuilder(context, items[index]);
+          }
+        },
+      ),
     );
   }
 }

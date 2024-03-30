@@ -23,6 +23,33 @@ import 'package:misskey_dart/misskey_dart.dart';
 import 'package:twemoji_v2/twemoji_v2.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+InlineSpan _unicodeEmojiBuilder(BuildContext builderContext, String emoji,
+    TextStyle? style, WidgetRef ref, void Function() onTap) {
+  if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
+      EmojiType.system) {
+    return TextSpan(
+        text: emoji,
+        style: style,
+        recognizer: MfmBlurScope.of(builderContext)
+            ? null
+            : (TapGestureRecognizer()..onTap = () => onTap));
+  } else {
+    return WidgetSpan(
+      child: GestureDetector(
+        onTap: MfmBlurScope.of(builderContext) ? null : () => onTap,
+        child: Twemoji(
+          emoji: emoji,
+          width: style?.fontSize ??
+              DefaultTextStyle.of(builderContext).style.fontSize,
+          height: style?.fontSize ??
+              DefaultTextStyle.of(builderContext).style.fontSize ??
+              22,
+        ),
+      ),
+    );
+  }
+}
+
 class MfmText extends ConsumerStatefulWidget {
   final String? mfmText;
   final List<MfmNode>? mfmNode;
@@ -34,6 +61,7 @@ class MfmText extends ConsumerStatefulWidget {
   final List<InlineSpan> prefixSpan;
   final Function(MisskeyEmojiData)? onEmojiTap;
   final bool isEnableAnimatedMFM;
+  final int? maxLines;
 
   const MfmText({
     super.key,
@@ -47,6 +75,7 @@ class MfmText extends ConsumerStatefulWidget {
     this.prefixSpan = const [],
     this.onEmojiTap,
     this.isEnableAnimatedMFM = true,
+    this.maxLines,
   }) : assert(mfmText != null || mfmNode != null);
 
   @override
@@ -95,34 +124,13 @@ class MfmTextState extends ConsumerState<MfmText> {
           ),
         );
       },
-      unicodeEmojiBuilder:
-          (BuildContext builderContext, String emoji, TextStyle? style) {
-        if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
-            EmojiType.system) {
-          return TextSpan(
-              text: emoji,
-              style: style,
-              recognizer: MfmBlurScope.of(builderContext)
-                  ? null
-                  : (TapGestureRecognizer()
-                    ..onTap = () => widget.onEmojiTap
-                        ?.call(UnicodeEmojiData(char: emoji))));
-        } else {
-          return WidgetSpan(
-            child: GestureDetector(
-              onTap: MfmBlurScope.of(builderContext)
-                  ? null
-                  : () =>
-                      widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
-              child: Twemoji(
-                emoji: emoji,
-                width: style?.fontSize,
-                height: style?.fontSize,
-              ),
-            ),
-          );
-        }
-      },
+      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
+        context,
+        emoji,
+        style,
+        ref,
+        () => widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+      ),
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
         language: lang,
@@ -139,9 +147,10 @@ class MfmTextState extends ConsumerState<MfmText> {
             child: Text.rich(
               textScaler: TextScaler.noScaling,
               TextSpan(
-                  style: style,
-                  text:
-                      "${unixtime?.formatUntilSeconds ?? "？？？"} (${unixtime?.differenceNowDetail ?? "？？？"})"),
+                style: style,
+                text:
+                    "${unixtime?.formatUntilSeconds(context) ?? "？？？"} (${unixtime?.differenceNowDetail(context) ?? "？？？"})",
+              ),
             ),
           ),
         );
@@ -156,7 +165,8 @@ class MfmTextState extends ConsumerState<MfmText> {
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
       mentionTap: (userName, host, acct) => const LinkNavigator()
-          .onMentionTap(context, ref, acct, widget.host)
+          .onMentionTap(
+              context, ref, AccountScope.of(context), acct, widget.host)
           .expectFailure(context),
       hashtagTap: onHashtagTap,
       searchTap: onSearch,
@@ -165,6 +175,8 @@ class MfmTextState extends ConsumerState<MfmText> {
       suffixSpan: widget.suffixSpan,
       prefixSpan: widget.prefixSpan,
       isUseAnimation: widget.isEnableAnimatedMFM,
+      defaultBorderColor: Theme.of(context).primaryColor,
+      maxLines: widget.maxLines,
     );
   }
 }
@@ -259,6 +271,13 @@ class SimpleMfmText extends ConsumerWidget {
           style: style,
         ),
       ),
+      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
+        context,
+        emoji,
+        style,
+        ref,
+        () => {},
+      ),
       style: style,
       suffixSpan: suffixSpan,
       prefixSpan: prefixSpan,
@@ -308,6 +327,14 @@ class UserInformationState extends ConsumerState<UserInformation> {
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!),
                   height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  loadingBuilder: (context, widget, event) => SizedBox(
+                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      height:
+                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  errorBuilder: (context, e, s) => SizedBox(
+                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      height:
+                          DefaultTextStyle.of(context).style.fontSize ?? 22),
                 ),
               ),
             )

@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -31,33 +32,36 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
   @override
   void initState() {
     super.initState();
-    intentDataStreamSubscription =
-        ReceiveSharingIntent.getMediaStream().listen((event) {
-      final items = event.map((e) => e.path).toList();
-      if (account.length == 1) {
-        widget.router.push(NoteCreateRoute(
-          initialMediaFiles: items,
-          initialAccount: account.first,
-        ));
-      } else {
-        widget.router.push(SharingAccountSelectRoute(
-          filePath: items,
-        ));
-      }
-    });
-    intentDataTextStreamSubscription =
-        ReceiveSharingIntent.getTextStream().listen((event) {
-      if (account.length == 1) {
-        widget.router.push(NoteCreateRoute(
-          initialText: event,
-          initialAccount: account.first,
-        ));
-      } else {
-        widget.router.push(SharingAccountSelectRoute(
-          sharingText: event,
-        ));
-      }
-    });
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      intentDataStreamSubscription =
+          ReceiveSharingIntent.getMediaStream().listen((event) {
+        final items = event.map((e) => e.path).toList();
+        if (account.length == 1) {
+          widget.router.push(NoteCreateRoute(
+            initialMediaFiles: items,
+            initialAccount: account.first,
+          ));
+        } else {
+          widget.router.push(SharingAccountSelectRoute(
+            filePath: items,
+          ));
+        }
+      });
+      intentDataTextStreamSubscription =
+          ReceiveSharingIntent.getTextStream().listen((event) {
+        if (account.length == 1) {
+          widget.router.push(NoteCreateRoute(
+            initialText: event,
+            initialAccount: account.first,
+          ));
+        } else {
+          widget.router.push(SharingAccountSelectRoute(
+            sharingText: event,
+          ));
+        }
+      });
+    }
   }
 
   @override

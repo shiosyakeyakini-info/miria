@@ -19,8 +19,14 @@ mixin _$FederationData {
   String? get bannerUrl => throw _privateConstructorUsedError;
   String? get faviconUrl => throw _privateConstructorUsedError;
   String? get tosUrl => throw _privateConstructorUsedError;
+  String? get privacyPolicyUrl => throw _privateConstructorUsedError;
+  String? get impressumUrl => throw _privateConstructorUsedError;
+  String? get repositoryUrl => throw _privateConstructorUsedError;
+  List<String> get serverRules => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  String? get maintainerName => throw _privateConstructorUsedError;
+  String? get maintainerEmail => throw _privateConstructorUsedError;
   int? get usersCount => throw _privateConstructorUsedError;
   int? get notesCount => throw _privateConstructorUsedError;
   int? get reactionCount => throw _privateConstructorUsedError;
@@ -31,6 +37,7 @@ mixin _$FederationData {
   bool get isSupportedEmoji => throw _privateConstructorUsedError;
   bool get isSupportedAnnouncement => throw _privateConstructorUsedError;
   bool get isSupportedLocalTimeline => throw _privateConstructorUsedError;
+  MetaResponse? get meta => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FederationDataCopyWith<FederationData> get copyWith =>
@@ -47,8 +54,14 @@ abstract class $FederationDataCopyWith<$Res> {
       {String? bannerUrl,
       String? faviconUrl,
       String? tosUrl,
+      String? privacyPolicyUrl,
+      String? impressumUrl,
+      String? repositoryUrl,
+      List<String> serverRules,
       String name,
       String description,
+      String? maintainerName,
+      String? maintainerEmail,
       int? usersCount,
       int? notesCount,
       int? reactionCount,
@@ -58,7 +71,10 @@ abstract class $FederationDataCopyWith<$Res> {
       List<MetaAd> ads,
       bool isSupportedEmoji,
       bool isSupportedAnnouncement,
-      bool isSupportedLocalTimeline});
+      bool isSupportedLocalTimeline,
+      MetaResponse? meta});
+
+  $MetaResponseCopyWith<$Res>? get meta;
 }
 
 /// @nodoc
@@ -77,8 +93,14 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
     Object? bannerUrl = freezed,
     Object? faviconUrl = freezed,
     Object? tosUrl = freezed,
+    Object? privacyPolicyUrl = freezed,
+    Object? impressumUrl = freezed,
+    Object? repositoryUrl = freezed,
+    Object? serverRules = null,
     Object? name = null,
     Object? description = null,
+    Object? maintainerName = freezed,
+    Object? maintainerEmail = freezed,
     Object? usersCount = freezed,
     Object? notesCount = freezed,
     Object? reactionCount = freezed,
@@ -89,6 +111,7 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
     Object? isSupportedEmoji = null,
     Object? isSupportedAnnouncement = null,
     Object? isSupportedLocalTimeline = null,
+    Object? meta = freezed,
   }) {
     return _then(_value.copyWith(
       bannerUrl: freezed == bannerUrl
@@ -103,6 +126,22 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
           ? _value.tosUrl
           : tosUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      privacyPolicyUrl: freezed == privacyPolicyUrl
+          ? _value.privacyPolicyUrl
+          : privacyPolicyUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      impressumUrl: freezed == impressumUrl
+          ? _value.impressumUrl
+          : impressumUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      repositoryUrl: freezed == repositoryUrl
+          ? _value.repositoryUrl
+          : repositoryUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      serverRules: null == serverRules
+          ? _value.serverRules
+          : serverRules // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -111,6 +150,14 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      maintainerName: freezed == maintainerName
+          ? _value.maintainerName
+          : maintainerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      maintainerEmail: freezed == maintainerEmail
+          ? _value.maintainerEmail
+          : maintainerEmail // ignore: cast_nullable_to_non_nullable
+              as String?,
       usersCount: freezed == usersCount
           ? _value.usersCount
           : usersCount // ignore: cast_nullable_to_non_nullable
@@ -151,7 +198,23 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
           ? _value.isSupportedLocalTimeline
           : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
               as bool,
+      meta: freezed == meta
+          ? _value.meta
+          : meta // ignore: cast_nullable_to_non_nullable
+              as MetaResponse?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MetaResponseCopyWith<$Res>? get meta {
+    if (_value.meta == null) {
+      return null;
+    }
+
+    return $MetaResponseCopyWith<$Res>(_value.meta!, (value) {
+      return _then(_value.copyWith(meta: value) as $Val);
+    });
   }
 }
 
@@ -167,8 +230,14 @@ abstract class _$$FederationDataImplCopyWith<$Res>
       {String? bannerUrl,
       String? faviconUrl,
       String? tosUrl,
+      String? privacyPolicyUrl,
+      String? impressumUrl,
+      String? repositoryUrl,
+      List<String> serverRules,
       String name,
       String description,
+      String? maintainerName,
+      String? maintainerEmail,
       int? usersCount,
       int? notesCount,
       int? reactionCount,
@@ -178,7 +247,11 @@ abstract class _$$FederationDataImplCopyWith<$Res>
       List<MetaAd> ads,
       bool isSupportedEmoji,
       bool isSupportedAnnouncement,
-      bool isSupportedLocalTimeline});
+      bool isSupportedLocalTimeline,
+      MetaResponse? meta});
+
+  @override
+  $MetaResponseCopyWith<$Res>? get meta;
 }
 
 /// @nodoc
@@ -195,8 +268,14 @@ class __$$FederationDataImplCopyWithImpl<$Res>
     Object? bannerUrl = freezed,
     Object? faviconUrl = freezed,
     Object? tosUrl = freezed,
+    Object? privacyPolicyUrl = freezed,
+    Object? impressumUrl = freezed,
+    Object? repositoryUrl = freezed,
+    Object? serverRules = null,
     Object? name = null,
     Object? description = null,
+    Object? maintainerName = freezed,
+    Object? maintainerEmail = freezed,
     Object? usersCount = freezed,
     Object? notesCount = freezed,
     Object? reactionCount = freezed,
@@ -207,6 +286,7 @@ class __$$FederationDataImplCopyWithImpl<$Res>
     Object? isSupportedEmoji = null,
     Object? isSupportedAnnouncement = null,
     Object? isSupportedLocalTimeline = null,
+    Object? meta = freezed,
   }) {
     return _then(_$FederationDataImpl(
       bannerUrl: freezed == bannerUrl
@@ -221,6 +301,22 @@ class __$$FederationDataImplCopyWithImpl<$Res>
           ? _value.tosUrl
           : tosUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      privacyPolicyUrl: freezed == privacyPolicyUrl
+          ? _value.privacyPolicyUrl
+          : privacyPolicyUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      impressumUrl: freezed == impressumUrl
+          ? _value.impressumUrl
+          : impressumUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      repositoryUrl: freezed == repositoryUrl
+          ? _value.repositoryUrl
+          : repositoryUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      serverRules: null == serverRules
+          ? _value._serverRules
+          : serverRules // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -229,6 +325,14 @@ class __$$FederationDataImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      maintainerName: freezed == maintainerName
+          ? _value.maintainerName
+          : maintainerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      maintainerEmail: freezed == maintainerEmail
+          ? _value.maintainerEmail
+          : maintainerEmail // ignore: cast_nullable_to_non_nullable
+              as String?,
       usersCount: freezed == usersCount
           ? _value.usersCount
           : usersCount // ignore: cast_nullable_to_non_nullable
@@ -269,6 +373,10 @@ class __$$FederationDataImplCopyWithImpl<$Res>
           ? _value.isSupportedLocalTimeline
           : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
               as bool,
+      meta: freezed == meta
+          ? _value.meta
+          : meta // ignore: cast_nullable_to_non_nullable
+              as MetaResponse?,
     ));
   }
 }
@@ -280,8 +388,14 @@ class _$FederationDataImpl implements _FederationData {
       {this.bannerUrl,
       this.faviconUrl,
       this.tosUrl,
+      this.privacyPolicyUrl,
+      this.impressumUrl,
+      this.repositoryUrl,
+      final List<String> serverRules = const [],
       this.name = "",
       this.description = "",
+      this.maintainerName,
+      this.maintainerEmail,
       this.usersCount,
       this.notesCount,
       this.reactionCount,
@@ -291,8 +405,10 @@ class _$FederationDataImpl implements _FederationData {
       final List<MetaAd> ads = const [],
       required this.isSupportedEmoji,
       required this.isSupportedAnnouncement,
-      required this.isSupportedLocalTimeline})
-      : _languages = languages,
+      required this.isSupportedLocalTimeline,
+      this.meta})
+      : _serverRules = serverRules,
+        _languages = languages,
         _ads = ads;
 
   @override
@@ -302,11 +418,30 @@ class _$FederationDataImpl implements _FederationData {
   @override
   final String? tosUrl;
   @override
+  final String? privacyPolicyUrl;
+  @override
+  final String? impressumUrl;
+  @override
+  final String? repositoryUrl;
+  final List<String> _serverRules;
+  @override
+  @JsonKey()
+  List<String> get serverRules {
+    if (_serverRules is EqualUnmodifiableListView) return _serverRules;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_serverRules);
+  }
+
+  @override
   @JsonKey()
   final String name;
   @override
   @JsonKey()
   final String description;
+  @override
+  final String? maintainerName;
+  @override
+  final String? maintainerEmail;
   @override
   final int? usersCount;
   @override
@@ -343,14 +478,16 @@ class _$FederationDataImpl implements _FederationData {
   final bool isSupportedAnnouncement;
   @override
   final bool isSupportedLocalTimeline;
+  @override
+  final MetaResponse? meta;
 
   @override
   String toString() {
-    return 'FederationData(bannerUrl: $bannerUrl, faviconUrl: $faviconUrl, tosUrl: $tosUrl, name: $name, description: $description, usersCount: $usersCount, notesCount: $notesCount, reactionCount: $reactionCount, softwareName: $softwareName, softwareVersion: $softwareVersion, languages: $languages, ads: $ads, isSupportedEmoji: $isSupportedEmoji, isSupportedAnnouncement: $isSupportedAnnouncement, isSupportedLocalTimeline: $isSupportedLocalTimeline)';
+    return 'FederationData(bannerUrl: $bannerUrl, faviconUrl: $faviconUrl, tosUrl: $tosUrl, privacyPolicyUrl: $privacyPolicyUrl, impressumUrl: $impressumUrl, repositoryUrl: $repositoryUrl, serverRules: $serverRules, name: $name, description: $description, maintainerName: $maintainerName, maintainerEmail: $maintainerEmail, usersCount: $usersCount, notesCount: $notesCount, reactionCount: $reactionCount, softwareName: $softwareName, softwareVersion: $softwareVersion, languages: $languages, ads: $ads, isSupportedEmoji: $isSupportedEmoji, isSupportedAnnouncement: $isSupportedAnnouncement, isSupportedLocalTimeline: $isSupportedLocalTimeline, meta: $meta)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FederationDataImpl &&
@@ -359,9 +496,21 @@ class _$FederationDataImpl implements _FederationData {
             (identical(other.faviconUrl, faviconUrl) ||
                 other.faviconUrl == faviconUrl) &&
             (identical(other.tosUrl, tosUrl) || other.tosUrl == tosUrl) &&
+            (identical(other.privacyPolicyUrl, privacyPolicyUrl) ||
+                other.privacyPolicyUrl == privacyPolicyUrl) &&
+            (identical(other.impressumUrl, impressumUrl) ||
+                other.impressumUrl == impressumUrl) &&
+            (identical(other.repositoryUrl, repositoryUrl) ||
+                other.repositoryUrl == repositoryUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._serverRules, _serverRules) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.maintainerName, maintainerName) ||
+                other.maintainerName == maintainerName) &&
+            (identical(other.maintainerEmail, maintainerEmail) ||
+                other.maintainerEmail == maintainerEmail) &&
             (identical(other.usersCount, usersCount) ||
                 other.usersCount == usersCount) &&
             (identical(other.notesCount, notesCount) ||
@@ -382,27 +531,36 @@ class _$FederationDataImpl implements _FederationData {
                 other.isSupportedAnnouncement == isSupportedAnnouncement) &&
             (identical(
                     other.isSupportedLocalTimeline, isSupportedLocalTimeline) ||
-                other.isSupportedLocalTimeline == isSupportedLocalTimeline));
+                other.isSupportedLocalTimeline == isSupportedLocalTimeline) &&
+            (identical(other.meta, meta) || other.meta == meta));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      bannerUrl,
-      faviconUrl,
-      tosUrl,
-      name,
-      description,
-      usersCount,
-      notesCount,
-      reactionCount,
-      softwareName,
-      softwareVersion,
-      const DeepCollectionEquality().hash(_languages),
-      const DeepCollectionEquality().hash(_ads),
-      isSupportedEmoji,
-      isSupportedAnnouncement,
-      isSupportedLocalTimeline);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        bannerUrl,
+        faviconUrl,
+        tosUrl,
+        privacyPolicyUrl,
+        impressumUrl,
+        repositoryUrl,
+        const DeepCollectionEquality().hash(_serverRules),
+        name,
+        description,
+        maintainerName,
+        maintainerEmail,
+        usersCount,
+        notesCount,
+        reactionCount,
+        softwareName,
+        softwareVersion,
+        const DeepCollectionEquality().hash(_languages),
+        const DeepCollectionEquality().hash(_ads),
+        isSupportedEmoji,
+        isSupportedAnnouncement,
+        isSupportedLocalTimeline,
+        meta
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -417,8 +575,14 @@ abstract class _FederationData implements FederationData {
       {final String? bannerUrl,
       final String? faviconUrl,
       final String? tosUrl,
+      final String? privacyPolicyUrl,
+      final String? impressumUrl,
+      final String? repositoryUrl,
+      final List<String> serverRules,
       final String name,
       final String description,
+      final String? maintainerName,
+      final String? maintainerEmail,
       final int? usersCount,
       final int? notesCount,
       final int? reactionCount,
@@ -428,7 +592,8 @@ abstract class _FederationData implements FederationData {
       final List<MetaAd> ads,
       required final bool isSupportedEmoji,
       required final bool isSupportedAnnouncement,
-      required final bool isSupportedLocalTimeline}) = _$FederationDataImpl;
+      required final bool isSupportedLocalTimeline,
+      final MetaResponse? meta}) = _$FederationDataImpl;
 
   @override
   String? get bannerUrl;
@@ -437,9 +602,21 @@ abstract class _FederationData implements FederationData {
   @override
   String? get tosUrl;
   @override
+  String? get privacyPolicyUrl;
+  @override
+  String? get impressumUrl;
+  @override
+  String? get repositoryUrl;
+  @override
+  List<String> get serverRules;
+  @override
   String get name;
   @override
   String get description;
+  @override
+  String? get maintainerName;
+  @override
+  String? get maintainerEmail;
   @override
   int? get usersCount;
   @override
@@ -460,6 +637,8 @@ abstract class _FederationData implements FederationData {
   bool get isSupportedAnnouncement;
   @override
   bool get isSupportedLocalTimeline;
+  @override
+  MetaResponse? get meta;
   @override
   @JsonKey(ignore: true)
   _$$FederationDataImplCopyWith<_$FederationDataImpl> get copyWith =>

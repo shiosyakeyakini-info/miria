@@ -19,39 +19,6 @@ class AvatarIcon extends StatefulWidget {
     this.onTap,
   });
 
-  factory AvatarIcon.fromIResponse(IResponse response, {double height = 48}) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
-
-  factory AvatarIcon.fromUserResponse(
-    UsersShowResponse response, {
-    double height = 48,
-  }) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
-
   @override
   State<StatefulWidget> createState() => AvatarIconState();
 }
@@ -159,8 +126,13 @@ class AvatarIconState extends State<AvatarIcon> {
             ),
             for (final decoration in widget.user.avatarDecorations)
               Transform.scale(
-                  scaleX: 2,
-                  scaleY: 2,
+                scaleX: 2,
+                scaleY: 2,
+                child: Transform.translate(
+                  offset: Offset(
+                    baseHeight * decoration.offsetX,
+                    baseHeight * decoration.offsetY,
+                  ),
                   child: Transform.rotate(
                     angle: (decoration.angle ?? 0) * 2 * pi,
                     alignment: Alignment.center,
@@ -178,7 +150,9 @@ class AvatarIconState extends State<AvatarIcon> {
                             child: NetworkImageView(
                                 url: decoration.url,
                                 type: ImageType.avatarDecoration)),
-                  )),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

@@ -51,6 +51,8 @@ void main() {
         await tester.pumpWidget(ProviderScope(
           overrides: [
             misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+            misskeyWithoutAccountProvider
+                .overrideWith((ref, arg) => mockMisskey),
             emojiRepositoryProvider.overrideWith((ref, arg) => emojiRepository)
           ],
           child: DefaultRootWidget(
@@ -136,11 +138,12 @@ void main() {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
-          when(mockUser.show(any)).thenAnswer((_) async =>
-              TestData.usersShowResponse2.copyWith(
-                  isFollowing: false,
-                  isLocked: false,
-                  autoAcceptFollowed: true));
+          when(mockUser.show(any)).thenAnswer(
+            (_) async => TestData.usersShowResponse2.copyWith(
+              isFollowing: false,
+              isLocked: false,
+            ),
+          );
 
           await tester.pumpWidget(ProviderScope(
             overrides: [
@@ -161,13 +164,14 @@ void main() {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
-          when(mockUser.show(any)).thenAnswer((_) async =>
-              TestData.usersShowResponse2.copyWith(
-                  isFollowing: false,
-                  hasPendingFollowRequestFromYou: false,
-                  isLocked: true,
-                  isFollowed: false,
-                  autoAcceptFollowed: false));
+          when(mockUser.show(any)).thenAnswer(
+            (_) async => TestData.usersShowResponse2.copyWith(
+              isFollowing: false,
+              hasPendingFollowRequestFromYou: false,
+              isLocked: true,
+              isFollowed: false,
+            ),
+          );
 
           await tester.pumpWidget(ProviderScope(
             overrides: [
@@ -279,7 +283,7 @@ void main() {
         await tester.pumpAndSettle();
 
         await tester.enterText(find.byType(TextField).hitTestable(), "藍ちゃん吸う");
-        await tester.tap(find.text("保存する"));
+        await tester.tap(find.text("保存"));
         await tester.pumpAndSettle();
 
         verify(mockUser.updateMemo(argThat(equals(UsersUpdateMemoRequest(
@@ -517,7 +521,6 @@ void main() {
                 followeeId: TestData.usersShowResponse2.id,
                 followerId: TestData.account.i.id,
                 followee: TestData.detailedUser2,
-                follower: TestData.user1,
               )
             ]);
 
@@ -530,7 +533,11 @@ void main() {
           ),
         ));
         await tester.pumpAndSettle();
-        await tester.ensureVisible(find.text("フォロー"));
+        await tester.dragUntilVisible(
+          find.text("フォロー"),
+          find.byType(CustomScrollView),
+          const Offset(0, -50));
+        await tester.pump();
         await tester.tap(find.text("フォロー"));
         await tester.pumpAndSettle();
 
@@ -555,7 +562,6 @@ void main() {
                 createdAt: DateTime.now(),
                 followeeId: TestData.account.i.id,
                 followerId: TestData.usersShowResponse2.id,
-                followee: TestData.user1,
                 follower: TestData.detailedUser2,
               )
             ]);
@@ -569,7 +575,11 @@ void main() {
           ),
         ));
         await tester.pumpAndSettle();
-        await tester.ensureVisible(find.text("フォロワー"));
+        await tester.dragUntilVisible(
+          find.text("フォロワー"),
+          find.byType(CustomScrollView),
+          const Offset(0, -50));
+        await tester.pump();
         await tester.tap(find.text("フォロワー"));
         await tester.pumpAndSettle();
 
