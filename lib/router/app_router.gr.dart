@@ -93,6 +93,7 @@ abstract class _$AppRouter extends RootStackRouter {
           initialAccount: args.initialAccount,
           initialText: args.initialText,
           initialMediaFiles: args.initialMediaFiles,
+          exitOnNoted: args.exitOnNoted,
           channel: args.channel,
           reply: args.reply,
           renote: args.renote,
@@ -343,6 +344,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    MisskeyGamesRoute.name: (routeData) {
+      final args = routeData.argsAs<MisskeyGamesRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MisskeyGamesPage(
+          key: args.key,
+          account: args.account,
+        ),
+      );
+    },
     ImportExportRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -421,21 +432,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ShareExtensionRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ShareExtensionPage(),
+      );
+    },
     FavoritedNoteRoute.name: (routeData) {
       final args = routeData.argsAs<FavoritedNoteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: FavoritedNotePage(
-          key: args.key,
-          account: args.account,
-        ),
-      );
-    },
-    MisskeyGamesRoute.name: (routeData) {
-      final args = routeData.argsAs<MisskeyGamesRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: MisskeyGamesPage(
           key: args.key,
           account: args.account,
         ),
@@ -709,6 +716,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     required Account initialAccount,
     String? initialText,
     List<String>? initialMediaFiles,
+    bool exitOnNoted = false,
     CommunityChannel? channel,
     Note? reply,
     Note? renote,
@@ -722,6 +730,7 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
             initialAccount: initialAccount,
             initialText: initialText,
             initialMediaFiles: initialMediaFiles,
+            exitOnNoted: exitOnNoted,
             channel: channel,
             reply: reply,
             renote: renote,
@@ -743,6 +752,7 @@ class NoteCreateRouteArgs {
     required this.initialAccount,
     this.initialText,
     this.initialMediaFiles,
+    this.exitOnNoted = false,
     this.channel,
     this.reply,
     this.renote,
@@ -758,6 +768,8 @@ class NoteCreateRouteArgs {
 
   final List<String>? initialMediaFiles;
 
+  final bool exitOnNoted;
+
   final CommunityChannel? channel;
 
   final Note? reply;
@@ -770,7 +782,7 @@ class NoteCreateRouteArgs {
 
   @override
   String toString() {
-    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
+    return 'NoteCreateRouteArgs{key: $key, initialAccount: $initialAccount, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
   }
 }
 
@@ -1701,6 +1713,44 @@ class MisskeyRouteRouteArgs {
 }
 
 /// generated route for
+/// [MisskeyGamesPage]
+class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
+  MisskeyGamesRoute({
+    Key? key,
+    required Account account,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MisskeyGamesRoute.name,
+          args: MisskeyGamesRouteArgs(
+            key: key,
+            account: account,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MisskeyGamesRoute';
+
+  static const PageInfo<MisskeyGamesRouteArgs> page =
+      PageInfo<MisskeyGamesRouteArgs>(name);
+}
+
+class MisskeyGamesRouteArgs {
+  const MisskeyGamesRouteArgs({
+    this.key,
+    required this.account,
+  });
+
+  final Key? key;
+
+  final Account account;
+
+  @override
+  String toString() {
+    return 'MisskeyGamesRouteArgs{key: $key, account: $account}';
+  }
+}
+
+/// generated route for
 /// [ImportExportPage]
 class ImportExportRoute extends PageRouteInfo<void> {
   const ImportExportRoute({List<PageRouteInfo>? children})
@@ -1942,6 +1992,20 @@ class TimeLineRouteArgs {
 }
 
 /// generated route for
+/// [ShareExtensionPage]
+class ShareExtensionRoute extends PageRouteInfo<void> {
+  const ShareExtensionRoute({List<PageRouteInfo>? children})
+      : super(
+          ShareExtensionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ShareExtensionRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [FavoritedNotePage]
 class FavoritedNoteRoute extends PageRouteInfo<FavoritedNoteRouteArgs> {
   FavoritedNoteRoute({
@@ -1976,43 +2040,5 @@ class FavoritedNoteRouteArgs {
   @override
   String toString() {
     return 'FavoritedNoteRouteArgs{key: $key, account: $account}';
-  }
-}
-
-/// generated route for
-/// [MisskeyGamesPage]
-class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
-  MisskeyGamesRoute({
-    Key? key,
-    required Account account,
-    List<PageRouteInfo>? children,
-  }) : super(
-          MisskeyGamesRoute.name,
-          args: MisskeyGamesRouteArgs(
-            key: key,
-            account: account,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'MisskeyGamesRoute';
-
-  static const PageInfo<MisskeyGamesRouteArgs> page =
-      PageInfo<MisskeyGamesRouteArgs>(name);
-}
-
-class MisskeyGamesRouteArgs {
-  const MisskeyGamesRouteArgs({
-    this.key,
-    required this.account,
-  });
-
-  final Key? key;
-
-  final Account account;
-
-  @override
-  String toString() {
-    return 'MisskeyGamesRouteArgs{key: $key, account: $account}';
   }
 }
