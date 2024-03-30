@@ -42,6 +42,10 @@ class ShareExtensionPage extends ConsumerStatefulWidget {
       ShareExtensionPageState();
 }
 
+final isShareExtensionProvider = StateProvider(
+  (ref) => false,
+);
+
 class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   var sharedPreference = "";
   String? error;
@@ -50,6 +54,7 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Future(() async {
+      ref.read(isShareExtensionProvider.notifier).state = true;
       try {
         await ref.read(accountRepositoryProvider.notifier).load();
         final json = jsonDecode(
@@ -74,9 +79,9 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
             ),
           );
         }
-      } catch (e) {
+      } catch (e, s) {
         setState(() {
-          error = e.toString();
+          error = "$e\n$s";
         });
       }
     });
