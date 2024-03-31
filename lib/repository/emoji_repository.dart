@@ -8,8 +8,8 @@ import 'package:miria/model/account_settings.dart';
 import 'package:miria/model/misskey_emoji_data.dart';
 import 'package:miria/model/unicode_emoji.dart';
 import 'package:miria/repository/account_settings_repository.dart';
+import 'package:miria/repository/shared_preference_controller.dart';
 import 'package:misskey_dart/misskey_dart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class EmojiRepository {
   List<EmojiRepositoryData>? emoji;
@@ -41,10 +41,12 @@ class EmojiRepositoryImpl extends EmojiRepository {
   final Misskey misskey;
   final Account account;
   final AccountSettingsRepository accountSettingsRepository;
+  final SharedPreferenceController sharePreferenceController;
   EmojiRepositoryImpl({
     required this.misskey,
     required this.account,
     required this.accountSettingsRepository,
+    required this.sharePreferenceController,
   });
 
   bool thisLaunchLoaded = false;
@@ -58,8 +60,8 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   Future<void> loadFromLocalCache() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedData = prefs.getString("emojis@${account.host}");
+    final storedData =
+        await sharePreferenceController.getString("emojis@${account.host}");
     if (storedData == null || storedData.isEmpty) {
       return;
     }
@@ -72,9 +74,11 @@ class EmojiRepositoryImpl extends EmojiRepository {
     await _setEmojiData(serverFetchData);
 
     if (account.token != null) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(
-          "emojis@${account.host}", jsonEncode(serverFetchData));
+      await sharePreferenceController.setString(
+        "emojis@${account.host}",
+        jsonEncode(serverFetchData),
+      );
+
       await accountSettingsRepository.save(accountSettingsRepository
           .fromAccount(account)
           .copyWith(latestEmojiCached: DateTime.now()));

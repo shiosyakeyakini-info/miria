@@ -158,7 +158,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     withReplies: withReply,
                     withRenotes: renote,
                     withChannelNotes: true,
-                    untilDate: untilDate?.millisecondsSinceEpoch,
+                    untilDate: untilDate,
                   ),
                 );
               }
@@ -188,7 +188,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     withReplies: withReply,
                     withRenotes: renote,
                     withChannelNotes: true,
-                    untilDate: untilDate?.millisecondsSinceEpoch,
+                    untilDate: untilDate,
                   ),
                 );
               }
