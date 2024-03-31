@@ -78,12 +78,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         defaultTargetPlatform == TargetPlatform.windows) {
       if (languages == Languages.jaJP || languages == Languages.jaOJ) {
         return "Noto Sans JP";
+      } else  if (languages == Languages.zhCN) {
+        return "Noto Sans SC";
       } else {
         return "Noto Sans";
       }
     } else {
       if (languages == Languages.jaJP || languages == Languages.jaOJ) {
         return "Noto Sans CJK JP";
+      } else if (languages == Languages.zhCN) {
+        return "Noto Sans CJK SC";
       } else {
         return "Noto Sans";
       }
@@ -121,12 +125,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           defaultTargetPlatform == TargetPlatform.windows) {
         if (languages == Languages.jaJP || languages == Languages.jaOJ) {
           fontName = "Noto Serif JP";
+        } else if (languages == Languages.zhCN) {
+          fontName = "Noto Serif SC";
         } else {
           fontName = "Noto Serif";
         }
       } else {
         if (languages == Languages.jaJP || languages == Languages.jaOJ) {
           fontName = "Noto Serif CJK JP";
+        } else if (languages == Languages.zhCN) {
+          fontName = "Noto Serif CJK SC";
         } else {
           fontName = "Noto Serif";
         }
@@ -165,6 +173,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       } else {
         if (languages == Languages.jaJP || languages == Languages.jaOJ) {
           fontName = "Noto Sans Mono CJK JP";
+        } else if (languages == Languages.zhCN) {
+          fontName = "Noto Sans Mono CJK SC";
         } else {
           fontName = "Noto Sans";
         }
