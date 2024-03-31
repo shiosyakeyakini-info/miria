@@ -1,12 +1,12 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'federation_data.freezed.dart';
+part "federation_data.freezed.dart";
 
 @freezed
 class FederationData with _$FederationData {
   const factory FederationData({
-    String? bannerUrl,
+    required bool isSupportedEmoji, required bool isSupportedAnnouncement, required bool isSupportedLocalTimeline, String? bannerUrl,
     String? faviconUrl,
     String? tosUrl,
     String? privacyPolicyUrl,
@@ -24,9 +24,6 @@ class FederationData with _$FederationData {
     @Default("") String softwareVersion,
     @Default([]) List<String> languages,
     @Default([]) List<MetaAd> ads,
-    required bool isSupportedEmoji,
-    required bool isSupportedAnnouncement,
-    required bool isSupportedLocalTimeline,
     MetaResponse? meta,
   }) = _FederationData;
 }

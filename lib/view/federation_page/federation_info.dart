@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/string_extensions.dart';
-import 'package:miria/model/federation_data.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/federation_page/federation_page.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/string_extensions.dart";
+import "package:miria/model/federation_data.dart";
+import "package:miria/view/common/constants.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/federation_page/federation_page.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class FederationInfo extends ConsumerStatefulWidget {
   final String host;
 
   const FederationInfo({
-    super.key,
-    required this.host,
+    required this.host, super.key,
   });
 
   @override
@@ -149,7 +148,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           for (final rule in data.serverRules.indexed)
-                            Text("${(rule.$1 + 1)}. ${rule.$2}\n")
+                            Text("${rule.$1 + 1}. ${rule.$2}\n")
                         ],
                       )
                     ]),

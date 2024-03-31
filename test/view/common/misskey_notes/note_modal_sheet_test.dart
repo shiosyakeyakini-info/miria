@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/note_modal_sheet.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:mockito/mockito.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/note_modal_sheet.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
 
-import '../../../test_util/default_root_widget.dart';
-import '../../../test_util/mock.mocks.dart';
-import '../../../test_util/test_datas.dart';
+import "../../../test_util/default_root_widget.dart";
+import "../../../test_util/mock.mocks.dart";
+import "../../../test_util/test_datas.dart";
 
 void main() {
   group("お気に入り", () {

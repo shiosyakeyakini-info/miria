@@ -1,11 +1,11 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
 
 @RoutePage()
 class ImportExportPage extends ConsumerStatefulWidget {
@@ -50,7 +50,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                           ),
                       ],
                       value: selectedImportAccount,
-                      onChanged: (Account? value) {
+                      onChanged: (value) {
                         setState(() {
                           selectedImportAccount = value;
                         });
@@ -96,7 +96,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                           ),
                       ],
                       value: selectedExportAccount,
-                      onChanged: (Account? value) {
+                      onChanged: (value) {
                         setState(() {
                           selectedExportAccount = value;
                         });

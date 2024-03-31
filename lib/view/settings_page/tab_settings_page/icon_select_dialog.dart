@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_content.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_content.dart";
 
 class IconSelectDialog extends StatelessWidget {
   final icons = [
@@ -76,7 +76,7 @@ class IconSelectDialog extends StatelessWidget {
 
   final Account account;
 
-  IconSelectDialog({super.key, required this.account});
+  IconSelectDialog({required this.account, super.key});
 
   @override
   Widget build(BuildContext context) {

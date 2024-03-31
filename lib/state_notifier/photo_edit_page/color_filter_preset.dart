@@ -1,6 +1,6 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:image_editor/image_editor.dart';
+import "package:image_editor/image_editor.dart";
 
 class ColorFilterPresets {
   final List<ColorFilterPreset> presets;
@@ -321,11 +321,11 @@ ColorOption _hue(double value) {
     ]);
   }
 
-  var cosVal = cos(value);
-  var sinVal = sin(value);
-  var lumR = 0.213;
-  var lumG = 0.715;
-  var lumB = 0.072;
+  final cosVal = cos(value);
+  final sinVal = sin(value);
+  const lumR = 0.213;
+  const lumG = 0.715;
+  const lumB = 0.072;
 
   return ColorOption(
       matrix: List<double>.from(<double>[
@@ -420,8 +420,8 @@ ColorOption _contrast(double value) {
 //     alpha: color.alpha,
 //   );
 // }
-  double adj = value * 255;
-  double factor = (259 * (adj + 255)) / (255 * (259 - adj));
+  final adj = value * 255;
+  final factor = (259 * (adj + 255)) / (255 * (259 - adj));
 
   return ColorOption(matrix: [
     factor,
@@ -475,11 +475,11 @@ ColorOption _saturation(double value) {
     ]);
   }
 
-  var x =
-      ((1 + ((value > 0) ? ((3 * value) / 100) : (value / 100)))).toDouble();
-  var lumR = 0.3086;
-  var lumG = 0.6094;
-  var lumB = 0.082;
+  final x =
+      (1 + ((value > 0) ? ((3 * value) / 100) : (value / 100))).toDouble();
+  const lumR = 0.3086;
+  const lumG = 0.6094;
+  const lumB = 0.082;
 
   return ColorOption(
       matrix: List<double>.from(<double>[

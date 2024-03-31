@@ -1,12 +1,12 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/model/acct.dart';
-import 'package:shared_preference_app_group/shared_preference_app_group.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/model/acct.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class AccountSettingsRepository extends ChangeNotifier {
   List<AccountSettings> _accountSettings = [];

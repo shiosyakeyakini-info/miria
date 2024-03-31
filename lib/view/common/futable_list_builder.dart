@@ -1,8 +1,8 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class FutureListView<T> extends StatefulWidget {
   final Future<Iterable<T>> future;
@@ -11,9 +11,7 @@ class FutureListView<T> extends StatefulWidget {
   final ScrollPhysics? physics;
 
   const FutureListView({
-    super.key,
-    required this.future,
-    required this.builder,
+    required this.future, required this.builder, super.key,
     this.shrinkWrap = false,
     this.physics,
   });

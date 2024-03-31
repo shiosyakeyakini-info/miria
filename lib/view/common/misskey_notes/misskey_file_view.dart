@@ -1,15 +1,15 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/image_dialog.dart';
-import 'package:miria/view/common/misskey_notes/in_note_button.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/common/misskey_notes/video_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/image_dialog.dart";
+import "package:miria/view/common/misskey_notes/in_note_button.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/misskey_notes/video_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class MisskeyFileView extends ConsumerStatefulWidget {
   final List<DriveFile> files;
@@ -17,8 +17,7 @@ class MisskeyFileView extends ConsumerStatefulWidget {
   final double height;
 
   const MisskeyFileView({
-    super.key,
-    required this.files,
+    required this.files, super.key,
     this.height = 200,
   });
 
@@ -99,13 +98,7 @@ class MisskeyImage extends ConsumerStatefulWidget {
   final String name;
 
   const MisskeyImage({
-    super.key,
-    required this.isSensitive,
-    required this.thumbnailUrl,
-    required this.targetFiles,
-    required this.position,
-    required this.fileType,
-    required this.name,
+    required this.isSensitive, required this.thumbnailUrl, required this.targetFiles, required this.position, required this.fileType, required this.name, super.key,
   });
 
   @override

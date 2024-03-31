@@ -1,18 +1,16 @@
-import 'dart:async';
-import 'dart:io';
+import "dart:async";
+import "dart:io";
 
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:dio/dio.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class ErrorDetail extends StatelessWidget {
   final Object? error;
   final StackTrace? stackTrace;
 
   const ErrorDetail({
-    super.key,
-    required this.error,
-    required this.stackTrace,
+    required this.error, required this.stackTrace, super.key,
   });
 
   @override

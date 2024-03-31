@@ -1,9 +1,9 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/material.dart';
-import 'package:json5/json5.dart';
-import 'package:miria/model/color_theme.dart';
-import 'package:miria/model/misskey_theme.dart';
+import "package:flutter/material.dart";
+import "package:json5/json5.dart";
+import "package:miria/model/color_theme.dart";
+import "package:miria/model/misskey_theme.dart";
 
 void main() {
   final themes = [
@@ -39,27 +39,27 @@ void main() {
         ),
       )
       .map(
-        (theme) => 'ColorTheme('
+        (theme) => "ColorTheme("
             'id: "${theme.id}", '
             'name: "${theme.name}", '
-            'isDarkTheme: ${theme.isDarkTheme}, '
-            'primary: ${theme.primary}, '
-            'primaryDarken: ${theme.primaryDarken}, '
-            'primaryLighten: ${theme.primaryLighten}, '
-            'accentedBackground: ${theme.accentedBackground}, '
-            'background: ${theme.background}, '
-            'foreground: ${theme.foreground}, '
-            'renote: ${theme.renote}, '
-            'mention: ${theme.mention}, '
-            'hashtag: ${theme.hashtag}, '
-            'link: ${theme.link}, '
-            'divider: ${theme.divider}, '
-            'buttonBackground: ${theme.buttonBackground}, '
-            'buttonGradateA: ${theme.buttonGradateA}, '
-            'buttonGradateB: ${theme.buttonGradateB}, '
-            'panel: ${theme.panel}, '
-            'panelBackground: ${theme.panelBackground}, '
-            ')',
+            "isDarkTheme: ${theme.isDarkTheme}, "
+            "primary: ${theme.primary}, "
+            "primaryDarken: ${theme.primaryDarken}, "
+            "primaryLighten: ${theme.primaryLighten}, "
+            "accentedBackground: ${theme.accentedBackground}, "
+            "background: ${theme.background}, "
+            "foreground: ${theme.foreground}, "
+            "renote: ${theme.renote}, "
+            "mention: ${theme.mention}, "
+            "hashtag: ${theme.hashtag}, "
+            "link: ${theme.link}, "
+            "divider: ${theme.divider}, "
+            "buttonBackground: ${theme.buttonBackground}, "
+            "buttonGradateA: ${theme.buttonGradateA}, "
+            "buttonGradateB: ${theme.buttonGradateB}, "
+            "panel: ${theme.panel}, "
+            "panelBackground: ${theme.panelBackground}, "
+            ")",
       )
       .toList();
   // ignore: avoid_print

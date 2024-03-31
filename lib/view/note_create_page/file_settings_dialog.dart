@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/image_file.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/image_file.dart";
 
 class FileSettingsDialogResult {
   final String fileName;
@@ -15,7 +15,7 @@ class FileSettingsDialogResult {
 class FileSettingsDialog extends ConsumerStatefulWidget {
   final MisskeyPostFile file;
 
-  const FileSettingsDialog({super.key, required this.file});
+  const FileSettingsDialog({required this.file, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -44,7 +44,7 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
   }
 
   String generateRandomText() {
-    var str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    final str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         .split("");
     str.shuffle();
     return str.take(10).join("");

@@ -1,24 +1,22 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:device_info_plus/device_info_plus.dart";
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:image_gallery_saver/image_gallery_saver.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:permission_handler/permission_handler.dart";
 
 class ImageDialog extends ConsumerStatefulWidget {
   final List<String> imageUrlList;
   final int initialPage;
 
   const ImageDialog({
-    super.key,
-    required this.imageUrlList,
-    required this.initialPage,
+    required this.imageUrlList, required this.initialPage, super.key,
   });
 
   @override
@@ -83,9 +81,9 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                       },
                       onPointerUp: (event) {
                         final angle =
-                            (atan2(verticalDragY, verticalDragX).abs() /
+                            atan2(verticalDragY, verticalDragX).abs() /
                                 pi *
-                                180);
+                                180;
                         if (listeningId != null &&
                             verticalDragY.abs() > 10 &&
                             (angle > 60 && angle < 120)) {
@@ -220,10 +218,7 @@ class ScaleNotifierInteractiveViewer extends StatefulWidget {
   final void Function(double) onScaleChanged;
 
   const ScaleNotifierInteractiveViewer({
-    super.key,
-    required this.imageUrl,
-    required this.controller,
-    required this.onScaleChanged,
+    required this.imageUrl, required this.controller, required this.onScaleChanged, super.key,
   });
 
   @override

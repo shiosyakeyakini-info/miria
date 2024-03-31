@@ -1,15 +1,15 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:shared_preference_app_group/shared_preference_app_group.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
 
-part 'share_extension_page.freezed.dart';
-part 'share_extension_page.g.dart';
+part "share_extension_page.freezed.dart";
+part "share_extension_page.g.dart";
 
 @freezed
 class ShareExtensionData with _$ShareExtensionData {

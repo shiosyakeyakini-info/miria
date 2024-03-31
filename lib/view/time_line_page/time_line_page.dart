@@ -1,34 +1,34 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/socket_timeline_repository.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/channel_dialog.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/server_detail_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/common/common_drawer.dart';
-import 'package:miria/view/common/notification_icon.dart';
-import 'package:miria/view/common/tab_icon_view.dart';
-import 'package:miria/view/common/timeline_listview.dart';
-import 'package:miria/view/time_line_page/misskey_time_line.dart';
-import 'package:miria/view/time_line_page/nyanpuppu.dart';
-import 'package:miria/view/time_line_page/timeline_emoji.dart';
-import 'package:miria/view/time_line_page/timeline_note.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/socket_timeline_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/channel_dialog.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/common_drawer.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/notification_icon.dart";
+import "package:miria/view/common/tab_icon_view.dart";
+import "package:miria/view/common/timeline_listview.dart";
+import "package:miria/view/server_detail_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:miria/view/time_line_page/misskey_time_line.dart";
+import "package:miria/view/time_line_page/nyanpuppu.dart";
+import "package:miria/view/time_line_page/timeline_emoji.dart";
+import "package:miria/view/time_line_page/timeline_note.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class TimeLinePage extends ConsumerStatefulWidget {
   final TabSetting initialTabSetting;
 
-  const TimeLinePage({super.key, required this.initialTabSetting});
+  const TimeLinePage({required this.initialTabSetting, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => TimeLinePageState();
@@ -392,7 +392,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 class BannerArea extends ConsumerWidget {
   final TabSetting tabSetting;
 
-  const BannerArea({super.key, required this.tabSetting});
+  const BannerArea({required this.tabSetting, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -444,7 +444,7 @@ class BannerArea extends ConsumerWidget {
 class AnnoucementInfo extends ConsumerWidget {
   final TabSetting tabSetting;
 
-  const AnnoucementInfo({super.key, required this.tabSetting});
+  const AnnoucementInfo({required this.tabSetting, super.key});
 
   void announcementsRoute(BuildContext context, WidgetRef ref) {
     final account = ref.read(accountProvider(tabSetting.acct));
@@ -488,7 +488,7 @@ class AnnoucementInfo extends ConsumerWidget {
 class AnnouncementIcon extends StatelessWidget {
   final AnnouncementIconType iconType;
 
-  const AnnouncementIcon({super.key, required this.iconType});
+  const AnnouncementIcon({required this.iconType, super.key});
 
   @override
   Widget build(BuildContext context) {

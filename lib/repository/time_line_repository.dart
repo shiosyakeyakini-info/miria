@@ -1,13 +1,13 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/repository/general_settings_repository.dart';
-import 'package:miria/repository/main_stream_repository.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter/cupertino.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/repository/general_settings_repository.dart";
+import "package:miria/repository/main_stream_repository.dart";
+import "package:miria/repository/note_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class NotifierQueueList extends QueueList<Note> {
   final NoteRepository noteRepository;
@@ -21,7 +21,7 @@ class NotifierQueueList extends QueueList<Note> {
   );
 
   bool filterAs(Note element) {
-    if (tabSetting.renoteDisplay == false &&
+    if (!tabSetting.renoteDisplay &&
         element.text == null &&
         element.cw == null &&
         element.renoteId != null) {

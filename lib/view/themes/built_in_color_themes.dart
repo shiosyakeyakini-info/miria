@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/color_theme.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/color_theme.dart";
 
 const builtInColorThemes = [
   ColorTheme(

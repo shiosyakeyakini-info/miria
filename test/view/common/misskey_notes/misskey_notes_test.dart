@@ -1,26 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_highlighting/flutter_highlighting.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/common/misskey_notes/reaction_button.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:mockito/mockito.dart';
+import "package:flutter/material.dart";
+import "package:flutter_highlighting/flutter_highlighting.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/note_repository.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/misskey_notes/reaction_button.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
+import "package:url_launcher_platform_interface/url_launcher_platform_interface.dart";
 
-import '../../../test_util/default_root_widget.dart';
-import '../../../test_util/mock.mocks.dart';
-import '../../../test_util/test_datas.dart';
-import '../../../test_util/widget_tester_extension.dart';
-import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
+import "../../../test_util/default_root_widget.dart";
+import "../../../test_util/mock.mocks.dart";
+import "../../../test_util/test_datas.dart";
+import "../../../test_util/widget_tester_extension.dart";
 
 Widget buildTestWidget({
-  List<Override> overrides = const [],
-  required Note note,
+  required Note note, List<Override> overrides = const [],
 }) {
   final notesRepository = NoteRepository(MockMisskey(), TestData.account);
   notesRepository.registerNote(note);
@@ -82,7 +81,7 @@ void main() {
     group("MFM", () {
       testWidgets("コードブロックがあった場合、コードブロックで表示されること", (tester) async {
         await tester
-            .pumpWidget(buildTestWidget(note: TestData.note1.copyWith(text: r'''
+            .pumpWidget(buildTestWidget(note: TestData.note1.copyWith(text: '''
 ```js
 window.ai = "@ai uneune";
 ```

@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserReactions extends ConsumerWidget {
   final String userId;
 
-  const UserReactions({super.key, required this.userId});
+  const UserReactions({required this.userId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +50,7 @@ class UserReactions extends ConsumerWidget {
 class UserReaction extends ConsumerWidget {
   final UsersReactionsResponse response;
 
-  const UserReaction({super.key, required this.response});
+  const UserReaction({required this.response, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

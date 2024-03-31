@@ -1,13 +1,11 @@
-import 'package:flutter/widgets.dart';
-import 'package:miria/model/account.dart';
+import "package:flutter/widgets.dart";
+import "package:miria/model/account.dart";
 
 class AccountScope extends InheritedWidget {
   final Account account;
 
   const AccountScope({
-    super.key,
-    required this.account,
-    required super.child,
+    required this.account, required super.child, super.key,
   });
 
   static Account of(BuildContext context) {

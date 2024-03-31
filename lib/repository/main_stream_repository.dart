@@ -1,8 +1,8 @@
-import 'package:flutter/widgets.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/widgets.dart";
+import "package:miria/model/account.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class MainStreamRepository extends ChangeNotifier {
   var hasUnreadNotification = false;

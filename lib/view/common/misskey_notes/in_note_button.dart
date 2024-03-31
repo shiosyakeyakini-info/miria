@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:miria/view/themes/app_theme.dart';
+import "package:flutter/material.dart";
+import "package:miria/view/themes/app_theme.dart";
 
 class InNoteButton extends StatelessWidget {
   final void Function() onPressed;
   final Widget child;
 
-  const InNoteButton({super.key, required this.onPressed, required this.child});
+  const InNoteButton({required this.onPressed, required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {

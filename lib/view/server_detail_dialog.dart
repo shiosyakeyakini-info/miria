@@ -1,24 +1,23 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:fl_chart/fl_chart.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/constants.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ServerDetailDialog extends ConsumerStatefulWidget {
   //TODO: 本当はサーバー情報取るのにアカウントいらない...
   final Account account;
 
   const ServerDetailDialog({
-    super.key,
-    required this.account,
+    required this.account, super.key,
   });
 
   @override
@@ -371,7 +370,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 class Chart extends StatelessWidget {
   final List<FlSpot> data;
 
-  const Chart({super.key, required this.data});
+  const Chart({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {

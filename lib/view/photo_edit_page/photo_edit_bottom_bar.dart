@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
 
 class PhotoEditBottomBar extends ConsumerWidget {
   const PhotoEditBottomBar({super.key});

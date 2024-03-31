@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class SimpleMessageDialog extends StatelessWidget {
   final String message;
@@ -10,8 +10,7 @@ class SimpleMessageDialog extends StatelessWidget {
           builder: (context) => SimpleMessageDialog(message: message));
 
   const SimpleMessageDialog({
-    super.key,
-    required this.message,
+    required this.message, super.key,
   });
 
   @override

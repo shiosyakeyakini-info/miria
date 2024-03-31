@@ -1,34 +1,34 @@
-import 'dart:convert';
-import 'dart:typed_data';
+import "dart:convert";
+import "dart:typed_data";
 
-import 'package:collection/collection.dart';
-import 'package:file/memory.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:miria/extensions/string_extensions.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/common/note_create/input_completation.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/note_create_page/mfm_preview.dart';
-import 'package:miria/view/note_create_page/reply_to_area.dart';
-import 'package:miria/view/note_create_page/vote_area.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:mockito/mockito.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import "package:collection/collection.dart";
+import "package:file/memory.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_svg/svg.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:miria/extensions/string_extensions.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/local_only_icon.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/note_create/input_completation.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/note_create_page/mfm_preview.dart";
+import "package:miria/view/note_create_page/reply_to_area.dart";
+import "package:miria/view/note_create_page/vote_area.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
+import "package:visibility_detector/visibility_detector.dart";
 
-import '../../test_util/default_root_widget.dart';
-import '../../test_util/mock.mocks.dart';
-import '../../test_util/test_datas.dart';
-import '../../test_util/widget_tester_extension.dart';
+import "../../test_util/default_root_widget.dart";
+import "../../test_util/mock.mocks.dart";
+import "../../test_util/test_datas.dart";
+import "../../test_util/widget_tester_extension.dart";
 
 void main() {
   group("初期値", () {

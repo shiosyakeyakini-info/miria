@@ -1,19 +1,19 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:json5/json5.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:reorderables/reorderables.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:json5/json5.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
+import "package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:reorderables/reorderables.dart";
 
 enum ReactionDeckPageMenuType { addMany, copy, clear }
 
@@ -21,7 +21,7 @@ enum ReactionDeckPageMenuType { addMany, copy, clear }
 class ReactionDeckPage extends ConsumerStatefulWidget {
   final Account account;
 
-  const ReactionDeckPage({super.key, required this.account});
+  const ReactionDeckPage({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -110,7 +110,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                             ),
                           )
                       ],
-                      onReorder: (int oldIndex, int newIndex) {
+                      onReorder: (oldIndex, newIndex) {
                         setState(() {
                           final element = reactions.removeAt(oldIndex);
                           reactions.insert(newIndex, element);

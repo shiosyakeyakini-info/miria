@@ -1,13 +1,13 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/modal_indicator.dart';
-import 'package:miria/view/login_page/centraing_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/modal_indicator.dart";
+import "package:miria/view/login_page/centraing_widget.dart";
+import "package:miria/view/login_page/misskey_server_list_dialog.dart";
 
 class MiAuthLogin extends ConsumerStatefulWidget {
   const MiAuthLogin({super.key});

@@ -1,23 +1,20 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:collection/collection.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class NoteVote extends ConsumerStatefulWidget {
   const NoteVote({
-    super.key,
-    required this.displayNote,
-    required this.poll,
-    required this.loginAs,
+    required this.displayNote, required this.poll, required this.loginAs, super.key,
   });
 
   final Note displayNote;

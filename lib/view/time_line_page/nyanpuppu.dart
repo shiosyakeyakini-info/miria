@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
+import "package:flutter/material.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
 
 // blobs in community discord server
 final _discordOfficialEmojiList = [

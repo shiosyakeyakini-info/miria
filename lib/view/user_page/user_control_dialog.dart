@@ -1,20 +1,20 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/note_search_condition.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/user_page/antenna_modal_sheet.dart';
-import 'package:miria/view/user_page/users_list_modal_sheet.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/note_search_condition.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/user_page/antenna_modal_sheet.dart";
+import "package:miria/view/user_page/users_list_modal_sheet.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:url_launcher/url_launcher.dart";
 
 enum UserControl {
   createMute,
@@ -30,9 +30,7 @@ class UserControlDialog extends ConsumerStatefulWidget {
   final UserDetailed response;
 
   const UserControlDialog({
-    super.key,
-    required this.account,
-    required this.response,
+    required this.account, required this.response, super.key,
   });
 
   @override

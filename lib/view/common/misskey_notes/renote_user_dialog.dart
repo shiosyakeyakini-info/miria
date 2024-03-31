@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class RenoteUserDialog extends ConsumerWidget {
   final Account account;
   final String noteId;
 
   const RenoteUserDialog({
-    super.key,
-    required this.account,
-    required this.noteId,
+    required this.account, required this.noteId, super.key,
   });
 
   @override

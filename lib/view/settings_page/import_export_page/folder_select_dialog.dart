@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/futable_list_builder.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/futable_list_builder.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class FolderResult {
   const FolderResult(this.folder);
@@ -19,10 +19,7 @@ class FolderSelectDialog extends ConsumerStatefulWidget {
   final String confirmationText;
 
   const FolderSelectDialog({
-    super.key,
-    required this.account,
-    required this.fileShowTarget,
-    required this.confirmationText,
+    required this.account, required this.fileShowTarget, required this.confirmationText, super.key,
   });
 
   @override

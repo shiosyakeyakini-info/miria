@@ -1,20 +1,20 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/summaly_result.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/link_navigator.dart';
-import 'package:miria/view/common/misskey_notes/player_embed.dart';
-import 'package:miria/view/common/misskey_notes/twitter_embed.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/summaly_result.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/link_navigator.dart";
+import "package:miria/view/common/misskey_notes/player_embed.dart";
+import "package:miria/view/common/misskey_notes/twitter_embed.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:webview_flutter/webview_flutter.dart";
 
 final _summalyProvider =
     AsyncNotifierProvider.family<_Summaly, SummalyResult, (String, String)>(
@@ -53,10 +53,7 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
 
 class LinkPreview extends ConsumerWidget {
   const LinkPreview({
-    super.key,
-    required this.account,
-    required this.link,
-    required this.host,
+    required this.account, required this.link, required this.host, super.key,
   });
 
   final Account account;
@@ -79,10 +76,7 @@ class LinkPreview extends ConsumerWidget {
 
 class LinkPreviewItem extends StatefulWidget {
   const LinkPreviewItem({
-    super.key,
-    required this.link,
-    required this.summalyResult,
-    required this.host,
+    required this.link, required this.summalyResult, required this.host, super.key,
   });
 
   final String link;
@@ -168,9 +162,7 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
 
 class LinkPreviewTile extends ConsumerWidget {
   const LinkPreviewTile({
-    super.key,
-    required this.link,
-    required this.host,
+    required this.link, required this.host, super.key,
     this.summalyResult = const SummalyResult(player: Player()),
   });
 

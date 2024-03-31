@@ -1,21 +1,19 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:miria/router/app_router.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:receive_sharing_intent/receive_sharing_intent.dart";
 
 class SharingIntentListener extends ConsumerStatefulWidget {
   final AppRouter router;
   final Widget child;
 
   const SharingIntentListener({
-    super.key,
-    required this.router,
-    required this.child,
+    required this.router, required this.child, super.key,
   });
 
   @override

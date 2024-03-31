@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
 
 class EditedPhotoImage extends ConsumerWidget {
   const EditedPhotoImage({super.key});

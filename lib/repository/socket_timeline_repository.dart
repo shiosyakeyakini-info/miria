@@ -1,15 +1,15 @@
-import 'dart:async';
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:miria/repository/main_stream_repository.dart';
-import 'package:miria/repository/time_line_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:miria/repository/main_stream_repository.dart";
+import "package:miria/repository/time_line_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;

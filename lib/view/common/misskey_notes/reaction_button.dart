@@ -1,18 +1,18 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:miria/const.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/misskey_notes/reaction_user_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/const.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ReactionButton extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -22,12 +22,7 @@ class ReactionButton extends ConsumerStatefulWidget {
   final Account? loginAs;
 
   const ReactionButton({
-    super.key,
-    required this.emojiData,
-    required this.reactionCount,
-    required this.myReaction,
-    required this.noteId,
-    required this.loginAs,
+    required this.emojiData, required this.reactionCount, required this.myReaction, required this.noteId, required this.loginAs, super.key,
   });
 
   @override
@@ -103,11 +98,9 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         switch (emojiData) {
           case UnicodeEmojiData():
             reactionString = emojiData.char;
-            break;
           case CustomEmojiData():
             if (!emojiData.isCurrentServer) return;
             reactionString = ":${emojiData.baseName}:";
-            break;
           case NotEmojiData():
             return;
         }

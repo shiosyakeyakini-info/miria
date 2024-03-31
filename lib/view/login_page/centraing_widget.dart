@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import "package:flutter/cupertino.dart";
 
 class CenteringWidget extends StatelessWidget {
   final Widget child;
 
-  const CenteringWidget({super.key, required this.child});
+  const CenteringWidget({required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {

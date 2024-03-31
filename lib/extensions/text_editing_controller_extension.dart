@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/input_completion_type.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/input_completion_type.dart";
 
 extension TextEditingControllerExtension on TextEditingController {
   String? get textBeforeSelection {
@@ -19,7 +19,7 @@ extension TextEditingControllerExtension on TextEditingController {
     if (lastColonIndex < 0) {
       return null;
     }
-    if (RegExp(r':[a-zA-z_0-9]+?:$')
+    if (RegExp(r":[a-zA-z_0-9]+?:$")
         .hasMatch(text.substring(0, lastColonIndex + 1))) {
       return null;
     } else {

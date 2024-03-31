@@ -1,25 +1,25 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm_parser/mfm_parser.dart' hide MfmText;
-import 'package:miria/extensions/list_mfm_node_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/image_dialog.dart';
-import 'package:miria/view/common/misskey_notes/link_preview.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:misskey_dart/misskey_dart.dart' as misskey;
-import 'package:miria/view/common/account_scope.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:mfm_parser/mfm_parser.dart" hide MfmText;
+import "package:miria/extensions/list_mfm_node_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/constants.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/image_dialog.dart";
+import "package:miria/view/common/misskey_notes/link_preview.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart" as misskey;
+import "package:url_launcher/url_launcher.dart";
 
 @RoutePage()
 class MisskeyPagePage extends ConsumerWidget {
@@ -27,9 +27,7 @@ class MisskeyPagePage extends ConsumerWidget {
   final misskey.Page page;
 
   const MisskeyPagePage({
-    super.key,
-    required this.account,
-    required this.page,
+    required this.account, required this.page, super.key,
   });
 
   @override
@@ -117,9 +115,7 @@ class PageContent extends ConsumerWidget {
   final misskey.AbstractPageContent content;
   final misskey.Page page;
   const PageContent({
-    super.key,
-    required this.content,
-    required this.page,
+    required this.content, required this.page, super.key,
   });
 
   @override
@@ -226,11 +222,7 @@ class PageLikeButton extends ConsumerStatefulWidget {
   final String userId;
 
   const PageLikeButton({
-    super.key,
-    required this.initialLiked,
-    required this.likeCount,
-    required this.pageId,
-    required this.userId,
+    required this.initialLiked, required this.likeCount, required this.pageId, required this.userId, super.key,
   });
 
   @override

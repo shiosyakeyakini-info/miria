@@ -1,22 +1,20 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class FederationCustomEmojis extends ConsumerStatefulWidget {
   final String host;
   final MetaResponse meta;
 
   const FederationCustomEmojis({
-    super.key,
-    required this.host,
-    required this.meta,
+    required this.host, required this.meta, super.key,
   });
 
   @override

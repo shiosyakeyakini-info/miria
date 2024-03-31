@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/view/common/error_notification.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:miria/view/common/error_notification.dart";
 
 class CommonFuture<T> extends StatelessWidget {
   final Future<T> future;
@@ -8,9 +8,7 @@ class CommonFuture<T> extends StatelessWidget {
   final Widget Function(BuildContext, T) complete;
 
   const CommonFuture(
-      {super.key,
-      required this.future,
-      required this.complete,
+      {required this.future, required this.complete, super.key,
       this.futureFinished});
 
   @override

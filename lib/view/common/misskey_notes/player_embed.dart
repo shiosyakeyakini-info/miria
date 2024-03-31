@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/summaly_result.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/summaly_result.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:webview_flutter/webview_flutter.dart";
+import "package:webview_flutter_android/webview_flutter_android.dart";
+import "package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart";
 
 class PlayerEmbed extends StatefulWidget {
-  const PlayerEmbed({super.key, required this.player});
+  const PlayerEmbed({required this.player, super.key});
 
   final Player player;
 

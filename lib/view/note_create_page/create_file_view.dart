@@ -1,23 +1,20 @@
-import 'dart:typed_data';
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/image_file.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/note_create_page/file_settings_dialog.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/image_file.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/note_create_page/file_settings_dialog.dart";
 
 class CreateFileView extends ConsumerWidget {
   final int index;
   final MisskeyPostFile file;
 
   const CreateFileView({
-    super.key,
-    required this.file,
-    required this.index,
+    required this.file, required this.index, super.key,
   });
 
   Future<void> onTap(BuildContext context, WidgetRef ref) async {

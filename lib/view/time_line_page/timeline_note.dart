@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/view/themes/app_theme.dart";
 
 final timelineNoteProvider =
     ChangeNotifierProvider.autoDispose((ref) => TextEditingController());

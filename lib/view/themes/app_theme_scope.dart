@@ -1,19 +1,19 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:miria/extensions/color_extension.dart';
-import 'package:miria/model/color_theme.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/themes/built_in_color_themes.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:miria/extensions/color_extension.dart";
+import "package:miria/model/color_theme.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:miria/view/themes/built_in_color_themes.dart";
 
 class AppThemeScope extends ConsumerStatefulWidget {
   final Widget child;
 
-  const AppThemeScope({super.key, required this.child});
+  const AppThemeScope({required this.child, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => AppThemeScopeState();
@@ -172,7 +172,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
 
   TextStyle? fromGoogleFont(String? fontName) {
     return fontName != null &&
-            fontName.isNotEmpty == true &&
+            fontName.isNotEmpty &&
             GoogleFonts.asMap().containsKey(fontName)
         ? GoogleFonts.getFont(fontName)
         : null;

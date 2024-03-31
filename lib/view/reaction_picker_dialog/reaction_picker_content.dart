@@ -1,26 +1,24 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:visibility_detector/visibility_detector.dart";
 
 class ReactionPickerContent extends ConsumerStatefulWidget {
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
   final bool isAcceptSensitive;
 
   const ReactionPickerContent({
-    super.key,
-    required this.onTap,
-    required this.isAcceptSensitive,
+    required this.onTap, required this.isAcceptSensitive, super.key,
   });
 
   @override
@@ -100,11 +98,8 @@ class EmojiButton extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const EmojiButton({
-    super.key,
-    required this.emoji,
-    required this.onTap,
+    required this.emoji, required this.onTap, required this.isAcceptSensitive, super.key,
     this.isForceVisible = false,
-    required this.isAcceptSensitive,
   });
 
   @override
@@ -134,10 +129,10 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             : const BoxDecoration(),
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-            padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-            elevation: MaterialStatePropertyAll(0),
-            minimumSize: MaterialStatePropertyAll(Size.zero),
+            backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
+            padding: const MaterialStatePropertyAll(EdgeInsets.all(5)),
+            elevation: const MaterialStatePropertyAll(0),
+            minimumSize: const MaterialStatePropertyAll(Size.zero),
             overlayColor: MaterialStatePropertyAll(AppTheme.of(context).colorTheme.accentedBackground),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
@@ -172,9 +167,7 @@ class EmojiSearch extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const EmojiSearch({
-    super.key,
-    required this.onTap,
-    required this.isAcceptSensitive,
+    required this.onTap, required this.isAcceptSensitive, super.key,
   });
 
   @override

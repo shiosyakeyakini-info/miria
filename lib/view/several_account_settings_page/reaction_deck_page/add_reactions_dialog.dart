@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:json5/json5.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:json5/json5.dart";
+import "package:miria/model/account.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class AddReactionsDialog extends StatefulWidget {
   const AddReactionsDialog({
-    super.key,
-    required this.account,
+    required this.account, super.key,
     this.domain = "system",
   });
 

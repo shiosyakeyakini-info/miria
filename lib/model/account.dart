@@ -1,9 +1,9 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/model/acct.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/model/acct.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'account.freezed.dart';
-part 'account.g.dart';
+part "account.freezed.dart";
+part "account.g.dart";
 
 @Freezed(equal: false)
 class Account with _$Account {
@@ -12,8 +12,7 @@ class Account with _$Account {
   const factory Account({
     required String host,
     required String userId,
-    String? token,
-    required MeDetailed i,
+    required MeDetailed i, String? token,
     MetaResponse? meta,
   }) = _Account;
 

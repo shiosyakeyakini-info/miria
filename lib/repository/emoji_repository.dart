@@ -1,15 +1,15 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/services.dart';
-import 'package:kana_kit/kana_kit.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/model/unicode_emoji.dart';
-import 'package:miria/repository/account_settings_repository.dart';
-import 'package:miria/repository/shared_preference_controller.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter/services.dart";
+import "package:kana_kit/kana_kit.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/model/unicode_emoji.dart";
+import "package:miria/repository/account_settings_repository.dart";
+import "package:miria/repository/shared_preference_controller.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 abstract class EmojiRepository {
   List<EmojiRepositoryData>? emoji;
@@ -93,16 +93,13 @@ class EmojiRepositoryImpl extends EmojiRepository {
     switch (settings.emojiCacheStrategy) {
       case CacheStrategy.whenTabChange:
         await loadFromSource();
-        break;
       case CacheStrategy.whenLaunch:
         if (thisLaunchLoaded) return;
         await loadFromSource();
-        break;
       case CacheStrategy.whenOneDay:
         if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
           await loadFromSource();
         }
-        break;
     }
   }
 
@@ -189,7 +186,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
                 ...b.kanaAliases.where((e2) => e2.contains(converted))
               ].map((e) => e.length);
 
-              var ret = aValue.min.compareTo(bValue.min);
+              final ret = aValue.min.compareTo(bValue.min);
               if (ret != 0) return ret;
               if (a.emoji is CustomEmojiData) return -1;
               return 0;

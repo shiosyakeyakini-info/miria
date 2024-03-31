@@ -1,24 +1,23 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm/mfm.dart';
-import 'package:miria/extensions/note_visibility_extension.dart';
-import 'package:miria/extensions/reaction_acceptance_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:mfm/mfm.dart";
+import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/extensions/reaction_acceptance_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class SeveralAccountGeneralSettingsPage extends ConsumerStatefulWidget {
   final Account account;
 
   const SeveralAccountGeneralSettingsPage({
-    super.key,
-    required this.account,
+    required this.account, super.key,
   });
 
   @override

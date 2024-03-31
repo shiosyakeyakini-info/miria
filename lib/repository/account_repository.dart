@@ -1,17 +1,17 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/model/acct.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/shared_preference_controller.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:shared_preference_app_group/shared_preference_app_group.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:uuid/uuid.dart';
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/model/acct.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/shared_preference_controller.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:uuid/uuid.dart";
 
 sealed class ValidateMisskeyException implements Exception {}
 
@@ -67,12 +67,12 @@ class AccountRepository extends Notifier<List<Account>> {
           "group.info.shiosyakeyakini.miria");
     }
 
-    final String? storedData =
+    final storedData =
         await sharedPreferenceController.getStringSecure("accounts");
     if (storedData == null) return;
 
     try {
-      final list = (jsonDecode(storedData) as List);
+      final list = jsonDecode(storedData) as List;
       final resultList = List.of(list);
       for (final element in list) {
         if (element["meta"] == null) {
@@ -142,7 +142,6 @@ class AccountRepository extends Notifier<List<Account>> {
         switch (setting.iCacheStrategy) {
           case CacheStrategy.whenLaunch:
             if (!_validatedAccts.contains(acct)) await updateI(account);
-            break;
           case CacheStrategy.whenOneDay:
             final latestUpdated = setting.latestICached;
             if (latestUpdated == null ||
@@ -151,14 +150,12 @@ class AccountRepository extends Notifier<List<Account>> {
             }
           case CacheStrategy.whenTabChange:
             await updateI(account);
-            break;
         }
       }),
       Future(() async {
         switch (setting.metaChacheStrategy) {
           case CacheStrategy.whenLaunch:
             if (!_validateMetaAccts.contains(acct)) await updateMeta(account);
-            break;
           case CacheStrategy.whenOneDay:
             final latestUpdated = setting.latestMetaCached;
             if (latestUpdated == null ||
@@ -167,7 +164,6 @@ class AccountRepository extends Notifier<List<Account>> {
             }
           case CacheStrategy.whenTabChange:
             await updateMeta(account);
-            break;
         }
       })
     ]);

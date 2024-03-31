@@ -1,9 +1,9 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_server_list.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_server_list.dart";
 
 class ExploreServer extends ConsumerStatefulWidget {
   const ExploreServer({super.key});

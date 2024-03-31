@@ -1,18 +1,18 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/photo_edit_page/clip_mode.dart';
-import 'package:miria/view/photo_edit_page/color_filter_image_preview.dart';
-import 'package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/image_file.dart";
+import "package:miria/providers.dart";
+import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/photo_edit_page/clip_mode.dart";
+import "package:miria/view/photo_edit_page/color_filter_image_preview.dart";
+import "package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart";
 
 @RoutePage<Uint8List?>()
 class PhotoEditPage extends ConsumerStatefulWidget {

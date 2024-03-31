@@ -1,14 +1,14 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/photo_edit_page/edited_photo_image.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/photo_edit_page/edited_photo_image.dart";
 
 class ClipMode extends ConsumerStatefulWidget {
   final GlobalKey renderingGlobalKey;
 
-  const ClipMode({super.key, required this.renderingGlobalKey});
+  const ClipMode({required this.renderingGlobalKey, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => ClipModeState();

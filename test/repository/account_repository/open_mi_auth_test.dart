@@ -1,16 +1,16 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:mockito/mockito.dart';
+import "package:dio/dio.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
 
-import '../../test_util/mock.mocks.dart';
-import '../../test_util/test_datas.dart';
-import 'auth_test_data.dart';
+import "../../test_util/mock.mocks.dart";
+import "../../test_util/test_datas.dart";
+import "auth_test_data.dart";
 
 void main() {
   test("誤ったホスト名を入力するとエラーを返すこと", () async {

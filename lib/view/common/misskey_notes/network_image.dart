@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:miria/providers.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:miria/providers.dart";
 
 enum ImageType {
   avatarIcon,
@@ -26,9 +26,7 @@ class NetworkImageView extends ConsumerWidget {
   final BoxFit? fit;
 
   const NetworkImageView({
-    super.key,
-    required this.url,
-    required this.type,
+    required this.url, required this.type, super.key,
     this.loadingBuilder,
     this.errorBuilder,
     this.width,

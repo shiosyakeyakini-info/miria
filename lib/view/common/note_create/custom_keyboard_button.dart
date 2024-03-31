@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
+import "package:flutter/material.dart";
+import "package:miria/extensions/text_editing_controller_extension.dart";
 
 class CustomKeyboardButton extends StatelessWidget {
   final String keyboard;
@@ -10,10 +10,7 @@ class CustomKeyboardButton extends StatelessWidget {
   final void Function()? onTap;
 
   const CustomKeyboardButton({
-    super.key,
-    required this.keyboard,
-    required this.controller,
-    required this.focusNode,
+    required this.keyboard, required this.controller, required this.focusNode, super.key,
     String? displayText,
     this.afterInsert,
     this.onTap,

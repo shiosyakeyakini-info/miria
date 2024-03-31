@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/federation_page/federation_page.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/federation_page/federation_page.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class FederationAds extends ConsumerStatefulWidget {
   const FederationAds({super.key});

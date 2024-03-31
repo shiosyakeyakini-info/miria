@@ -1,40 +1,40 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm_parser/mfm_parser.dart' as parser;
-import 'package:miria/const.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/extensions/list_mfm_node_extension.dart';
-import 'package:miria/extensions/note_extension.dart';
-import 'package:miria/extensions/note_visibility_extension.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/avatar_icon.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/in_note_button.dart';
-import 'package:miria/view/common/misskey_notes/link_preview.dart';
-import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/misskey_notes/misskey_file_view.dart';
-import 'package:miria/view/common/misskey_notes/note_modal_sheet.dart';
-import 'package:miria/view/common/misskey_notes/note_vote.dart';
-import 'package:miria/view/common/misskey_notes/reaction_button.dart';
-import 'package:miria/view/common/misskey_notes/renote_modal_sheet.dart';
-import 'package:miria/view/common/misskey_notes/renote_user_dialog.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:dotted_border/dotted_border.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:mfm_parser/mfm_parser.dart" as parser;
+import "package:miria/const.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/extensions/list_mfm_node_extension.dart";
+import "package:miria/extensions/note_extension.dart";
+import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/avatar_icon.dart";
+import "package:miria/view/common/constants.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/in_note_button.dart";
+import "package:miria/view/common/misskey_notes/link_preview.dart";
+import "package:miria/view/common/misskey_notes/local_only_icon.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/common/misskey_notes/misskey_file_view.dart";
+import "package:miria/view/common/misskey_notes/note_modal_sheet.dart";
+import "package:miria/view/common/misskey_notes/note_vote.dart";
+import "package:miria/view/common/misskey_notes/reaction_button.dart";
+import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
+import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class MisskeyNote extends ConsumerStatefulWidget {
   final Note note;
@@ -47,8 +47,7 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final bool isForceVisibleLong;
 
   const MisskeyNote({
-    super.key,
-    required this.note,
+    required this.note, super.key,
     this.isDisplayBorder = true,
     this.recursive = 1,
     this.loginAs,
@@ -113,7 +112,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     final renoteId = widget.note.renote?.id;
     final Note? renoteNote;
 
-    bool isEmptyRenote = latestActualNote?.isEmptyRenote == true;
+    final isEmptyRenote = latestActualNote?.isEmptyRenote == true;
 
     if (isEmptyRenote) {
       renoteNote = ref.watch(
@@ -650,10 +649,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
     final account = AccountScope.of(context);
     final isLikeOnly =
-        (displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
+        displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
             (displayNote.reactionAcceptance ==
                     ReactionAcceptance.likeOnlyForRemote &&
-                displayNote.user.host != null));
+                displayNote.user.host != null);
     if (displayNote.myReaction != null && requestEmoji != null) {
       // すでにリアクション済み
       return;
@@ -696,7 +695,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     final note = ref.read(notesProvider(account));
     final MisskeyEmojiData? selectedEmoji;
     if (isLikeOnly) {
-      selectedEmoji = const UnicodeEmojiData(char: '❤️');
+      selectedEmoji = const UnicodeEmojiData(char: "❤️");
     } else if (requestEmoji == null) {
       selectedEmoji = await showDialog<MisskeyEmojiData?>(
           context: context,
@@ -728,9 +727,7 @@ class NoteHeader1 extends ConsumerWidget {
   final Account? loginAs;
 
   const NoteHeader1({
-    super.key,
-    required this.displayNote,
-    required this.loginAs,
+    required this.displayNote, required this.loginAs, super.key,
   });
 
   @override
@@ -787,8 +784,7 @@ class RenoteHeader extends ConsumerWidget {
   final Account? loginAs;
 
   const RenoteHeader({
-    super.key,
-    required this.note,
+    required this.note, super.key,
     this.loginAs,
   });
 
@@ -864,7 +860,7 @@ class RenoteHeader extends ConsumerWidget {
 class NoteChannelView extends StatelessWidget {
   final NoteChannelInfo channel;
 
-  const NoteChannelView({super.key, required this.channel});
+  const NoteChannelView({required this.channel, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -902,8 +898,7 @@ class NoteChannelView extends StatelessWidget {
 class RenoteButton extends StatelessWidget {
   final Note displayNote;
   const RenoteButton({
-    super.key,
-    required this.displayNote,
+    required this.displayNote, super.key,
   });
 
   @override
@@ -953,9 +948,7 @@ class FooterReactionButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const FooterReactionButton({
-    super.key,
-    required this.displayNote,
-    required this.onPressed,
+    required this.displayNote, required this.onPressed, super.key,
   });
 
   @override

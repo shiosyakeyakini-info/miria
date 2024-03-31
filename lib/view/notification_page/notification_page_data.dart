@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
   final String id;
@@ -32,17 +32,17 @@ sealed class MentionQuoteNotificationDataType {
 
 class _Mention implements MentionQuoteNotificationDataType {
   @override
-  get name => (context) => S.of(context).mention;
+  String Function(BuildContext context) get name => (context) => S.of(context).mention;
 }
 
 class _QuotedRenote implements MentionQuoteNotificationDataType {
   @override
-  get name => (context) => S.of(context).quotedRenote;
+  String Function(BuildContext context) get name => (context) => S.of(context).quotedRenote;
 }
 
 class _Reply implements MentionQuoteNotificationDataType {
   @override
-  get name => (context) => "";
+  String Function(BuildContext context) get name => (context) => "";
 }
 
 class MentionQuoteNotificationData extends NotificationData {
@@ -68,19 +68,19 @@ sealed class FollowNotificationDataType {
 
 class _Follow implements FollowNotificationDataType {
   @override
-  get name =>
+  String Function(BuildContext context, String userName) get name =>
       (context, userName) => S.of(context).followedNotification(userName);
 }
 
 class _FollowRequestAccepted implements FollowNotificationDataType {
   @override
-  get name => (context, userName) =>
+  String Function(BuildContext context, String userName) get name => (context, userName) =>
       S.of(context).followRequestAcceptedNotification(userName);
 }
 
 class _ReceiveFollowRequest implements FollowNotificationDataType {
   @override
-  get name => (context, userName) =>
+  String Function(BuildContext context, String userName) get name => (context, userName) =>
       S.of(context).receiveFollowRequestNotification(userName);
 }
 
@@ -160,7 +160,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
                 id: element.id));
           }
 
-          break;
         case NotificationType.renote:
           var isSummarize = false;
           resultList
@@ -180,7 +179,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
                 id: element.id));
           }
 
-          break;
 
         case NotificationType.quote:
           resultList.add(MentionQuoteNotificationData(
@@ -190,7 +188,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               type: MentionQuoteNotificationDataType.quote,
               id: element.id));
 
-          break;
         case NotificationType.mention:
           resultList.add(MentionQuoteNotificationData(
               createdAt: element.createdAt,
@@ -199,7 +196,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               type: MentionQuoteNotificationDataType.mention,
               id: element.id));
 
-          break;
         case NotificationType.reply:
           resultList.add(MentionQuoteNotificationData(
               createdAt: element.createdAt,
@@ -207,7 +203,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               user: element.user,
               type: MentionQuoteNotificationDataType.reply,
               id: element.id));
-          break;
 
         case NotificationType.follow:
           resultList.add(FollowNotificationData(
@@ -216,21 +211,18 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               type: FollowNotificationDataType.follow,
               id: element.id));
 
-          break;
         case NotificationType.followRequestAccepted:
           resultList.add(FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted,
               id: element.id));
-          break;
         case NotificationType.receiveFollowRequest:
           resultList.add(FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.receiveFollowRequest,
               id: element.id));
-          break;
 
         case NotificationType.achievementEarned:
           resultList.add(SimpleNotificationData(
@@ -238,40 +230,34 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
                   "${localize.achievementEarnedNotification}[${element.achievement}]",
               createdAt: element.createdAt,
               id: element.id));
-          break;
 
         case NotificationType.pollVote:
           resultList.add(PollNotification(
               note: element.note,
               createdAt: element.createdAt,
               id: element.id));
-          break;
         case NotificationType.pollEnded:
           resultList.add(PollNotification(
               note: element.note,
               createdAt: element.createdAt,
               id: element.id));
-          break;
         case NotificationType.test:
           resultList.add(SimpleNotificationData(
               text: localize.testNotification,
               createdAt: element.createdAt,
               id: element.id));
-          break;
 
         case NotificationType.note:
           resultList.add(NoteNotification(
               note: element.note,
               createdAt: element.createdAt,
               id: element.id));
-          break;
 
         case NotificationType.roleAssigned:
           resultList.add(RoleNotification(
               role: element.role,
               createdAt: element.createdAt,
               id: element.id));
-          break;
 
         default:
           break;

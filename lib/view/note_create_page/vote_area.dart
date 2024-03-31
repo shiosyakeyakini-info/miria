@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/providers.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 
-import '../common/account_scope.dart';
+import "package:miria/view/common/account_scope.dart";
 
 class VoteArea extends ConsumerStatefulWidget {
   const VoteArea({super.key});
@@ -74,7 +74,7 @@ class VoteContentListState extends ConsumerState<VoteContentList> {
 class VoteContentListItem extends ConsumerStatefulWidget {
   final int index;
 
-  const VoteContentListItem({super.key, required this.index});
+  const VoteContentListItem({required this.index, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

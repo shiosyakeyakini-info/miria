@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/account.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
 class SimpleConfirmDialog extends StatelessWidget {
   final String message;
@@ -29,13 +29,10 @@ class SimpleConfirmDialog extends StatelessWidget {
               ));
 
   const SimpleConfirmDialog({
-    super.key,
-    required this.message,
-    required this.primary,
-    required this.secondary,
+    required this.message, required this.primary, required this.secondary, super.key,
     this.isMfm = false,
     this.account,
-  }) : assert(isMfm == false || (isMfm == true && account != null));
+  }) : assert(!isMfm || (isMfm && account != null));
 
   @override
   Widget build(BuildContext context) {

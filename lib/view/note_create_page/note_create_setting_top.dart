@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/avatar_icon.dart';
-import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
-import 'package:miria/view/note_create_page/note_visibility_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/note_create_page/reaction_acceptance_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/avatar_icon.dart";
+import "package:miria/view/common/misskey_notes/local_only_icon.dart";
+import "package:miria/view/note_create_page/note_visibility_dialog.dart";
+import "package:miria/view/note_create_page/reaction_acceptance_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class NoteCreateSettingTop extends ConsumerWidget {
   const NoteCreateSettingTop({super.key});

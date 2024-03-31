@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/extensions/note_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/foundation.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/extensions/note_extension.dart";
+import "package:miria/model/account.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'note_repository.freezed.dart';
+part "note_repository.freezed.dart";
 
 @freezed
 class NoteStatus with _$NoteStatus {

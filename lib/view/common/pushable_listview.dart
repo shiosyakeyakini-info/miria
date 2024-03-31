@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/error_notification.dart';
-import 'package:miria/view/common/misskey_ad.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_notification.dart";
+import "package:miria/view/common/misskey_ad.dart";
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
@@ -17,10 +17,7 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final bool showAd;
 
   const PushableListView({
-    super.key,
-    required this.initializeFuture,
-    required this.nextFuture,
-    required this.itemBuilder,
+    required this.initializeFuture, required this.nextFuture, required this.itemBuilder, super.key,
     this.listKey = "",
     this.shrinkWrap = false,
     this.physics,

@@ -1,5 +1,5 @@
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:collection/collection.dart';
+import "package:collection/collection.dart";
+import "package:miria/repository/emoji_repository.dart";
 
 sealed class MisskeyEmojiData {
   final String baseName;
@@ -19,8 +19,8 @@ sealed class MisskeyEmojiData {
       return UnicodeEmojiData(char: emojiName);
     }
 
-    final customEmojiRegExp = RegExp(r":(.+?)@(.+?):");
-    final hostIncludedRegExp = RegExp(r":(.+?):");
+    final customEmojiRegExp = RegExp(":(.+?)@(.+?):");
+    final hostIncludedRegExp = RegExp(":(.+?):");
 
     // よそのサーバー
     if (emojiInfo != null && emojiInfo.isNotEmpty) {
@@ -44,7 +44,7 @@ sealed class MisskeyEmojiData {
     // 自分のサーバー :ai@.:
     if (customEmojiRegExp.hasMatch(emojiName)) {
       assert(repository != null);
-      final EmojiRepositoryData? found = repository!.emoji?.firstWhereOrNull(
+      final found = repository!.emoji?.firstWhereOrNull(
           (e) =>
               e.emoji.baseName ==
               (customEmojiRegExp.firstMatch(emojiName)?.group(1) ?? emojiName));
@@ -59,7 +59,7 @@ sealed class MisskeyEmojiData {
     final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
     if (customEmojiRegExp2.hasMatch(emojiName)) {
       assert(repository != null);
-      final EmojiRepositoryData? found = repository!.emoji?.firstWhereOrNull(
+      final found = repository!.emoji?.firstWhereOrNull(
           (e) =>
               e.emoji.baseName ==
               (customEmojiRegExp2.firstMatch(emojiName)?.group(1) ??

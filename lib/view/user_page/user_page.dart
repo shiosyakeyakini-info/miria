@@ -1,19 +1,19 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/user_page/user_clips.dart';
-import 'package:miria/view/user_page/user_detail.dart';
-import 'package:miria/view/user_page/user_misskey_page.dart';
-import 'package:miria/view/user_page/user_notes.dart';
-import 'package:miria/view/user_page/user_plays.dart';
-import 'package:miria/view/user_page/user_reactions.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/user_page/user_clips.dart";
+import "package:miria/view/user_page/user_detail.dart";
+import "package:miria/view/user_page/user_misskey_page.dart";
+import "package:miria/view/user_page/user_notes.dart";
+import "package:miria/view/user_page/user_plays.dart";
+import "package:miria/view/user_page/user_reactions.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserInfo {
   final String userId;
@@ -41,7 +41,7 @@ final userInfoProvider = StateProvider.family.autoDispose<UserInfo?, String>((
 class UserPage extends ConsumerStatefulWidget {
   final String userId;
   final Account account;
-  const UserPage({super.key, required this.userId, required this.account});
+  const UserPage({required this.userId, required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserPageState();
@@ -96,12 +96,12 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse!),
+                            userInfo!.response!.host!, userInfo.metaResponse),
                         child: UserDetail(
                           response: userInfo.remoteResponse!,
                           account: Account.demoAccount(
                               userInfo.response!.host!,
-                              userInfo.metaResponse!),
+                              userInfo.metaResponse),
                           controlAccount: widget.account,
                         ),
                       ),
@@ -114,7 +114,7 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse!),
+                            userInfo!.response!.host!, userInfo.metaResponse),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
@@ -140,7 +140,7 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse!),
+                            userInfo!.response!.host!, userInfo.metaResponse),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserMisskeyPage(
@@ -156,7 +156,7 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse!),
+                            userInfo!.response!.host!, userInfo.metaResponse),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserPlays(userId: userInfo.remoteResponse!.id),
@@ -181,7 +181,7 @@ class UserPageState extends ConsumerState<UserPage> {
 class UserDetailTab extends ConsumerStatefulWidget {
   final String userId;
 
-  const UserDetailTab({super.key, required this.userId});
+  const UserDetailTab({required this.userId, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserDetailTabState();

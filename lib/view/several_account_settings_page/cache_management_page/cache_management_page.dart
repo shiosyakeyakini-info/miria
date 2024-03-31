@@ -1,16 +1,16 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/providers.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/providers.dart";
 
 @RoutePage()
 class CacheManagementPage extends ConsumerStatefulWidget {
   final Account account;
 
-  const CacheManagementPage({super.key, required this.account});
+  const CacheManagementPage({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

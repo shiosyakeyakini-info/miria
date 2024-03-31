@@ -1,29 +1,29 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:dio/dio.dart';
-import 'package:file/file.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mfm_parser/mfm_parser.dart';
-import 'package:miria/extensions/note_visibility_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
-import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
-import 'package:miria/view/note_create_page/file_settings_dialog.dart';
-import 'package:miria/view/note_create_page/note_create_page.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:dio/dio.dart";
+import "package:file/file.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/image_file.dart";
+import "package:miria/repository/note_repository.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
+import "package:miria/view/note_create_page/drive_modal_sheet.dart";
+import "package:miria/view/note_create_page/file_settings_dialog.dart";
+import "package:miria/view/note_create_page/note_create_page.dart";
+import "package:miria/view/user_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'note_create_state_notifier.freezed.dart';
+part "note_create_state_notifier.freezed.dart";
 
 enum NoteSendStatus { sending, finished, error }
 
@@ -75,12 +75,11 @@ class NoteCreate with _$NoteCreate {
     required Account account,
     required NoteVisibility noteVisibility,
     required bool localOnly,
-    @Default([]) List<User> replyTo,
+    required ReactionAcceptance? reactionAcceptance, @Default([]) List<User> replyTo,
     @Default([]) List<MisskeyPostFile> files,
     NoteCreateChannel? channel,
     Note? reply,
     Note? renote,
-    required ReactionAcceptance? reactionAcceptance,
     @Default(false) bool isCw,
     @Default("") String cwText,
     @Default("") String text,
@@ -152,7 +151,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     if (initialText != null) {
       resultState = resultState.copyWith(text: initialText);
     }
-    if (initialMediaFiles != null && initialMediaFiles.isNotEmpty == true) {
+    if (initialMediaFiles != null && initialMediaFiles.isNotEmpty) {
       resultState = resultState.copyWith(
         files: await Future.wait(
           initialMediaFiles.map((media) async {
@@ -283,7 +282,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     // サイレンスの場合、ホーム以下に強制
     final isSilenced = state.account.i.isSilenced;
-    if (isSilenced == true) {
+    if (isSilenced) {
       resultState = resultState.copyWith(
           noteVisibility: NoteVisibility.min(
               resultState.noteVisibility, NoteVisibility.home));
@@ -350,7 +349,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             );
             fileIds.add(response.id);
 
-            break;
           case UnknownFile():
             response = await misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
@@ -363,7 +361,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             );
             fileIds.add(response.id);
 
-            break;
           case UnknownAlreadyPostedFile():
             if (file.isEdited) {
               await misskey.drive.files.update(DriveFilesUpdateRequest(
@@ -374,7 +371,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               ));
             }
             fileIds.add(file.id);
-            break;
           case ImageFileAlreadyPostedFile():
             if (file.isEdited) {
               response =
@@ -387,7 +383,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             }
 
             fileIds.add(file.id);
-            break;
         }
 
         if (response?.isSensitive == true &&
@@ -597,28 +592,24 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             fileName: file.fileName,
             caption: file.caption,
             isNsfw: file.isNsfw);
-        break;
       case ImageFileAlreadyPostedFile():
         files[files.indexOf(file)] = ImageFile(
             data: content,
             fileName: file.fileName,
             caption: file.caption,
             isNsfw: file.isNsfw);
-        break;
       case UnknownFile():
         files[files.indexOf(file)] = ImageFile(
             data: content,
             fileName: file.fileName,
             caption: file.caption,
             isNsfw: file.isNsfw);
-        break;
       case UnknownAlreadyPostedFile():
         files[files.indexOf(file)] = ImageFile(
             data: content,
             fileName: file.fileName,
             caption: file.caption,
             isNsfw: file.isNsfw);
-        break;
     }
 
     state = state.copyWith(files: files);
@@ -637,7 +628,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           caption: result.caption,
           isNsfw: result.isNsfw,
         );
-        break;
       case ImageFileAlreadyPostedFile():
         files[index] = ImageFileAlreadyPostedFile(
           data: file.data,
@@ -647,14 +637,12 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           caption: result.caption,
           isEdited: true,
         );
-        break;
       case UnknownFile():
         files[index] = UnknownFile(
             data: file.data,
             fileName: result.fileName,
             isNsfw: result.isNsfw,
             caption: result.caption);
-        break;
       case UnknownAlreadyPostedFile():
         files[index] = UnknownAlreadyPostedFile(
           url: file.url,
@@ -664,7 +652,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           caption: result.caption,
           isEdited: true,
         );
-        break;
     }
 
     state = state.copyWith(files: files);
@@ -688,7 +675,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     }
   }
 
-  void deleteReplyUser(User user) async {
+  Future<void> deleteReplyUser(User user) async {
     final list = state.replyTo.toList();
     state = state.copyWith(replyTo: list..remove(user));
   }
@@ -711,7 +698,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       );
       return false;
     }
-    if (state.account.i.isSilenced == true) {
+    if (state.account.i.isSilenced) {
       SimpleMessageDialog.show(
         context,
         S.of(context).cannotPublicNoteBySilencedUser,

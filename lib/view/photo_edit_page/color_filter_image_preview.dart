@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
 
 class ColorFilterImagePreview extends ConsumerWidget {
   const ColorFilterImagePreview({super.key});
@@ -26,7 +26,7 @@ class ColorFilterImagePreview extends ConsumerWidget {
       width: double.infinity,
       height: 100,
       child: ListView.builder(
-        key: const PageStorageKey<String>('colorFilterImagePreview'),
+        key: const PageStorageKey<String>("colorFilterImagePreview"),
         scrollDirection: Axis.horizontal,
         itemCount: previewImages.length,
         itemBuilder: (context, index) {

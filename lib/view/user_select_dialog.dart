@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/origin_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/origin_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserSelectDialog extends StatelessWidget {
   final Account account;
 
-  const UserSelectDialog({super.key, required this.account});
+  const UserSelectDialog({required this.account, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,7 @@ class UserSelectContent extends ConsumerStatefulWidget {
   final bool isDetail;
 
   const UserSelectContent({
-    super.key,
-    required this.onSelected,
+    required this.onSelected, super.key,
     this.focusNode,
     this.isDetail = false,
   });
@@ -118,9 +117,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
 
 class UsersSelectContentList extends ConsumerWidget {
   const UsersSelectContentList({
-    super.key,
-    required this.onSelected,
-    required this.isDetail,
+    required this.onSelected, required this.isDetail, super.key,
   });
   final void Function(User) onSelected;
   final bool isDetail;

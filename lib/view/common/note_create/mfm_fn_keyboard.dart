@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
-import 'package:miria/model/input_completion_type.dart';
-import 'package:miria/view/common/color_picker_dialog.dart';
-import 'package:miria/view/common/date_time_picker.dart';
-import 'package:miria/view/common/note_create/basic_keyboard.dart';
-import 'package:miria/view/common/note_create/custom_keyboard_button.dart';
-import 'package:miria/view/common/note_create/input_completation.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/text_editing_controller_extension.dart";
+import "package:miria/model/input_completion_type.dart";
+import "package:miria/view/common/color_picker_dialog.dart";
+import "package:miria/view/common/date_time_picker.dart";
+import "package:miria/view/common/note_create/basic_keyboard.dart";
+import "package:miria/view/common/note_create/custom_keyboard_button.dart";
+import "package:miria/view/common/note_create/input_completation.dart";
 
 class MfmFnArg {
   const MfmFnArg({
@@ -143,10 +143,7 @@ final filteredMfmFnArgsProvider = Provider.autoDispose<List<MfmFnArg>>((ref) {
 
 class MfmFnKeyboard extends ConsumerWidget {
   const MfmFnKeyboard({
-    super.key,
-    required this.controller,
-    required this.focusNode,
-    required this.parentContext,
+    required this.controller, required this.focusNode, required this.parentContext, super.key,
   });
 
   final TextEditingController controller;

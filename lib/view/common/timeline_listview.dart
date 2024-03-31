@@ -1,9 +1,9 @@
-import 'dart:math' as math;
+import "dart:math" as math;
 
-import 'package:flutter/gestures.dart' show DragStartBehavior;
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import "package:flutter/gestures.dart" show DragStartBehavior;
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter/widgets.dart";
 
 /// Infinite ListView
 ///
@@ -12,14 +12,13 @@ import 'package:flutter/widgets.dart';
 class TimelineListView extends StatefulWidget {
   /// See [ListView.builder]
   const TimelineListView.builder({
-    Key? key,
+    required this.itemBuilder, Key? key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
     this.physics,
     this.padding,
     this.itemExtent,
-    required this.itemBuilder,
     this.itemCount,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
@@ -35,14 +34,12 @@ class TimelineListView extends StatefulWidget {
 
   /// See [ListView.separated]
   const TimelineListView.separated({
-    Key? key,
+    required this.itemBuilder, required this.separatorBuilder, Key? key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
     this.physics,
     this.padding,
-    required this.itemBuilder,
-    required this.separatorBuilder,
     this.itemCount,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
@@ -163,17 +160,17 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> slivers = _buildSlivers(context, negative: false);
-    final List<Widget> negativeSlivers = _buildSlivers(context, negative: true);
-    final AxisDirection axisDirection = _getDirection(context);
+    final slivers = _buildSlivers(context, negative: false);
+    final negativeSlivers = _buildSlivers(context, negative: true);
+    final axisDirection = _getDirection(context);
     final scrollPhysics =
         widget.physics ?? const AlwaysScrollableScrollPhysics();
     return Scrollable(
       axisDirection: axisDirection,
       controller: _effectiveController,
       physics: scrollPhysics,
-      viewportBuilder: (BuildContext context, ViewportOffset offset) {
-        return Builder(builder: (BuildContext context) {
+      viewportBuilder: (context, offset) {
+        return Builder(builder: (context) {
           /// Build negative [ScrollPosition] for the negative scrolling [Viewport].
           final state = Scrollable.of(context);
           final negativeOffset = _InfiniteScrollPosition(
@@ -242,7 +239,7 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   SliverChildDelegate get negativeChildrenDelegate {
     return SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
+      (context, index) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           final extent = (_negativeOffset?.hasContentDimensions ?? false)
               ? _negativeOffset?.maxScrollExtent
@@ -274,7 +271,7 @@ class _TimelineListViewState extends State<TimelineListView> {
     final itemCount = widget.itemCount;
     return SliverChildBuilderDelegate(
       (separatorBuilder != null)
-          ? (BuildContext context, int index) {
+          ? (context, index) {
               final itemIndex = index ~/ 2;
               return index.isEven
                   ? widget.itemBuilder(context, itemIndex)
@@ -293,21 +290,21 @@ class _TimelineListViewState extends State<TimelineListView> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(EnumProperty<Axis>('scrollDirection', widget.scrollDirection));
-    properties.add(FlagProperty('reverse',
-        value: widget.reverse, ifTrue: 'reversed', showName: true));
+        .add(EnumProperty<Axis>("scrollDirection", widget.scrollDirection));
+    properties.add(FlagProperty("reverse",
+        value: widget.reverse, ifTrue: "reversed", showName: true));
     properties.add(DiagnosticsProperty<ScrollController>(
-        'controller', widget.controller,
+        "controller", widget.controller,
         showName: false, defaultValue: null));
-    properties.add(DiagnosticsProperty<ScrollPhysics>('physics', widget.physics,
+    properties.add(DiagnosticsProperty<ScrollPhysics>("physics", widget.physics,
         showName: false, defaultValue: null));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>(
-        'padding', widget.padding,
+        "padding", widget.padding,
         defaultValue: null));
     properties.add(
-        DoubleProperty('itemExtent', widget.itemExtent, defaultValue: null));
+        DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null));
     properties.add(
-        DoubleProperty('cacheExtent', widget.cacheExtent, defaultValue: null));
+        DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null));
   }
 }
 

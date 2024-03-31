@@ -1,27 +1,27 @@
-import 'dart:io';
-import 'dart:ui';
+import "dart:io";
+import "dart:ui";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
-import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/note_create_page/note_create_page.dart';
-import 'package:miria/view/user_page/user_control_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
+import "package:miria/view/common/misskey_notes/clip_modal_sheet.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/note_create_page/note_create_page.dart";
+import "package:miria/view/user_page/user_control_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:path/path.dart";
+import "package:path_provider/path_provider.dart";
+import "package:share_plus/share_plus.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 final noteModalSheetSharingModeProviding = StateProvider((ref) => false);
 
@@ -32,11 +32,7 @@ class NoteModalSheet extends ConsumerWidget {
   final GlobalKey noteBoundaryKey;
 
   const NoteModalSheet({
-    super.key,
-    required this.baseNote,
-    required this.targetNote,
-    required this.account,
-    required this.noteBoundaryKey,
+    required this.baseNote, required this.targetNote, required this.account, required this.noteBoundaryKey, super.key,
   });
 
   @override
@@ -141,7 +137,7 @@ class NoteModalSheet extends ConsumerWidget {
               Future(() async {
                 final box = context.findRenderObject() as RenderBox?;
                 final boundary = noteBoundaryKey.currentContext
-                    ?.findRenderObject() as RenderRepaintBoundary;
+                    !.findRenderObject()! as RenderRepaintBoundary;
                 final image = await boundary.toImage(
                   pixelRatio: View.of(context).devicePixelRatio,
                 );

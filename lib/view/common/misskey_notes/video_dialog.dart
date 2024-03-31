@@ -1,17 +1,17 @@
-import 'dart:async';
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:volume_controller/volume_controller.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
-import 'package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:media_kit/media_kit.dart";
+import "package:media_kit_video/media_kit_video.dart";
+import "package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart";
+import "package:url_launcher/url_launcher_string.dart";
+import "package:volume_controller/volume_controller.dart";
 
 class VideoDialog extends StatefulWidget {
-  const VideoDialog({super.key, required this.url, required this.fileType});
+  const VideoDialog({required this.url, required this.fileType, super.key});
 
   final String url;
   final String fileType;
@@ -133,8 +133,8 @@ class _VideoDialogState extends State<VideoDialog> {
                 onPointerDown: (event) {
                   if (isAudioFile) return;
                   timer?.cancel();
-                  int now = DateTime.now().millisecondsSinceEpoch;
-                  int elap = now - lastTapTime;
+                  final now = DateTime.now().millisecondsSinceEpoch;
+                  final elap = now - lastTapTime;
                   lastTapTime = now;
                   setState(() {
                     if (!isVisibleControlBar) {
@@ -452,15 +452,15 @@ class _VideoControlState extends State<_VideoControls> {
                             bufferPosition.inMilliseconds.toDouble(),
                         min: 0,
                         max: duration.inMilliseconds.toDouble(),
-                        onChangeStart: (double value) {
+                        onChangeStart: (value) {
                           isSeeking = true;
                         },
-                        onChanged: (double value) {
+                        onChanged: (value) {
                           setState(() {
                             position = Duration(milliseconds: value.toInt());
                           });
                         },
-                        onChangeEnd: (double value) {
+                        onChangeEnd: (value) {
                           widget.controller.player.seek(position);
                           isSeeking = false;
                         },

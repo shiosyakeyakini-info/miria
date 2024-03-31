@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
 sealed class MisskeyPostFile {
   final String fileName;
@@ -29,8 +29,7 @@ class ImageFileAlreadyPostedFile extends MisskeyPostFile {
   const ImageFileAlreadyPostedFile({
     required this.data,
     required this.id,
-    this.isEdited = false,
-    required super.fileName,
+    required super.fileName, this.isEdited = false,
     super.isNsfw,
     super.caption,
   });
@@ -53,8 +52,7 @@ class UnknownAlreadyPostedFile extends MisskeyPostFile {
   const UnknownAlreadyPostedFile({
     required this.url,
     required this.id,
-    this.isEdited = false,
-    required super.fileName,
+    required super.fileName, this.isEdited = false,
     super.isNsfw,
     super.caption,
   });

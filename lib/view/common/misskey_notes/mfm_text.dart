@@ -1,27 +1,27 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_highlighting/flutter_highlighting.dart';
-import 'package:flutter_highlighting/themes/github-dark.dart';
-import 'package:flutter_highlighting/themes/github.dart';
-import 'package:highlighting/languages/all.dart';
-import 'package:mfm_parser/mfm_parser.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/link_navigator.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm/mfm.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:twemoji_v2/twemoji_v2.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter_highlighting/flutter_highlighting.dart";
+import "package:flutter_highlighting/themes/github-dark.dart";
+import "package:flutter_highlighting/themes/github.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:highlighting/languages/all.dart";
+import "package:mfm/mfm.dart";
+import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/link_navigator.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:twemoji_v2/twemoji_v2.dart";
+import "package:url_launcher/url_launcher.dart";
 
 InlineSpan _unicodeEmojiBuilder(BuildContext builderContext, String emoji,
     TextStyle? style, WidgetRef ref, void Function() onTap) {
@@ -186,9 +186,8 @@ class CodeBlock extends StatelessWidget {
   final String code;
 
   const CodeBlock({
-    super.key,
+    required this.code, super.key,
     this.language,
-    required this.code,
   });
 
   String resolveLanguage(String language) {
@@ -222,7 +221,7 @@ class CodeBlock extends StatelessWidget {
 class EmojiInk extends ConsumerWidget {
   final Widget child;
 
-  const EmojiInk({super.key, required this.child});
+  const EmojiInk({required this.child, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -289,8 +288,7 @@ class SimpleMfmText extends ConsumerWidget {
 class UserInformation extends ConsumerStatefulWidget {
   final User user;
   const UserInformation({
-    super.key,
-    required this.user,
+    required this.user, super.key,
   });
 
   @override
@@ -326,7 +324,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
                 child: NetworkImageView(
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!),
-                  height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  height: DefaultTextStyle.of(context).style.fontSize ?? 22,
                   loadingBuilder: (context, widget, event) => SizedBox(
                       width: DefaultTextStyle.of(context).style.fontSize ?? 22,
                       height:

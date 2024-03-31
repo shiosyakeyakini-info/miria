@@ -1,12 +1,12 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class TabSettingsRepository extends ChangeNotifier {
   List<TabSetting> _tabSettings = [];

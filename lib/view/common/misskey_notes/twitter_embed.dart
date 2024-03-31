@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import "package:flutter/material.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:webview_flutter/webview_flutter.dart";
 
 class TwitterEmbed extends StatefulWidget {
   const TwitterEmbed({
-    super.key,
-    required this.tweetId,
+    required this.tweetId, super.key,
     this.isDark = false,
 
     // https://developer.twitter.com/en/docs/twitter-for-websites/supported-languages

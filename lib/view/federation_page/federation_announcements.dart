@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class FederationAnnouncements extends ConsumerStatefulWidget {
   final String host;
   const FederationAnnouncements({
-    super.key,
-    required this.host,
+    required this.host, super.key,
   });
 
   @override
@@ -114,9 +113,7 @@ class Announcement extends ConsumerStatefulWidget {
   final String host;
 
   const Announcement({
-    super.key,
-    required this.data,
-    required this.host,
+    required this.data, required this.host, super.key,
   });
 
   @override
@@ -221,8 +218,7 @@ class AnnouncementIcon extends StatelessWidget {
   final AnnouncementIconType iconType;
 
   const AnnouncementIcon({
-    super.key,
-    required this.iconType,
+    required this.iconType, super.key,
   });
 
   @override

@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:twemoji_v2/twemoji_v2.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:twemoji_v2/twemoji_v2.dart";
 
 class CustomEmoji extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -17,8 +17,7 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final bool forceSquare;
 
   const CustomEmoji({
-    super.key,
-    required this.emojiData,
+    required this.emojiData, super.key,
     this.fontSizeRatio = 1,
     this.isAttachTooltip = true,
     this.size,
@@ -50,7 +49,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
       host: emojiData.isCurrentServer
           ? AccountScope.of(context).host
           : emojiData.hostedName
-              .replaceAll(RegExp(r'^\:(.+?)@'), "")
+              .replaceAll(RegExp(r"^\:(.+?)@"), "")
               .replaceAll(":", ""),
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
@@ -101,7 +100,6 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             height: scopedFontSize,
           ),
         );
-        break;
       case UnicodeEmojiData():
         switch (
             ref.read(generalSettingsRepositoryProvider).settings.emojiType) {
@@ -117,21 +115,17 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
                 style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
               ),
             );
-            break;
           case EmojiType.twemoji:
             cachedImage = Twemoji(
               height: scopedFontSize,
               emoji: emojiData.char,
             );
-            break;
         }
-        break;
       case NotEmojiData():
         cachedImage = Text(
           emojiData.name,
           style: style,
         );
-        break;
     }
     return cachedImage!;
   }
@@ -143,10 +137,7 @@ class ConditionalTooltip extends StatelessWidget {
   final Widget child;
 
   const ConditionalTooltip({
-    super.key,
-    required this.isAttachTooltip,
-    required this.message,
-    required this.child,
+    required this.isAttachTooltip, required this.message, required this.child, super.key,
   });
 
   @override

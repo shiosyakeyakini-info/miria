@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/channels_page/community_channel_view.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/channels_page/community_channel_view.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final channelSearchProvider = StateProvider.autoDispose((ref) => "");
 
