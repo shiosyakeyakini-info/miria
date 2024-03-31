@@ -16,7 +16,9 @@ class ImageDialog extends ConsumerStatefulWidget {
   final int initialPage;
 
   const ImageDialog({
-    required this.imageUrlList, required this.initialPage, super.key,
+    required this.imageUrlList,
+    required this.initialPage,
+    super.key,
   });
 
   @override
@@ -218,7 +220,10 @@ class ScaleNotifierInteractiveViewer extends StatefulWidget {
   final void Function(double) onScaleChanged;
 
   const ScaleNotifierInteractiveViewer({
-    required this.imageUrl, required this.controller, required this.onScaleChanged, super.key,
+    required this.imageUrl,
+    required this.controller,
+    required this.onScaleChanged,
+    super.key,
   });
 
   @override

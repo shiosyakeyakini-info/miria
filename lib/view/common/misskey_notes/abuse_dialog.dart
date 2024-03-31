@@ -15,7 +15,9 @@ class AbuseDialog extends ConsumerStatefulWidget {
   final String? defaultText;
 
   const AbuseDialog({
-    required this.account, required this.targetUser, super.key,
+    required this.account,
+    required this.targetUser,
+    super.key,
     this.defaultText,
   });
 

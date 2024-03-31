@@ -17,7 +17,8 @@ class SeveralAccountGeneralSettingsPage extends ConsumerStatefulWidget {
   final Account account;
 
   const SeveralAccountGeneralSettingsPage({
-    required this.account, super.key,
+    required this.account,
+    super.key,
   });
 
   @override

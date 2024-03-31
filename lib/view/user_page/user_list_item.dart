@@ -15,7 +15,8 @@ class UserListItem extends ConsumerWidget {
   final void Function()? onTap;
 
   const UserListItem({
-    required this.user, super.key,
+    required this.user,
+    super.key,
     this.onTap,
     this.isDetail = false,
   });

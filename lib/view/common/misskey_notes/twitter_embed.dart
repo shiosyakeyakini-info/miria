@@ -4,7 +4,8 @@ import "package:webview_flutter/webview_flutter.dart";
 
 class TwitterEmbed extends StatefulWidget {
   const TwitterEmbed({
-    required this.tweetId, super.key,
+    required this.tweetId,
+    super.key,
     this.isDark = false,
 
     // https://developer.twitter.com/en/docs/twitter-for-websites/supported-languages

@@ -17,7 +17,8 @@ class CustomEmoji extends ConsumerStatefulWidget {
   final bool forceSquare;
 
   const CustomEmoji({
-    required this.emojiData, super.key,
+    required this.emojiData,
+    super.key,
     this.fontSizeRatio = 1,
     this.isAttachTooltip = true,
     this.size,
@@ -137,7 +138,10 @@ class ConditionalTooltip extends StatelessWidget {
   final Widget child;
 
   const ConditionalTooltip({
-    required this.isAttachTooltip, required this.message, required this.child, super.key,
+    required this.isAttachTooltip,
+    required this.message,
+    required this.child,
+    super.key,
   });
 
   @override

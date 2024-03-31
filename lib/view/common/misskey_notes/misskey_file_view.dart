@@ -17,7 +17,8 @@ class MisskeyFileView extends ConsumerStatefulWidget {
   final double height;
 
   const MisskeyFileView({
-    required this.files, super.key,
+    required this.files,
+    super.key,
     this.height = 200,
   });
 
@@ -98,7 +99,13 @@ class MisskeyImage extends ConsumerStatefulWidget {
   final String name;
 
   const MisskeyImage({
-    required this.isSensitive, required this.thumbnailUrl, required this.targetFiles, required this.position, required this.fileType, required this.name, super.key,
+    required this.isSensitive,
+    required this.thumbnailUrl,
+    required this.targetFiles,
+    required this.position,
+    required this.fileType,
+    required this.name,
+    super.key,
   });
 
   @override

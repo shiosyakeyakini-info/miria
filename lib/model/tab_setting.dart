@@ -36,7 +36,9 @@ class TabSetting with _$TabSetting {
     /// アカウント情報
     // https://github.com/rrousselGit/freezed/issues/488
     // ignore: invalid_annotation_target
-    @JsonKey(readValue: _readAcct) required Acct acct, /// ロールタイムラインのノートの場合、ロールID
+    @JsonKey(readValue: _readAcct) required Acct acct,
+
+    /// ロールタイムラインのノートの場合、ロールID
     String? roleId,
 
     /// チャンネルのノートの場合、チャンネルID

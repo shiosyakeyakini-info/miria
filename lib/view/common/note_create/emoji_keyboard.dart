@@ -35,7 +35,10 @@ class _FilteredEmojis
 
 class EmojiKeyboard extends ConsumerWidget {
   const EmojiKeyboard({
-    required this.account, required this.controller, required this.focusNode, super.key,
+    required this.account,
+    required this.controller,
+    required this.focusNode,
+    super.key,
   });
 
   final Account account;

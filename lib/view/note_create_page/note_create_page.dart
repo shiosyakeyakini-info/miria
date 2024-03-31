@@ -51,7 +51,8 @@ class NoteCreatePage extends ConsumerStatefulWidget {
   final NoteCreationMode? noteCreationMode;
 
   const NoteCreatePage({
-    required this.initialAccount, super.key,
+    required this.initialAccount,
+    super.key,
     this.initialText,
     this.initialMediaFiles,
     this.exitOnNoted = false,

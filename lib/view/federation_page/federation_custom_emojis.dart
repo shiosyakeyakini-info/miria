@@ -14,7 +14,9 @@ class FederationCustomEmojis extends ConsumerStatefulWidget {
   final MetaResponse meta;
 
   const FederationCustomEmojis({
-    required this.host, required this.meta, super.key,
+    required this.host,
+    required this.meta,
+    super.key,
   });
 
   @override

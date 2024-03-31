@@ -158,7 +158,9 @@ class NotificationItem extends ConsumerWidget {
   final Account account;
 
   const NotificationItem({
-    required this.notification, required this.account, super.key,
+    required this.notification,
+    required this.account,
+    super.key,
   });
 
   @override

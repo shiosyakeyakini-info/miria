@@ -29,7 +29,8 @@ class ImageFileAlreadyPostedFile extends MisskeyPostFile {
   const ImageFileAlreadyPostedFile({
     required this.data,
     required this.id,
-    required super.fileName, this.isEdited = false,
+    required super.fileName,
+    this.isEdited = false,
     super.isNsfw,
     super.caption,
   });
@@ -52,7 +53,8 @@ class UnknownAlreadyPostedFile extends MisskeyPostFile {
   const UnknownAlreadyPostedFile({
     required this.url,
     required this.id,
-    required super.fileName, this.isEdited = false,
+    required super.fileName,
+    this.isEdited = false,
     super.isNsfw,
     super.caption,
   });

@@ -9,7 +9,8 @@ class NoteVisibilityDialog extends ConsumerWidget {
   final Account account;
 
   const NoteVisibilityDialog({
-    required this.account, super.key,
+    required this.account,
+    super.key,
   });
 
   @override

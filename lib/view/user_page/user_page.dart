@@ -100,8 +100,7 @@ class UserPageState extends ConsumerState<UserPage> {
                         child: UserDetail(
                           response: userInfo.remoteResponse!,
                           account: Account.demoAccount(
-                              userInfo.response!.host!,
-                              userInfo.metaResponse),
+                              userInfo.response!.host!, userInfo.metaResponse),
                           controlAccount: widget.account,
                         ),
                       ),

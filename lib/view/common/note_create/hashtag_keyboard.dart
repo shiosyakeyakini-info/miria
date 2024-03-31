@@ -48,7 +48,8 @@ class _FilteredHashtags
     return [];
   }
 
-  Future<void> _updateHashtags(Account account, InputCompletionType type) async {
+  Future<void> _updateHashtags(
+      Account account, InputCompletionType type) async {
     if (type is Hashtag) {
       final query = type.query;
       if (query.isEmpty) {
@@ -65,7 +66,10 @@ class _FilteredHashtags
 
 class HashtagKeyboard extends ConsumerWidget {
   const HashtagKeyboard({
-    required this.account, required this.controller, required this.focusNode, super.key,
+    required this.account,
+    required this.controller,
+    required this.focusNode,
+    super.key,
   });
 
   final Account account;

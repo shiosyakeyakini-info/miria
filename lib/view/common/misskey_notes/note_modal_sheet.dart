@@ -32,7 +32,11 @@ class NoteModalSheet extends ConsumerWidget {
   final GlobalKey noteBoundaryKey;
 
   const NoteModalSheet({
-    required this.baseNote, required this.targetNote, required this.account, required this.noteBoundaryKey, super.key,
+    required this.baseNote,
+    required this.targetNote,
+    required this.account,
+    required this.noteBoundaryKey,
+    super.key,
   });
 
   @override
@@ -55,7 +59,9 @@ class NoteModalSheet extends ConsumerWidget {
             Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                  content: Text(S.of(context).doneCopy),
+                  duration: const Duration(seconds: 1)),
             );
           },
         ),
@@ -70,7 +76,9 @@ class NoteModalSheet extends ConsumerWidget {
             );
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                  content: Text(S.of(context).doneCopy),
+                  duration: const Duration(seconds: 1)),
             );
           },
         ),
@@ -136,8 +144,8 @@ class NoteModalSheet extends ConsumerWidget {
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               Future(() async {
                 final box = context.findRenderObject() as RenderBox?;
-                final boundary = noteBoundaryKey.currentContext
-                    !.findRenderObject()! as RenderRepaintBoundary;
+                final boundary = noteBoundaryKey.currentContext!
+                    .findRenderObject()! as RenderRepaintBoundary;
                 final image = await boundary.toImage(
                   pixelRatio: View.of(context).devicePixelRatio,
                 );

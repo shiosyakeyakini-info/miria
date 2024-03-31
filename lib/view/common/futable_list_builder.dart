@@ -11,7 +11,9 @@ class FutureListView<T> extends StatefulWidget {
   final ScrollPhysics? physics;
 
   const FutureListView({
-    required this.future, required this.builder, super.key,
+    required this.future,
+    required this.builder,
+    super.key,
     this.shrinkWrap = false,
     this.physics,
   });

@@ -14,7 +14,8 @@ class FederationInfo extends ConsumerStatefulWidget {
   final String host;
 
   const FederationInfo({
-    required this.host, super.key,
+    required this.host,
+    super.key,
   });
 
   @override

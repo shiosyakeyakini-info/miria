@@ -6,7 +6,10 @@ part "federation_data.freezed.dart";
 @freezed
 class FederationData with _$FederationData {
   const factory FederationData({
-    required bool isSupportedEmoji, required bool isSupportedAnnouncement, required bool isSupportedLocalTimeline, String? bannerUrl,
+    required bool isSupportedEmoji,
+    required bool isSupportedAnnouncement,
+    required bool isSupportedLocalTimeline,
+    String? bannerUrl,
     String? faviconUrl,
     String? tosUrl,
     String? privacyPolicyUrl,

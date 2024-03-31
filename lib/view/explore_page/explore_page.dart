@@ -17,7 +17,8 @@ class ExplorePage extends ConsumerStatefulWidget {
   final Account account;
 
   const ExplorePage({
-    required this.account, super.key,
+    required this.account,
+    super.key,
   });
 
   @override

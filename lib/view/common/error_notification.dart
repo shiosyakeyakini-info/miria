@@ -7,7 +7,9 @@ class ErrorNotification extends StatelessWidget {
   final StackTrace? stackTrace;
 
   const ErrorNotification({
-    required this.error, required this.stackTrace, super.key,
+    required this.error,
+    required this.stackTrace,
+    super.key,
   });
 
   @override

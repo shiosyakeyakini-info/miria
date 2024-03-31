@@ -36,7 +36,8 @@ class UserSelectContent extends ConsumerStatefulWidget {
   final bool isDetail;
 
   const UserSelectContent({
-    required this.onSelected, super.key,
+    required this.onSelected,
+    super.key,
     this.focusNode,
     this.isDetail = false,
   });
@@ -117,7 +118,9 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
 
 class UsersSelectContentList extends ConsumerWidget {
   const UsersSelectContentList({
-    required this.onSelected, required this.isDetail, super.key,
+    required this.onSelected,
+    required this.isDetail,
+    super.key,
   });
   final void Function(User) onSelected;
   final bool isDetail;

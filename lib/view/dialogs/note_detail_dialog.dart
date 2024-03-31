@@ -14,7 +14,10 @@ class NoteDetailDialog extends ConsumerStatefulWidget {
   final ChangeNotifierProvider<TimelineRepository> timeLineRepository;
 
   const NoteDetailDialog({
-    required this.note, required this.timeLineRepository, required this.account, super.key,
+    required this.note,
+    required this.timeLineRepository,
+    required this.account,
+    super.key,
   });
 
   @override

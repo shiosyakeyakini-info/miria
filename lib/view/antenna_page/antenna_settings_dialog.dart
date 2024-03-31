@@ -116,7 +116,8 @@ final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
 
 class AntennaSettingsDialog extends StatelessWidget {
   const AntennaSettingsDialog({
-    required this.account, super.key,
+    required this.account,
+    super.key,
     this.title,
     this.initialSettings = const AntennaSettings(),
   });
@@ -147,7 +148,8 @@ class AntennaSettingsDialog extends StatelessWidget {
 
 class AntennaSettingsForm extends ConsumerWidget {
   const AntennaSettingsForm({
-    required this.account, super.key,
+    required this.account,
+    super.key,
   });
 
   final Account account;

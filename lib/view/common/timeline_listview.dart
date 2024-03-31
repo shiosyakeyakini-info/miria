@@ -12,7 +12,8 @@ import "package:flutter/widgets.dart";
 class TimelineListView extends StatefulWidget {
   /// See [ListView.builder]
   const TimelineListView.builder({
-    required this.itemBuilder, Key? key,
+    required this.itemBuilder,
+    Key? key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
@@ -34,7 +35,9 @@ class TimelineListView extends StatefulWidget {
 
   /// See [ListView.separated]
   const TimelineListView.separated({
-    required this.itemBuilder, required this.separatorBuilder, Key? key,
+    required this.itemBuilder,
+    required this.separatorBuilder,
+    Key? key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,

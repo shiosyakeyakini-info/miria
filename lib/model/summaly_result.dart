@@ -7,7 +7,8 @@ part "summaly_result.g.dart";
 @freezed
 class SummalyResult with _$SummalyResult {
   const factory SummalyResult({
-    required Player player, String? title,
+    required Player player,
+    String? title,
     String? icon,
     String? description,
     String? thumbnail,

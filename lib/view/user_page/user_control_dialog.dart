@@ -30,7 +30,9 @@ class UserControlDialog extends ConsumerStatefulWidget {
   final UserDetailed response;
 
   const UserControlDialog({
-    required this.account, required this.response, super.key,
+    required this.account,
+    required this.response,
+    super.key,
   });
 
   @override
@@ -146,7 +148,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               ),
             );
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                  content: Text(S.of(context).doneCopy),
+                  duration: const Duration(seconds: 1)),
             );
             Navigator.of(context).pop();
           },
@@ -157,7 +161,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           onTap: () {
             Clipboard.setData(ClipboardData(text: widget.response.acct));
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                  content: Text(S.of(context).doneCopy),
+                  duration: const Duration(seconds: 1)),
             );
             Navigator.of(context).pop();
           },
@@ -176,7 +182,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               ),
             );
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                  content: Text(S.of(context).doneCopy),
+                  duration: const Duration(seconds: 1)),
             );
             Navigator.of(context).pop();
           },
@@ -280,10 +288,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             onTap: () {
               Navigator.of(context).pop();
               showDialog(
-                context: context,
-                builder: (context) => AbuseDialog(
-                  account: widget.account,
-                  targetUser: widget.response));
+                  context: context,
+                  builder: (context) => AbuseDialog(
+                      account: widget.account, targetUser: widget.response));
             },
           )
         ],

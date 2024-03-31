@@ -17,7 +17,9 @@ class NoteDetailPage extends ConsumerStatefulWidget {
   final Account account;
 
   const NoteDetailPage({
-    required this.note, required this.account, super.key,
+    required this.note,
+    required this.account,
+    super.key,
   });
 
   @override

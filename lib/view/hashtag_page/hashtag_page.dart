@@ -15,7 +15,9 @@ class HashtagPage extends ConsumerWidget {
   final Account account;
 
   const HashtagPage({
-    required this.hashtag, required this.account, super.key,
+    required this.hashtag,
+    required this.account,
+    super.key,
   });
 
   @override

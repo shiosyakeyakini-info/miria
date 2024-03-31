@@ -143,7 +143,10 @@ final filteredMfmFnArgsProvider = Provider.autoDispose<List<MfmFnArg>>((ref) {
 
 class MfmFnKeyboard extends ConsumerWidget {
   const MfmFnKeyboard({
-    required this.controller, required this.focusNode, required this.parentContext, super.key,
+    required this.controller,
+    required this.focusNode,
+    required this.parentContext,
+    super.key,
   });
 
   final TextEditingController controller;
@@ -207,7 +210,8 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(arg.name.substring(queryLength));
       }
     }
-    if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") && arg.name == "color") {
+    if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") &&
+        arg.name == "color") {
       final result = await showDialog<Color?>(
         context: parentContext,
         builder: (context) => const ColorPickerDialog(),

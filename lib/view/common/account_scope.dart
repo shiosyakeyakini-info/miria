@@ -5,7 +5,9 @@ class AccountScope extends InheritedWidget {
   final Account account;
 
   const AccountScope({
-    required this.account, required super.child, super.key,
+    required this.account,
+    required super.child,
+    super.key,
   });
 
   static Account of(BuildContext context) {

@@ -21,7 +21,9 @@ class FederationPage extends ConsumerStatefulWidget {
   final String host;
 
   const FederationPage({
-    required this.account, required this.host, super.key,
+    required this.account,
+    required this.host,
+    super.key,
   });
 
   @override

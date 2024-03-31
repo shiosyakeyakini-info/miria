@@ -15,7 +15,8 @@ class UserNotes extends ConsumerStatefulWidget {
   final Account? actualAccount;
 
   const UserNotes({
-    required this.userId, super.key,
+    required this.userId,
+    super.key,
     this.remoteUserId,
     this.actualAccount,
   }) : assert((remoteUserId == null) == (actualAccount == null));

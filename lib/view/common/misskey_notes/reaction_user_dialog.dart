@@ -15,7 +15,10 @@ class ReactionUserDialog extends ConsumerWidget {
   final String noteId;
 
   const ReactionUserDialog({
-    required this.account, required this.emojiData, required this.noteId, super.key,
+    required this.account,
+    required this.emojiData,
+    required this.noteId,
+    super.key,
   });
 
   @override

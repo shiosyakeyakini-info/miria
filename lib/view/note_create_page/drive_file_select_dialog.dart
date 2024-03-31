@@ -13,7 +13,8 @@ class DriveFileSelectDialog extends ConsumerStatefulWidget {
   final bool allowMultiple;
 
   const DriveFileSelectDialog({
-    required this.account, super.key,
+    required this.account,
+    super.key,
     this.allowMultiple = false,
   });
 

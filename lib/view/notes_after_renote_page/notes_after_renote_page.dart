@@ -15,7 +15,9 @@ class NotesAfterRenotePage extends ConsumerStatefulWidget {
   final Account account;
 
   const NotesAfterRenotePage({
-    required this.note, required this.account, super.key,
+    required this.note,
+    required this.account,
+    super.key,
   });
 
   @override

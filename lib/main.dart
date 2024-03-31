@@ -89,8 +89,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
 
   Future<void> _initWindow() async {
     await windowManager.setPreventClose(true);
-    final config =
-        ref.read(desktopSettingsRepositoryProvider).settings;
+    final config = ref.read(desktopSettingsRepositoryProvider).settings;
 
     final size = (config.window.w > 0 && config.window.h > 0)
         ? Size(config.window.w, config.window.h)
@@ -128,7 +127,11 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
       title: "Miria",
       debugShowCheckedModeBanner: false,
       locale: Locale(language.countryCode, language.languageCode),
-      supportedLocales: const [Locale("ja", "JP"), Locale("ja", "OJ"), Locale("zh", "CN")],
+      supportedLocales: const [
+        Locale("ja", "JP"),
+        Locale("ja", "OJ"),
+        Locale("zh", "CN")
+      ],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,

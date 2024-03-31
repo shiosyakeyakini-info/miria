@@ -10,7 +10,10 @@ class CustomKeyboardButton extends StatelessWidget {
   final void Function()? onTap;
 
   const CustomKeyboardButton({
-    required this.keyboard, required this.controller, required this.focusNode, super.key,
+    required this.keyboard,
+    required this.controller,
+    required this.focusNode,
+    super.key,
     String? displayText,
     this.afterInsert,
     this.onTap,

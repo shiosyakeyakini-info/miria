@@ -11,7 +11,8 @@ class CommunityChannelView extends StatelessWidget {
   final void Function()? onTap;
 
   const CommunityChannelView({
-    required this.channel, super.key,
+    required this.channel,
+    super.key,
     this.onTap,
   });
 

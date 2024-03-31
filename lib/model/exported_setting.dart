@@ -9,7 +9,8 @@ part "exported_setting.g.dart";
 @freezed
 class ExportedSetting with _$ExportedSetting {
   const factory ExportedSetting({
-    required GeneralSettings generalSettings, @Default([]) List<AccountSettings> accountSettings,
+    required GeneralSettings generalSettings,
+    @Default([]) List<AccountSettings> accountSettings,
     @Default([]) List<TabSetting> tabSettings,
   }) = _ExportedSetting;
 

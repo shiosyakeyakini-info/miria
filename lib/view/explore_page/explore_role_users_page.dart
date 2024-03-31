@@ -16,7 +16,9 @@ class ExploreRoleUsersPage extends ConsumerWidget {
   final Account account;
 
   const ExploreRoleUsersPage({
-    required this.item, required this.account, super.key,
+    required this.item,
+    required this.account,
+    super.key,
   });
 
   @override

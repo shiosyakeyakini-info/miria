@@ -8,7 +8,8 @@ class MisskeyTheme with _$MisskeyTheme {
   const factory MisskeyTheme({
     required String id,
     required String name,
-    required Map<String, String> props, String? author,
+    required Map<String, String> props,
+    String? author,
     String? desc,
     String? base,
   }) = _MisskeyTheme;

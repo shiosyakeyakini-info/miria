@@ -19,7 +19,10 @@ class FolderSelectDialog extends ConsumerStatefulWidget {
   final String confirmationText;
 
   const FolderSelectDialog({
-    required this.account, required this.fileShowTarget, required this.confirmationText, super.key,
+    required this.account,
+    required this.fileShowTarget,
+    required this.confirmationText,
+    super.key,
   });
 
   @override

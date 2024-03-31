@@ -87,7 +87,9 @@ class _ClipModalSheetNotifier extends AutoDisposeFamilyAsyncNotifier<
 
 class ClipModalSheet extends ConsumerWidget {
   const ClipModalSheet({
-    required this.account, required this.noteId, super.key,
+    required this.account,
+    required this.noteId,
+    super.key,
   });
 
   final Account account;

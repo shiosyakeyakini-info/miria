@@ -186,7 +186,8 @@ class CodeBlock extends StatelessWidget {
   final String code;
 
   const CodeBlock({
-    required this.code, super.key,
+    required this.code,
+    super.key,
     this.language,
   });
 
@@ -288,7 +289,8 @@ class SimpleMfmText extends ConsumerWidget {
 class UserInformation extends ConsumerStatefulWidget {
   final User user;
   const UserInformation({
-    required this.user, super.key,
+    required this.user,
+    super.key,
   });
 
   @override

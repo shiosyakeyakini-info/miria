@@ -17,7 +17,8 @@ class MisskeyTimeline extends ConsumerStatefulWidget {
   final TimelineScrollController controller;
 
   MisskeyTimeline({
-    required this.timeLineRepositoryProvider, super.key,
+    required this.timeLineRepositoryProvider,
+    super.key,
     TimelineScrollController? controller,
   }) : controller = controller ?? TimelineScrollController();
 
@@ -175,7 +176,9 @@ class NoteWrapper extends ConsumerStatefulWidget {
   final TimelineRepository timeline;
 
   const NoteWrapper({
-    required this.targetNote, required this.timeline, super.key,
+    required this.targetNote,
+    required this.timeline,
+    super.key,
   });
 
   @override

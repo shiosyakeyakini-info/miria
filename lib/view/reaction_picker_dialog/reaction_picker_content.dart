@@ -18,7 +18,9 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const ReactionPickerContent({
-    required this.onTap, required this.isAcceptSensitive, super.key,
+    required this.onTap,
+    required this.isAcceptSensitive,
+    super.key,
   });
 
   @override
@@ -98,7 +100,10 @@ class EmojiButton extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const EmojiButton({
-    required this.emoji, required this.onTap, required this.isAcceptSensitive, super.key,
+    required this.emoji,
+    required this.onTap,
+    required this.isAcceptSensitive,
+    super.key,
     this.isForceVisible = false,
   });
 
@@ -133,7 +138,8 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             padding: const MaterialStatePropertyAll(EdgeInsets.all(5)),
             elevation: const MaterialStatePropertyAll(0),
             minimumSize: const MaterialStatePropertyAll(Size.zero),
-            overlayColor: MaterialStatePropertyAll(AppTheme.of(context).colorTheme.accentedBackground),
+            overlayColor: MaterialStatePropertyAll(
+                AppTheme.of(context).colorTheme.accentedBackground),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           onPressed: () async {
@@ -167,12 +173,13 @@ class EmojiSearch extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const EmojiSearch({
-    required this.onTap, required this.isAcceptSensitive, super.key,
+    required this.onTap,
+    required this.isAcceptSensitive,
+    super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      EmojiSearchState();
+  ConsumerState<ConsumerStatefulWidget> createState() => EmojiSearchState();
 }
 
 class EmojiSearchState extends ConsumerState<EmojiSearch> {

@@ -8,7 +8,9 @@ class CommonFuture<T> extends StatelessWidget {
   final Widget Function(BuildContext, T) complete;
 
   const CommonFuture(
-      {required this.future, required this.complete, super.key,
+      {required this.future,
+      required this.complete,
+      super.key,
       this.futureFinished});
 
   @override

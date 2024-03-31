@@ -97,7 +97,9 @@ class TabSettingsListPage extends ConsumerWidget {
 
 class TabSettingsListItem extends ConsumerWidget {
   const TabSettingsListItem({
-    required this.tabSetting, required this.index, super.key,
+    required this.tabSetting,
+    required this.index,
+    super.key,
   });
 
   final TabSetting tabSetting;

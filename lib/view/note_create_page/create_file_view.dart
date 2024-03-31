@@ -1,4 +1,3 @@
-
 import "package:auto_route/auto_route.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -14,7 +13,9 @@ class CreateFileView extends ConsumerWidget {
   final MisskeyPostFile file;
 
   const CreateFileView({
-    required this.file, required this.index, super.key,
+    required this.file,
+    required this.index,
+    super.key,
   });
 
   Future<void> onTap(BuildContext context, WidgetRef ref) async {

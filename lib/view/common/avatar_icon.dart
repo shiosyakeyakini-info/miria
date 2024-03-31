@@ -13,7 +13,8 @@ class AvatarIcon extends StatefulWidget {
   final VoidCallback? onTap;
 
   const AvatarIcon({
-    required this.user, super.key,
+    required this.user,
+    super.key,
     this.height = 48,
     this.onTap,
   });

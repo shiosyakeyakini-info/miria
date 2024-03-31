@@ -14,7 +14,10 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class NoteVote extends ConsumerStatefulWidget {
   const NoteVote({
-    required this.displayNote, required this.poll, required this.loginAs, super.key,
+    required this.displayNote,
+    required this.poll,
+    required this.loginAs,
+    super.key,
   });
 
   final Note displayNote;

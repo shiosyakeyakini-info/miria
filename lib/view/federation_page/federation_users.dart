@@ -9,7 +9,8 @@ import "package:misskey_dart/misskey_dart.dart";
 class FederationUsers extends ConsumerWidget {
   final String host;
   const FederationUsers({
-    required this.host, super.key,
+    required this.host,
+    super.key,
   });
 
   @override

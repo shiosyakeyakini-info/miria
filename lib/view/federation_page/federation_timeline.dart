@@ -12,7 +12,9 @@ class FederationTimeline extends ConsumerStatefulWidget {
   final MetaResponse meta;
 
   const FederationTimeline({
-    required this.host, required this.meta, super.key,
+    required this.host,
+    required this.meta,
+    super.key,
   });
 
   @override

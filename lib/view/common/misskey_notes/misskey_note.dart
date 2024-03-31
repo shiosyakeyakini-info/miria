@@ -47,7 +47,8 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final bool isForceVisibleLong;
 
   const MisskeyNote({
-    required this.note, super.key,
+    required this.note,
+    super.key,
     this.isDisplayBorder = true,
     this.recursive = 1,
     this.loginAs,
@@ -727,7 +728,9 @@ class NoteHeader1 extends ConsumerWidget {
   final Account? loginAs;
 
   const NoteHeader1({
-    required this.displayNote, required this.loginAs, super.key,
+    required this.displayNote,
+    required this.loginAs,
+    super.key,
   });
 
   @override
@@ -784,7 +787,8 @@ class RenoteHeader extends ConsumerWidget {
   final Account? loginAs;
 
   const RenoteHeader({
-    required this.note, super.key,
+    required this.note,
+    super.key,
     this.loginAs,
   });
 
@@ -898,7 +902,8 @@ class NoteChannelView extends StatelessWidget {
 class RenoteButton extends StatelessWidget {
   final Note displayNote;
   const RenoteButton({
-    required this.displayNote, super.key,
+    required this.displayNote,
+    super.key,
   });
 
   @override
@@ -948,7 +953,9 @@ class FooterReactionButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const FooterReactionButton({
-    required this.displayNote, required this.onPressed, super.key,
+    required this.displayNote,
+    required this.onPressed,
+    super.key,
   });
 
   @override

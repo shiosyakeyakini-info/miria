@@ -16,7 +16,9 @@ class WordMutePage extends ConsumerStatefulWidget {
   final MuteType muteType;
 
   const WordMutePage({
-    required this.account, required this.muteType, super.key,
+    required this.account,
+    required this.muteType,
+    super.key,
   });
 
   @override

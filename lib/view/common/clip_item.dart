@@ -10,7 +10,8 @@ class ClipItem extends StatelessWidget {
   final Widget? trailing;
 
   const ClipItem({
-    required this.clip, super.key,
+    required this.clip,
+    super.key,
     this.trailing,
   });
 

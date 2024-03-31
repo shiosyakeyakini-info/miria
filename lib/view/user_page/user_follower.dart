@@ -15,7 +15,9 @@ class UserFollowerPage extends ConsumerWidget {
   final Account account;
 
   const UserFollowerPage({
-    required this.userId, required this.account, super.key,
+    required this.userId,
+    required this.account,
+    super.key,
   });
 
   @override

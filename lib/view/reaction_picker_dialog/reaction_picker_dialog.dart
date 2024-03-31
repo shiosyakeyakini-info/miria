@@ -9,7 +9,9 @@ class ReactionPickerDialog extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const ReactionPickerDialog({
-    required this.account, required this.isAcceptSensitive, super.key,
+    required this.account,
+    required this.isAcceptSensitive,
+    super.key,
   });
 
   @override

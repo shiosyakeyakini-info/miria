@@ -13,7 +13,8 @@ import "package:misskey_dart/misskey_dart.dart";
 class FederationAnnouncements extends ConsumerStatefulWidget {
   final String host;
   const FederationAnnouncements({
-    required this.host, super.key,
+    required this.host,
+    super.key,
   });
 
   @override
@@ -113,7 +114,9 @@ class Announcement extends ConsumerStatefulWidget {
   final String host;
 
   const Announcement({
-    required this.data, required this.host, super.key,
+    required this.data,
+    required this.host,
+    super.key,
   });
 
   @override
@@ -218,7 +221,8 @@ class AnnouncementIcon extends StatelessWidget {
   final AnnouncementIconType iconType;
 
   const AnnouncementIcon({
-    required this.iconType, super.key,
+    required this.iconType,
+    super.key,
   });
 
   @override

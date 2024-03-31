@@ -17,7 +17,10 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final bool showAd;
 
   const PushableListView({
-    required this.initializeFuture, required this.nextFuture, required this.itemBuilder, super.key,
+    required this.initializeFuture,
+    required this.nextFuture,
+    required this.itemBuilder,
+    super.key,
     this.listKey = "",
     this.shrinkWrap = false,
     this.physics,

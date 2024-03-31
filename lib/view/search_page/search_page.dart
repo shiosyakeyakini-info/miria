@@ -23,7 +23,8 @@ class SearchPage extends ConsumerStatefulWidget {
   final Account account;
 
   const SearchPage({
-    required this.account, super.key,
+    required this.account,
+    super.key,
     this.initialNoteSearchCondition,
   });
 

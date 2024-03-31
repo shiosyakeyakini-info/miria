@@ -28,7 +28,10 @@ class UserDetail extends ConsumerStatefulWidget {
   final UserDetailed response;
 
   const UserDetail({
-    required this.response, required this.account, required this.controlAccount, super.key,
+    required this.response,
+    required this.account,
+    required this.controlAccount,
+    super.key,
   });
 
   @override
@@ -535,12 +538,11 @@ class UserDetailState extends ConsumerState<UserDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-            child: BirthdayConfetti(
+    return CustomScrollView(slivers: [
+      SliverToBoxAdapter(
+          child: BirthdayConfetti(
               response: widget.response,
-              child:Column(children: [
+              child: Column(children: [
                 if (response.bannerUrl != null)
                   Image.network(response.bannerUrl.toString()),
                 Align(
@@ -549,18 +551,16 @@ class UserDetailState extends ConsumerState<UserDetail> {
                         constraints: const BoxConstraints(maxWidth: 800),
                         child: buildContent())),
                 const Padding(padding: EdgeInsets.only(top: 20))
-                ]))),
-        if (response.pinnedNotes != null)
-          SliverPadding(
+              ]))),
+      if (response.pinnedNotes != null)
+        SliverPadding(
             padding: const EdgeInsets.only(right: 10),
             sliver: SliverList.builder(
-              itemCount: response.pinnedNotes!.length,
-              itemBuilder: (context, index) => 
-                MisskeyNote(
-                  note: response.pinnedNotes![index],
-                  loginAs: widget.controlAccount)
-            ))
-      ]);
+                itemCount: response.pinnedNotes!.length,
+                itemBuilder: (context, index) => MisskeyNote(
+                    note: response.pinnedNotes![index],
+                    loginAs: widget.controlAccount)))
+    ]);
   }
 }
 
@@ -569,7 +569,9 @@ class BirthdayConfetti extends StatefulWidget {
   final Widget child;
 
   const BirthdayConfetti({
-    required this.response, required this.child, super.key,
+    required this.response,
+    required this.child,
+    super.key,
   });
 
   @override

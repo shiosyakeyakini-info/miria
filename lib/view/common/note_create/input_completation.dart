@@ -21,7 +21,9 @@ class InputComplement extends ConsumerStatefulWidget {
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
   const InputComplement({
-    required this.controller, required this.focusNode, super.key,
+    required this.controller,
+    required this.focusNode,
+    super.key,
   });
 
   @override

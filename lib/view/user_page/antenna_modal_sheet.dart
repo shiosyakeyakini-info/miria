@@ -12,7 +12,9 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class AntennaModalSheet extends ConsumerWidget {
   const AntennaModalSheet({
-    required this.account, required this.user, super.key,
+    required this.account,
+    required this.user,
+    super.key,
   });
 
   final Account account;

@@ -22,7 +22,12 @@ class ReactionButton extends ConsumerStatefulWidget {
   final Account? loginAs;
 
   const ReactionButton({
-    required this.emojiData, required this.reactionCount, required this.myReaction, required this.noteId, required this.loginAs, super.key,
+    required this.emojiData,
+    required this.reactionCount,
+    required this.myReaction,
+    required this.noteId,
+    required this.loginAs,
+    super.key,
   });
 
   @override

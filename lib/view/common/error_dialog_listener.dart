@@ -57,10 +57,12 @@ class ErrorDialogListener extends ConsumerWidget {
           };
           SimpleMessageDialog.show(next.$2!, message);
         } else {
-          SimpleMessageDialog.show(next.$2!, "${S.of(context).thrownError}\n$next");
+          SimpleMessageDialog.show(
+              next.$2!, "${S.of(context).thrownError}\n$next");
         }
       } else if (error is Error) {
-        SimpleMessageDialog.show(next.$2!, "${S.of(context).thrownError}\n$next");
+        SimpleMessageDialog.show(
+            next.$2!, "${S.of(context).thrownError}\n$next");
       }
     });
 

@@ -53,7 +53,10 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
 
 class LinkPreview extends ConsumerWidget {
   const LinkPreview({
-    required this.account, required this.link, required this.host, super.key,
+    required this.account,
+    required this.link,
+    required this.host,
+    super.key,
   });
 
   final Account account;
@@ -76,7 +79,10 @@ class LinkPreview extends ConsumerWidget {
 
 class LinkPreviewItem extends StatefulWidget {
   const LinkPreviewItem({
-    required this.link, required this.summalyResult, required this.host, super.key,
+    required this.link,
+    required this.summalyResult,
+    required this.host,
+    super.key,
   });
 
   final String link;
@@ -162,7 +168,9 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
 
 class LinkPreviewTile extends ConsumerWidget {
   const LinkPreviewTile({
-    required this.link, required this.host, super.key,
+    required this.link,
+    required this.host,
+    super.key,
     this.summalyResult = const SummalyResult(player: Player()),
   });
 
@@ -187,7 +195,9 @@ class LinkPreviewTile extends ConsumerWidget {
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: link));
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(S.of(context).doneCopy),duration: const Duration(seconds: 1)),
+            SnackBar(
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1)),
           );
         },
         child: DecoratedBox(

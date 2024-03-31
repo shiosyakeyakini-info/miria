@@ -26,7 +26,9 @@ class NetworkImageView extends ConsumerWidget {
   final BoxFit? fit;
 
   const NetworkImageView({
-    required this.url, required this.type, super.key,
+    required this.url,
+    required this.type,
+    super.key,
     this.loadingBuilder,
     this.errorBuilder,
     this.width,

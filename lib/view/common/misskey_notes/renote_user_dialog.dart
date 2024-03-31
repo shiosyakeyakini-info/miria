@@ -13,7 +13,9 @@ class RenoteUserDialog extends ConsumerWidget {
   final String noteId;
 
   const RenoteUserDialog({
-    required this.account, required this.noteId, super.key,
+    required this.account,
+    required this.noteId,
+    super.key,
   });
 
   @override
@@ -21,7 +23,7 @@ class RenoteUserDialog extends ConsumerWidget {
     return AccountScope(
         account: account,
         child: AlertDialog(
-            title:  Text(S.of(context).renotedUsers),
+            title: Text(S.of(context).renotedUsers),
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.width * 0.8,

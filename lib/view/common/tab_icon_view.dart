@@ -13,7 +13,8 @@ class TabIconView extends ConsumerWidget {
   final double? size;
 
   const TabIconView({
-    required this.icon, super.key,
+    required this.icon,
+    super.key,
     this.color,
     this.size,
   });

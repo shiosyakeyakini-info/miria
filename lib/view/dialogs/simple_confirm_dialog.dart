@@ -29,7 +29,10 @@ class SimpleConfirmDialog extends StatelessWidget {
               ));
 
   const SimpleConfirmDialog({
-    required this.message, required this.primary, required this.secondary, super.key,
+    required this.message,
+    required this.primary,
+    required this.secondary,
+    super.key,
     this.isMfm = false,
     this.account,
   }) : assert(!isMfm || (isMfm && account != null));

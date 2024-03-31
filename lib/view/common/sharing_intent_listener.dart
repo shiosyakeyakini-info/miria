@@ -13,7 +13,9 @@ class SharingIntentListener extends ConsumerStatefulWidget {
   final Widget child;
 
   const SharingIntentListener({
-    required this.router, required this.child, super.key,
+    required this.router,
+    required this.child,
+    super.key,
   });
 
   @override

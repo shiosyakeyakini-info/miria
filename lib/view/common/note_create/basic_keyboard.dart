@@ -7,7 +7,9 @@ class BasicKeyboard extends StatelessWidget {
   final FocusNode focusNode;
 
   const BasicKeyboard({
-    required this.controller, required this.focusNode, super.key,
+    required this.controller,
+    required this.focusNode,
+    super.key,
   });
 
   @override

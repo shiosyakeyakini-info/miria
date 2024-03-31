@@ -100,7 +100,9 @@ class _UsersListUsers
 @RoutePage()
 class UsersListDetailPage extends ConsumerWidget {
   const UsersListDetailPage({
-    required this.account, required this.listId, super.key,
+    required this.account,
+    required this.listId,
+    super.key,
   });
 
   final Account account;

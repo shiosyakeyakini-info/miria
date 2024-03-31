@@ -7,7 +7,8 @@ import "package:url_launcher/url_launcher.dart";
 
 class AddReactionsDialog extends StatefulWidget {
   const AddReactionsDialog({
-    required this.account, super.key,
+    required this.account,
+    super.key,
     this.domain = "system",
   });
 

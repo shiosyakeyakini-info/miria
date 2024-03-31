@@ -16,7 +16,9 @@ class RenoteModalSheet extends ConsumerStatefulWidget {
   final Account account;
 
   const RenoteModalSheet({
-    required this.note, required this.account, super.key,
+    required this.note,
+    required this.account,
+    super.key,
   });
 
   @override
@@ -60,8 +62,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     localOnly: true,
                     channelId: channel.id,
                   ));
-              scaffoldMessenger
-                  .showSnackBar(SnackBar(content: Text(localize.renoted), duration: const Duration(seconds: 1)));
+              scaffoldMessenger.showSnackBar(SnackBar(
+                  content: Text(localize.renoted),
+                  duration: const Duration(seconds: 1)));
               navigator.pop();
             }.expectFailure(context),
             leading: const SizedBox(
@@ -77,9 +80,11 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     ),
                   ),
                   Align(
-                    alignment: Alignment.topRight,
-                    child: Icon(Icons.repeat, size: 18,)
-                  )
+                      alignment: Alignment.topRight,
+                      child: Icon(
+                        Icons.repeat,
+                        size: 18,
+                      ))
                 ],
               ),
             ),
@@ -102,25 +107,27 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   channel: channelsShowData,
                   initialAccount: widget.account));
             }.expectFailure(context),
-              leading: const SizedBox(
-                height: 30,
-                width: 30,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Icon(
-                        Icons.monitor,
-                        size: 24,
-                      ),
+            leading: const SizedBox(
+              height: 30,
+              width: 30,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Icon(
+                      Icons.monitor,
+                      size: 24,
                     ),
-                    Align(
+                  ),
+                  Align(
                       alignment: Alignment.topRight,
-                      child: Icon(Icons.format_quote, size: 18,)
-                    )
-                  ],
-                ),
+                      child: Icon(
+                        Icons.format_quote,
+                        size: 18,
+                      ))
+                ],
               ),
+            ),
             title: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: Text(
@@ -142,8 +149,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     localOnly: isLocalOnly,
                     visibility: visibility,
                   ));
-              scaffoldMessenger
-                  .showSnackBar(SnackBar(content: Text(localize.renoted), duration: const Duration(seconds: 1)));
+              scaffoldMessenger.showSnackBar(SnackBar(
+                  content: Text(localize.renoted),
+                  duration: const Duration(seconds: 1)));
               navigator.pop();
             }.expectFailure(context),
             leading: const Icon(Icons.repeat),
@@ -206,8 +214,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                         localOnly: true,
                       ));
 
-                  scaffoldMessenger
-                      .showSnackBar(SnackBar(content: Text(localize.renoted), duration: const Duration(seconds: 1)));
+                  scaffoldMessenger.showSnackBar(SnackBar(
+                      content: Text(localize.renoted),
+                      duration: const Duration(seconds: 1)));
                   navigator.pop();
                 }
               }.expectFailure(context),
@@ -224,9 +233,11 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                       ),
                     ),
                     Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(Icons.repeat, size: 18,)
-                    )
+                        alignment: Alignment.topRight,
+                        child: Icon(
+                          Icons.repeat,
+                          size: 18,
+                        ))
                   ],
                 ),
               ),
@@ -262,9 +273,11 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                       ),
                     ),
                     Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(Icons.format_quote, size: 18,)
-                    )
+                        alignment: Alignment.topRight,
+                        child: Icon(
+                          Icons.format_quote,
+                          size: 18,
+                        ))
                   ],
                 ),
               ),

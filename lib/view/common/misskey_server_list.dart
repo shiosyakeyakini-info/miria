@@ -12,7 +12,8 @@ class MisskeyServerList extends ConsumerWidget {
   final void Function(JoinMisskeyInstanceInfo) onTap;
 
   const MisskeyServerList({
-    required this.onTap, super.key,
+    required this.onTap,
+    super.key,
     this.isDisableUnloginable = false,
   });
 

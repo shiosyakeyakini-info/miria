@@ -17,7 +17,8 @@ class ServerDetailDialog extends ConsumerStatefulWidget {
   final Account account;
 
   const ServerDetailDialog({
-    required this.account, super.key,
+    required this.account,
+    super.key,
   });
 
   @override

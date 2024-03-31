@@ -16,7 +16,9 @@ class ChannelDetailPage extends ConsumerWidget {
   final String channelId;
 
   const ChannelDetailPage({
-    required this.account, required this.channelId, super.key,
+    required this.account,
+    required this.channelId,
+    super.key,
   });
 
   @override
@@ -27,8 +29,8 @@ class ChannelDetailPage extends ConsumerWidget {
         account: account,
         child: Scaffold(
           appBar: AppBar(
-            title:  Text(S.of(context).channel),
-            bottom:  TabBar(tabs: [
+            title: Text(S.of(context).channel),
+            bottom: TabBar(tabs: [
               Tab(child: Text(S.of(context).channelInformation)),
               Tab(child: Text(S.of(context).timeline))
             ]),

@@ -32,12 +32,14 @@ sealed class MentionQuoteNotificationDataType {
 
 class _Mention implements MentionQuoteNotificationDataType {
   @override
-  String Function(BuildContext context) get name => (context) => S.of(context).mention;
+  String Function(BuildContext context) get name =>
+      (context) => S.of(context).mention;
 }
 
 class _QuotedRenote implements MentionQuoteNotificationDataType {
   @override
-  String Function(BuildContext context) get name => (context) => S.of(context).quotedRenote;
+  String Function(BuildContext context) get name =>
+      (context) => S.of(context).quotedRenote;
 }
 
 class _Reply implements MentionQuoteNotificationDataType {
@@ -74,14 +76,16 @@ class _Follow implements FollowNotificationDataType {
 
 class _FollowRequestAccepted implements FollowNotificationDataType {
   @override
-  String Function(BuildContext context, String userName) get name => (context, userName) =>
-      S.of(context).followRequestAcceptedNotification(userName);
+  String Function(BuildContext context, String userName) get name =>
+      (context, userName) =>
+          S.of(context).followRequestAcceptedNotification(userName);
 }
 
 class _ReceiveFollowRequest implements FollowNotificationDataType {
   @override
-  String Function(BuildContext context, String userName) get name => (context, userName) =>
-      S.of(context).receiveFollowRequestNotification(userName);
+  String Function(BuildContext context, String userName) get name =>
+      (context, userName) =>
+          S.of(context).receiveFollowRequestNotification(userName);
 }
 
 class FollowNotificationData extends NotificationData {
@@ -178,7 +182,6 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
                 createdAt: element.createdAt,
                 id: element.id));
           }
-
 
         case NotificationType.quote:
           resultList.add(MentionQuoteNotificationData(

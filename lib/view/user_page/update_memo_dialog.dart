@@ -12,7 +12,10 @@ class UpdateMemoDialog extends ConsumerStatefulWidget {
   final String userId;
 
   const UpdateMemoDialog({
-    required this.account, required this.initialMemo, required this.userId, super.key,
+    required this.account,
+    required this.initialMemo,
+    required this.userId,
+    super.key,
   });
 
   @override

@@ -19,7 +19,8 @@ import "../../../test_util/test_datas.dart";
 import "../../../test_util/widget_tester_extension.dart";
 
 Widget buildTestWidget({
-  required Note note, List<Override> overrides = const [],
+  required Note note,
+  List<Override> overrides = const [],
 }) {
   final notesRepository = NoteRepository(MockMisskey(), TestData.account);
   notesRepository.registerNote(note);

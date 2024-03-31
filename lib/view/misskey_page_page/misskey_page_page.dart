@@ -27,7 +27,9 @@ class MisskeyPagePage extends ConsumerWidget {
   final misskey.Page page;
 
   const MisskeyPagePage({
-    required this.account, required this.page, super.key,
+    required this.account,
+    required this.page,
+    super.key,
   });
 
   @override
@@ -115,7 +117,9 @@ class PageContent extends ConsumerWidget {
   final misskey.AbstractPageContent content;
   final misskey.Page page;
   const PageContent({
-    required this.content, required this.page, super.key,
+    required this.content,
+    required this.page,
+    super.key,
   });
 
   @override
@@ -222,7 +226,11 @@ class PageLikeButton extends ConsumerStatefulWidget {
   final String userId;
 
   const PageLikeButton({
-    required this.initialLiked, required this.likeCount, required this.pageId, required this.userId, super.key,
+    required this.initialLiked,
+    required this.likeCount,
+    required this.pageId,
+    required this.userId,
+    super.key,
   });
 
   @override

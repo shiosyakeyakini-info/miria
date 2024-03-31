@@ -15,7 +15,7 @@ class ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title:  Text(S.of(context).pickColor),
+        title: Text(S.of(context).pickColor),
         content: ColorPicker(
           pickerColor: pickedColor,
           onColorChanged: (color) => setState(() => pickedColor = color),

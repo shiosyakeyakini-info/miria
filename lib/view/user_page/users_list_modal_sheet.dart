@@ -11,7 +11,9 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class UsersListModalSheet extends ConsumerWidget {
   const UsersListModalSheet({
-    required this.account, required this.user, super.key,
+    required this.account,
+    required this.user,
+    super.key,
   });
 
   final Account account;
