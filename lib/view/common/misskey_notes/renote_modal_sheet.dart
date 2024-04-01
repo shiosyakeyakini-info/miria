@@ -273,7 +273,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               ),
               title: Text(widget.note.channel != null
                   ? S.of(context).quotedRenoteInOtherChannel
-                  : S.of(context).quotedRenoteInOtherChannel)),
+                  : S.of(context).quotedRenoteInChannel)),
         ]
       ],
     );
