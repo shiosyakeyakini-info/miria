@@ -9,8 +9,9 @@ class Font {
 
 const choosableFonts = [
   Font("システム標準", ""),
+  // **Japanese**
   Font("Noto Sans Japanese", "Noto Sans JP"),
-  // Font("Noto Serif Japanese", "Noto Serif Japanese"),
+  // Font("Noto Serif Japanese", "Noto Serif JP"),
   Font("IBM Plex Sans JP", "IBM Plex Sans JP"),
   Font("ZEN角ゴシック", "Zen Kaku Gothic New"),
   Font("ZEN丸ゴシック", "Zen Maru Gothic"),
@@ -60,4 +61,15 @@ const choosableFonts = [
   Font("よもぎフォント", "Yomogi"),
   Font("Potta One", "Potta One"),
   Font("ニューテゴミン", "New Tegomin"),
+  // **Simplified Chinese**
+  Font("Noto Sans Simplified Chinese", "Noto Sans SC"),
+  // Font("Noto Serif Simplified Chinese", "Noto Serif SC"),
+  Font("Ma Shan Zheng", "Ma Shan Zheng"),
+  Font("ZCOOL XiaoWei", "ZCOOL XiaoWei"),
+  Font("ZCOOL QingKe HuangYou", "ZCOOL QingKe HuangYou"),
+  Font("ZCOOL KuaiLe", "ZCOOL KuaiLe"),
+  Font("Long Cang", "Long Cang"),
+  Font("Zhi Mang Xing", "Zhi Mang Xing"),
+  Font("Liu Jian Mao Cao", "Liu Jian Mao Cao"),
+  Font("Noto Sans Mongolian", "Noto Sans Mongolian") // ?
 ];
