@@ -38,13 +38,14 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> with WindowListener {
+class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindingObserver {
   final _appRouter = AppRouter();
   final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
   @override
   void initState() {
     if (isDesktop) {
+      WidgetsBinding.instance.addObserver(this);
       windowManager.addListener(this);
       ref
           .read(desktopSettingsRepositoryProvider)
@@ -57,6 +58,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
   @override
   void dispose() {
     if (isDesktop) {
+      WidgetsBinding.instance.removeObserver(this);
       windowManager.removeListener(this);
     }
     super.dispose();
@@ -87,6 +89,19 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
     }
   }
 
+  @override
+  Future<void> didChangePlatformBrightness() async {
+    super.didChangePlatformBrightness();
+    if (!isDesktop) return;
+
+    final brightness =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness;
+
+    /// Set up window brightness follow system theme mode.
+    await WindowManager.instance.setBrightness(brightness);
+    await WindowManager.instance.setTitleBarStyle(TitleBarStyle.normal);
+  }
+
   Future<void> _initWindow() async {
     await windowManager.setPreventClose(true);
     DesktopSettings config =
@@ -103,7 +118,6 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
     WindowOptions opt = WindowOptions(
       size: size,
       center: (position == null),
-      backgroundColor: Colors.transparent,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
     );
