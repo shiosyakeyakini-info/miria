@@ -184,14 +184,26 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       const ReplyArea(),
                       const ReplyToArea(),
                       const CwTextArea(),
-                      TextField(
-                        controller: ref.watch(noteInputTextProvider),
-                        focusNode: focusNode,
-                        maxLines: null,
-                        minLines: 5,
-                        keyboardType: TextInputType.multiline,
-                        decoration: noteDecoration,
-                        autofocus: true,
+                      Focus(
+                        onKeyEvent: (node, event) {
+                          if (event is KeyDownEvent) {
+                            if (event.logicalKey == LogicalKeyboardKey.enter &&
+                              HardwareKeyboard.instance.isControlPressed) {
+                                notifier.note(context).expectFailure(context);
+                                return KeyEventResult.handled;
+                              }
+                          }
+                          return KeyEventResult.ignored;
+                        },
+                        child: TextField(
+                          controller: ref.watch(noteInputTextProvider),
+                          focusNode: focusNode,
+                          maxLines: null,
+                          minLines: 5,
+                          keyboardType: TextInputType.multiline,
+                          decoration: noteDecoration,
+                          autofocus: true,
+                        ),
                       ),
                       Row(
                         children: [
