@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:miria/model/general_settings.dart';
 import 'package:miria/model/tab_setting.dart';
 import 'package:miria/model/tab_type.dart';
@@ -356,9 +357,19 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               //     : null,
               child: Row(
                 children: [
-                  const Expanded(
-                    child: TimelineNoteField(),
-                  ),
+                  Expanded(
+                      child: Focus(
+                          onKeyEvent: (node, event) {
+                            if (event is KeyDownEvent) {
+                              if (event.logicalKey == LogicalKeyboardKey.enter &&
+                                  HardwareKeyboard.instance.isControlPressed) {
+                                note().expectFailure(context);
+                                return KeyEventResult.handled;
+                              }
+                            }
+                            return KeyEventResult.ignored;
+                          },
+                          child: const TimelineNoteField())),
                   IconButton(
                     onPressed: note.expectFailure(context),
                     icon: const Icon(Icons.edit),
