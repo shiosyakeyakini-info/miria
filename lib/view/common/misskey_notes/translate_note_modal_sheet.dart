@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/model/account.dart';
 import 'package:miria/providers.dart';
@@ -40,19 +41,29 @@ class TranslateNoteModalSheet extends ConsumerWidget {
       ),
     );
 
-    return translatedNote.when(
-      data: (translatedNote) => Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
+    return Scaffold(
+      body: translatedNote.when(
+        data: (translatedNote) => Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
             children: [
               ListTile(
-                title: Text("${translatedNote.sourceLang}から翻訳"),
+                title: Text(
+                  S.of(context).translatedFrom(translatedNote.sourceLang),
+                ),
                 trailing: IconButton(
-                  onPressed: () => Clipboard.setData(
-                    ClipboardData(text: translatedNote.text),
-                  ),
-                  tooltip: "コピー",
+                  onPressed: () {
+                    Clipboard.setData(
+                      ClipboardData(text: translatedNote.text),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(S.of(context).doneCopy),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  tooltip: S.of(context).copyContents,
                   icon: const Icon(Icons.copy),
                 ),
               ),
@@ -81,9 +92,9 @@ class TranslateNoteModalSheet extends ConsumerWidget {
             ],
           ),
         ),
+        error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
-      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
-      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

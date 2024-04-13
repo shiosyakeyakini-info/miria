@@ -207,6 +207,15 @@
     "openInAnotherAccount": "別のアカウントで開く",
     "changeFullScreen": "フルスクリーンに切り替え",
     "shareNotes": "ノートを共有",
+    "translateNotes": "ノートを翻訳",
+    "translatedFrom": "{lang}から翻訳",
+    "@translatedFrom": {
+        "placeholders": {
+            "lang": {
+                "type": "String"
+            }
+        }
+    },
     "deleteFavorite": "お気に入り解除",
     "notesAfterRenote": "リノート直後のノート",
     "deletedRecreate": "削除してなおす",
