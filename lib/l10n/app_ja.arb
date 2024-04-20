@@ -288,7 +288,8 @@
         }
     },
     "chooseFile": "ファイルを選択",
-    "uploadFile": "アップロード",
+    "uploadMedia": "メディアをアップロード",
+    "uploadFile": "ファイルをアップロード",
     "fromDrive": "ドライブから",
     "fileName": "ファイル名",
     "randomizeFileName": "ファイル名をランダムにする",

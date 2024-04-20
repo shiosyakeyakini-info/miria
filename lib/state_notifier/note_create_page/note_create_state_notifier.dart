@@ -455,44 +455,54 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     final result = await showModalBottomSheet<DriveModalSheetReturnValue?>(
         context: context, builder: (context) => const DriveModalSheet());
 
-    if (result == DriveModalSheetReturnValue.drive) {
-      if (!mounted) return;
-      final result = await showDialog<List<DriveFile>?>(
-        context: context,
-        builder: (context) => DriveFileSelectDialog(
-          account: state.account,
+    switch (result) {
+      case DriveModalSheetReturnValue.drive:
+        if (!context.mounted) return;
+        final result = await showDialog<List<DriveFile>?>(
+          context: context,
+          builder: (context) => DriveFileSelectDialog(
+            account: state.account,
+            allowMultiple: true,
+          ),
+        );
+        if (result == null || result.isEmpty) return;
+
+        final files = result.map((file) => AlreadyPostedFile.file(file));
+
+        state = state.copyWith(
+          files: [
+            ...state.files,
+            ...files,
+          ],
+        );
+      case DriveModalSheetReturnValue.uploadFile ||
+            DriveModalSheetReturnValue.uploadMedia:
+        final pickerResult = await FilePicker.platform.pickFiles(
+          type: result == DriveModalSheetReturnValue.uploadMedia
+              ? FileType.media
+              : FileType.any,
           allowMultiple: true,
-        ),
-      );
-      if (result == null || result.isEmpty) return;
+        );
+        if (pickerResult == null || pickerResult.files.isEmpty) return;
 
-      final files = result.map((file) => AlreadyPostedFile.file(file));
+        final files = pickerResult.files.map(
+          (file) {
+            final path = file.path;
+            if (path != null) {
+              return PostFile.file(fileSystem.file(path));
+            }
+            return null;
+          },
+        ).nonNulls;
 
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
-    } else if (result == DriveModalSheetReturnValue.upload) {
-      final result = await FilePicker.platform.pickFiles(allowMultiple: true);
-      if (result == null || result.files.isEmpty) return;
-
-      final files = result.files.map((file) {
-        final path = file.path;
-        if (path != null) {
-          return PostFile.file(fileSystem.file(path));
-        }
-        return null;
-      }).nonNulls;
-
-      if (!mounted) return;
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
+        if (!mounted) return;
+        state = state.copyWith(
+          files: [
+            ...state.files,
+            ...files,
+          ],
+        );
+      default:
     }
   }
 
