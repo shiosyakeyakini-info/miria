@@ -620,53 +620,59 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   Future<void> chooseFile() async {
     final result = await ref
         .read(appRouterProvider)
-        .push<DriveModalSheetReturnValue>(const DriveModalRoute());
+        .push<DriveModalSheetReturnValue>(DriveModalRoute());
 
-    if (result == DriveModalSheetReturnValue.drive) {
-      final result = await ref
-          .read(appRouterProvider)
-          .push<List<DriveFile>>(
-            DriveFileSelectRoute(
-              account: ref.read(accountContextProvider).postAccount,
-              allowMultiple: true,
-            ),
-          );
-      if (result == null || result.isEmpty) return;
-
-      final files = result.map((file) => AlreadyPostedFile.file(file));
-
-      state = state.copyWith(files: [...state.files, ...files]);
-    } else if (result == DriveModalSheetReturnValue.upload) {
-      final result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        // iOSでは0の場合HEICファイルがJPEGに変換されないため
-        // Androidでは圧縮時に画像の向きがおかしくなることがあるため圧縮パススルー
-        compressionQuality: (Platform.isIOS) ? 95 : 0,
-      );
-      if (result == null || result.files.isEmpty) return;
-
-      final fsFiles = result.files.map((file) {
-        final path = file.path;
-        if (path != null) {
-          return _fileSystem.file(path);
-        }
-        return null;
-      }).nonNulls;
-      final files = await Future.wait(
-        fsFiles.map((file) async {
-          final d = await loadImage(file);
-          if (d == null) {
-            await _dialogNotifier.showSimpleDialog(
-              message: (context) =>
-                  S.of(context).unsupportedFileWithFilename(file.basename),
+    switch (result) {
+      case DriveModalSheetReturnValue.drive:
+        final result = await ref
+            .read(appRouterProvider)
+            .push<List<DriveFile>>(
+              DriveFileSelectRoute(
+                account: ref.read(accountContextProvider).postAccount,
+                allowMultiple: true,
+              ),
             );
-            return null;
-          }
-          return d;
-        }),
-      );
+        if (result == null || result.isEmpty) return;
 
-      state = state.copyWith(files: [...state.files, ...files.nonNulls]);
+        final files = result.map((file) => AlreadyPostedFile.file(file));
+
+        state = state.copyWith(files: [...state.files, ...files]);
+      case DriveModalSheetReturnValue.uploadMedia ||
+          DriveModalSheetReturnValue.uploadFile:
+        final pickerResult = await FilePicker.platform.pickFiles(
+          type: result == DriveModalSheetReturnValue.uploadMedia
+              ? FileType.media
+              : FileType.any,
+          allowMultiple: true,
+          // iOSでは0の場合HEICファイルがJPEGに変換されないため
+          // Androidでは圧縮時に画像の向きがおかしくなることがあるため圧縮パススルー
+          compressionQuality: (Platform.isIOS) ? 95 : 0,
+        );
+        if (pickerResult == null || pickerResult.files.isEmpty) return;
+
+        final fsFiles = pickerResult.files.map((file) {
+          final path = file.path;
+          if (path != null) {
+            return _fileSystem.file(path);
+          }
+          return null;
+        }).nonNulls;
+        final files = await Future.wait(
+          fsFiles.map((file) async {
+            final d = await loadImage(file);
+            if (d == null) {
+              await _dialogNotifier.showSimpleDialog(
+                message: (context) =>
+                    S.of(context).unsupportedFileWithFilename(file.basename),
+              );
+              return null;
+            }
+            return d;
+          }),
+        );
+
+        state = state.copyWith(files: [...state.files, ...files.nonNulls]);
+      case null:
     }
   }
 

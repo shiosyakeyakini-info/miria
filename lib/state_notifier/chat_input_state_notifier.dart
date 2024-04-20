@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:file_picker/file_picker.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:image/image.dart" as img;
@@ -53,7 +55,7 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
 
     // ドライブかアップロードかを選択するモーダルを表示
     final modalResult = await router.push<DriveModalSheetReturnValue>(
-      const DriveModalRoute(),
+      DriveModalRoute(),
     );
 
     if (modalResult == DriveModalSheetReturnValue.drive) {
@@ -70,14 +72,20 @@ class ChatInputStateNotifier extends _$ChatInputStateNotifier {
       final driveFile = driveFiles.first;
 
       await addFile(AlreadyPostedFile.file(driveFile));
-    } else if (modalResult == DriveModalSheetReturnValue.upload) {
+    } else if (modalResult
+        case DriveModalSheetReturnValue.uploadMedia ||
+            DriveModalSheetReturnValue.uploadFile) {
       // ファイルアップロード（既存の処理）
       final fileSystem = ref.read(fileSystemProvider);
 
       final result = await FilePicker.platform.pickFiles(
+        type: modalResult == DriveModalSheetReturnValue.uploadMedia
+            ? FileType.media
+            : FileType.any,
         allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
+        // iOSでは0の場合HEICファイルがJPEGに変換されないため
+        // Androidでは圧縮時に画像の向きがおかしくなることがあるため圧縮パススルー
+        compressionQuality: (Platform.isIOS) ? 95 : 0,
       );
 
       if (result == null || result.files.isEmpty) return;

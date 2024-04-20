@@ -572,6 +572,9 @@ class SZh extends S {
   String get chooseFile => '选择文件';
 
   @override
+  String get uploadMedia => 'メディアをアップロード';
+
+  @override
   String get uploadFile => '上传';
 
   @override

@@ -1682,18 +1682,51 @@ class DriveFileSelectRouteArgs {
 
 /// generated route for
 /// [DriveModalSheet]
-class DriveModalRoute extends PageRouteInfo<void> {
-  const DriveModalRoute({List<PageRouteInfo>? children})
-    : super(DriveModalRoute.name, initialChildren: children);
+class DriveModalRoute extends PageRouteInfo<DriveModalRouteArgs> {
+  DriveModalRoute({
+    Key? key,
+    bool fileOnly = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+         DriveModalRoute.name,
+         args: DriveModalRouteArgs(key: key, fileOnly: fileOnly),
+         initialChildren: children,
+       );
 
   static const String name = 'DriveModalRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const DriveModalSheet();
+      final args = data.argsAs<DriveModalRouteArgs>(
+        orElse: () => const DriveModalRouteArgs(),
+      );
+      return DriveModalSheet(key: args.key, fileOnly: args.fileOnly);
     },
   );
+}
+
+class DriveModalRouteArgs {
+  const DriveModalRouteArgs({this.key, this.fileOnly = false});
+
+  final Key? key;
+
+  final bool fileOnly;
+
+  @override
+  String toString() {
+    return 'DriveModalRouteArgs{key: $key, fileOnly: $fileOnly}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveModalRouteArgs) return false;
+    return key == other.key && fileOnly == other.fileOnly;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ fileOnly.hashCode;
 }
 
 /// generated route for

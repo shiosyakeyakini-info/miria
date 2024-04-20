@@ -124,11 +124,12 @@ class _ProfileEditForm extends HookConsumerWidget {
                               DriveModalSheetReturnValue
                             >(
                               context: context,
-                              builder: (context) => const DriveModalSheet(),
+                              builder: (context) =>
+                                  const DriveModalSheet(fileOnly: true),
                             );
                         if (result == null) return;
 
-                        if (result == DriveModalSheetReturnValue.upload) {
+                        if (result == DriveModalSheetReturnValue.uploadFile) {
                           final pickedFile = await FilePicker.platform
                               .pickFiles(withData: true, type: FileType.image);
                           if (pickedFile != null &&

@@ -168,7 +168,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         // モックファイルの設定
         final mockFile = PlatformFile(
@@ -178,11 +179,7 @@ void main() {
         );
 
         when(
-          mockFilePicker.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
-          ),
+          mockFilePicker.pickFiles(type: FileType.any, allowMultiple: false),
         ).thenAnswer((_) async => FilePickerResult([mockFile]));
 
         // ファイルシステムにファイルを作成
@@ -205,7 +202,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         // モックファイルの設定
         final mockFile = PlatformFile(
@@ -215,11 +213,7 @@ void main() {
         );
 
         when(
-          mockFilePicker.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
-          ),
+          mockFilePicker.pickFiles(type: FileType.any, allowMultiple: false),
         ).thenAnswer((_) async => FilePickerResult([mockFile]));
 
         // ファイルシステムにファイルを作成
@@ -246,7 +240,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         // モックファイルの設定
         final mockFile = PlatformFile(
@@ -256,11 +251,7 @@ void main() {
         );
 
         when(
-          mockFilePicker.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "jpeg", "png", "gif", "mp4", "webm"],
-          ),
+          mockFilePicker.pickFiles(type: FileType.any, allowMultiple: false),
         ).thenAnswer((_) async => FilePickerResult([mockFile]));
 
         // ファイルシステムにファイルを作成
@@ -282,7 +273,8 @@ void main() {
         );
 
         // ドライブモーダルのモック（アップロードを選択）
-        testRouter.driveModalReturnValue = DriveModalSheetReturnValue.upload;
+        testRouter.driveModalReturnValue =
+            DriveModalSheetReturnValue.uploadFile;
 
         when(
           mockFilePicker.pickFiles(

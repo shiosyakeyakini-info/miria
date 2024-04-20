@@ -1107,10 +1107,16 @@ abstract class S {
   /// **'ファイルを選択'**
   String get chooseFile;
 
+  /// No description provided for @uploadMedia.
+  ///
+  /// In ja, this message translates to:
+  /// **'メディアをアップロード'**
+  String get uploadMedia;
+
   /// No description provided for @uploadFile.
   ///
   /// In ja, this message translates to:
-  /// **'アップロード'**
+  /// **'ファイルをアップロード'**
   String get uploadFile;
 
   /// No description provided for @fromDrive.
