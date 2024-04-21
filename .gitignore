@@ -50,3 +50,6 @@ app.*.map.json
 
 # Release
 /private_keys/
+
+# Snap package related
+*.snap
