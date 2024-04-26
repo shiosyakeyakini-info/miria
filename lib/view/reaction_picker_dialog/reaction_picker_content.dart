@@ -201,7 +201,6 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
       TextField(
         decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
         autofocus: true,
-        keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
           Future(() async {
             final result = await emojiRepository.searchEmojis(value);
