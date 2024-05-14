@@ -25,7 +25,7 @@ dependencies:
   auto_route: ^6.0.5
   freezed_annotation: ^2.2.0
   url_launcher: ^6.1.10
-  intl: ^0.18.0
+  intl: ^0.19.0
   scrollable_positioned_list: ^0.3.6
   kana_kit: ^2.0.0
   cached_network_image: ^3.2.3
@@ -44,7 +44,7 @@ dependencies:
   dotted_border: ^2.0.0+3
   visibility_detector: ^0.4.0+2
   percent_indicator: ^4.2.3
-  fl_chart: ^0.62.0
+  fl_chart: ^0.68.0
   receive_sharing_intent: ^1.4.5
   share_plus: ^7.0.2
   mfm_parser: ^1.0.3
@@ -83,6 +83,10 @@ dependency_overrides:
     git:
       url: https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git
       path: ./image_editor_platform_interface/
+  flutter_colorpicker:
+    git:
+      url: https://github.com/mchome/flutter_colorpicker
+      ref: master
 
 
 dev_dependencies:
