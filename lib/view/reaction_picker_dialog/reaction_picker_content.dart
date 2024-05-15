@@ -134,11 +134,11 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             : const BoxDecoration(),
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-            padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-            elevation: MaterialStatePropertyAll(0),
-            minimumSize: MaterialStatePropertyAll(Size.zero),
-            overlayColor: MaterialStatePropertyAll(AppTheme.of(context).colorTheme.accentedBackground),
+            backgroundColor: WidgetStatePropertyAll(Colors.transparent),
+            padding: WidgetStatePropertyAll(EdgeInsets.all(5)),
+            elevation: WidgetStatePropertyAll(0),
+            minimumSize: WidgetStatePropertyAll(Size.zero),
+            overlayColor: WidgetStatePropertyAll(AppTheme.of(context).colorTheme.accentedBackground),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           onPressed: () async {

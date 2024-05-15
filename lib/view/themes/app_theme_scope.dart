@@ -224,7 +224,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       listTileTheme: ListTileThemeData(iconColor: theme.foreground),
       scaffoldBackgroundColor: theme.panel,
       tabBarTheme: TabBarTheme(
-        overlayColor: MaterialStatePropertyAll(theme.primary),
+        overlayColor: WidgetStatePropertyAll(theme.primary),
         labelColor: Colors.white,
         labelStyle: textTheme.titleSmall,
         unselectedLabelStyle:
@@ -237,16 +237,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       iconTheme: IconThemeData(color: theme.foreground),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             textTheme.bodyMedium?.copyWith(
               inherit: false,
               color: Colors.white,
             ),
           ),
-          backgroundColor: MaterialStatePropertyAll(theme.primary),
-          foregroundColor: const MaterialStatePropertyAll(Colors.white),
-          elevation: const MaterialStatePropertyAll(0),
-          shape: MaterialStatePropertyAll(
+          backgroundColor: WidgetStatePropertyAll(theme.primary),
+          foregroundColor: const WidgetStatePropertyAll(Colors.white),
+          elevation: const WidgetStatePropertyAll(0),
+          shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           ),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
@@ -255,8 +255,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: MaterialStatePropertyAll(theme.primary),
-          shape: MaterialStatePropertyAll(
+          foregroundColor: WidgetStatePropertyAll(theme.primary),
+          shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           ),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
@@ -265,8 +265,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          iconColor: MaterialStatePropertyAll(theme.primary),
-          foregroundColor: MaterialStatePropertyAll(theme.primary),
+          iconColor: WidgetStatePropertyAll(theme.primary),
+          foregroundColor: WidgetStatePropertyAll(theme.primary),
         ),
       ),
       dividerTheme: DividerThemeData(color: theme.divider),
@@ -301,12 +301,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         isDense: true,
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith(
+        fillColor: WidgetStateProperty.resolveWith(
           (states) {
-            if (states.contains(MaterialState.disabled)) {
+            if (states.contains(WidgetState.disabled)) {
               return null;
             }
-            if (states.contains(MaterialState.selected)) {
+            if (states.contains(WidgetState.selected)) {
               return theme.primary;
             }
             return null;

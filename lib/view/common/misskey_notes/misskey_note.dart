@@ -524,9 +524,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
                                       style: const ButtonStyle(
-                                        padding: MaterialStatePropertyAll(
+                                        padding: WidgetStatePropertyAll(
                                             EdgeInsets.zero),
-                                        minimumSize: MaterialStatePropertyAll(
+                                        minimumSize: WidgetStatePropertyAll(
                                             Size(0, 0)),
                                         tapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
@@ -559,10 +559,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                           initialAccount: account));
                                     },
                                     style: const ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
+                                      padding: WidgetStatePropertyAll(
                                           EdgeInsets.zero),
                                       minimumSize:
-                                          MaterialStatePropertyAll(Size(0, 0)),
+                                          WidgetStatePropertyAll(Size(0, 0)),
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
@@ -606,10 +606,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
                                     style: const ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
+                                      padding: WidgetStatePropertyAll(
                                           EdgeInsets.zero),
                                       minimumSize:
-                                          MaterialStatePropertyAll(Size(0, 0)),
+                                          WidgetStatePropertyAll(Size(0, 0)),
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
@@ -940,8 +940,8 @@ class RenoteButton extends StatelessWidget {
           "${displayNote.renoteCount != 0 ? displayNote.renoteCount : ""}",
           style: Theme.of(context).textTheme.bodySmall),
       style: const ButtonStyle(
-        padding: MaterialStatePropertyAll(EdgeInsets.zero),
-        minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+        padding: WidgetStatePropertyAll(EdgeInsets.zero),
+        minimumSize: WidgetStatePropertyAll(Size(0, 0)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
@@ -978,8 +978,8 @@ class FooterReactionButton extends StatelessWidget {
         constraints: const BoxConstraints(),
         padding: EdgeInsets.zero,
         style: const ButtonStyle(
-          padding: MaterialStatePropertyAll(EdgeInsets.zero),
-          minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+          padding: WidgetStatePropertyAll(EdgeInsets.zero),
+          minimumSize: WidgetStatePropertyAll(Size(0, 0)),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         icon: Icon(

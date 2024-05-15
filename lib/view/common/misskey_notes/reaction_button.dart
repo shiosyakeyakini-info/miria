@@ -135,8 +135,8 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             });
       },
       style: AppTheme.of(context).reactionButtonStyle.copyWith(
-            backgroundColor: MaterialStatePropertyAll(backgroundColor),
-            side: MaterialStatePropertyAll(
+            backgroundColor: WidgetStatePropertyAll(backgroundColor),
+            side: WidgetStatePropertyAll(
               BorderSide(color: borderColor),
             ),
           ),
