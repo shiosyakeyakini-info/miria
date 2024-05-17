@@ -24,11 +24,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   project.set_dart_entrypoint_arguments(std::move(command_line_arguments));
 
-  int displayx = GetSystemMetrics(SM_CXSCREEN);
-  int displayy = GetSystemMetrics(SM_CYSCREEN);
-
   FlutterWindow window(project);
-  Win32Window::Point origin(displayx / 2 - 200, displayy / 2 - 350);
+  Win32Window::Point origin(10, 10);
   Win32Window::Size size(400, 700);
   if (!window.CreateAndShow(L"miria", origin, size)) {
     return EXIT_FAILURE;
