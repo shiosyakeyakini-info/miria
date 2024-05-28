@@ -31,7 +31,7 @@ class AntennaSettings with _$AntennaSettings {
       caseSensitive: antenna.caseSensitive,
       withReplies: antenna.withReplies,
       withFile: antenna.withFile,
-      notify: antenna.notify,
+      notify: antenna.notify ?? false,
       localOnly: antenna.localOnly ?? false,
     );
   }
