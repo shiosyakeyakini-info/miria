@@ -1173,10 +1173,10 @@ packages:
     dependency: "direct main"
     description:
       name: receive_sharing_intent
-      sha256: f127989f8662ea15e193bd1e10605e5a0ab6bb92dffd51f3ce002feb0ce24c93
+      sha256: "912bebb551bce75a14098891fd750305b30d53eba0d61cc70cd9973be9866e8d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.4.5"
   reorderables:
     dependency: "direct main"
     description:
