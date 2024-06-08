@@ -55,7 +55,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
         "url": Uri.encodeFull(emojiData.url.toString()),
-        "emoji": "1"
+        "emoji": "1",
       },
     );
   }
@@ -110,9 +110,10 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
               child: Text(
                 emojiData.char,
                 strutStyle: StrutStyle(
-                    height: 1.0,
-                    forceStrutHeight: true,
-                    fontSize: scopedFontSize),
+                  height: 1.0,
+                  forceStrutHeight: true,
+                  fontSize: scopedFontSize,
+                ),
                 style: style.merge(AppTheme.of(context).unicodeEmojiStyle),
               ),
             );

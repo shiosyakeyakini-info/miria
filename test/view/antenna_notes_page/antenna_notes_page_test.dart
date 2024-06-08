@@ -18,21 +18,41 @@ void main() {
       when(misskey.antennas).thenReturn(antennas);
       when(antennas.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
-      await tester.pumpWidget(ProviderScope(
+      await tester.pumpWidget(
+        ProviderScope(
           overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
           child: DefaultRootWidget(
             initialRoute: AntennaNotesRoute(
-                account: TestData.account, antenna: TestData.antenna),
-          )));
+              account: TestData.account,
+              antenna: TestData.antenna,
+            ),
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(TestData.note1.text!), findsOneWidget);
-      verify(antennas.notes(argThat(
-          equals(AntennasNotesRequest(antennaId: TestData.antenna.id)))));
+      verify(
+        antennas.notes(
+          argThat(
+            equals(AntennasNotesRequest(antennaId: TestData.antenna.id)),
+          ),
+        ),
+      );
 
       await tester.pageNation();
-      verify(antennas.notes(argThat(equals(AntennasNotesRequest(
-          antennaId: TestData.antenna.id, untilId: TestData.note1.id)))));
+      verify(
+        antennas.notes(
+          argThat(
+            equals(
+              AntennasNotesRequest(
+                antennaId: TestData.antenna.id,
+                untilId: TestData.note1.id,
+              ),
+            ),
+          ),
+        ),
+      );
     });
   });
 }

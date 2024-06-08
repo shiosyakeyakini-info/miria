@@ -16,11 +16,14 @@ void main() {
       when(misskey.clips).thenReturn(clip);
       when(clip.list()).thenAnswer((_) async => [TestData.clip]);
 
-      await tester.pumpWidget(ProviderScope(
+      await tester.pumpWidget(
+        ProviderScope(
           overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ClipListRoute(account: TestData.account),
-          )));
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(TestData.clip.name!), findsOneWidget);

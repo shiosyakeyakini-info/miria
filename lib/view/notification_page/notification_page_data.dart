@@ -156,12 +156,15 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           });
 
           if (!isSummarize) {
-            resultList.add(RenoteReactionNotificationData(
+            resultList.add(
+              RenoteReactionNotificationData(
                 note: element.note,
                 reactionUsers: [(element.reaction, element.user)],
                 renoteUsers: [],
                 createdAt: element.createdAt,
-                id: element.id));
+                id: element.id,
+              ),
+            );
           }
 
         case NotificationType.renote:
@@ -175,92 +178,131 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           });
 
           if (!isSummarize) {
-            resultList.add(RenoteReactionNotificationData(
+            resultList.add(
+              RenoteReactionNotificationData(
                 note: element.note?.renote,
                 reactionUsers: [],
                 renoteUsers: [element.user],
                 createdAt: element.createdAt,
-                id: element.id));
+                id: element.id,
+              ),
+            );
           }
 
         case NotificationType.quote:
-          resultList.add(MentionQuoteNotificationData(
+          resultList.add(
+            MentionQuoteNotificationData(
               createdAt: element.createdAt,
               note: element.note,
               user: element.user,
               type: MentionQuoteNotificationDataType.quote,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.mention:
-          resultList.add(MentionQuoteNotificationData(
+          resultList.add(
+            MentionQuoteNotificationData(
               createdAt: element.createdAt,
               note: element.note,
               user: element.user,
               type: MentionQuoteNotificationDataType.mention,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.reply:
-          resultList.add(MentionQuoteNotificationData(
+          resultList.add(
+            MentionQuoteNotificationData(
               createdAt: element.createdAt,
               note: element.note,
               user: element.user,
               type: MentionQuoteNotificationDataType.reply,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.follow:
-          resultList.add(FollowNotificationData(
+          resultList.add(
+            FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.follow,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.followRequestAccepted:
-          resultList.add(FollowNotificationData(
+          resultList.add(
+            FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted,
-              id: element.id));
+              id: element.id,
+            ),
+          );
         case NotificationType.receiveFollowRequest:
-          resultList.add(FollowNotificationData(
+          resultList.add(
+            FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.receiveFollowRequest,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.achievementEarned:
-          resultList.add(SimpleNotificationData(
+          resultList.add(
+            SimpleNotificationData(
               text:
                   "${localize.achievementEarnedNotification}[${element.achievement}]",
               createdAt: element.createdAt,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.pollVote:
-          resultList.add(PollNotification(
+          resultList.add(
+            PollNotification(
               note: element.note,
               createdAt: element.createdAt,
-              id: element.id));
+              id: element.id,
+            ),
+          );
         case NotificationType.pollEnded:
-          resultList.add(PollNotification(
+          resultList.add(
+            PollNotification(
               note: element.note,
               createdAt: element.createdAt,
-              id: element.id));
+              id: element.id,
+            ),
+          );
         case NotificationType.test:
-          resultList.add(SimpleNotificationData(
+          resultList.add(
+            SimpleNotificationData(
               text: localize.testNotification,
               createdAt: element.createdAt,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.note:
-          resultList.add(NoteNotification(
+          resultList.add(
+            NoteNotification(
               note: element.note,
               createdAt: element.createdAt,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         case NotificationType.roleAssigned:
-          resultList.add(RoleNotification(
+          resultList.add(
+            RoleNotification(
               role: element.role,
               createdAt: element.createdAt,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
         default:
           break;

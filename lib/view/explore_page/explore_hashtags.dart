@@ -31,67 +31,77 @@ class ExploreHashtagsState extends ConsumerState<ExploreHashtags> {
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.only(top: 3, bottom: 3),
-            child: LayoutBuilder(
-                builder: (context, constraints) => ToggleButtons(
-                        constraints: BoxConstraints.expand(
-                            width: constraints.maxWidth / 3 -
-                                Theme.of(context)
-                                        .toggleButtonsTheme
-                                        .borderWidth!
-                                        .toInt() *
-                                    3),
-                        onPressed: (index) => setState(() {
-                              hashtagListType = HashtagListType.values[index];
-                            }),
-                        isSelected: [
-                          for (final element in HashtagListType.values)
-                            element == hashtagListType
-                        ],
-                        children: [
-                          Text(S.of(context).trend),
-                          Text(S.of(context).local),
-                          Text(S.of(context).remote),
-                        ]))),
+          padding: const EdgeInsets.only(top: 3, bottom: 3),
+          child: LayoutBuilder(
+            builder: (context, constraints) => ToggleButtons(
+              constraints: BoxConstraints.expand(
+                width: constraints.maxWidth / 3 -
+                    Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
+                        3,
+              ),
+              onPressed: (index) => setState(() {
+                hashtagListType = HashtagListType.values[index];
+              }),
+              isSelected: [
+                for (final element in HashtagListType.values)
+                  element == hashtagListType,
+              ],
+              children: [
+                Text(S.of(context).trend),
+                Text(S.of(context).local),
+                Text(S.of(context).remote),
+              ],
+            ),
+          ),
+        ),
         if (hashtagListType == HashtagListType.localTrend)
           Expanded(
             child: FutureListView(
-                future: ref
-                    .read(misskeyProvider(AccountScope.of(context)))
-                    .hashtags
-                    .trend(),
-                builder: (context, item) =>
-                    Hashtag(hashtag: item.tag, usersCount: item.usersCount)),
+              future: ref
+                  .read(misskeyProvider(AccountScope.of(context)))
+                  .hashtags
+                  .trend(),
+              builder: (context, item) =>
+                  Hashtag(hashtag: item.tag, usersCount: item.usersCount),
+            ),
           ),
         if (hashtagListType == HashtagListType.local)
           Expanded(
             child: FutureListView(
-                future: ref
-                    .read(misskeyProvider(AccountScope.of(context)))
-                    .hashtags
-                    .list(const HashtagsListRequest(
-                        limit: 50,
-                        attachedToLocalUserOnly: true,
-                        sort:
-                            HashtagsListSortType.attachedLocalUsersDescendant)),
-                builder: (context, item) => Hashtag(
-                    hashtag: item.tag,
-                    usersCount: item.attachedLocalUsersCount)),
+              future: ref
+                  .read(misskeyProvider(AccountScope.of(context)))
+                  .hashtags
+                  .list(
+                    const HashtagsListRequest(
+                      limit: 50,
+                      attachedToLocalUserOnly: true,
+                      sort: HashtagsListSortType.attachedLocalUsersDescendant,
+                    ),
+                  ),
+              builder: (context, item) => Hashtag(
+                hashtag: item.tag,
+                usersCount: item.attachedLocalUsersCount,
+              ),
+            ),
           ),
         if (hashtagListType == HashtagListType.remote)
           Expanded(
             child: FutureListView(
-                future: ref
-                    .read(misskeyProvider(AccountScope.of(context)))
-                    .hashtags
-                    .list(const HashtagsListRequest(
-                        limit: 50,
-                        attachedToRemoteUserOnly: true,
-                        sort: HashtagsListSortType
-                            .attachedRemoteUsersDescendant)),
-                builder: (context, item) => Hashtag(
-                    hashtag: item.tag,
-                    usersCount: item.attachedRemoteUsersCount)),
+              future: ref
+                  .read(misskeyProvider(AccountScope.of(context)))
+                  .hashtags
+                  .list(
+                    const HashtagsListRequest(
+                      limit: 50,
+                      attachedToRemoteUserOnly: true,
+                      sort: HashtagsListSortType.attachedRemoteUsersDescendant,
+                    ),
+                  ),
+              builder: (context, item) => Hashtag(
+                hashtag: item.tag,
+                usersCount: item.attachedRemoteUsersCount,
+              ),
+            ),
           ),
       ],
     );
@@ -108,7 +118,8 @@ class Hashtag extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => context.pushRoute(
-          HashtagRoute(hashtag: hashtag, account: AccountScope.of(context))),
+        HashtagRoute(hashtag: hashtag, account: AccountScope.of(context)),
+      ),
       title: Text("#$hashtag", style: AppTheme.of(context).hashtagStyle),
       trailing: MfmText(mfmText: S.of(context).joiningHashtagUsers(usersCount)),
     );

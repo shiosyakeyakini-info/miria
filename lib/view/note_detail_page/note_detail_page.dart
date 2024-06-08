@@ -75,16 +75,17 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: conversations.length,
-                          itemBuilder: (context, index) {
-                            return MisskeyNote(
-                              note: conversations[index],
-                              isForceUnvisibleRenote: true,
-                              isForceUnvisibleReply: true,
-                            );
-                          }),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: conversations.length,
+                        itemBuilder: (context, index) {
+                          return MisskeyNote(
+                            note: conversations[index],
+                            isForceUnvisibleRenote: true,
+                            isForceUnvisibleReply: true,
+                          );
+                        },
+                      ),
                       MisskeyNote(
                         note: actualShow!,
                         recursive: 1,
@@ -105,39 +106,46 @@ class NoteDetailPageState extends ConsumerState<NoteDetailPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: PushableListView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            initializeFuture: () async {
-                              final repliesResult = await ref
-                                  .read(misskeyProvider(widget.account))
-                                  .notes
-                                  .children(NotesChildrenRequest(
-                                      noteId: widget.note.id));
-                              ref
-                                  .read(notesProvider(widget.account))
-                                  .registerAll(repliesResult);
-                              return repliesResult.toList();
-                            },
-                            nextFuture: (lastItem, _) async {
-                              final repliesResult = await ref
-                                  .read(misskeyProvider(widget.account))
-                                  .notes
-                                  .children(NotesChildrenRequest(
-                                      noteId: widget.note.id,
-                                      untilId: lastItem.id));
-                              ref
-                                  .read(notesProvider(widget.account))
-                                  .registerAll(repliesResult);
-                              return repliesResult.toList();
-                            },
-                            itemBuilder: (context, item) {
-                              return MisskeyNote(
-                                note: item,
-                                recursive: 1,
-                                isForceUnvisibleRenote: true,
-                                isForceUnvisibleReply: true,
-                              );
-                            }),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          initializeFuture: () async {
+                            final repliesResult = await ref
+                                .read(misskeyProvider(widget.account))
+                                .notes
+                                .children(
+                                  NotesChildrenRequest(
+                                    noteId: widget.note.id,
+                                  ),
+                                );
+                            ref
+                                .read(notesProvider(widget.account))
+                                .registerAll(repliesResult);
+                            return repliesResult.toList();
+                          },
+                          nextFuture: (lastItem, _) async {
+                            final repliesResult = await ref
+                                .read(misskeyProvider(widget.account))
+                                .notes
+                                .children(
+                                  NotesChildrenRequest(
+                                    noteId: widget.note.id,
+                                    untilId: lastItem.id,
+                                  ),
+                                );
+                            ref
+                                .read(notesProvider(widget.account))
+                                .registerAll(repliesResult);
+                            return repliesResult.toList();
+                          },
+                          itemBuilder: (context, item) {
+                            return MisskeyNote(
+                              note: item,
+                              recursive: 1,
+                              isForceUnvisibleRenote: true,
+                              isForceUnvisibleReply: true,
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),

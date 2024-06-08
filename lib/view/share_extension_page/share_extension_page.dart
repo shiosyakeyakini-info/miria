@@ -58,16 +58,20 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
       try {
         await ref.read(accountRepositoryProvider.notifier).load();
         final json = jsonDecode(
-            await SharedPreferenceAppGroup.get("ShareKey") as String? ?? "");
+          await SharedPreferenceAppGroup.get("ShareKey") as String? ?? "",
+        );
         await SharedPreferenceAppGroup.setString("ShareKey", "");
         final sharedData =
             ShareExtensionData.fromJson(json as Map<String, dynamic>);
 
         if (ref.read(accountsProvider).length >= 2) {
           if (!mounted) return;
-          context.replaceRoute(SharingAccountSelectRoute(
+          context.replaceRoute(
+            SharingAccountSelectRoute(
               sharingText: sharedData.text.join("\n"),
-              filePath: sharedData.files.map((e) => e.path).toList()));
+              filePath: sharedData.files.map((e) => e.path).toList(),
+            ),
+          );
         } else {
           if (!mounted) return;
           context.replaceRoute(

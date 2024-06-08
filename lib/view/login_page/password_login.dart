@@ -27,30 +27,37 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
 
   Future<void> login() async {
     await ref.read(accountRepositoryProvider.notifier).loginAsPassword(
-        serverController.text, userController.text, passwordController.text);
+          serverController.text,
+          userController.text,
+          passwordController.text,
+        );
 
     if (!mounted) return;
-    context.pushRoute(TimeLineRoute(
+    context.pushRoute(
+      TimeLineRoute(
         initialTabSetting:
-            ref.read(tabSettingsRepositoryProvider).tabSettings.first));
+            ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return CenteringWidget(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
           const Text("この機能はめいどるふぃんなどを想定していますが、現状機能しません。"),
           Table(
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              columnWidths: const {
-                0: IntrinsicColumnWidth(),
-                1: FlexColumnWidth(),
-              },
-              children: [
-                TableRow(children: [
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            columnWidths: const {
+              0: IntrinsicColumnWidth(),
+              1: FlexColumnWidth(),
+            },
+            children: [
+              TableRow(
+                children: [
                   const Text("サーバー"),
                   TextField(
                     enabled: false,
@@ -58,47 +65,65 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                     decoration:
                         const InputDecoration(prefixIcon: Icon(Icons.dns)),
                   ),
-                ]),
-                TableRow(children: [
+                ],
+              ),
+              TableRow(
+                children: [
                   const Padding(padding: EdgeInsets.only(bottom: 10)),
-                  Container()
-                ]),
-                TableRow(children: [
+                  Container(),
+                ],
+              ),
+              TableRow(
+                children: [
                   const Text("ユーザー名"),
                   TextField(
-                      enabled: false,
-                      controller: userController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle)))
-                ]),
-                TableRow(children: [
+                    enabled: false,
+                    controller: userController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.account_circle),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
                   const Padding(padding: EdgeInsets.only(bottom: 10)),
-                  Container()
-                ]),
-                TableRow(children: [
+                  Container(),
+                ],
+              ),
+              TableRow(
+                children: [
                   const Padding(
-                      padding: EdgeInsets.only(right: 20),
-                      child: Text("パスワード")),
+                    padding: EdgeInsets.only(right: 20),
+                    child: Text("パスワード"),
+                  ),
                   TextField(
                     enabled: false,
                     controller: passwordController,
                     decoration:
                         const InputDecoration(prefixIcon: Icon(Icons.key)),
                     obscureText: true,
-                  )
-                ]),
-                TableRow(children: [
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
                   Container(),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
-                        onPressed: () {
-                          login();
-                        },
-                        child: const Text("ログイン")),
-                  )
-                ])
-              ])
-        ]));
+                      onPressed: () {
+                        login();
+                      },
+                      child: const Text("ログイン"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

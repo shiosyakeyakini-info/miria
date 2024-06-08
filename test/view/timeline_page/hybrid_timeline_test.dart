@@ -26,9 +26,19 @@ void main() {
       await tester.pumpWidget(timelineTester.buildWidget());
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(timelineTester.mockMisskeyNotes.hybridTimeline(argThat(equals(
-          const NotesHybridTimelineRequest(
-              withFiles: false, withRenotes: false, withReplies: false)))));
+      verify(
+        timelineTester.mockMisskeyNotes.hybridTimeline(
+          argThat(
+            equals(
+              const NotesHybridTimelineRequest(
+                withFiles: false,
+                withRenotes: false,
+                withReplies: false,
+              ),
+            ),
+          ),
+        ),
+      );
     });
   });
 }

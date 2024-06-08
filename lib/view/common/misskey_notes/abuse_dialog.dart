@@ -35,19 +35,19 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
   }
 
   Future<void> abuse() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .users
-        .reportAbuse(UsersReportAbuseRequest(
-          userId: widget.targetUser.id,
-          comment: controller.text,
-        ));
+    await ref.read(misskeyProvider(widget.account)).users.reportAbuse(
+          UsersReportAbuseRequest(
+            userId: widget.targetUser.id,
+            comment: controller.text,
+          ),
+        );
     if (!mounted) return;
     Navigator.of(context).pop();
     showDialog(
-        context: context,
-        builder: (context) =>
-            SimpleMessageDialog(message: S.of(context).thanksForReport));
+      context: context,
+      builder: (context) =>
+          SimpleMessageDialog(message: S.of(context).thanksForReport),
+    );
   }
 
   @override
@@ -80,8 +80,9 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
         ),
         actions: [
           ElevatedButton(
-              onPressed: abuse.expectFailure(context),
-              child: Text(S.of(context).reportAbuse))
+            onPressed: abuse.expectFailure(context),
+            child: Text(S.of(context).reportAbuse),
+          ),
         ],
       ),
     );

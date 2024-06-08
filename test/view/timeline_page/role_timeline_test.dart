@@ -30,10 +30,18 @@ void main() {
       await tester.pumpWidget(timelineTester.buildWidget());
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(mockMisskeyRoles.notes(argThat(equals(const RolesNotesRequest(
-        roleId: "abcdefg",
-        limit: 30,
-      )))));
+      verify(
+        mockMisskeyRoles.notes(
+          argThat(
+            equals(
+              const RolesNotesRequest(
+                roleId: "abcdefg",
+                limit: 30,
+              ),
+            ),
+          ),
+        ),
+      );
     });
   });
 }

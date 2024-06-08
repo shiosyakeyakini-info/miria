@@ -103,6 +103,6 @@ class AppRouter extends _$AppRouter {
     // きしょ……
     AutoRoute(page: MisskeyRouteRoute.page),
 
-    AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page)
+    AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page),
   ];
 }

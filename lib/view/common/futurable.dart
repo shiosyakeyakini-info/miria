@@ -7,35 +7,39 @@ class CommonFuture<T> extends StatelessWidget {
   final Function(T)? futureFinished;
   final Widget Function(BuildContext, T) complete;
 
-  const CommonFuture(
-      {required this.future,
-      required this.complete,
-      super.key,
-      this.futureFinished});
+  const CommonFuture({
+    required this.future,
+    required this.complete,
+    super.key,
+    this.futureFinished,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(future: () async {
-      final result = await future;
-      futureFinished?.call(result);
-      return result;
-    }(), builder: (context, snapshot) {
-      if (snapshot.hasError) {
-        if (kDebugMode) {
-          print(snapshot.error);
-          print(snapshot.stackTrace);
+    return FutureBuilder<T>(
+      future: () async {
+        final result = await future;
+        futureFinished?.call(result);
+        return result;
+      }(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          if (kDebugMode) {
+            print(snapshot.error);
+            print(snapshot.stackTrace);
+          }
+          return ErrorNotification(
+            error: snapshot.error,
+            stackTrace: snapshot.stackTrace,
+          );
         }
-        return ErrorNotification(
-          error: snapshot.error,
-          stackTrace: snapshot.stackTrace,
-        );
-      }
 
-      if (snapshot.connectionState == ConnectionState.done) {
-        return complete(context, snapshot.data as T);
-      }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return complete(context, snapshot.data as T);
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }

@@ -63,7 +63,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
 
   Future<Expire?> getExpire() async {
     return await showDialog<Expire?>(
-        context: context, builder: (context) => const ExpireSelectDialog());
+      context: context,
+      builder: (context) => const ExpireSelectDialog(),
+    );
   }
 
   Future<void> renoteMuteCreate() async {
@@ -91,7 +93,8 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ? null
         : DateTime.now().add(expires.expires!);
     await ref.read(misskeyProvider(widget.account)).mute.create(
-        MuteCreateRequest(userId: widget.response.id, expiresAt: expiresDate));
+          MuteCreateRequest(userId: widget.response.id, expiresAt: expiresDate),
+        );
     if (!mounted) return;
     Navigator.of(context).pop(UserControl.createMute);
   }
@@ -149,8 +152,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             );
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(S.of(context).doneCopy),
-                  duration: const Duration(seconds: 1)),
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
             Navigator.of(context).pop();
           },
@@ -162,8 +166,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             Clipboard.setData(ClipboardData(text: widget.response.acct));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(S.of(context).doneCopy),
-                  duration: const Duration(seconds: 1)),
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
             Navigator.of(context).pop();
           },
@@ -183,8 +188,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             );
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(S.of(context).doneCopy),
-                  duration: const Duration(seconds: 1)),
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
             Navigator.of(context).pop();
           },
@@ -288,11 +294,14 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             onTap: () {
               Navigator.of(context).pop();
               showDialog(
-                  context: context,
-                  builder: (context) => AbuseDialog(
-                      account: widget.account, targetUser: widget.response));
+                context: context,
+                builder: (context) => AbuseDialog(
+                  account: widget.account,
+                  targetUser: widget.response,
+                ),
+              );
             },
-          )
+          ),
         ],
       ],
     );
@@ -342,7 +351,7 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
               DropdownMenuItem<Expire>(
                 value: value,
                 child: Text(value.displayName(context)),
-              )
+              ),
           ],
           onChanged: (value) => setState(() => selectedExpire = value),
           value: selectedExpire,
@@ -350,10 +359,11 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
       ),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop(selectedExpire);
-            },
-            child: Text(S.of(context).done))
+          onPressed: () {
+            Navigator.of(context).pop(selectedExpire);
+          },
+          child: Text(S.of(context).done),
+        ),
       ],
     );
   }

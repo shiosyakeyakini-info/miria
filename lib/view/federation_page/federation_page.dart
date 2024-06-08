@@ -47,34 +47,38 @@ class FederationPageState extends ConsumerState<FederationPage> {
               await ref.read(misskeyProvider(account)).stats();
           ref.read(federationPageFederationDataProvider.notifier).state =
               FederationData(
-                  bannerUrl: metaResponse.bannerUrl?.toString(),
-                  faviconUrl: metaResponse.iconUrl?.toString(),
-                  tosUrl: metaResponse.tosUrl?.toString(),
-                  privacyPolicyUrl: metaResponse.privacyPolicyUrl?.toString(),
-                  impressumUrl: metaResponse.impressumUrl?.toString(),
-                  repositoryUrl: metaResponse.repositoryUrl.toString(),
-                  name: metaResponse.name ?? "",
-                  description: metaResponse.description ?? "",
-                  usersCount: statsResponse.originalUsersCount,
-                  notesCount: statsResponse.originalNotesCount,
-                  maintainerName: metaResponse.maintainerName,
-                  maintainerEmail: metaResponse.maintainerEmail,
-                  serverRules: metaResponse.serverRules,
-                  reactionCount: statsResponse.reactionsCount,
-                  softwareName: "misskey",
-                  softwareVersion: metaResponse.version,
-                  languages: metaResponse.langs,
-                  ads: metaResponse.ads,
-                  meta: metaResponse,
+            bannerUrl: metaResponse.bannerUrl?.toString(),
+            faviconUrl: metaResponse.iconUrl?.toString(),
+            tosUrl: metaResponse.tosUrl?.toString(),
+            privacyPolicyUrl: metaResponse.privacyPolicyUrl?.toString(),
+            impressumUrl: metaResponse.impressumUrl?.toString(),
+            repositoryUrl: metaResponse.repositoryUrl.toString(),
+            name: metaResponse.name ?? "",
+            description: metaResponse.description ?? "",
+            usersCount: statsResponse.originalUsersCount,
+            notesCount: statsResponse.originalNotesCount,
+            maintainerName: metaResponse.maintainerName,
+            maintainerEmail: metaResponse.maintainerEmail,
+            serverRules: metaResponse.serverRules,
+            reactionCount: statsResponse.reactionsCount,
+            softwareName: "misskey",
+            softwareVersion: metaResponse.version,
+            languages: metaResponse.langs,
+            ads: metaResponse.ads,
+            meta: metaResponse,
 
-                  // 自分のサーバーが非対応ということはない
-                  isSupportedAnnouncement: true,
-                  isSupportedEmoji: true,
-                  isSupportedLocalTimeline: true);
+            // 自分のサーバーが非対応ということはない
+            isSupportedAnnouncement: true,
+            isSupportedEmoji: true,
+            isSupportedLocalTimeline: true,
+          );
 
           await ref
-              .read(emojiRepositoryProvider(
-                  Account.demoAccount(widget.host, metaResponse)))
+              .read(
+                emojiRepositoryProvider(
+                  Account.demoAccount(widget.host, metaResponse),
+                ),
+              )
               .loadFromSourceIfNeed();
         } else {
           final federation = await ref
@@ -113,8 +117,11 @@ class FederationPageState extends ConsumerState<FederationPage> {
 
               misskeyMeta = await misskeyServer.meta();
               await ref
-                  .read(emojiRepositoryProvider(
-                      Account.demoAccount(widget.host, misskeyMeta)))
+                  .read(
+                    emojiRepositoryProvider(
+                      Account.demoAccount(widget.host, misskeyMeta),
+                    ),
+                  )
                   .loadFromSourceIfNeed();
             } catch (e) {}
           }
@@ -205,17 +212,21 @@ class FederationPageState extends ConsumerState<FederationPage> {
               if (isMisskey) FederationAnnouncements(host: widget.host),
               if (isSupportedTimeline)
                 FederationCustomEmojis(
-                    host: widget.host, meta: metaResponse!.meta!),
+                  host: widget.host,
+                  meta: metaResponse!.meta!,
+                ),
               if (isSupportedTimeline)
                 FederationTimeline(
-                    host: widget.host, meta: metaResponse!.meta!),
+                  host: widget.host,
+                  meta: metaResponse!.meta!,
+                ),
               if (enableSearch)
                 AccountScope(
-                    account:
-                        Account.demoAccount(widget.host, metaResponse!.meta),
-                    child: NoteSearch(
-                      focusNode: FocusNode(),
-                    )),
+                  account: Account.demoAccount(widget.host, metaResponse!.meta),
+                  child: NoteSearch(
+                    focusNode: FocusNode(),
+                  ),
+                ),
             ],
           ),
         ),

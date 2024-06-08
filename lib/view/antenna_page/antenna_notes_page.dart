@@ -17,8 +17,11 @@ class AntennaNotesPage extends ConsumerWidget {
   final Antenna antenna;
   final Account account;
 
-  const AntennaNotesPage(
-      {required this.antenna, required this.account, super.key});
+  const AntennaNotesPage({
+    required this.antenna,
+    required this.account,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

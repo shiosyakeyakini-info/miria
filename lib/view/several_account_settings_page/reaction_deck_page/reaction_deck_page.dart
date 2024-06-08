@@ -47,7 +47,8 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     reactions
       ..clear()
       ..addAll(
-          ref.read(emojiRepositoryProvider(widget.account)).defaultEmojis());
+        ref.read(emojiRepositoryProvider(widget.account)).defaultEmojis(),
+      );
   }
 
   @override
@@ -78,7 +79,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 child: Text(S.of(context).copy),
               ),
             ],
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -91,32 +92,33 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: ReorderableWrap(
-                      scrollPhysics: const NeverScrollableScrollPhysics(),
-                      spacing: 5,
-                      runSpacing: 5,
-                      children: [
-                        for (final reaction in reactions)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                reactions.remove(reaction);
-                                save();
-                              });
-                            },
-                            child: CustomEmoji(
-                              emojiData: reaction,
-                              fontSizeRatio: 2,
-                              isAttachTooltip: false,
-                            ),
-                          )
-                      ],
-                      onReorder: (oldIndex, newIndex) {
-                        setState(() {
-                          final element = reactions.removeAt(oldIndex);
-                          reactions.insert(newIndex, element);
-                          save();
-                        });
-                      }),
+                    scrollPhysics: const NeverScrollableScrollPhysics(),
+                    spacing: 5,
+                    runSpacing: 5,
+                    children: [
+                      for (final reaction in reactions)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              reactions.remove(reaction);
+                              save();
+                            });
+                          },
+                          child: CustomEmoji(
+                            emojiData: reaction,
+                            fontSizeRatio: 2,
+                            isAttachTooltip: false,
+                          ),
+                        ),
+                    ],
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        final element = reactions.removeAt(oldIndex);
+                        reactions.insert(newIndex, element);
+                        save();
+                      });
+                    },
+                  ),
                 ),
               ),
               Row(
@@ -148,7 +150,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                     child: Text(S.of(context).editReactionDeckDescription),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -223,8 +225,9 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          content: Text(S.of(context).doneCopy),
-          duration: const Duration(seconds: 1)),
+        content: Text(S.of(context).doneCopy),
+        duration: const Duration(seconds: 1),
+      ),
     );
   }
 

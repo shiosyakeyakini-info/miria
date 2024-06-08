@@ -7,7 +7,7 @@ linter:
     - avoid_dynamic_calls
     - cancel_subscriptions
     - close_sinks
-    # - discarded_futures
+    - discarded_futures
     - literal_only_boolean_expressions
     - no_self_assignments
     - prefer_void_to_null
@@ -41,7 +41,8 @@ linter:
     - avoid_final_parameters
     - prefer_if_elements_to_conditional_expressions
     - prefer_null_aware_method_calls
-    # - unawaited_futures
+    - require_trailing_commas
+    - unawaited_futures
     - unnecessary_breaks
     - unnecessary_null_aware_operator_on_extension_on_nullable
     - unnecessary_null_checks

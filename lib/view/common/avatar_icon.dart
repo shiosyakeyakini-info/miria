@@ -59,7 +59,9 @@ class AvatarIconState extends State<AvatarIcon> {
           () {
             context.pushRoute(
               UserRoute(
-                  userId: widget.user.id, account: AccountScope.of(context)),
+                userId: widget.user.id,
+                account: AccountScope.of(context),
+              ),
             );
           },
       child: Padding(
@@ -142,14 +144,18 @@ class AvatarIconState extends State<AvatarIcon> {
                             child: SizedBox(
                               width: baseHeight,
                               child: NetworkImageView(
-                                  url: decoration.url, type: ImageType.other),
+                                url: decoration.url,
+                                type: ImageType.other,
+                              ),
                             ),
                           )
                         : SizedBox(
                             width: baseHeight,
                             child: NetworkImageView(
-                                url: decoration.url,
-                                type: ImageType.avatarDecoration)),
+                              url: decoration.url,
+                              type: ImageType.avatarDecoration,
+                            ),
+                          ),
                   ),
                 ),
               ),

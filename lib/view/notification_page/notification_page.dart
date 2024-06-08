@@ -38,12 +38,15 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
         account: widget.account,
         child: Scaffold(
           appBar: AppBar(
-              title: Text(S.of(context).notification),
-              bottom: TabBar(tabs: [
+            title: Text(S.of(context).notification),
+            bottom: TabBar(
+              tabs: [
                 Tab(text: S.of(context).notificationAll),
                 Tab(text: S.of(context).notificationForMe),
-                Tab(text: S.of(context).notificationDirect)
-              ])),
+                Tab(text: S.of(context).notificationDirect),
+              ],
+            ),
+          ),
           body: Padding(
             padding: const EdgeInsets.only(left: 5.0, right: 5.0),
             child: TabBarView(
@@ -51,11 +54,12 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                 PushableListView<NotificationData>(
                   initializeFuture: () async {
                     final localize = S.of(context);
-                    final result = await misskey.i
-                        .notifications(const INotificationsRequest(
-                      limit: 50,
-                      markAsRead: true,
-                    ));
+                    final result = await misskey.i.notifications(
+                      const INotificationsRequest(
+                        limit: 50,
+                        markAsRead: true,
+                      ),
+                    );
                     ref
                         .read(notesProvider(widget.account))
                         .registerAll(result.map((e) => e.note).whereNotNull());
@@ -68,8 +72,11 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                   nextFuture: (lastElement, _) async {
                     final localize = S.of(context);
                     final result = await misskey.i.notifications(
-                        INotificationsRequest(
-                            limit: 50, untilId: lastElement.id));
+                      INotificationsRequest(
+                        limit: 50,
+                        untilId: lastElement.id,
+                      ),
+                    );
                     ref
                         .read(notesProvider(widget.account))
                         .registerAll(result.map((e) => e.note).whereNotNull());
@@ -112,8 +119,11 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                     final notes = await ref
                         .read(misskeyProvider(widget.account))
                         .notes
-                        .mentions(const NotesMentionsRequest(
-                            visibility: NoteVisibility.specified));
+                        .mentions(
+                          const NotesMentionsRequest(
+                            visibility: NoteVisibility.specified,
+                          ),
+                        );
                     ref.read(notesProvider(widget.account)).registerAll(notes);
                     return notes.toList();
                   },
@@ -121,9 +131,12 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                     final notes = await ref
                         .read(misskeyProvider(widget.account))
                         .notes
-                        .mentions(NotesMentionsRequest(
+                        .mentions(
+                          NotesMentionsRequest(
                             untilId: item.id,
-                            visibility: NoteVisibility.specified));
+                            visibility: NoteVisibility.specified,
+                          ),
+                        );
                     ref.read(notesProvider(widget.account)).registerAll(notes);
                     return notes.toList();
                   },
@@ -187,25 +200,28 @@ class NotificationItem extends ConsumerWidget {
                     if (hasReaction && hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                            S.of(context).renoteAndReactionsNotification(
-                                  notification.reactionUsers.first.$2?.name ??
-                                      notification
-                                          .reactionUsers.first.$2?.username,
-                                  notification.renoteUsers.first?.name ??
-                                      notification.renoteUsers.first?.username,
-                                ),
-                            emojis: Map.of(
-                                notification.reactionUsers.first.$2?.emojis ??
-                                    {})
-                              ..addAll(notification.renoteUsers.first?.emojis ??
-                                  {})),
+                          S.of(context).renoteAndReactionsNotification(
+                                notification.reactionUsers.first.$2?.name ??
+                                    notification
+                                        .reactionUsers.first.$2?.username,
+                                notification.renoteUsers.first?.name ??
+                                    notification.renoteUsers.first?.username,
+                              ),
+                          emojis: Map.of(
+                            notification.reactionUsers.first.$2?.emojis ?? {},
+                          )..addAll(
+                              notification.renoteUsers.first?.emojis ?? {},
+                            ),
+                        ),
                       ),
                     if (hasReaction && !hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).reactionNotification(notification
-                                  .reactionUsers.first.$2?.name ??
-                              notification.reactionUsers.first.$2?.username),
+                          S.of(context).reactionNotification(
+                                notification.reactionUsers.first.$2?.name ??
+                                    notification
+                                        .reactionUsers.first.$2?.username,
+                              ),
                           emojis:
                               notification.reactionUsers.first.$2?.emojis ?? {},
                         ),
@@ -213,11 +229,12 @@ class NotificationItem extends ConsumerWidget {
                     if (hasRenote && !hasReaction)
                       Expanded(
                         child: SimpleMfmText(
-                            S.of(context).renoteNotification(
+                          S.of(context).renoteNotification(
                                 notification.renoteUsers.first?.name ??
-                                    notification.renoteUsers.first?.username),
-                            emojis:
-                                notification.renoteUsers.first?.emojis ?? {}),
+                                    notification.renoteUsers.first?.username,
+                              ),
+                          emojis: notification.renoteUsers.first?.emojis ?? {},
+                        ),
                       ),
                     Text(notification.createdAt.differenceNow(context)),
                   ],
@@ -236,8 +253,10 @@ class NotificationItem extends ConsumerWidget {
                     if (hasRenote)
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor)),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                         padding: const EdgeInsets.all(5),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -248,7 +267,7 @@ class NotificationItem extends ConsumerWidget {
                               children: [
                                 for (final user
                                     in notification.renoteUsers.whereNotNull())
-                                  UserListItem(user: user)
+                                  UserListItem(user: user),
                               ],
                             ),
                           ],
@@ -259,16 +278,19 @@ class NotificationItem extends ConsumerWidget {
                     if (hasReaction)
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor)),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                         padding: const EdgeInsets.all(5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(S.of(context).reactionUsersInNotification),
-                            for (final reaction in notification.reactionUsers
-                                .mapIndexed(
-                                    (index, element) => (index, element))) ...[
+                            for (final reaction
+                                in notification.reactionUsers.mapIndexed(
+                              (index, element) => (index, element),
+                            )) ...[
                               if (reaction.$2.$1 != null &&
                                       (reaction.$1 > 0 &&
                                           notification
@@ -281,8 +303,10 @@ class NotificationItem extends ConsumerWidget {
                                   emojiData: MisskeyEmojiData.fromEmojiName(
                                     emojiName: reaction.$2.$1!,
                                     repository: ref.read(
-                                        emojiRepositoryProvider(
-                                            AccountScope.of(context))),
+                                      emojiRepositoryProvider(
+                                        AccountScope.of(context),
+                                      ),
+                                    ),
                                     emojiInfo:
                                         notification.note?.reactionEmojis,
                                   ),
@@ -290,15 +314,16 @@ class NotificationItem extends ConsumerWidget {
                                 ),
                               if (reaction.$2.$2 != null)
                                 Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: UserListItem(user: reaction.$2.$2!)),
-                            ]
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: UserListItem(user: reaction.$2.$2!),
+                                ),
+                            ],
                           ],
                         ),
-                      )
+                      ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -309,7 +334,7 @@ class NotificationItem extends ConsumerWidget {
           child: Column(
             children: [
               if (notification.note != null)
-                misskey_note.MisskeyNote(note: notification.note!)
+                misskey_note.MisskeyNote(note: notification.note!),
             ],
           ),
         );
@@ -407,7 +432,8 @@ class NotificationItem extends ConsumerWidget {
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text(S.of(context).finishedVotedNotification)),
+                      child: Text(S.of(context).finishedVotedNotification),
+                    ),
                     Text(notification.createdAt.differenceNow(context)),
                   ],
                 ),
@@ -445,9 +471,11 @@ class NotificationItem extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(
-                child: SimpleMfmText(S
-                    .of(context)
-                    .roleAssignedNotification(notification.role?.name ?? "")),
+                child: SimpleMfmText(
+                  S
+                      .of(context)
+                      .roleAssignedNotification(notification.role?.name ?? ""),
+                ),
               ),
             ],
           ),

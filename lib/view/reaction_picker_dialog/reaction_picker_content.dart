@@ -39,12 +39,14 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
 
     categoryList
       ..clear()
-      ..addAll(emojiRepository.emoji
-              ?.map((e) => e.category)
-              .toSet()
-              .toList()
-              .whereNotNull() ??
-          []);
+      ..addAll(
+        emojiRepository.emoji
+                ?.map((e) => e.category)
+                .toSet()
+                .toList()
+                .whereNotNull() ??
+            [],
+      );
   }
 
   @override
@@ -73,20 +75,20 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                       crossAxisAlignment: WrapCrossAlignment.start,
                       children: [
                         for (final emoji in (emojiRepository.emoji ?? []).where(
-                            (element) =>
-                                element.category == categoryList[index]))
+                          (element) => element.category == categoryList[index],
+                        ))
                           EmojiButton(
                             emoji: emoji.emoji,
                             onTap: widget.onTap,
                             isAcceptSensitive: widget.isAcceptSensitive,
-                          )
+                          ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -134,12 +136,13 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             : const BoxDecoration(),
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: const MaterialStatePropertyAll(Colors.transparent),
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(5)),
-            elevation: const MaterialStatePropertyAll(0),
-            minimumSize: const MaterialStatePropertyAll(Size.zero),
-            overlayColor: MaterialStatePropertyAll(
-                AppTheme.of(context).colorTheme.accentedBackground),
+            backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+            padding: const WidgetStatePropertyAll(EdgeInsets.all(5)),
+            elevation: const WidgetStatePropertyAll(0),
+            minimumSize: const WidgetStatePropertyAll(Size.zero),
+            overlayColor: WidgetStatePropertyAll(
+              AppTheme.of(context).colorTheme.accentedBackground,
+            ),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           onPressed: () async {
@@ -197,24 +200,25 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      TextField(
-        decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-        autofocus: true,
-        keyboardType: TextInputType.emailAddress,
-        onChanged: (value) {
-          Future(() async {
-            final result = await emojiRepository.searchEmojis(value);
-            if (!mounted) return;
-            setState(() {
-              emojis.clear();
-              emojis.addAll(result);
+    return Column(
+      children: [
+        TextField(
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+          autofocus: true,
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (value) {
+            Future(() async {
+              final result = await emojiRepository.searchEmojis(value);
+              if (!mounted) return;
+              setState(() {
+                emojis.clear();
+                emojis.addAll(result);
+              });
             });
-          });
-        },
-      ),
-      const Padding(padding: EdgeInsets.only(top: 10)),
-      Align(
+          },
+        ),
+        const Padding(padding: EdgeInsets.only(top: 10)),
+        Align(
           alignment: Alignment.topLeft,
           child: Wrap(
             spacing: 5,
@@ -227,9 +231,11 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
                   onTap: widget.onTap,
                   isForceVisible: true,
                   isAcceptSensitive: widget.isAcceptSensitive,
-                )
+                ),
             ],
-          ))
-    ]);
+          ),
+        ),
+      ],
+    );
   }
 }

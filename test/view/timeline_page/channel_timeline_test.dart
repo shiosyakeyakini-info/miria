@@ -30,11 +30,18 @@ void main() {
       await tester.pumpWidget(timelineTester.buildWidget());
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(mockMisskeyChannel
-          .timeline(argThat(equals(const ChannelsTimelineRequest(
-        channelId: "abcdefg",
-        limit: 30,
-      )))));
+      verify(
+        mockMisskeyChannel.timeline(
+          argThat(
+            equals(
+              const ChannelsTimelineRequest(
+                channelId: "abcdefg",
+                limit: 30,
+              ),
+            ),
+          ),
+        ),
+      );
     });
   });
 }

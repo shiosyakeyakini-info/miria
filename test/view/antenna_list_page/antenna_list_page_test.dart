@@ -16,11 +16,14 @@ void main() {
       when(misskey.antennas).thenReturn(antennas);
       when(antennas.list()).thenAnswer((_) async => [TestData.antenna]);
 
-      await tester.pumpWidget(ProviderScope(
+      await tester.pumpWidget(
+        ProviderScope(
           overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
           child: DefaultRootWidget(
             initialRoute: AntennaRoute(account: TestData.account),
-          )));
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(TestData.antenna.name), findsOneWidget);

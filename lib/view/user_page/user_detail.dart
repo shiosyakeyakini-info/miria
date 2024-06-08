@@ -201,9 +201,10 @@ class UserDetailState extends ConsumerState<UserDetail> {
   Widget buildContent() {
     final user = response;
 
-    return Column(children: [
-      if (widget.controlAccount == null)
-        Padding(
+    return Column(
+      children: [
+        if (widget.controlAccount == null)
+          Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -308,259 +309,311 @@ class UserDetailState extends ConsumerState<UserDetail> {
                     onPressed: userControl,
                     icon: const Icon(Icons.more_vert),
                   ),
-                )
+                ),
               ],
-            )),
-      const Divider(),
-      Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
-        child: Column(children: [
-          Row(
+            ),
+          ),
+        const Divider(),
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 12),
+          child: Column(
             children: [
-              AvatarIcon(
-                user: response,
-                height: 80,
+              Row(
+                children: [
+                  AvatarIcon(
+                    user: response,
+                    height: 80,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MfmText(
+                            mfmText: response.name ?? response.username,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                            emoji: response.emojis,
+                          ),
+                          Text(
+                            response.acct,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              const Padding(padding: EdgeInsets.only(top: 5)),
+              if (widget.controlAccount == null)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            memo.isNotEmpty
+                                ? memo
+                                : S.of(context).memoDescription,
+                            style: memo.isNotEmpty
+                                ? null
+                                : Theme.of(context)
+                                    .inputDecorationTheme
+                                    .hintStyle,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final result = await showDialog(
+                              context: context,
+                              builder: (context) => UpdateMemoDialog(
+                                account: widget.account,
+                                initialMemo: memo,
+                                userId: response.id,
+                              ),
+                            );
+                            if (result != null) {
+                              setState(() {
+                                memo = result;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.edit),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              const Padding(padding: EdgeInsets.only(top: 5)),
+              Wrap(
+                spacing: 5,
+                runSpacing: 5,
+                children: [
+                  for (final role in response.roles ?? []) RoleChip(role: role),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 5)),
+              if (response.host != null)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.warning_amber_rounded),
+                            Text(S.of(context).remoteUserCaution),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () => context.pushRoute(
+                            FederationRoute(
+                              account: AccountScope.of(context),
+                              host: response.host!,
+                            ),
+                          ),
+                          child: Text(
+                            S.of(context).showServerInformation,
+                            style: AppTheme.of(context).linkStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              Align(
+                alignment: Alignment.center,
+                child: MfmText(
+                  mfmText: response.description ?? "",
+                  emoji: response.emojis,
+                ),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 20)),
+              Table(
+                columnWidths: const {
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(1),
+                },
+                children: [
+                  TableRow(
                     children: [
-                      MfmText(
-                        mfmText: response.name ?? response.username,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                        emoji: response.emojis,
+                      TableCell(
+                        child: Text(
+                          S.of(context).location,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      TableCell(child: Text(response.location ?? "")),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(
+                        child: Text(
+                          S.of(context).registeredDate,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      TableCell(
+                        child: Text(response.createdAt.format(context)),
+                      ), //FIXME
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(
+                        child: Text(
+                          S.of(context).birthday,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      TableCell(
+                          child:
+                              Text(response.birthday?.format(context) ?? "")),
+                    ],
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 20)),
+              if (response.fields?.isNotEmpty == true) ...[
+                Table(
+                  columnWidths: const {
+                    1: FlexColumnWidth(2),
+                    2: FlexColumnWidth(3),
+                  },
+                  children: [
+                    for (final field in response.fields ?? <UserField>[])
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: MfmText(
+                              mfmText: field.name,
+                              emoji: response.emojis,
+                            ),
+                          ),
+                          TableCell(
+                            child: MfmText(
+                              mfmText: field.value,
+                              emoji: response.emojis,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 20)),
+              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        response.notesCount.format(),
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        response.acct,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        S.of(context).note,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
-                ),
-              ),
-            ],
-          ),
-          const Padding(padding: EdgeInsets.only(top: 5)),
-          if (widget.controlAccount == null)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        memo.isNotEmpty ? memo : S.of(context).memoDescription,
-                        style: memo.isNotEmpty
-                            ? null
-                            : Theme.of(context).inputDecorationTheme.hintStyle,
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () async {
-                          final result = await showDialog(
-                              context: context,
-                              builder: (context) => UpdateMemoDialog(
-                                    account: widget.account,
-                                    initialMemo: memo,
-                                    userId: response.id,
-                                  ));
-                          if (result != null) {
-                            setState(() {
-                              memo = result;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.edit)),
-                  ],
-                ),
-              ),
-            ),
-          const Padding(padding: EdgeInsets.only(top: 5)),
-          Wrap(
-            spacing: 5,
-            runSpacing: 5,
-            children: [
-              for (final role in response.roles ?? []) RoleChip(role: role),
-            ],
-          ),
-          const Padding(padding: EdgeInsets.only(top: 5)),
-          if (response.host != null)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.warning_amber_rounded),
-                        Text(S.of(context).remoteUserCaution),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () => context.pushRoute(FederationRoute(
+                  if (widget.response.isFollowingVisibleForMe)
+                    InkWell(
+                      onTap: () => context.pushRoute(
+                        UserFolloweeRoute(
+                          userId: response.id,
                           account: AccountScope.of(context),
-                          host: response.host!)),
-                      child: Text(
-                        S.of(context).showServerInformation,
-                        style: AppTheme.of(context).linkStyle,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            response.followingCount.format(),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            S.of(context).follow,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  if (widget.response.isFollowersVisibleForMe)
+                    InkWell(
+                      onTap: () => context.pushRoute(
+                        UserFollowerRoute(
+                          userId: response.id,
+                          account: AccountScope.of(context),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            response.followersCount.format(),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            S.of(context).follower,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
-            ),
-          Align(
-            alignment: Alignment.center,
-            child: MfmText(
-              mfmText: response.description ?? "",
-              emoji: response.emojis,
-            ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
-          Table(
-            columnWidths: const {
-              1: FlexColumnWidth(1),
-              2: FlexColumnWidth(1),
-            },
-            children: [
-              TableRow(children: [
-                TableCell(
-                  child: Text(
-                    S.of(context).location,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                TableCell(child: Text(response.location ?? ""))
-              ]),
-              TableRow(children: [
-                TableCell(
-                  child: Text(
-                    S.of(context).registeredDate,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                TableCell(
-                  child: Text(response.createdAt.format(context)),
-                ), //FIXME
-              ]),
-              TableRow(children: [
-                TableCell(
-                  child: Text(
-                    S.of(context).birthday,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                TableCell(child: Text(response.birthday?.format(context) ?? ""))
-              ])
             ],
           ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
-          if (response.fields?.isNotEmpty == true) ...[
-            Table(
-              columnWidths: const {
-                1: FlexColumnWidth(2),
-                2: FlexColumnWidth(3),
-              },
-              children: [
-                for (final field in response.fields ?? <UserField>[])
-                  TableRow(children: [
-                    TableCell(
-                      child: MfmText(
-                        mfmText: field.name,
-                        emoji: response.emojis,
-                      ),
-                    ),
-                    TableCell(
-                        child: MfmText(
-                      mfmText: field.value,
-                      emoji: response.emojis,
-                    )),
-                  ])
-              ],
-            ),
-            const Padding(padding: EdgeInsets.only(top: 20)),
-          ],
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            Column(
-              children: [
-                Text(response.notesCount.format(),
-                    style: Theme.of(context).textTheme.titleMedium),
-                Text(
-                  S.of(context).note,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              ],
-            ),
-            if (widget.response.isFollowingVisibleForMe)
-              InkWell(
-                onTap: () => context.pushRoute(UserFolloweeRoute(
-                    userId: response.id, account: AccountScope.of(context))),
-                child: Column(
-                  children: [
-                    Text(response.followingCount.format(),
-                        style: Theme.of(context).textTheme.titleMedium),
-                    Text(
-                      S.of(context).follow,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    )
-                  ],
-                ),
-              ),
-            if (widget.response.isFollowersVisibleForMe)
-              InkWell(
-                onTap: () => context.pushRoute(UserFollowerRoute(
-                    userId: response.id, account: AccountScope.of(context))),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(response.followersCount.format(),
-                        style: Theme.of(context).textTheme.titleMedium),
-                    Text(
-                      S.of(context).follower,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    )
-                  ],
-                ),
-              ),
-          ]),
-        ]),
-      ),
-    ]);
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      SliverToBoxAdapter(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
           child: BirthdayConfetti(
-              response: widget.response,
-              child: Column(children: [
+            response: widget.response,
+            child: Column(
+              children: [
                 if (response.bannerUrl != null)
                   Image.network(response.bannerUrl.toString()),
                 Align(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 800),
-                        child: buildContent())),
-                const Padding(padding: EdgeInsets.only(top: 20))
-              ]))),
-      if (response.pinnedNotes != null)
-        SliverPadding(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: buildContent(),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 20)),
+              ],
+            ),
+          ),
+        ),
+        if (response.pinnedNotes != null)
+          SliverPadding(
             padding: const EdgeInsets.only(right: 10),
             sliver: SliverList.builder(
-                itemCount: response.pinnedNotes!.length,
-                itemBuilder: (context, index) => MisskeyNote(
-                    note: response.pinnedNotes![index],
-                    loginAs: widget.controlAccount)))
-    ]);
+              itemCount: response.pinnedNotes!.length,
+              itemBuilder: (context, index) => MisskeyNote(
+                note: response.pinnedNotes![index],
+                loginAs: widget.controlAccount,
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
 
@@ -600,10 +653,11 @@ class BirthdayConfettiState extends State<BirthdayConfetti> {
     if (now.month == widget.response.birthday?.month &&
         now.day == widget.response.birthday?.day) {
       return ConfettiWidget(
-          confettiController: confettiController,
-          blastDirection: 0,
-          numberOfParticles: 40,
-          child: widget.child);
+        confettiController: confettiController,
+        blastDirection: 0,
+        numberOfParticles: 40,
+        child: widget.child,
+      );
     }
 
     return widget.child;

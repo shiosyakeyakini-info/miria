@@ -52,7 +52,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                 ),
               Expanded(child: Text(path.map((e) => e.name).join("/"))),
             ],
-          )
+          ),
         ],
       ),
       content: SizedBox(
@@ -125,7 +125,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                       Expanded(child: Text(item.name)),
                     ],
                   ),
-                )
+                ),
             ],
           ),
         ),
@@ -136,7 +136,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
             Navigator.of(context).pop(FolderResult(path.lastOrNull));
           },
           child: Text(widget.confirmationText),
-        )
+        ),
       ],
     );
   }

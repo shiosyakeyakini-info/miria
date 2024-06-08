@@ -42,7 +42,7 @@ class SettingsPage extends StatelessWidget {
             leading: const Icon(Icons.info),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushRoute(const AppInfoRoute()),
-          )
+          ),
         ],
       ),
     );

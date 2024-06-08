@@ -38,27 +38,35 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
           ReceiveSharingIntent.getMediaStream().listen((event) {
         final items = event.map((e) => e.path).toList();
         if (account.length == 1) {
-          widget.router.push(NoteCreateRoute(
-            initialMediaFiles: items,
-            initialAccount: account.first,
-          ));
+          widget.router.push(
+            NoteCreateRoute(
+              initialMediaFiles: items,
+              initialAccount: account.first,
+            ),
+          );
         } else {
-          widget.router.push(SharingAccountSelectRoute(
-            filePath: items,
-          ));
+          widget.router.push(
+            SharingAccountSelectRoute(
+              filePath: items,
+            ),
+          );
         }
       });
       intentDataTextStreamSubscription =
           ReceiveSharingIntent.getTextStream().listen((event) {
         if (account.length == 1) {
-          widget.router.push(NoteCreateRoute(
-            initialText: event,
-            initialAccount: account.first,
-          ));
+          widget.router.push(
+            NoteCreateRoute(
+              initialText: event,
+              initialAccount: account.first,
+            ),
+          );
         } else {
-          widget.router.push(SharingAccountSelectRoute(
-            sharingText: event,
-          ));
+          widget.router.push(
+            SharingAccountSelectRoute(
+              sharingText: event,
+            ),
+          );
         }
       });
     }

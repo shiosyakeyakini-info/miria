@@ -27,12 +27,19 @@ void main() {
       await tester.pumpWidget(timelineTester.buildWidget());
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(timelineTester.mockMisskeyNotes
-          .userListTimeline(argThat(equals(const UserListTimelineRequest(
-        listId: "abcdefg",
-        withRenotes: false,
-        withFiles: false,
-      )))));
+      verify(
+        timelineTester.mockMisskeyNotes.userListTimeline(
+          argThat(
+            equals(
+              const UserListTimelineRequest(
+                listId: "abcdefg",
+                withRenotes: false,
+                withFiles: false,
+              ),
+            ),
+          ),
+        ),
+      );
     });
   });
 }

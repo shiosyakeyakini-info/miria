@@ -33,6 +33,8 @@ class DesktopSettingsRepository extends ChangeNotifier {
 
   Future<String> getSettingPath() async {
     return join(
-        (await getApplicationSupportDirectory()).path, "desktopSettings.json");
+      (await getApplicationSupportDirectory()).path,
+      "desktopSettings.json",
+    );
   }
 }

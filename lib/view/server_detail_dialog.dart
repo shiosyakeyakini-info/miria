@@ -127,12 +127,17 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         children: [
           Expanded(child: Text(widget.account.host)),
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.pushRoute(FederationRoute(
-                    account: widget.account, host: widget.account.host));
-              },
-              icon: const Icon(Icons.keyboard_arrow_right))
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.pushRoute(
+                FederationRoute(
+                  account: widget.account,
+                  host: widget.account.host,
+                ),
+              );
+            },
+            icon: const Icon(Icons.keyboard_arrow_right),
+          ),
         ],
       ),
       content: SizedBox(
@@ -169,23 +174,33 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       children: [
                         Text(S.of(context).cpuUsageRate),
                         if (currentStat != null)
-                          Text.rich(TextSpan(children: [
+                          Text.rich(
                             TextSpan(
-                                text: ((currentStat.cpu * 10000).toInt() / 100)
-                                    .toString(),
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall),
-                            TextSpan(
-                                text: " %",
-                                style: Theme.of(context).textTheme.bodyMedium)
-                          ])),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      ((currentStat.cpu * 10000).toInt() / 100)
+                                          .toString(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                TextSpan(
+                                  text: " %",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ),
                         if (logged.isNotEmpty)
                           Chart(
-                              data: logged
-                                  .skip(max(0, logged.length - 41))
-                                  .mapIndexed((index, element) =>
-                                      FlSpot(index.toDouble(), element.cpu))
-                                  .toList())
+                            data: logged
+                                .skip(max(0, logged.length - 41))
+                                .mapIndexed(
+                                  (index, element) =>
+                                      FlSpot(index.toDouble(), element.cpu),
+                                )
+                                .toList(),
+                          ),
                       ],
                     ),
                   ),
@@ -201,62 +216,71 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: format(
-                                        currentStat.mem.used / totalMemories!),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                  text: format(
+                                    currentStat.mem.used / totalMemories!,
+                                  ),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 TextSpan(
-                                    text: " %",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium)
+                                  text: " %",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ],
                             ),
                           ),
                         if (totalMemories != null && logged.isNotEmpty)
                           Chart(
-                              data: logged
-                                  .skip(max(0, logged.length - 41))
-                                  .mapIndexed((index, element) => FlSpot(
-                                      index.toDouble(),
-                                      element.mem.used / totalMemories!))
-                                  .toList())
+                            data: logged
+                                .skip(max(0, logged.length - 41))
+                                .mapIndexed(
+                                  (index, element) => FlSpot(
+                                    index.toDouble(),
+                                    element.mem.used / totalMemories!,
+                                  ),
+                                )
+                                .toList(),
+                          ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 children: [
                   Expanded(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(S.of(context).responseTime),
                         if (ping != null)
                           Text.rich(
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: ping.format(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                  text: ping.format(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 TextSpan(
                                   text: " ${S.of(context).milliSeconds}",
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: IconButton(
-                                        onPressed: () => refreshPing(),
-                                        icon: const Icon(Icons.refresh)))
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: IconButton(
+                                    onPressed: () => refreshPing(),
+                                    icon: const Icon(Icons.refresh),
+                                  ),
+                                ),
                               ],
                             ),
-                          )
-                      ])),
+                          ),
+                      ],
+                    ),
+                  ),
                   Expanded(child: Container()),
                 ],
               ),
@@ -308,7 +332,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
               const Padding(padding: EdgeInsets.only(top: 10)),
               Text(S.of(context).deliverQueue),
@@ -358,7 +382,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ],
           ),
@@ -379,13 +403,13 @@ class Chart extends StatelessWidget {
       height: 100,
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(
+          gridData: const FlGridData(
             drawHorizontalLine: false,
             drawVerticalLine: false,
           ),
-          titlesData: FlTitlesData(show: false),
+          titlesData: const FlTitlesData(show: false),
           borderData: FlBorderData(show: false),
-          lineTouchData: LineTouchData(enabled: false),
+          lineTouchData: const LineTouchData(enabled: false),
           minX: 0,
           maxX: 40,
           minY: 0,
@@ -398,10 +422,11 @@ class Chart extends StatelessWidget {
                   Theme.of(context).textTheme.bodyMedium?.color?.withAlpha(200),
               barWidth: 4,
               belowBarData: BarAreaData(
-                  show: true,
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
-              dotData: FlDotData(show: false),
-            )
+                show: true,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
+              dotData: const FlDotData(show: false),
+            ),
           ],
         ),
       ),

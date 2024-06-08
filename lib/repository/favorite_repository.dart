@@ -12,10 +12,12 @@ class FavoriteRepository extends ChangeNotifier {
   List<Note> get notes => _notes;
 
   Future<void> getFavorites() async {
-    final response = await misskey.i.favorites(IFavoritesRequest(
-      untilId: _notes.isEmpty ? null : _notes.last.id,
-      limit: 50,
-    ));
+    final response = await misskey.i.favorites(
+      IFavoritesRequest(
+        untilId: _notes.isEmpty ? null : _notes.last.id,
+        limit: 50,
+      ),
+    );
     final responseNotes = response.map((e) => e.note);
     _notes = [..._notes, ...responseNotes];
     noteRepository.registerAll(responseNotes);

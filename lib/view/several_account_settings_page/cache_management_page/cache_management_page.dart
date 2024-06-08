@@ -52,14 +52,16 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
         ),
       ];
   Future<void> save() async {
-    await ref.read(accountSettingsRepositoryProvider).save(ref
-        .read(accountSettingsRepositoryProvider)
-        .fromAccount(widget.account)
-        .copyWith(
-          iCacheStrategy: iCacheStrategy,
-          metaChacheStrategy: metaCacheStrategy,
-          emojiCacheStrategy: emojisCacheStrategy,
-        ));
+    await ref.read(accountSettingsRepositoryProvider).save(
+          ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(widget.account)
+              .copyWith(
+                iCacheStrategy: iCacheStrategy,
+                metaChacheStrategy: metaCacheStrategy,
+                emojiCacheStrategy: emojisCacheStrategy,
+              ),
+        );
   }
 
   @override
@@ -68,54 +70,55 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
       appBar: AppBar(title: Text(S.of(context).cacheSettings)),
       body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).userCache,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                DropdownButton(
-                  items: buildCacheStrategyItems,
-                  value: iCacheStrategy,
-                  isExpanded: true,
-                  onChanged: (value) => setState(() {
-                    iCacheStrategy = value;
-                    save();
-                  }),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 10)),
-                Text(
-                  S.of(context).emojiCache,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                DropdownButton(
-                  items: buildCacheStrategyItems,
-                  value: emojisCacheStrategy,
-                  isExpanded: true,
-                  onChanged: (value) => setState(() {
-                    emojisCacheStrategy = value;
-                    save();
-                  }),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 10)),
-                Text(
-                  S.of(context).serverCache,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                DropdownButton(
-                  items: buildCacheStrategyItems,
-                  value: metaCacheStrategy,
-                  isExpanded: true,
-                  onChanged: (value) => setState(() {
-                    metaCacheStrategy = value;
-                    save();
-                  }),
-                ),
-              ],
-            )),
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                S.of(context).userCache,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              DropdownButton(
+                items: buildCacheStrategyItems,
+                value: iCacheStrategy,
+                isExpanded: true,
+                onChanged: (value) => setState(() {
+                  iCacheStrategy = value;
+                  save();
+                }),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
+              Text(
+                S.of(context).emojiCache,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              DropdownButton(
+                items: buildCacheStrategyItems,
+                value: emojisCacheStrategy,
+                isExpanded: true,
+                onChanged: (value) => setState(() {
+                  emojisCacheStrategy = value;
+                  save();
+                }),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
+              Text(
+                S.of(context).serverCache,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              DropdownButton(
+                items: buildCacheStrategyItems,
+                value: metaCacheStrategy,
+                isExpanded: true,
+                onChanged: (value) => setState(() {
+                  metaCacheStrategy = value;
+                  save();
+                }),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

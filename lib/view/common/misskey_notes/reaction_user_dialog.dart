@@ -48,40 +48,45 @@ class ReactionUserDialog extends ConsumerWidget {
             Text(
               emojiData.baseName,
               style: Theme.of(context).textTheme.bodySmall,
-            )
+            ),
           ],
         ),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.width * 0.8,
           child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: PushableListView(
-                initializeFuture: () async {
-                  final response = await ref
-                      .read(misskeyProvider(account))
-                      .notes
-                      .reactions
-                      .reactions(
-                          NotesReactionsRequest(noteId: noteId, type: type));
-                  return response.toList();
-                },
-                nextFuture: (item, index) async {
-                  // 後方互換性のためにoffsetとuntilIdの両方をリクエストに含める
-                  final response = await ref
-                      .read(misskeyProvider(account))
-                      .notes
-                      .reactions
-                      .reactions(NotesReactionsRequest(
-                          noteId: noteId,
-                          type: type,
-                          offset: index,
-                          untilId: item.id));
-                  return response.toList();
-                },
-                itemBuilder: (context, item) => UserListItem(user: item.user),
-                showAd: false,
-              )),
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: PushableListView(
+              initializeFuture: () async {
+                final response = await ref
+                    .read(misskeyProvider(account))
+                    .notes
+                    .reactions
+                    .reactions(
+                      NotesReactionsRequest(noteId: noteId, type: type),
+                    );
+                return response.toList();
+              },
+              nextFuture: (item, index) async {
+                // 後方互換性のためにoffsetとuntilIdの両方をリクエストに含める
+                final response = await ref
+                    .read(misskeyProvider(account))
+                    .notes
+                    .reactions
+                    .reactions(
+                      NotesReactionsRequest(
+                        noteId: noteId,
+                        type: type,
+                        offset: index,
+                        untilId: item.id,
+                      ),
+                    );
+                return response.toList();
+              },
+              itemBuilder: (context, item) => UserListItem(user: item.user),
+              showAd: false,
+            ),
+          ),
         ),
       ),
     );

@@ -19,7 +19,8 @@ class ClipItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => context.pushRoute(
-          ClipDetailRoute(account: AccountScope.of(context), id: clip.id)),
+        ClipDetailRoute(account: AccountScope.of(context), id: clip.id),
+      ),
       title: Text(clip.name ?? ""),
       subtitle: SimpleMfmText(clip.description ?? ""),
       trailing: trailing,

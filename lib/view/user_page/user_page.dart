@@ -31,11 +31,13 @@ class UserInfo {
   });
 }
 
-final userInfoProvider = StateProvider.family.autoDispose<UserInfo?, String>((
-  ref,
-  userId,
-) =>
-    null);
+final userInfoProvider = StateProvider.family.autoDispose<UserInfo?, String>(
+  (
+    ref,
+    userId,
+  ) =>
+      null,
+);
 
 @RoutePage()
 class UserPage extends ConsumerStatefulWidget {
@@ -96,11 +98,15 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse),
+                          userInfo!.response!.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: UserDetail(
                           response: userInfo.remoteResponse!,
                           account: Account.demoAccount(
-                              userInfo.response!.host!, userInfo.metaResponse),
+                            userInfo.response!.host!,
+                            userInfo.metaResponse,
+                          ),
                           controlAccount: widget.account,
                         ),
                       ),
@@ -113,7 +119,9 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse),
+                          userInfo!.response!.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
@@ -139,23 +147,29 @@ class UserPageState extends ConsumerState<UserPage> {
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse),
+                          userInfo!.response!.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserMisskeyPage(
-                              userId: userInfo.remoteResponse!.id),
+                            userId: userInfo.remoteResponse!.id,
+                          ),
                         ),
                       )
                     else
                       Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserMisskeyPage(userId: widget.userId)),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserMisskeyPage(userId: widget.userId),
+                      ),
 
                     // Play
                     if (isRemoteUser)
                       AccountScope(
                         account: Account.demoAccount(
-                            userInfo!.response!.host!, userInfo.metaResponse),
+                          userInfo!.response!.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserPlays(userId: userInfo.remoteResponse!.id),
@@ -229,8 +243,11 @@ class UserDetailTabState extends ConsumerState<UserDetailTab> {
               );
 
           await ref
-              .read(emojiRepositoryProvider(
-                  Account.demoAccount(remoteHost, meta)))
+              .read(
+                emojiRepositoryProvider(
+                  Account.demoAccount(remoteHost, meta),
+                ),
+              )
               .loadFromSourceIfNeed();
 
           ref

@@ -73,12 +73,15 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
       try {
         final settings = ref.read(desktopSettingsRepositoryProvider).settings;
         await ref.read(desktopSettingsRepositoryProvider).update(
-            settings.copyWith(
+              settings.copyWith(
                 window: DesktopWindowSettings(
-                    w: size.width,
-                    h: size.height,
-                    x: position.dx,
-                    y: position.dy)));
+                  w: size.width,
+                  h: size.height,
+                  x: position.dx,
+                  y: position.dy,
+                ),
+              ),
+            );
       } catch (e) {
         if (kDebugMode) print(e);
       } finally {
@@ -120,8 +123,10 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final language = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.languages));
+    final language = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.languages),
+    );
 
     return MaterialApp.router(
       title: "Miria",
@@ -130,7 +135,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
       supportedLocales: const [
         Locale("ja", "JP"),
         Locale("ja", "OJ"),
-        Locale("zh", "CN")
+        Locale("zh", "CN"),
       ],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [

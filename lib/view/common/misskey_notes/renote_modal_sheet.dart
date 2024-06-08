@@ -54,17 +54,19 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               final scaffoldMessenger = ScaffoldMessenger.of(context);
               final navigator = Navigator.of(context);
               final localize = S.of(context);
-              await ref
-                  .read(misskeyProvider(widget.account))
-                  .notes
-                  .create(NotesCreateRequest(
-                    renoteId: widget.note.id,
-                    localOnly: true,
-                    channelId: channel.id,
-                  ));
-              scaffoldMessenger.showSnackBar(SnackBar(
+              await ref.read(misskeyProvider(widget.account)).notes.create(
+                    NotesCreateRequest(
+                      renoteId: widget.note.id,
+                      localOnly: true,
+                      channelId: channel.id,
+                    ),
+                  );
+              scaffoldMessenger.showSnackBar(
+                SnackBar(
                   content: Text(localize.renoted),
-                  duration: const Duration(seconds: 1)));
+                  duration: const Duration(seconds: 1),
+                ),
+              );
               navigator.pop();
             }.expectFailure(context),
             leading: const SizedBox(
@@ -80,11 +82,12 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     ),
                   ),
                   Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(
-                        Icons.repeat,
-                        size: 18,
-                      ))
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.repeat,
+                      size: 18,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -102,10 +105,13 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   .show(ChannelsShowRequest(channelId: channel.id));
               if (!mounted) return;
               navigator.pop();
-              context.pushRoute(NoteCreateRoute(
+              context.pushRoute(
+                NoteCreateRoute(
                   renote: widget.note,
                   channel: channelsShowData,
-                  initialAccount: widget.account));
+                  initialAccount: widget.account,
+                ),
+              );
             }.expectFailure(context),
             leading: const SizedBox(
               height: 30,
@@ -120,18 +126,20 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                     ),
                   ),
                   Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(
-                        Icons.format_quote,
-                        size: 18,
-                      ))
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.format_quote,
+                      size: 18,
+                    ),
+                  ),
                 ],
               ),
             ),
             title: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: Text(
-                  S.of(context).quotedRenoteInSpecificChannel(channel.name)),
+                S.of(context).quotedRenoteInSpecificChannel(channel.name),
+              ),
             ),
           ),
         ],
@@ -141,17 +149,19 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               final scaffoldMessenger = ScaffoldMessenger.of(context);
               final navigator = Navigator.of(context);
               final localize = S.of(context);
-              await ref
-                  .read(misskeyProvider(widget.account))
-                  .notes
-                  .create(NotesCreateRequest(
-                    renoteId: widget.note.id,
-                    localOnly: isLocalOnly,
-                    visibility: visibility,
-                  ));
-              scaffoldMessenger.showSnackBar(SnackBar(
+              await ref.read(misskeyProvider(widget.account)).notes.create(
+                    NotesCreateRequest(
+                      renoteId: widget.note.id,
+                      localOnly: isLocalOnly,
+                      visibility: visibility,
+                    ),
+                  );
+              scaffoldMessenger.showSnackBar(
+                SnackBar(
                   content: Text(localize.renoted),
-                  duration: const Duration(seconds: 1)));
+                  duration: const Duration(seconds: 1),
+                ),
+              );
               navigator.pop();
             }.expectFailure(context),
             leading: const Icon(Icons.repeat),
@@ -159,132 +169,156 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: Text("Renote"),
             ),
-            subtitle: Row(children: [
-              Expanded(
-                child: DropdownButton(
-                  isExpanded: true,
-                  items: [
-                    for (final element in NoteVisibility.values.where(
-                        (element) => element != NoteVisibility.specified))
-                      DropdownMenuItem(
-                        value: element,
-                        child: Text(element.displayName(context)),
-                      ),
-                  ],
-                  value: visibility,
-                  onChanged: (value) => setState(() {
-                    visibility = value ?? NoteVisibility.public;
-                  }),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  child: DropdownButton(
+                    isExpanded: true,
+                    items: [
+                      for (final element in NoteVisibility.values.where(
+                        (element) => element != NoteVisibility.specified,
+                      ))
+                        DropdownMenuItem(
+                          value: element,
+                          child: Text(element.displayName(context)),
+                        ),
+                    ],
+                    value: visibility,
+                    onChanged: (value) => setState(() {
+                      visibility = value ?? NoteVisibility.public;
+                    }),
+                  ),
                 ),
-              ),
-              IconButton(
+                IconButton(
                   onPressed: () => setState(() {
-                        isLocalOnly = !isLocalOnly;
-                      }),
+                    isLocalOnly = !isLocalOnly;
+                  }),
                   icon: isLocalOnly
                       ? const LocalOnlyIcon()
-                      : const Icon(Icons.rocket)),
-            ]),
+                      : const Icon(Icons.rocket),
+                ),
+              ],
+            ),
           ),
           ListTile(
-              onTap: () {
-                final navigator = Navigator.of(context);
-                context.pushRoute(NoteCreateRoute(
-                    renote: widget.note, initialAccount: widget.account));
-                navigator.pop();
-              },
-              leading: const Icon(Icons.format_quote),
-              title: Text(S.of(context).quotedRenote)),
+            onTap: () {
+              final navigator = Navigator.of(context);
+              context.pushRoute(
+                NoteCreateRoute(
+                  renote: widget.note,
+                  initialAccount: widget.account,
+                ),
+              );
+              navigator.pop();
+            },
+            leading: const Icon(Icons.format_quote),
+            title: Text(S.of(context).quotedRenote),
+          ),
           ListTile(
-              onTap: () async {
-                final scaffoldMessenger = ScaffoldMessenger.of(context);
-                final navigator = Navigator.of(context);
-                final localize = S.of(context);
-                final selected = await showDialog<CommunityChannel?>(
-                    context: context,
-                    builder: (context) =>
-                        ChannelSelectDialog(account: widget.account));
-                if (selected != null) {
-                  await ref
-                      .read(misskeyProvider(widget.account))
-                      .notes
-                      .create(NotesCreateRequest(
+            onTap: () async {
+              final scaffoldMessenger = ScaffoldMessenger.of(context);
+              final navigator = Navigator.of(context);
+              final localize = S.of(context);
+              final selected = await showDialog<CommunityChannel?>(
+                context: context,
+                builder: (context) =>
+                    ChannelSelectDialog(account: widget.account),
+              );
+              if (selected != null) {
+                await ref.read(misskeyProvider(widget.account)).notes.create(
+                      NotesCreateRequest(
                         renoteId: widget.note.id,
                         channelId: selected.id,
                         localOnly: true,
-                      ));
+                      ),
+                    );
 
-                  scaffoldMessenger.showSnackBar(SnackBar(
-                      content: Text(localize.renoted),
-                      duration: const Duration(seconds: 1)));
-                  navigator.pop();
-                }
-              }.expectFailure(context),
-              leading: const SizedBox(
-                height: 30,
-                width: 30,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Icon(
-                        Icons.monitor,
-                        size: 24,
-                      ),
+                scaffoldMessenger.showSnackBar(
+                  SnackBar(
+                    content: Text(localize.renoted),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+                navigator.pop();
+              }
+            }.expectFailure(context),
+            leading: const SizedBox(
+              height: 30,
+              width: 30,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Icon(
+                      Icons.monitor,
+                      size: 24,
                     ),
-                    Align(
-                        alignment: Alignment.topRight,
-                        child: Icon(
-                          Icons.repeat,
-                          size: 18,
-                        ))
-                  ],
-                ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.repeat,
+                      size: 18,
+                    ),
+                  ),
+                ],
               ),
-              title: Text(widget.note.channel != null
+            ),
+            title: Text(
+              widget.note.channel != null
                   ? S.of(context).renoteInOtherChannel
-                  : S.of(context).renoteInChannel)),
+                  : S.of(context).renoteInChannel,
+            ),
+          ),
           ListTile(
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                final selected = await showDialog<CommunityChannel?>(
-                    context: context,
-                    builder: (context) =>
-                        ChannelSelectDialog(account: widget.account));
-                if (!mounted) return;
-                if (selected != null) {
-                  context.pushRoute(NoteCreateRoute(
-                      renote: widget.note,
-                      initialAccount: widget.account,
-                      channel: selected));
-                  navigator.pop();
-                }
-              },
-              leading: const SizedBox(
-                height: 30,
-                width: 30,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Icon(
-                        Icons.monitor,
-                        size: 24,
-                      ),
+            onTap: () async {
+              final navigator = Navigator.of(context);
+              final selected = await showDialog<CommunityChannel?>(
+                context: context,
+                builder: (context) =>
+                    ChannelSelectDialog(account: widget.account),
+              );
+              if (!mounted) return;
+              if (selected != null) {
+                context.pushRoute(
+                  NoteCreateRoute(
+                    renote: widget.note,
+                    initialAccount: widget.account,
+                    channel: selected,
+                  ),
+                );
+                navigator.pop();
+              }
+            },
+            leading: const SizedBox(
+              height: 30,
+              width: 30,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Icon(
+                      Icons.monitor,
+                      size: 24,
                     ),
-                    Align(
-                        alignment: Alignment.topRight,
-                        child: Icon(
-                          Icons.format_quote,
-                          size: 18,
-                        ))
-                  ],
-                ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.format_quote,
+                      size: 18,
+                    ),
+                  ),
+                ],
               ),
-              title: Text(widget.note.channel != null
+            ),
+            title: Text(
+              widget.note.channel != null
                   ? S.of(context).quotedRenoteInOtherChannel
-                  : S.of(context).quotedRenoteInOtherChannel)),
-        ]
+                  : S.of(context).quotedRenoteInOtherChannel,
+            ),
+          ),
+        ],
       ],
     );
   }

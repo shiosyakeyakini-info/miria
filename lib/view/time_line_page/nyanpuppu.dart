@@ -16,7 +16,7 @@ final _discordOfficialEmojiList = [
 
   // meowmoji 2
   "https://cdn.discordapp.com/emojis/380080817214324739.png?size=32",
-  "https://cdn.discordapp.com/emojis/391358218971906050.png?size=32"
+  "https://cdn.discordapp.com/emojis/391358218971906050.png?size=32",
 
   //mewomoji 3
 ]..shuffle();

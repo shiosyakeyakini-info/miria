@@ -28,30 +28,36 @@ class ChannelsPage extends StatelessWidget {
               Tab(text: S.of(context).trend),
               Tab(text: S.of(context).favorite),
               Tab(text: S.of(context).following),
-              Tab(text: S.of(context).managing)
+              Tab(text: S.of(context).managing),
             ],
             isScrollable: true,
             tabAlignment: TabAlignment.center,
           ),
         ),
         body: AccountScope(
-            account: account,
-            child: TabBarView(children: [
+          account: account,
+          child: TabBarView(
+            children: [
               const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: ChannelSearch()),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: ChannelSearch(),
+              ),
               const Padding(
                 padding: EdgeInsets.only(left: 10, right: 10),
                 child: ChannelTrend(),
               ),
               const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: ChannelFavorited()),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: ChannelFavorited(),
+              ),
               const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: ChannelFollowed()),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: ChannelFollowed(),
+              ),
               Text(S.of(context).notImplemented),
-            ])),
+            ],
+          ),
+        ),
       ),
     );
   }

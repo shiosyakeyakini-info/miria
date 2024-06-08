@@ -41,33 +41,34 @@ class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
-          child: Column(
-            children: [
-              Text(S.of(context).fileName),
-              TextField(
-                controller: fileNameController,
-                decoration:
-                    const InputDecoration(prefixIcon: Icon(Icons.file_present)),
-              ),
-              CheckboxListTile(
-                value: isNsfw,
-                onChanged: (value) => setState(() {
-                  isNsfw = !isNsfw;
-                }),
-                title: Text(S.of(context).markAsSensitive),
-              ),
-              Text(S.of(context).caption),
-              TextField(
-                controller: fileNameController,
-                decoration:
-                    const InputDecoration(prefixIcon: Icon(Icons.file_present)),
-                minLines: 5,
-                maxLines: null,
-              ),
-            ],
-          )),
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Column(
+          children: [
+            Text(S.of(context).fileName),
+            TextField(
+              controller: fileNameController,
+              decoration:
+                  const InputDecoration(prefixIcon: Icon(Icons.file_present)),
+            ),
+            CheckboxListTile(
+              value: isNsfw,
+              onChanged: (value) => setState(() {
+                isNsfw = !isNsfw;
+              }),
+              title: Text(S.of(context).markAsSensitive),
+            ),
+            Text(S.of(context).caption),
+            TextField(
+              controller: fileNameController,
+              decoration:
+                  const InputDecoration(prefixIcon: Icon(Icons.file_present)),
+              minLines: 5,
+              maxLines: null,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

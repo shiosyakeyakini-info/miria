@@ -17,7 +17,8 @@ class InNoteButton extends StatelessWidget {
         foregroundColor: Theme.of(context).textTheme.bodyMedium?.color,
         padding: const EdgeInsets.all(5),
         textStyle: TextStyle(
-            fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize),
+          fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+        ),
         minimumSize: const Size(double.infinity, 0),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),

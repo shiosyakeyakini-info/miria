@@ -11,9 +11,10 @@ class DebugInfoPageState extends State<DebugInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("デバッグ")),
-        body: ListView(
-          children: const [ListTile()],
-        ));
+      appBar: AppBar(title: const Text("デバッグ")),
+      body: ListView(
+        children: const [ListTile()],
+      ),
+    );
   }
 }

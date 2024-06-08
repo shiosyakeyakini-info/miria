@@ -35,11 +35,13 @@ class UserFollowerPage extends ConsumerWidget {
             return response.toList();
           },
           nextFuture: (lastItem, _) async {
-            final response = await ref
-                .read(misskeyProvider(account))
-                .users
-                .followers(UsersFollowersRequest(
-                    userId: userId, untilId: lastItem.id));
+            final response =
+                await ref.read(misskeyProvider(account)).users.followers(
+                      UsersFollowersRequest(
+                        userId: userId,
+                        untilId: lastItem.id,
+                      ),
+                    );
             return response.toList();
           },
           itemBuilder: (context, item) => UserListItem(

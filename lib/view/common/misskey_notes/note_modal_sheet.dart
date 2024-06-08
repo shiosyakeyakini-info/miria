@@ -60,8 +60,9 @@ class NoteModalSheet extends ConsumerWidget {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(S.of(context).doneCopy),
-                  duration: const Duration(seconds: 1)),
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
           },
         ),
@@ -77,8 +78,9 @@ class NoteModalSheet extends ConsumerWidget {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(S.of(context).doneCopy),
-                  duration: const Duration(seconds: 1)),
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
           },
         ),
@@ -212,9 +214,11 @@ class NoteModalSheet extends ConsumerWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                    title: Text(data.isFavorited
-                        ? S.of(context).deleteFavorite
-                        : S.of(context).favorite),
+                    title: Text(
+                      data.isFavorited
+                          ? S.of(context).deleteFavorite
+                          : S.of(context).favorite,
+                    ),
                   );
           },
         ),

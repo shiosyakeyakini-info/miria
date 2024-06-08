@@ -40,11 +40,12 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
           final list = data.toList();
 
           return ListView.builder(
-              shrinkWrap: widget.shrinkWrap,
-              physics: widget.physics,
-              itemCount: data.length,
-              itemBuilder: (context, index) =>
-                  widget.builder(context, list[index]));
+            shrinkWrap: widget.shrinkWrap,
+            physics: widget.physics,
+            itemCount: data.length,
+            itemBuilder: (context, index) =>
+                widget.builder(context, list[index]),
+          );
         } else if (snapshot.hasError) {
           if (kDebugMode) {
             print(snapshot.error);

@@ -26,7 +26,9 @@ class NoteCreateSettingTop extends ConsumerWidget {
   }
 
   Widget resolveAcceptanceIcon(
-      ReactionAcceptance? acceptance, BuildContext context) {
+    ReactionAcceptance? acceptance,
+    BuildContext context,
+  ) {
     switch (acceptance) {
       case null:
         return SvgPicture.asset(
@@ -52,13 +54,17 @@ class NoteCreateSettingTop extends ConsumerWidget {
         ref.read(noteCreateProvider(AccountScope.of(context)).notifier);
 
     final noteVisibility = ref.watch(
-        noteCreateProvider(AccountScope.of(context))
-            .select((value) => value.noteVisibility));
+      noteCreateProvider(AccountScope.of(context))
+          .select((value) => value.noteVisibility),
+    );
     final reactionAcceptance = ref.watch(
-        noteCreateProvider(AccountScope.of(context))
-            .select((value) => value.reactionAcceptance));
-    final isLocal = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.localOnly));
+      noteCreateProvider(AccountScope.of(context))
+          .select((value) => value.reactionAcceptance),
+    );
+    final isLocal = ref.watch(
+      noteCreateProvider(AccountScope.of(context))
+          .select((value) => value.localOnly),
+    );
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 5)),
@@ -71,34 +77,38 @@ class NoteCreateSettingTop extends ConsumerWidget {
         Expanded(child: Container()),
         Builder(
           builder: (context2) => IconButton(
-              onPressed: () async {
-                final result = await showModalBottomSheet<NoteVisibility?>(
-                    context: context2,
-                    builder: (context3) => NoteVisibilityDialog(
-                          account: AccountScope.of(context),
-                        ));
-                if (result != null) {
-                  notifier.setNoteVisibility(result);
-                }
-              },
-              icon: Icon(resolveVisibilityIcon(noteVisibility))),
+            onPressed: () async {
+              final result = await showModalBottomSheet<NoteVisibility?>(
+                context: context2,
+                builder: (context3) => NoteVisibilityDialog(
+                  account: AccountScope.of(context),
+                ),
+              );
+              if (result != null) {
+                notifier.setNoteVisibility(result);
+              }
+            },
+            icon: Icon(resolveVisibilityIcon(noteVisibility)),
+          ),
         ),
         IconButton(
-            onPressed: () async {
-              notifier.toggleLocalOnly(context);
-            },
-            icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket)),
+          onPressed: () async {
+            notifier.toggleLocalOnly(context);
+          },
+          icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket),
+        ),
         Builder(
-            builder: (context2) => IconButton(
-                onPressed: () async {
-                  final result =
-                      await showModalBottomSheet<ReactionAcceptance?>(
-                          context: context2,
-                          builder: (context) =>
-                              const ReactionAcceptanceDialog());
-                  notifier.setReactionAcceptance(result);
-                },
-                icon: resolveAcceptanceIcon(reactionAcceptance, context2))),
+          builder: (context2) => IconButton(
+            onPressed: () async {
+              final result = await showModalBottomSheet<ReactionAcceptance?>(
+                context: context2,
+                builder: (context) => const ReactionAcceptanceDialog(),
+              );
+              notifier.setReactionAcceptance(result);
+            },
+            icon: resolveAcceptanceIcon(reactionAcceptance, context2),
+          ),
+        ),
       ],
     );
   }

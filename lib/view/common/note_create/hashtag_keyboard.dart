@@ -49,7 +49,9 @@ class _FilteredHashtags
   }
 
   Future<void> _updateHashtags(
-      Account account, InputCompletionType type) async {
+    Account account,
+    InputCompletionType type,
+  ) async {
     if (type is Hashtag) {
       final query = type.query;
       if (query.isEmpty) {

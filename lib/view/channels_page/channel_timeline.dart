@@ -17,24 +17,27 @@ class ChannelTimeline extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
     return PushableListView<Note>(
-        initializeFuture: () async {
-          final response = await ref
-              .read(misskeyProvider(account))
-              .channels
-              .timeline(
-                  ChannelsTimelineRequest(channelId: channelId, limit: 30));
-          ref.read(notesProvider(account)).registerAll(response);
-          return response.toList();
-        },
-        nextFuture: (lastItem, _) async {
-          final response = await ref
-              .read(misskeyProvider(account))
-              .channels
-              .timeline(ChannelsTimelineRequest(
-                  channelId: channelId, untilId: lastItem.id, limit: 30));
-          ref.read(notesProvider(account)).registerAll(response);
-          return response.toList();
-        },
-        itemBuilder: (context, item) => MisskeyNote(note: item));
+      initializeFuture: () async {
+        final response =
+            await ref.read(misskeyProvider(account)).channels.timeline(
+                  ChannelsTimelineRequest(channelId: channelId, limit: 30),
+                );
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      nextFuture: (lastItem, _) async {
+        final response =
+            await ref.read(misskeyProvider(account)).channels.timeline(
+                  ChannelsTimelineRequest(
+                    channelId: channelId,
+                    untilId: lastItem.id,
+                    limit: 30,
+                  ),
+                );
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      itemBuilder: (context, item) => MisskeyNote(note: item),
+    );
   }
 }

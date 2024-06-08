@@ -29,38 +29,39 @@ class ExplorePageState extends ConsumerState<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return AccountScope(
-        account: widget.account,
-        child: DefaultTabController(
-          length: 7,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(S.of(context).explore),
-              bottom: TabBar(
-                isScrollable: true,
-                tabs: [
-                  Tab(text: S.of(context).highlight),
-                  Tab(text: S.of(context).user),
-                  Tab(text: S.of(context).role),
-                  Tab(text: S.of(context).page),
-                  Tab(text: S.of(context).flash),
-                  Tab(text: S.of(context).hashtag),
-                  Tab(text: S.of(context).otherServers),
-                ],
-                tabAlignment: TabAlignment.center,
-              ),
-            ),
-            body: const TabBarView(
-              children: [
-                ExploreHighlight(),
-                ExploreUsers(),
-                ExploreRole(),
-                ExplorePages(),
-                ExplorePlay(),
-                ExploreHashtags(),
-                ExploreServer(),
+      account: widget.account,
+      child: DefaultTabController(
+        length: 7,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(S.of(context).explore),
+            bottom: TabBar(
+              isScrollable: true,
+              tabs: [
+                Tab(text: S.of(context).highlight),
+                Tab(text: S.of(context).user),
+                Tab(text: S.of(context).role),
+                Tab(text: S.of(context).page),
+                Tab(text: S.of(context).flash),
+                Tab(text: S.of(context).hashtag),
+                Tab(text: S.of(context).otherServers),
               ],
+              tabAlignment: TabAlignment.center,
             ),
           ),
-        ));
+          body: const TabBarView(
+            children: [
+              ExploreHighlight(),
+              ExploreUsers(),
+              ExploreRole(),
+              ExplorePages(),
+              ExplorePlay(),
+              ExploreHashtags(),
+              ExploreServer(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

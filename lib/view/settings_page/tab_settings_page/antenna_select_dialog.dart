@@ -51,16 +51,18 @@ class AntennaSelectDialogState extends ConsumerState<AntennaSelectDialog> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: antennas.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(antennas[index]);
-                          },
-                          title: Text(antennas[index].name));
-                    }),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: antennas.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(antennas[index]);
+                      },
+                      title: Text(antennas[index].name),
+                    );
+                  },
+                ),
               ],
             ),
           ),

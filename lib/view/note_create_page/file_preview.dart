@@ -10,16 +10,19 @@ class FilePreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final files = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.files));
+    final files = ref.watch(
+      noteCreateProvider(AccountScope.of(context))
+          .select((value) => value.files),
+    );
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           for (final file in files.mapIndexed((index, e) => (index, e)))
             Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: CreateFileView(file: file.$2, index: file.$1))
+              padding: const EdgeInsets.only(right: 10),
+              child: CreateFileView(file: file.$2, index: file.$1),
+            ),
         ],
       ),
     );

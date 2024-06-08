@@ -117,19 +117,20 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                         defaultVerticalAlignment:
                             TableCellVerticalAlignment.middle,
                         children: [
-                          TableRow(children: [
-                            Text(S.of(context).user),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
-                                  child: selectedUser == null
-                                      ? Container()
-                                      : UserListItem(user: selectedUser),
-                                ),
-                                IconButton(
+                          TableRow(
+                            children: [
+                              Text(S.of(context).user),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: selectedUser == null
+                                        ? Container()
+                                        : UserListItem(user: selectedUser),
+                                  ),
+                                  IconButton(
                                     onPressed: () async {
                                       final selected = await showDialog<User?>(
                                         context: context,
@@ -145,10 +146,12 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                       );
                                     },
                                     icon:
-                                        const Icon(Icons.keyboard_arrow_right))
-                              ],
-                            )
-                          ]),
+                                        const Icon(Icons.keyboard_arrow_right),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                           TableRow(
                             children: [
                               Text(S.of(context).channel),

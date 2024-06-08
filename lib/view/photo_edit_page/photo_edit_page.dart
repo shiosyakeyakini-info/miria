@@ -57,25 +57,27 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
             ),
             actions: [
               IconButton(
-                  onPressed: () async {
-                    photoEdit.clearSelectMode();
-                    final confirm = await SimpleConfirmDialog.show(
-                        context: context,
-                        message: S.of(context).confirmSavingPhoto,
-                        primary: S.of(context).doneEditingPhoto,
-                        secondary: S.of(context).continueEditingPhoto);
+                onPressed: () async {
+                  photoEdit.clearSelectMode();
+                  final confirm = await SimpleConfirmDialog.show(
+                    context: context,
+                    message: S.of(context).confirmSavingPhoto,
+                    primary: S.of(context).doneEditingPhoto,
+                    secondary: S.of(context).continueEditingPhoto,
+                  );
 
-                    final result =
-                        await photoEdit.createSaveData(renderingAreaKey);
-                    if (result == null) return;
-                    if (!mounted) return;
-                    if (!mounted) return;
-                    if (confirm == true) {
-                      widget.onSubmit(result);
-                      context.back();
-                    }
-                  },
-                  icon: const Icon(Icons.save))
+                  final result =
+                      await photoEdit.createSaveData(renderingAreaKey);
+                  if (result == null) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (confirm == true) {
+                    widget.onSubmit(result);
+                    context.back();
+                  }
+                },
+                icon: const Icon(Icons.save),
+              ),
             ],
           ),
           body: Column(
@@ -84,20 +86,25 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: LayoutBuilder(builder: (context, constraints) {
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    photoEdit.decideDrawArea(
-                        Size(constraints.maxWidth, constraints.maxHeight));
-                  });
-                  return SizedBox(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      photoEdit.decideDrawArea(
+                        Size(constraints.maxWidth, constraints.maxHeight),
+                      );
+                    });
+                    return SizedBox(
                       width: constraints.maxWidth,
                       height: constraints.maxHeight,
                       child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: ClipMode(
-                            renderingGlobalKey: renderingAreaKey,
-                          )));
-                }),
+                        fit: BoxFit.contain,
+                        child: ClipMode(
+                          renderingGlobalKey: renderingAreaKey,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               const ColorFilterImagePreview(),
             ],

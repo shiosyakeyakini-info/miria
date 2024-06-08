@@ -21,30 +21,43 @@ void main() {
       when(mockMisskey.notes).thenReturn(mockNote);
       when(mockNote.search(any)).thenAnswer((_) async => [TestData.note1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), "Misskey");
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
-      verify(mockNote.search(
-              argThat(equals(const NotesSearchRequest(query: "Misskey")))))
-          .called(1);
+      verify(
+        mockNote.search(
+          argThat(equals(const NotesSearchRequest(query: "Misskey"))),
+        ),
+      ).called(1);
       expect(find.text(TestData.note1.text!), findsOneWidget);
 
       when(mockNote.search(any)).thenAnswer((_) async => [TestData.note2]);
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down).at(1));
       await tester.pumpAndSettle();
 
-      verify(mockNote.search(argThat(equals(NotesSearchRequest(
-              query: "Misskey", untilId: TestData.note1.id)))))
-          .called(1);
+      verify(
+        mockNote.search(
+          argThat(
+            equals(
+              NotesSearchRequest(
+                query: "Misskey",
+                untilId: TestData.note1.id,
+              ),
+            ),
+          ),
+        ),
+      ).called(1);
       expect(find.text(TestData.note2.text!), findsOneWidget);
     });
 
@@ -57,12 +70,14 @@ void main() {
       when(mockNote.search(any)).thenAnswer((_) async => [TestData.note1]);
       when(mockUsers.search(any)).thenAnswer((_) async => [TestData.user1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
@@ -79,14 +94,22 @@ void main() {
       await tester.pumpAndSettle();
 
       // 指定したユーザーが表示されていること
-      expect(find.descendant(of: find.byType(Card), matching: find.text("@ai")),
-          findsOneWidget);
+      expect(
+        find.descendant(of: find.byType(Card), matching: find.text("@ai")),
+        findsOneWidget,
+      );
 
       // ノートが表示されていること
       expect(find.text(TestData.note1.text!), findsOneWidget);
-      verify(mockNote.search(argThat(equals(
-              NotesSearchRequest(query: "", userId: TestData.user1ExpectId)))))
-          .called(1);
+      verify(
+        mockNote.search(
+          argThat(
+            equals(
+              NotesSearchRequest(query: "", userId: TestData.user1ExpectId),
+            ),
+          ),
+        ),
+      ).called(1);
     });
 
     testWidgets("チャンネル指定ができること", (tester) async {
@@ -101,12 +124,14 @@ void main() {
       when(mockChannel.myFavorite(any))
           .thenAnswer((_) async => [TestData.channel2]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
@@ -120,17 +145,24 @@ void main() {
 
       // 指定したチャンネルが表示されていること
       expect(
-          find.descendant(
-            of: find.byType(Card),
-            matching: find.text(TestData.channel2.name),
-          ),
-          findsOneWidget);
+        find.descendant(
+          of: find.byType(Card),
+          matching: find.text(TestData.channel2.name),
+        ),
+        findsOneWidget,
+      );
 
       // ノートが表示されていること
       expect(find.text(TestData.note1.text!), findsOneWidget);
-      verify(mockNote.search(argThat(equals(
-              NotesSearchRequest(query: "", channelId: TestData.channel2.id)))))
-          .called(1);
+      verify(
+        mockNote.search(
+          argThat(
+            equals(
+              NotesSearchRequest(query: "", channelId: TestData.channel2.id),
+            ),
+          ),
+        ),
+      ).called(1);
     });
 
     testWidgets("ハッシュタグを検索した場合、ハッシュタグのエンドポイントで検索されること", (tester) async {
@@ -139,30 +171,45 @@ void main() {
       when(mockMisskey.notes).thenReturn(mockNote);
       when(mockNote.searchByTag(any)).thenAnswer((_) async => [TestData.note1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), "#藍ちゃん大食いチャレンジ");
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
-      verify(mockNote.searchByTag(argThat(
-              equals(const NotesSearchByTagRequest(tag: "藍ちゃん大食いチャレンジ")))))
-          .called(1);
+      verify(
+        mockNote.searchByTag(
+          argThat(
+            equals(const NotesSearchByTagRequest(tag: "藍ちゃん大食いチャレンジ")),
+          ),
+        ),
+      ).called(1);
       expect(find.text(TestData.note1.text!), findsOneWidget);
 
       when(mockNote.searchByTag(any)).thenAnswer((_) async => [TestData.note2]);
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down).at(1));
       await tester.pumpAndSettle();
 
-      verify(mockNote.searchByTag(argThat(equals(NotesSearchByTagRequest(
-              tag: "藍ちゃん大食いチャレンジ", untilId: TestData.note1.id)))))
-          .called(1);
+      verify(
+        mockNote.searchByTag(
+          argThat(
+            equals(
+              NotesSearchByTagRequest(
+                tag: "藍ちゃん大食いチャレンジ",
+                untilId: TestData.note1.id,
+              ),
+            ),
+          ),
+        ),
+      ).called(1);
       expect(find.text(TestData.note2.text!), findsOneWidget);
     });
   });
@@ -176,12 +223,14 @@ void main() {
       when(mockMisskey.users).thenReturn(mockUser);
       when(mockUser.search(any)).thenAnswer((_) async => [TestData.user1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text("ユーザー"));
@@ -191,9 +240,18 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
-      verify(mockUser.search(argThat(equals(const UsersSearchRequest(
-              query: "常駐AI", origin: Origin.combined)))))
-          .called(1);
+      verify(
+        mockUser.search(
+          argThat(
+            equals(
+              const UsersSearchRequest(
+                query: "常駐AI",
+                origin: Origin.combined,
+              ),
+            ),
+          ),
+        ),
+      ).called(1);
       expect(find.text("藍"), findsOneWidget);
     });
 
@@ -203,12 +261,14 @@ void main() {
       when(mockMisskey.users).thenReturn(mockUser);
       when(mockUser.search(any)).thenAnswer((_) async => [TestData.user1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text("ユーザー"));
@@ -221,9 +281,15 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
-      verify(mockUser.search(argThat(equals(
-              const UsersSearchRequest(query: "常駐AI", origin: Origin.local)))))
-          .called(1);
+      verify(
+        mockUser.search(
+          argThat(
+            equals(
+              const UsersSearchRequest(query: "常駐AI", origin: Origin.local),
+            ),
+          ),
+        ),
+      ).called(1);
     });
 
     testWidgets("リモートの場合、リモートで検索されること", (tester) async {
@@ -232,12 +298,14 @@ void main() {
       when(mockMisskey.users).thenReturn(mockUser);
       when(mockUser.search(any)).thenAnswer((_) async => [TestData.user1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text("ユーザー"));
@@ -250,42 +318,59 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
-      verify(mockUser.search(argThat(equals(
-              const UsersSearchRequest(query: "常駐AI", origin: Origin.remote)))))
-          .called(1);
+      verify(
+        mockUser.search(
+          argThat(
+            equals(
+              const UsersSearchRequest(query: "常駐AI", origin: Origin.remote),
+            ),
+          ),
+        ),
+      ).called(1);
     });
   });
 
   group("その他", () {
     testWidgets("ノートとチャンネルの表示が折り畳めること", (tester) async {
-      await tester.pumpWidget(ProviderScope(
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(account: TestData.account),
+      await tester.pumpWidget(
+        ProviderScope(
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(account: TestData.account),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       expect(
-          find.descendant(
-              of: find.byType(Card), matching: find.text("ユーザー").hitTestable()),
-          findsNothing);
+        find.descendant(
+          of: find.byType(Card),
+          matching: find.text("ユーザー").hitTestable(),
+        ),
+        findsNothing,
+      );
       expect(find.text("チャンネル").hitTestable(), findsNothing);
 
       await tester.tap(find.byIcon(Icons.keyboard_arrow_down));
       await tester.pumpAndSettle();
 
       expect(
-          find.descendant(
-              of: find.byType(Card), matching: find.text("ユーザー").hitTestable()),
-          findsOneWidget);
+        find.descendant(
+          of: find.byType(Card),
+          matching: find.text("ユーザー").hitTestable(),
+        ),
+        findsOneWidget,
+      );
       expect(find.text("チャンネル").hitTestable(), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.keyboard_arrow_up));
       await tester.pumpAndSettle();
 
       expect(
-          find.descendant(
-              of: find.byType(Card), matching: find.text("ユーザー").hitTestable()),
-          findsNothing);
+        find.descendant(
+          of: find.byType(Card),
+          matching: find.text("ユーザー").hitTestable(),
+        ),
+        findsNothing,
+      );
       expect(find.text("チャンネル").hitTestable(), findsNothing);
     });
 
@@ -295,22 +380,26 @@ void main() {
       when(mockMisskey.notes).thenReturn(mockNote);
       when(mockNote.search(any)).thenAnswer((_) async => [TestData.note1]);
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
-        child: DefaultRootWidget(
-          initialRoute: SearchRoute(
-            account: TestData.account,
-            initialNoteSearchCondition:
-                const NoteSearchCondition(query: "Misskey"),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          child: DefaultRootWidget(
+            initialRoute: SearchRoute(
+              account: TestData.account,
+              initialNoteSearchCondition:
+                  const NoteSearchCondition(query: "Misskey"),
+            ),
           ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(TestData.note1.text!), findsOneWidget);
-      verify(mockNote.search(
-              argThat(equals(const NotesSearchRequest(query: "Misskey")))))
-          .called(1);
+      verify(
+        mockNote.search(
+          argThat(equals(const NotesSearchRequest(query: "Misskey"))),
+        ),
+      ).called(1);
     });
   });
 }

@@ -11,10 +11,11 @@ class NoteEmoji extends ConsumerWidget {
     final baseHeight = MediaQuery.textScalerOf(context)
         .scale((Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) * 1.35);
     return SizedBox(
-        height: baseHeight + 40,
-        child: InputComplement(
-          controller: ref.read(noteInputTextProvider),
-          focusNode: noteFocusProvider,
-        ));
+      height: baseHeight + 40,
+      child: InputComplement(
+        controller: ref.read(noteInputTextProvider),
+        focusNode: noteFocusProvider,
+      ),
+    );
   }
 }

@@ -18,31 +18,37 @@ class ExplorePagesState extends ConsumerState<ExplorePlay> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
-      child: FutureListView(future: () async {
-        final result = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
-            .flash
-            .featured();
-        return result.toList();
-      }(), builder: (context, item) {
-        return ListTile(
-          onTap: () async {
-            await launchUrl(
+      child: FutureListView(
+        future: () async {
+          final result = await ref
+              .read(misskeyProvider(AccountScope.of(context)))
+              .flash
+              .featured();
+          return result.toList();
+        }(),
+        builder: (context, item) {
+          return ListTile(
+            onTap: () async {
+              await launchUrl(
                 Uri(
-                    scheme: "https",
-                    host: AccountScope.of(context).host,
-                    pathSegments: ["play", item.id]),
-                mode: LaunchMode.externalApplication);
-          },
-          title: MfmText(
+                  scheme: "https",
+                  host: AccountScope.of(context).host,
+                  pathSegments: ["play", item.id],
+                ),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+            title: MfmText(
               mfmText: item.title,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold)),
-          subtitle: MfmText(mfmText: item.summary),
-        );
-      }),
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            subtitle: MfmText(mfmText: item.summary),
+          );
+        },
+      ),
     );
   }
 }

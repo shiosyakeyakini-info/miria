@@ -24,7 +24,8 @@ class SeveralAccountSettingsPage extends StatelessWidget {
           ListTile(
             onTap: () {
               context.pushRoute(
-                  SeveralAccountGeneralSettingsRoute(account: account));
+                SeveralAccountGeneralSettingsRoute(account: account),
+              );
             },
             title: Text(S.of(context).generalSettings),
             leading: const Icon(Icons.settings),
@@ -41,7 +42,8 @@ class SeveralAccountSettingsPage extends StatelessWidget {
           ListTile(
             onTap: () {
               context.pushRoute(
-                  WordMuteRoute(account: account, muteType: MuteType.soft));
+                WordMuteRoute(account: account, muteType: MuteType.soft),
+              );
             },
             title: Text(S.of(context).wordMute),
             leading: const Icon(Icons.comments_disabled),
@@ -50,7 +52,8 @@ class SeveralAccountSettingsPage extends StatelessWidget {
           ListTile(
             onTap: () {
               context.pushRoute(
-                  WordMuteRoute(account: account, muteType: MuteType.hard));
+                WordMuteRoute(account: account, muteType: MuteType.hard),
+              );
             },
             title: Text(S.of(context).hardWordMute),
             leading: const Icon(Icons.comments_disabled),
@@ -71,7 +74,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             title: Text(S.of(context).cacheSettings),
             leading: const Icon(Icons.cached),
             trailing: const Icon(Icons.chevron_right),
-          )
+          ),
         ],
       ),
     );

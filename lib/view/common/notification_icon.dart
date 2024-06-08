@@ -11,34 +11,41 @@ class NotificationIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasUnread = ref.watch(iProvider(AccountScope.of(context).acct)
-        .select((value) => value.hasUnreadNotification));
+    final hasUnread = ref.watch(
+      iProvider(AccountScope.of(context).acct)
+          .select((value) => value.hasUnreadNotification),
+    );
 
     if (hasUnread) {
       return IconButton(
-          onPressed: () => context
-              .pushRoute(NotificationRoute(account: AccountScope.of(context))),
-          icon: Stack(children: [
+        onPressed: () => context
+            .pushRoute(NotificationRoute(account: AccountScope.of(context))),
+        icon: Stack(
+          children: [
             const Icon(Icons.notifications),
             Transform.translate(
-                offset: const Offset(12, 12),
-                child: SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 1.5),
-                      borderRadius: BorderRadius.circular(20),
-                      color: Theme.of(context).primaryColor,
-                    ),
+              offset: const Offset(12, 12),
+              child: SizedBox(
+                width: 14,
+                height: 14,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 1.5),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).primaryColor,
                   ),
-                )),
-          ]));
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     } else {
       return IconButton(
-          onPressed: () => context
-              .pushRoute(NotificationRoute(account: AccountScope.of(context))),
-          icon: const Icon(Icons.notifications));
+        onPressed: () => context
+            .pushRoute(NotificationRoute(account: AccountScope.of(context))),
+        icon: const Icon(Icons.notifications),
+      );
     }
   }
 }

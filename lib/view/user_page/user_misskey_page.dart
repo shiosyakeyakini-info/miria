@@ -33,8 +33,12 @@ class UserMisskeyPage extends ConsumerWidget {
         return ListTile(
           title: Text(page.title),
           onTap: () {
-            context.pushRoute(MisskeyRouteRoute(
-                account: AccountScope.of(context), page: page));
+            context.pushRoute(
+              MisskeyRouteRoute(
+                account: AccountScope.of(context),
+                page: page,
+              ),
+            );
           },
         );
       },

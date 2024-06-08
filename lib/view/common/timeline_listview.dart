@@ -13,7 +13,7 @@ class TimelineListView extends StatefulWidget {
   /// See [ListView.builder]
   const TimelineListView.builder({
     required this.itemBuilder,
-    Key? key,
+    super.key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
@@ -30,14 +30,13 @@ class TimelineListView extends StatefulWidget {
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
-  })  : separatorBuilder = null,
-        super(key: key);
+  }) : separatorBuilder = null;
 
   /// See [ListView.separated]
   const TimelineListView.separated({
     required this.itemBuilder,
     required this.separatorBuilder,
-    Key? key,
+    super.key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
@@ -53,8 +52,7 @@ class TimelineListView extends StatefulWidget {
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
-  })  : itemExtent = null,
-        super(key: key);
+  }) : itemExtent = null;
 
   /// See: [ScrollView.scrollDirection]
   final Axis scrollDirection;
@@ -173,50 +171,55 @@ class _TimelineListViewState extends State<TimelineListView> {
       controller: _effectiveController,
       physics: scrollPhysics,
       viewportBuilder: (context, offset) {
-        return Builder(builder: (context) {
-          /// Build negative [ScrollPosition] for the negative scrolling [Viewport].
-          final state = Scrollable.of(context);
-          final negativeOffset = _InfiniteScrollPosition(
-            physics: scrollPhysics,
-            context: state,
-            initialPixels: -offset.pixels,
-            keepScrollOffset: _effectiveController.keepScrollOffset,
-            negativeScroll: true,
-          );
-          _negativeOffset = negativeOffset;
+        return Builder(
+          builder: (context) {
+            /// Build negative [ScrollPosition] for the negative scrolling [Viewport].
+            final state = Scrollable.of(context);
+            final negativeOffset = _InfiniteScrollPosition(
+              physics: scrollPhysics,
+              context: state,
+              initialPixels: -offset.pixels,
+              keepScrollOffset: _effectiveController.keepScrollOffset,
+              negativeScroll: true,
+            );
+            _negativeOffset = negativeOffset;
 
-          /// Keep the negative scrolling [Viewport] positioned to the [ScrollPosition].
-          offset.addListener(() {
-            negativeOffset._forceNegativePixels(offset.pixels);
-          });
+            /// Keep the negative scrolling [Viewport] positioned to the [ScrollPosition].
+            offset.addListener(() {
+              negativeOffset._forceNegativePixels(offset.pixels);
+            });
 
-          /// Stack the two [Viewport]s on top of each other so they move in sync.
-          return Stack(
-            children: <Widget>[
-              Viewport(
-                axisDirection: flipAxisDirection(axisDirection),
-                anchor: 1.0 - widget.anchor,
-                offset: negativeOffset,
-                slivers: negativeSlivers,
-                cacheExtent: widget.cacheExtent,
-              ),
-              Viewport(
-                axisDirection: axisDirection,
-                anchor: widget.anchor,
-                offset: offset,
-                slivers: slivers,
-                cacheExtent: widget.cacheExtent,
-              ),
-            ],
-          );
-        });
+            /// Stack the two [Viewport]s on top of each other so they move in sync.
+            return Stack(
+              children: <Widget>[
+                Viewport(
+                  axisDirection: flipAxisDirection(axisDirection),
+                  anchor: 1.0 - widget.anchor,
+                  offset: negativeOffset,
+                  slivers: negativeSlivers,
+                  cacheExtent: widget.cacheExtent,
+                ),
+                Viewport(
+                  axisDirection: axisDirection,
+                  anchor: widget.anchor,
+                  offset: offset,
+                  slivers: slivers,
+                  cacheExtent: widget.cacheExtent,
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }
 
   AxisDirection _getDirection(BuildContext context) {
     return getAxisDirectionFromAxisReverseAndDirectionality(
-        context, widget.scrollDirection, widget.reverse);
+      context,
+      widget.scrollDirection,
+      widget.reverse,
+    );
   }
 
   List<Widget> _buildSlivers(BuildContext context, {bool negative = false}) {
@@ -236,7 +239,7 @@ class _TimelineListViewState extends State<TimelineListView> {
                     : positiveChildrenDelegate,
               ),
         padding: EdgeInsets.zero,
-      )
+      ),
     ];
   }
 
@@ -294,20 +297,43 @@ class _TimelineListViewState extends State<TimelineListView> {
     super.debugFillProperties(properties);
     properties
         .add(EnumProperty<Axis>("scrollDirection", widget.scrollDirection));
-    properties.add(FlagProperty("reverse",
-        value: widget.reverse, ifTrue: "reversed", showName: true));
-    properties.add(DiagnosticsProperty<ScrollController>(
-        "controller", widget.controller,
-        showName: false, defaultValue: null));
-    properties.add(DiagnosticsProperty<ScrollPhysics>("physics", widget.physics,
-        showName: false, defaultValue: null));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>(
-        "padding", widget.padding,
-        defaultValue: null));
     properties.add(
-        DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null));
+      FlagProperty(
+        "reverse",
+        value: widget.reverse,
+        ifTrue: "reversed",
+        showName: true,
+      ),
+    );
     properties.add(
-        DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null));
+      DiagnosticsProperty<ScrollController>(
+        "controller",
+        widget.controller,
+        showName: false,
+        defaultValue: null,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<ScrollPhysics>(
+        "physics",
+        widget.physics,
+        showName: false,
+        defaultValue: null,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<EdgeInsetsGeometry>(
+        "padding",
+        widget.padding,
+        defaultValue: null,
+      ),
+    );
+    properties.add(
+      DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null),
+    );
+    properties.add(
+      DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null),
+    );
   }
 }
 
@@ -315,14 +341,10 @@ class _TimelineListViewState extends State<TimelineListView> {
 class TimelineScrollController extends ScrollController {
   /// Creates a new [TimelineScrollController]
   TimelineScrollController({
-    double initialScrollOffset = 0.0,
-    bool keepScrollOffset = true,
-    String? debugLabel,
-  }) : super(
-          initialScrollOffset: initialScrollOffset,
-          keepScrollOffset: keepScrollOffset,
-          debugLabel: debugLabel,
-        ) {
+    super.initialScrollOffset,
+    super.keepScrollOffset,
+    super.debugLabel,
+  }) {
     addListener(() {
       final currentPosition = position.pixels;
       _previousPosition = currentPosition;
@@ -331,8 +353,11 @@ class TimelineScrollController extends ScrollController {
   }
 
   @override
-  ScrollPosition createScrollPosition(ScrollPhysics physics,
-      ScrollContext context, ScrollPosition? oldPosition) {
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) {
     return _InfiniteScrollPosition(
       physics: physics,
       context: context,
@@ -382,21 +407,14 @@ class TimelineScrollController extends ScrollController {
 
 class _InfiniteScrollPosition extends ScrollPositionWithSingleContext {
   _InfiniteScrollPosition({
-    required ScrollPhysics physics,
-    required ScrollContext context,
-    double? initialPixels = 0.0,
-    bool keepScrollOffset = true,
-    ScrollPosition? oldPosition,
-    String? debugLabel,
+    required super.physics,
+    required super.context,
+    super.initialPixels,
+    super.keepScrollOffset,
+    super.oldPosition,
+    super.debugLabel,
     this.negativeScroll = false,
-  }) : super(
-          physics: physics,
-          context: context,
-          initialPixels: initialPixels,
-          keepScrollOffset: keepScrollOffset,
-          oldPosition: oldPosition,
-          debugLabel: debugLabel,
-        );
+  });
 
   final bool negativeScroll;
 

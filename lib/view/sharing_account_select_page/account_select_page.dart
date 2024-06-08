@@ -41,8 +41,10 @@ class SharingAccountSelectPage extends ConsumerWidget {
               );
             },
             leading: AvatarIcon(user: account.i),
-            title: Text(account.i.name ?? account.i.username,
-                style: Theme.of(context).textTheme.titleMedium),
+            title: Text(
+              account.i.name ?? account.i.username,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             subtitle: Text(
               account.acct.toString(),
               style: Theme.of(context).textTheme.bodySmall,

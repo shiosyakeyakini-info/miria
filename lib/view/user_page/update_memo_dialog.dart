@@ -28,7 +28,8 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
 
   Future<void> memoSave() async {
     await ref.read(misskeyProvider(widget.account)).users.updateMemo(
-        UsersUpdateMemoRequest(userId: widget.userId, memo: controller.text));
+          UsersUpdateMemoRequest(userId: widget.userId, memo: controller.text),
+        );
     if (!mounted) return;
     Navigator.of(context).pop(controller.text);
   }

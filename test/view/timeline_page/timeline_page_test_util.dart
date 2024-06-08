@@ -75,7 +75,7 @@ class TimelinePageTest {
           return mockAccountRepository;
         }),
         emojiRepositoryProvider
-            .overrideWith((ref, arg) => MockEmojiRepository())
+            .overrideWith((ref, arg) => MockEmojiRepository()),
       ],
       child: DefaultRootWidget(
         initialRoute: TimeLineRoute(initialTabSetting: tabSetting),

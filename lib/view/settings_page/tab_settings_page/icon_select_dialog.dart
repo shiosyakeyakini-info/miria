@@ -81,52 +81,57 @@ class IconSelectDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text(S.of(context).selectIcon),
-        content: DefaultTabController(
-            length: 2,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: DecoratedBox(
-                      decoration:
-                          BoxDecoration(color: Theme.of(context).primaryColor),
-                      child: TabBar(
-                        tabs: [
-                          Tab(text: S.of(context).standardIcon),
-                          Tab(text: S.of(context).emojiIcon),
+      title: Text(S.of(context).selectIcon),
+      content: DefaultTabController(
+        length: 2,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.width * 0.8,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: DecoratedBox(
+                  decoration:
+                      BoxDecoration(color: Theme.of(context).primaryColor),
+                  child: TabBar(
+                    tabs: [
+                      Tab(text: S.of(context).standardIcon),
+                      Tab(text: S.of(context).emojiIcon),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    SingleChildScrollView(
+                      child: Wrap(
+                        children: [
+                          for (final icon in icons)
+                            IconButton(
+                              onPressed: () => Navigator.of(context)
+                                  .pop(TabIcon(codePoint: icon.codePoint)),
+                              icon: Icon(icon),
+                            ),
                         ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: TabBarView(children: [
-                      SingleChildScrollView(
-                        child: Wrap(
-                          children: [
-                            for (final icon in icons)
-                              IconButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .pop(TabIcon(codePoint: icon.codePoint)),
-                                  icon: Icon(icon)),
-                          ],
-                        ),
+                    AccountScope(
+                      account: account,
+                      child: ReactionPickerContent(
+                        isAcceptSensitive: true,
+                        onTap: (emoji) => Navigator.of(context)
+                            .pop(TabIcon(customEmojiName: emoji.baseName)),
                       ),
-                      AccountScope(
-                        account: account,
-                        child: ReactionPickerContent(
-                          isAcceptSensitive: true,
-                          onTap: (emoji) => Navigator.of(context)
-                              .pop(TabIcon(customEmojiName: emoji.baseName)),
-                        ),
-                      )
-                    ]),
-                  )
-                ],
+                    ),
+                  ],
+                ),
               ),
-            )));
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

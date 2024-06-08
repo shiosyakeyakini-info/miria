@@ -400,5 +400,5 @@ const builtInColorThemes = [
     buttonGradateB: Color(0xff007aa4),
     panel: Color(0xff1d2d30),
     panelBackground: Color(0xff23363a),
-  )
+  ),
 ];

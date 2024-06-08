@@ -51,16 +51,18 @@ class UserListSelectDialogState extends ConsumerState<UserListSelectDialog> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: userLists.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(userLists[index]);
-                          },
-                          title: Text(userLists[index].name ?? ""));
-                    }),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: userLists.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(userLists[index]);
+                      },
+                      title: Text(userLists[index].name ?? ""),
+                    );
+                  },
+                ),
               ],
             ),
           ),

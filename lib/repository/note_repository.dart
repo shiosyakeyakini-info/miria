@@ -69,8 +69,10 @@ class NoteRepository extends ChangeNotifier {
   Map<String, NoteStatus> get noteStatuses => _noteStatuses;
 
   void updateNoteStatus(
-      String id, NoteStatus Function(NoteStatus status) statusPredicate,
-      {bool isNotify = true}) {
+    String id,
+    NoteStatus Function(NoteStatus status) statusPredicate, {
+    bool isNotify = true,
+  }) {
     _noteStatuses[id] = statusPredicate.call(_noteStatuses[id]!);
     if (isNotify) notifyListeners();
   }
@@ -103,15 +105,16 @@ class NoteRepository extends ChangeNotifier {
               (note.reactions.isNotEmpty ? registeredNote?.myReaction : null)),
     );
     _noteStatuses[note.id] ??= NoteStatus(
-        isCwOpened: false,
-        isLongVisible: false,
-        isReactionedRenote: false,
-        isLongVisibleInitialized: false,
-        isIncludeMuteWord:
-            (note.user.host != null || note.user.id != account.i.id) &&
-                    softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
-                softMuteWordRegExps.any(isMuteTarget),
-        isMuteOpened: false);
+      isCwOpened: false,
+      isLongVisible: false,
+      isReactionedRenote: false,
+      isLongVisibleInitialized: false,
+      isIncludeMuteWord:
+          (note.user.host != null || note.user.id != account.i.id) &&
+                  softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
+              softMuteWordRegExps.any(isMuteTarget),
+      isMuteOpened: false,
+    );
     final renote = note.renote;
     final reply = note.reply;
     if (renote != null) {

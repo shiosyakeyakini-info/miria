@@ -82,15 +82,13 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
           builder: (context, constraints) {
             return ToggleButtons(
               isSelected: [
-                for (final element in Origin.values) element == origin
+                for (final element in Origin.values) element == origin,
               ],
               constraints: BoxConstraints.expand(
-                  width: constraints.maxWidth / Origin.values.length -
-                      Theme.of(context)
-                              .toggleButtonsTheme
-                              .borderWidth!
-                              .toInt() *
-                          Origin.values.length),
+                width: constraints.maxWidth / Origin.values.length -
+                    Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
+                        Origin.values.length,
+              ),
               onPressed: (index) {
                 ref.read(usersSelectDialogOriginProvider.notifier).state =
                     Origin.values[index];
@@ -110,7 +108,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
             onSelected: widget.onSelected,
             isDetail: widget.isDetail,
           ),
-        )
+        ),
       ],
     );
   }
@@ -131,17 +129,22 @@ class UsersSelectContentList extends ConsumerWidget {
     final origin = ref.watch(usersSelectDialogOriginProvider);
 
     return PushableListView(
-      listKey: ObjectKey(Object.hashAll([
-        query,
-        origin,
-      ])),
+      listKey: ObjectKey(
+        Object.hashAll([
+          query,
+          origin,
+        ]),
+      ),
       initializeFuture: () async {
         if (query.isEmpty) {
           final response = await ref
               .read(misskeyProvider(AccountScope.of(context)))
               .users
-              .getFrequentlyRepliedUsers(UsersGetFrequentlyRepliedUsersRequest(
-                  userId: AccountScope.of(context).i.id));
+              .getFrequentlyRepliedUsers(
+                UsersGetFrequentlyRepliedUsersRequest(
+                  userId: AccountScope.of(context).i.id,
+                ),
+              );
           return response.map((e) => e.user).toList();
         }
 
@@ -158,11 +161,13 @@ class UsersSelectContentList extends ConsumerWidget {
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users
-            .search(UsersSearchRequest(
-              query: query,
-              origin: origin,
-              offset: length,
-            ));
+            .search(
+              UsersSearchRequest(
+                query: query,
+                origin: origin,
+                offset: length,
+              ),
+            );
         return response.toList();
       },
       itemBuilder: (context2, item) => UserListItem(

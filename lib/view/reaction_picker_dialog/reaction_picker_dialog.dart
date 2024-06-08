@@ -32,12 +32,13 @@ class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
       content: AccountScope(
         account: widget.account,
         child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: ReactionPickerContent(
-              isAcceptSensitive: widget.isAcceptSensitive,
-              onTap: (emoji) => Navigator.of(context).pop(emoji),
-            )),
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: ReactionPickerContent(
+            isAcceptSensitive: widget.isAcceptSensitive,
+            onTap: (emoji) => Navigator.of(context).pop(emoji),
+          ),
+        ),
       ),
     );
   }

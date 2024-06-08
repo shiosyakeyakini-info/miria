@@ -12,11 +12,15 @@ extension WidgetTestExtension on WidgetTester {
   }
 
   Future<void> pageNation() async {
-    await tap(find.descendant(
+    await tap(
+      find.descendant(
         of: find.descendant(
-            of: find.byType(Center),
-            matching: find.byType(IconButton).hitTestable()),
-        matching: find.byIcon(Icons.keyboard_arrow_down)));
+          of: find.byType(Center),
+          matching: find.byType(IconButton).hitTestable(),
+        ),
+        matching: find.byIcon(Icons.keyboard_arrow_down),
+      ),
+    );
     await pumpAndSettle();
   }
 }

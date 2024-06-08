@@ -9,7 +9,8 @@ class TimelineEmoji extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InputComplement(
-        controller: ref.read(timelineNoteProvider),
-        focusNode: timelineFocusNode);
+      controller: ref.read(timelineNoteProvider),
+      focusNode: timelineFocusNode,
+    );
   }
 }

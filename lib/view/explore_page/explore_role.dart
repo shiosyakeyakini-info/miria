@@ -19,17 +19,18 @@ class ExploreRole extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView<RolesListResponse>(
-          future: () async {
-            final response = await ref
-                .read(misskeyProvider(AccountScope.of(context)))
-                .roles
-                .list();
+        future: () async {
+          final response = await ref
+              .read(misskeyProvider(AccountScope.of(context)))
+              .roles
+              .list();
 
-            return response
-                .where((element) => element.usersCount != 0)
-                .sorted((a, b) => b.displayOrder.compareTo(a.displayOrder));
-          }(),
-          builder: (context, item) => RoleListItem(item: item)),
+          return response
+              .where((element) => element.usersCount != 0)
+              .sorted((a, b) => b.displayOrder.compareTo(a.displayOrder));
+        }(),
+        builder: (context, item) => RoleListItem(item: item),
+      ),
     );
   }
 }
@@ -46,31 +47,39 @@ class RoleListItem extends StatelessWidget {
 
     return ListTile(
       onTap: () {
-        context.pushRoute(ExploreRoleUsersRoute(
-            item: item, account: AccountScope.of(context)));
+        context.pushRoute(
+          ExploreRoleUsersRoute(
+            item: item,
+            account: AccountScope.of(context),
+          ),
+        );
       },
       title: Text.rich(
-        TextSpan(children: [
-          if (item.iconUrl != null)
-            WidgetSpan(
+        TextSpan(
+          children: [
+            if (item.iconUrl != null)
+              WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: NetworkImageView(
+                    height: iconHeight,
+                    loadingBuilder: (context, _, __) => SizedBox(
+                      width: iconHeight,
                       height: iconHeight,
-                      loadingBuilder: (context, _, __) => SizedBox(
-                            width: iconHeight,
-                            height: iconHeight,
-                          ),
-                      errorBuilder: (context, e, s) => const SizedBox(
-                            width: 1,
-                            height: 1,
-                          ),
-                      url: item.iconUrl!.toString(),
-                      type: ImageType.avatarIcon),
-                )),
-          TextSpan(text: item.name),
-        ]),
+                    ),
+                    errorBuilder: (context, e, s) => const SizedBox(
+                      width: 1,
+                      height: 1,
+                    ),
+                    url: item.iconUrl!.toString(),
+                    type: ImageType.avatarIcon,
+                  ),
+                ),
+              ),
+            TextSpan(text: item.name),
+          ],
+        ),
       ),
       subtitle: Text(item.description ?? ""),
       trailing:

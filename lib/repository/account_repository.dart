@@ -64,7 +64,8 @@ class AccountRepository extends Notifier<List<Account>> {
   Future<void> load() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await SharedPreferenceAppGroup.setAppGroup(
-          "group.info.shiosyakeyakini.miria");
+        "group.info.shiosyakeyakini.miria",
+      );
     }
 
     final storedData =
@@ -165,7 +166,7 @@ class AccountRepository extends Notifier<List<Account>> {
           case CacheStrategy.whenTabChange:
             await updateMeta(account);
         }
-      })
+      }),
     ]);
 
     await _save();
@@ -179,7 +180,7 @@ class AccountRepository extends Notifier<List<Account>> {
     final i = state[index].i.copyWith(
       unreadAnnouncements: [
         ...state[index].i.unreadAnnouncements,
-        announcement
+        announcement,
       ],
     );
 
@@ -232,9 +233,10 @@ class AccountRepository extends Notifier<List<Account>> {
     final Uri uri;
     try {
       uri = Uri(
-          scheme: "https",
-          host: server,
-          pathSegments: [".well-known", "nodeinfo"]);
+        scheme: "https",
+        host: server,
+        pathSegments: [".well-known", "nodeinfo"],
+      );
     } catch (e) {
       throw InvalidServerException(server);
     }
@@ -277,7 +279,10 @@ class AccountRepository extends Notifier<List<Account>> {
   }
 
   Future<void> loginAsPassword(
-      String server, String userId, String password) async {
+    String server,
+    String userId,
+    String password,
+  ) async {
     final token =
         await MisskeyServer().loginAsPassword(server, userId, password);
     final i = await Misskey(token: token, host: server).i.i();

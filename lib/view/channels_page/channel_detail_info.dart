@@ -111,7 +111,8 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
           alignment: Alignment.centerRight,
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).primaryColor)),
+              border: Border.all(color: Theme.of(context).primaryColor),
+            ),
             padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -131,7 +132,7 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
                           data.lastNotedAt!.differenceNow(context),
                         ),
                     style: Theme.of(context).textTheme.bodySmall,
-                  )
+                  ),
               ],
             ),
           ),
@@ -153,33 +154,38 @@ class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
           ),
         const Padding(padding: EdgeInsets.only(top: 10)),
         Align(
-            alignment: Alignment.centerRight,
-            child: Wrap(
-              children: [
-                if (isFavorited != null)
-                  isFavorited
-                      ? ElevatedButton.icon(
-                          onPressed: unfavorite.expectFailure(context),
-                          icon: const Icon(Icons.favorite_border),
-                          label: Text(S.of(context).favorite))
-                      : OutlinedButton(
-                          onPressed: favorite.expectFailure(context),
-                          child: Text(S.of(context).willFavorite)),
-                const Padding(padding: EdgeInsets.only(left: 10)),
-                if (isFollowing != null)
-                  isFollowing
-                      ? ElevatedButton.icon(
-                          onPressed: unfollow.expectFailure(context),
-                          icon: const Icon(Icons.check),
-                          label: Text(S.of(context).following))
-                      : OutlinedButton(
-                          onPressed: follow.expectFailure(context),
-                          child: Text(S.of(context).willFollow))
-              ],
-            )),
+          alignment: Alignment.centerRight,
+          child: Wrap(
+            children: [
+              if (isFavorited != null)
+                isFavorited
+                    ? ElevatedButton.icon(
+                        onPressed: unfavorite.expectFailure(context),
+                        icon: const Icon(Icons.favorite_border),
+                        label: Text(S.of(context).favorite),
+                      )
+                    : OutlinedButton(
+                        onPressed: favorite.expectFailure(context),
+                        child: Text(S.of(context).willFavorite),
+                      ),
+              const Padding(padding: EdgeInsets.only(left: 10)),
+              if (isFollowing != null)
+                isFollowing
+                    ? ElevatedButton.icon(
+                        onPressed: unfollow.expectFailure(context),
+                        icon: const Icon(Icons.check),
+                        label: Text(S.of(context).following),
+                      )
+                    : OutlinedButton(
+                        onPressed: follow.expectFailure(context),
+                        child: Text(S.of(context).willFollow),
+                      ),
+            ],
+          ),
+        ),
         MfmText(mfmText: data.description ?? ""),
         for (final pinnedNote in data.pinnedNotes ?? [])
-          MisskeyNote(note: pinnedNote)
+          MisskeyNote(note: pinnedNote),
       ],
     );
   }

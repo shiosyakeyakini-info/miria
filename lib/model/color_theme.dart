@@ -34,7 +34,7 @@ class ColorTheme with _$ColorTheme {
   factory ColorTheme.misskey(MisskeyTheme theme) {
     final isDarkTheme = theme.base == "dark";
     final props = {
-      ...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps
+      ...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps,
     };
     props.addAll(theme.props);
     props

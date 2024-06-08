@@ -56,8 +56,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       }
       darkModeTheme = settings.darkColorThemeId;
       if (darkModeTheme.isEmpty ||
-          builtInColorThemes.every((element) =>
-              !element.isDarkTheme || element.id != darkModeTheme)) {
+          builtInColorThemes.every(
+            (element) => !element.isDarkTheme || element.id != darkModeTheme,
+          )) {
         darkModeTheme =
             builtInColorThemes.where((element) => element.isDarkTheme).first.id;
       }
@@ -83,24 +84,25 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   Future<void> save() async {
     ref.read(generalSettingsRepositoryProvider).update(
           GeneralSettings(
-              lightColorThemeId: lightModeTheme,
-              darkColorThemeId: darkModeTheme,
-              themeColorSystem: colorSystem,
-              nsfwInherit: nsfwInherit,
-              enableDirectReaction: enableDirectReaction,
-              automaticPush: automaticPush,
-              enableAnimatedMFM: enableAnimatedMFM,
-              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
-              enableLongTextElipsed: enableLongTextElipsed,
-              tabPosition: tabPosition,
-              emojiType: emojiType,
-              textScaleFactor: textScaleFactor,
-              defaultFontName: defaultFontName,
-              serifFontName: serifFontName,
-              monospaceFontName: monospaceFontName,
-              cursiveFontName: cursiveFontName,
-              fantasyFontName: fantasyFontName,
-              languages: language),
+            lightColorThemeId: lightModeTheme,
+            darkColorThemeId: darkModeTheme,
+            themeColorSystem: colorSystem,
+            nsfwInherit: nsfwInherit,
+            enableDirectReaction: enableDirectReaction,
+            automaticPush: automaticPush,
+            enableAnimatedMFM: enableAnimatedMFM,
+            enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
+            enableLongTextElipsed: enableLongTextElipsed,
+            tabPosition: tabPosition,
+            emojiType: emojiType,
+            textScaleFactor: textScaleFactor,
+            defaultFontName: defaultFontName,
+            serifFontName: serifFontName,
+            monospaceFontName: monospaceFontName,
+            cursiveFontName: cursiveFontName,
+            fantasyFontName: fantasyFontName,
+            languages: language,
+          ),
         );
   }
 
@@ -397,10 +399,11 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 // style: GoogleFonts.asMap()[font.actualName]
                                 //     ?.call(),
                               ),
-                            )
+                            ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == defaultFontName) ??
+                              (e) => e.actualName == defaultFontName,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
                         onChanged: (item) => setState(() {
@@ -429,7 +432,8 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == serifFontName) ??
+                              (e) => e.actualName == serifFontName,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
                         onChanged: (item) => setState(() {
@@ -458,11 +462,13 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                             ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == monospaceFontName) ??
+                              (e) => e.actualName == monospaceFontName,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
                         onChanged: (item) => setState(
-                            () => monospaceFontName = item?.actualName ?? ""),
+                          () => monospaceFontName = item?.actualName ?? "",
+                        ),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -482,10 +488,11 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 //         ?.call() ??
                                 //     AppTheme.of(context).cursiveStyle,
                               ),
-                            )
+                            ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == cursiveFontName) ??
+                              (e) => e.actualName == cursiveFontName,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
                         onChanged: (item) => setState(() {
@@ -511,10 +518,11 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 //         ?.call() ??
                                 //     AppTheme.of(context).fantasyStyle,
                               ),
-                            )
+                            ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == fantasyFontName) ??
+                              (e) => e.actualName == fantasyFontName,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
                         onChanged: (item) => setState(() {

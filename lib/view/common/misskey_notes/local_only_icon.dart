@@ -34,7 +34,7 @@ class LocalOnlyIcon extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

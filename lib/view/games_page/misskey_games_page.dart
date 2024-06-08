@@ -77,7 +77,7 @@ class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
               "https://${widget.account.host}/reversi",
               mode: LaunchMode.externalApplication,
             ),
-          )
+          ),
         ],
       ),
     );

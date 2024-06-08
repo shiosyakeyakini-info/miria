@@ -8,8 +8,11 @@ class FileSettingsDialogResult {
   final bool isNsfw;
   final String caption;
 
-  const FileSettingsDialogResult(
-      {required this.fileName, required this.isNsfw, required this.caption});
+  const FileSettingsDialogResult({
+    required this.fileName,
+    required this.isNsfw,
+    required this.caption,
+  });
 }
 
 class FileSettingsDialog extends ConsumerStatefulWidget {
@@ -67,19 +70,21 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
               TextField(
                 controller: fileNameController,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.badge_outlined)),
+                  prefixIcon: Icon(Icons.badge_outlined),
+                ),
               ),
               TextButton(
-                  onPressed: () {
-                    final period = fileNameController.text.lastIndexOf(".");
-                    if (period == -1) {
-                      fileNameController.text = generateRandomText();
-                    } else {
-                      fileNameController.text = generateRandomText() +
-                          fileNameController.text.substring(period);
-                    }
-                  },
-                  child: Text(S.of(context).randomizeFileName)),
+                onPressed: () {
+                  final period = fileNameController.text.lastIndexOf(".");
+                  if (period == -1) {
+                    fileNameController.text = generateRandomText();
+                  } else {
+                    fileNameController.text = generateRandomText() +
+                        fileNameController.text.substring(period);
+                  }
+                },
+                child: Text(S.of(context).randomizeFileName),
+              ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               CheckboxListTile(
                 value: isNsfw,
@@ -95,7 +100,8 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
                 maxLines: null,
                 minLines: 5,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.subtitles_outlined)),
+                  prefixIcon: Icon(Icons.subtitles_outlined),
+                ),
               ),
             ],
           ),
@@ -103,14 +109,17 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
       ),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop(FileSettingsDialogResult(
+          onPressed: () {
+            Navigator.of(context).pop(
+              FileSettingsDialogResult(
                 fileName: fileNameController.text,
                 isNsfw: isNsfw,
                 caption: captionController.text,
-              ));
-            },
-            child: Text(S.of(context).done)),
+              ),
+            );
+          },
+          child: Text(S.of(context).done),
+        ),
       ],
     );
   }

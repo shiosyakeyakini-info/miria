@@ -75,10 +75,12 @@ class WordMutePageState extends ConsumerState<WordMutePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(switch (widget.muteType) {
-          MuteType.soft => S.of(context).wordMute,
-          MuteType.hard => S.of(context).hardWordMute,
-        }),
+        title: Text(
+          switch (widget.muteType) {
+            MuteType.soft => S.of(context).wordMute,
+            MuteType.hard => S.of(context).hardWordMute,
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

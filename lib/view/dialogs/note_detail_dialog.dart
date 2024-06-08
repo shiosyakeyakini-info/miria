@@ -37,16 +37,21 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
       setState(() {
         foundEmojis.clear();
         if (reactionTextField.text.isNotEmpty) {
-          foundEmojis.addAll(ref
-                  .read(emojiRepositoryProvider(widget.account))
-                  .emoji
-                  ?.where((element) =>
-                      element.emoji.baseName.contains(reactionTextField.text) ||
-                      element.aliases
-                          .any((e) => e.contains(reactionTextField.text)))
-                  .take(10)
-                  .map((e) => e.emoji) ??
-              []);
+          foundEmojis.addAll(
+            ref
+                    .read(emojiRepositoryProvider(widget.account))
+                    .emoji
+                    ?.where(
+                      (element) =>
+                          element.emoji.baseName
+                              .contains(reactionTextField.text) ||
+                          element.aliases
+                              .any((e) => e.contains(reactionTextField.text)),
+                    )
+                    .take(10)
+                    .map((e) => e.emoji) ??
+                [],
+          );
         }
       });
     });

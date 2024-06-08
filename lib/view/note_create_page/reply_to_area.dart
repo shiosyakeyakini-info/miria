@@ -11,8 +11,10 @@ class ReplyToArea extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final repliesTo = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.replyTo));
+    final repliesTo = ref.watch(
+      noteCreateProvider(AccountScope.of(context))
+          .select((value) => value.replyTo),
+    );
 
     if (repliesTo.isEmpty) {
       return const SizedBox.shrink();
@@ -42,12 +44,14 @@ class ReplyToArea extends ConsumerWidget {
                 Text(
                   "@${replyTo.username}${replyTo.host == null ? "" : "@${replyTo.host}"}",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.of(context).mentionStyle.color),
+                        color: AppTheme.of(context).mentionStyle.color,
+                      ),
                 ),
                 IconButton(
                   onPressed: () => ref
                       .read(
-                          noteCreateProvider(AccountScope.of(context)).notifier)
+                        noteCreateProvider(AccountScope.of(context)).notifier,
+                      )
                       .deleteReplyUser(replyTo),
                   icon: Icon(
                     Icons.remove,
@@ -58,8 +62,8 @@ class ReplyToArea extends ConsumerWidget {
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
                   style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                    minimumSize: MaterialStatePropertyAll(Size(0, 0)),
+                    padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                    minimumSize: WidgetStatePropertyAll(Size(0, 0)),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
@@ -75,8 +79,8 @@ class ReplyToArea extends ConsumerWidget {
             constraints: const BoxConstraints(),
             padding: EdgeInsets.zero,
             style: const ButtonStyle(
-              padding: MaterialStatePropertyAll(EdgeInsets.zero),
-              minimumSize: MaterialStatePropertyAll(Size.zero),
+              padding: WidgetStatePropertyAll(EdgeInsets.zero),
+              minimumSize: WidgetStatePropertyAll(Size.zero),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             icon: Icon(

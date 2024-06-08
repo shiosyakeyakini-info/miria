@@ -50,16 +50,18 @@ class RoleSelectDialogState extends ConsumerState<RoleSelectDialog> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: roles.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(roles[index]);
-                          },
-                          title: Text(roles[index].name));
-                    }),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: roles.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(roles[index]);
+                      },
+                      title: Text(roles[index].name),
+                    );
+                  },
+                ),
               ],
             ),
           ),

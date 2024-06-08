@@ -66,58 +66,69 @@ class ClipModeState extends ConsumerState<ClipMode> {
                 if (clipMode) ...[
                   // mask
                   Positioned(
-                      left: cropOffset.dx + basePadding * ratio,
-                      top: cropOffset.dy + basePadding * ratio,
-                      width: cropSize.width,
-                      height: cropSize.height,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.white.withAlpha(150),
-                                width: 2 * ratio)),
-                      )),
+                    left: cropOffset.dx + basePadding * ratio,
+                    top: cropOffset.dy + basePadding * ratio,
+                    width: cropSize.width,
+                    height: cropSize.height,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white.withAlpha(150),
+                          width: 2 * ratio,
+                        ),
+                      ),
+                    ),
+                  ),
 
                   //left top-down
                   Positioned(
-                      left: basePadding * ratio,
-                      top: basePadding * ratio,
-                      width: cropOffset.dx,
-                      height: defaultSize.height,
-                      child: DecoratedBox(
-                        decoration:
-                            BoxDecoration(color: Colors.black87.withAlpha(150)),
-                      )),
+                    left: basePadding * ratio,
+                    top: basePadding * ratio,
+                    width: cropOffset.dx,
+                    height: defaultSize.height,
+                    child: DecoratedBox(
+                      decoration:
+                          BoxDecoration(color: Colors.black87.withAlpha(150)),
+                    ),
+                  ),
                   //right top-down
                   Positioned(
-                      left:
-                          cropOffset.dx + basePadding * ratio + cropSize.width,
-                      top: basePadding * ratio,
-                      width: defaultSize.width - cropSize.width - cropOffset.dx,
-                      height: defaultSize.height,
-                      child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.black87.withAlpha(150)))),
+                    left: cropOffset.dx + basePadding * ratio + cropSize.width,
+                    top: basePadding * ratio,
+                    width: defaultSize.width - cropSize.width - cropOffset.dx,
+                    height: defaultSize.height,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black87.withAlpha(150),
+                      ),
+                    ),
+                  ),
                   //left over crop
                   Positioned(
-                      left: basePadding * ratio + cropOffset.dx,
-                      top: basePadding * ratio,
-                      width: cropSize.width,
-                      height: cropOffset.dy,
-                      child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.black87.withAlpha(150)))),
+                    left: basePadding * ratio + cropOffset.dx,
+                    top: basePadding * ratio,
+                    width: cropSize.width,
+                    height: cropOffset.dy,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black87.withAlpha(150),
+                      ),
+                    ),
+                  ),
 
                   //left under crop
                   Positioned(
-                      left: basePadding * ratio + cropOffset.dx,
-                      top:
-                          basePadding * ratio + cropSize.height + cropOffset.dy,
-                      width: cropSize.width,
-                      height:
-                          defaultSize.height - cropSize.height - cropOffset.dy,
-                      child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.black87.withAlpha(150)))),
+                    left: basePadding * ratio + cropOffset.dx,
+                    top: basePadding * ratio + cropSize.height + cropOffset.dy,
+                    width: cropSize.width,
+                    height:
+                        defaultSize.height - cropSize.height - cropOffset.dy,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black87.withAlpha(150),
+                      ),
+                    ),
+                  ),
 
                   Positioned(
                     left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
@@ -199,9 +210,10 @@ class ClipModeState extends ConsumerState<ClipMode> {
                           .selectReaction(reaction.$1),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                            border: reaction.$1 == selectedReaction
-                                ? Border.all(color: Colors.white)
-                                : null),
+                          border: reaction.$1 == selectedReaction
+                              ? Border.all(color: Colors.white)
+                              : null,
+                        ),
                         child: SizedBox(
                           width: reaction.$2.scale,
                           height: reaction.$2.scale,
@@ -218,7 +230,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                         ),
                       ),
                     ),
-                  )
+                  ),
               ],
             ),
           ),

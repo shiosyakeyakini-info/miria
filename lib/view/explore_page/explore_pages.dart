@@ -19,28 +19,33 @@ class ExplorePagesState extends ConsumerState<ExplorePages> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
-      child: FutureListView(future: () async {
-        final result = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
-            .pages
-            .featured();
-        return result.toList();
-      }(), builder: (context, item) {
-        return ListTile(
-          onTap: () {
-            context.pushRoute(
-              MisskeyRouteRoute(account: AccountScope.of(context), page: item),
-            );
-          },
-          title: MfmText(
+      child: FutureListView(
+        future: () async {
+          final result = await ref
+              .read(misskeyProvider(AccountScope.of(context)))
+              .pages
+              .featured();
+          return result.toList();
+        }(),
+        builder: (context, item) {
+          return ListTile(
+            onTap: () {
+              context.pushRoute(
+                MisskeyRouteRoute(
+                    account: AccountScope.of(context), page: item),
+              );
+            },
+            title: MfmText(
               mfmText: item.title,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold)),
-          subtitle: MfmText(mfmText: item.summary ?? ""),
-        );
-      }),
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            subtitle: MfmText(mfmText: item.summary ?? ""),
+          );
+        },
+      ),
     );
   }
 }

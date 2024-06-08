@@ -19,20 +19,21 @@ class LoginPageState extends ConsumerState<LoginPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(S.of(context).login),
-            bottom: TabBar(
-              isScrollable: true,
-              tabs: [
-                Tab(text: S.of(context).loginAsMiAuth),
-                Tab(text: S.of(context).loginAsAPIKey),
-              ],
-              tabAlignment: TabAlignment.center,
-            ),
+        appBar: AppBar(
+          title: Text(S.of(context).login),
+          bottom: TabBar(
+            isScrollable: true,
+            tabs: [
+              Tab(text: S.of(context).loginAsMiAuth),
+              Tab(text: S.of(context).loginAsAPIKey),
+            ],
+            tabAlignment: TabAlignment.center,
           ),
-          body: const TabBarView(
-            children: [MiAuthLogin(), ApiKeyLogin()],
-          )),
+        ),
+        body: const TabBarView(
+          children: [MiAuthLogin(), ApiKeyLogin()],
+        ),
+      ),
     );
   }
 }

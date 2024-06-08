@@ -136,7 +136,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
         Expanded(
           child: PushableListView<Note>(
             listKey: Object.hashAll(
-                [isFileOnly, withReply, renote, untilDate, highlight]),
+              [isFileOnly, withReply, renote, untilDate, highlight],
+            ),
             additionalErrorInfo: highlight
                 ? (context, e) => Text(S.of(context).userHighlightAvailability)
                 : null,
@@ -145,7 +146,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
               if (highlight) {
                 notes = await misskey.users.featuredNotes(
                   UsersFeaturedNotesRequest(
-                      userId: widget.remoteUserId ?? widget.userId),
+                    userId: widget.remoteUserId ?? widget.userId,
+                  ),
                 );
               } else {
                 notes = await misskey.users.notes(

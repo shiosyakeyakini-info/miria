@@ -42,23 +42,28 @@ class CwTextAreaState extends ConsumerState<CwTextArea> {
       },
     );
 
-    final cw = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.isCw));
+    final cw = ref.watch(
+      noteCreateProvider(AccountScope.of(context))
+          .select((value) => value.isCw),
+    );
 
     if (!cw) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor))),
+          border: Border(
+            bottom: BorderSide(color: Theme.of(context).dividerColor),
+          ),
+        ),
         padding: const EdgeInsets.only(bottom: 10),
         child: TextField(
           controller: cwController,
           keyboardType: TextInputType.multiline,
           decoration: AppTheme.of(context).noteTextStyle.copyWith(
-              hintText: S.of(context).contentWarning,
-              contentPadding: const EdgeInsets.all(5)),
+                hintText: S.of(context).contentWarning,
+                contentPadding: const EdgeInsets.all(5),
+              ),
         ),
       ),
     );

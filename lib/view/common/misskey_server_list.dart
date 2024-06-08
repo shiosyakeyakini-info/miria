@@ -94,7 +94,8 @@ class MisskeyServerList extends ConsumerWidget {
                             const Padding(padding: EdgeInsets.only(top: 10)),
                             Text(
                               S.of(context).joiningServerUsers(
-                                  server.nodeInfo?.usage?.users?.total ?? 0),
+                                    server.nodeInfo?.usage?.users?.total ?? 0,
+                                  ),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const Padding(padding: EdgeInsets.only(top: 10)),

@@ -15,7 +15,8 @@ class AccountSettingsRepository extends ChangeNotifier {
   Future<void> load() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await SharedPreferenceAppGroup.setAppGroup(
-          "group.info.shiosyakeyakini.miria");
+        "group.info.shiosyakeyakini.miria",
+      );
       final key = await SharedPreferenceAppGroup.get("account_settings");
       print(key);
     }
@@ -38,8 +39,10 @@ class AccountSettingsRepository extends ChangeNotifier {
     try {
       _accountSettings
         ..clear()
-        ..addAll((jsonDecode(storedData) as List)
-            .map((e) => AccountSettings.fromJson(e)));
+        ..addAll(
+          (jsonDecode(storedData) as List)
+              .map((e) => AccountSettings.fromJson(e)),
+        );
     } catch (e) {
       if (kDebugMode) print(e);
     }

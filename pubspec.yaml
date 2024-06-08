@@ -69,6 +69,8 @@ dependencies:
   volume_controller: ^2.0.7
   window_manager: ^0.3.8
   shared_preference_app_group: ^1.0.0+1
+  stack_trace: ^1.11.1
+  flutter_cache_manager: ^3.3.2
 
 dependency_overrides:
   image_editor:

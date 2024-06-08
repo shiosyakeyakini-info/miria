@@ -52,8 +52,11 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         setState(() {
           isLoading = false;
         });
-        scrollController.animateTo(-scrollController.position.pixels,
-            duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+        scrollController.animateTo(
+          -scrollController.position.pixels,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeIn,
+        );
       } catch (e, s) {
         if (kDebugMode) print(e);
         if (mounted) {
@@ -134,8 +137,10 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
               return Container();
             }
 
-            if (ref.read(generalSettingsRepositoryProvider
-                    .select((value) => value.settings.automaticPush)) ==
+            if (ref.read(
+                  generalSettingsRepositoryProvider
+                      .select((value) => value.settings.automaticPush),
+                ) ==
                 AutomaticPush.automatic) {
               nextLoad();
             }
@@ -152,7 +157,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                         stackTrace: error?.$2,
                       ),
                       widget.additionalErrorInfo?.call(context, error) ??
-                          const SizedBox.shrink()
+                          const SizedBox.shrink(),
                     ],
                   ),
                 Center(
@@ -166,8 +171,9 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                         )
                       : const Padding(
                           padding: EdgeInsets.all(20),
-                          child: CircularProgressIndicator()),
-                )
+                          child: CircularProgressIndicator(),
+                        ),
+                ),
               ],
             );
           }

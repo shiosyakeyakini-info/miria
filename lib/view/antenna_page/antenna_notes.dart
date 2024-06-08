@@ -15,23 +15,28 @@ class AntennaNotes extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
     return PushableListView(
-        initializeFuture: () async {
-          final response = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .antennas
-              .notes(AntennasNotesRequest(antennaId: antennaId));
-          ref.read(notesProvider(account)).registerAll(response);
-          return response.toList();
-        },
-        nextFuture: (lastItem, _) async {
-          final response = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .antennas
-              .notes(AntennasNotesRequest(
-                  antennaId: antennaId, untilId: lastItem.id));
-          ref.read(notesProvider(account)).registerAll(response);
-          return response.toList();
-        },
-        itemBuilder: (context, item) => MisskeyNote(note: item));
+      initializeFuture: () async {
+        final response = await ref
+            .read(misskeyProvider(AccountScope.of(context)))
+            .antennas
+            .notes(AntennasNotesRequest(antennaId: antennaId));
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      nextFuture: (lastItem, _) async {
+        final response = await ref
+            .read(misskeyProvider(AccountScope.of(context)))
+            .antennas
+            .notes(
+              AntennasNotesRequest(
+                antennaId: antennaId,
+                untilId: lastItem.id,
+              ),
+            );
+        ref.read(notesProvider(account)).registerAll(response);
+        return response.toList();
+      },
+      itemBuilder: (context, item) => MisskeyNote(note: item),
+    );
   }
 }

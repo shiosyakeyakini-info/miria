@@ -19,8 +19,10 @@ void main() {
     );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
-    expect(() => accountRepository.openMiAuth("https://misskey.io/"),
-        throwsA(isA<InvalidServerException>()));
+    expect(
+      () => accountRepository.openMiAuth("https://misskey.io/"),
+      throwsA(isA<InvalidServerException>()),
+    );
   });
 
   test("Activity Pub非対応サーバーの場合、エラーを返すこと", () {
@@ -30,12 +32,23 @@ void main() {
         ProviderContainer(overrides: [dioProvider.overrideWithValue(dio)]);
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
-    expect(() async => await accountRepository.openMiAuth("sawakai.space"),
-        throwsA(isA<ServerIsNotMisskeyException>()));
-    verify(dio.getUri(argThat(equals(Uri(
-        scheme: "https",
-        host: "sawakai.space",
-        pathSegments: [".well-known", "nodeinfo"])))));
+    expect(
+      () async => await accountRepository.openMiAuth("sawakai.space"),
+      throwsA(isA<ServerIsNotMisskeyException>()),
+    );
+    verify(
+      dio.getUri(
+        argThat(
+          equals(
+            Uri(
+              scheme: "https",
+              host: "sawakai.space",
+              pathSegments: [".well-known", "nodeinfo"],
+            ),
+          ),
+        ),
+      ),
+    );
   });
 
   // test("非対応のソフトウェアの場合、エラーを返すこと", () async {
@@ -68,16 +81,24 @@ void main() {
 
   test("Misskeyの場合でも、バージョンが古い場合、エラーを返すこと", () async {
     final dio = MockDio();
-    when(dio.getUri(any)).thenAnswer((_) async => Response(
+    when(dio.getUri(any)).thenAnswer(
+      (_) async => Response(
         requestOptions: RequestOptions(),
-        data: AuthTestData.oldVerMisskeyNodeInfo));
-    when(dio.get(any)).thenAnswer((realInvocation) async => Response(
+        data: AuthTestData.oldVerMisskeyNodeInfo,
+      ),
+    );
+    when(dio.get(any)).thenAnswer(
+      (realInvocation) async => Response(
         requestOptions: RequestOptions(),
-        data: AuthTestData.oldVerMisskeyNodeInfo2));
+        data: AuthTestData.oldVerMisskeyNodeInfo2,
+      ),
+    );
     final mockMisskey = MockMisskey();
     when(mockMisskey.endpoints()).thenAnswer((_) async => []);
-    when(mockMisskey.meta()).thenAnswer((_) async =>
-        MetaResponse.fromJson(jsonDecode(AuthTestData.oldVerMisskeyMeta)));
+    when(mockMisskey.meta()).thenAnswer(
+      (_) async =>
+          MetaResponse.fromJson(jsonDecode(AuthTestData.oldVerMisskeyMeta)),
+    );
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
@@ -88,7 +109,8 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     await expectLater(
-        () async => await accountRepository.openMiAuth("misskey.dev"),
-        throwsA(isA<SoftwareNotCompatibleException>()));
+      () async => await accountRepository.openMiAuth("misskey.dev"),
+      throwsA(isA<SoftwareNotCompatibleException>()),
+    );
   });
 }

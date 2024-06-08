@@ -47,10 +47,12 @@ final misskeyProvider = Provider.family<Misskey, Account>(
   ),
 );
 final misskeyWithoutAccountProvider = Provider.family<Misskey, String>(
-    (ref, host) => Misskey(
-        host: host,
-        token: null,
-        socketConnectionTimeout: const Duration(seconds: 20)));
+  (ref, host) => Misskey(
+    host: host,
+    token: null,
+    socketConnectionTimeout: const Duration(seconds: 20),
+  ),
+);
 
 final localTimeLineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
@@ -186,19 +188,25 @@ final antennaTimelineProvider =
 
 final mainStreamRepositoryProvider =
     ChangeNotifierProvider.family<MainStreamRepository, Account>(
-        (ref, account) => MainStreamRepository(
-            ref.read(misskeyProvider(account)),
-            ref.read(emojiRepositoryProvider(account)),
-            account,
-            ref.read(accountRepositoryProvider.notifier)));
+  (ref, account) => MainStreamRepository(
+    ref.read(misskeyProvider(account)),
+    ref.read(emojiRepositoryProvider(account)),
+    account,
+    ref.read(accountRepositoryProvider.notifier),
+  ),
+);
 
-final favoriteProvider = ChangeNotifierProvider.autoDispose
-    .family<FavoriteRepository, Account>((ref, account) => FavoriteRepository(
-        ref.read(misskeyProvider(account)), ref.read(notesProvider(account))));
+final favoriteProvider =
+    ChangeNotifierProvider.autoDispose.family<FavoriteRepository, Account>(
+  (ref, account) => FavoriteRepository(
+    ref.read(misskeyProvider(account)),
+    ref.read(notesProvider(account)),
+  ),
+);
 
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
-    (ref, account) =>
-        NoteRepository(ref.read(misskeyProvider(account)), account));
+  (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
+);
 
 //TODO: アカウント毎である必要はない ホスト毎
 //TODO: のつもりだったけど、絵文字にロールが関係するようになるとアカウント毎になる
@@ -247,7 +255,8 @@ final desktopSettingsRepositoryProvider =
 
 final errorEventProvider =
     StateProvider<(Object? error, BuildContext? context)>(
-        (ref) => (null, null));
+  (ref) => (null, null),
+);
 
 final photoEditProvider =
     StateNotifierProvider.autoDispose<PhotoEditStateNotifier, PhotoEdit>(
@@ -261,25 +270,27 @@ final importExportRepository =
 final noteCreateProvider = StateNotifierProvider.family
     .autoDispose<NoteCreateNotifier, NoteCreate, Account>(
   (ref, account) => NoteCreateNotifier(
-      NoteCreate(
-          account: account,
-          noteVisibility: ref
-              .read(accountSettingsRepositoryProvider)
-              .fromAccount(account)
-              .defaultNoteVisibility,
-          localOnly: ref
-              .read(accountSettingsRepositoryProvider)
-              .fromAccount(account)
-              .defaultIsLocalOnly,
-          reactionAcceptance: ref
-              .read(accountSettingsRepositoryProvider)
-              .fromAccount(account)
-              .defaultReactionAcceptance),
-      ref.read(fileSystemProvider),
-      ref.read(dioProvider),
-      ref.read(misskeyProvider(account)),
-      ref.read(errorEventProvider.notifier),
-      ref.read(notesProvider(account))),
+    NoteCreate(
+      account: account,
+      noteVisibility: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultNoteVisibility,
+      localOnly: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultIsLocalOnly,
+      reactionAcceptance: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultReactionAcceptance,
+    ),
+    ref.read(fileSystemProvider),
+    ref.read(dioProvider),
+    ref.read(misskeyProvider(account)),
+    ref.read(errorEventProvider.notifier),
+    ref.read(notesProvider(account)),
+  ),
 );
 
 final misskeyServerListNotifierProvider = AsyncNotifierProvider.autoDispose<

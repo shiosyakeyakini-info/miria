@@ -156,11 +156,13 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
                 isPlayerOpen = false;
               }),
               icon: const Icon(Icons.close),
-              label: Text(playerUrl != null
-                  ? S.of(context).closePlayer
-                  : S.of(context).closeTweet),
+              label: Text(
+                playerUrl != null
+                    ? S.of(context).closePlayer
+                    : S.of(context).closeTweet,
+              ),
             ),
-          ]
+          ],
       ],
     );
   }
@@ -196,8 +198,9 @@ class LinkPreviewTile extends ConsumerWidget {
           Clipboard.setData(ClipboardData(text: link));
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text(S.of(context).doneCopy),
-                duration: const Duration(seconds: 1)),
+              content: Text(S.of(context).doneCopy),
+              duration: const Duration(seconds: 1),
+            ),
           );
         },
         child: DecoratedBox(

@@ -30,10 +30,18 @@ void main() {
       await tester.pumpWidget(timelineTester.buildWidget());
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(mockMisskeyAntenna.notes(argThat(equals(const AntennasNotesRequest(
-        antennaId: "abcdefg",
-        limit: 30,
-      )))));
+      verify(
+        mockMisskeyAntenna.notes(
+          argThat(
+            equals(
+              const AntennasNotesRequest(
+                antennaId: "abcdefg",
+                limit: 30,
+              ),
+            ),
+          ),
+        ),
+      );
     });
   });
 }

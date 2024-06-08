@@ -18,11 +18,12 @@ class MisskeyServerListDialogState
     return AlertDialog(
       title: Text(S.of(context).chooseLoginServer),
       content: SizedBox(
-          width: double.maxFinite,
-          child: MisskeyServerList(
-            isDisableUnloginable: true,
-            onTap: (item) => Navigator.of(context).pop(item.url),
-          )),
+        width: double.maxFinite,
+        child: MisskeyServerList(
+          isDisableUnloginable: true,
+          onTap: (item) => Navigator.of(context).pop(item.url),
+        ),
+      ),
     );
   }
 }

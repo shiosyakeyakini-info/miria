@@ -100,74 +100,79 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     final repository = ref.watch(widget.timeLineRepositoryProvider);
 
     return Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: TimelineListView.builder(
-          reverse: true,
-          controller: scrollController,
-          itemCount:
-              repository.newerNotes.length + repository.olderNotes.length + 1,
-          itemBuilder: (context, index) {
-            // final corecctedIndex = index - 5;
-            final correctedNewer = [
-              if (timelineRepository.olderNotes.isNotEmpty)
-                ...timelineRepository.olderNotes
-                    .slice(0, min(5, timelineRepository.olderNotes.length))
-                    .reversed,
-              ...timelineRepository.newerNotes,
-            ];
-            final correctedOlder = [
-              if (timelineRepository.olderNotes.length > 5)
-                ...timelineRepository.olderNotes
-                    .slice(5, timelineRepository.olderNotes.length)
-            ];
+      padding: const EdgeInsets.only(right: 10),
+      child: TimelineListView.builder(
+        reverse: true,
+        controller: scrollController,
+        itemCount:
+            repository.newerNotes.length + repository.olderNotes.length + 1,
+        itemBuilder: (context, index) {
+          // final corecctedIndex = index - 5;
+          final correctedNewer = [
+            if (timelineRepository.olderNotes.isNotEmpty)
+              ...timelineRepository.olderNotes
+                  .slice(0, min(5, timelineRepository.olderNotes.length))
+                  .reversed,
+            ...timelineRepository.newerNotes,
+          ];
+          final correctedOlder = [
+            if (timelineRepository.olderNotes.length > 5)
+              ...timelineRepository.olderNotes
+                  .slice(5, timelineRepository.olderNotes.length),
+          ];
 
-            if (index > 0) {
-              if ((index - 1) >= correctedNewer.length) {
-                return null;
-              }
-
-              return NoteWrapper(
-                targetNote: correctedNewer[index - 1],
-                timeline: timelineRepository,
-              );
-            }
-
-            if (-index == correctedOlder.length) {
-              if (isLastLoaded) {
-                return const SizedBox.shrink();
-              }
-
-              if (isDownDirectionLoading &&
-                  repository.newerNotes.length + repository.olderNotes.length !=
-                      0) {
-                return const Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Center(child: CircularProgressIndicator()));
-              }
-
-              if (ref.read(generalSettingsRepositoryProvider
-                      .select((value) => value.settings.automaticPush)) ==
-                  AutomaticPush.automatic) {
-                downDirectionLoad();
-              }
-
-              return Center(
-                  child: IconButton(
-                onPressed: downDirectionLoad.expectFailure(context),
-                icon: const Icon(Icons.keyboard_arrow_down),
-              ));
-            }
-
-            if (-index >= correctedOlder.length) {
+          if (index > 0) {
+            if ((index - 1) >= correctedNewer.length) {
               return null;
             }
 
             return NoteWrapper(
-              targetNote: correctedOlder[-index],
+              targetNote: correctedNewer[index - 1],
               timeline: timelineRepository,
             );
-          },
-        ));
+          }
+
+          if (-index == correctedOlder.length) {
+            if (isLastLoaded) {
+              return const SizedBox.shrink();
+            }
+
+            if (isDownDirectionLoading &&
+                repository.newerNotes.length + repository.olderNotes.length !=
+                    0) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (ref.read(
+                  generalSettingsRepositoryProvider
+                      .select((value) => value.settings.automaticPush),
+                ) ==
+                AutomaticPush.automatic) {
+              downDirectionLoad();
+            }
+
+            return Center(
+              child: IconButton(
+                onPressed: downDirectionLoad.expectFailure(context),
+                icon: const Icon(Icons.keyboard_arrow_down),
+              ),
+            );
+          }
+
+          if (-index >= correctedOlder.length) {
+            return null;
+          }
+
+          return NoteWrapper(
+            targetNote: correctedOlder[-index],
+            timeline: timelineRepository,
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -190,17 +195,21 @@ class NoteWrapperState extends ConsumerState<NoteWrapper> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (widget.targetNote.renoteId != null && widget.targetNote.text == null) {
-      widget.timeline.subscribe(SubscribeItem(
-        noteId: widget.targetNote.renoteId!,
-        renoteId: null,
-        replyId: null,
-      ));
+      widget.timeline.subscribe(
+        SubscribeItem(
+          noteId: widget.targetNote.renoteId!,
+          renoteId: null,
+          replyId: null,
+        ),
+      );
     } else {
-      widget.timeline.subscribe(SubscribeItem(
-        noteId: widget.targetNote.id,
-        renoteId: widget.targetNote.renoteId,
-        replyId: widget.targetNote.replyId,
-      ));
+      widget.timeline.subscribe(
+        SubscribeItem(
+          noteId: widget.targetNote.id,
+          renoteId: widget.targetNote.renoteId,
+          replyId: widget.targetNote.replyId,
+        ),
+      );
     }
   }
 
@@ -212,12 +221,16 @@ class NoteWrapperState extends ConsumerState<NoteWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final note = ref.watch(notesProvider(AccountScope.of(context))
-        .select((note) => note.notes[widget.targetNote.id]));
+    final note = ref.watch(
+      notesProvider(AccountScope.of(context))
+          .select((note) => note.notes[widget.targetNote.id]),
+    );
     if (note == null) {
       print("note was not found. ${widget.targetNote}");
       return MisskeyNote(
-          note: widget.targetNote, key: ValueKey<String>(widget.targetNote.id));
+        note: widget.targetNote,
+        key: ValueKey<String>(widget.targetNote.id),
+      );
     }
     return MisskeyNote(note: note, key: ValueKey<String>(note.id));
   }

@@ -6,8 +6,9 @@ class SimpleMessageDialog extends StatelessWidget {
 
   static Future<void> show(BuildContext context, String message) async =>
       await showDialog(
-          context: context,
-          builder: (context) => SimpleMessageDialog(message: message));
+        context: context,
+        builder: (context) => SimpleMessageDialog(message: message),
+      );
 
   const SimpleMessageDialog({
     required this.message,
@@ -20,10 +21,11 @@ class SimpleMessageDialog extends StatelessWidget {
       content: Text(message),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(S.of(context).done))
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(S.of(context).done),
+        ),
       ],
     );
   }

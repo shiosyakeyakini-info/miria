@@ -49,168 +49,173 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        backgroundColor: Colors.transparent,
-        titlePadding: EdgeInsets.zero,
-        contentPadding: EdgeInsets.zero,
-        actionsPadding: EdgeInsets.zero,
-        insetPadding: EdgeInsets.zero,
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: Listener(
-                      onPointerDown: (event) {
-                        if (listeningId != null) {
-                          setState(() {
-                            verticalDragX = 0;
-                            verticalDragY = 0;
-                          });
-                          listeningId = null;
-                          return;
-                        }
-                        if (scale != 1.0) return;
-                        listeningId = event.pointer;
-                      },
-                      onPointerMove: (event) {
-                        if (listeningId != null) {
-                          setState(() {
-                            verticalDragX += event.delta.dx;
-                            verticalDragY += event.delta.dy;
-                          });
-                        }
-                      },
-                      onPointerUp: (event) {
-                        final angle =
-                            atan2(verticalDragY, verticalDragX).abs() /
-                                pi *
-                                180;
-                        if (listeningId != null &&
-                            verticalDragY.abs() > 10 &&
-                            (angle > 60 && angle < 120)) {
-                          Navigator.of(context).pop();
-                        } else {
-                          listeningId = null;
-                        }
-                      },
-                      child: GestureDetector(
-                          onDoubleTapDown: (details) {
-                            listeningId = null;
-                            if (scale != 1.0) {
-                              _transformationController.value =
-                                  Matrix4.identity();
-                              scale = 1.0;
-                            } else {
-                              final position = details.localPosition;
-                              _transformationController
-                                  .value = Matrix4.identity()
-                                ..translate(-position.dx * 2, -position.dy * 2)
-                                ..scale(3.0);
-                              scale = 3.0;
-                            }
-                          },
-                          child: Transform.translate(
-                            offset: Offset(verticalDragX, verticalDragY),
-                            child: PageView(
-                              controller: pageController,
-                              physics: scale == 1.0
-                                  ? const ScrollPhysics()
-                                  : const NeverScrollableScrollPhysics(),
-                              children: [
-                                for (final url in widget.imageUrlList)
-                                  ScaleNotifierInteractiveViewer(
-                                    imageUrl: url,
-                                    controller: _transformationController,
-                                    onScaleChanged: (scaleUpdated) =>
-                                        setState(() {
-                                      scale = scaleUpdated;
-                                    }),
-                                  ),
-                              ],
-                            ),
-                          )))),
+      backgroundColor: Colors.transparent,
+      titlePadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
+      actionsPadding: EdgeInsets.zero,
+      insetPadding: EdgeInsets.zero,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Listener(
+                onPointerDown: (event) {
+                  if (listeningId != null) {
+                    setState(() {
+                      verticalDragX = 0;
+                      verticalDragY = 0;
+                    });
+                    listeningId = null;
+                    return;
+                  }
+                  if (scale != 1.0) return;
+                  listeningId = event.pointer;
+                },
+                onPointerMove: (event) {
+                  if (listeningId != null) {
+                    setState(() {
+                      verticalDragX += event.delta.dx;
+                      verticalDragY += event.delta.dy;
+                    });
+                  }
+                },
+                onPointerUp: (event) {
+                  final angle =
+                      atan2(verticalDragY, verticalDragX).abs() / pi * 180;
+                  if (listeningId != null &&
+                      verticalDragY.abs() > 10 &&
+                      (angle > 60 && angle < 120)) {
+                    Navigator.of(context).pop();
+                  } else {
+                    listeningId = null;
+                  }
+                },
+                child: GestureDetector(
+                  onDoubleTapDown: (details) {
+                    listeningId = null;
+                    if (scale != 1.0) {
+                      _transformationController.value = Matrix4.identity();
+                      scale = 1.0;
+                    } else {
+                      final position = details.localPosition;
+                      _transformationController.value = Matrix4.identity()
+                        ..translate(-position.dx * 2, -position.dy * 2)
+                        ..scale(3.0);
+                      scale = 3.0;
+                    }
+                  },
+                  child: Transform.translate(
+                    offset: Offset(verticalDragX, verticalDragY),
+                    child: PageView(
+                      controller: pageController,
+                      physics: scale == 1.0
+                          ? const ScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
+                      children: [
+                        for (final url in widget.imageUrlList)
+                          ScaleNotifierInteractiveViewer(
+                            imageUrl: url,
+                            controller: _transformationController,
+                            onScaleChanged: (scaleUpdated) => setState(() {
+                              scale = scaleUpdated;
+                            }),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 10,
+              top: 10,
+              child: RawMaterialButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: EdgeInsets.zero,
+                fillColor:
+                    Theme.of(context).scaffoldBackgroundColor.withAlpha(200),
+                shape: const CircleBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Icon(
+                    Icons.close,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color
+                        ?.withAlpha(200),
+                  ),
+                ),
+              ),
+            ),
+            if (defaultTargetPlatform == TargetPlatform.android ||
+                defaultTargetPlatform == TargetPlatform.iOS)
               Positioned(
-                left: 10,
+                right: 10,
                 top: 10,
                 child: RawMaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    constraints:
-                        const BoxConstraints(minWidth: 0, minHeight: 0),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: EdgeInsets.zero,
-                    fillColor: Theme.of(context)
-                        .scaffoldBackgroundColor
-                        .withAlpha(200),
-                    shape: const CircleBorder(),
-                    child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Icon(Icons.close,
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.color
-                                ?.withAlpha(200)))),
+                  onPressed: () async {
+                    final page = pageController.page?.toInt();
+                    if (page == null) return;
+                    final response = await ref.read(dioProvider).get(
+                          widget.imageUrlList[page],
+                          options: Options(responseType: ResponseType.bytes),
+                        );
+
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      final androidInfo = await DeviceInfoPlugin().androidInfo;
+                      if (androidInfo.version.sdkInt <= 32) {
+                        final permissionStatus =
+                            await Permission.storage.status;
+                        if (permissionStatus.isDenied) {
+                          await Permission.storage.request();
+                        }
+                      } else {
+                        final permissionStatus = await Permission.photos.status;
+                        if (permissionStatus.isDenied) {
+                          await Permission.photos.request();
+                        }
+                      }
+                    }
+
+                    await ImageGallerySaver.saveImage(response.data);
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(S.of(context).savedImage),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: EdgeInsets.zero,
+                  fillColor:
+                      Theme.of(context).scaffoldBackgroundColor.withAlpha(200),
+                  shape: const CircleBorder(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Icon(
+                      Icons.save,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color
+                          ?.withAlpha(200),
+                    ),
+                  ),
+                ),
               ),
-              if (defaultTargetPlatform == TargetPlatform.android ||
-                  defaultTargetPlatform == TargetPlatform.iOS)
-                Positioned(
-                    right: 10,
-                    top: 10,
-                    child: RawMaterialButton(
-                        onPressed: () async {
-                          final page = pageController.page?.toInt();
-                          if (page == null) return;
-                          final response = await ref.read(dioProvider).get(
-                              widget.imageUrlList[page],
-                              options:
-                                  Options(responseType: ResponseType.bytes));
-
-                          if (defaultTargetPlatform == TargetPlatform.android) {
-                            final androidInfo =
-                                await DeviceInfoPlugin().androidInfo;
-                            if (androidInfo.version.sdkInt <= 32) {
-                              final permissionStatus =
-                                  await Permission.storage.status;
-                              if (permissionStatus.isDenied) {
-                                await Permission.storage.request();
-                              }
-                            } else {
-                              final permissionStatus =
-                                  await Permission.photos.status;
-                              if (permissionStatus.isDenied) {
-                                await Permission.photos.request();
-                              }
-                            }
-                          }
-
-                          await ImageGallerySaver.saveImage(response.data);
-                          if (!mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(S.of(context).savedImage),
-                              duration: const Duration(seconds: 1)));
-                        },
-                        constraints:
-                            const BoxConstraints(minWidth: 0, minHeight: 0),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        padding: EdgeInsets.zero,
-                        fillColor: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withAlpha(200),
-                        shape: const CircleBorder(),
-                        child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Icon(Icons.save,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.color
-                                    ?.withAlpha(200))))),
-            ],
-          ),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -237,19 +242,20 @@ class ScaleNotifierInteractiveViewerState
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.95,
-        height: MediaQuery.of(context).size.height * 0.95,
-        child: InteractiveViewer(
-          // ピンチイン・ピンチアウト終了後の処理
-          transformationController: widget.controller,
-          onInteractionEnd: (details) {
-            scale = widget.controller.value.getMaxScaleOnAxis();
-            widget.onScaleChanged(scale);
-          },
-          child: NetworkImageView(
-            url: widget.imageUrl,
-            type: ImageType.image,
-          ),
-        ));
+      width: MediaQuery.of(context).size.width * 0.95,
+      height: MediaQuery.of(context).size.height * 0.95,
+      child: InteractiveViewer(
+        // ピンチイン・ピンチアウト終了後の処理
+        transformationController: widget.controller,
+        onInteractionEnd: (details) {
+          scale = widget.controller.value.getMaxScaleOnAxis();
+          widget.onScaleChanged(scale);
+        },
+        child: NetworkImageView(
+          url: widget.imageUrl,
+          type: ImageType.image,
+        ),
+      ),
+    );
   }
 }

@@ -153,9 +153,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           title: Text(S.of(context).note),
           actions: [
             IconButton(
-                onPressed: () async =>
-                    await notifier.note(context).expectFailure(context),
-                icon: const Icon(Icons.send))
+              onPressed: () async =>
+                  await notifier.note(context).expectFailure(context),
+              icon: const Icon(Icons.send),
+            ),
           ],
         ),
         resizeToAvoidBottomInset: true,
@@ -192,53 +193,59 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                           if (widget.noteCreationMode !=
                               NoteCreationMode.update) ...[
                             IconButton(
-                                onPressed: () async =>
-                                    await notifier.chooseFile(context),
-                                icon: const Icon(Icons.image)),
+                              onPressed: () async =>
+                                  await notifier.chooseFile(context),
+                              icon: const Icon(Icons.image),
+                            ),
                             if (widget.noteCreationMode !=
                                 NoteCreationMode.update)
                               IconButton(
-                                  onPressed: () {
-                                    ref
-                                        .read(noteCreateProvider(
-                                                widget.initialAccount)
-                                            .notifier)
-                                        .toggleVote();
-                                  },
-                                  icon: const Icon(Icons.how_to_vote)),
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                        noteCreateProvider(
+                                          widget.initialAccount,
+                                        ).notifier,
+                                      )
+                                      .toggleVote();
+                                },
+                                icon: const Icon(Icons.how_to_vote),
+                              ),
                           ],
                           const CwToggleButton(),
                           if (widget.noteCreationMode !=
                               NoteCreationMode.update)
                             IconButton(
-                                onPressed: () => notifier.addReplyUser(context),
-                                icon: const Icon(Icons.mail_outline)),
+                              onPressed: () => notifier.addReplyUser(context),
+                              icon: const Icon(Icons.mail_outline),
+                            ),
                           IconButton(
-                              onPressed: () async {
-                                final selectedEmoji =
-                                    await showDialog<MisskeyEmojiData?>(
-                                        context: context,
-                                        builder: (context) =>
-                                            ReactionPickerDialog(
-                                              account: data.account,
-                                              isAcceptSensitive: true,
-                                            ));
-                                if (selectedEmoji == null) return;
-                                switch (selectedEmoji) {
-                                  case CustomEmojiData():
-                                    ref
-                                        .read(noteInputTextProvider)
-                                        .insert(":${selectedEmoji.baseName}:");
-                                  case UnicodeEmojiData():
-                                    ref
-                                        .read(noteInputTextProvider)
-                                        .insert(selectedEmoji.char);
-                                  default:
-                                    break;
-                                }
-                                ref.read(noteFocusProvider).requestFocus();
-                              },
-                              icon: const Icon(Icons.tag_faces))
+                            onPressed: () async {
+                              final selectedEmoji =
+                                  await showDialog<MisskeyEmojiData?>(
+                                context: context,
+                                builder: (context) => ReactionPickerDialog(
+                                  account: data.account,
+                                  isAcceptSensitive: true,
+                                ),
+                              );
+                              if (selectedEmoji == null) return;
+                              switch (selectedEmoji) {
+                                case CustomEmojiData():
+                                  ref
+                                      .read(noteInputTextProvider)
+                                      .insert(":${selectedEmoji.baseName}:");
+                                case UnicodeEmojiData():
+                                  ref
+                                      .read(noteInputTextProvider)
+                                      .insert(selectedEmoji.char);
+                                default:
+                                  break;
+                              }
+                              ref.read(noteFocusProvider).requestFocus();
+                            },
+                            icon: const Icon(Icons.tag_faces),
+                          ),
                         ],
                       ),
                       const MfmPreview(),

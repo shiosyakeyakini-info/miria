@@ -85,9 +85,11 @@ extension TextEditingControllerExtension on TextEditingController {
         : text.substring(currentPosition, text.length);
 
     value = TextEditingValue(
-        text: "$before$insertText${afterText ?? ""}$after",
-        selection: TextSelection.collapsed(
-            offset: (currentPosition == -1 ? 0 : currentPosition) +
-                insertText.length));
+      text: "$before$insertText${afterText ?? ""}$after",
+      selection: TextSelection.collapsed(
+        offset:
+            (currentPosition == -1 ? 0 : currentPosition) + insertText.length,
+      ),
+    );
   }
 }

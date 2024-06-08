@@ -30,20 +30,25 @@ class ChannelDetailPage extends ConsumerWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text(S.of(context).channel),
-            bottom: TabBar(tabs: [
-              Tab(child: Text(S.of(context).channelInformation)),
-              Tab(child: Text(S.of(context).timeline))
-            ]),
+            bottom: TabBar(
+              tabs: [
+                Tab(child: Text(S.of(context).channelInformation)),
+                Tab(child: Text(S.of(context).timeline)),
+              ],
+            ),
           ),
           body: TabBarView(
             children: [
               SingleChildScrollView(
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: ChannelDetailInfo(channelId: channelId))),
-              Padding(
+                child: Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: ChannelTimeline(channelId: channelId)),
+                  child: ChannelDetailInfo(channelId: channelId),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: ChannelTimeline(channelId: channelId),
+              ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -53,10 +58,12 @@ class ChannelDetailPage extends ConsumerWidget {
                   .read(misskeyProvider(account))
                   .channels
                   .show(ChannelsShowRequest(channelId: channelId));
-              context.pushRoute(NoteCreateRoute(
-                initialAccount: account,
-                channel: communityChannel,
-              ));
+              context.pushRoute(
+                NoteCreateRoute(
+                  initialAccount: account,
+                  channel: communityChannel,
+                ),
+              );
             },
           ),
         ),

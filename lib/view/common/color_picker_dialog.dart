@@ -15,17 +15,19 @@ class ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text(S.of(context).pickColor),
-        content: ColorPicker(
-          pickerColor: pickedColor,
-          onColorChanged: (color) => setState(() => pickedColor = color),
+      title: Text(S.of(context).pickColor),
+      content: ColorPicker(
+        pickerColor: pickedColor,
+        onColorChanged: (color) => setState(() => pickedColor = color),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(pickedColor);
+          },
+          child: Text(S.of(context).decideColor),
         ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(pickedColor);
-              },
-              child: Text(S.of(context).decideColor))
-        ]);
+      ],
+    );
   }
 }

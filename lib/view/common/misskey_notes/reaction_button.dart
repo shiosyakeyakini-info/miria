@@ -72,10 +72,11 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         final account = AccountScope.of(context);
         if (isMyReaction) {
           if (await SimpleConfirmDialog.show(
-                  context: context,
-                  message: S.of(context).confirmDeleteReaction,
-                  primary: S.of(context).cancelReaction,
-                  secondary: S.of(context).cancel) !=
+                context: context,
+                message: S.of(context).confirmDeleteReaction,
+                primary: S.of(context).cancelReaction,
+                secondary: S.of(context).cancel,
+              ) !=
               true) {
             return;
           }
@@ -87,7 +88,8 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
               .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
           if (account.host == "misskey.io") {
             await Future.delayed(
-                const Duration(milliseconds: misskeyIOReactionDelay));
+              const Duration(milliseconds: misskeyIOReactionDelay),
+            );
           }
 
           await ref.read(notesProvider(account)).refresh(widget.noteId);
@@ -111,30 +113,36 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         }
 
         await ref.read(misskeyProvider(account)).notes.reactions.create(
-            NotesReactionsCreateRequest(
-                noteId: widget.noteId, reaction: reactionString));
+              NotesReactionsCreateRequest(
+                noteId: widget.noteId,
+                reaction: reactionString,
+              ),
+            );
 
         // misskey.ioはただちにリアクションを反映してくれない
         if (account.host == "misskey.io") {
           await Future.delayed(
-              const Duration(milliseconds: misskeyIOReactionDelay));
+            const Duration(milliseconds: misskeyIOReactionDelay),
+          );
         }
 
         await ref.read(notesProvider(account)).refresh(widget.noteId);
       },
       onLongPress: () {
         showDialog(
-            context: context,
-            builder: (context2) {
-              return ReactionUserDialog(
-                  account: AccountScope.of(context),
-                  emojiData: widget.emojiData,
-                  noteId: widget.noteId);
-            });
+          context: context,
+          builder: (context2) {
+            return ReactionUserDialog(
+              account: AccountScope.of(context),
+              emojiData: widget.emojiData,
+              noteId: widget.noteId,
+            );
+          },
+        );
       },
       style: AppTheme.of(context).reactionButtonStyle.copyWith(
-            backgroundColor: MaterialStatePropertyAll(backgroundColor),
-            side: MaterialStatePropertyAll(
+            backgroundColor: WidgetStatePropertyAll(backgroundColor),
+            side: WidgetStatePropertyAll(
               BorderSide(color: borderColor),
             ),
           ),

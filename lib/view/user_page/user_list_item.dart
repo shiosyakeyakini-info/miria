@@ -26,7 +26,8 @@ class UserListItem extends ConsumerWidget {
     return InkWell(
       onTap: onTap ??
           () => context.pushRoute(
-              UserRoute(userId: user.id, account: AccountScope.of(context))),
+                UserRoute(userId: user.id, account: AccountScope.of(context)),
+              ),
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
@@ -89,11 +90,11 @@ class UserListItem extends ConsumerWidget {
                         mfmText: (user as UserDetailed).description ?? "",
                         emoji: user.emojis,
                         maxLines: 5,
-                      )
+                      ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

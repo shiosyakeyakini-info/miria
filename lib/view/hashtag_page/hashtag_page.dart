@@ -23,39 +23,46 @@ class HashtagPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AccountScope(
-        account: account,
-        child: Scaffold(
-          appBar: AppBar(title: Text("#$hashtag")),
-          body: Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: PushableListView(
-              initializeFuture: () async {
-                final response = await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .searchByTag(NotesSearchByTagRequest(tag: hashtag));
-                ref.read(notesProvider(account)).registerAll(response);
-                return response.toList();
-              },
-              nextFuture: (lastItem, _) async {
-                final response = await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .searchByTag(NotesSearchByTagRequest(
-                        tag: hashtag, untilId: lastItem.id));
-                ref.read(notesProvider(account)).registerAll(response);
-                return response.toList();
-              },
-              itemBuilder: (context, item) => MisskeyNote(note: item),
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              context.pushRoute(NoteCreateRoute(
-                  initialAccount: account, initialText: "#$hashtag"));
+      account: account,
+      child: Scaffold(
+        appBar: AppBar(title: Text("#$hashtag")),
+        body: Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: PushableListView(
+            initializeFuture: () async {
+              final response = await ref
+                  .read(misskeyProvider(account))
+                  .notes
+                  .searchByTag(NotesSearchByTagRequest(tag: hashtag));
+              ref.read(notesProvider(account)).registerAll(response);
+              return response.toList();
             },
-            child: const Icon(Icons.edit),
+            nextFuture: (lastItem, _) async {
+              final response =
+                  await ref.read(misskeyProvider(account)).notes.searchByTag(
+                        NotesSearchByTagRequest(
+                          tag: hashtag,
+                          untilId: lastItem.id,
+                        ),
+                      );
+              ref.read(notesProvider(account)).registerAll(response);
+              return response.toList();
+            },
+            itemBuilder: (context, item) => MisskeyNote(note: item),
           ),
-        ));
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.pushRoute(
+              NoteCreateRoute(
+                initialAccount: account,
+                initialText: "#$hashtag",
+              ),
+            );
+          },
+          child: const Icon(Icons.edit),
+        ),
+      ),
+    );
   }
 }
