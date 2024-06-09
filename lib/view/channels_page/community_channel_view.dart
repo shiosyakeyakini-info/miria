@@ -22,7 +22,7 @@ class CommunityChannelView extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
         onTap: onTap ??
-            () => context.pushRoute(
+            () async => context.pushRoute(
                   ChannelDetailRoute(
                     account: AccountScope.of(context),
                     channelId: channel.id,

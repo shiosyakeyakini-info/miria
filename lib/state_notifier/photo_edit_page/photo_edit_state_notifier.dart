@@ -56,7 +56,7 @@ class EditedEmojiData with _$EditedEmojiData {
 class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   static final List<String> _acceptReactions = [];
 
-  PhotoEditStateNotifier(super.state);
+  PhotoEditStateNotifier(super._state);
 
   /// 状態を初期化する
   Future<void> initialize(MisskeyPostFile file) async {

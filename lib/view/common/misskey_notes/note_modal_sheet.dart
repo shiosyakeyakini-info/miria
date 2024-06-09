@@ -47,16 +47,15 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: Text(S.of(context).detail),
-          onTap: () {
-            context
-                .pushRoute(NoteDetailRoute(note: targetNote, account: account));
-          },
+          onTap: () async => context
+              .pushRoute(NoteDetailRoute(note: targetNote, account: account)),
         ),
         ListTile(
           leading: const Icon(Icons.copy),
           title: Text(S.of(context).copyContents),
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
+          onTap: () async {
+            await Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
+            if (!context.mounted) return;
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -69,12 +68,13 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
-          onTap: () {
-            Clipboard.setData(
+          onTap: () async {
+            await Clipboard.setData(
               ClipboardData(
                 text: "https://${account.host}/notes/${targetNote.id}",
               ),
             );
+            if (!context.mounted) return;
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -94,7 +94,7 @@ class NoteModalSheet extends ConsumerWidget {
                 .users
                 .show(UsersShowRequest(userId: targetNote.userId));
             if (!context.mounted) return;
-            showModalBottomSheet<void>(
+            await showModalBottomSheet<void>(
               context: context,
               builder: (context) => UserControlDialog(
                 account: account,
@@ -107,11 +107,12 @@ class NoteModalSheet extends ConsumerWidget {
           leading: const Icon(Icons.open_in_browser),
           title: Text(S.of(context).openBrowsers),
           onTap: () async {
-            launchUrlString(
+            await launchUrlString(
               "https://${account.host}/notes/${targetNote.id}",
               mode: LaunchMode.inAppWebView,
             );
 
+            if (!context.mounted) return;
             Navigator.of(context).pop();
           },
         ),
@@ -122,8 +123,8 @@ class NoteModalSheet extends ConsumerWidget {
             onTap: () async {
               final uri = targetNote.url ?? targetNote.uri;
               if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.inAppWebView);
-
+              await launchUrl(uri, mode: LaunchMode.inAppWebView);
+              if (!context.mounted) return;
               Navigator.of(context).pop();
             },
           ),
@@ -133,7 +134,7 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.open_in_new),
             title: Text(S.of(context).openInAnotherAccount),
-            onTap: () => ref
+            onTap: () async => ref
                 .read(misskeyNoteNotifierProvider(account).notifier)
                 .openNoteInOtherAccount(context, targetNote)
                 .expectFailure(context),
@@ -190,7 +191,7 @@ class NoteModalSheet extends ConsumerWidget {
                     leading: const Icon(Icons.star_rounded),
                     onTap: () async {
                       if (data.isFavorited) {
-                        ref
+                        await ref
                             .read(misskeyProvider(account))
                             .notes
                             .favorites
@@ -199,10 +200,9 @@ class NoteModalSheet extends ConsumerWidget {
                                 noteId: targetNote.id,
                               ),
                             );
-
                         Navigator.of(context).pop();
                       } else {
-                        ref
+                        await ref
                             .read(misskeyProvider(account))
                             .notes
                             .favorites
@@ -211,6 +211,7 @@ class NoteModalSheet extends ConsumerWidget {
                                 noteId: targetNote.id,
                               ),
                             );
+                        if (!context.mounted) return;
                         Navigator.of(context).pop();
                       }
                     },

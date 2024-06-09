@@ -38,7 +38,7 @@ class ClipListPage extends ConsumerWidget {
               );
               if (!context.mounted) return;
               if (settings != null) {
-                ref
+                await ref
                     .read(clipsNotifierProvider(misskey).notifier)
                     .create(settings)
                     .expectFailure(context);

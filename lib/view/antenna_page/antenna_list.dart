@@ -46,7 +46,7 @@ class AntennaList extends ConsumerWidget {
                   }
                 },
               ),
-              onTap: () => context.pushRoute(
+              onTap: () async => context.pushRoute(
                 AntennaNotesRoute(
                   antenna: antenna,
                   account: account,

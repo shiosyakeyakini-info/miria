@@ -43,7 +43,7 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
         );
     if (!mounted) return;
     Navigator.of(context).pop();
-    showDialog(
+    await showDialog(
       context: context,
       builder: (context) =>
           SimpleMessageDialog(message: S.of(context).thanksForReport),

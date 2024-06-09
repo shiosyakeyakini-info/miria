@@ -57,7 +57,7 @@ class MisskeyAdState extends ConsumerState<MisskeyAd> {
 
     return Center(
       child: GestureDetector(
-        onTap: () =>
+        onTap: () async =>
             launchUrl(targetAd.url, mode: LaunchMode.externalApplication),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

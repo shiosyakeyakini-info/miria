@@ -1,4 +1,5 @@
 import "package:flutter/widgets.dart";
+import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/repository/emoji_repository.dart";
@@ -48,8 +49,7 @@ class MainStreamRepository extends ChangeNotifier {
         accountRepository.createUnreadAnnouncement(account, announcement);
       },
     );
-    await misskey.startStreaming();
-    await confirmNotification();
+    await Future.wait([misskey.startStreaming(), confirmNotification()]);
   }
 
   Future<void> reconnect() async {
@@ -62,7 +62,8 @@ class MainStreamRepository extends ChangeNotifier {
     }
     isReconnecting = true;
     try {
-      print("main stream repository's socket controller will be disconnect");
+      logger.info(
+          "main stream repository's socket controller will be disconnect");
       socketController?.disconnect();
       socketController = null;
       await misskey.streamingService.restart();

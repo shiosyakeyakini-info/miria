@@ -5,6 +5,7 @@ import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:json5/json5.dart";
+import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
@@ -169,7 +170,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 ),
               );
 
-      print(reactions);
+      logger.info(reactions);
     } catch (e) {
       final endpoints =
           await ref.read(misskeyProvider(widget.account)).endpoints();

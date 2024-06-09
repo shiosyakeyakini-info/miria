@@ -18,7 +18,7 @@ class ClipItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => context.pushRoute(
+      onTap: () async => context.pushRoute(
         ClipDetailRoute(account: AccountScope.of(context), id: clip.id),
       ),
       title: Text(clip.name ?? ""),

@@ -171,7 +171,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
       children: [
         Align(
           child: GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (!nsfwAccepted) {
                 setState(() {
                   nsfwAccepted = true;
@@ -179,7 +179,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                 return;
               } else {
                 if (widget.fileType.startsWith("image")) {
-                  showDialog(
+                  await showDialog(
                     context: context,
                     builder: (context) => ImageDialog(
                       imageUrlList: widget.targetFiles,
@@ -187,7 +187,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                     ),
                   );
                 } else if (widget.fileType.startsWith(RegExp("video|audio"))) {
-                  showDialog(
+                  await showDialog(
                     context: context,
                     builder: (context) => VideoDialog(
                       url: widget.targetFiles[widget.position],
@@ -195,7 +195,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                     ),
                   );
                 } else {
-                  launchUrl(
+                  await launchUrl(
                     Uri.parse(widget.targetFiles[widget.position]),
                     mode: LaunchMode.externalApplication,
                   );
@@ -299,12 +299,10 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                         );
                       } else {
                         cachedWidget = TextButton.icon(
-                          onPressed: () {
-                            launchUrl(
-                              Uri.parse(widget.targetFiles[widget.position]),
-                              mode: LaunchMode.externalApplication,
-                            );
-                          },
+                          onPressed: () async => launchUrl(
+                            Uri.parse(widget.targetFiles[widget.position]),
+                            mode: LaunchMode.externalApplication,
+                          ),
                           icon: const Icon(Icons.file_download_outlined),
                           label: Text(widget.name),
                         );

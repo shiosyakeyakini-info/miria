@@ -41,73 +41,79 @@ class CommonDrawer extends ConsumerWidget {
                     ListTile(
                       leading: const Icon(Icons.notifications),
                       title: Text(S.of(context).notification),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(NotificationRoute(account: account));
+                        await context
+                            .pushRoute(NotificationRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.star),
                       title: Text(S.of(context).favorite),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(FavoritedNoteRoute(account: account));
+                        await context
+                            .pushRoute(FavoritedNoteRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.list),
                       title: Text(S.of(context).list),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(UsersListRoute(account: account));
+                        await context
+                            .pushRoute(UsersListRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.settings_input_antenna),
                       title: Text(S.of(context).antenna),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(AntennaRoute(account: account));
+                        await context.pushRoute(AntennaRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.attach_file),
                       title: Text(S.of(context).clip),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(ClipListRoute(account: account));
+                        await context
+                            .pushRoute(ClipListRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.tv),
                       title: Text(S.of(context).channel),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(ChannelsRoute(account: account));
+                        await context
+                            .pushRoute(ChannelsRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.search),
                       title: Text(S.of(context).search),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(SearchRoute(account: account));
+                        await context.pushRoute(SearchRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.tag),
                       title: Text(S.of(context).explore),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(ExploreRoute(account: account));
+                        await context.pushRoute(ExploreRoute(account: account));
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.gamepad),
                       title: Text(S.of(context).misskeyGames),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(MisskeyGamesRoute(account: account));
+                        await context
+                            .pushRoute(MisskeyGamesRoute(account: account));
                       },
                     ),
                     ListTile(
@@ -117,9 +123,9 @@ class CommonDrawer extends ConsumerWidget {
                               account.i.name ?? account.i.username,
                             ),
                       ),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.of(context).pop();
-                        context.pushRoute(
+                        await context.pushRoute(
                           SeveralAccountSettingsRoute(account: account),
                         );
                       },
@@ -131,9 +137,9 @@ class CommonDrawer extends ConsumerWidget {
             ListTile(
               leading: const Icon(Icons.settings),
               title: Text(S.of(context).settings),
-              onTap: () {
+              onTap: () async {
                 Navigator.of(context).pop();
-                context.pushRoute(const SettingsRoute());
+                await context.pushRoute(const SettingsRoute());
               },
             ),
           ],

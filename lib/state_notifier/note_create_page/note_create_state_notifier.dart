@@ -8,6 +8,7 @@ import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:mfm_parser/mfm_parser.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
@@ -357,7 +358,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
                     await FlutterImageCompress.compressWithList(file.data);
               }
             } catch (e) {
-              print("failed to compress file");
+              logger.shout("failed to compress file");
             }
 
             response = await misskey.drive.files.createAsBinary(

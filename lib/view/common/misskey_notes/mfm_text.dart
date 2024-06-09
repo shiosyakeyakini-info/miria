@@ -96,11 +96,11 @@ class MfmTextState extends ConsumerState<MfmText> {
       pathSegments: ["search"],
       queryParameters: {"q": query},
     );
-    launchUrl(uri);
+    await launchUrl(uri);
   }
 
-  void onHashtagTap(String hashtag) {
-    context.pushRoute(
+  Future<void> onHashtagTap(String hashtag) async {
+    await context.pushRoute(
       HashtagRoute(account: AccountScope.of(context), hashtag: hashtag),
     );
   }
@@ -169,12 +169,12 @@ class MfmTextState extends ConsumerState<MfmText> {
       monospaceStyle: AppTheme.of(context).monospaceStyle,
       cursiveStyle: AppTheme.of(context).cursiveStyle,
       fantasyStyle: AppTheme.of(context).fantasyStyle,
-      linkTap: (src) => const LinkNavigator()
+      linkTap: (src) async => const LinkNavigator()
           .onTapLink(context, ref, src, widget.host)
           .expectFailure(context),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
-      mentionTap: (userName, host, acct) => const LinkNavigator()
+      mentionTap: (userName, host, acct) async => const LinkNavigator()
           .onMentionTap(
             context,
             ref,

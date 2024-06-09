@@ -56,14 +56,12 @@ class AvatarIconState extends State<AvatarIcon> {
 
     return GestureDetector(
       onTap: widget.onTap ??
-          () {
-            context.pushRoute(
-              UserRoute(
-                userId: widget.user.id,
-                account: AccountScope.of(context),
+          () async => context.pushRoute(
+                UserRoute(
+                  userId: widget.user.id,
+                  account: AccountScope.of(context),
+                ),
               ),
-            );
-          },
       child: Padding(
         padding: EdgeInsets.only(
           top: 3,

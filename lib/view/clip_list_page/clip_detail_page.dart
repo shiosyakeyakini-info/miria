@@ -46,7 +46,7 @@ class ClipDetailPage extends ConsumerWidget {
                   );
                   if (!context.mounted) return;
                   if (settings != null) {
-                    ref
+                    await ref
                         .read(clipsNotifierProvider(misskey).notifier)
                         .updateClip(clip.id, settings)
                         .expectFailure(context);

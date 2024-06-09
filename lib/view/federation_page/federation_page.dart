@@ -2,6 +2,7 @@ import "package:auto_route/annotations.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/federation_data.dart";
 import "package:miria/providers.dart";
@@ -156,8 +157,9 @@ class FederationPageState extends ConsumerState<FederationPage> {
         if (!mounted) return;
         setState(() {});
       } catch (e, s) {
-        print(e);
-        print(s);
+        logger
+          ..warning(e)
+          ..warning(s);
         if (!mounted) return;
       }
     });

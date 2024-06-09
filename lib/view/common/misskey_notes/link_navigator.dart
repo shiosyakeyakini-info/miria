@@ -56,14 +56,16 @@ class LinkNavigator {
       }
     }
 
+    if (!context.mounted) return;
+
     if (uri.pathSegments.length == 2 && uri.pathSegments.first == "clips") {
       // クリップはクリップの画面で開く
-      context.pushRoute(
+      await context.pushRoute(
         ClipDetailRoute(account: account, id: uri.pathSegments[1]),
       );
     } else if (uri.pathSegments.length == 2 &&
         uri.pathSegments.first == "channels") {
-      context.pushRoute(
+      await context.pushRoute(
         ChannelDetailRoute(account: account, channelId: uri.pathSegments[1]),
       );
     } else if (uri.pathSegments.length == 2 &&
@@ -72,7 +74,7 @@ class LinkNavigator {
           .read(misskeyProvider(account))
           .notes
           .show(NotesShowRequest(noteId: uri.pathSegments[1]));
-      context.pushRoute(NoteDetailRoute(account: account, note: note));
+      await context.pushRoute(NoteDetailRoute(account: account, note: note));
     } else if (uri.pathSegments.length == 3 && uri.pathSegments[1] == "pages") {
       final page = await ref.read(misskeyProvider(account)).pages.show(
             PagesShowRequest(
@@ -80,7 +82,7 @@ class LinkNavigator {
               username: uri.pathSegments[0].substring(1),
             ),
           );
-      context.pushRoute(MisskeyRouteRoute(account: account, page: page));
+      await context.pushRoute(MisskeyRouteRoute(account: account, page: page));
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(context, ref, account, uri.pathSegments.first, host);
@@ -126,6 +128,7 @@ class LinkNavigator {
           ),
         );
 
-    context.pushRoute(UserRoute(userId: response.id, account: account));
+    if (!context.mounted) return;
+    await context.pushRoute(UserRoute(userId: response.id, account: account));
   }
 }

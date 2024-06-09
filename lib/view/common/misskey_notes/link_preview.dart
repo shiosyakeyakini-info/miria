@@ -194,8 +194,9 @@ class LinkPreviewTile extends ConsumerWidget {
         onTap: () async => await const LinkNavigator()
             .onTapLink(context, ref, link, host)
             .expectFailure(context),
-        onLongPress: () {
-          Clipboard.setData(ClipboardData(text: link));
+        onLongPress: () async {
+          await Clipboard.setData(ClipboardData(text: link));
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(S.of(context).doneCopy),

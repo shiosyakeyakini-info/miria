@@ -3,6 +3,7 @@ import "dart:math";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/log.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/time_line_repository.dart";
@@ -226,7 +227,7 @@ class NoteWrapperState extends ConsumerState<NoteWrapper> {
           .select((note) => note.notes[widget.targetNote.id]),
     );
     if (note == null) {
-      print("note was not found. ${widget.targetNote}");
+      logger.info("note was not found. ${widget.targetNote}");
       return MisskeyNote(
         note: widget.targetNote,
         key: ValueKey<String>(widget.targetNote.id),

@@ -288,7 +288,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                   children: [
                     AvatarIcon(
                       user: displayNote.user,
-                      onTap: () => ref
+                      onTap: () async => ref
                           .read(misskeyNoteNotifierProvider(account).notifier)
                           .navigateToUserPage(
                             context,
@@ -319,7 +319,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                               ),
                               if (displayNote.user.instance != null)
                                 GestureDetector(
-                                  onTap: () => context.pushRoute(
+                                  onTap: () async => context.pushRoute(
                                     FederationRoute(
                                       account: widget.loginAs ?? account,
                                       host: displayNote.user.host!,
@@ -573,7 +573,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
-                                    onPressed: () => ref
+                                    onPressed: () async => ref
                                         .read(
                                           misskeyNoteNotifierProvider(account)
                                               .notifier,
@@ -596,14 +596,12 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                   ),
                                 ] else ...[
                                   TextButton.icon(
-                                    onPressed: () {
-                                      context.pushRoute(
-                                        NoteCreateRoute(
-                                          reply: displayNote,
-                                          initialAccount: account,
-                                        ),
-                                      );
-                                    },
+                                    onPressed: () async => context.pushRoute(
+                                      NoteCreateRoute(
+                                        reply: displayNote,
+                                        initialAccount: account,
+                                      ),
+                                    ),
                                     style: const ButtonStyle(
                                       padding: WidgetStatePropertyAll(
                                         EdgeInsets.zero,
@@ -641,19 +639,17 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     displayNote: displayNote,
                                   ),
                                   IconButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (builder) {
-                                          return NoteModalSheet(
-                                            baseNote: widget.note,
-                                            targetNote: displayNote,
-                                            account: account,
-                                            noteBoundaryKey: globalKey,
-                                          );
-                                        },
-                                      );
-                                    },
+                                    onPressed: () async => showModalBottomSheet(
+                                      context: context,
+                                      builder: (builder) {
+                                        return NoteModalSheet(
+                                          baseNote: widget.note,
+                                          targetNote: displayNote,
+                                          account: account,
+                                          noteBoundaryKey: globalKey,
+                                        );
+                                      },
+                                    ),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
                                     style: const ButtonStyle(
@@ -814,7 +810,7 @@ class NoteHeader1 extends ConsumerWidget {
             ),
           ),
         GestureDetector(
-          onTap: () => ref
+          onTap: () async => ref
               .read(misskeyNoteNotifierProvider(account).notifier)
               .navigateToNoteDetailPage(context, displayNote, loginAs)
               .expectFailure(context),
@@ -868,7 +864,7 @@ class RenoteHeader extends ConsumerWidget {
         const Padding(padding: EdgeInsets.only(left: 10)),
         Expanded(
           child: GestureDetector(
-            onTap: () => ref
+            onTap: () async => ref
                 .read(misskeyNoteNotifierProvider(account).notifier)
                 .navigateToUserPage(context, note.user, loginAs)
                 .expectFailure(context),
@@ -935,14 +931,12 @@ class NoteChannelView extends StatelessWidget {
     final account = AccountScope.of(context);
 
     return GestureDetector(
-      onTap: () {
-        context.pushRoute(
-          ChannelDetailRoute(
-            account: account,
-            channelId: channel.id,
-          ),
-        );
-      },
+      onTap: () async => context.pushRoute(
+        ChannelDetailRoute(
+          account: account,
+          channelId: channel.id,
+        ),
+      ),
       child: Row(
         children: [
           Icon(
@@ -989,12 +983,12 @@ class RenoteButton extends StatelessWidget {
     }
 
     return TextButton.icon(
-      onPressed: () => showModalBottomSheet(
+      onPressed: () async => showModalBottomSheet(
         context: context,
         builder: (innerContext) =>
             RenoteModalSheet(note: displayNote, account: account),
       ),
-      onLongPress: () => showDialog(
+      onLongPress: () async => showDialog(
         context: context,
         builder: (context) =>
             RenoteUserDialog(account: account, noteId: displayNote.id),

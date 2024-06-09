@@ -33,7 +33,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
         );
 
     if (!mounted) return;
-    context.pushRoute(
+    await context.pushRoute(
       TimeLineRoute(
         initialTabSetting:
             ref.read(tabSettingsRepositoryProvider).tabSettings.first,
@@ -112,9 +112,7 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
-                      onPressed: () {
-                        login();
-                      },
+                      onPressed: () async => login(),
                       child: const Text("ログイン"),
                     ),
                   ),
