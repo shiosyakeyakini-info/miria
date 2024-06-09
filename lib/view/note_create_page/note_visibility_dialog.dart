@@ -22,6 +22,7 @@ class NoteVisibilityDialog extends ConsumerWidget {
             if (await ref
                 .read(noteCreateNotifierProvider(account).notifier)
                 .validateNoteVisibility(NoteVisibility.public)) {
+              if (!context.mounted) return;
               Navigator.of(context).pop(NoteVisibility.public);
             }
           },

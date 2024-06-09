@@ -185,7 +185,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                     }
 
                     await ImageGallerySaver.saveImage(response.data);
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(S.of(context).savedImage),

@@ -296,44 +296,44 @@ class _TimelineListViewState extends State<TimelineListView> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(EnumProperty<Axis>("scrollDirection", widget.scrollDirection));
-    properties.add(
-      FlagProperty(
-        "reverse",
-        value: widget.reverse,
-        ifTrue: "reversed",
-        showName: true,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<ScrollController>(
-        "controller",
-        widget.controller,
-        showName: false,
-        defaultValue: null,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<ScrollPhysics>(
-        "physics",
-        widget.physics,
-        showName: false,
-        defaultValue: null,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<EdgeInsetsGeometry>(
-        "padding",
-        widget.padding,
-        defaultValue: null,
-      ),
-    );
-    properties.add(
-      DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null),
-    );
-    properties.add(
-      DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null),
-    );
+      ..add(EnumProperty<Axis>("scrollDirection", widget.scrollDirection))
+      ..add(
+        FlagProperty(
+          "reverse",
+          value: widget.reverse,
+          ifTrue: "reversed",
+          showName: true,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<ScrollController>(
+          "controller",
+          widget.controller,
+          showName: false,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<ScrollPhysics>(
+          "physics",
+          widget.physics,
+          showName: false,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<EdgeInsetsGeometry>(
+          "padding",
+          widget.padding,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null),
+      )
+      ..add(
+        DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null),
+      );
   }
 }
 

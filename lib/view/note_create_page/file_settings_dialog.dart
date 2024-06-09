@@ -48,8 +48,8 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
 
   String generateRandomText() {
     final str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        .split("");
-    str.shuffle();
+        .split("")
+      ..shuffle();
     return str.take(10).join("");
   }
 

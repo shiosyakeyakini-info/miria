@@ -323,8 +323,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   /// 画像の色調補正を設定する
   Future<void> selectColorFilter(String name) async {
     if (state.adaptivePresets.any((element) => element == name)) {
-      final list = state.adaptivePresets.toList();
-      list.removeWhere((element) => element == name);
+      final list = state.adaptivePresets.toList()
+        ..removeWhere((element) => element == name);
       await draw(state.copyWith(adaptivePresets: list));
     } else {
       await draw(

@@ -36,7 +36,7 @@ class _TwitterEmbedState extends State<TwitterEmbed> {
           onNavigationRequest: (request) async {
             final url = Uri.tryParse(request.url);
             if (url != null && await canLaunchUrl(url)) {
-              launchUrl(url, mode: LaunchMode.externalApplication);
+              await launchUrl(url, mode: LaunchMode.externalApplication);
             }
             return NavigationDecision.prevent;
           },

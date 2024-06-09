@@ -412,7 +412,7 @@ class _VideoControlState extends State<_VideoControls> {
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           iconSize: widget.iconSize,
-                          onPressed: () =>
+                          onPressed: () async =>
                               widget.controller.player.playOrPause(),
                           icon: StreamBuilder(
                             stream: widget.controller.player.stream.playing,

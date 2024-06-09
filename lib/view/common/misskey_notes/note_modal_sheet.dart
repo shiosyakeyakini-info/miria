@@ -200,6 +200,8 @@ class NoteModalSheet extends ConsumerWidget {
                                 noteId: targetNote.id,
                               ),
                             );
+
+                        if (!context.mounted) return;
                         Navigator.of(context).pop();
                       } else {
                         await ref

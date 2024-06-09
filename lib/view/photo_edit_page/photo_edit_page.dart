@@ -74,6 +74,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                   if (!mounted) return;
                   if (confirm == true) {
                     widget.onSubmit(result);
+                    if (!context.mounted) return;
                     context.back();
                   }
                 },

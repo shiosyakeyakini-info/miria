@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -142,7 +144,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                       .select((value) => value.settings.automaticPush),
                 ) ==
                 AutomaticPush.automatic) {
-              nextLoad();
+              unawaited(nextLoad());
             }
 
             return Column(

@@ -46,7 +46,7 @@ class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
           ListTile(
             title: Text(S.of(context).reversi),
             subtitle: ReversiInvite(account: widget.account),
-            onTap: () => launchUrlString(
+            onTap: () async => launchUrlString(
               "https://${widget.account.host}/reversi",
               mode: LaunchMode.externalApplication,
             ),

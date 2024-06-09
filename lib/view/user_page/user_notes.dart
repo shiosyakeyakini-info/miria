@@ -164,7 +164,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   ),
                 );
               }
-              if (!mounted) return [];
+              if (!context.mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
                   .registerAll(notes);
@@ -194,7 +194,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   ),
                 );
               }
-              if (!mounted) return [];
+              if (!context.mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
                   .registerAll(notes);

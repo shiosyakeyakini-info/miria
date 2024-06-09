@@ -237,7 +237,7 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
             lastDate: DateTime(2999, 12, 31),
           ); //TODO: ｍisskeyの日付のデータピッカーどこまで行く？
           if (resultDate == null) return;
-          if (!mounted) return;
+          if (!context.mounted) return;
           final resultTime = await showTimePicker(
             context: context,
             initialTime: TimeOfDay(

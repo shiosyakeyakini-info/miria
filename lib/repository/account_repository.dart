@@ -5,6 +5,7 @@ import "dart:convert";
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/model/acct.dart";
@@ -84,7 +85,9 @@ class AccountRepository extends Notifier<List<Account>> {
                 .read(misskeyWithoutAccountProvider(element["host"]))
                 .meta();
             element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
-          } catch (e) {}
+          } catch (e) {
+            logger.warning(e);
+          }
         }
       }
 

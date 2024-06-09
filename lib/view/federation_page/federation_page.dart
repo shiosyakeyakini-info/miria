@@ -124,7 +124,9 @@ class FederationPageState extends ConsumerState<FederationPage> {
                     ),
                   )
                   .loadFromSourceIfNeed();
-            } catch (e) {}
+            } catch (e) {
+              logger.warning(e);
+            }
           }
 
           ref.read(federationPageFederationDataProvider.notifier).state =

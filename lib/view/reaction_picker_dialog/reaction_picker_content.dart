@@ -194,8 +194,9 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    emojis.clear();
-    emojis.addAll(emojiRepository.defaultEmojis().toList());
+    emojis
+      ..clear()
+      ..addAll(emojiRepository.defaultEmojis().toList());
   }
 
   @override
@@ -211,8 +212,9 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
               final result = await emojiRepository.searchEmojis(value);
               if (!mounted) return;
               setState(() {
-                emojis.clear();
-                emojis.addAll(result);
+                emojis
+                  ..clear()
+                  ..addAll(result);
               });
             });
           },

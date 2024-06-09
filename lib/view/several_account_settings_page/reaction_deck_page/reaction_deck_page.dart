@@ -176,7 +176,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
           await ref.read(misskeyProvider(widget.account)).endpoints();
       final domain =
           endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
-      if (!mounted) return;
+      if (!context.mounted) return;
       final emojiNames = await showDialog<List<String>>(
         context: context,
         builder: (context) => AddReactionsDialog(

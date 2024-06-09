@@ -15,17 +15,17 @@ class ErrorDialogListener extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(errorEventProvider, (_, next) {
+    ref.listen(errorEventProvider, (_, next) async {
       final error = next.$1;
       if (error == null) return;
       if (error is Exception) {
         if (error is DioException) {
-          SimpleMessageDialog.show(
+          await SimpleMessageDialog.show(
             next.$2!,
             "${S.of(context).thrownError}\n${error.type} [${error.response?.statusCode ?? "---"}] ${error.response?.data ?? ""}",
           );
         } else if (error is SpecifiedException) {
-          SimpleMessageDialog.show(next.$2!, error.message);
+          await SimpleMessageDialog.show(next.$2!, error.message);
         } else if (error is ValidateMisskeyException) {
           final message = switch (error) {
             InvalidServerException(:final server) =>
@@ -39,20 +39,20 @@ class ErrorDialogListener extends ConsumerWidget {
             AlreadyLoggedInException(:final acct) =>
               S.of(context).alreadyLoggedIn(acct),
           };
-          SimpleMessageDialog.show(next.$2!, message);
+          await SimpleMessageDialog.show(next.$2!, message);
         } else if (error is OpenLocalOnlyNoteFromRemoteException) {
-          SimpleMessageDialog.show(
+          await SimpleMessageDialog.show(
             next.$2!,
             S.of(context).cannotOpenLocalOnlyNoteFromRemote,
           );
         } else {
-          SimpleMessageDialog.show(
+          await SimpleMessageDialog.show(
             next.$2!,
             "${S.of(context).thrownError}\n$next",
           );
         }
       } else if (error is Error) {
-        SimpleMessageDialog.show(
+        await SimpleMessageDialog.show(
           next.$2!,
           "${S.of(context).thrownError}\n$next",
         );

@@ -1,6 +1,7 @@
 import "package:flutter/foundation.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/extensions/note_extension.dart";
+import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -45,7 +46,9 @@ class NoteRepository extends ChangeNotifier {
         try {
           softMuteWordRegExps
               .add(RegExp(regExp.substring(1, regExp.length - 1)));
-        } catch (e) {}
+        } catch (e) {
+          logger.warning(e);
+        }
       }
     }
 
@@ -59,7 +62,9 @@ class NoteRepository extends ChangeNotifier {
         try {
           hardMuteWordRegExps
               .add(RegExp(regExp.substring(1, regExp.length - 1)));
-        } catch (e) {}
+        } catch (e) {
+          logger.warning(e);
+        }
       }
     }
   }
