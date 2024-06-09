@@ -5,7 +5,10 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:url_launcher/url_launcher_string.dart";
+
+part "misskey_games_page.g.dart";
 
 @RoutePage()
 class MisskeyGamesPage extends ConsumerStatefulWidget {
@@ -18,26 +21,6 @@ class MisskeyGamesPage extends ConsumerStatefulWidget {
 }
 
 class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
-  bool isLoaded = false;
-  List<User> reversiInvitations = [];
-  List<User> reversiWaiting = [];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future(() async {
-      reversiInvitations = (await ref
-              .read(misskeyProvider(widget.account))
-              .reversi
-              .invitations())
-          .toList();
-
-      setState(() {
-        isLoaded = true;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,31 +31,21 @@ class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
         children: [
           ListTile(
             title: Text(S.of(context).cookieCliker),
-            onTap: () => launchUrlString(
+            onTap: () async => launchUrlString(
               "https://${widget.account.host}/clicker",
               mode: LaunchMode.externalApplication,
             ),
           ),
           ListTile(
             title: Text(S.of(context).bubbleGame),
-            onTap: () => launchUrlString(
+            onTap: () async => launchUrlString(
               "https://${widget.account.host}/bubble-game",
               mode: LaunchMode.externalApplication,
             ),
           ),
           ListTile(
             title: Text(S.of(context).reversi),
-            subtitle: !isLoaded
-                ? Text(S.of(context).loading)
-                : reversiInvitations.isEmpty
-                    ? Text(S.of(context).nonInvitedReversi)
-                    : Text(
-                        S.of(context).invitedReversi(
-                              reversiInvitations
-                                  .map((e) => e.name ?? e.username)
-                                  .join(", "),
-                            ),
-                      ),
+            subtitle: ReversiInvite(account: widget.account),
             onTap: () => launchUrlString(
               "https://${widget.account.host}/reversi",
               mode: LaunchMode.externalApplication,
@@ -81,5 +54,36 @@ class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
         ],
       ),
     );
+  }
+}
+
+@riverpod
+Future<List<User>> _fetchReversiData(
+  _FetchReversiDataRef ref,
+  Account account,
+) async {
+  return [...await ref.read(misskeyProvider(account)).reversi.invitations()];
+}
+
+class ReversiInvite extends ConsumerWidget {
+  final Account account;
+
+  const ReversiInvite({required this.account, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reversiInvitation = ref.watch(_fetchReversiDataProvider(account));
+
+    return switch (reversiInvitation) {
+      AsyncLoading() => Text(S.of(context).loading),
+      AsyncData<List<User>>(:final value) => value.isEmpty
+          ? Text(S.of(context).nonInvitedReversi)
+          : Text(
+              S.of(context).invitedReversi(
+                    value.map((e) => e.name ?? e.username).join(", "),
+                  ),
+            ),
+      AsyncError() => const SizedBox.shrink(),
+    };
   }
 }
