@@ -1,24 +1,24 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm/mfm.dart';
-import 'package:miria/extensions/note_visibility_extension.dart';
-import 'package:miria/extensions/reaction_acceptance_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:mfm/mfm.dart";
+import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/extensions/reaction_acceptance_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class SeveralAccountGeneralSettingsPage extends ConsumerStatefulWidget {
   final Account account;
 
   const SeveralAccountGeneralSettingsPage({
-    super.key,
     required this.account,
+    super.key,
   });
 
   @override
@@ -41,9 +41,11 @@ class SeveralAccountGeneralSettingsPageState
       final loadedSettings = ref
           .read(accountSettingsRepositoryProvider)
           .accountSettings
-          .firstWhereOrNull((element) =>
-              element.userId == widget.account.userId &&
-              element.host == widget.account.host);
+          .firstWhereOrNull(
+            (element) =>
+                element.userId == widget.account.userId &&
+                element.host == widget.account.host,
+          );
       if (loadedSettings != null) {
         accountSettings = loadedSettings;
         if (!mounted) return;
@@ -107,23 +109,23 @@ class SeveralAccountGeneralSettingsPageState
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         Text(S.of(context).noteVisibility),
                         DropdownButton<NoteVisibility>(
-                            items: [
-                              for (final noteVisibility
-                                  in NoteVisibility.values)
-                                DropdownMenuItem(
-                                  value: noteVisibility,
-                                  child:
-                                      Text(noteVisibility.displayName(context)),
-                                ),
-                            ],
-                            value: defaultNoteVisibility,
-                            onChanged: (value) {
-                              setState(() {
-                                defaultNoteVisibility =
-                                    value ?? NoteVisibility.public;
-                                save();
-                              });
-                            }),
+                          items: [
+                            for (final noteVisibility in NoteVisibility.values)
+                              DropdownMenuItem(
+                                value: noteVisibility,
+                                child:
+                                    Text(noteVisibility.displayName(context)),
+                              ),
+                          ],
+                          value: defaultNoteVisibility,
+                          onChanged: (value) {
+                            setState(() {
+                              defaultNoteVisibility =
+                                  value ?? NoteVisibility.public;
+                              save();
+                            });
+                          },
+                        ),
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         CheckboxListTile(
                           value: defaultIsLocalOnly,
@@ -140,25 +142,24 @@ class SeveralAccountGeneralSettingsPageState
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         Text(S.of(context).reactionAcceptance),
                         DropdownButton<ReactionAcceptance?>(
-                            items: [
+                          items: [
+                            DropdownMenuItem(
+                              child: Text(S.of(context).reactionAcceptanceAll),
+                            ),
+                            for (final acceptance in ReactionAcceptance.values)
                               DropdownMenuItem(
-                                child:
-                                    Text(S.of(context).reactionAcceptanceAll),
+                                value: acceptance,
+                                child: Text(acceptance.displayName(context)),
                               ),
-                              for (final acceptance
-                                  in ReactionAcceptance.values)
-                                DropdownMenuItem(
-                                  value: acceptance,
-                                  child: Text(acceptance.displayName(context)),
-                                ),
-                            ],
-                            value: defaultReactionAppearance,
-                            onChanged: (value) {
-                              setState(() {
-                                defaultReactionAppearance = value;
-                                save();
-                              });
-                            }),
+                          ],
+                          value: defaultReactionAppearance,
+                          onChanged: (value) {
+                            setState(() {
+                              defaultReactionAppearance = value;
+                              save();
+                            });
+                          },
+                        ),
                         const Padding(padding: EdgeInsets.only(top: 10)),
                         Text(S.of(context).ad),
                         CheckboxListTile(
@@ -176,7 +177,7 @@ class SeveralAccountGeneralSettingsPageState
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

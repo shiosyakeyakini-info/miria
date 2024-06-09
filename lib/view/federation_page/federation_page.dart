@@ -1,19 +1,20 @@
-import 'package:auto_route/annotations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/federation_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/federation_page/federation_ads.dart';
-import 'package:miria/view/federation_page/federation_announcements.dart';
-import 'package:miria/view/federation_page/federation_custom_emojis.dart';
-import 'package:miria/view/federation_page/federation_info.dart';
-import 'package:miria/view/federation_page/federation_timeline.dart';
-import 'package:miria/view/federation_page/federation_users.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:miria/view/search_page/note_search.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/annotations.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/federation_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/federation_page/federation_ads.dart";
+import "package:miria/view/federation_page/federation_announcements.dart";
+import "package:miria/view/federation_page/federation_custom_emojis.dart";
+import "package:miria/view/federation_page/federation_info.dart";
+import "package:miria/view/federation_page/federation_timeline.dart";
+import "package:miria/view/federation_page/federation_users.dart";
+import "package:miria/view/search_page/note_search.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class FederationPage extends ConsumerStatefulWidget {
@@ -21,9 +22,9 @@ class FederationPage extends ConsumerStatefulWidget {
   final String host;
 
   const FederationPage({
-    super.key,
     required this.account,
     required this.host,
+    super.key,
   });
 
   @override
@@ -47,34 +48,38 @@ class FederationPageState extends ConsumerState<FederationPage> {
               await ref.read(misskeyProvider(account)).stats();
           ref.read(federationPageFederationDataProvider.notifier).state =
               FederationData(
-                  bannerUrl: metaResponse.bannerUrl?.toString(),
-                  faviconUrl: metaResponse.iconUrl?.toString(),
-                  tosUrl: metaResponse.tosUrl?.toString(),
-                  privacyPolicyUrl: (metaResponse.privacyPolicyUrl)?.toString(),
-                  impressumUrl: (metaResponse.impressumUrl)?.toString(),
-                  repositoryUrl: (metaResponse.repositoryUrl).toString(),
-                  name: metaResponse.name ?? "",
-                  description: metaResponse.description ?? "",
-                  usersCount: statsResponse.originalUsersCount,
-                  notesCount: statsResponse.originalNotesCount,
-                  maintainerName: metaResponse.maintainerName,
-                  maintainerEmail: metaResponse.maintainerEmail,
-                  serverRules: metaResponse.serverRules,
-                  reactionCount: statsResponse.reactionsCount,
-                  softwareName: "misskey",
-                  softwareVersion: metaResponse.version,
-                  languages: metaResponse.langs,
-                  ads: metaResponse.ads,
-                  meta: metaResponse,
+            bannerUrl: metaResponse.bannerUrl?.toString(),
+            faviconUrl: metaResponse.iconUrl?.toString(),
+            tosUrl: metaResponse.tosUrl?.toString(),
+            privacyPolicyUrl: metaResponse.privacyPolicyUrl?.toString(),
+            impressumUrl: metaResponse.impressumUrl?.toString(),
+            repositoryUrl: metaResponse.repositoryUrl.toString(),
+            name: metaResponse.name ?? "",
+            description: metaResponse.description ?? "",
+            usersCount: statsResponse.originalUsersCount,
+            notesCount: statsResponse.originalNotesCount,
+            maintainerName: metaResponse.maintainerName,
+            maintainerEmail: metaResponse.maintainerEmail,
+            serverRules: metaResponse.serverRules,
+            reactionCount: statsResponse.reactionsCount,
+            softwareName: "misskey",
+            softwareVersion: metaResponse.version,
+            languages: metaResponse.langs,
+            ads: metaResponse.ads,
+            meta: metaResponse,
 
-                  // 自分のサーバーが非対応ということはない
-                  isSupportedAnnouncement: true,
-                  isSupportedEmoji: true,
-                  isSupportedLocalTimeline: true);
+            // 自分のサーバーが非対応ということはない
+            isSupportedAnnouncement: true,
+            isSupportedEmoji: true,
+            isSupportedLocalTimeline: true,
+          );
 
           await ref
-              .read(emojiRepositoryProvider(
-                  Account.demoAccount(widget.host, metaResponse)))
+              .read(
+                emojiRepositoryProvider(
+                  Account.demoAccount(widget.host, metaResponse),
+                ),
+              )
               .loadFromSourceIfNeed();
         } else {
           final federation = await ref
@@ -83,9 +88,9 @@ class FederationPageState extends ConsumerState<FederationPage> {
               .showInstance(FederationShowInstanceRequest(host: widget.host));
           MetaResponse? misskeyMeta;
 
-          bool isSupportedEmoji = false;
-          bool isSupportedAnnouncement = false;
-          bool isSupportedLocalTimeline = false;
+          var isSupportedEmoji = false;
+          var isSupportedAnnouncement = false;
+          var isSupportedLocalTimeline = false;
 
           if (federation.softwareName == "fedibird" ||
               federation.softwareName == "mastodon") {
@@ -113,17 +118,21 @@ class FederationPageState extends ConsumerState<FederationPage> {
 
               misskeyMeta = await misskeyServer.meta();
               await ref
-                  .read(emojiRepositoryProvider(
-                      Account.demoAccount(widget.host, misskeyMeta)))
+                  .read(
+                    emojiRepositoryProvider(
+                      Account.demoAccount(widget.host, misskeyMeta),
+                    ),
+                  )
                   .loadFromSourceIfNeed();
-            } catch (e) {}
-            ;
+            } catch (e) {
+              logger.warning(e);
+            }
           }
 
           ref.read(federationPageFederationDataProvider.notifier).state =
               FederationData(
             bannerUrl: (misskeyMeta?.bannerUrl)?.toString(),
-            faviconUrl: (federation.faviconUrl)?.toString(),
+            faviconUrl: federation.faviconUrl?.toString(),
             tosUrl: (misskeyMeta?.tosUrl)?.toString(),
             privacyPolicyUrl: (misskeyMeta?.privacyPolicyUrl)?.toString(),
             impressumUrl: (misskeyMeta?.impressumUrl)?.toString(),
@@ -150,8 +159,9 @@ class FederationPageState extends ConsumerState<FederationPage> {
         if (!mounted) return;
         setState(() {});
       } catch (e, s) {
-        print(e);
-        print(s);
+        logger
+          ..warning(e)
+          ..warning(s);
         if (!mounted) return;
       }
     });
@@ -206,17 +216,21 @@ class FederationPageState extends ConsumerState<FederationPage> {
               if (isMisskey) FederationAnnouncements(host: widget.host),
               if (isSupportedTimeline)
                 FederationCustomEmojis(
-                    host: widget.host, meta: metaResponse!.meta!),
+                  host: widget.host,
+                  meta: metaResponse!.meta!,
+                ),
               if (isSupportedTimeline)
                 FederationTimeline(
-                    host: widget.host, meta: metaResponse!.meta!),
+                  host: widget.host,
+                  meta: metaResponse!.meta!,
+                ),
               if (enableSearch)
                 AccountScope(
-                    account:
-                        Account.demoAccount(widget.host, metaResponse!.meta!),
-                    child: NoteSearch(
-                      focusNode: FocusNode(),
-                    )),
+                  account: Account.demoAccount(widget.host, metaResponse!.meta),
+                  child: NoteSearch(
+                    focusNode: FocusNode(),
+                  ),
+                ),
             ],
           ),
         ),

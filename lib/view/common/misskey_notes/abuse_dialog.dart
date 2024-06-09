@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class AbuseDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -15,9 +15,9 @@ class AbuseDialog extends ConsumerStatefulWidget {
   final String? defaultText;
 
   const AbuseDialog({
-    super.key,
     required this.account,
     required this.targetUser,
+    super.key,
     this.defaultText,
   });
 
@@ -35,19 +35,19 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
   }
 
   Future<void> abuse() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .users
-        .reportAbuse(UsersReportAbuseRequest(
-          userId: widget.targetUser.id,
-          comment: controller.text,
-        ));
+    await ref.read(misskeyProvider(widget.account)).users.reportAbuse(
+          UsersReportAbuseRequest(
+            userId: widget.targetUser.id,
+            comment: controller.text,
+          ),
+        );
     if (!mounted) return;
     Navigator.of(context).pop();
-    showDialog(
-        context: context,
-        builder: (context) =>
-            SimpleMessageDialog(message: S.of(context).thanksForReport));
+    await showDialog(
+      context: context,
+      builder: (context) =>
+          SimpleMessageDialog(message: S.of(context).thanksForReport),
+    );
   }
 
   @override
@@ -80,8 +80,9 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
         ),
         actions: [
           ElevatedButton(
-              onPressed: abuse.expectFailure(context),
-              child: Text(S.of(context).reportAbuse))
+            onPressed: abuse.expectFailure(context),
+            child: Text(S.of(context).reportAbuse),
+          ),
         ],
       ),
     );

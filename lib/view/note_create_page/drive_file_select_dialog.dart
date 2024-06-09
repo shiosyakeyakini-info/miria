@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class DriveFileSelectDialog extends ConsumerStatefulWidget {
   final Account account;
   final bool allowMultiple;
 
   const DriveFileSelectDialog({
-    super.key,
     required this.account,
+    super.key,
     this.allowMultiple = false,
   });
 
@@ -68,36 +68,41 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
           child: Column(
             children: [
               PushableListView(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  showAd: false,
-                  initializeFuture: () async {
-                    final misskey = ref.read(misskeyProvider(widget.account));
-                    final response = await misskey.drive.folders.folders(
-                        DriveFoldersRequest(
-                            folderId: path.isEmpty ? null : path.last.id));
-                    return response.toList();
-                  },
-                  nextFuture: (lastItem, _) async {
-                    final misskey = ref.read(misskeyProvider(widget.account));
-                    final response = await misskey.drive.folders.folders(
-                        DriveFoldersRequest(
-                            untilId: lastItem.id,
-                            folderId: path.isEmpty ? null : path.last.id));
-                    return response.toList();
-                  },
-                  listKey: path.map((e) => e.id).join("/"),
-                  itemBuilder: (context, item) {
-                    return ListTile(
-                      leading: const Icon(Icons.folder),
-                      title: Text(item.name),
-                      onTap: () {
-                        setState(() {
-                          path.add(item);
-                        });
-                      },
-                    );
-                  }),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                showAd: false,
+                initializeFuture: () async {
+                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final response = await misskey.drive.folders.folders(
+                    DriveFoldersRequest(
+                      folderId: path.isEmpty ? null : path.last.id,
+                    ),
+                  );
+                  return response.toList();
+                },
+                nextFuture: (lastItem, _) async {
+                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final response = await misskey.drive.folders.folders(
+                    DriveFoldersRequest(
+                      untilId: lastItem.id,
+                      folderId: path.isEmpty ? null : path.last.id,
+                    ),
+                  );
+                  return response.toList();
+                },
+                listKey: path.map((e) => e.id).join("/"),
+                itemBuilder: (context, item) {
+                  return ListTile(
+                    leading: const Icon(Icons.folder),
+                    title: Text(item.name),
+                    onTap: () {
+                      setState(() {
+                        path.add(item);
+                      });
+                    },
+                  );
+                },
+              ),
               PushableListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),

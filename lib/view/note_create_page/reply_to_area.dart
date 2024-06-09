@@ -1,18 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/avatar_icon.dart';
-import 'package:miria/view/themes/app_theme.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/avatar_icon.dart";
+import "package:miria/view/themes/app_theme.dart";
 
 class ReplyToArea extends ConsumerWidget {
   const ReplyToArea({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final repliesTo = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.replyTo));
+    final repliesTo = ref.watch(
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.replyTo),
+    );
 
     if (repliesTo.isEmpty) {
       return const SizedBox.shrink();
@@ -42,12 +44,15 @@ class ReplyToArea extends ConsumerWidget {
                 Text(
                   "@${replyTo.username}${replyTo.host == null ? "" : "@${replyTo.host}"}",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.of(context).mentionStyle.color),
+                        color: AppTheme.of(context).mentionStyle.color,
+                      ),
                 ),
                 IconButton(
-                  onPressed: () => ref
+                  onPressed: () async => ref
                       .read(
-                          noteCreateProvider(AccountScope.of(context)).notifier)
+                        noteCreateNotifierProvider(AccountScope.of(context))
+                            .notifier,
+                      )
                       .deleteReplyUser(replyTo),
                   icon: Icon(
                     Icons.remove,
@@ -67,11 +72,11 @@ class ReplyToArea extends ConsumerWidget {
               ],
             ),
           IconButton(
-            onPressed: () {
-              ref
-                  .read(noteCreateProvider(AccountScope.of(context)).notifier)
-                  .addReplyUser(context);
-            },
+            onPressed: () async => ref
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
+                .addReplyUser(context),
             constraints: const BoxConstraints(),
             padding: EdgeInsets.zero,
             style: const ButtonStyle(

@@ -1,21 +1,21 @@
-import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui';
+import "dart:math";
+import "dart:typed_data";
+import "dart:ui";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:image_editor/image_editor.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/state_notifier/photo_edit_page/color_filter_preset.dart';
-import 'package:miria/view/photo_edit_page/license_confirm_dialog.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:image_editor/image_editor.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/state_notifier/photo_edit_page/color_filter_preset.dart";
+import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 
-part 'photo_edit_state_notifier.freezed.dart';
+part "photo_edit_state_notifier.freezed.dart";
 
 @freezed
 class PhotoEdit with _$PhotoEdit {
@@ -56,7 +56,7 @@ class EditedEmojiData with _$EditedEmojiData {
 class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   static final List<String> _acceptReactions = [];
 
-  PhotoEditStateNotifier(super.state);
+  PhotoEditStateNotifier(super._state);
 
   /// 状態を初期化する
   Future<void> initialize(MisskeyPostFile file) async {
@@ -65,10 +65,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     switch (file) {
       case ImageFile():
         initialImage = file.data;
-        break;
       case ImageFileAlreadyPostedFile():
         initialImage = file.data;
-        break;
       default:
         throw UnsupportedError("$file is unsupported.");
     }
@@ -167,9 +165,9 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   }
 
   /// 画像を回転する
-  void rotate() {
+  Future<void> rotate() async {
     final angle = ((state.angle - 90) % 360).abs();
-    draw(
+    await draw(
       state.copyWith(
         angle: angle,
         defaultSize: Size(state.defaultSize.height, state.defaultSize.width),
@@ -196,8 +194,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   }
 
   /// 画像を切り取る
-  void crop() {
-    draw(
+  Future<void> crop() async {
+    await draw(
       state.copyWith(
         clipMode: !state.clipMode,
         colorFilterMode: false,
@@ -296,7 +294,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
       colorFilterMode: !state.colorFilterMode,
     );
     if (!state.colorFilterMode) return;
-    createPreviewImage();
+    await createPreviewImage();
   }
 
   Future<void> createPreviewImage() async {
@@ -325,8 +323,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   /// 画像の色調補正を設定する
   Future<void> selectColorFilter(String name) async {
     if (state.adaptivePresets.any((element) => element == name)) {
-      final list = state.adaptivePresets.toList();
-      list.removeWhere((element) => element == name);
+      final list = state.adaptivePresets.toList()
+        ..removeWhere((element) => element == name);
       await draw(state.copyWith(adaptivePresets: list));
     } else {
       await draw(
@@ -361,7 +359,6 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
           _acceptReactions.add(reaction.baseName);
         }
 
-        break;
       case UnicodeEmojiData():
         break;
       default:
@@ -434,8 +431,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     );
   }
 
-  void clearSelectMode() {
-    draw(
+  Future<void> clearSelectMode() async {
+    await draw(
       state.copyWith(
         selectedEmojiIndex: null,
         colorFilterMode: false,

@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/string_extensions.dart';
-import 'package:miria/model/federation_data.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/federation_page/federation_page.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/string_extensions.dart";
+import "package:miria/model/federation_data.dart";
+import "package:miria/view/common/constants.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/federation_page/federation_page.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class FederationInfo extends ConsumerStatefulWidget {
   final String host;
 
   const FederationInfo({
-    super.key,
     required this.host,
+    super.key,
   });
 
   @override
@@ -42,7 +42,9 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
             children: [
               if (data.bannerUrl != null)
                 NetworkImageView(
-                    url: data.bannerUrl!.toString(), type: ImageType.other),
+                  url: data.bannerUrl!.toString(),
+                  type: ImageType.other,
+                ),
               Row(
                 children: [
                   if (data.faviconUrl != null)
@@ -59,7 +61,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                       data.name,
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                  )
+                  ),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 5)),
@@ -108,94 +110,112 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                       ),
                       Text(
                         "${data.softwareName} ${data.softwareVersion}",
-                      )
+                      ),
                     ],
                   ),
                   if (data.languages.isNotEmpty)
-                    TableRow(children: [
-                      Text(S.of(context).language, textAlign: TextAlign.center),
-                      Text(
-                        data.languages.join(", "),
-                      )
-                    ]),
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).language,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          data.languages.join(", "),
+                        ),
+                      ],
+                    ),
                   if (data.maintainerName != null)
-                    TableRow(children: [
-                      Text(
-                        S.of(context).administrator,
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        "${data.maintainerName}",
-                      )
-                    ]),
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).administrator,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "${data.maintainerName}",
+                        ),
+                      ],
+                    ),
                   if (data.maintainerEmail != null)
-                    TableRow(children: [
-                      Text(
-                        S.of(context).contact,
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        "${data.maintainerEmail}",
-                      )
-                    ]),
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).contact,
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "${data.maintainerEmail}",
+                        ),
+                      ],
+                    ),
                   if (data.serverRules.isNotEmpty)
-                    TableRow(children: [
-                      Text(
-                        S.of(context).serverRules,
-                        textAlign: TextAlign.center,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (final rule in data.serverRules.indexed)
-                            Text("${(rule.$1 + 1)}. ${rule.$2}\n")
-                        ],
-                      )
-                    ]),
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).serverRules,
+                          textAlign: TextAlign.center,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (final rule in data.serverRules.indexed)
+                              Text("${rule.$1 + 1}. ${rule.$2}\n"),
+                          ],
+                        ),
+                      ],
+                    ),
                   if (data.tosUrl != null)
-                    TableRow(children: [
-                      Text(
-                        S.of(context).tos,
-                        textAlign: TextAlign.center,
-                      ),
-                      GestureDetector(
-                        onTap: () => launchUrl(Uri.parse(data.tosUrl!)),
-                        child: Text(
-                          data.tosUrl!.toString().tight,
-                          style: AppTheme.of(context).linkStyle,
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).tos,
+                          textAlign: TextAlign.center,
                         ),
-                      )
-                    ]),
+                        GestureDetector(
+                          onTap: () async => launchUrl(Uri.parse(data.tosUrl!)),
+                          child: Text(
+                            data.tosUrl!.toString().tight,
+                            style: AppTheme.of(context).linkStyle,
+                          ),
+                        ),
+                      ],
+                    ),
                   if (data.privacyPolicyUrl != null)
-                    TableRow(children: [
-                      Text(
-                        S.of(context).privacyPolicy,
-                        textAlign: TextAlign.center,
-                      ),
-                      GestureDetector(
-                        onTap: () =>
-                            launchUrl(Uri.parse(data.privacyPolicyUrl!)),
-                        child: Text(
-                          data.privacyPolicyUrl!.toString().tight,
-                          style: AppTheme.of(context).linkStyle,
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).privacyPolicy,
+                          textAlign: TextAlign.center,
                         ),
-                      )
-                    ]),
+                        GestureDetector(
+                          onTap: () async =>
+                              launchUrl(Uri.parse(data.privacyPolicyUrl!)),
+                          child: Text(
+                            data.privacyPolicyUrl!.toString().tight,
+                            style: AppTheme.of(context).linkStyle,
+                          ),
+                        ),
+                      ],
+                    ),
                   if (data.impressumUrl != null)
-                    TableRow(children: [
-                      Text(
-                        S.of(context).impressum,
-                        textAlign: TextAlign.center,
-                      ),
-                      GestureDetector(
-                        onTap: () => launchUrl(Uri.parse(data.impressumUrl!)),
-                        child: Text(
-                          data.impressumUrl!.toString().tight,
-                          style: AppTheme.of(context).linkStyle,
+                    TableRow(
+                      children: [
+                        Text(
+                          S.of(context).impressum,
+                          textAlign: TextAlign.center,
                         ),
-                      )
-                    ]),
+                        GestureDetector(
+                          onTap: () async =>
+                              launchUrl(Uri.parse(data.impressumUrl!)),
+                          child: Text(
+                            data.impressumUrl!.toString().tight,
+                            style: AppTheme.of(context).linkStyle,
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ],

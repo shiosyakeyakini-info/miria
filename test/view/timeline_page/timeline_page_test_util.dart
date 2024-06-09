@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:mockito/mockito.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:mockito/mockito.dart";
 
-import '../../test_util/default_root_widget.dart';
-import '../../test_util/mock.mocks.dart';
-import '../../test_util/test_datas.dart';
+import "../../test_util/default_root_widget.dart";
+import "../../test_util/mock.mocks.dart";
+import "../../test_util/test_datas.dart";
 
 class TimelinePageTest {
   final mockMisskey = MockMisskey();
@@ -50,8 +50,10 @@ class TimelinePageTest {
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
     when(mockMisskey.streamingService).thenReturn(mockStreamingService);
     when(mockMisskey.i).thenReturn(mockMisskeyI);
+    // ignore: discarded_futures
     when(mockMisskey.meta()).thenAnswer((_) async => TestData.meta);
 
+    // ignore: discarded_futures
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
 
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);
@@ -75,7 +77,7 @@ class TimelinePageTest {
           return mockAccountRepository;
         }),
         emojiRepositoryProvider
-            .overrideWith((ref, arg) => MockEmojiRepository())
+            .overrideWith((ref, arg) => MockEmojiRepository()),
       ],
       child: DefaultRootWidget(
         initialRoute: TimeLineRoute(initialTabSetting: tabSetting),

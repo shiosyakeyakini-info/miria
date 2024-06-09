@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 extension ColorExtension on Color {
   Color darken([double amount = .1]) {

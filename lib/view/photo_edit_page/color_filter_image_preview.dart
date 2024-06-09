@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
 
 class ColorFilterImagePreview extends ConsumerWidget {
   const ColorFilterImagePreview({super.key});
@@ -9,7 +9,8 @@ class ColorFilterImagePreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final previewImages = ref
         .watch(
-            photoEditProvider.select((value) => value.colorFilterPreviewImages))
+          photoEditProvider.select((value) => value.colorFilterPreviewImages),
+        )
         .toList();
     final previewMode =
         ref.watch(photoEditProvider.select((value) => value.colorFilterMode));
@@ -26,14 +27,14 @@ class ColorFilterImagePreview extends ConsumerWidget {
       width: double.infinity,
       height: 100,
       child: ListView.builder(
-        key: const PageStorageKey<String>('colorFilterImagePreview'),
+        key: const PageStorageKey<String>("colorFilterImagePreview"),
         scrollDirection: Axis.horizontal,
         itemCount: previewImages.length,
         itemBuilder: (context, index) {
           final image = previewImages[index].image;
           if (image == null) return const SizedBox.shrink();
           return GestureDetector(
-            onTap: () => ref
+            onTap: () async => ref
                 .read(photoEditProvider.notifier)
                 .selectColorFilter(previewImages[index].name),
             child: DecoratedBox(
@@ -47,7 +48,7 @@ class ColorFilterImagePreview extends ConsumerWidget {
                   child: Column(
                     children: [
                       Expanded(child: Image.memory(image)),
-                      Text(previewImages[index].name)
+                      Text(previewImages[index].name),
                     ],
                   ),
                 ),

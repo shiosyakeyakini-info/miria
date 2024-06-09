@@ -1,17 +1,17 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'summaly_result.freezed.dart';
-part 'summaly_result.g.dart';
+part "summaly_result.freezed.dart";
+part "summaly_result.g.dart";
 
 // https://github.com/misskey-dev/summaly
 @freezed
 class SummalyResult with _$SummalyResult {
   const factory SummalyResult({
+    required Player player,
     String? title,
     String? icon,
     String? description,
     String? thumbnail,
-    required Player player,
     String? sitename,
     bool? sensitive,
     String? url,

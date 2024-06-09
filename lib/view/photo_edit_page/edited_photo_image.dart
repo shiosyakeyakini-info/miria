@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
 
 class EditedPhotoImage extends ConsumerWidget {
   const EditedPhotoImage({super.key});
@@ -17,10 +17,11 @@ class EditedPhotoImage extends ConsumerWidget {
 
     if (image != null) {
       return Positioned.fill(
-          child: Padding(
-              padding:
-                  EdgeInsets.all(10 * (defaultSize.width / actualSize.width)),
-              child: Image.memory(image)));
+        child: Padding(
+          padding: EdgeInsets.all(10 * (defaultSize.width / actualSize.width)),
+          child: Image.memory(image),
+        ),
+      );
     }
     return const Positioned(
       child: SizedBox.shrink(),

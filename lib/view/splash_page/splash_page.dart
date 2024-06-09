@@ -1,13 +1,14 @@
-import 'dart:io';
+import "dart:async";
+import "dart:io";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/licenses.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/licenses.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:receive_sharing_intent/receive_sharing_intent.dart";
 
 @RoutePage()
 class SplashPage extends ConsumerStatefulWidget {
@@ -31,7 +32,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
 
     for (final account in ref.read(accountsProvider)) {
       await ref.read(emojiRepositoryProvider(account)).loadFromLocalCache();
-      ref.read(mainStreamRepositoryProvider(account)).connect();
+      unawaited(ref.read(mainStreamRepositoryProvider(account)).connect());
     }
 
     if (_isFirst) {
@@ -43,7 +44,8 @@ class SplashPageState extends ConsumerState<SplashPage> {
       }
 
       LicenseRegistry.addLicense(
-          () => Stream.fromIterable(miriaInheritedLicenses));
+        () => Stream.fromIterable(miriaInheritedLicenses),
+      );
     }
 
     _isFirst = false;
@@ -53,57 +55,61 @@ class SplashPageState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: initialize(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              final accounts = ref.read(accountsProvider);
-              final isSigned = accounts.isNotEmpty;
-              final hasTabSetting = ref
-                  .read(tabSettingsRepositoryProvider)
-                  .tabSettings
-                  .isNotEmpty;
+        future: initialize(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final accounts = ref.read(accountsProvider);
+            final isSigned = accounts.isNotEmpty;
+            final hasTabSetting =
+                ref.read(tabSettingsRepositoryProvider).tabSettings.isNotEmpty;
 
-              if (isSigned && hasTabSetting) {
-                context.replaceRoute(TimeLineRoute(
-                    initialTabSetting: ref
-                        .read(tabSettingsRepositoryProvider)
-                        .tabSettings
-                        .first));
-                if (initialSharingMedias.isNotEmpty ||
-                    initialSharingText.isNotEmpty) {
-                  if (accounts.length == 1) {
-                    context.pushRoute(NoteCreateRoute(
+            if (isSigned && hasTabSetting) {
+              context.replaceRoute(
+                TimeLineRoute(
+                  initialTabSetting:
+                      ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+                ),
+              );
+              if (initialSharingMedias.isNotEmpty ||
+                  initialSharingText.isNotEmpty) {
+                if (accounts.length == 1) {
+                  context.pushRoute(
+                    NoteCreateRoute(
                       initialMediaFiles: initialSharingMedias,
                       initialText: initialSharingText,
                       initialAccount: accounts.first,
-                    ));
-                  } else {
-                    context.pushRoute(SharingAccountSelectRoute(
+                    ),
+                  );
+                } else {
+                  context.pushRoute(
+                    SharingAccountSelectRoute(
                       filePath: initialSharingMedias,
                       sharingText: initialSharingText,
-                    ));
-                  }
+                    ),
+                  );
                 }
-              } else if (isSigned && !hasTabSetting) {
-                // KeyChainに保存したデータだけアンインストールしても残るので
-                // この状況が発生する
-                Future(() async {
-                  for (final account in accounts) {
-                    await ref
-                        .read(accountRepositoryProvider.notifier)
-                        .remove(account);
-                  }
-                  if (!mounted) return;
-
-                  context.replaceRoute(const LoginRoute());
-                });
-              } else {
-                context.replaceRoute(const LoginRoute());
               }
-            }
+            } else if (isSigned && !hasTabSetting) {
+              // KeyChainに保存したデータだけアンインストールしても残るので
+              // この状況が発生する
+              Future(() async {
+                for (final account in accounts) {
+                  await ref
+                      .read(accountRepositoryProvider.notifier)
+                      .remove(account);
+                }
+                if (!mounted) return;
 
-            return const Center(child: CircularProgressIndicator());
-          }),
+                context.replaceRoute(const LoginRoute());
+              });
+            } else {
+              context.replaceRoute(const LoginRoute());
+            }
+          }
+
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }

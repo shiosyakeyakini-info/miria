@@ -1,22 +1,22 @@
-import 'package:auto_route/annotations.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/extensions/users_lists_show_response_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/common/tab_icon_view.dart';
-import 'package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/annotations.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/users_lists_show_response_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/tab_icon_view.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class TabSettingsPage extends ConsumerStatefulWidget {
@@ -138,17 +138,20 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
         actions: [
           if (widget.tabIndex != null)
             IconButton(
-                onPressed: () {
-                  ref.read(tabSettingsRepositoryProvider).save(ref
-                      .read(tabSettingsRepositoryProvider)
-                      .tabSettings
-                      .toList()
-                    ..removeAt(widget.tabIndex!));
+              onPressed: () async {
+                await ref.read(tabSettingsRepositoryProvider).save(
+                      ref
+                          .read(tabSettingsRepositoryProvider)
+                          .tabSettings
+                          .toList()
+                        ..removeAt(widget.tabIndex!),
+                    );
 
-                  if (!mounted) return;
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.delete_outline_outlined))
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.delete_outline_outlined),
+            ),
         ],
       ),
       body: SingleChildScrollView(
@@ -211,22 +214,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   children: [
                     Expanded(child: Text(selectedRole?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedRole = await showDialog<RolesListResponse>(
-                              context: context,
-                              builder: (context) =>
-                                  RoleSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedRole?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedRole = await showDialog<RolesListResponse>(
+                          context: context,
+                          builder: (context) =>
+                              RoleSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedRole?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               if (selectedTabType == TabType.channel) ...[
                 Text(S.of(context).channel),
@@ -234,22 +239,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   children: [
                     Expanded(child: Text(selectedChannel?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedChannel = await showDialog<CommunityChannel>(
-                              context: context,
-                              builder: (context) =>
-                                  ChannelSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedChannel?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedChannel = await showDialog<CommunityChannel>(
+                          context: context,
+                          builder: (context) =>
+                              ChannelSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedChannel?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               if (selectedTabType == TabType.userList) ...[
                 Text(S.of(context).list),
@@ -257,22 +264,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   children: [
                     Expanded(child: Text(selectedUserList?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedUserList = await showDialog<UsersList>(
-                              context: context,
-                              builder: (context) =>
-                                  UserListSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedUserList?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedUserList = await showDialog<UsersList>(
+                          context: context,
+                          builder: (context) =>
+                              UserListSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedUserList?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               if (selectedTabType == TabType.antenna) ...[
                 Text(S.of(context).antenna),
@@ -280,22 +289,24 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   children: [
                     Expanded(child: Text(selectedAntenna?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedAntenna = await showDialog<Antenna>(
-                              context: context,
-                              builder: (context) =>
-                                  AntennaSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedAntenna?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedAntenna = await showDialog<Antenna>(
+                          context: context,
+                          builder: (context) =>
+                              AntennaSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedAntenna?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               const Padding(padding: EdgeInsets.all(10)),
               Text(S.of(context).tabName),
@@ -308,27 +319,32 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               Row(
                 children: [
                   Expanded(
-                      child: selectedAccount == null
-                          ? Container()
-                          : AccountScope(
-                              account: selectedAccount!,
-                              child: SizedBox(
-                                height: 32,
-                                child: TabIconView(
-                                    icon: selectedIcon,
-                                    size: IconTheme.of(context).size),
-                              ))),
+                    child: selectedAccount == null
+                        ? Container()
+                        : AccountScope(
+                            account: selectedAccount!,
+                            child: SizedBox(
+                              height: 32,
+                              child: TabIconView(
+                                icon: selectedIcon,
+                                size: IconTheme.of(context).size,
+                              ),
+                            ),
+                          ),
+                  ),
                   IconButton(
-                      onPressed: () async {
-                        if (selectedAccount == null) return;
-                        selectedIcon = await showDialog<TabIcon>(
-                            context: context,
-                            builder: (context) => IconSelectDialog(
-                                  account: selectedAccount!,
-                                ));
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.navigate_next))
+                    onPressed: () async {
+                      if (selectedAccount == null) return;
+                      selectedIcon = await showDialog<TabIcon>(
+                        context: context,
+                        builder: (context) => IconSelectDialog(
+                          account: selectedAccount!,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.navigate_next),
+                  ),
                 ],
               ),
               CheckboxListTile(
@@ -373,7 +389,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   onPressed: () async {
                     final account = selectedAccount;
                     if (account == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectAccount,
                       );
@@ -382,7 +398,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
                     final tabType = selectedTabType;
                     if (tabType == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectTabType,
                       );
@@ -391,7 +407,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
                     final icon = selectedIcon;
                     if (icon == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectIcon,
                       );
@@ -399,7 +415,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     }
 
                     if (tabType == TabType.channel && selectedChannel == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectChannel,
                       );
@@ -408,7 +424,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
                     if (tabType == TabType.userList &&
                         selectedUserList == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectList,
                       );
@@ -416,7 +432,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     }
 
                     if (tabType == TabType.antenna && selectedAntenna == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectAntenna,
                       );
@@ -424,7 +440,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     }
                     if (tabType == TabType.roleTimeline &&
                         selectedRole == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectRole,
                       );
@@ -458,12 +474,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       await ref.read(tabSettingsRepositoryProvider).save(list);
                     }
 
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     Navigator.of(context).pop();
                   },
                   child: Text(S.of(context).done),
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -1,13 +1,13 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/antenna_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/user_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -116,10 +116,10 @@ final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
 
 class AntennaSettingsDialog extends StatelessWidget {
   const AntennaSettingsDialog({
+    required this.account,
     super.key,
     this.title,
     this.initialSettings = const AntennaSettings(),
-    required this.account,
   });
 
   final Widget? title;
@@ -148,8 +148,8 @@ class AntennaSettingsDialog extends StatelessWidget {
 
 class AntennaSettingsForm extends ConsumerWidget {
   const AntennaSettingsForm({
-    super.key,
     required this.account,
+    super.key,
   });
 
   final Account account;

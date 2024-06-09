@@ -1,15 +1,15 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/clip_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/clip_list_page/clip_settings_dialog.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:dio/dio.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/clip_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final _notesClipsNotifierProvider = AsyncNotifierProvider.autoDispose
     .family<_NotesClipsNotifier, List<Clip>, (Misskey, String)>(
@@ -87,9 +87,9 @@ class _ClipModalSheetNotifier extends AutoDisposeFamilyAsyncNotifier<
 
 class ClipModalSheet extends ConsumerWidget {
   const ClipModalSheet({
-    super.key,
     required this.account,
     required this.noteId,
+    super.key,
   });
 
   final Account account;
@@ -109,7 +109,7 @@ class ClipModalSheet extends ConsumerWidget {
             .addToClip(clip);
       } catch (e) {
         // TODO: あとでなおす
-        if (e is DioError && e.response?.data != null) {
+        if (e is DioException && e.response?.data != null) {
           if ((e.response?.data as Map?)?["error"]?["code"] ==
               "ALREADY_CLIPPED") {
             if (!context.mounted) return;

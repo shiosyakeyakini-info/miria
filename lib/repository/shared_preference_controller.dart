@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:miria/view/share_extension_page/share_extension_page.dart';
-import 'package:shared_preference_app_group/shared_preference_app_group.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
+import "package:miria/view/share_extension_page/share_extension_page.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class SharedPreferenceController {
   final bool isShareExtensionContext;
@@ -52,7 +52,7 @@ class SharedPreferenceController {
       // 共有エクステンションのコンテクストでは書かない
       return;
     }
-    prefs.write(key: key, value: value);
+    await prefs.write(key: key, value: value);
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await SharedPreferenceAppGroup.setString(key, value);
     }

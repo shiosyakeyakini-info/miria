@@ -1,18 +1,18 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/futurable.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/futurable.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class InstanceMutePage extends ConsumerStatefulWidget {
   final Account account;
 
-  const InstanceMutePage({super.key, required this.account});
+  const InstanceMutePage({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -31,7 +31,7 @@ class InstanceMutePageState extends ConsumerState<InstanceMutePage> {
   Future<void> save() async {
     final text = controller.text;
 
-    final List<String> mutedInstances =
+    final mutedInstances =
         text.split("\n").whereNot((element) => element.trim().isEmpty).toList();
 
     await ref

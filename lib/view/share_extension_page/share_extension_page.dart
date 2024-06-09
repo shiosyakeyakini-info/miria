@@ -1,15 +1,15 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:shared_preference_app_group/shared_preference_app_group.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
 
-part 'share_extension_page.freezed.dart';
-part 'share_extension_page.g.dart';
+part "share_extension_page.freezed.dart";
+part "share_extension_page.g.dart";
 
 @freezed
 class ShareExtensionData with _$ShareExtensionData {
@@ -58,19 +58,23 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
       try {
         await ref.read(accountRepositoryProvider.notifier).load();
         final json = jsonDecode(
-            await SharedPreferenceAppGroup.get("ShareKey") as String? ?? "");
+          await SharedPreferenceAppGroup.get("ShareKey") as String? ?? "",
+        );
         await SharedPreferenceAppGroup.setString("ShareKey", "");
         final sharedData =
             ShareExtensionData.fromJson(json as Map<String, dynamic>);
 
         if (ref.read(accountsProvider).length >= 2) {
           if (!mounted) return;
-          context.replaceRoute(SharingAccountSelectRoute(
+          await context.replaceRoute(
+            SharingAccountSelectRoute(
               sharingText: sharedData.text.join("\n"),
-              filePath: sharedData.files.map((e) => e.path).toList()));
+              filePath: sharedData.files.map((e) => e.path).toList(),
+            ),
+          );
         } else {
           if (!mounted) return;
-          context.replaceRoute(
+          await context.replaceRoute(
             NoteCreateRoute(
               initialAccount: ref.read(accountsProvider)[0],
               initialText: sharedData.text.join("\n"),

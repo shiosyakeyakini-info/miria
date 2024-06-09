@@ -1,15 +1,15 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
-import 'package:miria/model/input_completion_type.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/note_create/basic_keyboard.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/note_create/emoji_keyboard.dart';
-import 'package:miria/view/common/note_create/hashtag_keyboard.dart';
-import 'package:miria/view/common/note_create/mfm_fn_keyboard.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/extensions/text_editing_controller_extension.dart";
+import "package:miria/model/input_completion_type.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/note_create/basic_keyboard.dart";
+import "package:miria/view/common/note_create/emoji_keyboard.dart";
+import "package:miria/view/common/note_create/hashtag_keyboard.dart";
+import "package:miria/view/common/note_create/mfm_fn_keyboard.dart";
 
 final inputCompletionTypeProvider =
     StateProvider.autoDispose<InputCompletionType>((ref) => Basic());
@@ -21,9 +21,9 @@ class InputComplement extends ConsumerStatefulWidget {
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
   const InputComplement({
-    super.key,
     required this.controller,
     required this.focusNode,
+    super.key,
   });
 
   @override
@@ -89,8 +89,8 @@ class InputComplementState extends ConsumerState<InputComplement> {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: Theme.of(context).primaryColor))),
+        border: Border(top: BorderSide(color: Theme.of(context).primaryColor)),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -126,10 +126,11 @@ class InputComplementState extends ConsumerState<InputComplement> {
           if (defaultTargetPlatform == TargetPlatform.android ||
               defaultTargetPlatform == TargetPlatform.iOS)
             IconButton(
-                onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-                icon: const Icon(Icons.keyboard_arrow_down)),
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              icon: const Icon(Icons.keyboard_arrow_down),
+            ),
         ],
       ),
     );

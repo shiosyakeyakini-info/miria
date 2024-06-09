@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm_parser/mfm_parser.dart';
-import 'package:miria/model/note_search_condition.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/model/note_search_condition.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:miria/view/user_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final noteSearchProvider =
     StateProvider.autoDispose((ref) => const NoteSearchCondition());
@@ -117,19 +117,20 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                         defaultVerticalAlignment:
                             TableCellVerticalAlignment.middle,
                         children: [
-                          TableRow(children: [
-                            Text(S.of(context).user),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
-                                  child: selectedUser == null
-                                      ? Container()
-                                      : UserListItem(user: selectedUser),
-                                ),
-                                IconButton(
+                          TableRow(
+                            children: [
+                              Text(S.of(context).user),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: selectedUser == null
+                                        ? Container()
+                                        : UserListItem(user: selectedUser),
+                                  ),
+                                  IconButton(
                                     onPressed: () async {
                                       final selected = await showDialog<User?>(
                                         context: context,
@@ -145,10 +146,12 @@ class NoteSearchState extends ConsumerState<NoteSearch> {
                                       );
                                     },
                                     icon:
-                                        const Icon(Icons.keyboard_arrow_right))
-                              ],
-                            )
-                          ]),
+                                        const Icon(Icons.keyboard_arrow_right),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                           TableRow(
                             children: [
                               Text(S.of(context).channel),

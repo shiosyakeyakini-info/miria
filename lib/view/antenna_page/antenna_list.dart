@@ -1,13 +1,13 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 
 class AntennaList extends ConsumerWidget {
   const AntennaList({super.key});
@@ -46,7 +46,7 @@ class AntennaList extends ConsumerWidget {
                   }
                 },
               ),
-              onTap: () => context.pushRoute(
+              onTap: () async => context.pushRoute(
                 AntennaNotesRoute(
                   antenna: antenna,
                   account: account,

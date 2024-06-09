@@ -1,11 +1,11 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class OpenLocalOnlyNoteFromRemoteException implements Exception {}
 
@@ -112,7 +112,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
             account: loginAs,
           );
     if (!context.mounted) return;
-    context.pushRoute(
+    await context.pushRoute(
       NoteDetailRoute(
         note: foundNote,
         account: loginAs ?? _account,
@@ -132,7 +132,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
             user: user,
           );
     if (!context.mounted) return;
-    context.pushRoute(
+    await context.pushRoute(
       UserRoute(
         userId: foundUser.id,
         account: loginAs ?? _account,

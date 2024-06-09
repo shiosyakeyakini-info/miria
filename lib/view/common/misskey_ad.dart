@@ -1,13 +1,13 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class MisskeyAd extends ConsumerStatefulWidget {
   const MisskeyAd({super.key});
@@ -57,7 +57,7 @@ class MisskeyAdState extends ConsumerState<MisskeyAd> {
 
     return Center(
       child: GestureDetector(
-        onTap: () =>
+        onTap: () async =>
             launchUrl(targetAd.url, mode: LaunchMode.externalApplication),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

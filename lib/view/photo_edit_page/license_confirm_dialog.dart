@@ -1,21 +1,22 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class LicenseConfirmDialog extends ConsumerStatefulWidget {
   final String emoji;
   final Account account;
 
-  const LicenseConfirmDialog(
-      {super.key, required this.emoji, required this.account});
+  const LicenseConfirmDialog({
+    required this.emoji,
+    required this.account,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -55,7 +56,8 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
   Widget build(BuildContext context) {
     if (error != null) {
       return SimpleMessageDialog(
-          message: "${S.of(context).thrownError}\n$error");
+        message: "${S.of(context).thrownError}\n$error",
+      );
     }
     final data = this.data;
     if (isLoading || data == null) {
@@ -73,19 +75,22 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
                   S.of(context).customEmojiLicensedBy,
                 ),
                 MfmText(
-                    mfmText:
-                        data.license ?? S.of(context).customEmojiLicensedByNone)
+                  mfmText:
+                      data.license ?? S.of(context).customEmojiLicensedByNone,
+                ),
               ],
             ),
           ),
         ),
         actions: [
           OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(S.of(context).cancelEmojiChoosing)),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(S.of(context).cancelEmojiChoosing),
+          ),
           ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(S.of(context).doneEmojiChoosing))
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(S.of(context).doneEmojiChoosing),
+          ),
         ],
       ),
     );

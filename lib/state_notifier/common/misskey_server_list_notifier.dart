@@ -1,6 +1,6 @@
-import 'package:collection/collection.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final _queryProvider = StateProvider.autoDispose((ref) {
   return "";

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:intl/intl.dart";
 
 extension DateTimeExtension on DateTime {
   Duration operator -(DateTime other) => difference(other);
-  operator <(DateTime other) => compareTo(other) < 0;
-  operator <=(DateTime other) => compareTo(other) <= 0;
-  operator >(DateTime other) => compareTo(other) > 0;
-  operator >=(DateTime other) => compareTo(other) >= 0;
+  bool operator <(DateTime other) => compareTo(other) < 0;
+  bool operator <=(DateTime other) => compareTo(other) <= 0;
+  bool operator >(DateTime other) => compareTo(other) > 0;
+  bool operator >=(DateTime other) => compareTo(other) >= 0;
 
   String format(BuildContext context) {
     final localeName = Localizations.localeOf(context).toLanguageTag();
