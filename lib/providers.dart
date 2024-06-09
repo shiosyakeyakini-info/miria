@@ -31,7 +31,6 @@ import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/state_notifier/common/misskey_server_list_notifier.dart";
-import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 import "package:miria/state_notifier/user_list_page/users_lists_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -265,33 +264,6 @@ final photoEditProvider =
 
 final importExportRepository =
     ChangeNotifierProvider((ref) => ImportExportRepository(ref.read));
-
-// TODO: 下書きの機能かんがえるときにfamilyの引数みなおす
-final noteCreateProvider = StateNotifierProvider.family
-    .autoDispose<NoteCreateNotifier, NoteCreate, Account>(
-  (ref, account) => NoteCreateNotifier(
-    NoteCreate(
-      account: account,
-      noteVisibility: ref
-          .read(accountSettingsRepositoryProvider)
-          .fromAccount(account)
-          .defaultNoteVisibility,
-      localOnly: ref
-          .read(accountSettingsRepositoryProvider)
-          .fromAccount(account)
-          .defaultIsLocalOnly,
-      reactionAcceptance: ref
-          .read(accountSettingsRepositoryProvider)
-          .fromAccount(account)
-          .defaultReactionAcceptance,
-    ),
-    ref.read(fileSystemProvider),
-    ref.read(dioProvider),
-    ref.read(misskeyProvider(account)),
-    ref.read(errorEventProvider.notifier),
-    ref.read(notesProvider(account)),
-  ),
-);
 
 final misskeyServerListNotifierProvider = AsyncNotifierProvider.autoDispose<
     MisskeyServerListNotifier, List<JoinMisskeyInstanceInfo>>(

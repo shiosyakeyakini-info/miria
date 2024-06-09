@@ -17,8 +17,6 @@ class AccountSettingsRepository extends ChangeNotifier {
       await SharedPreferenceAppGroup.setAppGroup(
         "group.info.shiosyakeyakini.miria",
       );
-      final key = await SharedPreferenceAppGroup.get("account_settings");
-      print(key);
     }
 
     final prefs = await SharedPreferences.getInstance();
@@ -62,7 +60,7 @@ class AccountSettingsRepository extends ChangeNotifier {
     await prefs.setString("account_settings", value);
     notifyListeners();
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      SharedPreferenceAppGroup.setString("account_settings", value);
+      await SharedPreferenceAppGroup.setString("account_settings", value);
     }
   }
 

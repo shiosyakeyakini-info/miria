@@ -49,7 +49,7 @@ class MainStreamRepository extends ChangeNotifier {
       },
     );
     await misskey.startStreaming();
-    confirmNotification();
+    await confirmNotification();
   }
 
   Future<void> reconnect() async {

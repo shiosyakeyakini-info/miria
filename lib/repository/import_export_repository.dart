@@ -82,12 +82,12 @@ class ImportExportRepository extends ChangeNotifier {
     for (final accountSetting in importedSettings.accountSettings) {
       // この端末でログイン済みのアカウントであれば
       if (accounts.any((account) => account.acct == accountSetting.acct)) {
-        reader(accountSettingsRepositoryProvider).save(accountSetting);
+        await reader(accountSettingsRepositoryProvider).save(accountSetting);
       }
     }
 
     // 全般設定
-    reader(generalSettingsRepositoryProvider)
+    await reader(generalSettingsRepositoryProvider)
         .update(importedSettings.generalSettings);
 
     // タブ設定
@@ -103,15 +103,14 @@ class ImportExportRepository extends ChangeNotifier {
 
       tabSettings.add(tabSetting);
     }
-    reader(tabSettingsRepositoryProvider).save(tabSettings);
+    await reader(tabSettingsRepositoryProvider).save(tabSettings);
 
     if (!context.mounted) return;
     await SimpleMessageDialog.show(context, S.of(context).importCompleted);
 
     if (!context.mounted) return;
-    context.router
-      ..removeWhere((route) => true)
-      ..push(const SplashRoute());
+    context.router.removeWhere((route) => true);
+    await context.router.push(const SplashRoute());
   }
 
   Future<void> export(BuildContext context, Account account) async {

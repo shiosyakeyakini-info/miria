@@ -7,7 +7,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
-import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
@@ -71,9 +70,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   late final focusNode = ref.watch(noteFocusProvider);
   var isFirstChangeDependenciesCalled = false;
 
-  NoteCreate get data => ref.read(noteCreateProvider(widget.initialAccount));
+  NoteCreate get data =>
+      ref.read(noteCreateNotifierProvider(widget.initialAccount));
   NoteCreateNotifier get notifier =>
-      ref.read(noteCreateProvider(widget.initialAccount).notifier);
+      ref.read(noteCreateNotifierProvider(widget.initialAccount).notifier);
 
   static const shareExtensionMethodChannel =
       MethodChannel("info.shiosyakeyakini.miria/share_extension");
@@ -111,7 +111,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      noteCreateProvider(widget.initialAccount).select((value) => value.text),
+      noteCreateNotifierProvider(widget.initialAccount)
+          .select((value) => value.text),
       (_, next) {
         if (next != ref.read(noteInputTextProvider).text) {
           ref.read(noteInputTextProvider).text = next;
@@ -119,7 +120,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       },
     );
     ref.listen(
-        noteCreateProvider(widget.initialAccount)
+        noteCreateNotifierProvider(widget.initialAccount)
             .select((value) => value.isNoteSending), (_, next) {
       switch (next) {
         case NoteSendStatus.sending:
@@ -154,7 +155,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
           actions: [
             IconButton(
               onPressed: () async =>
-                  await notifier.note(context).expectFailure(context),
+                  await notifier.note().expectFailure(context),
               icon: const Icon(Icons.send),
             ),
           ],
@@ -203,7 +204,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                                 onPressed: () {
                                   ref
                                       .read(
-                                        noteCreateProvider(
+                                        noteCreateNotifierProvider(
                                           widget.initialAccount,
                                         ).notifier,
                                       )

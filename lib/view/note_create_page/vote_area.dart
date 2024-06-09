@@ -3,9 +3,7 @@ import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
-import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
-
 import "package:miria/view/common/account_scope.dart";
 
 class VoteArea extends ConsumerStatefulWidget {
@@ -19,11 +17,11 @@ class VoteAreaState extends ConsumerState<VoteArea> {
   @override
   Widget build(BuildContext context) {
     final expireType = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.voteExpireType),
     );
     final isVote = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.isVote),
     );
 
@@ -39,7 +37,9 @@ class VoteAreaState extends ConsumerState<VoteArea> {
         ElevatedButton(
           onPressed: () {
             ref
-                .read(noteCreateProvider(AccountScope.of(context)).notifier)
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
                 .addVoteContent();
           },
           child: Text(S.of(context).addChoice),
@@ -64,7 +64,7 @@ class VoteContentListState extends ConsumerState<VoteContentList> {
   @override
   Widget build(BuildContext context) {
     final contentCount = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.voteContentCount),
     );
     return ListView(
@@ -95,7 +95,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
 
     controller.addListener(() {
       ref
-          .read(noteCreateProvider(AccountScope.of(context)).notifier)
+          .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
           .setVoteContent(widget.index, controller.text);
     });
   }
@@ -105,7 +105,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
     super.didUpdateWidget(oldWidget);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.text = ref
-          .read(noteCreateProvider(AccountScope.of(context)))
+          .read(noteCreateNotifierProvider(AccountScope.of(context)))
           .voteContent[widget.index];
     });
   }
@@ -115,7 +115,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.text = ref
-          .read(noteCreateProvider(AccountScope.of(context)))
+          .read(noteCreateNotifierProvider(AccountScope.of(context)))
           .voteContent[widget.index];
     });
   }
@@ -143,7 +143,10 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
           IconButton(
             onPressed: () {
               ref
-                  .read(noteCreateProvider(AccountScope.of(context)).notifier)
+                  .read(
+                    noteCreateNotifierProvider(AccountScope.of(context))
+                        .notifier,
+                  )
                   .deleteVoteContent(widget.index);
             },
             icon: const Icon(Icons.close),
@@ -163,12 +166,14 @@ class MultipleVoteRadioButton extends ConsumerWidget {
       children: [
         Switch(
           value: ref.watch(
-            noteCreateProvider(AccountScope.of(context))
+            noteCreateNotifierProvider(AccountScope.of(context))
                 .select((value) => value.isVoteMultiple),
           ),
           onChanged: (value) {
             ref
-                .read(noteCreateProvider(AccountScope.of(context)).notifier)
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
                 .toggleVoteMultiple();
           },
         ),
@@ -185,7 +190,7 @@ class VoteDuration extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DropdownButton(
       value: ref.watch(
-        noteCreateProvider(AccountScope.of(context))
+        noteCreateNotifierProvider(AccountScope.of(context))
             .select((value) => value.voteExpireType),
       ),
       items: [
@@ -198,7 +203,7 @@ class VoteDuration extends ConsumerWidget {
       onChanged: (item) {
         if (item == null) return;
         ref
-            .read(noteCreateProvider(AccountScope.of(context)).notifier)
+            .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
             .setVoteExpireType(item);
       },
     );
@@ -216,7 +221,7 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
   @override
   Widget build(BuildContext context) {
     final date = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.voteDate),
     );
 
@@ -242,7 +247,9 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
           );
           if (resultTime == null) return;
 
-          ref.read(noteCreateProvider(account).notifier).setVoteExpireDate(
+          ref
+              .read(noteCreateNotifierProvider(account).notifier)
+              .setVoteExpireDate(
                 DateTime(
                   resultDate.year,
                   resultDate.month,
@@ -299,7 +306,7 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
         final value = int.tryParse(controller.text);
         if (value == null) return;
         ref
-            .read(noteCreateProvider(AccountScope.of(context)).notifier)
+            .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
             .setVoteDuration(value);
       });
     });
@@ -315,7 +322,7 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     controller.text = ref
-            .read(noteCreateProvider(AccountScope.of(context)))
+            .read(noteCreateNotifierProvider(AccountScope.of(context)))
             .voteDuration
             ?.toString() ??
         "";
@@ -345,13 +352,14 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
               ),
           ],
           value: ref.watch(
-            noteCreateProvider(AccountScope.of(context))
+            noteCreateNotifierProvider(AccountScope.of(context))
                 .select((value) => value.voteDurationType),
           ),
           onChanged: (value) {
             if (value == null) return;
             ref
-                .read(noteCreateProvider(AccountScope.of(context)).notifier)
+                .read(noteCreateNotifierProvider(AccountScope.of(context))
+                    .notifier)
                 .setVoteDurationType(value);
           },
         ),

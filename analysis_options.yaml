@@ -48,12 +48,12 @@ linter:
     - unnecessary_null_checks
     - unnecessary_parenthesis
     - unnecessary_raw_strings
-    
-
-
-
 
 analyzer:
   exclude:
     - /**/*.freezed.dart
     - /**/*.g.dart
+  language:
+    # strict-casts: true
+    # strict-inference: true
+    # strict-raw-types: true

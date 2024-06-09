@@ -35,11 +35,10 @@ class ColorTheme with _$ColorTheme {
     final isDarkTheme = theme.base == "dark";
     final props = {
       ...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps,
-    };
-    props.addAll(theme.props);
-    props
-        .cast<String, String>()
-        .removeWhere((key, value) => value.startsWith('"'));
+    }
+      ..addAll(theme.props)
+      ..cast<String, String>()
+          .removeWhere((key, value) => value.startsWith('"'));
 
     // https://github.com/misskey-dev/misskey/blob/13.14.1/packages/frontend/src/scripts/theme.ts#L98-L124
     Color getColor(String val) {

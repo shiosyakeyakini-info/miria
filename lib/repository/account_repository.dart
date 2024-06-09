@@ -76,7 +76,7 @@ class AccountRepository extends Notifier<List<Account>> {
       final list = jsonDecode(storedData) as List;
       final resultList = List.of(list);
       for (final element in list) {
-        if (element["meta"] == null) {
+        if ((element as Map<String, dynamic>)["meta"] == null) {
           try {
             final meta = await ref
                 .read(misskeyWithoutAccountProvider(element["host"]))
@@ -289,7 +289,7 @@ class AccountRepository extends Notifier<List<Account>> {
     final meta = await Misskey(token: token, host: server).meta();
     final account =
         Account(host: server, token: token, userId: userId, i: i, meta: meta);
-    _addAccount(account);
+    await _addAccount(account);
   }
 
   Future<void> loginAsToken(String server, String token) async {
@@ -340,16 +340,13 @@ class AccountRepository extends Notifier<List<Account>> {
     await ref
         .read(tabSettingsRepositoryProvider)
         .initializeTabSettings(account);
-    ();
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
+    final actualIndex = oldIndex < newIndex ? -1 : newIndex;
     final newState = state.toList();
     final item = newState.removeAt(oldIndex);
-    newState.insert(newIndex, item);
+    newState.insert(actualIndex, item);
     state = newState;
 
     await _save();

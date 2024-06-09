@@ -5,7 +5,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
-import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 
@@ -46,18 +45,6 @@ class ErrorDialogListener extends ConsumerWidget {
             next.$2!,
             S.of(context).cannotOpenLocalOnlyNoteFromRemote,
           );
-        } else if (error is NoteCreateException) {
-          final message = switch (error) {
-            EmptyNoteException() => S.of(context).pleaseInputSomething,
-            TooFewVoteChoiceException() => S.of(context).pleaseAddVoteChoice,
-            EmptyVoteExpireDateException() =>
-              S.of(context).pleaseSpecifyExpirationDate,
-            EmptyVoteExpireDurationException() =>
-              S.of(context).pleaseSpecifyExpirationDuration,
-            MentionToRemoteInLocalOnlyNoteException() =>
-              S.of(context).cannotMentionToRemoteInLocalOnlyNote,
-          };
-          SimpleMessageDialog.show(next.$2!, message);
         } else {
           SimpleMessageDialog.show(
             next.$2!,

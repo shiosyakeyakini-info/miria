@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:miria/providers.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 
@@ -10,7 +10,7 @@ class RenoteArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final renote = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.renote),
     );
 

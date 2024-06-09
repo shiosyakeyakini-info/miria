@@ -1,29 +1,28 @@
 import "dart:typed_data";
 
 import "package:dio/dio.dart";
-import "package:file/file.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:mfm_parser/mfm_parser.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
-import "package:miria/repository/note_repository.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
-import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
 import "package:miria/view/user_select_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "note_create_state_notifier.freezed.dart";
+part "note_create_state_notifier.g.dart";
 
 enum NoteSendStatus { sending, finished, error }
 
@@ -56,18 +55,6 @@ enum VoteExpireDurationType {
     };
   }
 }
-
-sealed class NoteCreateException implements Exception {}
-
-class EmptyNoteException implements NoteCreateException {}
-
-class TooFewVoteChoiceException implements NoteCreateException {}
-
-class EmptyVoteExpireDateException implements NoteCreateException {}
-
-class EmptyVoteExpireDurationException implements NoteCreateException {}
-
-class MentionToRemoteInLocalOnlyNoteException implements NoteCreateException {}
 
 @freezed
 class NoteCreate with _$NoteCreate {
@@ -108,21 +95,33 @@ class NoteCreateChannel with _$NoteCreateChannel {
   }) = _NoteCreateChannel;
 }
 
-class NoteCreateNotifier extends StateNotifier<NoteCreate> {
-  FileSystem fileSystem;
-  Dio dio;
-  Misskey misskey;
-  NoteRepository noteRepository;
-  StateNotifier<(Object? error, BuildContext? context)> errorNotifier;
+@riverpod
+class NoteCreateNotifier extends _$NoteCreateNotifier {
+  late final fileSystem = ref.read(fileSystemProvider);
+  late final dio = ref.read(dioProvider);
+  late final misskey = ref.read(misskeyProvider(state.account));
+  late final noteRepository = ref.read(notesProvider(state.account));
+  late final errorNotifier = ref.read(errorEventProvider.notifier);
+  late final dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
 
-  NoteCreateNotifier(
-    super.state,
-    this.fileSystem,
-    this.dio,
-    this.misskey,
-    this.errorNotifier,
-    this.noteRepository,
-  );
+  @override
+  NoteCreate build(Account account) {
+    return NoteCreate(
+      account: account,
+      noteVisibility: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultNoteVisibility,
+      localOnly: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultIsLocalOnly,
+      reactionAcceptance: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultReactionAcceptance,
+    );
+  }
 
   /// 初期化する
   Future<void> initialize(
@@ -303,26 +302,38 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   }
 
   /// ノートを投稿する
-  Future<void> note(BuildContext context) async {
+  Future<void> note() async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
-      throw EmptyNoteException();
+      await dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseInputSomething,
+      );
+      return;
     }
 
     if (state.isVote &&
         state.voteContent.where((e) => e.isNotEmpty).length < 2) {
-      throw TooFewVoteChoiceException();
+      await dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseAddVoteChoice,
+      );
+      return;
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.date &&
         state.voteDate == null) {
-      throw EmptyVoteExpireDateException();
+      await dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseSpecifyExpirationDate,
+      );
+      return;
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.duration &&
         state.voteDuration == null) {
-      throw EmptyVoteExpireDurationException();
+      await dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseSpecifyExpirationDuration,
+      );
+      return;
     }
 
     try {
@@ -402,26 +413,21 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         if (response?.isSensitive == true &&
             !file.isNsfw &&
             !state.account.i.alwaysMarkNsfw) {
-          if (context.mounted) {
-            final confirmResult = await SimpleConfirmDialog.show(
-              context: context,
-              message: S.of(context).unexpectedSensitive,
-              primary: S.of(context).staySensitive,
-              secondary: S.of(context).unsetSensitive,
+          final result = await dialogNotifier.showDialog(
+            message: (context) => S.of(context).unexpectedSensitive,
+            actions: (context) =>
+                [S.of(context).staySensitive, S.of(context).unsetSensitive],
+          );
+          if (result == 1) {
+            await misskey.drive.files.update(
+              DriveFilesUpdateRequest(
+                fileId: fileIds.last,
+                isSensitive: false,
+              ),
             );
-            if (confirmResult == false) {
-              await misskey.drive.files.update(
-                DriveFilesUpdateRequest(
-                  fileId: fileIds.last,
-                  isSensitive: false,
-                ),
-              );
-            }
           }
         }
       }
-
-      if (!mounted) return;
 
       final nodes = const MfmParser().parse(state.text);
       final userList = <MfmMention>[];
@@ -443,7 +449,10 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             (element) =>
                 element.host != null && element.host != misskey.apiService.host,
           )) {
-        throw MentionToRemoteInLocalOnlyNoteException();
+        await dialogNotifier.showSimpleDialog(
+          message: (context) =>
+              S.of(context).cannotMentionToRemoteInLocalOnlyNote,
+        );
       }
 
       final mentionTargetUsers = [
@@ -455,8 +464,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             ),
           ),
       ];
-      final visibleUserIds = state.replyTo.map((e) => e.id).toList();
-      visibleUserIds.addAll(mentionTargetUsers.map((e) => e.id));
+      final visibleUserIds = state.replyTo.map((e) => e.id).toList()
+        ..addAll(mentionTargetUsers.map((e) => e.id));
 
       final baseText =
           "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}";
@@ -519,7 +528,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           ),
         );
       }
-      if (!mounted) return;
       state = state.copyWith(isNoteSending: NoteSendStatus.finished);
     } catch (e) {
       state = state.copyWith(isNoteSending: NoteSendStatus.error);
@@ -535,7 +543,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     );
 
     if (result == DriveModalSheetReturnValue.drive) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       final result = await showDialog<List<DriveFile>?>(
         context: context,
         builder: (context) => DriveFileSelectDialog(
@@ -568,7 +576,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           );
         }),
       );
-      if (!mounted) return;
       state = state.copyWith(
         files: [
           ...state.files,
@@ -598,7 +605,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         ),
       );
 
-      if (!mounted) return;
       state = state.copyWith(
         files: [
           ...state.files,
@@ -692,10 +698,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
   /// メディアを削除する
   void deleteFile(int index) {
-    final list = state.files.toList();
-    list.removeAt(index);
-
-    state = state.copyWith(files: list);
+    state = state.copyWith(files: state.files.toList()..removeAt(index));
   }
 
   /// リプライ先ユーザーを追加する
@@ -719,23 +722,24 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     state = state.copyWith(isCw: !state.isCw);
   }
 
-  bool validateNoteVisibility(NoteVisibility visibility, BuildContext context) {
+  Future<bool> validateNoteVisibility(
+    NoteVisibility visibility,
+  ) async {
     final replyVisibility = state.reply?.visibility;
     if (replyVisibility == NoteVisibility.specified ||
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
-      SimpleMessageDialog.show(
-        context,
-        S.of(context).cannotPublicReplyToPrivateNote(
+      await dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).cannotPublicReplyToPrivateNote(
               replyVisibility!.displayName(context),
             ),
       );
+
       return false;
     }
     if (state.account.i.isSilenced) {
-      SimpleMessageDialog.show(
-        context,
-        S.of(context).cannotPublicNoteBySilencedUser,
+      await dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).cannotPublicNoteBySilencedUser,
       );
       return false;
     }
@@ -806,8 +810,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// 投票を追加する
   void addVoteContent() {
     if (state.voteContentCount == 10) return;
-    final list = state.voteContent.toList();
-    list.add("");
+    final list = [...state.voteContent, ""];
     state = state.copyWith(
       voteContentCount: state.voteContentCount + 1,
       voteContent: list,
@@ -817,8 +820,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// 投票の行を削除する
   void deleteVoteContent(int index) {
     if (state.voteContentCount == 2) return;
-    final list = state.voteContent.toList();
-    list.removeAt(index);
+    final list = state.voteContent.toList()..removeAt(index);
     state = state.copyWith(
       voteContentCount: state.voteContentCount - 1,
       voteContent: list,

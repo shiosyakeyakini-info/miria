@@ -52,7 +52,7 @@ class SharedPreferenceController {
       // 共有エクステンションのコンテクストでは書かない
       return;
     }
-    prefs.write(key: key, value: value);
+    await prefs.write(key: key, value: value);
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await SharedPreferenceAppGroup.setString(key, value);
     }

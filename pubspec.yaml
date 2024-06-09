@@ -71,6 +71,7 @@ dependencies:
   shared_preference_app_group: ^1.0.0+1
   stack_trace: ^1.11.1
   flutter_cache_manager: ^3.3.2
+  riverpod_annotation: ^2.3.5
 
 dependency_overrides:
   image_editor:
@@ -99,6 +100,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   mockito: ^5.4.2
   cider: ^0.2.3
+  riverpod_generator: ^2.4.0
 
 flutter:
   uses-material-design: true

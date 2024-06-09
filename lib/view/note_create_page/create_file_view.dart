@@ -3,8 +3,8 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/image_file.dart";
-import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
 
@@ -29,7 +29,7 @@ class CreateFileView extends ConsumerWidget {
           file: file,
           onSubmit: (result) {
             ref
-                .read(noteCreateProvider(account).notifier)
+                .read(noteCreateNotifierProvider(account).notifier)
                 .setFileContent(file, result);
           },
         ),
@@ -46,13 +46,13 @@ class CreateFileView extends ConsumerWidget {
     if (result == null) return;
 
     ref
-        .read(noteCreateProvider(account).notifier)
+        .read(noteCreateNotifierProvider(account).notifier)
         .setFileMetaData(index, result);
   }
 
   void delete(BuildContext context, WidgetRef ref) {
     ref
-        .read(noteCreateProvider(AccountScope.of(context)).notifier)
+        .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
         .deleteFile(index);
   }
 

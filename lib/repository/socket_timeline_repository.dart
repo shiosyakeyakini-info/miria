@@ -49,7 +49,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   void reloadLatestNotes() {
     moveToOlder();
-    requestNotes().then((resultNotes) {
+    unawaited(() async {
+      final resultNotes = await requestNotes();
       if (olderNotes.isEmpty) {
         olderNotes.addAll(resultNotes);
         notifyListeners();
@@ -75,7 +76,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         noteRepository.registerNote(note);
       }
       notifyListeners();
-    });
+    }());
   }
 
   @override
@@ -176,8 +177,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         );
       },
     );
-    Future.wait([
-      Future(() async => await misskey.startStreaming()),
+    await Future.wait([
+      misskey.startStreaming(),
       Future(() async {
         if (olderNotes.isEmpty) {
           try {
@@ -239,7 +240,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   }
 
   @override
-  void subscribe(SubscribeItem item) {
+  Future<void> subscribe(SubscribeItem item) async {
     if (!tabSetting.isSubscribe) return;
     final index =
         subscribedList.indexWhere((element) => element.noteId == item.noteId);
@@ -253,7 +254,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     if (index == -1) {
       subscribedList.add(item);
       if (isSubscribed == -1) {
-        socketController?.subNote(item.noteId);
+        await socketController?.subNote(item.noteId);
       }
     } else {
       subscribedList[index] = item;
@@ -269,13 +270,13 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             element.replyId == renoteId,
       );
       if (isRenoteSubscribed == -1) {
-        socketController?.subNote(renoteId);
+        await socketController?.subNote(renoteId);
       }
     }
 
     final replyId = item.replyId;
     if (replyId != null) {
-      socketController?.subNote(replyId);
+      await socketController?.subNote(replyId);
       final isRenoteSubscribed = subscribedList.indexWhere(
         (element) =>
             element.noteId == replyId ||
@@ -283,14 +284,14 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             element.replyId == replyId,
       );
       if (isRenoteSubscribed == -1) {
-        socketController?.subNote(replyId);
+        await socketController?.subNote(replyId);
       }
     }
   }
 
   @override
-  void describe(String id) {
+  Future<void> describe(String id) async {
     if (!tabSetting.isSubscribe) return;
-    socketController?.unsubNote(id);
+    await socketController?.unsubNote(id);
   }
 }

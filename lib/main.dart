@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 
 import "package:flutter/foundation.dart";
@@ -10,6 +11,7 @@ import "package:media_kit/media_kit.dart";
 import "package:miria/model/desktop_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
 import "package:miria/view/themes/app_theme_scope.dart";
@@ -20,7 +22,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-    windowManager.ensureInitialized();
+    await windowManager.ensureInitialized();
   }
   FlutterError.demangleStackTrace = (stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
@@ -46,10 +48,10 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
   void initState() {
     if (isDesktop) {
       windowManager.addListener(this);
-      ref
-          .read(desktopSettingsRepositoryProvider)
-          .load()
-          .then((_) => _initWindow());
+      unawaited(() async {
+        await ref.read(desktopSettingsRepositoryProvider).load();
+        await _initWindow();
+      }());
     }
     super.initState();
   }
@@ -111,10 +113,10 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
     );
 
     if (position != null) {
-      windowManager.setPosition(position);
+      await windowManager.setPosition(position);
     }
 
-    windowManager.waitUntilReadyToShow(opt, () async {
+    await windowManager.waitUntilReadyToShow(opt, () async {
       await windowManager.show();
       await windowManager.focus();
     });
@@ -145,11 +147,13 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener {
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, widget) {
-        return AppThemeScope(
-          child: SharingIntentListener(
-            router: _appRouter,
-            child: ErrorDialogListener(
-              child: widget ?? Container(),
+        return DialogScope(
+          child: AppThemeScope(
+            child: SharingIntentListener(
+              router: _appRouter,
+              child: ErrorDialogListener(
+                child: widget ?? Container(),
+              ),
             ),
           ),
         );

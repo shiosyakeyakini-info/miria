@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:flutter_svg/flutter_svg.dart";
-import "package:miria/providers.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/misskey_notes/local_only_icon.dart";
@@ -51,18 +51,18 @@ class NoteCreateSettingTop extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier =
-        ref.read(noteCreateProvider(AccountScope.of(context)).notifier);
+        ref.read(noteCreateNotifierProvider(AccountScope.of(context)).notifier);
 
     final noteVisibility = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.noteVisibility),
     );
     final reactionAcceptance = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.reactionAcceptance),
     );
     final isLocal = ref.watch(
-      noteCreateProvider(AccountScope.of(context))
+      noteCreateNotifierProvider(AccountScope.of(context))
           .select((value) => value.localOnly),
     );
     return Row(

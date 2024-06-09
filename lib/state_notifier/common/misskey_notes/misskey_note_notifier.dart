@@ -112,7 +112,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
             account: loginAs,
           );
     if (!context.mounted) return;
-    context.pushRoute(
+    await context.pushRoute(
       NoteDetailRoute(
         note: foundNote,
         account: loginAs ?? _account,
@@ -132,7 +132,7 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
             user: user,
           );
     if (!context.mounted) return;
-    context.pushRoute(
+    await context.pushRoute(
       UserRoute(
         userId: foundUser.id,
         account: loginAs ?? _account,

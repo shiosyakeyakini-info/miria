@@ -10,7 +10,7 @@ part "tab_setting.freezed.dart";
 part "tab_setting.g.dart";
 
 Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
-  final account = json["account"];
+  final account = json["account"] as Map<String, dynamic>?;
   if (account != null) {
     return {
       "host": account["host"],

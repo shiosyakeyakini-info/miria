@@ -36,7 +36,7 @@ sealed class MisskeyEmojiData {
           hostedName: emojiName,
           url: Uri.parse(found),
           isCurrentServer: false,
-          isSensitive: false, //TODO: 要検証
+          isSensitive: false,
         );
       }
     }
