@@ -82,7 +82,7 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   }
 
   Future<void> save() async {
-    ref.read(generalSettingsRepositoryProvider).update(
+    await ref.read(generalSettingsRepositoryProvider).update(
           GeneralSettings(
             lightColorThemeId: lightModeTheme,
             darkColorThemeId: darkModeTheme,
@@ -143,9 +143,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         ],
                         value: language,
                         onChanged: (value) => setState(
-                          () {
+                          () async {
                             language = value ?? Languages.jaJP;
-                            save();
+                            await save();
                           },
                         ),
                       ),
@@ -162,9 +162,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         ],
                         value: nsfwInherit,
                         onChanged: (value) => setState(
-                          () {
+                          () async {
                             nsfwInherit = value ?? NSFWInherit.inherit;
-                            save();
+                            await save();
                           },
                         ),
                       ),
@@ -181,9 +181,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         ],
                         value: automaticPush,
                         onChanged: (value) => setState(
-                          () {
+                          () async {
                             automaticPush = value ?? AutomaticPush.none;
-                            save();
+                            await save();
                           },
                         ),
                       ),
@@ -232,9 +232,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         ],
                         value: tabPosition,
                         onChanged: (value) => setState(
-                          () {
+                          () async {
                             tabPosition = value ?? TabPosition.top;
-                            save();
+                            await save();
                           },
                         ),
                       ),

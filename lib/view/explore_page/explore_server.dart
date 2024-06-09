@@ -18,7 +18,7 @@ class ExploreServerState extends ConsumerState<ExploreServer> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: MisskeyServerList(
-        onTap: (item) => context.pushRoute(
+        onTap: (item) async => context.pushRoute(
           FederationRoute(
             account: AccountScope.of(context),
             host: item.url,

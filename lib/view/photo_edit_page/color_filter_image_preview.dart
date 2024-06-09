@@ -34,7 +34,7 @@ class ColorFilterImagePreview extends ConsumerWidget {
           final image = previewImages[index].image;
           if (image == null) return const SizedBox.shrink();
           return GestureDetector(
-            onTap: () => ref
+            onTap: () async => ref
                 .read(photoEditProvider.notifier)
                 .selectColorFilter(previewImages[index].name),
             child: DecoratedBox(

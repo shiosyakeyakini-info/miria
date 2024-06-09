@@ -64,7 +64,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
                         .read(notesProvider(widget.account))
                         .registerAll(result.map((e) => e.note).whereNotNull());
 
-                    ref
+                    await ref
                         .read(accountRepositoryProvider.notifier)
                         .readAllNotification(widget.account);
                     return result.toNotificationData(localize);
@@ -376,7 +376,7 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: ElevatedButton(
-                                onPressed: () => handleFollowRequest(
+                                onPressed: () async => handleFollowRequest(
                                   ref,
                                   account: account,
                                   accept: true,
@@ -390,7 +390,7 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: OutlinedButton(
-                                onPressed: () => handleFollowRequest(
+                                onPressed: () async => handleFollowRequest(
                                   ref,
                                   account: account,
                                   accept: false,

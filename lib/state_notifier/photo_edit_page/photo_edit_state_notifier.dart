@@ -165,9 +165,9 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   }
 
   /// 画像を回転する
-  void rotate() {
+  Future<void> rotate() async {
     final angle = ((state.angle - 90) % 360).abs();
-    draw(
+    await draw(
       state.copyWith(
         angle: angle,
         defaultSize: Size(state.defaultSize.height, state.defaultSize.width),
@@ -194,8 +194,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
   }
 
   /// 画像を切り取る
-  void crop() {
-    draw(
+  Future<void> crop() async {
+    await draw(
       state.copyWith(
         clipMode: !state.clipMode,
         colorFilterMode: false,
@@ -294,7 +294,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
       colorFilterMode: !state.colorFilterMode,
     );
     if (!state.colorFilterMode) return;
-    createPreviewImage();
+    await createPreviewImage();
   }
 
   Future<void> createPreviewImage() async {
@@ -431,8 +431,8 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
     );
   }
 
-  void clearSelectMode() {
-    draw(
+  Future<void> clearSelectMode() async {
+    await draw(
       state.copyWith(
         selectedEmojiIndex: null,
         colorFilterMode: false,

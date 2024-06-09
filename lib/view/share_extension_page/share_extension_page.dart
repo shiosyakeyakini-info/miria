@@ -66,7 +66,7 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
 
         if (ref.read(accountsProvider).length >= 2) {
           if (!mounted) return;
-          context.replaceRoute(
+          await context.replaceRoute(
             SharingAccountSelectRoute(
               sharingText: sharedData.text.join("\n"),
               filePath: sharedData.files.map((e) => e.path).toList(),
@@ -74,7 +74,7 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
           );
         } else {
           if (!mounted) return;
-          context.replaceRoute(
+          await context.replaceRoute(
             NoteCreateRoute(
               initialAccount: ref.read(accountsProvider)[0],
               initialText: sharedData.text.join("\n"),

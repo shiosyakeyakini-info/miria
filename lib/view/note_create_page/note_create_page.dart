@@ -89,7 +89,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
     if (isFirstChangeDependenciesCalled) return;
     isFirstChangeDependenciesCalled = true;
     Future(() async {
-      notifier.initialize(
+      await notifier.initialize(
         widget.channel,
         widget.initialText,
         widget.initialMediaFiles,
@@ -110,35 +110,36 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(
-      noteCreateNotifierProvider(widget.initialAccount)
-          .select((value) => value.text),
-      (_, next) {
-        if (next != ref.read(noteInputTextProvider).text) {
-          ref.read(noteInputTextProvider).text = next;
-        }
-      },
-    );
-    ref.listen(
+    ref
+      ..listen(
         noteCreateNotifierProvider(widget.initialAccount)
-            .select((value) => value.isNoteSending), (_, next) {
-      switch (next) {
-        case NoteSendStatus.sending:
-          IndicatorView.showIndicator(context);
-        case NoteSendStatus.finished:
-          IndicatorView.hideIndicator(context);
-          if (widget.exitOnNoted) {
-            shareExtensionMethodChannel.invokeMethod("exit");
-          } else {
-            Navigator.of(context).pop();
+            .select((value) => value.text),
+        (_, next) {
+          if (next != ref.read(noteInputTextProvider).text) {
+            ref.read(noteInputTextProvider).text = next;
           }
+        },
+      )
+      ..listen(
+          noteCreateNotifierProvider(widget.initialAccount)
+              .select((value) => value.isNoteSending), (_, next) async {
+        switch (next) {
+          case NoteSendStatus.sending:
+            IndicatorView.showIndicator(context);
+          case NoteSendStatus.finished:
+            IndicatorView.hideIndicator(context);
+            if (widget.exitOnNoted) {
+              await shareExtensionMethodChannel.invokeMethod("exit");
+            } else {
+              Navigator.of(context).pop();
+            }
 
-        case NoteSendStatus.error:
-          IndicatorView.hideIndicator(context);
-        case null:
-          break;
-      }
-    });
+          case NoteSendStatus.error:
+            IndicatorView.hideIndicator(context);
+          case null:
+            break;
+        }
+      });
 
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
           hintText: (widget.renote != null || widget.reply != null)
@@ -217,7 +218,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                           if (widget.noteCreationMode !=
                               NoteCreationMode.update)
                             IconButton(
-                              onPressed: () => notifier.addReplyUser(context),
+                              onPressed: () async =>
+                                  notifier.addReplyUser(context),
                               icon: const Icon(Icons.mail_outline),
                             ),
                           IconButton(

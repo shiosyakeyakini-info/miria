@@ -58,7 +58,8 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
             actions: [
               IconButton(
                 onPressed: () async {
-                  photoEdit.clearSelectMode();
+                  await photoEdit.clearSelectMode();
+                  if (!context.mounted) return;
                   final confirm = await SimpleConfirmDialog.show(
                     context: context,
                     message: S.of(context).confirmSavingPhoto,

@@ -40,9 +40,7 @@ class _FilteredHashtags
   List<String> build(Account arg) {
     ref.listen(
       inputCompletionTypeProvider,
-      (_, type) {
-        _updateHashtags(arg, type);
-      },
+      (_, type) async => await _updateHashtags(arg, type),
       fireImmediately: true,
     );
     return [];

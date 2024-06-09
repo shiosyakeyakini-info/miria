@@ -22,7 +22,7 @@ class UsersListTimelinePage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
-            onPressed: () => context.pushRoute(
+            onPressed: () async => context.pushRoute(
               UsersListDetailRoute(
                 account: account,
                 listId: list.id,

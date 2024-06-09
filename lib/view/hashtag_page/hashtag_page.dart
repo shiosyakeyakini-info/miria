@@ -52,8 +52,8 @@ class HashtagPage extends ConsumerWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.pushRoute(
+          onPressed: () async {
+            await context.pushRoute(
               NoteCreateRoute(
                 initialAccount: account,
                 initialText: "#$hashtag",

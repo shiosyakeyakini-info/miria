@@ -90,7 +90,7 @@ class SearchPageState extends ConsumerState<SearchPage> {
                     child: UserSelectContent(
                       focusNode: focusNodes[1],
                       isDetail: true,
-                      onSelected: (item) => context.pushRoute(
+                      onSelected: (item) async => context.pushRoute(
                         UserRoute(
                           userId: item.id,
                           account: widget.account,

@@ -120,7 +120,9 @@ class FederationCustomEmojisState
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 3, right: 3),
+                                          left: 3,
+                                          right: 3,
+                                        ),
                                         child: Text(
                                           S.of(context).sensitive,
                                           style: Theme.of(context)

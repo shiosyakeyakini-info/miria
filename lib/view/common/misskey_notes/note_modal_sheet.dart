@@ -226,10 +226,10 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.attach_file),
           title: Text(S.of(context).clip),
-          onTap: () {
+          onTap: () async {
             Navigator.of(context).pop();
 
-            showModalBottomSheet(
+            await showModalBottomSheet(
               context: context,
               builder: (context2) =>
                   ClipModalSheet(account: account, noteId: targetNote.id),
@@ -239,14 +239,12 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.repeat_rounded),
           title: Text(S.of(context).notesAfterRenote),
-          onTap: () {
-            context.pushRoute(
-              NotesAfterRenoteRoute(
-                note: targetNote,
-                account: account,
-              ),
-            );
-          },
+          onTap: () async => context.pushRoute(
+            NotesAfterRenoteRoute(
+              note: targetNote,
+              account: account,
+            ),
+          ),
         ),
         if (baseNote.user.host == null &&
             baseNote.user.username == account.userId &&
@@ -260,7 +258,7 @@ class NoteModalSheet extends ConsumerWidget {
               title: Text(S.of(context).edit),
               onTap: () async {
                 Navigator.of(context).pop();
-                context.pushRoute(
+                await context.pushRoute(
                   NoteCreateRoute(
                     initialAccount: account,
                     note: targetNote,
@@ -312,7 +310,7 @@ class NoteModalSheet extends ConsumerWidget {
                 ref.read(notesProvider(account)).delete(targetNote.id);
                 if (!context.mounted) return;
                 Navigator.of(context).pop();
-                context.pushRoute(
+                await context.pushRoute(
                   NoteCreateRoute(
                     initialAccount: account,
                     note: targetNote,
@@ -349,9 +347,9 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
-            onTap: () {
+            onTap: () async {
               Navigator.of(context).pop();
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (context) => AbuseDialog(
                   account: account,

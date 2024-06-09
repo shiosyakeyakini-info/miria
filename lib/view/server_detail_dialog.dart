@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:math";
 
 import "package:auto_route/auto_route.dart";
@@ -69,7 +70,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         });
       },
     );
-    misskey.startStreaming();
+    unawaited(misskey.startStreaming());
 
     Future(() async {
       try {
@@ -127,9 +128,9 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         children: [
           Expanded(child: Text(widget.account.host)),
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              context.pushRoute(
+              await context.pushRoute(
                 FederationRoute(
                   account: widget.account,
                   host: widget.account.host,
@@ -271,7 +272,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                                 WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
                                   child: IconButton(
-                                    onPressed: () => refreshPing(),
+                                    onPressed: () async => refreshPing(),
                                     icon: const Icon(Icons.refresh),
                                   ),
                                 ),

@@ -63,7 +63,8 @@ class MainStreamRepository extends ChangeNotifier {
     isReconnecting = true;
     try {
       logger.info(
-          "main stream repository's socket controller will be disconnect");
+        "main stream repository's socket controller will be disconnect",
+      );
       socketController?.disconnect();
       socketController = null;
       await misskey.streamingService.restart();

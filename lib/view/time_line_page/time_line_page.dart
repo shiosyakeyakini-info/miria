@@ -112,7 +112,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     });
   }
 
-  void noteCreateRoute() {
+  Future<void> noteCreateRoute() async {
     CommunityChannel? channel;
     if (currentTabSetting.channelId != null) {
       final Note? note;
@@ -145,7 +145,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     final sendText = ref.read(timelineNoteProvider).text;
     ref.read(timelineNoteProvider).text = "";
     final account = ref.read(accountProvider(currentTabSetting.acct));
-    context.pushRoute(
+    await context.pushRoute(
       NoteCreateRoute(
         channel: channel,
         initialText: sendText,
@@ -251,8 +251,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   const Nyanpuppu(),
                   if (currentTabSetting.tabType == TabType.channel)
                     IconButton(
-                      onPressed: () {
-                        showDialog(
+                      onPressed: () async {
+                        await showDialog(
                           context: context,
                           builder: (context) => ChannelDialog(
                             channelId: currentTabSetting.channelId ?? "",
@@ -265,8 +265,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   else if (currentTabSetting.tabType == TabType.userList)
                     IconButton(
                       icon: const Icon(Icons.info_outline),
-                      onPressed: () {
-                        context.pushRoute(
+                      onPressed: () async {
+                        await context.pushRoute(
                           UsersListDetailRoute(
                             account: account,
                             listId: currentTabSetting.listId!,
@@ -282,8 +282,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   ].contains(currentTabSetting.tabType)) ...[
                     AnnoucementInfo(tabSetting: currentTabSetting),
                     IconButton(
-                      onPressed: () {
-                        showDialog(
+                      onPressed: () async {
+                        await showDialog(
                           context: context,
                           builder: (context) => ServerDetailDialog(
                             account: account,
@@ -297,7 +297,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     padding: EdgeInsets.only(right: 5),
                   ),
                   IconButton(
-                    onPressed: () => ref
+                    onPressed: () async => ref
                         .read(
                           currentTabSetting.tabType
                               .timelineProvider(currentTabSetting),
@@ -452,9 +452,9 @@ class AnnoucementInfo extends ConsumerWidget {
 
   const AnnoucementInfo({required this.tabSetting, super.key});
 
-  void announcementsRoute(BuildContext context, WidgetRef ref) {
+  Future<void> announcementsRoute(BuildContext context, WidgetRef ref) async {
     final account = ref.read(accountProvider(tabSetting.acct));
-    context.pushRoute(AnnouncementRoute(account: account));
+    await context.pushRoute(AnnouncementRoute(account: account));
   }
 
   @override
@@ -466,7 +466,7 @@ class AnnoucementInfo extends ConsumerWidget {
 
     if (hasUnread) {
       return IconButton(
-        onPressed: () => announcementsRoute(context, ref),
+        onPressed: () async => announcementsRoute(context, ref),
         icon: Stack(
           children: [
             const Icon(Icons.campaign),
@@ -489,7 +489,7 @@ class AnnoucementInfo extends ConsumerWidget {
       );
     } else {
       return IconButton(
-        onPressed: () => announcementsRoute(context, ref),
+        onPressed: () async => announcementsRoute(context, ref),
         icon: const Icon(Icons.campaign),
       );
     }

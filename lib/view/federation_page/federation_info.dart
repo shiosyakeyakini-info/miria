@@ -116,8 +116,10 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                   if (data.languages.isNotEmpty)
                     TableRow(
                       children: [
-                        Text(S.of(context).language,
-                            textAlign: TextAlign.center),
+                        Text(
+                          S.of(context).language,
+                          textAlign: TextAlign.center,
+                        ),
                         Text(
                           data.languages.join(", "),
                         ),
@@ -172,7 +174,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                           textAlign: TextAlign.center,
                         ),
                         GestureDetector(
-                          onTap: () => launchUrl(Uri.parse(data.tosUrl!)),
+                          onTap: () async => launchUrl(Uri.parse(data.tosUrl!)),
                           child: Text(
                             data.tosUrl!.toString().tight,
                             style: AppTheme.of(context).linkStyle,
@@ -188,7 +190,7 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                           textAlign: TextAlign.center,
                         ),
                         GestureDetector(
-                          onTap: () =>
+                          onTap: () async =>
                               launchUrl(Uri.parse(data.privacyPolicyUrl!)),
                           child: Text(
                             data.privacyPolicyUrl!.toString().tight,
@@ -205,7 +207,8 @@ class FederationInfoState extends ConsumerState<FederationInfo> {
                           textAlign: TextAlign.center,
                         ),
                         GestureDetector(
-                          onTap: () => launchUrl(Uri.parse(data.impressumUrl!)),
+                          onTap: () async =>
+                              launchUrl(Uri.parse(data.impressumUrl!)),
                           child: Text(
                             data.impressumUrl!.toString().tight,
                             style: AppTheme.of(context).linkStyle,

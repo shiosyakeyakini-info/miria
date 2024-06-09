@@ -29,10 +29,12 @@ class ExplorePagesState extends ConsumerState<ExplorePages> {
         }(),
         builder: (context, item) {
           return ListTile(
-            onTap: () {
-              context.pushRoute(
+            onTap: () async {
+              await context.pushRoute(
                 MisskeyRouteRoute(
-                    account: AccountScope.of(context), page: item),
+                  account: AccountScope.of(context),
+                  page: item,
+                ),
               );
             },
             title: MfmText(

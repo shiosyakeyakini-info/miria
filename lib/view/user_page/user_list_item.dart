@@ -25,7 +25,7 @@ class UserListItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: onTap ??
-          () => context.pushRoute(
+          () async => context.pushRoute(
                 UserRoute(userId: user.id, account: AccountScope.of(context)),
               ),
       child: Padding(

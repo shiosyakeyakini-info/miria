@@ -25,12 +25,12 @@ class PhotoEditBottomBar extends ConsumerWidget {
               color: isClipMode ? Theme.of(context).primaryColorDark : null,
             ),
             child: IconButton(
-              onPressed: () => photoEdit.crop(),
+              onPressed: () async => photoEdit.crop(),
               icon: const Icon(Icons.crop, color: Colors.white),
             ),
           ),
           IconButton(
-            onPressed: () => photoEdit.rotate(),
+            onPressed: () async => photoEdit.rotate(),
             icon: const Icon(Icons.refresh, color: Colors.white),
           ),
           DecoratedBox(
@@ -39,12 +39,12 @@ class PhotoEditBottomBar extends ConsumerWidget {
                   isColorFilterMode ? Theme.of(context).primaryColorDark : null,
             ),
             child: IconButton(
-              onPressed: () => photoEdit.colorFilter(),
+              onPressed: () async => photoEdit.colorFilter(),
               icon: const Icon(Icons.palette_outlined, color: Colors.white),
             ),
           ),
           IconButton(
-            onPressed: () =>
+            onPressed: () async =>
                 photoEdit.addReaction(AccountScope.of(context), context),
             icon: const Icon(Icons.add_reaction_outlined, color: Colors.white),
           ),

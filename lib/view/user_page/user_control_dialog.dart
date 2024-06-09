@@ -144,12 +144,13 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.copy),
           title: Text(S.of(context).copyName),
-          onTap: () {
-            Clipboard.setData(
+          onTap: () async {
+            await Clipboard.setData(
               ClipboardData(
                 text: widget.response.name ?? widget.response.username,
               ),
             );
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(S.of(context).doneCopy),
@@ -162,8 +163,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.alternate_email),
           title: Text(S.of(context).copyUserScreenName),
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: widget.response.acct));
+          onTap: () async {
+            await Clipboard.setData(ClipboardData(text: widget.response.acct));
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(S.of(context).doneCopy),
@@ -176,8 +178,8 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
-          onTap: () {
-            Clipboard.setData(
+          onTap: () async {
+            await Clipboard.setData(
               ClipboardData(
                 text: Uri(
                   scheme: "https",
@@ -186,6 +188,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
                 ).toString(),
               ),
             );
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(S.of(context).doneCopy),
@@ -198,8 +201,8 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.open_in_browser),
           title: Text(S.of(context).openBrowsers),
-          onTap: () {
-            launchUrl(
+          onTap: () async {
+            await launchUrl(
               Uri(
                 scheme: "https",
                 host: widget.account.host,
@@ -207,6 +210,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               ),
               mode: LaunchMode.inAppWebView,
             );
+            if (!context.mounted) return;
             Navigator.of(context).pop();
           },
         ),
@@ -214,17 +218,18 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           ListTile(
             leading: const Icon(Icons.rocket_launch),
             title: Text(S.of(context).openBrowsersAsRemote),
-            onTap: () {
+            onTap: () async {
               final uri = widget.response.uri ?? widget.response.url;
               if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.inAppWebView);
+              await launchUrl(uri, mode: LaunchMode.inAppWebView);
+              if (!context.mounted) return;
               Navigator.of(context).pop();
             },
           ),
         ListTile(
           leading: const Icon(Icons.open_in_new),
           title: Text(S.of(context).openInAnotherAccount),
-          onTap: () => ref
+          onTap: () async => ref
               .read(misskeyNoteNotifierProvider(widget.account).notifier)
               .openUserInOtherAccount(context, user)
               .expectFailure(context),
@@ -232,7 +237,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.search),
           title: Text(S.of(context).searchNote),
-          onTap: () => context.pushRoute(
+          onTap: () async => context.pushRoute(
             SearchRoute(
               account: widget.account,
               initialNoteSearchCondition: NoteSearchCondition(
@@ -291,9 +296,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           ListTile(
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
-            onTap: () {
+            onTap: () async {
               Navigator.of(context).pop();
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (context) => AbuseDialog(
                   account: widget.account,
@@ -344,18 +349,16 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(S.of(context).selectDuration),
-      content: Container(
-        child: DropdownButton<Expire>(
-          items: [
-            for (final value in Expire.values)
-              DropdownMenuItem<Expire>(
-                value: value,
-                child: Text(value.displayName(context)),
-              ),
-          ],
-          onChanged: (value) => setState(() => selectedExpire = value),
-          value: selectedExpire,
-        ),
+      content: DropdownButton<Expire>(
+        items: [
+          for (final value in Expire.values)
+            DropdownMenuItem<Expire>(
+              value: value,
+              child: Text(value.displayName(context)),
+            ),
+        ],
+        onChanged: (value) => setState(() => selectedExpire = value),
+        value: selectedExpire,
       ),
       actions: [
         ElevatedButton(

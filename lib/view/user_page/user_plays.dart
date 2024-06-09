@@ -40,8 +40,8 @@ class UserPlays extends ConsumerWidget {
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
           subtitle: MfmText(mfmText: play.summary),
-          onTap: () {
-            launchUrl(
+          onTap: () async {
+            await launchUrl(
               Uri(
                 scheme: "https",
                 host: AccountScope.of(context).host,

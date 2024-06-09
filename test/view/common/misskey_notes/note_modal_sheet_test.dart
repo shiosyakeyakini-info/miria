@@ -238,7 +238,10 @@ void main() {
           choices: const [
             NotePollChoice(text: ":ai_yay:", votes: 1, isVoted: false),
             NotePollChoice(
-                text: ":ai_yay_superfast:", votes: 2, isVoted: false),
+              text: ":ai_yay_superfast:",
+              votes: 2,
+              isVoted: false,
+            ),
           ],
           multiple: false,
           expiresAt: DateTime.now(),
@@ -344,7 +347,10 @@ void main() {
           choices: const [
             NotePollChoice(text: ":ai_yay:", votes: 1, isVoted: false),
             NotePollChoice(
-                text: ":ai_yay_superfast:", votes: 2, isVoted: false),
+              text: ":ai_yay_superfast:",
+              votes: 2,
+              isVoted: false,
+            ),
           ],
           multiple: false,
           expiresAt: DateTime.now(),
@@ -489,7 +495,10 @@ void main() {
           choices: const [
             NotePollChoice(text: ":ai_yay:", votes: 1, isVoted: false),
             NotePollChoice(
-                text: ":ai_yay_superfast:", votes: 2, isVoted: false),
+              text: ":ai_yay_superfast:",
+              votes: 2,
+              isVoted: false,
+            ),
           ],
           multiple: false,
           expiresAt: DateTime.now(),

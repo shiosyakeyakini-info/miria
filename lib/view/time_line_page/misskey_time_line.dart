@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:math";
 
 import "package:collection/collection.dart";
@@ -41,27 +42,25 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
   Future<void> downDirectionLoad() async {
     if (isDownDirectionLoading) return;
-    Future(() async {
-      try {
-        if (!mounted) return;
-        setState(() {
-          isDownDirectionLoading = true;
-        });
-        final result = await timelineRepository.previousLoad();
-        if (!mounted) return;
+    try {
+      if (!mounted) return;
+      setState(() {
+        isDownDirectionLoading = true;
+      });
+      final result = await timelineRepository.previousLoad();
+      if (!mounted) return;
+      setState(() {
+        isDownDirectionLoading = false;
+        isLastLoaded = result == 0;
+      });
+    } catch (e) {
+      if (mounted) {
         setState(() {
           isDownDirectionLoading = false;
-          isLastLoaded = result == 0;
         });
-      } catch (e) {
-        if (mounted) {
-          setState(() {
-            isDownDirectionLoading = false;
-          });
-        }
-        rethrow;
       }
-    });
+      rethrow;
+    }
   }
 
   @override
@@ -152,7 +151,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
                       .select((value) => value.settings.automaticPush),
                 ) ==
                 AutomaticPush.automatic) {
-              downDirectionLoad();
+              unawaited(downDirectionLoad());
             }
 
             return Center(

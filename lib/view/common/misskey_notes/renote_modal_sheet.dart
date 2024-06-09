@@ -103,9 +103,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                   .read(misskeyProvider(widget.account))
                   .channels
                   .show(ChannelsShowRequest(channelId: channel.id));
-              if (!mounted) return;
+              if (!context.mounted) return;
               navigator.pop();
-              context.pushRoute(
+              await context.pushRoute(
                 NoteCreateRoute(
                   renote: widget.note,
                   channel: channelsShowData,
@@ -201,9 +201,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
             ),
           ),
           ListTile(
-            onTap: () {
+            onTap: () async {
               final navigator = Navigator.of(context);
-              context.pushRoute(
+              await context.pushRoute(
                 NoteCreateRoute(
                   renote: widget.note,
                   initialAccount: widget.account,
@@ -278,9 +278,9 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                 builder: (context) =>
                     ChannelSelectDialog(account: widget.account),
               );
-              if (!mounted) return;
+              if (!context.mounted) return;
               if (selected != null) {
-                context.pushRoute(
+                await context.pushRoute(
                   NoteCreateRoute(
                     renote: widget.note,
                     initialAccount: widget.account,

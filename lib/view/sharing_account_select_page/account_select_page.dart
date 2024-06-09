@@ -31,7 +31,7 @@ class SharingAccountSelectPage extends ConsumerWidget {
                     .loadFromLocalCache();
               }
               if (!context.mounted) return;
-              context.replaceRoute(
+              await context.replaceRoute(
                 NoteCreateRoute(
                   initialAccount: account,
                   initialText: sharingText,

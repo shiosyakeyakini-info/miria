@@ -207,8 +207,8 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     }
   }
 
-  void copyReactions({required BuildContext context}) {
-    Clipboard.setData(
+  Future<void> copyReactions({required BuildContext context}) async {
+    await Clipboard.setData(
       ClipboardData(
         text: JSON5.stringify(
           reactions
@@ -224,6 +224,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
         ),
       ),
     );
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(S.of(context).doneCopy),

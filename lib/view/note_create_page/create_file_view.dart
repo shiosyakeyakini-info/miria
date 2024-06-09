@@ -23,7 +23,7 @@ class CreateFileView extends ConsumerWidget {
         defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.android) {
       final account = AccountScope.of(context);
-      context.pushRoute<Uint8List?>(
+      await context.pushRoute<Uint8List?>(
         PhotoEditRoute(
           account: AccountScope.of(context),
           file: file,
@@ -76,7 +76,7 @@ class CreateFileView extends ConsumerWidget {
                 if (data.isNsfw) const Icon(Icons.details_rounded),
                 Text(data.fileName),
                 IconButton(
-                  onPressed: () => detailTap(context, ref),
+                  onPressed: () async => detailTap(context, ref),
                   icon: const Icon(Icons.more_vert),
                 ),
                 IconButton(
@@ -102,7 +102,7 @@ class CreateFileView extends ConsumerWidget {
                 if (data.isNsfw) const Icon(Icons.details_rounded),
                 Text(data.fileName),
                 IconButton(
-                  onPressed: () => detailTap(context, ref),
+                  onPressed: () async => detailTap(context, ref),
                   icon: const Icon(Icons.more_vert),
                 ),
                 IconButton(

@@ -35,7 +35,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
           .loginAsToken(serverController.text, apiKeyController.text);
 
       if (!mounted) return;
-      context.pushRoute(
+      await context.pushRoute(
         TimeLineRoute(
           initialTabSetting:
               ref.read(tabSettingsRepositoryProvider).tabSettings.first,
@@ -111,8 +111,8 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
-                      onPressed: () {
-                        login().expectFailure(context);
+                      onPressed: () async {
+                        await login().expectFailure(context);
                       },
                       child: Text(S.of(context).login),
                     ),

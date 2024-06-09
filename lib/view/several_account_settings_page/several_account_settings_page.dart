@@ -22,55 +22,48 @@ class SeveralAccountSettingsPage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            onTap: () {
-              context.pushRoute(
-                SeveralAccountGeneralSettingsRoute(account: account),
-              );
-            },
+            onTap: () async => await context.pushRoute(
+              SeveralAccountGeneralSettingsRoute(account: account),
+            ),
             title: Text(S.of(context).generalSettings),
             leading: const Icon(Icons.settings),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () {
-              context.pushRoute(ReactionDeckRoute(account: account));
-            },
+            onTap: () async =>
+                await context.pushRoute(ReactionDeckRoute(account: account)),
             title: Text(S.of(context).reactionDeck),
             leading: const Icon(Icons.favorite),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () {
-              context.pushRoute(
-                WordMuteRoute(account: account, muteType: MuteType.soft),
-              );
-            },
+            onTap: () async => await context.pushRoute(
+              WordMuteRoute(account: account, muteType: MuteType.soft),
+            ),
             title: Text(S.of(context).wordMute),
             leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () {
-              context.pushRoute(
-                WordMuteRoute(account: account, muteType: MuteType.hard),
-              );
-            },
+            onTap: () async => await context.pushRoute(
+              WordMuteRoute(account: account, muteType: MuteType.hard),
+            ),
             title: Text(S.of(context).hardWordMute),
             leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () {
-              context.pushRoute(InstanceMuteRoute(account: account));
-            },
+            onTap: () async => await context.pushRoute(
+              InstanceMuteRoute(account: account),
+            ),
             title: Text(S.of(context).instanceMute),
             leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () {
-              context.pushRoute(CacheManagementRoute(account: account));
-            },
+            onTap: () async => await context.pushRoute(
+              CacheManagementRoute(account: account),
+            ),
             title: Text(S.of(context).cacheSettings),
             leading: const Icon(Icons.cached),
             trailing: const Icon(Icons.chevron_right),

@@ -132,7 +132,7 @@ class UsersListDetailPage extends ConsumerWidget {
                 );
                 if (!context.mounted) return;
                 if (settings != null) {
-                  ref
+                  await ref
                       .read(_usersListNotifierProvider(arg).notifier)
                       .updateList(settings)
                       .expectFailure(context);

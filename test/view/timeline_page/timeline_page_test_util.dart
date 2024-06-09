@@ -50,8 +50,10 @@ class TimelinePageTest {
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
     when(mockMisskey.streamingService).thenReturn(mockStreamingService);
     when(mockMisskey.i).thenReturn(mockMisskeyI);
+    // ignore: discarded_futures
     when(mockMisskey.meta()).thenAnswer((_) async => TestData.meta);
 
+    // ignore: discarded_futures
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
 
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);

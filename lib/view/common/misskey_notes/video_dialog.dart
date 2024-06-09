@@ -227,8 +227,8 @@ class _VideoDialogState extends State<VideoDialog> {
                                 child: _VideoControls(
                                   controller: controller,
                                   isAudioFile: isAudioFile,
-                                  onMenuPressed: () => {
-                                    showModalBottomSheet(
+                                  onMenuPressed: () async {
+                                    await showModalBottomSheet(
                                       context: context,
                                       builder: (innerContext) {
                                         return ListView(
@@ -244,7 +244,7 @@ class _VideoDialogState extends State<VideoDialog> {
                                                 Navigator.of(innerContext)
                                                     .pop();
                                                 Navigator.of(context).pop();
-                                                launchUrlString(
+                                                await launchUrlString(
                                                   widget.url,
                                                   mode: LaunchMode
                                                       .externalApplication,
@@ -271,7 +271,7 @@ class _VideoDialogState extends State<VideoDialog> {
                                           ],
                                         );
                                       },
-                                    ),
+                                    );
                                   },
                                 ),
                               ),
@@ -490,8 +490,8 @@ class _VideoControlState extends State<_VideoControls> {
                         position = Duration(milliseconds: value.toInt());
                       });
                     },
-                    onChangeEnd: (value) {
-                      widget.controller.player.seek(position);
+                    onChangeEnd: (value) async {
+                      await widget.controller.player.seek(position);
                       isSeeking = false;
                     },
                   ),

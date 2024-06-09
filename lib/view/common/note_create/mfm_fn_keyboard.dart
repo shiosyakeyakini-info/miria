@@ -244,7 +244,7 @@ class MfmFnKeyboard extends ConsumerWidget {
                 keyboard: arg.name,
                 controller: controller,
                 focusNode: focusNode,
-                onTap: () => insertMfmFnArg(arg),
+                onTap: () async => insertMfmFnArg(arg),
               ),
             )
             .toList(),
@@ -257,7 +257,7 @@ class MfmFnKeyboard extends ConsumerWidget {
                 keyboard: name,
                 controller: controller,
                 focusNode: focusNode,
-                onTap: () => insertMfmFnName(name),
+                onTap: () async => insertMfmFnName(name),
               ),
             )
             .toList(),

@@ -29,9 +29,7 @@ class TabSettingsListPage extends ConsumerWidget {
         title: Text(S.of(context).tabSettings),
         actions: [
           IconButton(
-            onPressed: () {
-              context.pushRoute(TabSettingsRoute());
-            },
+            onPressed: () async => await context.pushRoute(TabSettingsRoute()),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -65,13 +63,13 @@ class TabSettingsListPage extends ConsumerWidget {
                   );
                 }
               },
-              onReorder: (oldIndex, newIndex) {
+              onReorder: (oldIndex, newIndex) async {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
                 final item = tabSettings.removeAt(oldIndex);
                 tabSettings.insert(newIndex, item);
-                ref.read(tabSettingsRepositoryProvider).save(tabSettings);
+                await ref.read(tabSettingsRepositoryProvider).save(tabSettings);
               },
             ),
           ),
@@ -80,10 +78,9 @@ class TabSettingsListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () {
-                  context.router
-                    ..removeWhere((route) => true)
-                    ..push(const SplashRoute());
+                onPressed: () async {
+                  context.router.removeWhere((route) => true);
+                  await context.router.push(const SplashRoute());
                 },
                 child: Text(S.of(context).apply),
               ),
@@ -118,7 +115,7 @@ class TabSettingsListItem extends ConsumerWidget {
         "${tabSetting.tabType.displayName(context)} / ${tabSetting.acct}",
       ),
       trailing: const Icon(Icons.drag_handle),
-      onTap: () => context.pushRoute(TabSettingsRoute(tabIndex: index)),
+      onTap: () async => context.pushRoute(TabSettingsRoute(tabIndex: index)),
     );
   }
 }

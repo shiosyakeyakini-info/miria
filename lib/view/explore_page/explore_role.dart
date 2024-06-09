@@ -46,8 +46,8 @@ class RoleListItem extends StatelessWidget {
         .scale(Theme.of(context).textTheme.bodyMedium!.fontSize!);
 
     return ListTile(
-      onTap: () {
-        context.pushRoute(
+      onTap: () async {
+        await context.pushRoute(
           ExploreRoleUsersRoute(
             item: item,
             account: AccountScope.of(context),

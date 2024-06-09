@@ -52,7 +52,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         setState(() {
           isLoading = false;
         });
-        scrollController.animateTo(
+        await scrollController.animateTo(
           -scrollController.position.pixels,
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeIn,

@@ -33,7 +33,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
           .read(accountRepositoryProvider.notifier)
           .validateMiAuth(serverController.text);
       if (!mounted) return;
-      context.pushRoute(
+      await context.pushRoute(
         TimeLineRoute(
           initialTabSetting:
               ref.read(tabSettingsRepositoryProvider).tabSettings.first,
@@ -93,8 +93,8 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                 children: [
                   Container(),
                   ElevatedButton(
-                    onPressed: () {
-                      ref
+                    onPressed: () async {
+                      await ref
                           .read(accountRepositoryProvider.notifier)
                           .openMiAuth(serverController.text)
                           .expectFailure(context);
@@ -121,7 +121,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                   children: [
                     Container(),
                     ElevatedButton(
-                      onPressed: () => login().expectFailure(context),
+                      onPressed: () async => login().expectFailure(context),
                       child: Text(S.of(context).didAuthorize),
                     ),
                   ],

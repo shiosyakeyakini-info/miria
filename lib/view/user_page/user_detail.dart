@@ -414,7 +414,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                           ],
                         ),
                         GestureDetector(
-                          onTap: () => context.pushRoute(
+                          onTap: () async => context.pushRoute(
                             FederationRoute(
                               account: AccountScope.of(context),
                               host: response.host!,
@@ -476,8 +476,8 @@ class UserDetailState extends ConsumerState<UserDetail> {
                         ),
                       ),
                       TableCell(
-                          child:
-                              Text(response.birthday?.format(context) ?? "")),
+                        child: Text(response.birthday?.format(context) ?? ""),
+                      ),
                     ],
                   ),
                 ],
@@ -528,7 +528,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                   ),
                   if (widget.response.isFollowingVisibleForMe)
                     InkWell(
-                      onTap: () => context.pushRoute(
+                      onTap: () async => context.pushRoute(
                         UserFolloweeRoute(
                           userId: response.id,
                           account: AccountScope.of(context),
@@ -549,7 +549,7 @@ class UserDetailState extends ConsumerState<UserDetail> {
                     ),
                   if (widget.response.isFollowersVisibleForMe)
                     InkWell(
-                      onTap: () => context.pushRoute(
+                      onTap: () async => context.pushRoute(
                         UserFollowerRoute(
                           userId: response.id,
                           account: AccountScope.of(context),
@@ -685,7 +685,7 @@ class RoleChip extends ConsumerWidget {
               .show(RolesShowRequest(roleId: role.id));
           if (response.isPublic && response.isExplorable) {
             if (!context.mounted) return;
-            context.pushRoute(
+            await context.pushRoute(
               ExploreRoleUsersRoute(item: response, account: account),
             );
           }

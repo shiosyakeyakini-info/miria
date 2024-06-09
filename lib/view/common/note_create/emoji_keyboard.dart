@@ -19,9 +19,10 @@ class _FilteredEmojis
     extends AutoDisposeFamilyNotifier<List<MisskeyEmojiData>, Account> {
   @override
   List<MisskeyEmojiData> build(Account arg) {
-    ref.listen(inputCompletionTypeProvider, (_, type) {
-      _updateEmojis(type);
-    });
+    ref.listen(
+      inputCompletionTypeProvider,
+      (_, type) async => _updateEmojis(type),
+    );
     return ref.read(emojiRepositoryProvider(arg)).defaultEmojis();
   }
 

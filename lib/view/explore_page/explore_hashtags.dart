@@ -117,7 +117,7 @@ class Hashtag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => context.pushRoute(
+      onTap: () async => context.pushRoute(
         HashtagRoute(hashtag: hashtag, account: AccountScope.of(context)),
       ),
       title: Text("#$hashtag", style: AppTheme.of(context).hashtagStyle),

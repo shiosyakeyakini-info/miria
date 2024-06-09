@@ -7,7 +7,7 @@ part of 'dialog_state.dart';
 // **************************************************************************
 
 String _$dialogStateNotifierHash() =>
-    r'8d7a51f6223029b7905479e693e83af289ed9e30';
+    r'da5b1115a571c3c0dbc29cd050d82f21b119a9c6';
 
 /// See also [DialogStateNotifier].
 @ProviderFor(DialogStateNotifier)
@@ -24,4 +24,4 @@ final dialogStateNotifierProvider =
 
 typedef _$DialogStateNotifier = AutoDisposeNotifier<DialogsState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

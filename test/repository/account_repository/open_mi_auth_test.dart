@@ -27,6 +27,7 @@ void main() {
 
   test("Activity Pub非対応サーバーの場合、エラーを返すこと", () {
     final dio = MockDio();
+    // ignore: discarded_futures
     when(dio.getUri(any)).thenAnswer((_) async => throw TestData.response404);
     final provider =
         ProviderContainer(overrides: [dioProvider.overrideWithValue(dio)]);
@@ -37,6 +38,7 @@ void main() {
       throwsA(isA<ServerIsNotMisskeyException>()),
     );
     verify(
+      // ignore: discarded_futures
       dio.getUri(
         argThat(
           equals(

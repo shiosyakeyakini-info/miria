@@ -32,8 +32,8 @@ class UserMisskeyPage extends ConsumerWidget {
       itemBuilder: (context, page) {
         return ListTile(
           title: Text(page.title),
-          onTap: () {
-            context.pushRoute(
+          onTap: () async {
+            await context.pushRoute(
               MisskeyRouteRoute(
                 account: AccountScope.of(context),
                 page: page,

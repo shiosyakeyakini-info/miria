@@ -22,9 +22,7 @@ class AccountListPage extends ConsumerWidget {
         leading: Container(),
         actions: [
           IconButton(
-            onPressed: () {
-              context.pushRoute(const LoginRoute());
-            },
+            onPressed: () async => await context.pushRoute(const LoginRoute()),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -60,10 +58,9 @@ class AccountListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () {
-                  context.router
-                    ..removeWhere((route) => true)
-                    ..push(const SplashRoute());
+                onPressed: () async {
+                  context.router.removeWhere((route) => true);
+                  await context.router.push(const SplashRoute());
                 },
                 child: Text(S.of(context).quitAccountSettings),
               ),

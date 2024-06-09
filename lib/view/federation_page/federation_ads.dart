@@ -24,7 +24,7 @@ class FederationAdsState extends ConsumerState<FederationAds> {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: GestureDetector(
-            onTap: () => launchUrl(ad.url),
+            onTap: () async => launchUrl(ad.url),
             child: NetworkImageView(
               url: ad.imageUrl.toString(),
               type: ImageType.ad,

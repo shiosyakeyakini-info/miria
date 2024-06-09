@@ -358,8 +358,9 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
           onChanged: (value) {
             if (value == null) return;
             ref
-                .read(noteCreateNotifierProvider(AccountScope.of(context))
-                    .notifier)
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
                 .setVoteDurationType(value);
           },
         ),

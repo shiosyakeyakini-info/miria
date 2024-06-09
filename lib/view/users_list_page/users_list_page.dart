@@ -37,7 +37,7 @@ class UsersListPage extends ConsumerWidget {
               );
               if (!context.mounted) return;
               if (settings != null) {
-                ref
+                await ref
                     .read(usersListsNotifierProvider(misskey).notifier)
                     .create(settings)
                     .expectFailure(context);
@@ -76,7 +76,7 @@ class UsersListPage extends ConsumerWidget {
                       }
                     },
                   ),
-                  onTap: () => context.pushRoute(
+                  onTap: () async => context.pushRoute(
                     UsersListTimelineRoute(
                       account: account,
                       list: list,

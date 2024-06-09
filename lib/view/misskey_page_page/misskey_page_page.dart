@@ -79,7 +79,7 @@ class MisskeyPagePage extends ConsumerWidget {
                         ),
                         const Padding(padding: EdgeInsets.only(left: 10)),
                         GestureDetector(
-                          onTap: () => launchUrl(
+                          onTap: () async => launchUrl(
                             Uri(
                               scheme: "https",
                               host: account.host,
@@ -159,7 +159,7 @@ class PageContent extends ConsumerWidget {
           ?.thumbnailUrl;
       if (url != null) {
         return GestureDetector(
-          onTap: () => showDialog(
+          onTap: () async => showDialog(
             context: context,
             builder: (context) =>
                 ImageDialog(imageUrlList: [url], initialPage: 0),
@@ -284,7 +284,7 @@ class PageLikeButtonState extends ConsumerState<PageLikeButton> {
       return OutlinedButton.icon(
         onPressed: () async {
           if (AccountScope.of(context).i.id == widget.userId) {
-            SimpleMessageDialog.show(
+            await SimpleMessageDialog.show(
               context,
               S.of(context).canNotFavoriteMyPage,
             );

@@ -104,16 +104,16 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     final account = selectedExportAccount;
                     if (account == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectAccountToExportSettings,
                       );
                       return;
                     }
-                    ref
+                    await ref
                         .read(importExportRepository)
                         .export(context, account)
                         .expectFailure(context);

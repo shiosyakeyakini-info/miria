@@ -148,7 +148,7 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
           onPressed: () async {
             if (!isVisibility) return;
             if (disabled) {
-              SimpleMessageDialog.show(
+              await SimpleMessageDialog.show(
                 context,
                 S.of(context).disabledUsingSensitiveCustomEmoji,
               );

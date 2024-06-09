@@ -1144,7 +1144,7 @@ void main() {
 
         final memoryFileSystem = MemoryFileSystem();
         final binaryImage = await TestData.binaryImage;
-        memoryFileSystem.file("/test.png").writeAsBytes(binaryImage);
+        await memoryFileSystem.file("/test.png").writeAsBytes(binaryImage);
 
         await tester.pumpWidget(
           ProviderScope(
@@ -1222,7 +1222,7 @@ void main() {
         final memoryFileSystem = MemoryFileSystem();
         final binaryData =
             utf8.encode(":murakamisan_tutinoko_hasitumami_crying:");
-        memoryFileSystem.file("/test.txt").writeAsBytes(binaryData);
+        await memoryFileSystem.file("/test.txt").writeAsBytes(binaryData);
 
         await tester.pumpWidget(
           ProviderScope(
@@ -1627,7 +1627,7 @@ void main() {
         final memoryFileSystem = MemoryFileSystem();
         final binaryData =
             utf8.encode(":murakamisan_tutinoko_hasitumami_crying:");
-        memoryFileSystem.file("/test.txt").writeAsBytes(binaryData);
+        await memoryFileSystem.file("/test.txt").writeAsBytes(binaryData);
 
         await tester.pumpWidget(
           ProviderScope(

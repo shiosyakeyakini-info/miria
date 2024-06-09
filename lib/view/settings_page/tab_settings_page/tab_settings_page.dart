@@ -138,8 +138,8 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
         actions: [
           if (widget.tabIndex != null)
             IconButton(
-              onPressed: () {
-                ref.read(tabSettingsRepositoryProvider).save(
+              onPressed: () async {
+                await ref.read(tabSettingsRepositoryProvider).save(
                       ref
                           .read(tabSettingsRepositoryProvider)
                           .tabSettings
@@ -147,7 +147,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                         ..removeAt(widget.tabIndex!),
                     );
 
-                if (!mounted) return;
+                if (!context.mounted) return;
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.delete_outline_outlined),
@@ -389,7 +389,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   onPressed: () async {
                     final account = selectedAccount;
                     if (account == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectAccount,
                       );
@@ -398,7 +398,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
                     final tabType = selectedTabType;
                     if (tabType == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectTabType,
                       );
@@ -407,7 +407,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
                     final icon = selectedIcon;
                     if (icon == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectIcon,
                       );
@@ -415,7 +415,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     }
 
                     if (tabType == TabType.channel && selectedChannel == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectChannel,
                       );
@@ -424,7 +424,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
                     if (tabType == TabType.userList &&
                         selectedUserList == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectList,
                       );
@@ -432,7 +432,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     }
 
                     if (tabType == TabType.antenna && selectedAntenna == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectAntenna,
                       );
@@ -440,7 +440,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                     }
                     if (tabType == TabType.roleTimeline &&
                         selectedRole == null) {
-                      SimpleMessageDialog.show(
+                      await SimpleMessageDialog.show(
                         context,
                         S.of(context).pleaseSelectRole,
                       );
@@ -474,7 +474,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       await ref.read(tabSettingsRepositoryProvider).save(list);
                     }
 
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     Navigator.of(context).pop();
                   },
                   child: Text(S.of(context).done),
