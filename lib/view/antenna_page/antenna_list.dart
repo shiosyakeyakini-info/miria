@@ -18,9 +18,8 @@ class AntennaList extends ConsumerWidget {
     final misskey = ref.watch(misskeyProvider(account));
     final antennas = ref.watch(antennasNotifierProvider(misskey));
 
-    return antennas.when(
-      data: (antennas) {
-        return ListView.builder(
+    return switch (antennas) {
+      AsyncData(value: final antennas) => ListView.builder(
           itemCount: antennas.length,
           itemBuilder: (context, index) {
             final antenna = antennas[index];
@@ -54,10 +53,10 @@ class AntennaList extends ConsumerWidget {
               ),
             );
           },
-        );
-      },
-      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
-      loading: () => const Center(child: CircularProgressIndicator()),
-    );
+        ),
+      AsyncError(error: final e, stackTrace: final st) =>
+        Center(child: ErrorDetail(error: e, stackTrace: st)),
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+    };
   }
 }
