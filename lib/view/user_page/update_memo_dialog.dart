@@ -2,9 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/account.dart";
-import "package:miria/providers.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
-import "package:misskey_dart/misskey_dart.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
 
 class UpdateMemoDialog extends ConsumerStatefulWidget {
   final Account account;
@@ -25,14 +23,6 @@ class UpdateMemoDialog extends ConsumerStatefulWidget {
 
 class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
   final controller = TextEditingController();
-
-  Future<void> memoSave() async {
-    await ref.read(misskeyProvider(widget.account)).users.updateMemo(
-          UsersUpdateMemoRequest(userId: widget.userId, memo: controller.text),
-        );
-    if (!mounted) return;
-    Navigator.of(context).pop(controller.text);
-  }
 
   @override
   void initState() {
@@ -65,7 +55,12 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
           child: Text(S.of(context).cancel),
         ),
         ElevatedButton(
-          onPressed: memoSave.expectFailure(context),
+          onPressed: () async => ref
+              .read(
+                userInfoNotifierProvider(widget.account, widget.userId)
+                    .notifier,
+              )
+              .updateMemo(controller.text),
           child: Text(S.of(context).save),
         ),
       ],

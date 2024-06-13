@@ -12,6 +12,7 @@ import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/user_page/antenna_modal_sheet.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:miria/view/user_page/users_list_modal_sheet.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -61,83 +62,34 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
     );
   }
 
-  Future<Expire?> getExpire() async {
-    return await showDialog<Expire?>(
+  Future<void> createMute() async {
+    final expires = await showDialog<Expire?>(
       context: context,
       builder: (context) => const ExpireSelectDialog(),
     );
-  }
-
-  Future<void> renoteMuteCreate() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .renoteMute
-        .create(RenoteMuteCreateRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createRenoteMute);
-  }
-
-  Future<void> renoteMuteDelete() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .renoteMute
-        .delete(RenoteMuteDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteRenoteMute);
-  }
-
-  Future<void> muteCreate() async {
-    final expires = await getExpire();
     if (expires == null) return;
-    final expiresDate = expires == Expire.indefinite
-        ? null
-        : DateTime.now().add(expires.expires!);
-    await ref.read(misskeyProvider(widget.account)).mute.create(
-          MuteCreateRequest(userId: widget.response.id, expiresAt: expiresDate),
-        );
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createMute);
-  }
-
-  Future<void> muteDelete() async {
     await ref
-        .read(misskeyProvider(widget.account))
-        .mute
-        .delete(MuteDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteMute);
-  }
-
-  Future<void> blockingCreate() async {
-    if (await SimpleConfirmDialog.show(
-          context: context,
-          message: S.of(context).confirmCreateBlock,
-          primary: S.of(context).createBlock,
-          secondary: S.of(context).cancel,
-        ) !=
-        true) {
-      return;
-    }
-
-    await ref
-        .read(misskeyProvider(widget.account))
-        .blocking
-        .create(BlockCreateRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createBlock);
-  }
-
-  Future<void> blockingDelete() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .blocking
-        .delete(BlockDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteBlock);
+        .read(
+          userInfoNotifierProvider(widget.account, widget.response.id).notifier,
+        )
+        .createMute(expires);
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider =
+        userInfoNotifierProvider(widget.account, widget.response.id);
+
+    ref
+      ..listen(
+        provider.select((value) => value.valueOrNull?.mute),
+        (_, next) async => Navigator.of(context).pop(),
+      )
+      ..listen(
+        provider.select((value) => value.valueOrNull?.block),
+        (_, next) async => Navigator.of(context).pop(),
+      );
+
     final user = widget.response;
     return ListView(
       children: [
@@ -261,37 +213,37 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).deleteRenoteMute),
-              onTap: renoteMuteDelete.expectFailure(context),
+              onTap: ref.read(provider.notifier).deleteRenoteMute,
             )
           else
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).createRenoteMute),
-              onTap: renoteMuteCreate.expectFailure(context),
+              onTap: ref.read(provider.notifier).createRenoteMute,
             ),
           if (user.isMuted)
             ListTile(
               leading: const Icon(Icons.visibility),
               title: Text(S.of(context).deleteMute),
-              onTap: muteDelete.expectFailure(context),
+              onTap: ref.read(provider.notifier).deleteMute,
             )
           else
             ListTile(
               leading: const Icon(Icons.visibility_off),
               title: Text(S.of(context).createMute),
-              onTap: muteCreate.expectFailure(context),
+              onTap: createMute,
             ),
           if (user.isBlocking)
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).deleteBlock),
-              onTap: blockingDelete.expectFailure(context),
+              onTap: ref.read(provider.notifier).deleteBlock,
             )
           else
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).createBlock),
-              onTap: blockingCreate.expectFailure(context),
+              onTap: ref.read(provider.notifier).createBlock,
             ),
           ListTile(
             leading: const Icon(Icons.report),

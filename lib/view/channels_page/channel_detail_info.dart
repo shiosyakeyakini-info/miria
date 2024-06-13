@@ -119,116 +119,182 @@ class ChannelDetailInfo extends ConsumerStatefulWidget {
 class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
   @override
   Widget build(BuildContext context) {
-    final provider =
-        _channelDetailProvider(AccountScope.of(context), widget.channelId);
-    final data = ref.watch(provider);
-    final notifier = ref.read(provider.notifier);
-    final isFavorited = data.valueOrNull?.channel.isFavorited;
-    final isFollowing = data.valueOrNull?.channel.isFollowing;
-
-    ref
-      ..listen(provider.select((value) => value.valueOrNull?.follow?.error),
-          (_, next) async {
-        if (next == null) return;
-        await SimpleMessageDialog.show(context, next.toString());
-      })
-      ..listen(provider.select((value) => value.valueOrNull?.favorite?.error),
-          (_, next) async {
-        if (next == null) return;
-        await SimpleMessageDialog.show(context, next.toString());
-      });
+    final data = ref.watch(
+      _channelDetailProvider(AccountScope.of(context), widget.channelId),
+    );
 
     return switch (data) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
       AsyncError(:final error, :final stackTrace) =>
         ErrorDetail(error: error, stackTrace: stackTrace),
-      AsyncData(:final value) => Column(
-          children: [
-            if (value.channel.bannerUrl != null)
-              Image.network(value.channel.bannerUrl!.toString()),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).primaryColor),
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      S
-                          .of(context)
-                          .channelJoinningCounts(value.channel.usersCount),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      S.of(context).channelNotes(value.channel.notesCount),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    if (value.channel.lastNotedAt != null)
-                      Text(
-                        S.of(context).channelLastNotedAt(
-                              value.channel.lastNotedAt!.differenceNow(context),
-                            ),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                  ],
-                ),
-              ),
+      AsyncData(:final value) => ChannelDetailArea(channel: value.channel),
+    };
+  }
+}
+
+class ChannelDetailArea extends ConsumerWidget {
+  final CommunityChannel channel;
+
+  const ChannelDetailArea({required this.channel, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        if (channel.bannerUrl != null)
+          Image.network(channel.bannerUrl!.toString()),
+        const Padding(padding: EdgeInsets.only(top: 10)),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).primaryColor),
             ),
-            if (value.channel.isSensitive)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: DecoratedBox(
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).primaryColor),
-                    child: Text(
-                      " ${S.of(context).sensitive} ",
-                      style: const TextStyle(color: Colors.white),
-                    ),
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  S.of(context).channelJoinningCounts(channel.usersCount),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  S.of(context).channelNotes(channel.notesCount),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                if (channel.lastNotedAt != null)
+                  Text(
+                    S.of(context).channelLastNotedAt(
+                          channel.lastNotedAt!.differenceNow(context),
+                        ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
+              ],
+            ),
+          ),
+        ),
+        if (channel.isSensitive)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: DecoratedBox(
+                decoration:
+                    BoxDecoration(color: Theme.of(context).primaryColor),
+                child: Text(
+                  " ${S.of(context).sensitive} ",
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Wrap(
-                children: [
-                  if (isFavorited != null)
-                    isFavorited
-                        ? ElevatedButton.icon(
-                            onPressed: notifier.unfavorite,
-                            icon: const Icon(Icons.favorite_border),
-                            label: Text(S.of(context).favorite),
-                          )
-                        : OutlinedButton(
-                            onPressed: notifier.favorite,
-                            child: Text(S.of(context).willFavorite),
-                          ),
-                  const Padding(padding: EdgeInsets.only(left: 10)),
-                  if (isFollowing != null)
-                    isFollowing
-                        ? ElevatedButton.icon(
-                            onPressed: notifier.unfollow,
-                            icon: const Icon(Icons.check),
-                            label: Text(S.of(context).following),
-                          )
-                        : OutlinedButton(
-                            onPressed: notifier.follow,
-                            child: Text(S.of(context).willFollow),
-                          ),
-                ],
-              ),
             ),
-            MfmText(mfmText: value.channel.description ?? ""),
-            for (final pinnedNote in value.channel.pinnedNotes ?? [])
-              MisskeyNote(note: pinnedNote),
-          ],
+          ),
+        const Padding(padding: EdgeInsets.only(top: 10)),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Wrap(
+            children: [
+              ChannelFavoriteButton(
+                channelId: channel.id,
+                isFavorite: channel.isFavorited,
+              ),
+              const Padding(padding: EdgeInsets.only(left: 10)),
+              ChannelFollowingButton(
+                isFollowing: channel.isFollowing,
+                channelId: channel.id,
+              ),
+            ],
+          ),
+        ),
+        MfmText(mfmText: channel.description ?? ""),
+        for (final pinnedNote in channel.pinnedNotes ?? [])
+          MisskeyNote(note: pinnedNote),
+      ],
+    );
+  }
+}
+
+class ChannelFavoriteButton extends ConsumerWidget {
+  final bool? isFavorite;
+  final String channelId;
+
+  const ChannelFavoriteButton({
+    required this.isFavorite,
+    required this.channelId,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider =
+        _channelDetailProvider(AccountScope.of(context), channelId);
+    final followingState = ref.watch(
+      provider.select((value) => value.valueOrNull?.favorite),
+    );
+
+    ref.listen(provider.select((value) => value.valueOrNull?.favorite?.error),
+        (_, next) async {
+      if (next == null) return;
+      await SimpleMessageDialog.show(context, next.toString());
+    });
+
+    return switch (isFavorite) {
+      null => const SizedBox.shrink(),
+      true => ElevatedButton.icon(
+          onPressed: followingState is AsyncLoading
+              ? null
+              : ref.read(provider.notifier).unfavorite,
+          icon: const Icon(Icons.check),
+          label: Text(S.of(context).favorited),
+        ),
+      false => OutlinedButton(
+          onPressed: followingState is AsyncLoading
+              ? null
+              : ref.read(provider.notifier).favorite,
+          child: Text(S.of(context).willFavorite),
+        )
+    };
+  }
+}
+
+class ChannelFollowingButton extends ConsumerWidget {
+  final bool? isFollowing;
+  final String channelId;
+
+  const ChannelFollowingButton({
+    required this.isFollowing,
+    required this.channelId,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider =
+        _channelDetailProvider(AccountScope.of(context), channelId);
+    final followState = ref.watch(
+      provider.select((value) => value.valueOrNull?.follow),
+    );
+
+    ref.listen(provider.select((value) => value.valueOrNull?.follow?.error),
+        (_, next) async {
+      if (next == null) return;
+      await SimpleMessageDialog.show(context, next.toString());
+    });
+
+    return switch (isFollowing) {
+      null => const SizedBox.shrink(),
+      true => ElevatedButton.icon(
+          onPressed: followState is AsyncLoading
+              ? null
+              : ref.read(provider.notifier).unfollow,
+          icon: const Icon(Icons.favorite_border),
+          label: Text(S.of(context).following),
+        ),
+      false => OutlinedButton(
+          onPressed: followState is AsyncLoading
+              ? null
+              : ref.read(provider.notifier).follow,
+          child: Text(S.of(context).willFollow),
         )
     };
   }

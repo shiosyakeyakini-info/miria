@@ -7,7 +7,7 @@ part of 'dialog_state.dart';
 // **************************************************************************
 
 String _$dialogStateNotifierHash() =>
-    r'da5b1115a571c3c0dbc29cd050d82f21b119a9c6';
+    r'f9e7b3c69f3967c83a9aea8ec0620411e6109fdb';
 
 /// See also [DialogStateNotifier].
 @ProviderFor(DialogStateNotifier)

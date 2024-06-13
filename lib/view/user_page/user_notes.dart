@@ -6,7 +6,7 @@ import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
-import "package:miria/view/user_page/user_page.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class UserNotes extends ConsumerStatefulWidget {
@@ -103,10 +103,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
               ),
               IconButton(
                 onPressed: () async {
-                  final userInfo = ref.read(userInfoProvider(widget.userId));
+                  final userInfo = ref.read(
+                    userInfoNotifierProvider(
+                      AccountScope.of(context),
+                      widget.userId,
+                    ).select((value) => value.requireValue),
+                  );
                   final firstDate = widget.actualAccount == null
-                      ? userInfo?.response?.createdAt
-                      : userInfo?.remoteResponse?.createdAt;
+                      ? userInfo.response.createdAt
+                      : userInfo.remoteResponse?.createdAt;
 
                   final result = await showDatePicker(
                     context: context,

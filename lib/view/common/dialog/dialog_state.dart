@@ -1,8 +1,10 @@
 import "dart:async";
 
+import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "dialog_state.freezed.dart";
@@ -54,4 +56,35 @@ class DialogStateNotifier extends _$DialogStateNotifier {
       dialogs: state.dialogs.where((element) => element != dialog).toList(),
     );
   }
+
+  Future<AsyncValue<T>> guard<T>(Future<T> Function() future) async {
+    final result = await AsyncValue.guard(future);
+    if (result is AsyncError) {
+      await showSimpleDialog(
+        message: _handleError(result.error, result.stackTrace),
+      );
+    }
+    return result;
+  }
+}
+
+String Function(BuildContext context) _handleError(
+  Object? error,
+  StackTrace? trace,
+) {
+  if (error is Exception) {
+    if (error is DioException) {
+      return (context) =>
+          "${S.of(context).thrownError}\n${error.type} [${error.response?.statusCode ?? "---"}] ${error.response?.data ?? ""}";
+    } else if (error is SpecifiedException) {
+      return (context) => error.message;
+    }
+    return (context) => "${S.of(context).thrownError}\n$error";
+  }
+
+  if (error is Error) {
+    return (context) => "${S.of(context).thrownError}\n$error";
+  }
+
+  return (context) => "${S.of(context).thrownError}\n$error";
 }
