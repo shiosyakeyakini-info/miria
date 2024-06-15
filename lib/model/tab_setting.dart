@@ -24,7 +24,7 @@ Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
 class TabSetting with _$TabSetting {
   const TabSetting._();
 
-  ChangeNotifierProvider<TimelineRepository> get timelineProvider =>
+  AutoDisposeProvider<TimelineRepository> get timelineProvider =>
       tabType.timelineProvider(this);
 
   const factory TabSetting({

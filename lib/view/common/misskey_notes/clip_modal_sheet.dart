@@ -5,6 +5,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -52,11 +53,11 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   Future<void> addToClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       try {
-        await misskey.clips.addNote(
-          ClipsAddNoteRequest(clipId: clip.id, noteId: noteId),
-        );
+        await this.misskey.clips.addNote(
+              ClipsAddNoteRequest(clipId: clip.id, noteId: noteId),
+            );
         ref
-            .read(_notesClipsNotifierProvider(misskey, noteId).notifier)
+            .read(_notesClipsNotifierProvider(this.misskey, noteId).notifier)
             .addClip(clip);
       } on DioException catch (e) {
         if (e.response != null) {
@@ -72,7 +73,8 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
             if (confirm == 0) {
               await ref
                   .read(
-                    _clipModalSheetNotifierProvider(misskey, noteId).notifier,
+                    _clipModalSheetNotifierProvider(this.misskey, noteId)
+                        .notifier,
                   )
                   .removeFromClip(clip);
             }
@@ -86,14 +88,14 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
 
   Future<void> removeFromClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await misskey.clips.removeNote(
-        ClipsRemoveNoteRequest(
-          clipId: clip.id,
-          noteId: noteId,
-        ),
-      );
+      await this.misskey.clips.removeNote(
+            ClipsRemoveNoteRequest(
+              clipId: clip.id,
+              noteId: noteId,
+            ),
+          );
       ref
-          .read(_notesClipsNotifierProvider(misskey, noteId).notifier)
+          .read(_notesClipsNotifierProvider(this.misskey, noteId).notifier)
           .removeClip(clip.id);
     });
   }

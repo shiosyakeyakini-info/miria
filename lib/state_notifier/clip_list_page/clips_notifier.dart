@@ -1,19 +1,20 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class ClipsNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<Clip>, Misskey> {
+part "clips_notifier.g.dart";
+
+@riverpod
+class ClipsNotifier extends _$ClipsNotifier {
   @override
-  Future<List<Clip>> build(Misskey arg) async {
-    final response = await _misskey.clips.list();
+  Future<List<Clip>> build(Misskey misskey) async {
+    final response = await misskey.clips.list();
     return response.toList();
   }
 
-  Misskey get _misskey => arg;
-
   Future<void> create(ClipSettings settings) async {
-    final list = await _misskey.clips.create(
+    final list = await misskey.clips.create(
       ClipsCreateRequest(
         name: settings.name,
         description: settings.description,
@@ -24,17 +25,16 @@ class ClipsNotifier
   }
 
   Future<void> delete(String clipId) async {
-    await _misskey.clips.delete(ClipsDeleteRequest(clipId: clipId));
-    state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != clipId).toList() ?? [],
-    );
+    await misskey.clips.delete(ClipsDeleteRequest(clipId: clipId));
+    state =
+        AsyncValue.data([...?state.valueOrNull?.where((e) => e.id != clipId)]);
   }
 
   Future<void> updateClip(
     String clipId,
     ClipSettings settings,
   ) async {
-    final clip = await _misskey.clips.update(
+    final clip = await misskey.clips.update(
       ClipsUpdateRequest(
         clipId: clipId,
         name: settings.name,
@@ -42,13 +42,8 @@ class ClipsNotifier
         isPublic: settings.isPublic,
       ),
     );
-    state = AsyncValue.data(
-      state.valueOrNull
-              ?.map(
-                (e) => (e.id == clipId) ? clip : e,
-              )
-              .toList() ??
-          [],
-    );
+    state = AsyncValue.data([
+      for (final e in [...?state.valueOrNull]) e.id == clipId ? clip : e
+    ]);
   }
 }

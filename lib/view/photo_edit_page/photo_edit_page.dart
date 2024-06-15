@@ -32,7 +32,8 @@ class PhotoEditPage extends ConsumerStatefulWidget {
 }
 
 class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
-  PhotoEditStateNotifier get photoEdit => ref.read(photoEditProvider.notifier);
+  PhotoEditStateNotifier get photoEdit =>
+      ref.read(photoEditStateNotifierProvider.notifier);
 
   final renderingAreaKey = GlobalKey();
 

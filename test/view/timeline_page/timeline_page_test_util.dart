@@ -66,7 +66,7 @@ class TimelinePageTest {
 
     return ProviderScope(
       overrides: [
-        misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+        misskeyProvider.overrideWith((ref) => mockMisskey),
         tabSettingsRepositoryProvider
             .overrideWith((ref) => mockTabSettingsRepository),
         accountsProvider.overrideWith((ref) => [TestData.account]),
@@ -76,8 +76,7 @@ class TimelinePageTest {
           });
           return mockAccountRepository;
         }),
-        emojiRepositoryProvider
-            .overrideWith((ref, arg) => MockEmojiRepository()),
+        emojiRepositoryProvider.overrideWith((ref) => MockEmojiRepository()),
       ],
       child: DefaultRootWidget(
         initialRoute: TimeLineRoute(initialTabSetting: tabSetting),

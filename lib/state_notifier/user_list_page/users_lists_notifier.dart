@@ -1,26 +1,26 @@
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class UsersListsNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<UsersList>, Misskey> {
+part "users_lists_notifier.g.dart";
+
+@riverpod
+class UsersListsNotifier extends _$UsersListsNotifier {
   @override
-  Future<List<UsersList>> build(Misskey arg) async {
-    final response = await _misskey.users.list.list();
+  Future<List<UsersList>> build(Misskey misskey) async {
+    final response = await misskey.users.list.list();
     return response.toList();
   }
 
-  Misskey get _misskey => arg;
-
   Future<void> create(UsersListSettings settings) async {
-    final list = await _misskey.users.list.create(
+    final list = await misskey.users.list.create(
       UsersListsCreateRequest(
         name: settings.name,
       ),
     );
     if (settings.isPublic) {
-      await _misskey.users.list.update(
+      await misskey.users.list.update(
         UsersListsUpdateRequest(
           listId: list.id,
           isPublic: settings.isPublic,
@@ -31,9 +31,9 @@ class UsersListsNotifier
   }
 
   Future<void> delete(String listId) async {
-    await _misskey.users.list.delete(UsersListsDeleteRequest(listId: listId));
+    await misskey.users.list.delete(UsersListsDeleteRequest(listId: listId));
     state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != listId).toList() ?? [],
+      [...?state.valueOrNull?.where((e) => e.id != listId)],
     );
   }
 
@@ -43,7 +43,7 @@ class UsersListsNotifier
   ) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(
       () async {
-        await _misskey.users.list.push(
+        await misskey.users.list.push(
           UsersListsPushRequest(
             listId: listId,
             userId: user.id,
@@ -51,7 +51,7 @@ class UsersListsNotifier
         );
         state = AsyncValue.data(
           [
-            for (final list in state.valueOrNull ?? <UsersList>[])
+            for (final list in [...?state.valueOrNull])
               list.id == listId
                   ? list.copyWith(userIds: [...list.userIds, user.id])
                   : list,
@@ -65,25 +65,19 @@ class UsersListsNotifier
     String listId,
     User user,
   ) async {
-    await _misskey.users.list.pull(
+    await misskey.users.list.pull(
       UsersListsPullRequest(
         listId: listId,
         userId: user.id,
       ),
     );
-    state = AsyncValue.data(
-      state.valueOrNull
-              ?.map(
-                (list) => (list.id == listId)
-                    ? list.copyWith(
-                        userIds: list.userIds
-                            .where((userId) => userId != user.id)
-                            .toList(),
-                      )
-                    : list,
+    state = AsyncValue.data([
+      for (final list in [...?state.valueOrNull])
+        list.id == listId
+            ? list.copyWith(
+                userIds: [...list.userIds.where((userId) => userId != user.id)],
               )
-              .toList() ??
-          [],
-    );
+            : list,
+    ]);
   }
 }

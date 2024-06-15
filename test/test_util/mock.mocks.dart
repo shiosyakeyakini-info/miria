@@ -91,9 +91,9 @@ class _FakeSharedPreferenceController_2 extends _i1.SmartFake
         );
 }
 
-class _FakeNotifierProviderRef_3<T> extends _i1.SmartFake
-    implements _i5.NotifierProviderRef<T> {
-  _FakeNotifierProviderRef_3(
+class _FakeAutoDisposeNotifierProviderRef_3<T> extends _i1.SmartFake
+    implements _i5.AutoDisposeNotifierProviderRef<T> {
+  _FakeAutoDisposeNotifierProviderRef_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -1189,18 +1189,19 @@ class MockAccountRepository extends _i1.Mock implements _i26.AccountRepository {
       ) as _i4.SharedPreferenceController);
 
   @override
-  _i5.NotifierProviderRef<List<_i7.Account>> get ref => (super.noSuchMethod(
+  _i5.AutoDisposeNotifierProviderRef<List<_i7.Account>> get ref =>
+      (super.noSuchMethod(
         Invocation.getter(#ref),
-        returnValue: _FakeNotifierProviderRef_3<List<_i7.Account>>(
+        returnValue: _FakeAutoDisposeNotifierProviderRef_3<List<_i7.Account>>(
           this,
           Invocation.getter(#ref),
         ),
         returnValueForMissingStub:
-            _FakeNotifierProviderRef_3<List<_i7.Account>>(
+            _FakeAutoDisposeNotifierProviderRef_3<List<_i7.Account>>(
           this,
           Invocation.getter(#ref),
         ),
-      ) as _i5.NotifierProviderRef<List<_i7.Account>>);
+      ) as _i5.AutoDisposeNotifierProviderRef<List<_i7.Account>>);
 
   @override
   List<_i7.Account> get state => (super.noSuchMethod(

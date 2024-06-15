@@ -50,7 +50,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFollowing: true),
         follow: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(account))
+              .read(misskeyProvider(this.account))
               .channels
               .follow(ChannelsFollowRequest(channelId: channelId)),
         ),
@@ -66,7 +66,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFollowing: false),
         follow: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(account))
+              .read(misskeyProvider(this.account))
               .channels
               .unfollow(ChannelsUnfollowRequest(channelId: channelId)),
         ),
@@ -82,7 +82,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFavorited: true),
         favorite: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(account))
+              .read(misskeyProvider(this.account))
               .channels
               .favorite(ChannelsFavoriteRequest(channelId: channelId)),
         ),
@@ -97,7 +97,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFavorited: false),
         favorite: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(account))
+              .read(misskeyProvider(this.account))
               .channels
               .unfavorite(ChannelsUnfavoriteRequest(channelId: channelId)),
         ),

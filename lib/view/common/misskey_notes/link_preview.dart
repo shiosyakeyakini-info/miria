@@ -25,7 +25,7 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
   @override
   Future<SummalyResult> build((String, String) arg) async {
     final (host, link) = arg;
-    final dio = ref.watch(dioProvider);
+    final dio = ref.read(dioProvider);
     final url = Uri.parse(link);
     // https://github.com/misskey-dev/misskey/blob/2023.9.3/packages/frontend/src/components/MkUrlPreview.vue#L141-L145
     final replacedUrl = url

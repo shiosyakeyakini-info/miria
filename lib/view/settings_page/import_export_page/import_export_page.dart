@@ -68,7 +68,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                       return;
                     }
                     await ref
-                        .read(importExportRepository)
+                        .read(importExportRepositoryProvider)
                         .import(context, account)
                         .expectFailure(context);
                   },
@@ -114,7 +114,7 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                       return;
                     }
                     await ref
-                        .read(importExportRepository)
+                        .read(importExportRepositoryProvider)
                         .export(context, account)
                         .expectFailure(context);
                   },

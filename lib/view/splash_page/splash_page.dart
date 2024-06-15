@@ -6,6 +6,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/licenses.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:receive_sharing_intent/receive_sharing_intent.dart";
 

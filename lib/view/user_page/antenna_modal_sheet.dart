@@ -5,6 +5,7 @@ import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/error_dialog_handler.dart";

@@ -10,6 +10,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -51,9 +52,10 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(user: const AsyncLoading());
     state = state.copyWith(
       user: await ref.read(dialogStateNotifierProvider.notifier).guard(
-            () async => await ref.read(misskeyProvider(account)).users.show(
-                  UsersShowRequest(userId: note.userId),
-                ),
+            () async =>
+                await ref.read(misskeyProvider(this.account)).users.show(
+                      UsersShowRequest(userId: note.userId),
+                    ),
           ),
     );
   }
@@ -80,7 +82,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     final xFile = XFile(path, mimeType: "image/png");
     await Share.shareXFiles(
       [xFile],
-      text: "https://${account.host}/notes/${targetNote.id}",
+      text: "https://${this.account.host}/notes/${note.id}",
       sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
     );
   }

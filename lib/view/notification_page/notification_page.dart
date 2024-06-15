@@ -7,6 +7,7 @@ import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";

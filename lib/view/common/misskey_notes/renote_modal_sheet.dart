@@ -24,7 +24,7 @@ class RenoteNotifier extends _$RenoteNotifier {
     state = const AsyncLoading();
     state =
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(account)).notes.create(
+      await ref.read(misskeyProvider(this.account)).notes.create(
             NotesCreateRequest(
               renoteId: note.id,
               localOnly: true,
@@ -39,7 +39,7 @@ class RenoteNotifier extends _$RenoteNotifier {
     state = const AsyncLoading();
     state =
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(account)).notes.create(
+      await ref.read(misskeyProvider(this.account)).notes.create(
             NotesCreateRequest(
               renoteId: note.id,
               channelId: channel.id,
@@ -54,7 +54,7 @@ class RenoteNotifier extends _$RenoteNotifier {
     state = const AsyncLoading();
     state =
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(account)).notes.create(
+      await ref.read(misskeyProvider(this.account)).notes.create(
             NotesCreateRequest(
               renoteId: note.id,
               localOnly: isLocalOnly,
@@ -75,7 +75,7 @@ class RenoteChannelNotifier extends _$RenoteChannelNotifier {
     state = const AsyncLoading();
     state = await ref.read(dialogStateNotifierProvider.notifier).guard(
           () async => await ref
-              .read(misskeyProvider(account))
+              .read(misskeyProvider(this.account))
               .channels
               .show(ChannelsShowRequest(channelId: channelId)),
         );

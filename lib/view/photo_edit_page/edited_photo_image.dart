@@ -1,19 +1,19 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:miria/providers.dart";
+import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 
 class EditedPhotoImage extends ConsumerWidget {
   const EditedPhotoImage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final image =
-        ref.watch(photoEditProvider.select((value) => value.editedImage));
+    final image = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.editedImage));
 
-    final defaultSize =
-        ref.watch(photoEditProvider.select((value) => value.defaultSize));
-    final actualSize =
-        ref.watch(photoEditProvider.select((value) => value.actualSize));
+    final defaultSize = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.defaultSize));
+    final actualSize = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.actualSize));
 
     if (image != null) {
       return Positioned.fill(

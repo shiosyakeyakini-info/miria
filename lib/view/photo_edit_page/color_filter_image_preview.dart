@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:miria/providers.dart";
+import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 
 class ColorFilterImagePreview extends ConsumerWidget {
   const ColorFilterImagePreview({super.key});
@@ -9,13 +9,14 @@ class ColorFilterImagePreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final previewImages = ref
         .watch(
-          photoEditProvider.select((value) => value.colorFilterPreviewImages),
+          photoEditStateNotifierProvider
+              .select((value) => value.colorFilterPreviewImages),
         )
         .toList();
-    final previewMode =
-        ref.watch(photoEditProvider.select((value) => value.colorFilterMode));
-    final adaptive =
-        ref.watch(photoEditProvider.select((value) => value.adaptivePresets));
+    final previewMode = ref.watch(photoEditStateNotifierProvider
+        .select((value) => value.colorFilterMode));
+    final adaptive = ref.watch(photoEditStateNotifierProvider
+        .select((value) => value.adaptivePresets));
     if (!previewMode) {
       return const SizedBox.shrink();
     }
@@ -35,7 +36,7 @@ class ColorFilterImagePreview extends ConsumerWidget {
           if (image == null) return const SizedBox.shrink();
           return GestureDetector(
             onTap: () async => ref
-                .read(photoEditProvider.notifier)
+                .read(photoEditStateNotifierProvider.notifier)
                 .selectColorFilter(previewImages[index].name),
             child: DecoratedBox(
               decoration: adaptive.any((e) => e == previewImages[index].name)

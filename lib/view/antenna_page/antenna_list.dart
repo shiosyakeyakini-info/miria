@@ -4,6 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/error_dialog_handler.dart";

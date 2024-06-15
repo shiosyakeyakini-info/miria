@@ -18,7 +18,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+          overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ClipListRoute(account: TestData.account),
           ),

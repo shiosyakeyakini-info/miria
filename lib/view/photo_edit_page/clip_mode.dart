@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/photo_edit_page/edited_photo_image.dart";
 
@@ -20,20 +21,20 @@ class ClipModeState extends ConsumerState<ClipMode> {
 
   @override
   Widget build(BuildContext context) {
-    final clipMode =
-        ref.watch(photoEditProvider.select((value) => value.clipMode));
-    final defaultSize =
-        ref.watch(photoEditProvider.select((value) => value.defaultSize));
-    final cropOffset =
-        ref.watch(photoEditProvider.select((value) => value.cropOffset));
-    final actualSize =
-        ref.watch(photoEditProvider.select((value) => value.actualSize));
-    final cropSize =
-        ref.watch(photoEditProvider.select((value) => value.cropSize));
-    final reactions =
-        ref.watch(photoEditProvider.select((value) => value.emojis));
-    final selectedReaction = ref
-        .watch(photoEditProvider.select((value) => value.selectedEmojiIndex));
+    final clipMode = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.clipMode));
+    final defaultSize = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.defaultSize));
+    final cropOffset = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.cropOffset));
+    final actualSize = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.actualSize));
+    final cropSize = ref.watch(
+        photoEditStateNotifierProvider.select((value) => value.cropSize));
+    final reactions = ref
+        .watch(photoEditStateNotifierProvider.select((value) => value.emojis));
+    final selectedReaction = ref.watch(photoEditStateNotifierProvider
+        .select((value) => value.selectedEmojiIndex));
 
     final ratio = defaultSize.width / actualSize.width;
 
@@ -43,19 +44,20 @@ class ClipModeState extends ConsumerState<ClipMode> {
       child: Listener(
         onPointerMove: selectedReaction == null
             ? null
-            : (detail) =>
-                ref.read(photoEditProvider.notifier).reactionMove(detail),
+            : (detail) => ref
+                .read(photoEditStateNotifierProvider.notifier)
+                .reactionMove(detail),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onScaleStart: selectedReaction == null
               ? null
               : (detail) => ref
-                  .read(photoEditProvider.notifier)
+                  .read(photoEditStateNotifierProvider.notifier)
                   .reactionScaleStart(detail),
           onScaleUpdate: selectedReaction == null
               ? null
               : (detail) => ref
-                  .read(photoEditProvider.notifier)
+                  .read(photoEditStateNotifierProvider.notifier)
                   .reactionScaleUpdate(detail),
           child: RepaintBoundary(
             key: widget.renderingGlobalKey,
@@ -138,7 +140,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditProvider.notifier)
+                          .read(photoEditStateNotifierProvider.notifier)
                           .cropMoveLeftTop(detail),
                       child: Icon(Icons.add, size: iconSize * ratio),
                     ),
@@ -151,7 +153,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditProvider.notifier)
+                          .read(photoEditStateNotifierProvider.notifier)
                           .cropMoveRightTop(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
@@ -164,7 +166,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditProvider.notifier)
+                          .read(photoEditStateNotifierProvider.notifier)
                           .cropMoveLeftBottom(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
@@ -179,7 +181,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
                       onPointerMove: (detail) => ref
-                          .read(photoEditProvider.notifier)
+                          .read(photoEditStateNotifierProvider.notifier)
                           .cropMoveRightBottom(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
@@ -206,7 +208,7 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     height: reaction.$2.scale,
                     child: GestureDetector(
                       onTap: () => ref
-                          .read(photoEditProvider.notifier)
+                          .read(photoEditStateNotifierProvider.notifier)
                           .selectReaction(reaction.$1),
                       child: DecoratedBox(
                         decoration: BoxDecoration(

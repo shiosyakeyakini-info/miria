@@ -29,18 +29,18 @@ enum TabType {
     };
   }
 
-  ChangeNotifierProvider<TimelineRepository> timelineProvider(
+  AutoDisposeProvider<TimelineRepository> timelineProvider(
     TabSetting setting,
   ) {
     switch (this) {
       case TabType.localTimeline:
-        return localTimeLineProvider(setting);
+        return localTimelineProvider(setting);
       case TabType.homeTimeline:
-        return homeTimeLineProvider(setting);
+        return homeTimelineProvider(setting);
       case TabType.globalTimeline:
-        return globalTimeLineProvider(setting);
+        return globalTimelineProvider(setting);
       case TabType.hybridTimeline:
-        return hybridTimeLineProvider(setting); //FIXME
+        return hybridTimelineProvider(setting); //FIXME
       case TabType.roleTimeline:
         return roleTimelineProvider(setting);
       case TabType.channel:

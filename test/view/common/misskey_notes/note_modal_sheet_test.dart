@@ -25,7 +25,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -63,7 +63,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -101,7 +101,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -141,7 +141,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -171,7 +171,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -206,7 +206,7 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -249,7 +249,7 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -277,7 +277,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -313,7 +313,7 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -358,7 +358,7 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -389,7 +389,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -427,7 +427,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -462,7 +462,7 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -506,7 +506,7 @@ void main() {
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -536,7 +536,7 @@ void main() {
           .copyWith(text: null, renote: TestData.note1);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -568,7 +568,7 @@ void main() {
       when(misskey.users).thenReturn(misskeyUsers);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(
@@ -619,7 +619,7 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => misskey)],
           child: DefaultRootNoRouterWidget(
             child: Scaffold(
               body: NoteModalSheet(

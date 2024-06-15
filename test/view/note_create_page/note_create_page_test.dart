@@ -40,7 +40,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -83,7 +83,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -131,7 +131,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -179,7 +179,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -238,7 +238,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               accountSettingsRepositoryProvider
                   .overrideWith((ref) => accountSettings),
@@ -277,7 +277,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -313,7 +313,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -350,7 +350,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -395,7 +395,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               accountSettingsRepositoryProvider
                   .overrideWith((ref) => accountSettings),
@@ -447,7 +447,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               accountSettingsRepositoryProvider
                   .overrideWith((ref) => accountSettings),
@@ -500,7 +500,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               accountSettingsRepositoryProvider
                   .overrideWith((ref) => accountSettings),
@@ -537,7 +537,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -570,7 +570,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -607,7 +607,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -649,7 +649,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+                misskeyProvider.overrideWith((ref) => mockMisskey),
                 inputComplementDelayedProvider.overrideWithValue(1),
                 accountSettingsRepositoryProvider
                     .overrideWith((ref) => accountSettings),
@@ -700,7 +700,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               accountSettingsRepositoryProvider
                   .overrideWith((ref) => accountSettings),
@@ -749,7 +749,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               accountSettingsRepositoryProvider
                   .overrideWith((ref) => accountSettings),
@@ -794,7 +794,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -835,7 +835,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -878,7 +878,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -901,7 +901,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -927,7 +927,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -954,7 +954,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -982,7 +982,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1002,7 +1002,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1028,7 +1028,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1056,7 +1056,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1092,7 +1092,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
@@ -1149,7 +1149,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => memoryFileSystem),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
@@ -1227,7 +1227,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => memoryFileSystem),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
@@ -1322,7 +1322,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => misskey),
+              misskeyProvider.overrideWith((ref) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1368,7 +1368,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => misskey),
+              misskeyProvider.overrideWith((ref) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1432,7 +1432,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1464,7 +1464,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1510,7 +1510,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1552,7 +1552,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1588,7 +1588,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1632,7 +1632,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => memoryFileSystem),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
@@ -1705,8 +1705,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider
-                    .overrideWith((ref, arg) => emojiRepository),
+                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
                 generalSettingsRepositoryProvider
                     .overrideWith((ref) => generalSettingsRepository),
               ],
@@ -1761,8 +1760,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider
-                    .overrideWith((ref, arg) => emojiRepository),
+                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
                 generalSettingsRepositoryProvider
                     .overrideWith((ref) => generalSettingsRepository),
               ],
@@ -1809,8 +1807,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider
-                    .overrideWith((ref, arg) => emojiRepository),
+                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1900,7 +1897,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+                misskeyProvider.overrideWith((ref) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -2033,7 +2030,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2072,7 +2069,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2122,7 +2119,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+                misskeyProvider.overrideWith((ref) => mockMisskey),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
@@ -2165,7 +2162,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2205,7 +2202,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2271,7 +2268,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+                misskeyProvider.overrideWith((ref) => mockMisskey),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
@@ -2338,7 +2335,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2372,7 +2369,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2407,7 +2404,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2438,7 +2435,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2469,7 +2466,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2504,7 +2501,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2545,7 +2542,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2595,8 +2592,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              emojiRepositoryProvider
-                  .overrideWith((ref, arg) => emojiRepository),
+              emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2644,8 +2640,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              emojiRepositoryProvider
-                  .overrideWith((ref, arg) => emojiRepository),
+              emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
               inputComplementDelayedProvider.overrideWithValue(1),
               generalSettingsRepositoryProvider
                   .overrideWith((ref) => generalSettingsRepository),
@@ -2691,7 +2686,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => misskey),
+              misskeyProvider.overrideWith((ref) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2750,7 +2745,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => misskey),
+              misskeyProvider.overrideWith((ref) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2818,7 +2813,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => misskey),
+              misskeyProvider.overrideWith((ref) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2883,7 +2878,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
               dioProvider.overrideWith((ref) => mockDio),
             ],
@@ -2973,7 +2968,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => fileSystem),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
@@ -3060,7 +3055,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3105,7 +3100,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3149,7 +3144,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3210,7 +3205,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3297,7 +3292,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3359,7 +3354,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3412,7 +3407,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3495,7 +3490,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3585,7 +3580,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3642,7 +3637,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3705,7 +3700,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3768,7 +3763,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3831,7 +3826,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+              misskeyProvider.overrideWith((ref) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(

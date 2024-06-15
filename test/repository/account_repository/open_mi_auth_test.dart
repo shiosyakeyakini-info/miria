@@ -63,7 +63,7 @@ void main() {
   //   final provider = ProviderContainer(
   //     overrides: [
   //       dioProvider.overrideWithValue(dio),
-  //       misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+  //       misskeyProvider.overrideWith((ref) => mockMisskey),
   //     ],
   //   );
   //   final accountRepository = provider.read(accountRepositoryProvider.notifier);
@@ -104,8 +104,8 @@ void main() {
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
-        misskeyProvider.overrideWith((ref, arg) => mockMisskey),
-        misskeyWithoutAccountProvider.overrideWith((ref, arg) => mockMisskey),
+        misskeyProvider.overrideWith((ref) => mockMisskey),
+        misskeyWithoutAccountProvider.overrideWith((ref) => mockMisskey),
       ],
     );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);

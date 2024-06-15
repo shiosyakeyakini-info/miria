@@ -12,9 +12,12 @@ import "package:miria/model/acct.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/shared_preference_controller.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preference_app_group/shared_preference_app_group.dart";
 import "package:url_launcher/url_launcher.dart";
 import "package:uuid/uuid.dart";
+
+part "account_repository.g.dart";
 
 sealed class ValidateMisskeyException implements Exception {}
 
@@ -49,7 +52,8 @@ class AlreadyLoggedInException implements ValidateMisskeyException {
   final String acct;
 }
 
-class AccountRepository extends Notifier<List<Account>> {
+@riverpod
+class AccountRepository extends _$AccountRepository {
   late final SharedPreferenceController sharedPreferenceController =
       ref.read(sharedPrefenceControllerProvider);
 

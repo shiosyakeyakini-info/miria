@@ -247,7 +247,7 @@ class _NotesClipsNotifierProviderElement
 }
 
 String _$clipModalSheetNotifierHash() =>
-    r'f83ca6342260576599b864ff6b9d056711451298';
+    r'62537b29c05a8b1d14498895c97e395cd2772d6d';
 
 abstract class _$ClipModalSheetNotifier
     extends BuildlessAutoDisposeAsyncNotifier<List<(Clip, bool)>> {

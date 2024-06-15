@@ -6,6 +6,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/view/antenna_page/antenna_notes.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
 import "package:miria/view/common/account_scope.dart";

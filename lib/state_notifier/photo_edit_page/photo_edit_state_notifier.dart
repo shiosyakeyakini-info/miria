@@ -14,8 +14,10 @@ import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/state_notifier/photo_edit_page/color_filter_preset.dart";
 import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "photo_edit_state_notifier.freezed.dart";
+part "photo_edit_state_notifier.g.dart";
 
 @freezed
 class PhotoEdit with _$PhotoEdit {
@@ -53,10 +55,14 @@ class EditedEmojiData with _$EditedEmojiData {
   }) = _EditedEmojiData;
 }
 
-class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
+@riverpod
+class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
   static final List<String> _acceptReactions = [];
 
-  PhotoEditStateNotifier(super._state);
+  PhotoEditStateNotifier();
+
+  @override
+  PhotoEdit build() => const PhotoEdit();
 
   /// 状態を初期化する
   Future<void> initialize(MisskeyPostFile file) async {
@@ -347,7 +353,7 @@ class PhotoEditStateNotifier extends StateNotifier<PhotoEdit> {
       case CustomEmojiData():
         // カスタム絵文字の場合、ライセンスを確認する
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
-          if (!mounted) return;
+          if (!context.mounted) return;
           final dialogResult = await showDialog<bool?>(
             context: context,
             builder: (context) => LicenseConfirmDialog(

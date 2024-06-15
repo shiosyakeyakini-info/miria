@@ -108,7 +108,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     if (!context.mounted) return;
     if (foundNote == null) return;
     await context.pushRoute(
-      NoteDetailRoute(note: foundNote, account: loginAs ?? account),
+      NoteDetailRoute(note: foundNote, account: loginAs ?? this.account),
     );
   }
 
@@ -122,7 +122,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     if (foundUser == null) return;
     if (!context.mounted) return;
     await context.pushRoute(
-      UserRoute(userId: foundUser.id, account: loginAs ?? account),
+      UserRoute(userId: foundUser.id, account: loginAs ?? this.account),
     );
   }
 
@@ -130,7 +130,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     final selectedAccount = await showDialog<Account?>(
       context: context,
       builder: (context) =>
-          AccountSelectDialog(host: note.localOnly ? account.host : null),
+          AccountSelectDialog(host: note.localOnly ? this.account.host : null),
     );
     if (selectedAccount == null) return;
     if (!context.mounted) return;

@@ -6,7 +6,7 @@ part of 'renote_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$renoteNotifierHash() => r'463d89a232d583fbcdb0c1a0e9afa440875e8c3e';
+String _$renoteNotifierHash() => r'2f8d167b63754ec318a4f0f76509e87798948ec6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -244,7 +244,7 @@ class _RenoteNotifierProviderElement extends AutoDisposeNotifierProviderElement<
 }
 
 String _$renoteChannelNotifierHash() =>
-    r'c75e84f2456d46f685eb9fa0289f6ee8de05c770';
+    r'c519cce3b931c05ce41c7d31f69e849feca88bff';
 
 abstract class _$RenoteChannelNotifier
     extends BuildlessAutoDisposeNotifier<AsyncValue<CommunityChannel>?> {

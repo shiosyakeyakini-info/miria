@@ -30,7 +30,7 @@ Widget buildTestWidget({
     overrides: [
       ...overrides,
       cacheManagerProvider.overrideWith((ref) => mockCacheManager),
-      notesProvider.overrideWith((ref, arg) => notesRepository),
+      notesProvider.overrideWith((ref) => notesRepository),
     ],
     child: DefaultRootNoRouterWidget(
       child: Scaffold(
@@ -340,7 +340,7 @@ System.out.println("@ai uneune");
       );
       await tester.pumpWidget(
         buildTestWidget(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
           note: TestData.note1,
         ),
       );
@@ -369,7 +369,7 @@ System.out.println("@ai uneune");
           .thenAnswer((_) async => [TestData.note6AsRenote]);
       await tester.pumpWidget(
         buildTestWidget(
-          overrides: [misskeyProvider.overrideWith((ref, arg) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
           note: TestData.note1,
         ),
       );
