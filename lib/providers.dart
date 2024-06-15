@@ -272,11 +272,6 @@ final misskeyServerListNotifierProvider = AsyncNotifierProvider.autoDispose<
 
 final cacheManagerProvider = Provider<BaseCacheManager?>((ref) => null);
 
-final misskeyNoteNotifierProvider =
-    NotifierProvider.family<MisskeyNoteNotifier, void, Account>(
-  MisskeyNoteNotifier.new,
-);
-
 final usersListsNotifierProvider = AsyncNotifierProvider.autoDispose
     .family<UsersListsNotifier, List<UsersList>, Misskey>(
   UsersListsNotifier.new,

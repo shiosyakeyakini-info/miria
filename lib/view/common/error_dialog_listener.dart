@@ -4,7 +4,6 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
-import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 
@@ -40,11 +39,6 @@ class ErrorDialogListener extends ConsumerWidget {
               S.of(context).alreadyLoggedIn(acct),
           };
           await SimpleMessageDialog.show(next.$2!, message);
-        } else if (error is OpenLocalOnlyNoteFromRemoteException) {
-          await SimpleMessageDialog.show(
-            next.$2!,
-            S.of(context).cannotOpenLocalOnlyNoteFromRemote,
-          );
         } else {
           await SimpleMessageDialog.show(
             next.$2!,

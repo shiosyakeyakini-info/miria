@@ -22,13 +22,19 @@ mixin _$UserInfo {
   UserDetailed? get remoteResponse => throw _privateConstructorUsedError;
   MetaResponse? get metaResponse => throw _privateConstructorUsedError;
 
-  /// メモ更新の状態
+  /// メモの更新中
   AsyncValue<void>? get updateMemo => throw _privateConstructorUsedError;
 
-  /// フォロー
+  /// フォロー操作中
   AsyncValue<void>? get follow => throw _privateConstructorUsedError;
+
+  /// ミュート操作中
   AsyncValue<void>? get mute => throw _privateConstructorUsedError;
+
+  /// リノート操作中
   AsyncValue<void>? get renoteMute => throw _privateConstructorUsedError;
+
+  /// ブロック操作中
   AsyncValue<void>? get block => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -255,17 +261,23 @@ class _$UserInfoImpl extends _UserInfo {
   @override
   final MetaResponse? metaResponse;
 
-  /// メモ更新の状態
+  /// メモの更新中
   @override
   final AsyncValue<void>? updateMemo;
 
-  /// フォロー
+  /// フォロー操作中
   @override
   final AsyncValue<void>? follow;
+
+  /// ミュート操作中
   @override
   final AsyncValue<void>? mute;
+
+  /// リノート操作中
   @override
   final AsyncValue<void>? renoteMute;
+
+  /// ブロック操作中
   @override
   final AsyncValue<void>? block;
 
@@ -344,17 +356,23 @@ abstract class _UserInfo extends UserInfo {
   MetaResponse? get metaResponse;
   @override
 
-  /// メモ更新の状態
+  /// メモの更新中
   AsyncValue<void>? get updateMemo;
   @override
 
-  /// フォロー
+  /// フォロー操作中
   AsyncValue<void>? get follow;
   @override
+
+  /// ミュート操作中
   AsyncValue<void>? get mute;
   @override
+
+  /// リノート操作中
   AsyncValue<void>? get renoteMute;
   @override
+
+  /// ブロック操作中
   AsyncValue<void>? get block;
   @override
   @JsonKey(ignore: true)

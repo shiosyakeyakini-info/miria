@@ -7,10 +7,12 @@ import "package:flutter/rendering.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
 import "package:miria/view/common/misskey_notes/clip_modal_sheet.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
@@ -19,11 +21,70 @@ import "package:miria/view/user_page/user_control_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:path/path.dart";
 import "package:path_provider/path_provider.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:share_plus/share_plus.dart";
 import "package:url_launcher/url_launcher.dart";
 import "package:url_launcher/url_launcher_string.dart";
 
-final noteModalSheetSharingModeProviding = StateProvider((ref) => false);
+part "note_modal_sheet.freezed.dart";
+part "note_modal_sheet.g.dart";
+
+@freezed
+class NoteModalSheetState with _$NoteModalSheetState {
+  factory NoteModalSheetState({
+    required AsyncValue<NotesStateResponse> noteState,
+    @Default(false) bool isSharingMode,
+    AsyncValue<UserDetailed>? user,
+    AsyncValue<void>? delete,
+    AsyncValue<void>? deleteRecreate,
+  }) = _NoteModalSheetState;
+}
+
+@Riverpod(keepAlive: false)
+class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
+  @override
+  NoteModalSheetState build(Account account, Note note) {
+    return NoteModalSheetState(noteState: const AsyncLoading());
+  }
+
+  Future<void> user() async {
+    state = state.copyWith(user: const AsyncLoading());
+    state = state.copyWith(
+      user: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => await ref.read(misskeyProvider(account)).users.show(
+                  UsersShowRequest(userId: note.userId),
+                ),
+          ),
+    );
+  }
+
+  Future<void> copyAsImage(
+    RenderBox box,
+    RenderRepaintBoundary boundary,
+    double devicePixelRatio,
+  ) async {
+    final image = await boundary.toImage(pixelRatio: devicePixelRatio);
+    final byteData = await image.toByteData(format: ImageByteFormat.png);
+    state = state.copyWith(isSharingMode: false);
+
+    final path =
+        "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
+    final file = File(path);
+    await file.writeAsBytes(
+      byteData!.buffer.asUint8List(
+        byteData.offsetInBytes,
+        byteData.lengthInBytes,
+      ),
+    );
+
+    final xFile = XFile(path, mimeType: "image/png");
+    await Share.shareXFiles(
+      [xFile],
+      text: "https://${account.host}/notes/${targetNote.id}",
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    );
+  }
+}
 
 class NoteModalSheet extends ConsumerWidget {
   final Note baseNote;
@@ -42,6 +103,22 @@ class NoteModalSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
+    final notifierProvider =
+        noteModalSheetNotifierProvider(account, targetNote);
+
+    ref.listen(notifierProvider.select((value) => value.user), (_, next) async {
+      if (next! is AsyncData) return;
+      await showModalBottomSheet<void>(
+        context: context,
+        builder: (context) => UserControlDialog(
+          account: account,
+          response: next.value!,
+        ),
+      );
+    });
+    final noteStatus =
+        ref.watch(notifierProvider.select((value) => value.noteState));
+
     return ListView(
       children: [
         ListTile(
@@ -88,20 +165,7 @@ class NoteModalSheet extends ConsumerWidget {
           leading: const Icon(Icons.person),
           title: Text(S.of(context).user),
           trailing: const Icon(Icons.keyboard_arrow_right),
-          onTap: () async {
-            final response = await ref
-                .read(misskeyProvider(account))
-                .users
-                .show(UsersShowRequest(userId: targetNote.userId));
-            if (!context.mounted) return;
-            await showModalBottomSheet<void>(
-              context: context,
-              builder: (context) => UserControlDialog(
-                account: account,
-                response: response,
-              ),
-            );
-          },
+          onTap: () async => ref.read(notifierProvider.notifier).user(),
         ),
         ListTile(
           leading: const Icon(Icons.open_in_browser),
@@ -136,44 +200,23 @@ class NoteModalSheet extends ConsumerWidget {
             title: Text(S.of(context).openInAnotherAccount),
             onTap: () async => ref
                 .read(misskeyNoteNotifierProvider(account).notifier)
-                .openNoteInOtherAccount(context, targetNote)
-                .expectFailure(context),
+                .openNoteInOtherAccount(context, targetNote),
           ),
         ListTile(
           leading: const Icon(Icons.share),
           title: Text(S.of(context).shareNotes),
           onTap: () {
-            ref.read(noteModalSheetSharingModeProviding.notifier).state = true;
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               Future(() async {
                 final box = context.findRenderObject() as RenderBox?;
+                if (box == null) return;
                 final boundary = noteBoundaryKey.currentContext!
                     .findRenderObject()! as RenderRepaintBoundary;
-                final image = await boundary.toImage(
-                  pixelRatio: View.of(context).devicePixelRatio,
-                );
-                final byteData =
-                    await image.toByteData(format: ImageByteFormat.png);
-                ref.read(noteModalSheetSharingModeProviding.notifier).state =
-                    false;
-
-                final path =
-                    "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
-                final file = File(path);
-                await file.writeAsBytes(
-                  byteData!.buffer.asUint8List(
-                    byteData.offsetInBytes,
-                    byteData.lengthInBytes,
-                  ),
-                );
-
-                final xFile = XFile(path, mimeType: "image/png");
-                await Share.shareXFiles(
-                  [xFile],
-                  text: "https://${account.host}/notes/${targetNote.id}",
-                  sharePositionOrigin:
-                      box!.localToGlobal(Offset.zero) & box.size,
-                );
+                await ref.read(notifierProvider.notifier).copyAsImage(
+                      box,
+                      boundary,
+                      View.of(context).devicePixelRatio,
+                    );
               });
             });
           },

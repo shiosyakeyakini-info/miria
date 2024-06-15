@@ -168,7 +168,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
     state = AsyncData(
       before.copyWith(
-        response: response.copyWith(isFollowed: false),
+        response: response.copyWith(isFollowing: false),
         follow: result,
       ),
     );
@@ -199,6 +199,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     );
   }
 
+  /// ミュートする
   Future<void> createMute(Expire expires) async {
     var before = await future;
     if (before.mute is AsyncLoading) return;
@@ -229,6 +230,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     );
   }
 
+  /// ミュートを解除する
   Future<void> deleteMute() async {
     var before = await future;
     if (before.mute is AsyncLoading) return;
@@ -254,6 +256,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     );
   }
 
+  /// Renoteをミュートする
   Future<void> createRenoteMute() async {
     var before = await future;
     if (before.renoteMute is AsyncLoading) return;
@@ -273,11 +276,12 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     state = AsyncData(
       before.copyWith(
         response: response.copyWith(isRenoteMuted: true),
-        mute: result,
+        renoteMute: result,
       ),
     );
   }
 
+  /// Renoteのミュートを解除する
   Future<void> deleteRenoteMute() async {
     var before = await future;
     if (before.renoteMute is AsyncLoading) return;
@@ -297,12 +301,13 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     state = AsyncData(
       before.copyWith(
         response: response.copyWith(isRenoteMuted: false),
-        mute: result,
+        renoteMute: result,
       ),
     );
   }
 
-  Future<void> createBlock() async {
+  /// ブロックする
+  Future<void> createBlocking() async {
     var before = await future;
     if (before.block is AsyncLoading) return;
 
@@ -314,6 +319,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
       ],
     );
     if (confirm == 1) return;
+    state = AsyncData(before.copyWith(block: const AsyncLoading()));
 
     final result = await _dialog.guard(
       () async => await ref
@@ -335,9 +341,11 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     );
   }
 
-  Future<void> deleteBlock() async {
+  /// ブロックを解除する
+  Future<void> deleteBlocking() async {
     var before = await future;
     if (before.block is AsyncLoading) return;
+    state = AsyncData(before.copyWith(block: const AsyncLoading()));
 
     final result = await _dialog.guard(
       () async => await ref

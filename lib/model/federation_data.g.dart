@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_info_notifier.dart';
+part of 'federation_data.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userInfoNotifierHash() => r'bf4a16d5d5a3dc3acba0a6239fc52fe345f74e3b';
+String _$federationStateHash() => r'9c167f036298a174352bb982133485adbee4c5bc';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,25 +29,25 @@ class _SystemHash {
   }
 }
 
-abstract class _$UserInfoNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {
+abstract class _$FederationState
+    extends BuildlessAutoDisposeAsyncNotifier<FederationData> {
   late final Account account;
-  late final String userId;
+  late final String host;
 
-  FutureOr<UserInfo> build(
+  FutureOr<FederationData> build(
     Account account,
-    String userId,
+    String host,
   );
 }
 
-/// See also [UserInfoNotifier].
-@ProviderFor(UserInfoNotifier)
-const userInfoNotifierProvider = UserInfoNotifierFamily();
+/// See also [FederationState].
+@ProviderFor(FederationState)
+const federationStateProvider = FederationStateFamily();
 
-/// See also [UserInfoNotifier].
-class UserInfoNotifierFamily extends Family {
-  /// See also [UserInfoNotifier].
-  const UserInfoNotifierFamily();
+/// See also [FederationState].
+class FederationStateFamily extends Family {
+  /// See also [FederationState].
+  const FederationStateFamily();
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
 
@@ -61,77 +61,77 @@ class UserInfoNotifierFamily extends Family {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'userInfoNotifierProvider';
+  String? get name => r'federationStateProvider';
 
-  /// See also [UserInfoNotifier].
-  UserInfoNotifierProvider call(
+  /// See also [FederationState].
+  FederationStateProvider call(
     Account account,
-    String userId,
+    String host,
   ) {
-    return UserInfoNotifierProvider(
+    return FederationStateProvider(
       account,
-      userId,
+      host,
     );
   }
 
   @visibleForOverriding
   @override
-  UserInfoNotifierProvider getProviderOverride(
-    covariant UserInfoNotifierProvider provider,
+  FederationStateProvider getProviderOverride(
+    covariant FederationStateProvider provider,
   ) {
     return call(
       provider.account,
-      provider.userId,
+      provider.host,
     );
   }
 
   /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(UserInfoNotifier Function() create) {
-    return _$UserInfoNotifierFamilyOverride(this, create);
+  Override overrideWith(FederationState Function() create) {
+    return _$FederationStateFamilyOverride(this, create);
   }
 }
 
-class _$UserInfoNotifierFamilyOverride implements FamilyOverride {
-  _$UserInfoNotifierFamilyOverride(this.overriddenFamily, this.create);
+class _$FederationStateFamilyOverride implements FamilyOverride {
+  _$FederationStateFamilyOverride(this.overriddenFamily, this.create);
 
-  final UserInfoNotifier Function() create;
-
-  @override
-  final UserInfoNotifierFamily overriddenFamily;
+  final FederationState Function() create;
 
   @override
-  UserInfoNotifierProvider getProviderOverride(
-    covariant UserInfoNotifierProvider provider,
+  final FederationStateFamily overriddenFamily;
+
+  @override
+  FederationStateProvider getProviderOverride(
+    covariant FederationStateProvider provider,
   ) {
     return provider._copyWith(create);
   }
 }
 
-/// See also [UserInfoNotifier].
-class UserInfoNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
-  /// See also [UserInfoNotifier].
-  UserInfoNotifierProvider(
+/// See also [FederationState].
+class FederationStateProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    FederationState, FederationData> {
+  /// See also [FederationState].
+  FederationStateProvider(
     Account account,
-    String userId,
+    String host,
   ) : this._internal(
-          () => UserInfoNotifier()
+          () => FederationState()
             ..account = account
-            ..userId = userId,
-          from: userInfoNotifierProvider,
-          name: r'userInfoNotifierProvider',
+            ..host = host,
+          from: federationStateProvider,
+          name: r'federationStateProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$userInfoNotifierHash,
-          dependencies: UserInfoNotifierFamily._dependencies,
+                  : _$federationStateHash,
+          dependencies: FederationStateFamily._dependencies,
           allTransitiveDependencies:
-              UserInfoNotifierFamily._allTransitiveDependencies,
+              FederationStateFamily._allTransitiveDependencies,
           account: account,
-          userId: userId,
+          host: host,
         );
 
-  UserInfoNotifierProvider._internal(
+  FederationStateProvider._internal(
     super.create, {
     required super.name,
     required super.dependencies,
@@ -139,37 +139,37 @@ class UserInfoNotifierProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.account,
-    required this.userId,
+    required this.host,
   }) : super.internal();
 
   final Account account;
-  final String userId;
+  final String host;
 
   @override
-  FutureOr<UserInfo> runNotifierBuild(
-    covariant UserInfoNotifier notifier,
+  FutureOr<FederationData> runNotifierBuild(
+    covariant FederationState notifier,
   ) {
     return notifier.build(
       account,
-      userId,
+      host,
     );
   }
 
   @override
-  Override overrideWith(UserInfoNotifier Function() create) {
+  Override overrideWith(FederationState Function() create) {
     return ProviderOverride(
       origin: this,
-      override: UserInfoNotifierProvider._internal(
+      override: FederationStateProvider._internal(
         () => create()
           ..account = account
-          ..userId = userId,
+          ..host = host,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         account: account,
-        userId: userId,
+        host: host,
       ),
     );
   }
@@ -181,67 +181,68 @@ class UserInfoNotifierProvider
   ) get argument {
     return (
       account,
-      userId,
+      host,
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
+  AutoDisposeAsyncNotifierProviderElement<FederationState, FederationData>
       createElement() {
-    return _UserInfoNotifierProviderElement(this);
+    return _FederationStateProviderElement(this);
   }
 
-  UserInfoNotifierProvider _copyWith(
-    UserInfoNotifier Function() create,
+  FederationStateProvider _copyWith(
+    FederationState Function() create,
   ) {
-    return UserInfoNotifierProvider._internal(
+    return FederationStateProvider._internal(
       () => create()
         ..account = account
-        ..userId = userId,
+        ..host = host,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
       account: account,
-      userId: userId,
+      host: host,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UserInfoNotifierProvider &&
+    return other is FederationStateProvider &&
         other.account == account &&
-        other.userId == userId;
+        other.host == host;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, account.hashCode);
-    hash = _SystemHash.combine(hash, userId.hashCode);
+    hash = _SystemHash.combine(hash, host.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin UserInfoNotifierRef on AutoDisposeAsyncNotifierProviderRef<UserInfo> {
+mixin FederationStateRef
+    on AutoDisposeAsyncNotifierProviderRef<FederationData> {
   /// The parameter `account` of this provider.
   Account get account;
 
-  /// The parameter `userId` of this provider.
-  String get userId;
+  /// The parameter `host` of this provider.
+  String get host;
 }
 
-class _UserInfoNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
-    with UserInfoNotifierRef {
-  _UserInfoNotifierProviderElement(super.provider);
+class _FederationStateProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<FederationState,
+        FederationData> with FederationStateRef {
+  _FederationStateProviderElement(super.provider);
 
   @override
-  Account get account => (origin as UserInfoNotifierProvider).account;
+  Account get account => (origin as FederationStateProvider).account;
   @override
-  String get userId => (origin as UserInfoNotifierProvider).userId;
+  String get host => (origin as FederationStateProvider).host;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

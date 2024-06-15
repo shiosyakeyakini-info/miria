@@ -1,36 +1,41 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_select_dialog.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class OpenLocalOnlyNoteFromRemoteException implements Exception {}
+part "misskey_note_notifier.g.dart";
 
-class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
+@riverpod
+class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
   @override
-  void build(Account arg) {
+  void build(Account account) {
     return;
   }
 
-  Account get _account => arg;
-
   /// 指定したアカウントから見たNoteを返す
-  Future<Note> lookupNote({
+  Future<Note?> lookupNote({
     required Account account,
     required Note note,
   }) async {
-    if (account.host == _account.host) {
+    if (account.host == this.account.host) {
       return note;
     }
 
     if (note.localOnly) {
-      throw OpenLocalOnlyNoteFromRemoteException();
+      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+            message: (context) =>
+                S.of(context).cannotOpenLocalOnlyNoteFromRemote,
+          );
+      return null;
     }
 
-    final host = note.user.host ?? _account.host;
+    final host = note.user.host ?? this.account.host;
 
     try {
       // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
@@ -52,52 +57,45 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
           .firstWhere((e) => e.uri?.pathSegments.lastOrNull == note.id);
     } catch (e) {
       // 最終手段として、連合で照会する
-      final response = await ref.read(misskeyProvider(account)).ap.show(
-            ApShowRequest(
-              uri: note.uri ??
-                  Uri(
-                    scheme: "https",
-                    host: host,
-                    pathSegments: ["notes", note.id],
-                  ),
-            ),
-          );
-      return Note.fromJson(response.object);
+      final response =
+          await ref.read(dialogStateNotifierProvider.notifier).guard(
+                () async => await ref.read(misskeyProvider(account)).ap.show(
+                      ApShowRequest(
+                        uri: note.uri ??
+                            Uri(
+                              scheme: "https",
+                              host: host,
+                              pathSegments: ["notes", note.id],
+                            ),
+                      ),
+                    ),
+              );
+      final result = response.valueOrNull?.object;
+      if (result == null) return null;
+      return Note.fromJson(result);
     }
   }
 
   /// 指定したアカウントから見たUserを返す
-  Future<User> lookupUser({
+  Future<User?> lookupUser({
     required Account account,
     required User user,
   }) async {
-    if (account.host == _account.host) {
+    if (account.host == this.account.host) {
       return user;
     }
 
-    final host = user.host ?? _account.host;
+    final host = user.host ?? this.account.host;
 
-    try {
-      return ref.read(misskeyProvider(account)).users.showByName(
-            UsersShowByUserNameRequest(
-              userName: user.username,
-              host: host,
-            ),
-          );
-    } catch (e) {
-      // 最終手段として、連合で照会する
-      // `users/show` で自動的に照会されるから必要ない
-      final response = await ref.read(misskeyProvider(account)).ap.show(
-            ApShowRequest(
-              uri: Uri(
-                scheme: "https",
-                host: user.host,
-                pathSegments: ["@$host"],
+    final response = await ref.read(dialogStateNotifierProvider.notifier).guard(
+          () async => ref.read(misskeyProvider(account)).users.showByName(
+                UsersShowByUserNameRequest(
+                  userName: user.username,
+                  host: host,
+                ),
               ),
-            ),
-          );
-      return UserDetailed.fromJson(response.object);
-    }
+        );
+    return response.valueOrNull;
   }
 
   Future<void> navigateToNoteDetailPage(
@@ -105,18 +103,12 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
     Note note,
     Account? loginAs,
   ) async {
-    final foundNote = loginAs == null
-        ? note
-        : await lookupNote(
-            note: note,
-            account: loginAs,
-          );
+    final foundNote =
+        loginAs == null ? note : await lookupNote(note: note, account: loginAs);
     if (!context.mounted) return;
+    if (foundNote == null) return;
     await context.pushRoute(
-      NoteDetailRoute(
-        note: foundNote,
-        account: loginAs ?? _account,
-      ),
+      NoteDetailRoute(note: foundNote, account: loginAs ?? account),
     );
   }
 
@@ -125,27 +117,20 @@ class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
     User user,
     Account? loginAs,
   ) async {
-    final foundUser = loginAs == null
-        ? user
-        : await lookupUser(
-            account: loginAs,
-            user: user,
-          );
+    final foundUser =
+        loginAs == null ? user : await lookupUser(account: loginAs, user: user);
+    if (foundUser == null) return;
     if (!context.mounted) return;
     await context.pushRoute(
-      UserRoute(
-        userId: foundUser.id,
-        account: loginAs ?? _account,
-      ),
+      UserRoute(userId: foundUser.id, account: loginAs ?? account),
     );
   }
 
   Future<void> openNoteInOtherAccount(BuildContext context, Note note) async {
     final selectedAccount = await showDialog<Account?>(
       context: context,
-      builder: (context) => AccountSelectDialog(
-        host: note.localOnly ? _account.host : null,
-      ),
+      builder: (context) =>
+          AccountSelectDialog(host: note.localOnly ? account.host : null),
     );
     if (selectedAccount == null) return;
     if (!context.mounted) return;

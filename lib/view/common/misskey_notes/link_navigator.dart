@@ -24,7 +24,7 @@ class LinkNavigator {
     var account = AccountScope.of(context);
 
     // 他サーバーや外部サイトは別アプリで起動する
-    if (uri.host != AccountScope.of(context).host) {
+    if (uri.host != account.host) {
       try {
         await ref.read(dioProvider).getUri(
               Uri(
@@ -57,8 +57,12 @@ class LinkNavigator {
     }
 
     if (!context.mounted) return;
-
-    if (uri.pathSegments.length == 2 && uri.pathSegments.first == "clips") {
+    if (uri.pathSegments.isEmpty) {
+      await context.pushRoute(
+        FederationRoute(account: account, host: uri.host),
+      );
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "clips") {
       // クリップはクリップの画面で開く
       await context.pushRoute(
         ClipDetailRoute(account: account, id: uri.pathSegments[1]),
@@ -76,6 +80,12 @@ class LinkNavigator {
           .show(NotesShowRequest(noteId: uri.pathSegments[1]));
       if (!context.mounted) return;
       await context.pushRoute(NoteDetailRoute(account: account, note: note));
+    } else if (uri.pathSegments.length == 2 &&
+        uri.pathSegments.first == "announcements") {
+      //TODO: とりあえずはこれでゆるして
+      await context.pushRoute(
+        FederationRoute(account: account, host: uri.host),
+      );
     } else if (uri.pathSegments.length == 3 && uri.pathSegments[1] == "pages") {
       final page = await ref.read(misskeyProvider(account)).pages.show(
             PagesShowRequest(

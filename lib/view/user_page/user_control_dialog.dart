@@ -8,9 +8,9 @@ import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/user_page/antenna_modal_sheet.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:miria/view/user_page/users_list_modal_sheet.dart";
@@ -80,15 +80,36 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
     final provider =
         userInfoNotifierProvider(widget.account, widget.response.id);
 
+    final isLoading = ref.watch(
+      provider.select(
+        (value) =>
+            value.valueOrNull?.mute is AsyncLoading ||
+            value.valueOrNull?.renoteMute is AsyncLoading ||
+            value.valueOrNull?.block is AsyncLoading,
+      ),
+    );
     ref
-      ..listen(
-        provider.select((value) => value.valueOrNull?.mute),
-        (_, next) async => Navigator.of(context).pop(),
-      )
+      ..listen(provider.select((value) => value.valueOrNull?.mute),
+          (_, next) async {
+        if (next is! AsyncData) return;
+        Navigator.of(context).pop();
+      })
+      ..listen(provider.select((value) => value.valueOrNull?.renoteMute),
+          (_, next) {
+        if (next is! AsyncData) return;
+        Navigator.of(context).pop();
+      })
       ..listen(
         provider.select((value) => value.valueOrNull?.block),
-        (_, next) async => Navigator.of(context).pop(),
+        (_, next) async {
+          if (next is! AsyncData) return;
+          Navigator.of(context).pop();
+        },
       );
+
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator.adaptive());
+    }
 
     final user = widget.response;
     return ListView(
@@ -183,8 +204,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           title: Text(S.of(context).openInAnotherAccount),
           onTap: () async => ref
               .read(misskeyNoteNotifierProvider(widget.account).notifier)
-              .openUserInOtherAccount(context, user)
-              .expectFailure(context),
+              .openUserInOtherAccount(context, user),
         ),
         ListTile(
           leading: const Icon(Icons.search),
@@ -237,13 +257,13 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).deleteBlock),
-              onTap: ref.read(provider.notifier).deleteBlock,
+              onTap: ref.read(provider.notifier).deleteBlocking,
             )
           else
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).createBlock),
-              onTap: ref.read(provider.notifier).createBlock,
+              onTap: ref.read(provider.notifier).createBlocking,
             ),
           ListTile(
             leading: const Icon(Icons.report),

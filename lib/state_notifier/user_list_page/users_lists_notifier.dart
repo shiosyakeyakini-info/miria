@@ -1,5 +1,6 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/users_list_settings.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class UsersListsNotifier
@@ -40,23 +41,23 @@ class UsersListsNotifier
     String listId,
     User user,
   ) async {
-    await _misskey.users.list.push(
-      UsersListsPushRequest(
-        listId: listId,
-        userId: user.id,
-      ),
-    );
-    state = AsyncValue.data(
-      state.valueOrNull
-              ?.map(
-                (list) => (list.id == listId)
-                    ? list.copyWith(
-                        userIds: [...list.userIds, user.id],
-                      )
-                    : list,
-              )
-              .toList() ??
-          [],
+    await ref.read(dialogStateNotifierProvider.notifier).guard(
+      () async {
+        await _misskey.users.list.push(
+          UsersListsPushRequest(
+            listId: listId,
+            userId: user.id,
+          ),
+        );
+        state = AsyncValue.data(
+          [
+            for (final list in state.valueOrNull ?? <UsersList>[])
+              list.id == listId
+                  ? list.copyWith(userIds: [...list.userIds, user.id])
+                  : list,
+          ],
+        );
+      },
     );
   }
 

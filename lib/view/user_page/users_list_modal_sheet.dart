@@ -40,13 +40,11 @@ class UsersListModalSheet extends ConsumerWidget {
                   if (value) {
                     await ref
                         .read(usersListsNotifierProvider(misskey).notifier)
-                        .push(list.id, user)
-                        .expectFailure(context);
+                        .push(list.id, user);
                   } else {
                     await ref
                         .read(usersListsNotifierProvider(misskey).notifier)
-                        .pull(list.id, user)
-                        .expectFailure(context);
+                        .pull(list.id, user);
                   }
                 },
                 title: Text(list.name ?? ""),
@@ -66,8 +64,7 @@ class UsersListModalSheet extends ConsumerWidget {
                   if (settings != null) {
                     await ref
                         .read(usersListsNotifierProvider(misskey).notifier)
-                        .create(settings)
-                        .expectFailure(context);
+                        .create(settings);
                   }
                 },
               );

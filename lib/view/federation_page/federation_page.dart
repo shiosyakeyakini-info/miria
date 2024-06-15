@@ -2,11 +2,10 @@ import "package:auto_route/annotations.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/federation_data.dart";
-import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/federation_page/federation_ads.dart";
 import "package:miria/view/federation_page/federation_announcements.dart";
 import "package:miria/view/federation_page/federation_custom_emojis.dart";
@@ -14,10 +13,9 @@ import "package:miria/view/federation_page/federation_info.dart";
 import "package:miria/view/federation_page/federation_timeline.dart";
 import "package:miria/view/federation_page/federation_users.dart";
 import "package:miria/view/search_page/note_search.dart";
-import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class FederationPage extends ConsumerStatefulWidget {
+class FederationPage extends ConsumerWidget {
   final Account account;
   final String host;
 
@@ -28,213 +26,83 @@ class FederationPage extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => FederationPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final federate = ref.watch(federationStateProvider(account, host));
 
-final federationPageFederationDataProvider =
-    StateProvider.autoDispose<FederationData?>((ref) => null);
+    return switch (federate) {
+      AsyncLoading() => Scaffold(
+          appBar: AppBar(title: Text(host)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        ),
+      AsyncError(:final error, :final stackTrace) => Scaffold(
+          appBar: AppBar(title: Text(host)),
+          body: ErrorDetail(error: error, stackTrace: stackTrace),
+        ),
+      AsyncData(:final value) => Builder(
+          builder: (context) {
+            final adsAvailable = value.ads.isNotEmpty;
+            final isMisskey = value.isSupportedEmoji;
+            final isAnotherHost = account.host != host;
+            final isSupportedTimeline =
+                isMisskey && value.isSupportedLocalTimeline;
+            final enableLocalTimeline = isSupportedTimeline &&
+                value.meta?.policies?.ltlAvailable == true;
+            final enableSearch = isSupportedTimeline &&
+                value.meta?.policies?.canSearchNotes == true;
 
-class FederationPageState extends ConsumerState<FederationPage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future(() async {
-      try {
-        final account = widget.account;
-        if (widget.host == account.host) {
-          // 自分のサーバーの場合
-          final metaResponse = await ref.read(misskeyProvider(account)).meta();
-          final statsResponse =
-              await ref.read(misskeyProvider(account)).stats();
-          ref.read(federationPageFederationDataProvider.notifier).state =
-              FederationData(
-            bannerUrl: metaResponse.bannerUrl?.toString(),
-            faviconUrl: metaResponse.iconUrl?.toString(),
-            tosUrl: metaResponse.tosUrl?.toString(),
-            privacyPolicyUrl: metaResponse.privacyPolicyUrl?.toString(),
-            impressumUrl: metaResponse.impressumUrl?.toString(),
-            repositoryUrl: metaResponse.repositoryUrl.toString(),
-            name: metaResponse.name ?? "",
-            description: metaResponse.description ?? "",
-            usersCount: statsResponse.originalUsersCount,
-            notesCount: statsResponse.originalNotesCount,
-            maintainerName: metaResponse.maintainerName,
-            maintainerEmail: metaResponse.maintainerEmail,
-            serverRules: metaResponse.serverRules,
-            reactionCount: statsResponse.reactionsCount,
-            softwareName: "misskey",
-            softwareVersion: metaResponse.version,
-            languages: metaResponse.langs,
-            ads: metaResponse.ads,
-            meta: metaResponse,
-
-            // 自分のサーバーが非対応ということはない
-            isSupportedAnnouncement: true,
-            isSupportedEmoji: true,
-            isSupportedLocalTimeline: true,
-          );
-
-          await ref
-              .read(
-                emojiRepositoryProvider(
-                  Account.demoAccount(widget.host, metaResponse),
-                ),
-              )
-              .loadFromSourceIfNeed();
-        } else {
-          final federation = await ref
-              .read(misskeyProvider(widget.account))
-              .federation
-              .showInstance(FederationShowInstanceRequest(host: widget.host));
-          MetaResponse? misskeyMeta;
-
-          var isSupportedEmoji = false;
-          var isSupportedAnnouncement = false;
-          var isSupportedLocalTimeline = false;
-
-          if (federation.softwareName == "fedibird" ||
-              federation.softwareName == "mastodon") {
-            // already known unsupported software.
-          } else {
-            try {
-              // Misskeyサーバーかもしれなかったら追加の情報を取得
-
-              final misskeyServer =
-                  ref.read(misskeyWithoutAccountProvider(widget.host));
-              final endpoints = await misskeyServer.endpoints();
-
-              if (endpoints.contains("announcement")) {
-                isSupportedAnnouncement = true;
-              }
-
-              // 絵文字が取得できなければローカルタイムラインを含め非対応
-              if (endpoints.contains("emojis")) {
-                isSupportedEmoji = true;
-
-                if (endpoints.contains("notes/local-timeline")) {
-                  isSupportedLocalTimeline = true;
-                }
-              }
-
-              misskeyMeta = await misskeyServer.meta();
-              await ref
-                  .read(
-                    emojiRepositoryProvider(
-                      Account.demoAccount(widget.host, misskeyMeta),
+            return AccountScope(
+              account: account,
+              child: DefaultTabController(
+                length: 1 +
+                    (isAnotherHost ? 1 : 0) +
+                    (adsAvailable ? 1 : 0) +
+                    (isMisskey ? 1 : 0) +
+                    (isSupportedTimeline ? 1 : 0) +
+                    (enableLocalTimeline ? 1 : 0) +
+                    (enableSearch ? 1 : 0),
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(host),
+                    bottom: TabBar(
+                      isScrollable: true,
+                      tabs: [
+                        Tab(text: S.of(context).serverInformation),
+                        if (isAnotherHost) Tab(text: S.of(context).user),
+                        if (adsAvailable) Tab(text: S.of(context).ad),
+                        if (isMisskey) Tab(text: S.of(context).announcement),
+                        if (isSupportedTimeline)
+                          Tab(text: S.of(context).customEmoji),
+                        if (isSupportedTimeline)
+                          Tab(text: S.of(context).localTimelineAbbr),
+                        if (enableSearch) Tab(text: S.of(context).search),
+                      ],
+                      tabAlignment: TabAlignment.center,
                     ),
-                  )
-                  .loadFromSourceIfNeed();
-            } catch (e) {
-              logger.warning(e);
-            }
-          }
-
-          ref.read(federationPageFederationDataProvider.notifier).state =
-              FederationData(
-            bannerUrl: (misskeyMeta?.bannerUrl)?.toString(),
-            faviconUrl: federation.faviconUrl?.toString(),
-            tosUrl: (misskeyMeta?.tosUrl)?.toString(),
-            privacyPolicyUrl: (misskeyMeta?.privacyPolicyUrl)?.toString(),
-            impressumUrl: (misskeyMeta?.impressumUrl)?.toString(),
-            repositoryUrl: (misskeyMeta?.repositoryUrl)?.toString(),
-            name: misskeyMeta?.name ?? federation.name,
-            description: misskeyMeta?.description ?? federation.description,
-            maintainerName: misskeyMeta?.maintainerName,
-            maintainerEmail: misskeyMeta?.maintainerEmail,
-            usersCount: federation.usersCount,
-            notesCount: federation.notesCount,
-            softwareName: federation.softwareName ?? "",
-            softwareVersion:
-                misskeyMeta?.version ?? federation.softwareVersion ?? "",
-            languages: misskeyMeta?.langs ?? [],
-            ads: misskeyMeta?.ads ?? [],
-            serverRules: misskeyMeta?.serverRules ?? [],
-            isSupportedEmoji: isSupportedEmoji,
-            isSupportedLocalTimeline: isSupportedLocalTimeline,
-            isSupportedAnnouncement: isSupportedAnnouncement,
-            meta: misskeyMeta,
-          );
-        }
-
-        if (!mounted) return;
-        setState(() {});
-      } catch (e, s) {
-        logger
-          ..warning(e)
-          ..warning(s);
-        if (!mounted) return;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final metaResponse = ref.watch(federationPageFederationDataProvider);
-    final adsAvailable = metaResponse?.ads.isNotEmpty == true;
-    final isMisskey = metaResponse?.isSupportedEmoji == true;
-    final isAnotherHost = widget.account.host != widget.host;
-    final isSupportedTimeline =
-        isMisskey && metaResponse?.isSupportedLocalTimeline == true;
-    final enableLocalTimeline = isSupportedTimeline &&
-        metaResponse?.meta?.policies?.ltlAvailable == true;
-    final enableSearch = isSupportedTimeline &&
-        metaResponse?.meta?.policies?.canSearchNotes == true;
-
-    return AccountScope(
-      account: widget.account,
-      child: DefaultTabController(
-        length: 1 +
-            (isAnotherHost ? 1 : 0) +
-            (adsAvailable ? 1 : 0) +
-            (isMisskey ? 1 : 0) +
-            (isSupportedTimeline ? 1 : 0) +
-            (enableLocalTimeline ? 1 : 0) +
-            (enableSearch ? 1 : 0),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(widget.host),
-            bottom: TabBar(
-              isScrollable: true,
-              tabs: [
-                Tab(text: S.of(context).serverInformation),
-                if (isAnotherHost) Tab(text: S.of(context).user),
-                if (adsAvailable) Tab(text: S.of(context).ad),
-                if (isMisskey) Tab(text: S.of(context).announcement),
-                if (isSupportedTimeline) Tab(text: S.of(context).customEmoji),
-                if (isSupportedTimeline)
-                  Tab(text: S.of(context).localTimelineAbbr),
-                if (enableSearch) Tab(text: S.of(context).search),
-              ],
-              tabAlignment: TabAlignment.center,
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              FederationInfo(host: widget.host),
-              if (isAnotherHost) FederationUsers(host: widget.host),
-              if (adsAvailable) const FederationAds(),
-              if (isMisskey) FederationAnnouncements(host: widget.host),
-              if (isSupportedTimeline)
-                FederationCustomEmojis(
-                  host: widget.host,
-                  meta: metaResponse!.meta!,
-                ),
-              if (isSupportedTimeline)
-                FederationTimeline(
-                  host: widget.host,
-                  meta: metaResponse!.meta!,
-                ),
-              if (enableSearch)
-                AccountScope(
-                  account: Account.demoAccount(widget.host, metaResponse!.meta),
-                  child: NoteSearch(
-                    focusNode: FocusNode(),
+                  ),
+                  body: TabBarView(
+                    children: [
+                      FederationInfo(data: value),
+                      if (isAnotherHost) FederationUsers(host: host),
+                      if (adsAvailable) FederationAds(ads: [...value.ads]),
+                      if (isMisskey) FederationAnnouncements(host: host),
+                      if (isSupportedTimeline)
+                        FederationCustomEmojis(host: host, meta: value.meta!),
+                      if (isSupportedTimeline)
+                        FederationTimeline(host: host, meta: value.meta!),
+                      if (enableSearch)
+                        AccountScope(
+                          account: Account.demoAccount(host, value.meta),
+                          child: NoteSearch(
+                            focusNode: FocusNode(),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-            ],
-          ),
+              ),
+            );
+          },
         ),
-      ),
-    );
+    };
   }
 }

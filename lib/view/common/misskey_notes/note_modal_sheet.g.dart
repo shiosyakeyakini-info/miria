@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_info_notifier.dart';
+part of 'note_modal_sheet.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userInfoNotifierHash() => r'bf4a16d5d5a3dc3acba0a6239fc52fe345f74e3b';
+String _$noteModalSheetNotifierHash() =>
+    r'5110cf14e83d3f55b12e7a2236e3855570699c81';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,25 +30,25 @@ class _SystemHash {
   }
 }
 
-abstract class _$UserInfoNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {
+abstract class _$NoteModalSheetNotifier
+    extends BuildlessAutoDisposeNotifier<NoteModalSheetState> {
   late final Account account;
-  late final String userId;
+  late final Note note;
 
-  FutureOr<UserInfo> build(
+  NoteModalSheetState build(
     Account account,
-    String userId,
+    Note note,
   );
 }
 
-/// See also [UserInfoNotifier].
-@ProviderFor(UserInfoNotifier)
-const userInfoNotifierProvider = UserInfoNotifierFamily();
+/// See also [NoteModalSheetNotifier].
+@ProviderFor(NoteModalSheetNotifier)
+const noteModalSheetNotifierProvider = NoteModalSheetNotifierFamily();
 
-/// See also [UserInfoNotifier].
-class UserInfoNotifierFamily extends Family {
-  /// See also [UserInfoNotifier].
-  const UserInfoNotifierFamily();
+/// See also [NoteModalSheetNotifier].
+class NoteModalSheetNotifierFamily extends Family {
+  /// See also [NoteModalSheetNotifier].
+  const NoteModalSheetNotifierFamily();
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
 
@@ -61,77 +62,77 @@ class UserInfoNotifierFamily extends Family {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'userInfoNotifierProvider';
+  String? get name => r'noteModalSheetNotifierProvider';
 
-  /// See also [UserInfoNotifier].
-  UserInfoNotifierProvider call(
+  /// See also [NoteModalSheetNotifier].
+  NoteModalSheetNotifierProvider call(
     Account account,
-    String userId,
+    Note note,
   ) {
-    return UserInfoNotifierProvider(
+    return NoteModalSheetNotifierProvider(
       account,
-      userId,
+      note,
     );
   }
 
   @visibleForOverriding
   @override
-  UserInfoNotifierProvider getProviderOverride(
-    covariant UserInfoNotifierProvider provider,
+  NoteModalSheetNotifierProvider getProviderOverride(
+    covariant NoteModalSheetNotifierProvider provider,
   ) {
     return call(
       provider.account,
-      provider.userId,
+      provider.note,
     );
   }
 
   /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(UserInfoNotifier Function() create) {
-    return _$UserInfoNotifierFamilyOverride(this, create);
+  Override overrideWith(NoteModalSheetNotifier Function() create) {
+    return _$NoteModalSheetNotifierFamilyOverride(this, create);
   }
 }
 
-class _$UserInfoNotifierFamilyOverride implements FamilyOverride {
-  _$UserInfoNotifierFamilyOverride(this.overriddenFamily, this.create);
+class _$NoteModalSheetNotifierFamilyOverride implements FamilyOverride {
+  _$NoteModalSheetNotifierFamilyOverride(this.overriddenFamily, this.create);
 
-  final UserInfoNotifier Function() create;
-
-  @override
-  final UserInfoNotifierFamily overriddenFamily;
+  final NoteModalSheetNotifier Function() create;
 
   @override
-  UserInfoNotifierProvider getProviderOverride(
-    covariant UserInfoNotifierProvider provider,
+  final NoteModalSheetNotifierFamily overriddenFamily;
+
+  @override
+  NoteModalSheetNotifierProvider getProviderOverride(
+    covariant NoteModalSheetNotifierProvider provider,
   ) {
     return provider._copyWith(create);
   }
 }
 
-/// See also [UserInfoNotifier].
-class UserInfoNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
-  /// See also [UserInfoNotifier].
-  UserInfoNotifierProvider(
+/// See also [NoteModalSheetNotifier].
+class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
+    NoteModalSheetNotifier, NoteModalSheetState> {
+  /// See also [NoteModalSheetNotifier].
+  NoteModalSheetNotifierProvider(
     Account account,
-    String userId,
+    Note note,
   ) : this._internal(
-          () => UserInfoNotifier()
+          () => NoteModalSheetNotifier()
             ..account = account
-            ..userId = userId,
-          from: userInfoNotifierProvider,
-          name: r'userInfoNotifierProvider',
+            ..note = note,
+          from: noteModalSheetNotifierProvider,
+          name: r'noteModalSheetNotifierProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$userInfoNotifierHash,
-          dependencies: UserInfoNotifierFamily._dependencies,
+                  : _$noteModalSheetNotifierHash,
+          dependencies: NoteModalSheetNotifierFamily._dependencies,
           allTransitiveDependencies:
-              UserInfoNotifierFamily._allTransitiveDependencies,
+              NoteModalSheetNotifierFamily._allTransitiveDependencies,
           account: account,
-          userId: userId,
+          note: note,
         );
 
-  UserInfoNotifierProvider._internal(
+  NoteModalSheetNotifierProvider._internal(
     super.create, {
     required super.name,
     required super.dependencies,
@@ -139,37 +140,37 @@ class UserInfoNotifierProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.account,
-    required this.userId,
+    required this.note,
   }) : super.internal();
 
   final Account account;
-  final String userId;
+  final Note note;
 
   @override
-  FutureOr<UserInfo> runNotifierBuild(
-    covariant UserInfoNotifier notifier,
+  NoteModalSheetState runNotifierBuild(
+    covariant NoteModalSheetNotifier notifier,
   ) {
     return notifier.build(
       account,
-      userId,
+      note,
     );
   }
 
   @override
-  Override overrideWith(UserInfoNotifier Function() create) {
+  Override overrideWith(NoteModalSheetNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: UserInfoNotifierProvider._internal(
+      override: NoteModalSheetNotifierProvider._internal(
         () => create()
           ..account = account
-          ..userId = userId,
+          ..note = note,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         account: account,
-        userId: userId,
+        note: note,
       ),
     );
   }
@@ -177,71 +178,72 @@ class UserInfoNotifierProvider
   @override
   (
     Account,
-    String,
+    Note,
   ) get argument {
     return (
       account,
-      userId,
+      note,
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
-      createElement() {
-    return _UserInfoNotifierProviderElement(this);
+  AutoDisposeNotifierProviderElement<NoteModalSheetNotifier,
+      NoteModalSheetState> createElement() {
+    return _NoteModalSheetNotifierProviderElement(this);
   }
 
-  UserInfoNotifierProvider _copyWith(
-    UserInfoNotifier Function() create,
+  NoteModalSheetNotifierProvider _copyWith(
+    NoteModalSheetNotifier Function() create,
   ) {
-    return UserInfoNotifierProvider._internal(
+    return NoteModalSheetNotifierProvider._internal(
       () => create()
         ..account = account
-        ..userId = userId,
+        ..note = note,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
       account: account,
-      userId: userId,
+      note: note,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UserInfoNotifierProvider &&
+    return other is NoteModalSheetNotifierProvider &&
         other.account == account &&
-        other.userId == userId;
+        other.note == note;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, account.hashCode);
-    hash = _SystemHash.combine(hash, userId.hashCode);
+    hash = _SystemHash.combine(hash, note.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin UserInfoNotifierRef on AutoDisposeAsyncNotifierProviderRef<UserInfo> {
+mixin NoteModalSheetNotifierRef
+    on AutoDisposeNotifierProviderRef<NoteModalSheetState> {
   /// The parameter `account` of this provider.
   Account get account;
 
-  /// The parameter `userId` of this provider.
-  String get userId;
+  /// The parameter `note` of this provider.
+  Note get note;
 }
 
-class _UserInfoNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
-    with UserInfoNotifierRef {
-  _UserInfoNotifierProviderElement(super.provider);
+class _NoteModalSheetNotifierProviderElement
+    extends AutoDisposeNotifierProviderElement<NoteModalSheetNotifier,
+        NoteModalSheetState> with NoteModalSheetNotifierRef {
+  _NoteModalSheetNotifierProviderElement(super.provider);
 
   @override
-  Account get account => (origin as UserInfoNotifierProvider).account;
+  Account get account => (origin as NoteModalSheetNotifierProvider).account;
   @override
-  String get userId => (origin as UserInfoNotifierProvider).userId;
+  Note get note => (origin as NoteModalSheetNotifierProvider).note;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

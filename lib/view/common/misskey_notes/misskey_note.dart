@@ -17,6 +17,7 @@ import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/constants.dart";
@@ -241,10 +242,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
             ),
             decoration: widget.isDisplayBorder
                 ? BoxDecoration(
-                    color: widget.recursive == 1 &&
-                            ref.read(noteModalSheetSharingModeProviding)
-                        ? Theme.of(context).scaffoldBackgroundColor
-                        : null,
+                    //TODO: 動いていないっぽい
+                    // color: widget.recursive == 1 &&
+                    //         ref.read(noteModalSheetSharingModeProviding)
+                    //     ? Theme.of(context).scaffoldBackgroundColor
+                    //     : null,
                     border: Border(
                       left: displayNote.channel?.color != null
                           ? BorderSide(
@@ -294,8 +296,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             context,
                             displayNote.user,
                             widget.loginAs,
-                          )
-                          .expectFailure(context),
+                          ),
                     ),
                     const Padding(padding: EdgeInsets.only(left: 10)),
                     Expanded(
