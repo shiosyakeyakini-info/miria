@@ -19,7 +19,11 @@ import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart" as misskey;
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:url_launcher/url_launcher.dart";
+
+part "misskey_page_page.g.dart";
 
 @RoutePage()
 class MisskeyPagePage extends ConsumerWidget {
@@ -120,6 +124,16 @@ class MisskeyPagePage extends ConsumerWidget {
   }
 }
 
+@riverpod
+Future<Note> fetchNote(FetchNoteRef ref, Account account, String noteId) async {
+  final note = await ref
+      .read(misskeyProvider(account))
+      .notes
+      .show(misskey.NotesShowRequest(noteId: /*content.note*/ noteId));
+  ref.read(notesProvider(account)).registerNote(note);
+  return note;
+}
+
 class PageContent extends ConsumerWidget {
   final misskey.AbstractPageContent content;
   final misskey.Page page;
@@ -174,33 +188,18 @@ class PageContent extends ConsumerWidget {
       }
     }
     if (content is misskey.PageNote) {
-      return FutureBuilder(
-        future: (() async {
-          final account = AccountScope.of(context);
-          final note = await ref
-              .read(misskeyProvider(account))
-              .notes
-              .show(misskey.NotesShowRequest(noteId: content.note));
-          ref.read(notesProvider(account)).registerNote(note);
-          return note;
-        })(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data != null) {
-            return MisskeyNote(note: snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Text(S.of(context).thrownError);
-          } else {
-            return const Center(
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-        },
-      );
+      final note =
+          ref.watch(fetchNoteProvider(AccountScope.of(context), content.note));
+      return switch (note) {
+        AsyncLoading() => const Center(
+            child: SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        AsyncError() => Text(S.of(context).thrownError),
+        AsyncData(:final value) => MisskeyNote(note: value)
+      };
     }
     if (content is misskey.PageSection) {
       return Padding(

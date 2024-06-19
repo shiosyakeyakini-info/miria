@@ -11,18 +11,12 @@ import "package:url_launcher/url_launcher_string.dart";
 part "misskey_games_page.g.dart";
 
 @RoutePage()
-class MisskeyGamesPage extends ConsumerStatefulWidget {
+class MisskeyGamesPage extends ConsumerWidget {
   final Account account;
 
   const MisskeyGamesPage({required this.account, super.key});
-
   @override
-  ConsumerState<MisskeyGamesPage> createState() => MisskeyGamesPageState();
-}
-
-class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).misskeyGames),
@@ -32,22 +26,22 @@ class MisskeyGamesPageState extends ConsumerState<MisskeyGamesPage> {
           ListTile(
             title: Text(S.of(context).cookieCliker),
             onTap: () async => launchUrlString(
-              "https://${widget.account.host}/clicker",
+              "https://${account.host}/clicker",
               mode: LaunchMode.externalApplication,
             ),
           ),
           ListTile(
             title: Text(S.of(context).bubbleGame),
             onTap: () async => launchUrlString(
-              "https://${widget.account.host}/bubble-game",
+              "https://${account.host}/bubble-game",
               mode: LaunchMode.externalApplication,
             ),
           ),
           ListTile(
             title: Text(S.of(context).reversi),
-            subtitle: ReversiInvite(account: widget.account),
+            subtitle: ReversiInvite(account: account),
             onTap: () async => launchUrlString(
-              "https://${widget.account.host}/reversi",
+              "https://${account.host}/reversi",
               mode: LaunchMode.externalApplication,
             ),
           ),

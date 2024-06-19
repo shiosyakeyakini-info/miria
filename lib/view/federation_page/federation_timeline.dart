@@ -7,7 +7,7 @@ import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class FederationTimeline extends ConsumerStatefulWidget {
+class FederationTimeline extends ConsumerWidget {
   final String host;
   final MetaResponse meta;
 
@@ -18,14 +18,8 @@ class FederationTimeline extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      FederationTimelineState();
-}
-
-class FederationTimelineState extends ConsumerState<FederationTimeline> {
-  @override
-  Widget build(BuildContext context) {
-    final demoAccount = Account.demoAccount(widget.host, widget.meta);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final demoAccount = Account.demoAccount(host, meta);
 
     return AccountScope(
       account: demoAccount,
