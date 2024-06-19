@@ -56,8 +56,7 @@ class AntennaNotesPage extends ConsumerWidget {
                 if (settings != null) {
                   await ref
                       .read(antennasNotifierProvider(misskey).notifier)
-                      .updateAntenna(antenna.id, settings)
-                      .expectFailure(context);
+                      .updateAntenna(antenna.id, settings);
                 }
               },
             ),

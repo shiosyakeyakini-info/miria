@@ -1,4 +1,5 @@
 import "package:miria/model/antenna_settings.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
@@ -41,21 +42,24 @@ class AntennasNotifier extends _$AntennasNotifier {
     String antennaId,
     AntennaSettings settings,
   ) async {
-    await misskey.antennas.update(
-      AntennasUpdateRequest(
-        antennaId: antennaId,
-        name: settings.name,
-        src: settings.src,
-        keywords: settings.keywords,
-        excludeKeywords: settings.excludeKeywords,
-        users: settings.users,
-        caseSensitive: settings.caseSensitive,
-        withReplies: settings.withReplies,
-        withFile: settings.withFile,
-        notify: settings.notify,
-        localOnly: settings.localOnly,
-      ),
-    );
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await misskey.antennas.update(
+        AntennasUpdateRequest(
+          antennaId: antennaId,
+          name: settings.name,
+          src: settings.src,
+          keywords: settings.keywords,
+          excludeKeywords: settings.excludeKeywords,
+          users: settings.users,
+          caseSensitive: settings.caseSensitive,
+          withReplies: settings.withReplies,
+          withFile: settings.withFile,
+          notify: settings.notify,
+          localOnly: settings.localOnly,
+        ),
+      );
+    });
+
     state = AsyncValue.data([
       for (final antenna in [...?state.valueOrNull])
         antenna.id == antennaId

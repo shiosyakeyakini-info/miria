@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/providers.dart";
@@ -10,7 +11,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class FederationAnnouncements extends ConsumerStatefulWidget {
+class FederationAnnouncements extends HookConsumerWidget {
   final String host;
   const FederationAnnouncements({
     required this.host,
@@ -18,18 +19,12 @@ class FederationAnnouncements extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      FederationAnnouncementsState();
-}
-
-class FederationAnnouncementsState
-    extends ConsumerState<FederationAnnouncements> {
-  var isActive = true;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
-    final isCurrentServer = widget.host == AccountScope.of(context).host;
+    final isCurrentServer = host == AccountScope.of(context).host;
+
+    final isActive = useState(true);
+
     return Column(
       children: [
         Row(
@@ -38,18 +33,16 @@ class FederationAnnouncementsState
               child: Center(
                 child: ToggleButtons(
                   isSelected: [
-                    isActive,
-                    !isActive,
+                    isActive.value,
+                    !isActive.value,
                   ],
                   onPressed: (value) {
-                    setState(() {
-                      switch (value) {
-                        case 0:
-                          isActive = true;
-                        case 1:
-                          isActive = false;
-                      }
-                    });
+                    switch (value) {
+                      case 0:
+                        isActive.value = true;
+                      case 1:
+                        isActive.value = false;
+                    }
                   },
                   children: [
                     Padding(
@@ -72,14 +65,14 @@ class FederationAnnouncementsState
             initializeFuture: () async {
               final Iterable<AnnouncementsResponse> response;
               final request =
-                  AnnouncementsRequest(isActive: isActive, limit: 10);
+                  AnnouncementsRequest(isActive: isActive.value, limit: 10);
               if (isCurrentServer) {
                 response = await ref
                     .read(misskeyProvider(account))
                     .announcements(request);
               } else {
                 response = await ref
-                    .read(misskeyWithoutAccountProvider(widget.host))
+                    .read(misskeyWithoutAccountProvider(host))
                     .announcements(request);
               }
               return response.toList();
@@ -89,7 +82,7 @@ class FederationAnnouncementsState
               // 互換性のためにuntilIdとoffsetを両方いれる
               final request = AnnouncementsRequest(
                 untilId: lastItem.id,
-                isActive: isActive,
+                isActive: isActive.value,
                 limit: 30,
                 offset: offset,
               );
@@ -99,13 +92,13 @@ class FederationAnnouncementsState
                     .announcements(request);
               } else {
                 response = await ref
-                    .read(misskeyWithoutAccountProvider(widget.host))
+                    .read(misskeyWithoutAccountProvider(host))
                     .announcements(request);
               }
               return response.toList();
             },
             itemBuilder: (context, data) =>
-                Announcement(data: data, host: widget.host),
+                Announcement(data: data, host: host),
           ),
         ),
       ],
