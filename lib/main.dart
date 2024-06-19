@@ -6,7 +6,7 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
 import "package:miria/model/desktop_settings.dart";
 import "package:miria/providers.dart";

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/themes/app_theme.dart";

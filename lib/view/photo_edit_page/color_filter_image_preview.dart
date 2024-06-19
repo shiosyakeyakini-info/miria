@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 
 class ColorFilterImagePreview extends ConsumerWidget {
@@ -13,10 +13,12 @@ class ColorFilterImagePreview extends ConsumerWidget {
               .select((value) => value.colorFilterPreviewImages),
         )
         .toList();
-    final previewMode = ref.watch(photoEditStateNotifierProvider
-        .select((value) => value.colorFilterMode),);
-    final adaptive = ref.watch(photoEditStateNotifierProvider
-        .select((value) => value.adaptivePresets),);
+    final previewMode = ref.watch(
+      photoEditStateNotifierProvider.select((value) => value.colorFilterMode),
+    );
+    final adaptive = ref.watch(
+      photoEditStateNotifierProvider.select((value) => value.adaptivePresets),
+    );
     if (!previewMode) {
       return const SizedBox.shrink();
     }

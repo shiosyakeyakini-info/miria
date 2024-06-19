@@ -2,7 +2,7 @@ import "dart:math";
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";

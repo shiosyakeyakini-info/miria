@@ -1,6 +1,6 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/photo_edit_page/edited_photo_image.dart";
@@ -21,19 +21,26 @@ class ClipModeState extends ConsumerState<ClipMode> {
   @override
   Widget build(BuildContext context) {
     final clipMode = ref.watch(
-        photoEditStateNotifierProvider.select((value) => value.clipMode),);
+      photoEditStateNotifierProvider.select((value) => value.clipMode),
+    );
     final defaultSize = ref.watch(
-        photoEditStateNotifierProvider.select((value) => value.defaultSize),);
+      photoEditStateNotifierProvider.select((value) => value.defaultSize),
+    );
     final cropOffset = ref.watch(
-        photoEditStateNotifierProvider.select((value) => value.cropOffset),);
+      photoEditStateNotifierProvider.select((value) => value.cropOffset),
+    );
     final actualSize = ref.watch(
-        photoEditStateNotifierProvider.select((value) => value.actualSize),);
+      photoEditStateNotifierProvider.select((value) => value.actualSize),
+    );
     final cropSize = ref.watch(
-        photoEditStateNotifierProvider.select((value) => value.cropSize),);
+      photoEditStateNotifierProvider.select((value) => value.cropSize),
+    );
     final reactions = ref
         .watch(photoEditStateNotifierProvider.select((value) => value.emojis));
-    final selectedReaction = ref.watch(photoEditStateNotifierProvider
-        .select((value) => value.selectedEmojiIndex),);
+    final selectedReaction = ref.watch(
+      photoEditStateNotifierProvider
+          .select((value) => value.selectedEmojiIndex),
+    );
 
     final ratio = defaultSize.width / actualSize.width;
 

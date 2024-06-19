@@ -3,7 +3,7 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";

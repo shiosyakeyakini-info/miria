@@ -13,7 +13,7 @@ import 'package:dio/dio.dart' as _i12;
 import 'package:file/file.dart' as _i15;
 import 'package:file_picker/file_picker.dart' as _i37;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' as _i16;
-import 'package:flutter_riverpod/flutter_riverpod.dart' as _i5;
+import 'package:hooks_riverpod/hooks_riverpod.dart' as _i5;
 import 'package:miria/model/account.dart' as _i7;
 import 'package:miria/model/account_settings.dart' as _i2;
 import 'package:miria/model/acct.dart' as _i22;

@@ -5,7 +5,7 @@ import "package:collection/collection.dart";
 import "package:file/memory.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:flutter_svg/svg.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:miria/extensions/string_extensions.dart";

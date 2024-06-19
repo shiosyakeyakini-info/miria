@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 
@@ -11,9 +11,11 @@ class PhotoEditBottomBar extends ConsumerWidget {
     final photoEdit = ref.read(photoEditStateNotifierProvider.notifier);
 
     final isClipMode = ref.watch(
-        photoEditStateNotifierProvider.select((value) => value.clipMode),);
-    final isColorFilterMode = ref.watch(photoEditStateNotifierProvider
-        .select((value) => value.colorFilterMode),);
+      photoEditStateNotifierProvider.select((value) => value.clipMode),
+    );
+    final isColorFilterMode = ref.watch(
+      photoEditStateNotifierProvider.select((value) => value.colorFilterMode),
+    );
 
     return BottomAppBar(
       child: Row(

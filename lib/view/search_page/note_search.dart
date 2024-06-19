@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";

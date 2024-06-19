@@ -3,7 +3,7 @@ import "package:file/file.dart";
 import "package:file/local.dart";
 import "package:flutter/widgets.dart";
 import "package:flutter_cache_manager/flutter_cache_manager.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/model/tab_setting.dart";

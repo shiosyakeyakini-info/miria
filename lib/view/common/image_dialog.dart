@@ -5,7 +5,7 @@ import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:image_gallery_saver/image_gallery_saver.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";

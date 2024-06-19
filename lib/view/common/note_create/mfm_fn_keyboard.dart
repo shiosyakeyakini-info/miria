@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/input_completion_type.dart";
 import "package:miria/view/common/color_picker_dialog.dart";

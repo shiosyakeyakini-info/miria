@@ -1,7 +1,7 @@
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:miria/extensions/color_extension.dart";
 import "package:miria/model/color_theme.dart";
