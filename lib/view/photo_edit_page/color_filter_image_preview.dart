@@ -14,9 +14,9 @@ class ColorFilterImagePreview extends ConsumerWidget {
         )
         .toList();
     final previewMode = ref.watch(photoEditStateNotifierProvider
-        .select((value) => value.colorFilterMode));
+        .select((value) => value.colorFilterMode),);
     final adaptive = ref.watch(photoEditStateNotifierProvider
-        .select((value) => value.adaptivePresets));
+        .select((value) => value.adaptivePresets),);
     if (!previewMode) {
       return const SizedBox.shrink();
     }

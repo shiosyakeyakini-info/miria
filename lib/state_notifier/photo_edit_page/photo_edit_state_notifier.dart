@@ -5,7 +5,6 @@ import "dart:ui";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:image_editor/image_editor.dart";
 import "package:miria/model/account.dart";

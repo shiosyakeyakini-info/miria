@@ -28,7 +28,7 @@ class AbuseDialogNotifier extends _$AbuseDialogNotifier {
             UsersReportAbuseRequest(userId: targetUser.id, comment: abuseText),
           );
       await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
-          message: (context) => S.of(context).thanksForReport);
+          message: (context) => S.of(context).thanksForReport,);
     });
   }
 }
@@ -106,7 +106,7 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
                     .abuse(widget.account, widget.targetUser, controller.text),
                 child: Text(S.of(context).reportAbuse),
               ),
-          }
+          },
         ],
       ),
     );

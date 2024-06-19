@@ -22,6 +22,7 @@ mixin _$NoteModalSheetState {
   AsyncValue<UserDetailed>? get user => throw _privateConstructorUsedError;
   AsyncValue<void>? get delete => throw _privateConstructorUsedError;
   AsyncValue<void>? get deleteRecreate => throw _privateConstructorUsedError;
+  AsyncValue<void>? get favorite => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NoteModalSheetStateCopyWith<NoteModalSheetState> get copyWith =>
@@ -39,7 +40,8 @@ abstract class $NoteModalSheetStateCopyWith<$Res> {
       bool isSharingMode,
       AsyncValue<UserDetailed>? user,
       AsyncValue<void>? delete,
-      AsyncValue<void>? deleteRecreate});
+      AsyncValue<void>? deleteRecreate,
+      AsyncValue<void>? favorite});
 }
 
 /// @nodoc
@@ -60,6 +62,7 @@ class _$NoteModalSheetStateCopyWithImpl<$Res, $Val extends NoteModalSheetState>
     Object? user = freezed,
     Object? delete = freezed,
     Object? deleteRecreate = freezed,
+    Object? favorite = freezed,
   }) {
     return _then(_value.copyWith(
       noteState: null == noteState
@@ -82,6 +85,10 @@ class _$NoteModalSheetStateCopyWithImpl<$Res, $Val extends NoteModalSheetState>
           ? _value.deleteRecreate
           : deleteRecreate // ignore: cast_nullable_to_non_nullable
               as AsyncValue<void>?,
+      favorite: freezed == favorite
+          ? _value.favorite
+          : favorite // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<void>?,
     ) as $Val);
   }
 }
@@ -99,7 +106,8 @@ abstract class _$$NoteModalSheetStateImplCopyWith<$Res>
       bool isSharingMode,
       AsyncValue<UserDetailed>? user,
       AsyncValue<void>? delete,
-      AsyncValue<void>? deleteRecreate});
+      AsyncValue<void>? deleteRecreate,
+      AsyncValue<void>? favorite});
 }
 
 /// @nodoc
@@ -118,6 +126,7 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
     Object? user = freezed,
     Object? delete = freezed,
     Object? deleteRecreate = freezed,
+    Object? favorite = freezed,
   }) {
     return _then(_$NoteModalSheetStateImpl(
       noteState: null == noteState
@@ -140,6 +149,10 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
           ? _value.deleteRecreate
           : deleteRecreate // ignore: cast_nullable_to_non_nullable
               as AsyncValue<void>?,
+      favorite: freezed == favorite
+          ? _value.favorite
+          : favorite // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<void>?,
     ));
   }
 }
@@ -152,7 +165,8 @@ class _$NoteModalSheetStateImpl implements _NoteModalSheetState {
       this.isSharingMode = false,
       this.user,
       this.delete,
-      this.deleteRecreate});
+      this.deleteRecreate,
+      this.favorite});
 
   @override
   final AsyncValue<NotesStateResponse> noteState;
@@ -165,10 +179,12 @@ class _$NoteModalSheetStateImpl implements _NoteModalSheetState {
   final AsyncValue<void>? delete;
   @override
   final AsyncValue<void>? deleteRecreate;
+  @override
+  final AsyncValue<void>? favorite;
 
   @override
   String toString() {
-    return 'NoteModalSheetState(noteState: $noteState, isSharingMode: $isSharingMode, user: $user, delete: $delete, deleteRecreate: $deleteRecreate)';
+    return 'NoteModalSheetState(noteState: $noteState, isSharingMode: $isSharingMode, user: $user, delete: $delete, deleteRecreate: $deleteRecreate, favorite: $favorite)';
   }
 
   @override
@@ -183,12 +199,14 @@ class _$NoteModalSheetStateImpl implements _NoteModalSheetState {
             (identical(other.user, user) || other.user == user) &&
             (identical(other.delete, delete) || other.delete == delete) &&
             (identical(other.deleteRecreate, deleteRecreate) ||
-                other.deleteRecreate == deleteRecreate));
+                other.deleteRecreate == deleteRecreate) &&
+            (identical(other.favorite, favorite) ||
+                other.favorite == favorite));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, noteState, isSharingMode, user, delete, deleteRecreate);
+  int get hashCode => Object.hash(runtimeType, noteState, isSharingMode, user,
+      delete, deleteRecreate, favorite);
 
   @JsonKey(ignore: true)
   @override
@@ -204,7 +222,8 @@ abstract class _NoteModalSheetState implements NoteModalSheetState {
       final bool isSharingMode,
       final AsyncValue<UserDetailed>? user,
       final AsyncValue<void>? delete,
-      final AsyncValue<void>? deleteRecreate}) = _$NoteModalSheetStateImpl;
+      final AsyncValue<void>? deleteRecreate,
+      final AsyncValue<void>? favorite}) = _$NoteModalSheetStateImpl;
 
   @override
   AsyncValue<NotesStateResponse> get noteState;
@@ -216,6 +235,8 @@ abstract class _NoteModalSheetState implements NoteModalSheetState {
   AsyncValue<void>? get delete;
   @override
   AsyncValue<void>? get deleteRecreate;
+  @override
+  AsyncValue<void>? get favorite;
   @override
   @JsonKey(ignore: true)
   _$$NoteModalSheetStateImplCopyWith<_$NoteModalSheetStateImpl> get copyWith =>

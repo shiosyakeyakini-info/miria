@@ -98,12 +98,12 @@ class NoteCreateChannel with _$NoteCreateChannel {
 
 @riverpod
 class NoteCreateNotifier extends _$NoteCreateNotifier {
-  late final fileSystem = ref.read(fileSystemProvider);
-  late final dio = ref.read(dioProvider);
-  late final misskey = ref.read(misskeyProvider(state.account));
-  late final noteRepository = ref.read(notesProvider(state.account));
-  late final errorNotifier = ref.read(errorEventProvider.notifier);
-  late final dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
+  late final _fileSystem = ref.read(fileSystemProvider);
+  late final _dio = ref.read(dioProvider);
+  late final _misskey = ref.read(misskeyProvider(state.account));
+  late final _noteRepository = ref.read(notesProvider(state.account));
+  late final _errorNotifier = ref.read(errorEventProvider.notifier);
+  late final _dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
 
   @override
   NoteCreate build(Account account) {
@@ -156,7 +156,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       resultState = resultState.copyWith(
         files: await Future.wait(
           initialMediaFiles.map((media) async {
-            final file = fileSystem.file(media);
+            final file = _fileSystem.file(media);
             final contents = await file.readAsBytes();
             final fileName = file.basename;
             final extension = fileName.split(".").last.toLowerCase();
@@ -181,7 +181,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final files = <MisskeyPostFile>[];
       for (final file in note.files) {
         if (file.type.startsWith("image")) {
-          final response = await dio.get(
+          final response = await _dio.get(
             file.url,
             options: Options(responseType: ResponseType.bytes),
           );
@@ -211,7 +211,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final replyTo = <User>[];
       if (note.mentions.isNotEmpty) {
         replyTo.addAll(
-          await misskey.users
+          await _misskey.users
               .showByIds(UsersShowByIdsRequest(userIds: note.mentions)),
         );
       }
@@ -262,7 +262,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final replyTo = <User>[];
       if (reply.mentions.isNotEmpty) {
         replyTo.addAll(
-          await misskey.users
+          await _misskey.users
               .showByIds(UsersShowByIdsRequest(userIds: reply.mentions)),
         );
       }
@@ -305,7 +305,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   /// ノートを投稿する
   Future<void> note() async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
-      await dialogNotifier.showSimpleDialog(
+      await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).pleaseInputSomething,
       );
       return;
@@ -313,7 +313,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
     if (state.isVote &&
         state.voteContent.where((e) => e.isNotEmpty).length < 2) {
-      await dialogNotifier.showSimpleDialog(
+      await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).pleaseAddVoteChoice,
       );
       return;
@@ -322,7 +322,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.date &&
         state.voteDate == null) {
-      await dialogNotifier.showSimpleDialog(
+      await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).pleaseSpecifyExpirationDate,
       );
       return;
@@ -331,7 +331,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.duration &&
         state.voteDuration == null) {
-      await dialogNotifier.showSimpleDialog(
+      await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).pleaseSpecifyExpirationDuration,
       );
       return;
@@ -361,7 +361,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
               logger.shout("failed to compress file");
             }
 
-            response = await misskey.drive.files.createAsBinary(
+            response = await _misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -373,7 +373,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
             fileIds.add(response.id);
 
           case UnknownFile():
-            response = await misskey.drive.files.createAsBinary(
+            response = await _misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -386,7 +386,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
           case UnknownAlreadyPostedFile():
             if (file.isEdited) {
-              await misskey.drive.files.update(
+              await _misskey.drive.files.update(
                 DriveFilesUpdateRequest(
                   fileId: file.id,
                   name: file.fileName,
@@ -398,7 +398,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
             fileIds.add(file.id);
           case ImageFileAlreadyPostedFile():
             if (file.isEdited) {
-              response = await misskey.drive.files.update(
+              response = await _misskey.drive.files.update(
                 DriveFilesUpdateRequest(
                   fileId: file.id,
                   name: file.fileName,
@@ -414,13 +414,13 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         if (response?.isSensitive == true &&
             !file.isNsfw &&
             !state.account.i.alwaysMarkNsfw) {
-          final result = await dialogNotifier.showDialog(
+          final result = await _dialogNotifier.showDialog(
             message: (context) => S.of(context).unexpectedSensitive,
             actions: (context) =>
                 [S.of(context).staySensitive, S.of(context).unsetSensitive],
           );
           if (result == 1) {
-            await misskey.drive.files.update(
+            await _misskey.drive.files.update(
               DriveFilesUpdateRequest(
                 fileId: fileIds.last,
                 isSensitive: false,
@@ -448,9 +448,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       if (state.localOnly &&
           userList.any(
             (element) =>
-                element.host != null && element.host != misskey.apiService.host,
+                element.host != null &&
+                element.host != _misskey.apiService.host,
           )) {
-        await dialogNotifier.showSimpleDialog(
+        await _dialogNotifier.showSimpleDialog(
           message: (context) =>
               S.of(context).cannotMentionToRemoteInLocalOnlyNote,
         );
@@ -458,7 +459,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
       final mentionTargetUsers = [
         for (final user in userList)
-          await misskey.users.showByName(
+          await _misskey.users.showByName(
             UsersShowByUserNameRequest(
               userName: user.username,
               host: user.host,
@@ -499,21 +500,21 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       );
 
       if (state.noteCreationMode == NoteCreationMode.update) {
-        await misskey.notes.update(
+        await _misskey.notes.update(
           NotesUpdateRequest(
             noteId: state.noteId!,
             text: postText ?? "",
             cw: state.isCw ? state.cwText : null,
           ),
         );
-        noteRepository.registerNote(
-          noteRepository.notes[state.noteId!]!.copyWith(
+        _noteRepository.registerNote(
+          _noteRepository.notes[state.noteId!]!.copyWith(
             text: postText ?? "",
             cw: state.isCw ? state.cwText : null,
           ),
         );
       } else {
-        await misskey.notes.create(
+        await _misskey.notes.create(
           NotesCreateRequest(
             visibility: state.noteVisibility,
             text: postText,
@@ -556,7 +557,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final files = await Future.wait(
         result.map((file) async {
           if (file.type.startsWith("image")) {
-            final fileContentResponse = await dio.get<Uint8List>(
+            final fileContentResponse = await _dio.get<Uint8List>(
               file.url,
               options: Options(responseType: ResponseType.bytes),
             );
@@ -593,7 +594,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final fsFiles = result.files.map((file) {
         final path = file.path;
         if (path != null) {
-          return fileSystem.file(path);
+          return _fileSystem.file(path);
         }
         return null;
       }).nonNulls;
@@ -730,7 +731,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     if (replyVisibility == NoteVisibility.specified ||
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
-      await dialogNotifier.showSimpleDialog(
+      await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).cannotPublicReplyToPrivateNote(
               replyVisibility!.displayName(context),
             ),
@@ -739,7 +740,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       return false;
     }
     if (state.account.i.isSilenced) {
-      await dialogNotifier.showSimpleDialog(
+      await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).cannotPublicNoteBySilencedUser,
       );
       return false;
@@ -756,21 +757,21 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   void toggleLocalOnly(BuildContext context) {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      errorNotifier.state = (
+      _errorNotifier.state = (
         SpecifiedException(S.of(context).cannotFederateNoteToChannel),
         context
       );
       return;
     }
     if (state.reply?.localOnly == true) {
-      errorNotifier.state = (
+      _errorNotifier.state = (
         SpecifiedException(S.of(context).cannotFederateReplyToLocalOnlyNote),
         context
       );
       return;
     }
     if (state.renote?.localOnly == true) {
-      errorNotifier.state = (
+      _errorNotifier.state = (
         SpecifiedException(S.of(context).cannotFederateRenoteToLocalOnlyNote),
         context
       );

@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:io";
 import "dart:ui";
 
@@ -16,7 +17,6 @@ import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
 import "package:miria/view/common/misskey_notes/clip_modal_sheet.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
 import "package:miria/view/user_page/user_control_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -38,6 +38,7 @@ class NoteModalSheetState with _$NoteModalSheetState {
     AsyncValue<UserDetailed>? user,
     AsyncValue<void>? delete,
     AsyncValue<void>? deleteRecreate,
+    AsyncValue<void>? favorite,
   }) = _NoteModalSheetState;
 }
 
@@ -45,7 +46,19 @@ class NoteModalSheetState with _$NoteModalSheetState {
 class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   @override
   NoteModalSheetState build(Account account, Note note) {
+    unawaited(_status());
     return NoteModalSheetState(noteState: const AsyncLoading());
+  }
+
+  Future<void> _status() async {
+    state = state.copyWith(
+      noteState: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => ref
+                .read(misskeyProvider(this.account))
+                .notes
+                .state(NotesStateRequest(noteId: note.id)),
+          ),
+    );
   }
 
   Future<void> user() async {
@@ -57,6 +70,26 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
                       UsersShowRequest(userId: note.userId),
                     ),
           ),
+    );
+  }
+
+  Future<void> favorite() async {
+    final isFavorited = state.noteState.valueOrNull?.isFavorited;
+    if (isFavorited == null) return;
+    state = state.copyWith(favorite: const AsyncLoading());
+    state = state.copyWith(
+      favorite:
+          await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        if (isFavorited) {
+          await ref.read(misskeyProvider(this.account)).notes.favorites.delete(
+                NotesFavoritesDeleteRequest(noteId: note.id),
+              );
+        } else {
+          await ref.read(misskeyProvider(this.account)).notes.favorites.create(
+                NotesFavoritesCreateRequest(noteId: note.id),
+              );
+        }
+      }),
     );
   }
 
@@ -84,6 +117,61 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
       [xFile],
       text: "https://${this.account.host}/notes/${note.id}",
       sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    );
+  }
+
+  Future<void> unRenote() async {
+    state = state.copyWith(delete: const AsyncLoading());
+    state = state.copyWith(
+      delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => await ref
+                .read(misskeyProvider(this.account))
+                .notes
+                .delete(NotesDeleteRequest(noteId: note.id)),
+          ),
+    );
+  }
+
+  Future<void> delete() async {
+    final confirm =
+        await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+              message: (context) => S.of(context).confirmDelete,
+              actions: (context) => [
+                S.of(context).doDeleting,
+                S.of(context).cancel,
+              ],
+            );
+    if (confirm != 0) return;
+    state = state.copyWith(delete: const AsyncLoading());
+    state = state.copyWith(
+      delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => await ref
+                .read(misskeyProvider(this.account))
+                .notes
+                .delete(NotesDeleteRequest(noteId: note.id)),
+          ),
+    );
+  }
+
+  Future<void> deleteRecreate() async {
+    final confirm =
+        await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+              message: (context) => S.of(context).confirmDeletedRecreate,
+              actions: (context) => [
+                S.of(context).doDeleting,
+                S.of(context).cancel,
+              ],
+            );
+    if (confirm != 0) return;
+    state = state.copyWith(deleteRecreate: const AsyncLoading());
+    state = state.copyWith(
+      deleteRecreate:
+          await ref.read(dialogStateNotifierProvider.notifier).guard(
+                () async => await ref
+                    .read(misskeyProvider(this.account))
+                    .notes
+                    .delete(NotesDeleteRequest(noteId: note.id)),
+              ),
     );
   }
 }
@@ -223,53 +311,19 @@ class NoteModalSheet extends ConsumerWidget {
             });
           },
         ),
-        FutureBuilder(
-          future: ref
-              .read(misskeyProvider(account))
-              .notes
-              .state(NotesStateRequest(noteId: targetNote.id)),
-          builder: (_, snapshot) {
-            final data = snapshot.data;
-            return (data == null)
-                ? const Center(child: CircularProgressIndicator())
-                : ListTile(
-                    leading: const Icon(Icons.star_rounded),
-                    onTap: () async {
-                      if (data.isFavorited) {
-                        await ref
-                            .read(misskeyProvider(account))
-                            .notes
-                            .favorites
-                            .delete(
-                              NotesFavoritesDeleteRequest(
-                                noteId: targetNote.id,
-                              ),
-                            );
-
-                        if (!context.mounted) return;
-                        Navigator.of(context).pop();
-                      } else {
-                        await ref
-                            .read(misskeyProvider(account))
-                            .notes
-                            .favorites
-                            .create(
-                              NotesFavoritesCreateRequest(
-                                noteId: targetNote.id,
-                              ),
-                            );
-                        if (!context.mounted) return;
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    title: Text(
-                      data.isFavorited
-                          ? S.of(context).deleteFavorite
-                          : S.of(context).favorite,
-                    ),
-                  );
-          },
-        ),
+        switch (noteStatus) {
+          AsyncLoading() => const Center(child: CircularProgressIndicator()),
+          AsyncError() => Text(S.of(context).thrownError),
+          AsyncData(:final value) => ListTile(
+              leading: const Icon(Icons.star_rounded),
+              onTap: () async => ref.read(notifierProvider.notifier).favorite(),
+              title: Text(
+                value.isFavorited
+                    ? S.of(context).deleteFavorite
+                    : S.of(context).favorite,
+              ),
+            )
+        },
         ListTile(
           leading: const Icon(Icons.attach_file),
           title: Text(S.of(context).clip),
@@ -317,55 +371,13 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.delete),
             title: Text(S.of(context).delete),
-            onTap: () async {
-              if (await showDialog(
-                    context: context,
-                    builder: (context) => SimpleConfirmDialog(
-                      message: S.of(context).confirmDelete,
-                      primary: S.of(context).doDeleting,
-                      secondary: S.of(context).cancel,
-                    ),
-                  ) ==
-                  true) {
-                await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .delete(NotesDeleteRequest(noteId: baseNote.id));
-                ref.read(notesProvider(account)).delete(baseNote.id);
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-              }
-            },
+            onTap: () async => ref.read(notifierProvider.notifier).delete(),
           ),
           ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
-            onTap: () async {
-              if (await showDialog(
-                    context: context,
-                    builder: (context) => SimpleConfirmDialog(
-                      message: S.of(context).confirmDeletedRecreate,
-                      primary: S.of(context).doDeleting,
-                      secondary: S.of(context).cancel,
-                    ),
-                  ) ==
-                  true) {
-                await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .delete(NotesDeleteRequest(noteId: targetNote.id));
-                ref.read(notesProvider(account)).delete(targetNote.id);
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-                await context.pushRoute(
-                  NoteCreateRoute(
-                    initialAccount: account,
-                    note: targetNote,
-                    noteCreationMode: NoteCreationMode.recreate,
-                  ),
-                );
-              }
-            },
+            onTap: () async =>
+                ref.read(notifierProvider.notifier).deleteRecreate(),
           ),
         ],
         if (baseNote.user.host == null &&
@@ -376,16 +388,7 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.delete),
             title: Text(S.of(context).deleteRenote),
-            onTap: () async {
-              await ref
-                  .read(misskeyProvider(account))
-                  .notes
-                  // unrenote ではないらしい
-                  .delete(NotesDeleteRequest(noteId: baseNote.id));
-              ref.read(notesProvider(account)).delete(baseNote.id);
-              if (!context.mounted) return;
-              Navigator.of(context).pop();
-            },
+            onTap: () async => ref.read(notifierProvider.notifier).unRenote(),
           ),
         ],
         if (baseNote.user.host != null ||

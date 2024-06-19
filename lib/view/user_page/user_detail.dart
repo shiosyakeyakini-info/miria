@@ -52,7 +52,6 @@ class UserDetail extends ConsumerWidget {
     final notifier =
         ref.read(userInfoNotifierProvider(account, response.id).notifier);
     final memo = response.memo ?? "";
-    ;
 
     return Column(
       children: [

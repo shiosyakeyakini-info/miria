@@ -1,4 +1,3 @@
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -43,7 +42,7 @@ class ClipsNotifier extends _$ClipsNotifier {
       ),
     );
     state = AsyncValue.data([
-      for (final e in [...?state.valueOrNull]) e.id == clipId ? clip : e
+      for (final e in [...?state.valueOrNull]) e.id == clipId ? clip : e,
     ]);
   }
 }
