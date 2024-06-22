@@ -7,7 +7,7 @@ part of 'note_create_state_notifier.dart';
 // **************************************************************************
 
 String _$noteCreateNotifierHash() =>
-    r'2238f919e1918b351a9f68e232a61cdb95517c65';
+    r'e4f27cc424696b29ae8619532fdee426493b4691';
 
 /// Copied from Dart SDK
 class _SystemHash {

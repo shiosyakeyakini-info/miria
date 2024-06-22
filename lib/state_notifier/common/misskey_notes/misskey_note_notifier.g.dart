@@ -7,7 +7,7 @@ part of 'misskey_note_notifier.dart';
 // **************************************************************************
 
 String _$misskeyNoteNotifierHash() =>
-    r'5d236dfb70aa6e16386b36434d5d63375b62be97';
+    r'20591a74a92ee48715376a65f47ccf3d383cfc29';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -54,7 +54,7 @@ class MainStreamRepository extends ChangeNotifier {
 
   Future<void> reconnect() async {
     if (isReconnecting) {
-      // 排他制御11
+      // 排他制御
       while (isReconnecting) {
         await Future.delayed(const Duration(milliseconds: 100));
       }

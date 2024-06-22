@@ -1,5 +1,6 @@
 import "dart:typed_data";
 
+import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
@@ -12,6 +13,7 @@ import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
@@ -539,16 +541,13 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   /// メディアを選択する
   Future<void> chooseFile(BuildContext context) async {
-    final result = await showModalBottomSheet<DriveModalSheetReturnValue?>(
-      context: context,
-      builder: (context) => const DriveModalSheet(),
-    );
+    final result = await context
+        .pushRoute<DriveModalSheetReturnValue>(const DriveModalRoute());
 
     if (result == DriveModalSheetReturnValue.drive) {
       if (!context.mounted) return;
-      final result = await showDialog<List<DriveFile>?>(
-        context: context,
-        builder: (context) => DriveFileSelectDialog(
+      final result = await context.pushRoute<List<DriveFile>?>(
+        DriveFileSelectRoute(
           account: state.account,
           allowMultiple: true,
         ),
@@ -607,12 +606,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         ),
       );
 
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
+      state = state.copyWith(files: [...state.files, ...files]);
     }
   }
 
@@ -705,10 +699,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   /// リプライ先ユーザーを追加する
   Future<void> addReplyUser(BuildContext context) async {
-    final user = await showDialog<User?>(
-      context: context,
-      builder: (context) => UserSelectDialog(account: state.account),
-    );
+    final user =
+        await context.pushRoute<User>(UserSelectRoute(account: state.account));
     if (user != null) {
       state = state.copyWith(replyTo: [...state.replyTo, user]);
     }

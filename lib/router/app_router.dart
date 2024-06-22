@@ -4,9 +4,11 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart" hide Page;
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
+import "package:miria/model/clip_settings.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/model/tab_setting.dart";
+import "package:miria/model/users_list_settings.dart";
 import "package:miria/view/announcements_page/announcements_page.dart";
 import "package:miria/view/antenna_page/antenna_notes_page.dart";
 import "package:miria/view/antenna_page/antenna_page.dart";
@@ -16,7 +18,9 @@ import "package:miria/view/channels_page/channel_detail_page.dart";
 import "package:miria/view/channels_page/channels_page.dart";
 import "package:miria/view/clip_list_page/clip_detail_page.dart";
 import "package:miria/view/clip_list_page/clip_list_page.dart";
+import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/common/account_select_dialog.dart";
+import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
 import "package:miria/view/common/misskey_notes/note_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
@@ -28,8 +32,10 @@ import "package:miria/view/federation_page/federation_page.dart";
 import "package:miria/view/games_page/misskey_games_page.dart";
 import "package:miria/view/hashtag_page/hashtag_page.dart";
 import "package:miria/view/login_page/login_page.dart";
+import "package:miria/view/login_page/misskey_server_list_dialog.dart";
 import "package:miria/view/misskey_page_page/misskey_page_page.dart";
 import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
+import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
 import "package:miria/view/note_create_page/note_create_page.dart";
 import "package:miria/view/note_detail_page/note_detail_page.dart";
 import "package:miria/view/notes_after_renote_page/notes_after_renote_page.dart";
@@ -67,6 +73,7 @@ import "package:miria/view/user_page/users_list_modal_sheet.dart";
 import "package:miria/view/user_select_dialog.dart";
 import "package:miria/view/users_list_page/users_list_detail_page.dart";
 import "package:miria/view/users_list_page/users_list_page.dart";
+import "package:miria/view/users_list_page/users_list_settings_dialog.dart";
 import "package:miria/view/users_list_page/users_list_timeline_page.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -130,6 +137,11 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: ChannelSelectRoute.page),
     AutoDialogRoute(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
+    AutoDialogRoute(page: ClipSettingsRoute.page),
+    AutoDialogRoute(page: ReactionPickerRoute.page),
+    AutoDialogRoute(page: LicenseConfirmRoute.page),
+    AutoDialogRoute(page: ColorPickerRoute.page),
+    AutoDialogRoute(page: MisskeyServerListRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),
@@ -137,6 +149,7 @@ class AppRouter extends _$AppRouter {
     AutoModalRouteSheet(page: RenoteModalRoute.page),
     AutoModalRouteSheet(page: AntennaModalRoute.page),
     AutoModalRouteSheet(page: UsersListModalRoute.page),
+    AutoModalRouteSheet(page: DriveModalRoute.page),
   ];
 }
 

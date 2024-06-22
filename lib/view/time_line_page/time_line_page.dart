@@ -98,7 +98,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   }
 
   void reload() {
-    ref.read(currentTabSetting.timelineProvider).moveToOlder();
+    ref.read(timelineProvider(currentTabSetting)).moveToOlder();
     scrollControllers[currentIndex].forceScrollToTop();
   }
 
@@ -106,7 +106,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     final tabSetting = tabSettings[index];
     if ([TabType.globalTimeline, TabType.homeTimeline, TabType.hybridTimeline]
         .contains(tabSetting.tabType)) {
-      ref.read(tabSetting.timelineProvider).moveToOlder();
+      ref.read(timelineProvider(tabSetting)).moveToOlder();
     }
     setState(() {
       currentIndex = index;
@@ -117,7 +117,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     CommunityChannel? channel;
     if (currentTabSetting.channelId != null) {
       final Note? note;
-      final timeline = ref.read(currentTabSetting.timelineProvider);
+      final timeline = ref.read(timelineProvider(currentTabSetting));
       if (timeline.olderNotes.isNotEmpty) {
         note = timeline.olderNotes.first;
       } else if (timeline.newerNotes.isNotEmpty) {
@@ -202,7 +202,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   Widget build(BuildContext context) {
-    final socketTimelineBase = ref.watch(currentTabSetting.timelineProvider);
+    final socketTimelineBase = ref.watch(timelineProvider(currentTabSetting));
     final socketTimeline = socketTimelineBase is SocketTimelineRepository
         ? socketTimelineBase
         : null;
@@ -299,10 +299,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   ),
                   IconButton(
                     onPressed: () async => ref
-                        .read(
-                          currentTabSetting.tabType
-                              .timelineProvider(currentTabSetting),
-                        )
+                        .read(timelineProvider(currentTabSetting))
                         .reconnect(),
                     icon:
                         socketTimeline != null && socketTimeline.isReconnecting
@@ -341,8 +338,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         Expanded(
                           child: MisskeyTimeline(
                             controller: scrollControllers[index],
-                            timeLineRepositoryProvider:
-                                tabSetting.tabType.timelineProvider(tabSetting),
+                            tabSetting: tabSetting,
                           ),
                         ),
                         const TimelineEmoji(),
@@ -362,19 +358,20 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
               child: Row(
                 children: [
                   Expanded(
-                      child: Focus(
-                          onKeyEvent: (node, event) {
-                            if (event is KeyDownEvent) {
-                              if (event.logicalKey ==
-                                      LogicalKeyboardKey.enter &&
-                                  HardwareKeyboard.instance.isControlPressed) {
-                                note().expectFailure(context);
-                                return KeyEventResult.handled;
-                              }
-                            }
-                            return KeyEventResult.ignored;
-                          },
-                          child: const TimelineNoteField(),),),
+                    child: Focus(
+                      onKeyEvent: (node, event) {
+                        if (event is KeyDownEvent) {
+                          if (event.logicalKey == LogicalKeyboardKey.enter &&
+                              HardwareKeyboard.instance.isControlPressed) {
+                            note().expectFailure(context);
+                            return KeyEventResult.handled;
+                          }
+                        }
+                        return KeyEventResult.ignored;
+                      },
+                      child: const TimelineNoteField(),
+                    ),
+                  ),
                   IconButton(
                     onPressed: note.expectFailure(context),
                     icon: const Icon(Icons.edit),

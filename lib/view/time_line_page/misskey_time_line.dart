@@ -6,6 +6,8 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/log.dart";
 import "package:miria/model/general_settings.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -15,11 +17,11 @@ import "package:miria/view/common/timeline_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
-  final Provider<TimelineRepository> timeLineRepositoryProvider;
+  final TabSetting tabSetting;
   final TimelineScrollController controller;
 
   MisskeyTimeline({
-    required this.timeLineRepositoryProvider,
+    required this.tabSetting,
     super.key,
     TimelineScrollController? controller,
   }) : controller = controller ?? TimelineScrollController();
@@ -33,7 +35,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   late final TimelineScrollController scrollController = widget.controller;
   bool isScrolling = false;
   late TimelineRepository timelineRepository =
-      ref.read(widget.timeLineRepositoryProvider);
+      ref.read(timelineProvider(widget.tabSetting));
   bool contextAccessed = false;
 
   bool isInitStated = false;
@@ -67,11 +69,10 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     contextAccessed = true;
-    if (oldWidget.timeLineRepositoryProvider !=
-        widget.timeLineRepositoryProvider) {
-      ref.read(oldWidget.timeLineRepositoryProvider).disconnect();
-      ref.read(widget.timeLineRepositoryProvider).startTimeLine();
-      timelineRepository = ref.read(widget.timeLineRepositoryProvider);
+    if (oldWidget.tabSetting != widget.tabSetting) {
+      ref.read(timelineProvider(oldWidget.tabSetting)).disconnect();
+      ref.read(timelineProvider(widget.tabSetting)).startTimeLine();
+      timelineRepository = ref.read(timelineProvider(widget.tabSetting));
       isDownDirectionLoading = false;
       isLastLoaded = false;
     }
@@ -81,9 +82,9 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
   void initState() {
     super.initState();
     if (isInitStated) return;
-    Future(() {
-      ref.read(widget.timeLineRepositoryProvider).startTimeLine();
-    });
+    unawaited(() {
+      ref.read(timelineProvider(widget.tabSetting)).startTimeLine();
+    }());
   }
 
   @override
@@ -97,7 +98,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
     if (scrollController.positions.isNotEmpty) {
       scrollController.scrollToTop();
     }
-    final repository = ref.watch(widget.timeLineRepositoryProvider);
+    final repository = ref.watch(timelineProvider(widget.tabSetting));
 
     return Padding(
       padding: const EdgeInsets.only(right: 10),

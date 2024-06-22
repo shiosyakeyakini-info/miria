@@ -1,3 +1,4 @@
+import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
@@ -5,6 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -141,18 +143,14 @@ class ClipModalSheet extends ConsumerWidget {
                 leading: const Icon(Icons.add),
                 title: Text(S.of(context).createClip),
                 onTap: () async {
-                  final settings = await showDialog<ClipSettings>(
-                    context: context,
-                    builder: (context) => ClipSettingsDialog(
-                      title: Text(S.of(context).create),
-                    ),
+                  final settings = await context.pushRoute<ClipSettings>(
+                    ClipSettingsRoute(title: Text(S.of(context).create)),
                   );
                   if (!context.mounted) return;
-                  if (settings != null) {
-                    await ref
-                        .read(clipsNotifierProvider(misskey).notifier)
-                        .create(settings);
-                  }
+                  if (settings == null) return;
+                  await ref
+                      .read(clipsNotifierProvider(misskey).notifier)
+                      .create(settings);
                 },
               );
             }

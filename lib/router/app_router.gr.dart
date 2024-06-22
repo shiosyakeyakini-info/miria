@@ -89,7 +89,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     AntennaSettingsRoute.name: (routeData) {
       final args = routeData.argsAs<AntennaSettingsRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<AntennaSettings>(
         routeData: routeData,
         child: AntennaSettingsDialog(
           account: args.account,
@@ -179,6 +179,24 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ClipSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<ClipSettingsRouteArgs>(
+          orElse: () => const ClipSettingsRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ClipSettingsDialog(
+          key: args.key,
+          title: args.title,
+          initialSettings: args.initialSettings,
+        ),
+      );
+    },
+    ColorPickerRoute.name: (routeData) {
+      return AutoRoutePage<Color>(
+        routeData: routeData,
+        child: const ColorPickerDialog(),
+      );
+    },
     DriveFileSelectRoute.name: (routeData) {
       final args = routeData.argsAs<DriveFileSelectRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -188,6 +206,12 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           allowMultiple: args.allowMultiple,
         ),
+      );
+    },
+    DriveModalRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DriveModalSheet(),
       );
     },
     ExpireSelectRoute.name: (routeData) {
@@ -319,6 +343,12 @@ abstract class _$AppRouter extends RootStackRouter {
           page: args.page,
           key: args.key,
         ),
+      );
+    },
+    MisskeyServerListRoute.name: (routeData) {
+      return AutoRoutePage<String>(
+        routeData: routeData,
+        child: const MisskeyServerListDialog(),
       );
     },
     NoteCreateRoute.name: (routeData) {
@@ -587,7 +617,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     UserSelectRoute.name: (routeData) {
       final args = routeData.argsAs<UserSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<User>(
         routeData: routeData,
         child: UserSelectDialog(
           account: args.account,
@@ -624,6 +654,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: UsersListPage(
           args.account,
           key: args.key,
+        ),
+      );
+    },
+    UsersListSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListSettingsRouteArgs>(
+          orElse: () => const UsersListSettingsRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListSettingsDialog(
+          key: args.key,
+          title: args.title,
+          initialSettings: args.initialSettings,
         ),
       );
     },
@@ -1257,6 +1299,63 @@ class ClipListRouteArgs {
 }
 
 /// generated route for
+/// [ClipSettingsDialog]
+class ClipSettingsRoute extends PageRouteInfo<ClipSettingsRouteArgs> {
+  ClipSettingsRoute({
+    Key? key,
+    Widget? title,
+    ClipSettings initialSettings = const ClipSettings(),
+    List<PageRouteInfo>? children,
+  }) : super(
+          ClipSettingsRoute.name,
+          args: ClipSettingsRouteArgs(
+            key: key,
+            title: title,
+            initialSettings: initialSettings,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ClipSettingsRoute';
+
+  static const PageInfo<ClipSettingsRouteArgs> page =
+      PageInfo<ClipSettingsRouteArgs>(name);
+}
+
+class ClipSettingsRouteArgs {
+  const ClipSettingsRouteArgs({
+    this.key,
+    this.title,
+    this.initialSettings = const ClipSettings(),
+  });
+
+  final Key? key;
+
+  final Widget? title;
+
+  final ClipSettings initialSettings;
+
+  @override
+  String toString() {
+    return 'ClipSettingsRouteArgs{key: $key, title: $title, initialSettings: $initialSettings}';
+  }
+}
+
+/// generated route for
+/// [ColorPickerDialog]
+class ColorPickerRoute extends PageRouteInfo<void> {
+  const ColorPickerRoute({List<PageRouteInfo>? children})
+      : super(
+          ColorPickerRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ColorPickerRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [DriveFileSelectDialog]
 class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
   DriveFileSelectRoute({
@@ -1297,6 +1396,20 @@ class DriveFileSelectRouteArgs {
   String toString() {
     return 'DriveFileSelectRouteArgs{account: $account, key: $key, allowMultiple: $allowMultiple}';
   }
+}
+
+/// generated route for
+/// [DriveModalSheet]
+class DriveModalRoute extends PageRouteInfo<void> {
+  const DriveModalRoute({List<PageRouteInfo>? children})
+      : super(
+          DriveModalRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DriveModalRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -1768,6 +1881,20 @@ class MisskeyRouteRouteArgs {
   String toString() {
     return 'MisskeyRouteRouteArgs{account: $account, page: $page, key: $key}';
   }
+}
+
+/// generated route for
+/// [MisskeyServerListDialog]
+class MisskeyServerListRoute extends PageRouteInfo<void> {
+  const MisskeyServerListRoute({List<PageRouteInfo>? children})
+      : super(
+          MisskeyServerListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MisskeyServerListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -2914,6 +3041,49 @@ class UsersListRouteArgs {
   @override
   String toString() {
     return 'UsersListRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UsersListSettingsDialog]
+class UsersListSettingsRoute extends PageRouteInfo<UsersListSettingsRouteArgs> {
+  UsersListSettingsRoute({
+    Key? key,
+    Widget? title,
+    UsersListSettings initialSettings = const UsersListSettings(),
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListSettingsRoute.name,
+          args: UsersListSettingsRouteArgs(
+            key: key,
+            title: title,
+            initialSettings: initialSettings,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListSettingsRoute';
+
+  static const PageInfo<UsersListSettingsRouteArgs> page =
+      PageInfo<UsersListSettingsRouteArgs>(name);
+}
+
+class UsersListSettingsRouteArgs {
+  const UsersListSettingsRouteArgs({
+    this.key,
+    this.title,
+    this.initialSettings = const UsersListSettings(),
+  });
+
+  final Key? key;
+
+  final Widget? title;
+
+  final UsersListSettings initialSettings;
+
+  @override
+  String toString() {
+    return 'UsersListSettingsRouteArgs{key: $key, title: $title, initialSettings: $initialSettings}';
   }
 }
 

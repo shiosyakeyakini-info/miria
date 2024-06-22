@@ -45,9 +45,8 @@ class ImportExportRepository extends ChangeNotifier {
   }
 
   Future<void> import(BuildContext context, Account account) async {
-    final result = await showDialog<FolderResult>(
-      context: context,
-      builder: (context2) => FolderSelectDialog(
+    final result = await context.pushRoute<FolderResult>(
+      FolderSelectRoute(
         account: account,
         fileShowTarget: const ["miria.json", "miria.json.unknown"],
         confirmationText: S.of(context).importFromThisFolder,
@@ -114,9 +113,8 @@ class ImportExportRepository extends ChangeNotifier {
   }
 
   Future<void> export(BuildContext context, Account account) async {
-    final result = await showDialog<FolderResult>(
-      context: context,
-      builder: (context2) => FolderSelectDialog(
+    final result = await context.pushRoute<FolderResult>(
+      FolderSelectRoute(
         account: account,
         fileShowTarget: const ["miria.json", "miria.json.unknown"],
         confirmationText: S.of(context).exportToThisFolder,

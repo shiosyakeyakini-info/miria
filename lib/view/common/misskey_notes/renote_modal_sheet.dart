@@ -284,14 +284,13 @@ class RenoteModalSheet extends HookConsumerWidget {
           ),
           ListTile(
             onTap: () async {
-              final navigator = Navigator.of(context);
-              final selected = await showDialog<CommunityChannel?>(
-                context: context,
-                builder: (context) => ChannelSelectDialog(account: account),
+              final selected = await context.pushRoute<CommunityChannel>(
+                ChannelSelectRoute(account: account),
               );
               if (!context.mounted) return;
               if (selected == null) return;
-              navigator.pop();
+              await context.maybePop();
+              if (!context.mounted) return;
               await context.pushRoute(
                 NoteCreateRoute(
                   renote: note,
@@ -319,7 +318,9 @@ class RenoteModalSheet extends HookConsumerWidget {
             title: Text(
               note.channel != null
                   ? S.of(context).quotedRenoteInOtherChannel
-                  : S.of(context).quotedRenoteInChannel,),),
+                  : S.of(context).quotedRenoteInChannel,
+            ),
+          ),
         ],
       ],
     );

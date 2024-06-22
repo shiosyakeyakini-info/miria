@@ -1,4 +1,5 @@
 import "package:auto_route/annotations.dart";
+import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
@@ -6,6 +7,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/view/antenna_page/antenna_notes.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
@@ -43,9 +45,8 @@ class AntennaNotesPage extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () async {
-                final settings = await showDialog<AntennaSettings>(
-                  context: context,
-                  builder: (context) => AntennaSettingsDialog(
+                final settings = await context.pushRoute<AntennaSettings>(
+                  AntennaSettingsRoute(
                     title: Text(S.of(context).edit),
                     initialSettings: AntennaSettings.fromAntenna(antenna),
                     account: account,
@@ -63,9 +64,7 @@ class AntennaNotesPage extends ConsumerWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: AntennaNotes(
-            antennaId: antenna.id,
-          ),
+          child: AntennaNotes(antennaId: antenna.id),
         ),
       ),
     );

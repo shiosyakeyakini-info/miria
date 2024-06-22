@@ -1,9 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:miria/model/tab_setting.dart";
-import "package:miria/providers.dart";
-import "package:miria/repository/time_line_repository.dart";
-import "package:riverpod_annotation/riverpod_annotation.dart";
 
 enum TabType {
   localTimeline,
@@ -27,28 +23,5 @@ enum TabType {
       TabType.userList => S.of(context).list,
       TabType.antenna => S.of(context).antenna,
     };
-  }
-
-  Provider<Raw<TimelineRepository>> timelineProvider(
-    TabSetting setting,
-  ) {
-    switch (this) {
-      case TabType.localTimeline:
-        return localTimelineProvider(setting);
-      case TabType.homeTimeline:
-        return homeTimelineProvider(setting);
-      case TabType.globalTimeline:
-        return globalTimelineProvider(setting);
-      case TabType.hybridTimeline:
-        return hybridTimelineProvider(setting); //FIXME
-      case TabType.roleTimeline:
-        return roleTimelineProvider(setting);
-      case TabType.channel:
-        return channelTimelineProvider(setting);
-      case TabType.userList:
-        return userListTimelineProvider(setting);
-      case TabType.antenna:
-        return antennaTimelineProvider(setting);
-    }
   }
 }

@@ -115,7 +115,7 @@ final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
   },
 );
 
-@RoutePage()
+@RoutePage<AntennaSettings>()
 class AntennaSettingsDialog extends StatelessWidget {
   const AntennaSettingsDialog({
     required this.account,

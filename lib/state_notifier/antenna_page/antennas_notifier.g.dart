@@ -6,7 +6,7 @@ part of 'antennas_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$antennasNotifierHash() => r'bc971acc312b22119b0a1b1f7bc749fad635a777';
+String _$antennasNotifierHash() => r'f3568688c5892e2da08562145cf74bddcfde7bba';
 
 /// Copied from Dart SDK
 class _SystemHash {

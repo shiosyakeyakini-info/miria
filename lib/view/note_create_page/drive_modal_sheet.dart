@@ -1,8 +1,10 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 enum DriveModalSheetReturnValue { upload, drive }
 
+@RoutePage()
 class DriveModalSheet extends StatelessWidget {
   const DriveModalSheet({super.key});
 
@@ -13,16 +15,13 @@ class DriveModalSheet extends StatelessWidget {
         ListTile(
           title: Text(S.of(context).uploadFile),
           leading: const Icon(Icons.upload),
-          onTap: () {
-            Navigator.of(context).pop(DriveModalSheetReturnValue.upload);
-          },
+          onTap: () async =>
+              context.maybePop(DriveModalSheetReturnValue.upload),
         ),
         ListTile(
           title: Text(S.of(context).fromDrive),
           leading: const Icon(Icons.cloud_outlined),
-          onTap: () {
-            Navigator.of(context).pop(DriveModalSheetReturnValue.drive);
-          },
+          onTap: () async => context.maybePop(DriveModalSheetReturnValue.drive),
         ),
       ],
     );

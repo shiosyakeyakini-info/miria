@@ -30,7 +30,7 @@ Widget buildTestWidget({
     overrides: [
       ...overrides,
       cacheManagerProvider.overrideWith((ref) => mockCacheManager),
-      notesProvider.overrideWith((ref) => notesRepository),
+      notesProvider.overrideWith((ref, account) => notesRepository),
     ],
     child: DefaultRootNoRouterWidget(
       child: Scaffold(

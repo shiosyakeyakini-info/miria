@@ -2,6 +2,7 @@ import "dart:math";
 import "dart:typed_data";
 import "dart:ui";
 
+import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
@@ -10,9 +11,8 @@ import "package:image_editor/image_editor.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/photo_edit_page/color_filter_preset.dart";
-import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
-import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "photo_edit_state_notifier.freezed.dart";
@@ -341,10 +341,8 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   /// リアクションを追加する
   Future<void> addReaction(Account account, BuildContext context) async {
-    final reaction = await showDialog<MisskeyEmojiData?>(
-      context: context,
-      builder: (context) =>
-          ReactionPickerDialog(account: account, isAcceptSensitive: true),
+    final reaction = await context.pushRoute<MisskeyEmojiData>(
+      ReactionPickerRoute(account: account, isAcceptSensitive: true),
     );
     if (reaction == null) return;
 
@@ -353,12 +351,8 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
         // カスタム絵文字の場合、ライセンスを確認する
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
           if (!context.mounted) return;
-          final dialogResult = await showDialog<bool?>(
-            context: context,
-            builder: (context) => LicenseConfirmDialog(
-              emoji: reaction.baseName,
-              account: account,
-            ),
+          final dialogResult = await context.pushRoute<bool>(
+            LicenseConfirmRoute(emoji: reaction.baseName, account: account),
           );
           if (dialogResult != true) return;
           _acceptReactions.add(reaction.baseName);

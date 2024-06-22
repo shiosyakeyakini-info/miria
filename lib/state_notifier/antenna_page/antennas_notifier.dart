@@ -14,21 +14,23 @@ class AntennasNotifier extends _$AntennasNotifier {
   }
 
   Future<void> create(AntennaSettings settings) async {
-    final antenna = await misskey.antennas.create(
-      AntennasCreateRequest(
-        name: settings.name,
-        src: settings.src,
-        keywords: settings.keywords,
-        excludeKeywords: settings.excludeKeywords,
-        users: settings.users,
-        caseSensitive: settings.caseSensitive,
-        withReplies: settings.withReplies,
-        withFile: settings.withFile,
-        notify: settings.notify,
-        localOnly: settings.localOnly,
-      ),
-    );
-    state = AsyncValue.data([...?state.valueOrNull, antenna]);
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final antenna = await misskey.antennas.create(
+        AntennasCreateRequest(
+          name: settings.name,
+          src: settings.src,
+          keywords: settings.keywords,
+          excludeKeywords: settings.excludeKeywords,
+          users: settings.users,
+          caseSensitive: settings.caseSensitive,
+          withReplies: settings.withReplies,
+          withFile: settings.withFile,
+          notify: settings.notify,
+          localOnly: settings.localOnly,
+        ),
+      );
+      state = AsyncValue.data([...?state.valueOrNull, antenna]);
+    });
   }
 
   Future<void> delete(String antennaId) async {

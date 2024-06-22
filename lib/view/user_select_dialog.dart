@@ -9,7 +9,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage()
+@RoutePage<User>()
 class UserSelectDialog extends StatelessWidget {
   final Account account;
 
@@ -24,7 +24,7 @@ class UserSelectDialog extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
           child: UserSelectContent(
-            onSelected: (item) => Navigator.of(context).pop(item),
+            onSelected: (item) async => context.maybePop(item),
           ),
         ),
       ),
