@@ -351,20 +351,38 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 },
               ),
             ),
-            Row(
-              children: [
-                const Expanded(
-                  child: TimelineNoteField(),
-                ),
-                IconButton(
-                  onPressed: note.expectFailure(context),
-                  icon: const Icon(Icons.edit),
-                ),
-                IconButton(
-                  onPressed: noteCreateRoute,
-                  icon: const Icon(Icons.keyboard_arrow_right),
-                ),
-              ],
+            Container(
+              // decoration: filteringInputEmoji.isEmpty
+              //     ? BoxDecoration(
+              //         border: Border(
+              //             top: BorderSide(
+              //                 color: Theme.of(context).primaryColor)))
+              //     : null,
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Focus(
+                          onKeyEvent: (node, event) {
+                            if (event is KeyDownEvent) {
+                              if (event.logicalKey == LogicalKeyboardKey.enter &&
+                                  HardwareKeyboard.instance.isControlPressed) {
+                                note().expectFailure(context);
+                                return KeyEventResult.handled;
+                              }
+                            }
+                            return KeyEventResult.ignored;
+                          },
+                          child: const TimelineNoteField())),
+                  IconButton(
+                    onPressed: note.expectFailure(context),
+                    icon: const Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: noteCreateRoute,
+                    icon: const Icon(Icons.keyboard_arrow_right),
+                  )
+                ],
+              ),
             ),
             if (ref
                         .read(generalSettingsRepositoryProvider)
