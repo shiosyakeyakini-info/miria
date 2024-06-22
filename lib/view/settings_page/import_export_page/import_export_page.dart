@@ -29,82 +29,82 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                S.of(context).settingsFileManagement,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Text(S.of(context).importAndExportSettingsDescription),
-              Text(
-                S.of(context).importSettings,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Text(S.of(context).importSettingsDescription),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton(
-                      isExpanded: true,
-                      items: [
-                        for (final account in accounts)
-                          DropdownMenuItem(
-                            value: account,
-                            child: Text(account.acct.toString()),
-                          ),
-                      ],
-                      value: selectedImportAccount,
-                      onChanged: (Account? value) {
-                        setState(() {
-                          selectedImportAccount = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final account = selectedImportAccount;
-                      if (account == null) {
-                        await SimpleMessageDialog.show(
-                          context,
-                          S.of(context).pleaseSelectAccount,
-                        );
-                        return;
-                      }
-                      await ref
-                          .read(importExportRepository)
-                          .import(context, account)
-                          .expectFailure(context);
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).settingsFileManagement,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Text(S.of(context).importAndExportSettingsDescription),
+            Text(
+              S.of(context).importSettings,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Text(S.of(context).importSettingsDescription),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton(
+                    isExpanded: true,
+                    items: [
+                      for (final account in accounts)
+                        DropdownMenuItem(
+                          value: account,
+                          child: Text(account.acct.toString()),
+                        ),
+                    ],
+                    value: selectedImportAccount,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedImportAccount = value;
+                      });
                     },
                   ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 30)),
-              Text(
-                S.of(context).exportSettings,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Text(S.of(context).exportSettingsDescription),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton(
-                      isExpanded: true,
-                      items: [
-                        for (final account in accounts)
-                          DropdownMenuItem(
-                            value: account,
-                            child: Text(account.acct.toString()),
-                          ),
-                      ],
-                      value: selectedExportAccount,
-                      onChanged: (Account? value) {
-                        setState(() {
-                          selectedExportAccount = value;
-                        });
-                      },
-                    ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final account = selectedImportAccount;
+                    if (account == null) {
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectAccount,
+                      );
+                      return;
+                    }
+                    await ref
+                        .read(importExportRepositoryProvider)
+                        .import(context, account)
+                        .expectFailure(context);
+                  },
+                  child: Text(S.of(context).select),
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 30)),
+            Text(
+              S.of(context).exportSettings,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Text(S.of(context).exportSettingsDescription),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton(
+                    isExpanded: true,
+                    items: [
+                      for (final account in accounts)
+                        DropdownMenuItem(
+                          value: account,
+                          child: Text(account.acct.toString()),
+                        ),
+                    ],
+                    value: selectedExportAccount,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedExportAccount = value;
+                      });
+                    },
                   ),
                 ),
                 ElevatedButton(
