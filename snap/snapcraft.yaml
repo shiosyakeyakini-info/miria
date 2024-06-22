@@ -1,0 +1,77 @@
+name: miria # 'snapcraft register miria'で名前を予約する必要あり
+title: Miria
+type: app
+summary: Misskey Client App # 79文字まで
+description: |
+  **NOTE: Allow access to `password-manager-service` after installation.**
+  ```
+  $ snap connect miria:password-manager-service
+  ```
+  Miria is Misskey Client App for iOS, Android and many targets which made by Flutter.
+  Miria includes these features.
+  - Login, Logout, Management multiple servers and accounts
+  - Show home, local, hybrid(social), global timelines, list, antenna and channel
+  - Show note with MFM (Completely Supported).
+  - Note, Renote, Quoted renote, renote to any channel
+  - Reaction
+  - Show Notifications
+  - Edit antenna and list
+  - Explore
+  - Announcements
+  - Favorite
+  - Search notes and users
+  - Page (show only)
+  - Show Server Information (online users, job queue, ads, custom emojis)
+license: AGPL-3.0
+website: https://shiosyakeyakini.info/miria_web
+source-code: https://github.com/shiosyakeyakini-info/miria
+issues: https://github.com/shiosyakeyakini-info/miria/issues
+donation: https://shiosyakeyakini.fanbox.cc
+contact: sorairo@shiosyakeyakini.info
+icon: assets/images/icon.png
+adopt-info: miria
+base: core22
+grade: stable
+confinement: strict
+compression: lzo # 起動速度の向上（xz比）
+
+apps:
+  miria:
+    command: miria
+    extensions: [gnome]
+    plugs:
+      - home
+      - unity7
+      - network
+      - audio-playback
+      # 以下はユーザーが接続を許可するまで使用不可
+      - removable-media # カメラのSDカードから直接取り込むユーザー向け
+      - password-manager-service # ログイン情報の保存＆読み込みのため必須
+    environment:
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/lapack
+
+parts:
+  miria:
+    source: .
+    plugin: flutter
+    build-packages:
+      - libmpv-dev
+      - libsecret-1-dev
+    stage-packages:
+      - libmpv1
+      - libsecret-1-0
+    override-pull: |
+      craftctl default
+      craftctl set version=$(cat pubspec.yaml | grep "version[:]" | cut -d " " -f 2)
+  zenity:
+    plugin: nil
+    stage-packages:
+      - zenity
+    prime:
+      - usr/bin/zenity
+      - usr/share/zenity/*
+
+lint:
+  ignore:
+    - library:
+      - lib/libmedia_kit_native_event_loop.so

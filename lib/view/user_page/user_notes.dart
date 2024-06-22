@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/user_page/user_page.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
@@ -15,8 +15,8 @@ class UserNotes extends ConsumerStatefulWidget {
   final Account? actualAccount;
 
   const UserNotes({
-    super.key,
     required this.userId,
+    super.key,
     this.remoteUserId,
     this.actualAccount,
   }) : assert((remoteUserId == null) == (actualAccount == null));
@@ -103,10 +103,13 @@ class UserNotesState extends ConsumerState<UserNotes> {
               ),
               IconButton(
                 onPressed: () async {
-                  final userInfo = ref.read(userInfoProvider(widget.userId));
+                  final userInfo = ref.read(
+                    userInfoNotifierProvider(widget.userId)
+                        .select((value) => value.requireValue),
+                  );
                   final firstDate = widget.actualAccount == null
-                      ? userInfo?.response?.createdAt
-                      : userInfo?.remoteResponse?.createdAt;
+                      ? userInfo.response.createdAt
+                      : userInfo.remoteResponse?.createdAt;
 
                   final result = await showDatePicker(
                     context: context,
@@ -136,7 +139,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
         Expanded(
           child: PushableListView<Note>(
             listKey: Object.hashAll(
-                [isFileOnly, withReply, renote, untilDate, highlight]),
+              [isFileOnly, withReply, renote, untilDate, highlight],
+            ),
             additionalErrorInfo: highlight
                 ? (context, e) => Text(S.of(context).userHighlightAvailability)
                 : null,
@@ -145,7 +149,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
               if (highlight) {
                 notes = await misskey.users.featuredNotes(
                   UsersFeaturedNotesRequest(
-                      userId: widget.remoteUserId ?? widget.userId),
+                    userId: widget.remoteUserId ?? widget.userId,
+                  ),
                 );
               } else {
                 notes = await misskey.users.notes(
@@ -158,11 +163,11 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     withReplies: withReply,
                     withRenotes: renote,
                     withChannelNotes: true,
-                    untilDate: untilDate?.millisecondsSinceEpoch,
+                    untilDate: untilDate,
                   ),
                 );
               }
-              if (!mounted) return [];
+              if (!context.mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
                   .registerAll(notes);
@@ -188,11 +193,11 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     withReplies: withReply,
                     withRenotes: renote,
                     withChannelNotes: true,
-                    untilDate: untilDate?.millisecondsSinceEpoch,
+                    untilDate: untilDate,
                   ),
                 );
               }
-              if (!mounted) return [];
+              if (!context.mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
                   .registerAll(notes);

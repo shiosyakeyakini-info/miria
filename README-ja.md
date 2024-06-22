@@ -31,7 +31,6 @@ MiriaはiOS, Android向けMisskeyクライアントです。Windowsでも動作�
 - 「ページ」機能（閲覧のみ）
 - サーバー情報の表示（オンラインユーザー数、ジョブキュー、広告、カスタム絵文字等）
 
-
 ### 機能に対する制限
 
 - Miriaはサーバー独自の機能に基本的には対応していません。
@@ -44,14 +43,15 @@ MiriaはiOS, Android向けMisskeyクライアントです。Windowsでも動作�
   - MFMの見た目がブラウザと異なる場合があります。
   - カスタムCSSは実装できません。
 
-# コントリビュート
+## コントリビュート
 
+### ローカライズ
 
+[Issue #164](https://github.com/shiosyakeyakini-info/miria/issues/164)を確認してください。
 
-# ライセンス
+## ライセンス
 
-## アイコンについて
-
+### アイコンについて
 
 ![Miriaのアイコン](/assets/images/icon.png)
 

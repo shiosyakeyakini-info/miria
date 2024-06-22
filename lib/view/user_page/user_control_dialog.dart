@@ -1,20 +1,20 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/note_search_condition.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/user_page/antenna_modal_sheet.dart';
-import 'package:miria/view/user_page/users_list_modal_sheet.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "dart:async";
+
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/note_search_condition.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:url_launcher/url_launcher.dart";
 
 enum UserControl {
   createMute,
@@ -25,130 +25,72 @@ enum UserControl {
   deleteBlock,
 }
 
-class UserControlDialog extends ConsumerStatefulWidget {
+@RoutePage()
+class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final UserDetailed response;
 
   const UserControlDialog({
-    super.key,
     required this.account,
     required this.response,
+    super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      UserControlDialogState();
-}
-
-class UserControlDialogState extends ConsumerState<UserControlDialog> {
-  Future<void> addToList() async {
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) => UsersListModalSheet(
-        account: widget.account,
-        user: widget.response,
-      ),
-    );
-  }
-
-  Future<void> addToAntenna() async {
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) => AntennaModalSheet(
-        account: widget.account,
-        user: widget.response,
-      ),
-    );
-  }
-
-  Future<Expire?> getExpire() async {
-    return await showDialog<Expire?>(
-        context: context, builder: (context) => const ExpireSelectDialog());
-  }
-
-  Future<void> renoteMuteCreate() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .renoteMute
-        .create(RenoteMuteCreateRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createRenoteMute);
-  }
-
-  Future<void> renoteMuteDelete() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .renoteMute
-        .delete(RenoteMuteDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteRenoteMute);
-  }
-
-  Future<void> muteCreate() async {
-    final expires = await getExpire();
-    if (expires == null) return;
-    final expiresDate = expires == Expire.indefinite
-        ? null
-        : DateTime.now().add(expires.expires!);
-    await ref.read(misskeyProvider(widget.account)).mute.create(
-        MuteCreateRequest(userId: widget.response.id, expiresAt: expiresDate));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createMute);
-  }
-
-  Future<void> muteDelete() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .mute
-        .delete(MuteDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteMute);
-  }
-
-  Future<void> blockingCreate() async {
-    if (await SimpleConfirmDialog.show(
-          context: context,
-          message: S.of(context).confirmCreateBlock,
-          primary: S.of(context).createBlock,
-          secondary: S.of(context).cancel,
-        ) !=
-        true) {
-      return;
-    }
-
-    await ref
-        .read(misskeyProvider(widget.account))
-        .blocking
-        .create(BlockCreateRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.createBlock);
-  }
-
-  Future<void> blockingDelete() async {
-    await ref
-        .read(misskeyProvider(widget.account))
-        .blocking
-        .delete(BlockDeleteRequest(userId: widget.response.id));
-    if (!mounted) return;
-    Navigator.of(context).pop(UserControl.deleteBlock);
-  }
+  Widget wrappedRoute(BuildContext context) =>
+      AccountScopeMark2(account: account, child: this);
 
   @override
-  Widget build(BuildContext context) {
-    final user = widget.response;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = userInfoNotifierProvider(response.id);
+
+    final isLoading = ref.watch(
+      provider.select(
+        (value) =>
+            value.valueOrNull?.mute is AsyncLoading ||
+            value.valueOrNull?.renoteMute is AsyncLoading ||
+            value.valueOrNull?.block is AsyncLoading,
+      ),
+    );
+    ref
+      ..listen(provider.select((value) => value.valueOrNull?.mute),
+          (_, next) async {
+        if (next is! AsyncData) return;
+        Navigator.of(context).pop();
+      })
+      ..listen(provider.select((value) => value.valueOrNull?.renoteMute),
+          (_, next) {
+        if (next is! AsyncData) return;
+        Navigator.of(context).pop();
+      })
+      ..listen(
+        provider.select((value) => value.valueOrNull?.block),
+        (_, next) async {
+          if (next is! AsyncData) return;
+          Navigator.of(context).pop();
+        },
+      );
+
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator.adaptive());
+    }
+
+    final user = response;
     return ListView(
       children: [
         ListTile(
           leading: const Icon(Icons.copy),
           title: Text(S.of(context).copyName),
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: widget.response.name ?? widget.response.username,
-              ),
+          onTap: () async {
+            await Clipboard.setData(
+              ClipboardData(text: response.name ?? response.username),
             );
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
             Navigator.of(context).pop();
           },
@@ -156,10 +98,14 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.alternate_email),
           title: Text(S.of(context).copyUserScreenName),
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: widget.response.acct));
+          onTap: () async {
+            await Clipboard.setData(ClipboardData(text: response.acct));
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
             Navigator.of(context).pop();
           },
@@ -167,18 +113,22 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
-          onTap: () {
-            Clipboard.setData(
+          onTap: () async {
+            await Clipboard.setData(
               ClipboardData(
                 text: Uri(
                   scheme: "https",
-                  host: widget.account.host,
-                  path: widget.response.acct,
+                  host: account.host,
+                  path: response.acct,
                 ).toString(),
               ),
             );
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
             Navigator.of(context).pop();
           },
@@ -186,45 +136,46 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.open_in_browser),
           title: Text(S.of(context).openBrowsers),
-          onTap: () {
-            launchUrl(
+          onTap: () async {
+            await launchUrl(
               Uri(
                 scheme: "https",
-                host: widget.account.host,
-                path: widget.response.acct,
+                host: account.host,
+                path: response.acct,
               ),
-              mode: LaunchMode.inAppWebView,
+              mode: LaunchMode.externalApplication,
             );
+            if (!context.mounted) return;
             Navigator.of(context).pop();
           },
         ),
-        if (widget.response.host != null)
+        if (response.host != null)
           ListTile(
             leading: const Icon(Icons.rocket_launch),
             title: Text(S.of(context).openBrowsersAsRemote),
-            onTap: () {
-              final uri = widget.response.uri ?? widget.response.url;
+            onTap: () async {
+              final uri = response.uri ?? response.url;
               if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.inAppWebView);
+              launchUrl(uri, mode: LaunchMode.externalApplication);
+              if (!context.mounted) return;
               Navigator.of(context).pop();
             },
           ),
         ListTile(
           leading: const Icon(Icons.open_in_new),
           title: Text(S.of(context).openInAnotherAccount),
-          onTap: () => ref
-              .read(misskeyNoteNotifierProvider(widget.account).notifier)
-              .openUserInOtherAccount(context, user)
-              .expectFailure(context),
+          onTap: () async => ref
+              .read(misskeyNoteNotifierProvider(account).notifier)
+              .openUserInOtherAccount(context, user),
         ),
         ListTile(
           leading: const Icon(Icons.search),
           title: Text(S.of(context).searchNote),
-          onTap: () => context.pushRoute(
+          onTap: () async => context.pushRoute(
             SearchRoute(
-              account: widget.account,
+              account: account,
               initialNoteSearchCondition: NoteSearchCondition(
-                user: widget.response,
+                user: response,
               ),
             ),
           ),
@@ -232,73 +183,73 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.list),
           title: Text(S.of(context).addToList),
-          onTap: addToList,
+          onTap: () async => context
+              .pushRoute(UsersListModalRoute(account: account, user: response)),
         ),
         ListTile(
           leading: const Icon(Icons.settings_input_antenna),
           title: Text(S.of(context).addToAntenna),
-          onTap: addToAntenna,
+          onTap: () async => context
+              .pushRoute(AntennaModalRoute(account: account, user: user)),
         ),
         if (user is UserDetailedNotMeWithRelations) ...[
           if (user.isRenoteMuted)
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).deleteRenoteMute),
-              onTap: renoteMuteDelete.expectFailure(context),
+              onTap: ref.read(provider.notifier).deleteRenoteMute,
             )
           else
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).createRenoteMute),
-              onTap: renoteMuteCreate.expectFailure(context),
+              onTap: ref.read(provider.notifier).createRenoteMute,
             ),
           if (user.isMuted)
             ListTile(
               leading: const Icon(Icons.visibility),
               title: Text(S.of(context).deleteMute),
-              onTap: muteDelete.expectFailure(context),
+              onTap: ref.read(provider.notifier).deleteMute,
             )
           else
             ListTile(
               leading: const Icon(Icons.visibility_off),
               title: Text(S.of(context).createMute),
-              onTap: muteCreate.expectFailure(context),
+              onTap: () async {
+                final expires =
+                    await context.pushRoute<Expire?>(const ExpireSelectRoute());
+                if (expires == null) return;
+                await ref
+                    .read(userInfoNotifierProvider(response.id).notifier)
+                    .createMute(expires);
+              },
             ),
           if (user.isBlocking)
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).deleteBlock),
-              onTap: blockingDelete.expectFailure(context),
+              onTap: ref.read(provider.notifier).deleteBlocking,
             )
           else
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).createBlock),
-              onTap: blockingCreate.expectFailure(context),
+              onTap: ref.read(provider.notifier).createBlocking,
             ),
           ListTile(
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
-            onTap: () {
-              Navigator.of(context).pop();
-              showDialog(
-                context: context,
-                builder: (context) => AbuseDialog(
-                  account: widget.account,
-                  targetUser: widget.response));
+            onTap: () async {
+              unawaited(context.maybePop());
+              await context.pushRoute(
+                AbuseRoute(account: account, targetUser: response),
+              );
             },
-          )
+          ),
         ],
       ],
     );
   }
-}
-
-class ExpireSelectDialog extends StatefulWidget {
-  const ExpireSelectDialog({super.key});
-
-  @override
-  State<StatefulWidget> createState() => ExpireSelectDialogState();
 }
 
 enum Expire {
@@ -323,32 +274,34 @@ enum Expire {
   }
 }
 
-class ExpireSelectDialogState extends State<ExpireSelectDialog> {
-  Expire? selectedExpire = Expire.indefinite;
+@RoutePage()
+class ExpireSelectDialog extends HookWidget {
+  const ExpireSelectDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedExpire = useState<Expire?>(Expire.indefinite);
+
     return AlertDialog(
       title: Text(S.of(context).selectDuration),
-      content: Container(
-        child: DropdownButton<Expire>(
-          items: [
-            for (final value in Expire.values)
-              DropdownMenuItem<Expire>(
-                value: value,
-                child: Text(value.displayName(context)),
-              )
-          ],
-          onChanged: (value) => setState(() => selectedExpire = value),
-          value: selectedExpire,
-        ),
+      content: DropdownButton<Expire>(
+        items: [
+          for (final value in Expire.values)
+            DropdownMenuItem<Expire>(
+              value: value,
+              child: Text(value.displayName(context)),
+            ),
+        ],
+        onChanged: (value) => selectedExpire.value = value,
+        value: selectedExpire.value,
       ),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop(selectedExpire);
-            },
-            child: Text(S.of(context).done))
+          onPressed: () {
+            Navigator.of(context).pop(selectedExpire);
+          },
+          child: Text(S.of(context).done),
+        ),
       ],
     );
   }
