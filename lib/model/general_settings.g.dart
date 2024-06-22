@@ -94,4 +94,5 @@ const _$EmojiTypeEnumMap = {
 const _$LanguagesEnumMap = {
   Languages.jaJP: 'jaJP',
   Languages.jaOJ: 'jaOJ',
+  Languages.zhCN: 'zhCN',
 };

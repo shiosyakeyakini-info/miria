@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/time_line_repository.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/time_line_repository.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 enum TabType {
   localTimeline,
@@ -29,17 +29,18 @@ enum TabType {
     };
   }
 
-  ChangeNotifierProvider<TimelineRepository> timelineProvider(
-      TabSetting setting) {
+  Provider<Raw<TimelineRepository>> timelineProvider(
+    TabSetting setting,
+  ) {
     switch (this) {
       case TabType.localTimeline:
-        return localTimeLineProvider(setting);
+        return localTimelineProvider(setting);
       case TabType.homeTimeline:
-        return homeTimeLineProvider(setting);
+        return homeTimelineProvider(setting);
       case TabType.globalTimeline:
-        return globalTimeLineProvider(setting);
+        return globalTimelineProvider(setting);
       case TabType.hybridTimeline:
-        return hybridTimeLineProvider(setting); //FIXME
+        return hybridTimelineProvider(setting); //FIXME
       case TabType.roleTimeline:
         return roleTimelineProvider(setting);
       case TabType.channel:

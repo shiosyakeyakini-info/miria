@@ -1,24 +1,26 @@
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:fl_chart/fl_chart.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/constants.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ServerDetailDialog extends ConsumerStatefulWidget {
   //TODO: 本当はサーバー情報取るのにアカウントいらない...
   final Account account;
 
   const ServerDetailDialog({
-    super.key,
     required this.account,
+    super.key,
   });
 
   @override
@@ -69,7 +71,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         });
       },
     );
-    misskey.startStreaming();
+    unawaited(misskey.startStreaming());
 
     Future(() async {
       try {
@@ -122,17 +124,24 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   Widget build(BuildContext context) {
     final currentStat = logged.lastOrNull;
     final currentQueueStats = queueLogged.lastOrNull;
+
+    useEffect(() {});
     return AlertDialog(
       title: Row(
         children: [
           Expanded(child: Text(widget.account.host)),
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.pushRoute(FederationRoute(
-                    account: widget.account, host: widget.account.host));
-              },
-              icon: const Icon(Icons.keyboard_arrow_right))
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await context.pushRoute(
+                FederationRoute(
+                  account: widget.account,
+                  host: widget.account.host,
+                ),
+              );
+            },
+            icon: const Icon(Icons.keyboard_arrow_right),
+          ),
         ],
       ),
       content: SizedBox(
@@ -169,23 +178,33 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       children: [
                         Text(S.of(context).cpuUsageRate),
                         if (currentStat != null)
-                          Text.rich(TextSpan(children: [
+                          Text.rich(
                             TextSpan(
-                                text: ((currentStat.cpu * 10000).toInt() / 100)
-                                    .toString(),
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall),
-                            TextSpan(
-                                text: " %",
-                                style: Theme.of(context).textTheme.bodyMedium)
-                          ])),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      ((currentStat.cpu * 10000).toInt() / 100)
+                                          .toString(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                TextSpan(
+                                  text: " %",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ),
                         if (logged.isNotEmpty)
                           Chart(
-                              data: logged
-                                  .skip(max(0, logged.length - 41))
-                                  .mapIndexed((index, element) =>
-                                      FlSpot(index.toDouble(), element.cpu))
-                                  .toList())
+                            data: logged
+                                .skip(max(0, logged.length - 41))
+                                .mapIndexed(
+                                  (index, element) =>
+                                      FlSpot(index.toDouble(), element.cpu),
+                                )
+                                .toList(),
+                          ),
                       ],
                     ),
                   ),
@@ -201,62 +220,71 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: format(
-                                        currentStat.mem.used / totalMemories!),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                  text: format(
+                                    currentStat.mem.used / totalMemories!,
+                                  ),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 TextSpan(
-                                    text: " %",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium)
+                                  text: " %",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ],
                             ),
                           ),
                         if (totalMemories != null && logged.isNotEmpty)
                           Chart(
-                              data: logged
-                                  .skip(max(0, logged.length - 41))
-                                  .mapIndexed((index, element) => FlSpot(
-                                      index.toDouble(),
-                                      element.mem.used / totalMemories!))
-                                  .toList())
+                            data: logged
+                                .skip(max(0, logged.length - 41))
+                                .mapIndexed(
+                                  (index, element) => FlSpot(
+                                    index.toDouble(),
+                                    element.mem.used / totalMemories!,
+                                  ),
+                                )
+                                .toList(),
+                          ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 children: [
                   Expanded(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(S.of(context).responseTime),
                         if (ping != null)
                           Text.rich(
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: ping.format(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                  text: ping.format(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 TextSpan(
                                   text: " ${S.of(context).milliSeconds}",
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: IconButton(
-                                        onPressed: () => refreshPing(),
-                                        icon: const Icon(Icons.refresh)))
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: IconButton(
+                                    onPressed: () async => refreshPing(),
+                                    icon: const Icon(Icons.refresh),
+                                  ),
+                                ),
                               ],
                             ),
-                          )
-                      ])),
+                          ),
+                      ],
+                    ),
+                  ),
                   Expanded(child: Container()),
                 ],
               ),
@@ -308,7 +336,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
               const Padding(padding: EdgeInsets.only(top: 10)),
               Text(S.of(context).deliverQueue),
@@ -358,7 +386,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ],
           ),
@@ -371,7 +399,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 class Chart extends StatelessWidget {
   final List<FlSpot> data;
 
-  const Chart({super.key, required this.data});
+  const Chart({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -379,13 +407,13 @@ class Chart extends StatelessWidget {
       height: 100,
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(
+          gridData: const FlGridData(
             drawHorizontalLine: false,
             drawVerticalLine: false,
           ),
-          titlesData: FlTitlesData(show: false),
+          titlesData: const FlTitlesData(show: false),
           borderData: FlBorderData(show: false),
-          lineTouchData: LineTouchData(enabled: false),
+          lineTouchData: const LineTouchData(enabled: false),
           minX: 0,
           maxX: 40,
           minY: 0,
@@ -398,10 +426,11 @@ class Chart extends StatelessWidget {
                   Theme.of(context).textTheme.bodyMedium?.color?.withAlpha(200),
               barWidth: 4,
               belowBarData: BarAreaData(
-                  show: true,
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
-              dotData: FlDotData(show: false),
-            )
+                show: true,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
+              dotData: const FlDotData(show: false),
+            ),
           ],
         ),
       ),

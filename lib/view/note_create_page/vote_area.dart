@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/state_notifier/note_create_page/note_create_state_notifier.dart';
-
-import '../common/account_scope.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
 
 class VoteArea extends ConsumerStatefulWidget {
   const VoteArea({super.key});
@@ -18,10 +16,14 @@ class VoteArea extends ConsumerStatefulWidget {
 class VoteAreaState extends ConsumerState<VoteArea> {
   @override
   Widget build(BuildContext context) {
-    final expireType = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.voteExpireType));
-    final isVote = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.isVote));
+    final expireType = ref.watch(
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.voteExpireType),
+    );
+    final isVote = ref.watch(
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.isVote),
+    );
 
     if (!isVote) {
       return Container();
@@ -35,7 +37,9 @@ class VoteAreaState extends ConsumerState<VoteArea> {
         ElevatedButton(
           onPressed: () {
             ref
-                .read(noteCreateProvider(AccountScope.of(context)).notifier)
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
                 .addVoteContent();
           },
           child: Text(S.of(context).addChoice),
@@ -59,8 +63,10 @@ class VoteContentList extends ConsumerStatefulWidget {
 class VoteContentListState extends ConsumerState<VoteContentList> {
   @override
   Widget build(BuildContext context) {
-    final contentCount = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.voteContentCount));
+    final contentCount = ref.watch(
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.voteContentCount),
+    );
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -74,7 +80,7 @@ class VoteContentListState extends ConsumerState<VoteContentList> {
 class VoteContentListItem extends ConsumerStatefulWidget {
   final int index;
 
-  const VoteContentListItem({super.key, required this.index});
+  const VoteContentListItem({required this.index, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -89,7 +95,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
 
     controller.addListener(() {
       ref
-          .read(noteCreateProvider(AccountScope.of(context)).notifier)
+          .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
           .setVoteContent(widget.index, controller.text);
     });
   }
@@ -99,7 +105,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
     super.didUpdateWidget(oldWidget);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.text = ref
-          .read(noteCreateProvider(AccountScope.of(context)))
+          .read(noteCreateNotifierProvider(AccountScope.of(context)))
           .voteContent[widget.index];
     });
   }
@@ -109,7 +115,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.text = ref
-          .read(noteCreateProvider(AccountScope.of(context)))
+          .read(noteCreateNotifierProvider(AccountScope.of(context)))
           .voteContent[widget.index];
     });
   }
@@ -135,12 +141,16 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
             ),
           ),
           IconButton(
-              onPressed: () {
-                ref
-                    .read(noteCreateProvider(AccountScope.of(context)).notifier)
-                    .deleteVoteContent(widget.index);
-              },
-              icon: const Icon(Icons.close)),
+            onPressed: () {
+              ref
+                  .read(
+                    noteCreateNotifierProvider(AccountScope.of(context))
+                        .notifier,
+                  )
+                  .deleteVoteContent(widget.index);
+            },
+            icon: const Icon(Icons.close),
+          ),
         ],
       ),
     );
@@ -155,13 +165,18 @@ class MultipleVoteRadioButton extends ConsumerWidget {
     return Row(
       children: [
         Switch(
-            value: ref.watch(noteCreateProvider(AccountScope.of(context))
-                .select((value) => value.isVoteMultiple)),
-            onChanged: (value) {
-              ref
-                  .read(noteCreateProvider(AccountScope.of(context)).notifier)
-                  .toggleVoteMultiple();
-            }),
+          value: ref.watch(
+            noteCreateNotifierProvider(AccountScope.of(context))
+                .select((value) => value.isVoteMultiple),
+          ),
+          onChanged: (value) {
+            ref
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
+                .toggleVoteMultiple();
+          },
+        ),
         Expanded(child: Text(S.of(context).canMultipleChoice)),
       ],
     );
@@ -174,21 +189,24 @@ class VoteDuration extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DropdownButton(
-        value: ref.watch(noteCreateProvider(AccountScope.of(context))
-            .select((value) => value.voteExpireType)),
-        items: [
-          for (final item in VoteExpireType.values)
-            DropdownMenuItem(
-              value: item,
-              child: Text(item.displayText(context)),
-            )
-        ],
-        onChanged: (item) {
-          if (item == null) return;
-          ref
-              .read(noteCreateProvider(AccountScope.of(context)).notifier)
-              .setVoteExpireType(item);
-        });
+      value: ref.watch(
+        noteCreateNotifierProvider(AccountScope.of(context))
+            .select((value) => value.voteExpireType),
+      ),
+      items: [
+        for (final item in VoteExpireType.values)
+          DropdownMenuItem(
+            value: item,
+            child: Text(item.displayText(context)),
+          ),
+      ],
+      onChanged: (item) {
+        if (item == null) return;
+        ref
+            .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
+            .setVoteExpireType(item);
+      },
+    );
   }
 }
 
@@ -202,8 +220,10 @@ class VoteUntilDate extends ConsumerStatefulWidget {
 class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
   @override
   Widget build(BuildContext context) {
-    final date = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.voteDate));
+    final date = ref.watch(
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.voteDate),
+    );
 
     return Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -211,43 +231,57 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
         onTap: () async {
           final account = AccountScope.of(context);
           final resultDate = await showDatePicker(
-              context: context,
-              initialDate: date ?? DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate:
-                  DateTime(2999, 12, 31)); //TODO: ｍisskeyの日付のデータピッカーどこまで行く？
+            context: context,
+            initialDate: date ?? DateTime.now(),
+            firstDate: DateTime.now(),
+            lastDate: DateTime(2999, 12, 31),
+          ); //TODO: ｍisskeyの日付のデータピッカーどこまで行く？
           if (resultDate == null) return;
-          if (!mounted) return;
+          if (!context.mounted) return;
           final resultTime = await showTimePicker(
-              context: context,
-              initialTime: TimeOfDay(
-                  hour: date?.hour ?? DateTime.now().hour,
-                  minute: date?.minute ?? DateTime.now().minute));
+            context: context,
+            initialTime: TimeOfDay(
+              hour: date?.hour ?? DateTime.now().hour,
+              minute: date?.minute ?? DateTime.now().minute,
+            ),
+          );
           if (resultTime == null) return;
 
-          ref.read(noteCreateProvider(account).notifier).setVoteExpireDate(
-              DateTime(resultDate.year, resultDate.month, resultDate.day,
-                  resultTime.hour, resultTime.minute, 0));
+          ref
+              .read(noteCreateNotifierProvider(account).notifier)
+              .setVoteExpireDate(
+                DateTime(
+                  resultDate.year,
+                  resultDate.month,
+                  resultDate.day,
+                  resultTime.hour,
+                  resultTime.minute,
+                  0,
+                ),
+              );
         },
         child: DecoratedBox(
-            decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).primaryColor),
-                borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Icon(Icons.date_range),
-                    const Padding(padding: EdgeInsets.only(left: 10)),
-                    Expanded(
-                      child: Text(
-                        date?.formatUntilSeconds(context) ?? "",
-                      ),
-                    ),
-                  ]),
-            )),
+          decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).primaryColor),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const Icon(Icons.date_range),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                Expanded(
+                  child: Text(
+                    date?.formatUntilSeconds(context) ?? "",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -272,7 +306,7 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
         final value = int.tryParse(controller.text);
         if (value == null) return;
         ref
-            .read(noteCreateProvider(AccountScope.of(context)).notifier)
+            .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
             .setVoteDuration(value);
       });
     });
@@ -288,7 +322,7 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     controller.text = ref
-            .read(noteCreateProvider(AccountScope.of(context)))
+            .read(noteCreateNotifierProvider(AccountScope.of(context)))
             .voteDuration
             ?.toString() ??
         "";
@@ -300,30 +334,36 @@ class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
       children: [
         Expanded(
           child: TextField(
-              controller: controller,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.timer)),
-              keyboardType: const TextInputType.numberWithOptions(),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
+            controller: controller,
+            decoration: const InputDecoration(prefixIcon: Icon(Icons.timer)),
+            keyboardType: const TextInputType.numberWithOptions(),
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          ),
         ),
         const Padding(
           padding: EdgeInsets.only(left: 10),
         ),
         DropdownButton(
-            items: [
-              for (final item in VoteExpireDurationType.values)
-                DropdownMenuItem(
-                  value: item,
-                  child: Text(item.displayText(context)),
-                ),
-            ],
-            value: ref.watch(noteCreateProvider(AccountScope.of(context))
-                .select((value) => value.voteDurationType)),
-            onChanged: (value) {
-              if (value == null) return;
-              ref
-                  .read(noteCreateProvider(AccountScope.of(context)).notifier)
-                  .setVoteDurationType(value);
-            }),
+          items: [
+            for (final item in VoteExpireDurationType.values)
+              DropdownMenuItem(
+                value: item,
+                child: Text(item.displayText(context)),
+              ),
+          ],
+          value: ref.watch(
+            noteCreateNotifierProvider(AccountScope.of(context))
+                .select((value) => value.voteDurationType),
+          ),
+          onChanged: (value) {
+            if (value == null) return;
+            ref
+                .read(
+                  noteCreateNotifierProvider(AccountScope.of(context)).notifier,
+                )
+                .setVoteDurationType(value);
+          },
+        ),
       ],
     );
   }
