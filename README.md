@@ -1,4 +1,4 @@
-EN | [日本語](https://github.com/shiosyakeyakini-info/miria/blob/develop/README-ja.md) 
+EN | [日本語](https://github.com/shiosyakeyakini-info/miria/blob/develop/README-ja.md)
 
 # Miria
 
@@ -33,16 +33,22 @@ I'm planning to deploy from F-Droid.
 
 - Miria does not support forked server's unique features.
 - Miria supports only over Misskey v13 and forked servers.
-  -  [Sharkey](https://joinsharkey.org/), [CherryPick](https://github.com/kokonect-link/cherrypick) and [mkkey.net](https://mkkey.net/) may be available but did not test.
-  -  [Firefish](https://joinfirefish.org/ja/), [Catodon](https://catodon.social/), Mastodon will not support in the future too.
--  Miria does not support AiScript related features. (Plugin, Play)
--  Miria does not depend browser features. ¥
-  - There are cases in which Miria's MFM appearance is different from browsers. 
+  - [Sharkey](https://joinsharkey.org/), [CherryPick](https://github.com/kokonect-link/cherrypick) and [mkkey.net](https://mkkey.net/) may be available but did not test.
+  - [Firefish](https://joinfirefish.org/ja/), [Catodon](https://catodon.social/), Mastodon will not support in the future too.
+- Miria does not support AiScript related features. (Plugin, Play)
+- Miria does not depend browser features. ¥
+  - There are cases in which Miria's MFM appearance is different from browsers.
   - Custom CSS didn't support.
 
-# License
+## Contribute
 
-## About Miria Icon
+### Localization
+
+See [Issue #164](https://github.com/shiosyakeyakini-info/miria/issues/164).
+
+## License
+
+### About Miria Icon
 
 ![Miria Icon](/assets/images/icon.png)
 
