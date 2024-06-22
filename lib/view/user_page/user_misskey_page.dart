@@ -1,18 +1,16 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserMisskeyPage extends ConsumerWidget {
   final String userId;
 
-  const UserMisskeyPage({super.key, required this.userId});
+  const UserMisskeyPage({required this.userId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,9 +32,13 @@ class UserMisskeyPage extends ConsumerWidget {
       itemBuilder: (context, page) {
         return ListTile(
           title: Text(page.title),
-          onTap: () {
-            context.pushRoute(MisskeyRouteRoute(
-                account: AccountScope.of(context), page: page));
+          onTap: () async {
+            await context.pushRoute(
+              MisskeyRouteRoute(
+                account: AccountScope.of(context),
+                page: page,
+              ),
+            );
           },
         );
       },

@@ -1,6 +1,6 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:mfm_parser/mfm_parser.dart';
+import "package:mfm_parser/mfm_parser.dart";
 
 extension ListMfmNodeExtension on List<MfmNode> {
   // https://github.com/misskey-dev/misskey/blob/2023.9.2/packages/frontend/src/scripts/extract-url-from-mfm.ts

@@ -1,19 +1,19 @@
-import 'package:auto_route/annotations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/users_lists_show_response_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/users_list_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/annotations.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/users_lists_show_response_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/users_list_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:miria/view/user_select_dialog.dart";
+import "package:miria/view/users_list_page/users_list_settings_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
     _UsersListNotifier, UsersList, (Misskey, String)>(_UsersListNotifier.new);
@@ -100,9 +100,9 @@ class _UsersListUsers
 @RoutePage()
 class UsersListDetailPage extends ConsumerWidget {
   const UsersListDetailPage({
-    super.key,
     required this.account,
     required this.listId,
+    super.key,
   });
 
   final Account account;
@@ -132,7 +132,7 @@ class UsersListDetailPage extends ConsumerWidget {
                 );
                 if (!context.mounted) return;
                 if (settings != null) {
-                  ref
+                  await ref
                       .read(_usersListNotifierProvider(arg).notifier)
                       .updateList(settings)
                       .expectFailure(context);

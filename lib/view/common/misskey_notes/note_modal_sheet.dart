@@ -1,31 +1,180 @@
-import 'dart:io';
-import 'dart:ui';
+import "dart:async";
+import "dart:io";
+import "dart:ui";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/abuse_dialog.dart';
-import 'package:miria/view/common/misskey_notes/clip_modal_sheet.dart';
-import 'package:miria/view/common/misskey_notes/copy_note_modal_sheet.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/note_create_page/note_create_page.dart';
-import 'package:miria/view/user_page/user_control_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/view/common/misskey_notes/clip_modal_sheet.dart";
+import "package:miria/view/note_create_page/note_create_page.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:path/path.dart";
+import "package:path_provider/path_provider.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:share_plus/share_plus.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
-final noteModalSheetSharingModeProviding = StateProvider((ref) => false);
+part "note_modal_sheet.freezed.dart";
+part "note_modal_sheet.g.dart";
 
+@freezed
+class NoteModalSheetState with _$NoteModalSheetState {
+  factory NoteModalSheetState({
+    required AsyncValue<NotesStateResponse> noteState,
+    @Default(false) bool isSharingMode,
+    AsyncValue<UserDetailed>? user,
+    AsyncValue<void>? delete,
+    AsyncValue<void>? deleteRecreate,
+    AsyncValue<void>? favorite,
+  }) = _NoteModalSheetState;
+}
+
+@Riverpod(keepAlive: false)
+class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
+  @override
+  NoteModalSheetState build(Account account, Note note) {
+    unawaited(_status());
+    return NoteModalSheetState(noteState: const AsyncLoading());
+  }
+
+  Future<void> _status() async {
+    state = state.copyWith(
+      noteState: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => ref
+                .read(misskeyProvider(this.account))
+                .notes
+                .state(NotesStateRequest(noteId: note.id)),
+          ),
+    );
+  }
+
+  Future<void> user() async {
+    state = state.copyWith(user: const AsyncLoading());
+    state = state.copyWith(
+      user: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async =>
+                await ref.read(misskeyProvider(this.account)).users.show(
+                      UsersShowRequest(userId: note.userId),
+                    ),
+          ),
+    );
+  }
+
+  Future<void> favorite() async {
+    final isFavorited = state.noteState.valueOrNull?.isFavorited;
+    if (isFavorited == null) return;
+    state = state.copyWith(favorite: const AsyncLoading());
+    state = state.copyWith(
+      favorite:
+          await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        if (isFavorited) {
+          await ref.read(misskeyProvider(this.account)).notes.favorites.delete(
+                NotesFavoritesDeleteRequest(noteId: note.id),
+              );
+        } else {
+          await ref.read(misskeyProvider(this.account)).notes.favorites.create(
+                NotesFavoritesCreateRequest(noteId: note.id),
+              );
+        }
+      }),
+    );
+  }
+
+  Future<void> copyAsImage(
+    RenderBox box,
+    RenderRepaintBoundary boundary,
+    double devicePixelRatio,
+  ) async {
+    final image = await boundary.toImage(pixelRatio: devicePixelRatio);
+    final byteData = await image.toByteData(format: ImageByteFormat.png);
+    state = state.copyWith(isSharingMode: false);
+
+    final path =
+        "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
+    final file = File(path);
+    await file.writeAsBytes(
+      byteData!.buffer.asUint8List(
+        byteData.offsetInBytes,
+        byteData.lengthInBytes,
+      ),
+    );
+
+    final xFile = XFile(path, mimeType: "image/png");
+    await Share.shareXFiles(
+      [xFile],
+      text: "https://${this.account.host}/notes/${note.id}",
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    );
+  }
+
+  Future<void> unRenote() async {
+    state = state.copyWith(delete: const AsyncLoading());
+    state = state.copyWith(
+      delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => await ref
+                .read(misskeyProvider(this.account))
+                .notes
+                .delete(NotesDeleteRequest(noteId: note.id)),
+          ),
+    );
+  }
+
+  Future<void> delete() async {
+    final confirm =
+        await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+              message: (context) => S.of(context).confirmDelete,
+              actions: (context) => [
+                S.of(context).doDeleting,
+                S.of(context).cancel,
+              ],
+            );
+    if (confirm != 0) return;
+    state = state.copyWith(delete: const AsyncLoading());
+    state = state.copyWith(
+      delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
+            () async => await ref
+                .read(misskeyProvider(this.account))
+                .notes
+                .delete(NotesDeleteRequest(noteId: note.id)),
+          ),
+    );
+  }
+
+  Future<void> deleteRecreate() async {
+    final confirm =
+        await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+              message: (context) => S.of(context).confirmDeletedRecreate,
+              actions: (context) => [
+                S.of(context).doDeleting,
+                S.of(context).cancel,
+              ],
+            );
+    if (confirm != 0) return;
+    state = state.copyWith(deleteRecreate: const AsyncLoading());
+    state = state.copyWith(
+      deleteRecreate:
+          await ref.read(dialogStateNotifierProvider.notifier).guard(
+                () async => await ref
+                    .read(misskeyProvider(this.account))
+                    .notes
+                    .delete(NotesDeleteRequest(noteId: note.id)),
+              ),
+    );
+  }
+}
+
+@RoutePage()
 class NoteModalSheet extends ConsumerWidget {
   final Note baseNote;
   final Note targetNote;
@@ -33,34 +182,48 @@ class NoteModalSheet extends ConsumerWidget {
   final GlobalKey noteBoundaryKey;
 
   const NoteModalSheet({
-    super.key,
     required this.baseNote,
     required this.targetNote,
     required this.account,
     required this.noteBoundaryKey,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
+    final notifierProvider =
+        noteModalSheetNotifierProvider(account, targetNote);
+
+    ref.listen(notifierProvider.select((value) => value.user), (_, next) async {
+      if (next! is AsyncData) return;
+      await context.pushRoute(
+        UserControlRoute(account: account, response: next.value!),
+      );
+    });
+    final noteStatus =
+        ref.watch(notifierProvider.select((value) => value.noteState));
+
     return ListView(
       children: [
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: Text(S.of(context).detail),
-          onTap: () {
-            context
-                .pushRoute(NoteDetailRoute(note: targetNote, account: account));
-          },
+          onTap: () async => context
+              .pushRoute(NoteDetailRoute(note: targetNote, account: account)),
         ),
         ListTile(
           leading: const Icon(Icons.copy),
           title: Text(S.of(context).copyContents),
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
+          onTap: () async {
+            await Clipboard.setData(ClipboardData(text: targetNote.text ?? ""));
+            if (!context.mounted) return;
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
           },
           trailing: IconButton(
@@ -80,15 +243,19 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
-          onTap: () {
-            Clipboard.setData(
+          onTap: () async {
+            await Clipboard.setData(
               ClipboardData(
                 text: "https://${account.host}/notes/${targetNote.id}",
               ),
             );
+            if (!context.mounted) return;
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).doneCopy), duration: const Duration(seconds: 1)),
+              SnackBar(
+                content: Text(S.of(context).doneCopy),
+                duration: const Duration(seconds: 1),
+              ),
             );
           },
         ),
@@ -96,30 +263,18 @@ class NoteModalSheet extends ConsumerWidget {
           leading: const Icon(Icons.person),
           title: Text(S.of(context).user),
           trailing: const Icon(Icons.keyboard_arrow_right),
-          onTap: () async {
-            final response = await ref
-                .read(misskeyProvider(account))
-                .users
-                .show(UsersShowRequest(userId: targetNote.userId));
-            if (!context.mounted) return;
-            showModalBottomSheet<void>(
-              context: context,
-              builder: (context) => UserControlDialog(
-                account: account,
-                response: response,
-              ),
-            );
-          },
+          onTap: () async => ref.read(notifierProvider.notifier).user(),
         ),
         ListTile(
           leading: const Icon(Icons.open_in_browser),
           title: Text(S.of(context).openBrowsers),
           onTap: () async {
-            launchUrlString(
+            await launchUrlString(
               "https://${account.host}/notes/${targetNote.id}",
               mode: LaunchMode.inAppWebView,
             );
 
+            if (!context.mounted) return;
             Navigator.of(context).pop();
           },
         ),
@@ -130,8 +285,8 @@ class NoteModalSheet extends ConsumerWidget {
             onTap: () async {
               final uri = targetNote.url ?? targetNote.uri;
               if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.inAppWebView);
-
+              await launchUrl(uri, mode: LaunchMode.inAppWebView);
+              if (!context.mounted) return;
               Navigator.of(context).pop();
             },
           ),
@@ -141,100 +296,49 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.open_in_new),
             title: Text(S.of(context).openInAnotherAccount),
-            onTap: () => ref
+            onTap: () async => ref
                 .read(misskeyNoteNotifierProvider(account).notifier)
-                .openNoteInOtherAccount(context, targetNote)
-                .expectFailure(context),
+                .openNoteInOtherAccount(context, targetNote),
           ),
         ListTile(
           leading: const Icon(Icons.share),
           title: Text(S.of(context).shareNotes),
           onTap: () {
-            ref.read(noteModalSheetSharingModeProviding.notifier).state = true;
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               Future(() async {
                 final box = context.findRenderObject() as RenderBox?;
-                final boundary = noteBoundaryKey.currentContext
-                    ?.findRenderObject() as RenderRepaintBoundary;
-                final image = await boundary.toImage(
-                  pixelRatio: View.of(context).devicePixelRatio,
-                );
-                final byteData =
-                    await image.toByteData(format: ImageByteFormat.png);
-                ref.read(noteModalSheetSharingModeProviding.notifier).state =
-                    false;
-
-                final path =
-                    "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
-                final file = File(path);
-                await file.writeAsBytes(
-                  byteData!.buffer.asUint8List(
-                    byteData.offsetInBytes,
-                    byteData.lengthInBytes,
-                  ),
-                );
-
-                final xFile = XFile(path, mimeType: "image/png");
-                await Share.shareXFiles(
-                  [xFile],
-                  text: "https://${account.host}/notes/${targetNote.id}",
-                  sharePositionOrigin:
-                      box!.localToGlobal(Offset.zero) & box.size,
-                );
+                if (box == null) return;
+                final boundary = noteBoundaryKey.currentContext!
+                    .findRenderObject()! as RenderRepaintBoundary;
+                await ref.read(notifierProvider.notifier).copyAsImage(
+                      box,
+                      boundary,
+                      View.of(context).devicePixelRatio,
+                    );
               });
             });
           },
         ),
-        FutureBuilder(
-          future: ref
-              .read(misskeyProvider(account))
-              .notes
-              .state(NotesStateRequest(noteId: targetNote.id)),
-          builder: (_, snapshot) {
-            final data = snapshot.data;
-            return (data == null)
-                ? const Center(child: CircularProgressIndicator())
-                : ListTile(
-                    leading: const Icon(Icons.star_rounded),
-                    onTap: () async {
-                      if (data.isFavorited) {
-                        ref
-                            .read(misskeyProvider(account))
-                            .notes
-                            .favorites
-                            .delete(
-                              NotesFavoritesDeleteRequest(
-                                noteId: targetNote.id,
-                              ),
-                            );
-
-                        Navigator.of(context).pop();
-                      } else {
-                        ref
-                            .read(misskeyProvider(account))
-                            .notes
-                            .favorites
-                            .create(
-                              NotesFavoritesCreateRequest(
-                                noteId: targetNote.id,
-                              ),
-                            );
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    title: Text(data.isFavorited
-                        ? S.of(context).deleteFavorite
-                        : S.of(context).favorite),
-                  );
-          },
-        ),
+        switch (noteStatus) {
+          AsyncLoading() => const Center(child: CircularProgressIndicator()),
+          AsyncError() => Text(S.of(context).thrownError),
+          AsyncData(:final value) => ListTile(
+              leading: const Icon(Icons.star_rounded),
+              onTap: () async => ref.read(notifierProvider.notifier).favorite(),
+              title: Text(
+                value.isFavorited
+                    ? S.of(context).deleteFavorite
+                    : S.of(context).favorite,
+              ),
+            )
+        },
         ListTile(
           leading: const Icon(Icons.attach_file),
           title: Text(S.of(context).clip),
-          onTap: () {
+          onTap: () async {
             Navigator.of(context).pop();
 
-            showModalBottomSheet(
+            await showModalBottomSheet(
               context: context,
               builder: (context2) =>
                   ClipModalSheet(account: account, noteId: targetNote.id),
@@ -244,14 +348,12 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.repeat_rounded),
           title: Text(S.of(context).notesAfterRenote),
-          onTap: () {
-            context.pushRoute(
-              NotesAfterRenoteRoute(
-                note: targetNote,
-                account: account,
-              ),
-            );
-          },
+          onTap: () async => context.pushRoute(
+            NotesAfterRenoteRoute(
+              note: targetNote,
+              account: account,
+            ),
+          ),
         ),
         if (baseNote.user.host == null &&
             baseNote.user.username == account.userId &&
@@ -265,7 +367,7 @@ class NoteModalSheet extends ConsumerWidget {
               title: Text(S.of(context).edit),
               onTap: () async {
                 Navigator.of(context).pop();
-                context.pushRoute(
+                await context.pushRoute(
                   NoteCreateRoute(
                     initialAccount: account,
                     note: targetNote,
@@ -277,55 +379,13 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.delete),
             title: Text(S.of(context).delete),
-            onTap: () async {
-              if (await showDialog(
-                    context: context,
-                    builder: (context) => SimpleConfirmDialog(
-                      message: S.of(context).confirmDelete,
-                      primary: S.of(context).doDeleting,
-                      secondary: S.of(context).cancel,
-                    ),
-                  ) ==
-                  true) {
-                await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .delete(NotesDeleteRequest(noteId: baseNote.id));
-                ref.read(notesProvider(account)).delete(baseNote.id);
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-              }
-            },
+            onTap: () async => ref.read(notifierProvider.notifier).delete(),
           ),
           ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
-            onTap: () async {
-              if (await showDialog(
-                    context: context,
-                    builder: (context) => SimpleConfirmDialog(
-                      message: S.of(context).confirmDeletedRecreate,
-                      primary: S.of(context).doDeleting,
-                      secondary: S.of(context).cancel,
-                    ),
-                  ) ==
-                  true) {
-                await ref
-                    .read(misskeyProvider(account))
-                    .notes
-                    .delete(NotesDeleteRequest(noteId: targetNote.id));
-                ref.read(notesProvider(account)).delete(targetNote.id);
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-                context.pushRoute(
-                  NoteCreateRoute(
-                    initialAccount: account,
-                    note: targetNote,
-                    noteCreationMode: NoteCreationMode.recreate,
-                  ),
-                );
-              }
-            },
+            onTap: () async =>
+                ref.read(notifierProvider.notifier).deleteRecreate(),
           ),
         ],
         if (baseNote.user.host == null &&
@@ -336,16 +396,7 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.delete),
             title: Text(S.of(context).deleteRenote),
-            onTap: () async {
-              await ref
-                  .read(misskeyProvider(account))
-                  .notes
-                  // unrenote ではないらしい
-                  .delete(NotesDeleteRequest(noteId: baseNote.id));
-              ref.read(notesProvider(account)).delete(baseNote.id);
-              if (!context.mounted) return;
-              Navigator.of(context).pop();
-            },
+            onTap: () async => ref.read(notifierProvider.notifier).unRenote(),
           ),
         ],
         if (baseNote.user.host != null ||
@@ -354,11 +405,10 @@ class NoteModalSheet extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
-            onTap: () {
-              Navigator.of(context).pop();
-              showDialog(
-                context: context,
-                builder: (context) => AbuseDialog(
+            onTap: () async {
+              // Navigator.of(context).pop();
+              await context.pushRoute(
+                AbuseRoute(
                   account: account,
                   targetUser: targetNote.user,
                   defaultText:

@@ -1,7 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'acct.freezed.dart';
-part 'acct.g.dart';
+part "acct.freezed.dart";
+part "acct.g.dart";
 
 @freezed
 class Acct with _$Acct {
