@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file/file.dart';
 import 'package:file_picker/file_picker.dart';
@@ -11,7 +12,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mfm_parser/mfm_parser.dart';
 import 'package:miria/extensions/note_visibility_extension.dart';
 import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
+import 'package:miria/model/misskey_post_file.dart';
 import 'package:miria/repository/note_repository.dart';
 import 'package:miria/view/common/error_dialog_handler.dart';
 import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
@@ -66,6 +67,8 @@ class TooFewVoteChoiceException implements NoteCreateException {}
 class EmptyVoteExpireDateException implements NoteCreateException {}
 
 class EmptyVoteExpireDurationException implements NoteCreateException {}
+
+class TooManyFilesException implements NoteCreateException {}
 
 class MentionToRemoteInLocalOnlyNoteException implements NoteCreateException {}
 
@@ -154,56 +157,22 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     }
     if (initialMediaFiles != null && initialMediaFiles.isNotEmpty == true) {
       resultState = resultState.copyWith(
-        files: await Future.wait(
-          initialMediaFiles.map((media) async {
-            final file = fileSystem.file(media);
-            final contents = await file.readAsBytes();
-            final fileName = file.basename;
-            final extension = fileName.split(".").last.toLowerCase();
-            if (["jpg", "png", "gif", "webp"].contains(extension)) {
-              return ImageFile(
-                data: contents,
-                fileName: fileName,
-              );
-            } else {
-              return UnknownFile(
-                data: contents,
-                fileName: fileName,
-              );
-            }
-          }),
-        ),
+        files: initialMediaFiles.map((path) {
+          final file = fileSystem.file(path);
+          final fileName = file.basename;
+          return PostFile(
+            file: file,
+            fileName: fileName,
+          );
+        }).toList(),
       );
     }
 
     // 削除されたノートの反映
     if (note != null) {
-      final files = <MisskeyPostFile>[];
-      for (final file in note.files) {
-        if (file.type.startsWith("image")) {
-          final response = await dio.get(file.url,
-              options: Options(responseType: ResponseType.bytes));
-          files.add(
-            ImageFileAlreadyPostedFile(
-              fileName: file.name,
-              data: response.data,
-              id: file.id,
-              isNsfw: file.isSensitive,
-              caption: file.comment,
-            ),
-          );
-        } else {
-          files.add(
-            UnknownAlreadyPostedFile(
-              url: file.url,
-              id: file.id,
-              fileName: file.name,
-              isNsfw: file.isSensitive,
-              caption: file.comment,
-            ),
-          );
-        }
-      }
+      final files =
+          note.files.map((file) => AlreadyPostedFile.file(file)).toList();
+
       final deletedNoteChannel = note.channel;
 
       final replyTo = <User>[];
@@ -315,104 +284,12 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       throw EmptyVoteExpireDurationException();
     }
 
+    if (state.files.length > 16) {
+      throw TooManyFilesException();
+    }
+
     try {
       state = state.copyWith(isNoteSending: NoteSendStatus.sending);
-
-      final fileIds = <String>[];
-
-      for (final file in state.files) {
-        DriveFile? response;
-
-        switch (file) {
-          case ImageFile():
-            final fileName = file.fileName.toLowerCase();
-            var imageData = file.data;
-            try {
-              if (fileName.endsWith("jpg") ||
-                  fileName.endsWith("jpeg") ||
-                  fileName.endsWith("tiff") ||
-                  fileName.endsWith("tif")) {
-                imageData =
-                    await FlutterImageCompress.compressWithList(file.data);
-              }
-            } catch (e) {
-              print("failed to compress file");
-            }
-
-            response = await misskey.drive.files.createAsBinary(
-              DriveFilesCreateRequest(
-                force: true,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ),
-              imageData,
-            );
-            fileIds.add(response.id);
-
-            break;
-          case UnknownFile():
-            response = await misskey.drive.files.createAsBinary(
-              DriveFilesCreateRequest(
-                force: true,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ),
-              file.data,
-            );
-            fileIds.add(response.id);
-
-            break;
-          case UnknownAlreadyPostedFile():
-            if (file.isEdited) {
-              await misskey.drive.files.update(DriveFilesUpdateRequest(
-                fileId: file.id,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ));
-            }
-            fileIds.add(file.id);
-            break;
-          case ImageFileAlreadyPostedFile():
-            if (file.isEdited) {
-              response =
-                  await misskey.drive.files.update(DriveFilesUpdateRequest(
-                fileId: file.id,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ));
-            }
-
-            fileIds.add(file.id);
-            break;
-        }
-
-        if (response?.isSensitive == true &&
-            !file.isNsfw &&
-            !state.account.i.alwaysMarkNsfw) {
-          if (context.mounted) {
-            final confirmResult = await SimpleConfirmDialog.show(
-              context: context,
-              message: S.of(context).unexpectedSensitive,
-              primary: S.of(context).staySensitive,
-              secondary: S.of(context).unsetSensitive,
-            );
-            if (confirmResult == false) {
-              await misskey.drive.files.update(
-                DriveFilesUpdateRequest(
-                  fileId: fileIds.last,
-                  isSensitive: false,
-                ),
-              );
-            }
-          }
-        }
-      }
-
-      if (!mounted) return;
 
       final nodes = const MfmParser().parse(state.text);
       final userList = <MfmMention>[];
@@ -434,6 +311,73 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
               element.host != null &&
               element.host != misskey.apiService.host)) {
         throw MentionToRemoteInLocalOnlyNoteException();
+      }
+
+      final files = await Future.wait(
+        state.files.map(
+          (file) async {
+            switch (file) {
+              case PostFile():
+                Uint8List contents = await file.file.readAsBytes();
+                if (["image/jpeg", "image/tiff"].contains(file.type)) {
+                  try {
+                    contents =
+                        await FlutterImageCompress.compressWithList(contents);
+                  } catch (e) {
+                    debugPrint("failed to compress file");
+                  }
+                }
+                final response = await misskey.drive.files.createAsBinary(
+                  DriveFilesCreateRequest(
+                    force: true,
+                    name: file.fileName,
+                    isSensitive: file.isNsfw,
+                    comment: file.caption,
+                  ),
+                  contents,
+                );
+                return response;
+              case AlreadyPostedFile():
+                if (file.isEdited) {
+                  return await misskey.drive.files.update(
+                    DriveFilesUpdateRequest(
+                      fileId: file.file.id,
+                      name: file.fileName,
+                      isSensitive: file.isNsfw,
+                      comment: file.caption,
+                    ),
+                  );
+                } else {
+                  return file.file;
+                }
+            }
+          },
+        ),
+      );
+      final autoSensitiveFiles = files.whereIndexed(
+        (index, file) => file.isSensitive && !state.files[index].isNsfw,
+      );
+      if (autoSensitiveFiles.isNotEmpty && !state.account.i.alwaysMarkNsfw) {
+        if (context.mounted) {
+          final confirmResult = await SimpleConfirmDialog.show(
+            context: context,
+            message: S.of(context).unexpectedSensitive,
+            primary: S.of(context).staySensitive,
+            secondary: S.of(context).unsetSensitive,
+          );
+          if (confirmResult == false) {
+            await Future.wait(
+              autoSensitiveFiles.map(
+                (file) => misskey.drive.files.update(
+                  DriveFilesUpdateRequest(
+                    fileId: file.id,
+                    isSensitive: false,
+                  ),
+                ),
+              ),
+            );
+          }
+        }
       }
 
       final mentionTargetUsers = [
@@ -492,7 +436,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           replyId: state.reply?.id,
           renoteId: state.renote?.id,
           channelId: state.channel?.id,
-          fileIds: fileIds.isEmpty ? null : fileIds,
+          fileIds: files.isEmpty ? null : files.map((file) => file.id).toList(),
           visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
           reactionAcceptance: state.reactionAcceptance,
           poll: state.isVote ? poll : null,
@@ -511,115 +455,70 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     final result = await showModalBottomSheet<DriveModalSheetReturnValue?>(
         context: context, builder: (context) => const DriveModalSheet());
 
-    if (result == DriveModalSheetReturnValue.drive) {
-      if (!mounted) return;
-      final result = await showDialog<List<DriveFile>?>(
-        context: context,
-        builder: (context) => DriveFileSelectDialog(
-          account: state.account,
-          allowMultiple: true,
-        ),
-      );
-      if (result == null) return;
-      final files = await Future.wait(
-        result.map((file) async {
-          if (file.type.startsWith("image")) {
-            final fileContentResponse = await dio.get<Uint8List>(
-              file.url,
-              options: Options(responseType: ResponseType.bytes),
-            );
-            return ImageFileAlreadyPostedFile(
-              data: fileContentResponse.data!,
-              id: file.id,
-              fileName: file.name,
-              isNsfw: file.isSensitive,
-              caption: file.comment,
-            );
-          }
-          return UnknownAlreadyPostedFile(
-            url: file.url,
-            id: file.id,
-            fileName: file.name,
-            isNsfw: file.isSensitive,
-            caption: file.comment,
-          );
-        }),
-      );
-      if (!mounted) return;
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
-    } else if (result == DriveModalSheetReturnValue.upload) {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: true,
-      );
-      if (result == null || result.files.isEmpty) return;
-
-      final fsFiles = result.files.map((file) {
-        final path = file.path;
-        if (path != null) {
-          return fileSystem.file(path);
-        }
-        return null;
-      }).nonNulls;
-      final files = await Future.wait(
-        fsFiles.map(
-          (file) async => ImageFile(
-            data: await file.readAsBytes(),
-            fileName: file.basename,
+    switch (result) {
+      case DriveModalSheetReturnValue.drive:
+        if (!context.mounted) return;
+        final result = await showDialog<List<DriveFile>?>(
+          context: context,
+          builder: (context) => DriveFileSelectDialog(
+            account: state.account,
+            allowMultiple: true,
           ),
-        ),
-      );
+        );
+        if (result == null || result.isEmpty) return;
 
-      if (!mounted) return;
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
+        final files = result.map((file) => AlreadyPostedFile.file(file));
+
+        state = state.copyWith(
+          files: [
+            ...state.files,
+            ...files,
+          ],
+        );
+      case DriveModalSheetReturnValue.uploadFile ||
+            DriveModalSheetReturnValue.uploadMedia:
+        final pickerResult = await FilePicker.platform.pickFiles(
+          type: result == DriveModalSheetReturnValue.uploadMedia
+              ? FileType.media
+              : FileType.any,
+          allowMultiple: true,
+        );
+        if (pickerResult == null || pickerResult.files.isEmpty) return;
+
+        final files = pickerResult.files.map(
+          (file) {
+            final path = file.path;
+            if (path != null) {
+              return PostFile.file(fileSystem.file(path));
+            }
+            return null;
+          },
+        ).nonNulls;
+
+        if (!mounted) return;
+        state = state.copyWith(
+          files: [
+            ...state.files,
+            ...files,
+          ],
+        );
+      default:
     }
   }
 
   /// メディアの内容を変更する
-  void setFileContent(MisskeyPostFile file, Uint8List? content) {
+  Future<void> setFileContent(MisskeyPostFile file, Uint8List? content) async {
     if (content == null) return;
+    final tempDir = await fileSystem.systemTempDirectory.createTemp();
+    final tempFile = fileSystem.file("${tempDir.path}/${file.fileName}");
+    await tempFile.writeAsBytes(content.toList());
     final files = state.files.toList();
-
-    switch (file) {
-      case ImageFile():
-        files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
-      case ImageFileAlreadyPostedFile():
-        files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
-      case UnknownFile():
-        files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
-      case UnknownAlreadyPostedFile():
-        files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
-    }
+    files[files.indexOf(file)] = PostFile(
+      file: tempFile,
+      fileName: file.fileName,
+      isNsfw: file.isNsfw,
+      caption: file.caption,
+    );
 
     state = state.copyWith(files: files);
   }
@@ -630,41 +529,19 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     final file = state.files[index];
 
     switch (file) {
-      case ImageFile():
-        files[index] = ImageFile(
-          data: file.data,
+      case PostFile():
+        files[index] = file.copyWith(
           fileName: result.fileName,
-          caption: result.caption,
           isNsfw: result.isNsfw,
+          caption: result.caption,
         );
-        break;
-      case ImageFileAlreadyPostedFile():
-        files[index] = ImageFileAlreadyPostedFile(
-          data: file.data,
-          id: file.id,
-          fileName: result.fileName,
-          isNsfw: result.isNsfw,
-          caption: result.caption,
+      case AlreadyPostedFile():
+        files[index] = file.copyWith(
           isEdited: true,
-        );
-        break;
-      case UnknownFile():
-        files[index] = UnknownFile(
-            data: file.data,
-            fileName: result.fileName,
-            isNsfw: result.isNsfw,
-            caption: result.caption);
-        break;
-      case UnknownAlreadyPostedFile():
-        files[index] = UnknownAlreadyPostedFile(
-          url: file.url,
-          id: file.id,
           fileName: result.fileName,
           isNsfw: result.isNsfw,
           caption: result.caption,
-          isEdited: true,
         );
-        break;
     }
 
     state = state.copyWith(files: files);

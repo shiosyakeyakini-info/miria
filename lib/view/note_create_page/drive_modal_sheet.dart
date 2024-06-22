@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum DriveModalSheetReturnValue { upload, drive }
+enum DriveModalSheetReturnValue { uploadMedia, uploadFile, drive }
 
 class DriveModalSheet extends StatelessWidget {
   const DriveModalSheet({super.key});
@@ -11,10 +11,17 @@ class DriveModalSheet extends StatelessWidget {
     return ListView(
       children: [
         ListTile(
-          title: Text(S.of(context).uploadFile),
+          title: Text(S.of(context).uploadMedia),
           leading: const Icon(Icons.upload),
           onTap: () {
-            Navigator.of(context).pop(DriveModalSheetReturnValue.upload);
+            Navigator.of(context).pop(DriveModalSheetReturnValue.uploadMedia);
+          },
+        ),
+        ListTile(
+          title: Text(S.of(context).uploadFile),
+          leading: const Icon(Icons.upload_file),
+          onTap: () {
+            Navigator.of(context).pop(DriveModalSheetReturnValue.uploadFile);
           },
         ),
         ListTile(
