@@ -209,9 +209,9 @@ class RenoteModalSheet extends HookConsumerWidget {
             onTap: () async =>
                 ref.read(notifier).renote(isLocalOnly.value, visibility.value),
             leading: const Icon(Icons.repeat),
-            title: const Padding(
-              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Text("Renote"),
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text(S.of(context).renote),
             ),
             subtitle: Row(
               children: [
@@ -319,10 +319,8 @@ class RenoteModalSheet extends HookConsumerWidget {
             title: Text(
               note.channel != null
                   ? S.of(context).quotedRenoteInOtherChannel
-                  : S.of(context).quotedRenoteInOtherChannel,
-            ),
-          ),
-        ],
+                  : S.of(context).quotedRenoteInChannel)),
+        ]
       ],
     );
   }
