@@ -1,3 +1,4 @@
+import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
@@ -6,7 +7,7 @@ import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/user_select_dialog.dart";
+import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
@@ -114,6 +115,7 @@ final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
   },
 );
 
+@RoutePage()
 class AntennaSettingsDialog extends StatelessWidget {
   const AntennaSettingsDialog({
     required this.account,
@@ -251,10 +253,8 @@ class AntennaSettingsForm extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () async {
-                final user = await showDialog<User>(
-                  context: context,
-                  builder: (context) => UserSelectDialog(account: account),
-                );
+                final user = await context
+                    .pushRoute<User>(UserSelectRoute(account: account));
                 if (user == null) {
                   return;
                 }

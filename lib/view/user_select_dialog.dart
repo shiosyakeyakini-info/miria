@@ -1,3 +1,4 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/origin_extension.dart";
@@ -8,6 +9,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
+@RoutePage()
 class UserSelectDialog extends StatelessWidget {
   final Account account;
 

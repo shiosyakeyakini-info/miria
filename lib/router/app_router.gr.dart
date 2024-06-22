@@ -34,6 +34,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AccountListPage(),
       );
     },
+    AccountSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<AccountSelectRouteArgs>(
+          orElse: () => const AccountSelectRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AccountSelectDialog(
+          key: args.key,
+          host: args.host,
+        ),
+      );
+    },
     AnnouncementRoute.name: (routeData) {
       final args = routeData.argsAs<AnnouncementRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -73,6 +84,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: AntennaPage(
           account: args.account,
           key: args.key,
+        ),
+      );
+    },
+    AntennaSettingsRoute.name: (routeData) {
+      final args = routeData.argsAs<AntennaSettingsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AntennaSettingsDialog(
+          account: args.account,
+          key: args.key,
+          title: args.title,
+          initialSettings: args.initialSettings,
         ),
       );
     },
@@ -156,6 +179,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    DriveFileSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<DriveFileSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DriveFileSelectDialog(
+          account: args.account,
+          key: args.key,
+          allowMultiple: args.allowMultiple,
+        ),
+      );
+    },
     ExpireSelectRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -204,6 +238,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    FolderSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<FolderSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: FolderSelectDialog(
+          account: args.account,
+          fileShowTarget: args.fileShowTarget,
+          confirmationText: args.confirmationText,
+          key: args.key,
+        ),
+      );
+    },
     GeneralSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -232,6 +278,17 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: InstanceMutePage(
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+    LicenseConfirmRoute.name: (routeData) {
+      final args = routeData.argsAs<LicenseConfirmRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LicenseConfirmDialog(
+          emoji: args.emoji,
           account: args.account,
           key: args.key,
         ),
@@ -345,6 +402,17 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: ReactionDeckPage(
           account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+    ReactionPickerRoute.name: (routeData) {
+      final args = routeData.argsAs<ReactionPickerRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ReactionPickerDialog(
+          account: args.account,
+          isAcceptSensitive: args.isAcceptSensitive,
           key: args.key,
         ),
       );
@@ -517,6 +585,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UserSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<UserSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserSelectDialog(
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
     UsersListDetailRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -633,6 +711,44 @@ class AccountListRoute extends PageRouteInfo<void> {
   static const String name = 'AccountListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AccountSelectDialog]
+class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
+  AccountSelectRoute({
+    Key? key,
+    String? host,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AccountSelectRoute.name,
+          args: AccountSelectRouteArgs(
+            key: key,
+            host: host,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AccountSelectRoute';
+
+  static const PageInfo<AccountSelectRouteArgs> page =
+      PageInfo<AccountSelectRouteArgs>(name);
+}
+
+class AccountSelectRouteArgs {
+  const AccountSelectRouteArgs({
+    this.key,
+    this.host,
+  });
+
+  final Key? key;
+
+  final String? host;
+
+  @override
+  String toString() {
+    return 'AccountSelectRouteArgs{key: $key, host: $host}';
+  }
 }
 
 /// generated route for
@@ -794,6 +910,54 @@ class AntennaRouteArgs {
   @override
   String toString() {
     return 'AntennaRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [AntennaSettingsDialog]
+class AntennaSettingsRoute extends PageRouteInfo<AntennaSettingsRouteArgs> {
+  AntennaSettingsRoute({
+    required Account account,
+    Key? key,
+    Widget? title,
+    AntennaSettings initialSettings = const AntennaSettings(),
+    List<PageRouteInfo>? children,
+  }) : super(
+          AntennaSettingsRoute.name,
+          args: AntennaSettingsRouteArgs(
+            account: account,
+            key: key,
+            title: title,
+            initialSettings: initialSettings,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AntennaSettingsRoute';
+
+  static const PageInfo<AntennaSettingsRouteArgs> page =
+      PageInfo<AntennaSettingsRouteArgs>(name);
+}
+
+class AntennaSettingsRouteArgs {
+  const AntennaSettingsRouteArgs({
+    required this.account,
+    this.key,
+    this.title,
+    this.initialSettings = const AntennaSettings(),
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  final Widget? title;
+
+  final AntennaSettings initialSettings;
+
+  @override
+  String toString() {
+    return 'AntennaSettingsRouteArgs{account: $account, key: $key, title: $title, initialSettings: $initialSettings}';
   }
 }
 
@@ -1093,6 +1257,49 @@ class ClipListRouteArgs {
 }
 
 /// generated route for
+/// [DriveFileSelectDialog]
+class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
+  DriveFileSelectRoute({
+    required Account account,
+    Key? key,
+    bool allowMultiple = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DriveFileSelectRoute.name,
+          args: DriveFileSelectRouteArgs(
+            account: account,
+            key: key,
+            allowMultiple: allowMultiple,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DriveFileSelectRoute';
+
+  static const PageInfo<DriveFileSelectRouteArgs> page =
+      PageInfo<DriveFileSelectRouteArgs>(name);
+}
+
+class DriveFileSelectRouteArgs {
+  const DriveFileSelectRouteArgs({
+    required this.account,
+    this.key,
+    this.allowMultiple = false,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  final bool allowMultiple;
+
+  @override
+  String toString() {
+    return 'DriveFileSelectRouteArgs{account: $account, key: $key, allowMultiple: $allowMultiple}';
+  }
+}
+
+/// generated route for
 /// [ExpireSelectDialog]
 class ExpireSelectRoute extends PageRouteInfo<void> {
   const ExpireSelectRoute({List<PageRouteInfo>? children})
@@ -1269,6 +1476,54 @@ class FederationRouteArgs {
 }
 
 /// generated route for
+/// [FolderSelectDialog]
+class FolderSelectRoute extends PageRouteInfo<FolderSelectRouteArgs> {
+  FolderSelectRoute({
+    required Account account,
+    required List<String>? fileShowTarget,
+    required String confirmationText,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          FolderSelectRoute.name,
+          args: FolderSelectRouteArgs(
+            account: account,
+            fileShowTarget: fileShowTarget,
+            confirmationText: confirmationText,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'FolderSelectRoute';
+
+  static const PageInfo<FolderSelectRouteArgs> page =
+      PageInfo<FolderSelectRouteArgs>(name);
+}
+
+class FolderSelectRouteArgs {
+  const FolderSelectRouteArgs({
+    required this.account,
+    required this.fileShowTarget,
+    required this.confirmationText,
+    this.key,
+  });
+
+  final Account account;
+
+  final List<String>? fileShowTarget;
+
+  final String confirmationText;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'FolderSelectRouteArgs{account: $account, fileShowTarget: $fileShowTarget, confirmationText: $confirmationText, key: $key}';
+  }
+}
+
+/// generated route for
 /// [GeneralSettingsPage]
 class GeneralSettingsRoute extends PageRouteInfo<void> {
   const GeneralSettingsRoute({List<PageRouteInfo>? children})
@@ -1374,6 +1629,49 @@ class InstanceMuteRouteArgs {
   @override
   String toString() {
     return 'InstanceMuteRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [LicenseConfirmDialog]
+class LicenseConfirmRoute extends PageRouteInfo<LicenseConfirmRouteArgs> {
+  LicenseConfirmRoute({
+    required String emoji,
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LicenseConfirmRoute.name,
+          args: LicenseConfirmRouteArgs(
+            emoji: emoji,
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'LicenseConfirmRoute';
+
+  static const PageInfo<LicenseConfirmRouteArgs> page =
+      PageInfo<LicenseConfirmRouteArgs>(name);
+}
+
+class LicenseConfirmRouteArgs {
+  const LicenseConfirmRouteArgs({
+    required this.emoji,
+    required this.account,
+    this.key,
+  });
+
+  final String emoji;
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'LicenseConfirmRouteArgs{emoji: $emoji, account: $account, key: $key}';
   }
 }
 
@@ -1810,6 +2108,49 @@ class ReactionDeckRouteArgs {
   @override
   String toString() {
     return 'ReactionDeckRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ReactionPickerDialog]
+class ReactionPickerRoute extends PageRouteInfo<ReactionPickerRouteArgs> {
+  ReactionPickerRoute({
+    required Account account,
+    required bool isAcceptSensitive,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ReactionPickerRoute.name,
+          args: ReactionPickerRouteArgs(
+            account: account,
+            isAcceptSensitive: isAcceptSensitive,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ReactionPickerRoute';
+
+  static const PageInfo<ReactionPickerRouteArgs> page =
+      PageInfo<ReactionPickerRouteArgs>(name);
+}
+
+class ReactionPickerRouteArgs {
+  const ReactionPickerRouteArgs({
+    required this.account,
+    required this.isAcceptSensitive,
+    this.key,
+  });
+
+  final Account account;
+
+  final bool isAcceptSensitive;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ReactionPickerRouteArgs{account: $account, isAcceptSensitive: $isAcceptSensitive, key: $key}';
   }
 }
 
@@ -2411,6 +2752,44 @@ class UserRouteArgs {
   @override
   String toString() {
     return 'UserRouteArgs{userId: $userId, account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UserSelectDialog]
+class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
+  UserSelectRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserSelectRoute.name,
+          args: UserSelectRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserSelectRoute';
+
+  static const PageInfo<UserSelectRouteArgs> page =
+      PageInfo<UserSelectRouteArgs>(name);
+}
+
+class UserSelectRouteArgs {
+  const UserSelectRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UserSelectRouteArgs{account: $account, key: $key}';
   }
 }
 
