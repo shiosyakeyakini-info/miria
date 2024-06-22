@@ -349,7 +349,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         cursorColor: theme.primary,
         selectionColor: theme.accentedBackground,
         selectionHandleColor: theme.primary,
-      )
+      ),
     );
 
     return themeData;

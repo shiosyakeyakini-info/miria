@@ -4,12 +4,12 @@ import "package:device_info_plus/device_info_plus.dart";
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import 'package:flutter/services.dart';
+import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:image_gallery_saver/image_gallery_saver.dart";
-import 'package:miria/view/common/interactive_viewer.dart' as iv;
 import "package:miria/providers.dart";
+import "package:miria/view/common/interactive_viewer.dart" as iv;
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:permission_handler/permission_handler.dart";
 
@@ -68,19 +68,19 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                   _resetScale();
                   pageController.previousPage(
                       duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease);
+                      curve: Curves.ease,);
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowRight): () {
                   _resetScale();
                   pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease);
+                      curve: Curves.ease,);
                 },
               },
               child: Dismissible(
                   key: const ValueKey(""),
                   behavior: HitTestBehavior.translucent,
-                  direction: (isDoubleTap == false &&
+                  direction: (!isDoubleTap &&
                           scale == 1.0 &&
                           pointersCount <= 1)
                       ? DismissDirection.vertical
@@ -116,8 +116,8 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
 
                                       scale = max(
                                           min(lastScale + (delta.dy / 75.0),
-                                              maxScale),
-                                          1.0);
+                                              maxScale,),
+                                          1.0,);
                                       final v = _transformationController
                                           .toScene(position);
 
@@ -151,7 +151,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                         _transformationController.value =
                                             Matrix4.identity()
                                             ..translate(
-                                              -position.dx * 2, -position.dy * 2)
+                                              -position.dx * 2, -position.dy * 2,)
                                               ..scale(3.0);
                                         scale = 3.0;
                                       }
@@ -161,7 +161,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                     },
                                     child: PageView(
                                       controller: pageController,
-                                      physics: (isDoubleTap == false &&
+                                      physics: (!isDoubleTap &&
                                               scale == 1.0 &&
                                               pointersCount <= 1)
                                           ? const ScrollPhysics()
@@ -180,7 +180,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                           ),
                                       ],
                                     ),
-                                  )))),
+                                  ),),),),
                       Positioned(
                         left: 10,
                         top: 10,
@@ -203,7 +203,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                         .textTheme
                                         .bodyMedium
                                         ?.color
-                                        ?.withAlpha(200)))),
+                                        ?.withAlpha(200),),),),
                       ),
                       if (defaultTargetPlatform == TargetPlatform.android ||
                           defaultTargetPlatform == TargetPlatform.iOS)
@@ -217,7 +217,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                   final response = await ref.read(dioProvider).get(
                                   widget.imageUrlList[page],
                                           options: Options(
-                                              responseType: ResponseType.bytes));
+                                              responseType: ResponseType.bytes,),);
 
                                   if (defaultTargetPlatform ==
                                       TargetPlatform.android) {
@@ -242,7 +242,7 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                   if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                          content: Text(S.of(context).savedImage)));
+                                          content: Text(S.of(context).savedImage),),);
                                 },
                                 constraints:
                                 const BoxConstraints(minWidth: 0, minHeight: 0),
@@ -260,10 +260,10 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                                             .textTheme
                                             .bodyMedium
                                             ?.color
-                                            ?.withAlpha(200))))),
+                                            ?.withAlpha(200),),),),),
                     ],
-                  )),
-                )));
+                  ),),
+                ),),);
   }
 }
 
@@ -308,15 +308,15 @@ class ScaleNotifierInteractiveViewerState
           child: NetworkImageView(
             url: widget.imageUrl,
             type: ImageType.image,
-            loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
+            loadingBuilder: (context, child,
+                  loadingProgress,) {
                 if (loadingProgress == null) return child;
                 return const SizedBox(
                     height: 48.0,
                     width: 48.0,
-                    child: Center(child: CircularProgressIndicator()));
-              }),
-        ));
+                    child: Center(child: CircularProgressIndicator()),);
+              },),
+        ),);
 
   }
 }

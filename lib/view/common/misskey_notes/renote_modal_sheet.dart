@@ -319,8 +319,8 @@ class RenoteModalSheet extends HookConsumerWidget {
             title: Text(
               note.channel != null
                   ? S.of(context).quotedRenoteInOtherChannel
-                  : S.of(context).quotedRenoteInChannel)),
-        ]
+                  : S.of(context).quotedRenoteInChannel,),),
+        ],
       ],
     );
   }

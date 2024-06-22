@@ -37,11 +37,11 @@ class UserMisskeyPage extends ConsumerWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold)),
+                  ?.copyWith(fontWeight: FontWeight.bold),),
           subtitle: MfmText(mfmText: page.summary),
           onTap: () {
             context.pushRoute(MisskeyRouteRoute(
-                account: AccountScope.of(context), page: page));
+                account: AccountScope.of(context), page: page,),);
           },
         );
       },

@@ -374,7 +374,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                             }
                             return KeyEventResult.ignored;
                           },
-                          child: const TimelineNoteField())),
+                          child: const TimelineNoteField(),),),
                   IconButton(
                     onPressed: note.expectFailure(context),
                     icon: const Icon(Icons.edit),
@@ -382,7 +382,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   IconButton(
                     onPressed: noteCreateRoute,
                     icon: const Icon(Icons.keyboard_arrow_right),
-                  )
+                  ),
                 ],
               ),
             ),
