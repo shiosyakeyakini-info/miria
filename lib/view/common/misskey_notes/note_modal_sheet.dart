@@ -226,6 +226,19 @@ class NoteModalSheet extends ConsumerWidget {
               ),
             );
           },
+          trailing: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => CopyNoteModalSheet(
+                  note: targetNote.text ?? "",
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit_note),
+            tooltip: S.of(context).detail,
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.link),
