@@ -1,7 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'clip_settings.freezed.dart';
+part "clip_settings.freezed.dart";
 
 @freezed
 class ClipSettings with _$ClipSettings {

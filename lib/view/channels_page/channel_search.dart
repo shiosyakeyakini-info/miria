@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/channels_page/community_channel_view.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/channels_page/community_channel_view.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 final channelSearchProvider = StateProvider.autoDispose((ref) => "");
 
@@ -69,8 +69,12 @@ class ChannelSearchList extends ConsumerWidget {
         final channels = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .channels
-            .search(ChannelsSearchRequest(
-                query: searchValue, untilId: lastItem.id));
+            .search(
+              ChannelsSearchRequest(
+                query: searchValue,
+                untilId: lastItem.id,
+              ),
+            );
         return channels.toList();
       },
       itemBuilder: (context, item) {

@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/model/tab_icon.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/model/tab_icon.dart";
 
 class IconDataConverter extends JsonConverter<TabIcon, dynamic> {
   const IconDataConverter();

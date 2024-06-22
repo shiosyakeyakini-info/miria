@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'desktop_settings.freezed.dart';
-part 'desktop_settings.g.dart';
+part "desktop_settings.freezed.dart";
+part "desktop_settings.g.dart";
 
 @freezed
 class DesktopSettings with _$DesktopSettings {
