@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/origin_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/origin_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserSelectDialog extends StatelessWidget {
   final Account account;
 
-  const UserSelectDialog({super.key, required this.account});
+  const UserSelectDialog({required this.account, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,8 @@ class UserSelectContent extends ConsumerStatefulWidget {
   final bool isDetail;
 
   const UserSelectContent({
-    super.key,
     required this.onSelected,
+    super.key,
     this.focusNode,
     this.isDetail = false,
   });
@@ -82,15 +82,13 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
           builder: (context, constraints) {
             return ToggleButtons(
               isSelected: [
-                for (final element in Origin.values) element == origin
+                for (final element in Origin.values) element == origin,
               ],
               constraints: BoxConstraints.expand(
-                  width: constraints.maxWidth / Origin.values.length -
-                      Theme.of(context)
-                              .toggleButtonsTheme
-                              .borderWidth!
-                              .toInt() *
-                          Origin.values.length),
+                width: constraints.maxWidth / Origin.values.length -
+                    Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
+                        Origin.values.length,
+              ),
               onPressed: (index) {
                 ref.read(usersSelectDialogOriginProvider.notifier).state =
                     Origin.values[index];
@@ -110,7 +108,7 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
             onSelected: widget.onSelected,
             isDetail: widget.isDetail,
           ),
-        )
+        ),
       ],
     );
   }
@@ -118,9 +116,9 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
 
 class UsersSelectContentList extends ConsumerWidget {
   const UsersSelectContentList({
-    super.key,
     required this.onSelected,
     required this.isDetail,
+    super.key,
   });
   final void Function(User) onSelected;
   final bool isDetail;
@@ -131,17 +129,22 @@ class UsersSelectContentList extends ConsumerWidget {
     final origin = ref.watch(usersSelectDialogOriginProvider);
 
     return PushableListView(
-      listKey: ObjectKey(Object.hashAll([
-        query,
-        origin,
-      ])),
+      listKey: ObjectKey(
+        Object.hashAll([
+          query,
+          origin,
+        ]),
+      ),
       initializeFuture: () async {
         if (query.isEmpty) {
           final response = await ref
               .read(misskeyProvider(AccountScope.of(context)))
               .users
-              .getFrequentlyRepliedUsers(UsersGetFrequentlyRepliedUsersRequest(
-                  userId: AccountScope.of(context).i.id));
+              .getFrequentlyRepliedUsers(
+                UsersGetFrequentlyRepliedUsersRequest(
+                  userId: AccountScope.of(context).i.id,
+                ),
+              );
           return response.map((e) => e.user).toList();
         }
 
@@ -158,11 +161,13 @@ class UsersSelectContentList extends ConsumerWidget {
         final response = await ref
             .read(misskeyProvider(AccountScope.of(context)))
             .users
-            .search(UsersSearchRequest(
-              query: query,
-              origin: origin,
-              offset: length,
-            ));
+            .search(
+              UsersSearchRequest(
+                query: query,
+                origin: origin,
+                offset: length,
+              ),
+            );
         return response.toList();
       },
       itemBuilder: (context2, item) => UserListItem(

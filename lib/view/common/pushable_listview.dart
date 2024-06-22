@@ -1,10 +1,12 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/error_notification.dart';
-import 'package:miria/view/common/misskey_ad.dart';
+import "dart:async";
+
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_notification.dart";
+import "package:miria/view/common/misskey_ad.dart";
 
 class PushableListView<T> extends ConsumerStatefulWidget {
   final Future<List<T>> Function() initializeFuture;
@@ -17,10 +19,10 @@ class PushableListView<T> extends ConsumerStatefulWidget {
   final bool showAd;
 
   const PushableListView({
-    super.key,
     required this.initializeFuture,
     required this.nextFuture,
     required this.itemBuilder,
+    super.key,
     this.listKey = "",
     this.shrinkWrap = false,
     this.physics,
@@ -52,8 +54,11 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
         setState(() {
           isLoading = false;
         });
-        scrollController.animateTo(-scrollController.position.pixels,
-            duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+        await scrollController.animateTo(
+          -scrollController.position.pixels,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeIn,
+        );
       } catch (e, s) {
         if (kDebugMode) print(e);
         if (mounted) {
@@ -134,10 +139,12 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
               return Container();
             }
 
-            if (ref.read(generalSettingsRepositoryProvider
-                    .select((value) => value.settings.automaticPush)) ==
+            if (ref.read(
+                  generalSettingsRepositoryProvider
+                      .select((value) => value.settings.automaticPush),
+                ) ==
                 AutomaticPush.automatic) {
-              nextLoad();
+              unawaited(nextLoad());
             }
 
             return Column(
@@ -152,7 +159,7 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                         stackTrace: error?.$2,
                       ),
                       widget.additionalErrorInfo?.call(context, error) ??
-                          const SizedBox.shrink()
+                          const SizedBox.shrink(),
                     ],
                   ),
                 Center(
@@ -166,8 +173,9 @@ class PushableListViewState<T> extends ConsumerState<PushableListView<T>> {
                         )
                       : const Padding(
                           padding: EdgeInsets.all(20),
-                          child: CircularProgressIndicator()),
-                )
+                          child: CircularProgressIndicator(),
+                        ),
+                ),
               ],
             );
           }

@@ -1,12 +1,12 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:miria/main.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_listener.dart';
-import 'package:miria/view/common/sharing_intent_listener.dart';
-import 'package:miria/view/themes/app_theme_scope.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_localizations/flutter_localizations.dart";
+import "package:miria/main.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/error_dialog_listener.dart";
+import "package:miria/view/common/sharing_intent_listener.dart";
+import "package:miria/view/themes/app_theme_scope.dart";
 
 class DefaultRootWidget extends StatefulWidget {
   final AppRouter? router;
@@ -52,9 +52,10 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
         );
       },
       routerConfig: router.config(
-          deepLinkBuilder: widget.initialRoute != null
-              ? (_) => DeepLink([widget.initialRoute!])
-              : null),
+        deepLinkBuilder: widget.initialRoute != null
+            ? (_) => DeepLink([widget.initialRoute!])
+            : null,
+      ),
     );
   }
 }
@@ -62,7 +63,7 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
 class DefaultRootNoRouterWidget extends StatelessWidget {
   final Widget child;
 
-  const DefaultRootNoRouterWidget({super.key, required this.child});
+  const DefaultRootNoRouterWidget({required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {

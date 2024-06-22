@@ -53,3 +53,5 @@ app.*.map.json
 
 # Snap package related
 *.snap
+# FVM Version Cache
+.fvm/
