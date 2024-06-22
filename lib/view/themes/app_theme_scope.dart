@@ -345,6 +345,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         valueIndicatorColor: theme.panel,
         valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
       ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: theme.primary,
+        selectionColor: theme.accentedBackground,
+        selectionHandleColor: theme.primary,
+      )
     );
 
     return themeData;
