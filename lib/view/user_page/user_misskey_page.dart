@@ -4,9 +4,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import 'package:url_launcher/url_launcher.dart';
 
 class UserMisskeyPage extends ConsumerWidget {
   final String userId;
@@ -32,7 +32,12 @@ class UserMisskeyPage extends ConsumerWidget {
       },
       itemBuilder: (context, page) {
         return ListTile(
-          title: MfmText(mfmText: page.title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+          title: MfmText(
+              mfmText: page.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold)),
           subtitle: MfmText(mfmText: page.summary),
           onTap: () {
             context.pushRoute(MisskeyRouteRoute(

@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:auto_route/annotations.dart";
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
@@ -185,10 +187,10 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         onKeyEvent: (node, event) {
                           if (event is KeyDownEvent) {
                             if (event.logicalKey == LogicalKeyboardKey.enter &&
-                              HardwareKeyboard.instance.isControlPressed) {
-                                notifier.note(context).expectFailure(context);
-                                return KeyEventResult.handled;
-                              }
+                                HardwareKeyboard.instance.isControlPressed) {
+                              unawaited(notifier.note());
+                              return KeyEventResult.handled;
+                            }
                           }
                           return KeyEventResult.ignored;
                         },
