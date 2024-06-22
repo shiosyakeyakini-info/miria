@@ -143,7 +143,7 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
                 host: account.host,
                 path: response.acct,
               ),
-              mode: LaunchMode.inAppWebView,
+              mode: LaunchMode.externalApplication,
             );
             if (!context.mounted) return;
             Navigator.of(context).pop();
@@ -156,7 +156,7 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
             onTap: () async {
               final uri = response.uri ?? response.url;
               if (uri == null) return;
-              await launchUrl(uri, mode: LaunchMode.inAppWebView);
+              launchUrl(uri, mode: LaunchMode.externalApplication);
               if (!context.mounted) return;
               Navigator.of(context).pop();
             },

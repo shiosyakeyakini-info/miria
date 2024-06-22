@@ -272,7 +272,7 @@ class NoteModalSheet extends ConsumerWidget {
           onTap: () async {
             await launchUrlString(
               "https://${account.host}/notes/${targetNote.id}",
-              mode: LaunchMode.inAppWebView,
+              mode: LaunchMode.externalApplication,
             );
 
             if (!context.mounted) return;
@@ -286,7 +286,7 @@ class NoteModalSheet extends ConsumerWidget {
             onTap: () async {
               final uri = targetNote.url ?? targetNote.uri;
               if (uri == null) return;
-              await launchUrl(uri, mode: LaunchMode.inAppWebView);
+              launchUrl(uri, mode: LaunchMode.externalApplication);
               if (!context.mounted) return;
               Navigator.of(context).pop();
             },
