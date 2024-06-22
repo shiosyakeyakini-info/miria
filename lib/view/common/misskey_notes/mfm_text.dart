@@ -1,38 +1,44 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_highlighting/flutter_highlighting.dart';
-import 'package:flutter_highlighting/themes/github-dark.dart';
-import 'package:flutter_highlighting/themes/github.dart';
-import 'package:highlighting/languages/all.dart';
-import 'package:mfm_parser/mfm_parser.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/link_navigator.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm/mfm.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:twemoji_v2/twemoji_v2.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter_highlighting/flutter_highlighting.dart";
+import "package:flutter_highlighting/themes/github-dark.dart";
+import "package:flutter_highlighting/themes/github.dart";
+import "package:highlighting/languages/all.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mfm/mfm.dart";
+import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/link_navigator.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:twemoji_v2/twemoji_v2.dart";
+import "package:url_launcher/url_launcher.dart";
 
-InlineSpan _unicodeEmojiBuilder(BuildContext builderContext, String emoji,
-    TextStyle? style, WidgetRef ref, void Function() onTap) {
+InlineSpan _unicodeEmojiBuilder(
+  BuildContext builderContext,
+  String emoji,
+  TextStyle? style,
+  WidgetRef ref,
+  void Function() onTap,
+) {
   if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
       EmojiType.system) {
     return TextSpan(
-        text: emoji,
-        style: style,
-        recognizer: MfmBlurScope.of(builderContext)
-            ? null
-            : (TapGestureRecognizer()..onTap = () => onTap));
+      text: emoji,
+      style: style,
+      recognizer: MfmBlurScope.of(builderContext)
+          ? null
+          : (TapGestureRecognizer()..onTap = () => onTap),
+    );
   } else {
     return WidgetSpan(
       child: GestureDetector(
@@ -85,16 +91,18 @@ class MfmText extends ConsumerStatefulWidget {
 class MfmTextState extends ConsumerState<MfmText> {
   Future<void> onSearch(String query) async {
     final uri = Uri(
-        scheme: "https",
-        host: "google.com",
-        pathSegments: ["search"],
-        queryParameters: {"q": query});
-    launchUrl(uri);
+      scheme: "https",
+      host: "google.com",
+      pathSegments: ["search"],
+      queryParameters: {"q": query},
+    );
+    await launchUrl(uri);
   }
 
-  void onHashtagTap(String hashtag) {
-    context.pushRoute(
-        HashtagRoute(account: AccountScope.of(context), hashtag: hashtag));
+  Future<void> onHashtagTap(String hashtag) async {
+    await context.pushRoute(
+      HashtagRoute(account: AccountScope.of(context), hashtag: hashtag),
+    );
   }
 
   @override
@@ -104,10 +112,11 @@ class MfmTextState extends ConsumerState<MfmText> {
       mfmNode: widget.mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
-            emojiName: ":$emojiName:",
-            repository: ref
-                .read(emojiRepositoryProvider(AccountScope.of(builderContext))),
-            emojiInfo: widget.emoji);
+          emojiName: ":$emojiName:",
+          repository: ref
+              .read(emojiRepositoryProvider(AccountScope.of(builderContext))),
+          emojiInfo: widget.emoji,
+        );
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,
           child: GestureDetector(
@@ -140,8 +149,9 @@ class MfmTextState extends ConsumerState<MfmText> {
           alignment: PlaceholderAlignment.middle,
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).dividerColor),
-                borderRadius: BorderRadius.circular(10)),
+              border: Border.all(color: Theme.of(context).dividerColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.only(left: 5, right: 5),
             margin: const EdgeInsets.only(left: 5, right: 5),
             child: Text.rich(
@@ -159,14 +169,19 @@ class MfmTextState extends ConsumerState<MfmText> {
       monospaceStyle: AppTheme.of(context).monospaceStyle,
       cursiveStyle: AppTheme.of(context).cursiveStyle,
       fantasyStyle: AppTheme.of(context).fantasyStyle,
-      linkTap: (src) => const LinkNavigator()
+      linkTap: (src) async => const LinkNavigator()
           .onTapLink(context, ref, src, widget.host)
           .expectFailure(context),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
-      mentionTap: (userName, host, acct) => const LinkNavigator()
+      mentionTap: (userName, host, acct) async => const LinkNavigator()
           .onMentionTap(
-              context, ref, AccountScope.of(context), acct, widget.host)
+            context,
+            ref,
+            AccountScope.of(context),
+            acct,
+            widget.host,
+          )
           .expectFailure(context),
       hashtagTap: onHashtagTap,
       searchTap: onSearch,
@@ -186,9 +201,9 @@ class CodeBlock extends StatelessWidget {
   final String code;
 
   const CodeBlock({
+    required this.code,
     super.key,
     this.language,
-    required this.code,
   });
 
   String resolveLanguage(String language) {
@@ -206,15 +221,16 @@ class CodeBlock extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: HighlightView(
-            code,
-            languageId: resolvedLanguage,
-            theme:
-                AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
-            padding: const EdgeInsets.all(10),
-            textStyle: AppTheme.of(context).monospaceStyle,
-          )),
+        scrollDirection: Axis.horizontal,
+        child: HighlightView(
+          code,
+          languageId: resolvedLanguage,
+          theme:
+              AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
+          padding: const EdgeInsets.all(10),
+          textStyle: AppTheme.of(context).monospaceStyle,
+        ),
+      ),
     );
   }
 }
@@ -222,12 +238,14 @@ class CodeBlock extends StatelessWidget {
 class EmojiInk extends ConsumerWidget {
   final Widget child;
 
-  const EmojiInk({super.key, required this.child});
+  const EmojiInk({required this.child, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isEnabled = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.enableDirectReaction));
+    final isEnabled = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.enableDirectReaction),
+    );
     if (isEnabled) {
       return InkWell(child: child);
     } else {
@@ -289,8 +307,8 @@ class SimpleMfmText extends ConsumerWidget {
 class UserInformation extends ConsumerStatefulWidget {
   final User user;
   const UserInformation({
-    super.key,
     required this.user,
+    super.key,
   });
 
   @override
@@ -326,18 +344,18 @@ class UserInformationState extends ConsumerState<UserInformation> {
                 child: NetworkImageView(
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!),
-                  height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  height: DefaultTextStyle.of(context).style.fontSize ?? 22,
                   loadingBuilder: (context, widget, event) => SizedBox(
-                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                      height:
-                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                  ),
                   errorBuilder: (context, e, s) => SizedBox(
-                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                      height:
-                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                  ),
                 ),
               ),
-            )
+            ),
       ],
     );
   }
