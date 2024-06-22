@@ -1,6 +1,6 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class LocalOnlyIcon extends StatelessWidget {
   final double? size;
@@ -12,11 +12,7 @@ class LocalOnlyIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Icon(
-          Icons.rocket,
-          size: size,
-          color: color,
-        ),
+        Icon(Icons.rocket, size: size, color: color),
         Transform.translate(
           offset: Offset(3, (size ?? 22) / 2 - 1),
           child: Transform.rotate(
@@ -26,15 +22,12 @@ class LocalOnlyIcon extends StatelessWidget {
               height: size,
               decoration: BoxDecoration(
                 border: Border(
-                  left: BorderSide(
-                    color: color ?? Colors.grey,
-                    width: 2,
-                  ),
+                  left: BorderSide(color: color ?? Colors.grey, width: 2),
                 ),
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

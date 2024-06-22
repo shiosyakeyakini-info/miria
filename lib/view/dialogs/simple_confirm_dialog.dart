@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/account.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
 class SimpleConfirmDialog extends StatelessWidget {
   final String message;
@@ -19,51 +19,57 @@ class SimpleConfirmDialog extends StatelessWidget {
     Account? account,
   }) async =>
       await showDialog(
-          context: context,
-          builder: (context) => SimpleConfirmDialog(
-                message: message,
-                primary: primary,
-                secondary: secondary,
-                isMfm: isMfm,
-                account: account,
-              ));
+        context: context,
+        builder: (context) => SimpleConfirmDialog(
+          message: message,
+          primary: primary,
+          secondary: secondary,
+          isMfm: isMfm,
+          account: account,
+        ),
+      );
 
   const SimpleConfirmDialog({
-    super.key,
     required this.message,
     required this.primary,
     required this.secondary,
+    super.key,
     this.isMfm = false,
     this.account,
-  }) : assert(isMfm == false || (isMfm == true && account != null));
+  }) : assert(!isMfm || (isMfm && account != null));
 
   @override
   Widget build(BuildContext context) {
     if (isMfm) {
       return AccountScope(
-          account: account!,
-          child: AlertDialog(
-            content: SimpleMfmText(message),
-            actions: [
-              OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text(secondary)),
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(primary))
-            ],
-          ));
+        account: account!,
+        child: AlertDialog(
+          content: SimpleMfmText(message),
+          actions: [
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(secondary),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(primary),
+            ),
+          ],
+        ),
+      );
     }
 
     return AlertDialog(
       content: Text(message),
       actions: [
         OutlinedButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(secondary)),
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(secondary),
+        ),
         ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(primary))
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(primary),
+        ),
       ],
     );
   }

@@ -1,34 +1,36 @@
-import 'dart:io';
+import "dart:async";
+import "dart:io";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:miria/model/desktop_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_dialog_listener.dart';
-import 'package:miria/view/common/sharing_intent_listener.dart';
-import 'package:miria/view/themes/app_theme_scope.dart';
-import 'package:stack_trace/stack_trace.dart' as stack_trace;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:window_manager/window_manager.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_localizations/flutter_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:media_kit/media_kit.dart";
+import "package:miria/model/desktop_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/dialog/dialog_scope.dart";
+import "package:miria/view/common/error_dialog_listener.dart";
+import "package:miria/view/common/sharing_intent_listener.dart";
+import "package:miria/view/themes/app_theme_scope.dart";
+import "package:stack_trace/stack_trace.dart" as stack_trace;
+import "package:window_manager/window_manager.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-    windowManager.ensureInitialized();
+    await windowManager.ensureInitialized();
   }
-  FlutterError.demangleStackTrace = (StackTrace stack) {
+  FlutterError.demangleStackTrace = (stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
 
-  runApp(ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -47,10 +49,10 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
     if (isDesktop) {
       WidgetsBinding.instance.addObserver(this);
       windowManager.addListener(this);
-      ref
-          .read(desktopSettingsRepositoryProvider)
-          .load()
-          .then((_) => _initWindow());
+      unawaited(() async {
+        await ref.read(desktopSettingsRepositoryProvider).load();
+        await _initWindow();
+      }());
     }
     super.initState();
   }
@@ -65,22 +67,25 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
   }
 
   @override
-  void onWindowClose() async {
+  Future<void> onWindowClose() async {
     if (!isDesktop) return;
 
-    bool isPreventClose = await windowManager.isPreventClose();
+    final isPreventClose = await windowManager.isPreventClose();
     if (isPreventClose) {
       final size = await windowManager.getSize();
       final position = await windowManager.getPosition();
       try {
         final settings = ref.read(desktopSettingsRepositoryProvider).settings;
         await ref.read(desktopSettingsRepositoryProvider).update(
-            settings.copyWith(
+              settings.copyWith(
                 window: DesktopWindowSettings(
-                    w: size.width,
-                    h: size.height,
-                    x: position.dx,
-                    y: position.dy)));
+                  w: size.width,
+                  h: size.height,
+                  x: position.dx,
+                  y: position.dy,
+                ),
+              ),
+            );
       } catch (e) {
         if (kDebugMode) print(e);
       } finally {
@@ -104,29 +109,28 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
 
   Future<void> _initWindow() async {
     await windowManager.setPreventClose(true);
-    DesktopSettings config =
-        ref.read(desktopSettingsRepositoryProvider).settings;
+    final config = ref.read(desktopSettingsRepositoryProvider).settings;
 
-    Size size = (config.window.w > 0 && config.window.h > 0)
+    final size = (config.window.w > 0 && config.window.h > 0)
         ? Size(config.window.w, config.window.h)
         : const Size(400, 700);
 
-    Offset? position = (config.window.x != null && config.window.y != null)
+    final position = (config.window.x != null && config.window.y != null)
         ? Offset(config.window.x!, config.window.y!)
         : null;
 
-    WindowOptions opt = WindowOptions(
+    final opt = WindowOptions(
       size: size,
-      center: (position == null),
+      center: position == null,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
     );
 
     if (position != null) {
-      windowManager.setPosition(position);
+      await windowManager.setPosition(position);
     }
 
-    windowManager.waitUntilReadyToShow(opt, () async {
+    await windowManager.waitUntilReadyToShow(opt, () async {
       await windowManager.show();
       await windowManager.focus();
     });
@@ -135,14 +139,20 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final language = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.languages));
+    final language = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.languages),
+    );
 
     return MaterialApp.router(
-      title: 'Miria',
+      title: "Miria",
       debugShowCheckedModeBanner: false,
       locale: Locale(language.countryCode, language.languageCode),
-      supportedLocales: const [Locale("ja", "JP"), Locale("ja", "OJ"), Locale("zh", "CN")],
+      supportedLocales: const [
+        Locale("ja", "JP"),
+        Locale("ja", "OJ"),
+        Locale("zh", "CN"),
+      ],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,
@@ -151,11 +161,13 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, widget) {
-        return AppThemeScope(
-          child: SharingIntentListener(
-            router: _appRouter,
-            child: ErrorDialogListener(
-              child: widget ?? Container(),
+        return DialogScope(
+          child: AppThemeScope(
+            child: SharingIntentListener(
+              router: _appRouter,
+              child: ErrorDialogListener(
+                child: widget ?? Container(),
+              ),
             ),
           ),
         );
