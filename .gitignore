@@ -50,3 +50,6 @@ app.*.map.json
 
 # Release
 /private_keys/
+
+# FVM Version Cache
+.fvm/

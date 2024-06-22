@@ -1,6 +1,9 @@
-import 'package:collection/collection.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+
+part "misskey_server_list_notifier.g.dart";
 
 final _queryProvider = StateProvider.autoDispose((ref) {
   return "";
@@ -27,8 +30,8 @@ class _InstanceInfos
   }
 }
 
-class MisskeyServerListNotifier
-    extends AutoDisposeAsyncNotifier<List<JoinMisskeyInstanceInfo>> {
+@riverpod
+class MisskeyServerListNotifier extends _$MisskeyServerListNotifier {
   @override
   Future<List<JoinMisskeyInstanceInfo>> build() async {
     final query = ref.watch(_queryProvider);

@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
-import 'package:miria/model/input_completion_type.dart';
-import 'package:miria/view/common/color_picker_dialog.dart';
-import 'package:miria/view/common/date_time_picker.dart';
-import 'package:miria/view/common/note_create/basic_keyboard.dart';
-import 'package:miria/view/common/note_create/custom_keyboard_button.dart';
-import 'package:miria/view/common/note_create/input_completation.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/text_editing_controller_extension.dart";
+import "package:miria/model/input_completion_type.dart";
+import "package:miria/view/common/color_picker_dialog.dart";
+import "package:miria/view/common/date_time_picker.dart";
+import "package:miria/view/common/note_create/basic_keyboard.dart";
+import "package:miria/view/common/note_create/custom_keyboard_button.dart";
+import "package:miria/view/common/note_create/input_completation.dart";
 
 class MfmFnArg {
   const MfmFnArg({
@@ -143,10 +143,10 @@ final filteredMfmFnArgsProvider = Provider.autoDispose<List<MfmFnArg>>((ref) {
 
 class MfmFnKeyboard extends ConsumerWidget {
   const MfmFnKeyboard({
-    super.key,
     required this.controller,
     required this.focusNode,
     required this.parentContext,
+    super.key,
   });
 
   final TextEditingController controller;
@@ -172,11 +172,13 @@ class MfmFnKeyboard extends ConsumerWidget {
       }
     } else if (mfmFnName == "fg" || mfmFnName == "bg") {
       final result = await showDialog<Color?>(
-          context: parentContext,
-          builder: (context) => const ColorPickerDialog());
+        context: parentContext,
+        builder: (context) => const ColorPickerDialog(),
+      );
       if (result != null) {
         controller.insert(
-            ".color=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ");
+          ".color=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ",
+        );
       } else {
         controller.insert(" ");
       }
@@ -210,7 +212,8 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(arg.name.substring(queryLength));
       }
     }
-    if ((mfmFnName == "fg" || mfmFnName == "bg") && arg.name == "color") {
+    if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") &&
+        arg.name == "color") {
       final result = await showDialog<Color?>(
         context: parentContext,
         builder: (context) => const ColorPickerDialog(),
@@ -241,7 +244,7 @@ class MfmFnKeyboard extends ConsumerWidget {
                 keyboard: arg.name,
                 controller: controller,
                 focusNode: focusNode,
-                onTap: () => insertMfmFnArg(arg),
+                onTap: () async => insertMfmFnArg(arg),
               ),
             )
             .toList(),
@@ -254,7 +257,7 @@ class MfmFnKeyboard extends ConsumerWidget {
                 keyboard: name,
                 controller: controller,
                 focusNode: focusNode,
-                onTap: () => insertMfmFnName(name),
+                onTap: () async => insertMfmFnName(name),
               ),
             )
             .toList(),

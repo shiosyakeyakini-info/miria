@@ -1,26 +1,26 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import "package:device_info_plus/device_info_plus.dart";
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:image_gallery_saver/image_gallery_saver.dart";
 import 'package:miria/view/common/interactive_viewer.dart' as iv;
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:permission_handler/permission_handler.dart";
 
 class ImageDialog extends ConsumerStatefulWidget {
   final List<String> imageUrlList;
   final int initialPage;
 
   const ImageDialog({
-    super.key,
     required this.imageUrlList,
     required this.initialPage,
+    super.key,
   });
 
   @override
@@ -275,12 +275,12 @@ class ScaleNotifierInteractiveViewer extends StatefulWidget {
   final bool isEnableScale;
 
   const ScaleNotifierInteractiveViewer({
-    super.key,
     required this.imageUrl,
     required this.controller,
     required this.onScaleChanged,
     required this.maxScale,
     required this.isEnableScale,
+    super.key,
   });
 
   @override
@@ -317,5 +317,6 @@ class ScaleNotifierInteractiveViewerState
                     child: Center(child: CircularProgressIndicator()));
               }),
         ));
+
   }
 }
