@@ -201,21 +201,17 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-          autofocus: true,
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (value) {
-            Future(() async {
-              final result = await emojiRepository.searchEmojis(value);
-              if (!mounted) return;
-              setState(() {
-                emojis
-                  ..clear()
-                  ..addAll(result);
-              });
+    return Column(children: [
+      TextField(
+        decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+        autofocus: true,
+        onChanged: (value) {
+          Future(() async {
+            final result = await emojiRepository.searchEmojis(value);
+            if (!mounted) return;
+            setState(() {
+              emojis.clear();
+              emojis.addAll(result);
             });
           },
         ),
