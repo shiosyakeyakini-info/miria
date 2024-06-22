@@ -94,6 +94,12 @@ class AccountListItem extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              context.pushRoute(SeveralAccountGeneralSettingsRoute(account: account));
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
               showDialog(
