@@ -17,8 +17,8 @@
     "hide": "隠す",
     "note": "ノート",
     "mention": "メンション",
-    "renote": "Renote",
-    "quotedRenote": "引用Renote",
+    "renote": "リノート",
+    "quotedRenote": "引用",
     "notification": "通知",
     "list": "リスト",
     "explore": "みつける",
@@ -210,7 +210,7 @@
     "deleteFavorite": "お気に入り解除",
     "notesAfterRenote": "リノート直後のノート",
     "deletedRecreate": "削除してなおす",
-    "confirmDeletedRecreate": "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
+    "confirmDeletedRecreate": "このノート消してなおす？ついたリアクション、リノート、返信は消えて戻らへんで？",
     "deleteRenote": "リノートを解除する",
     "confirmDelete": "ほんまに消してええな？",
     "doDeleting": "消す！",
@@ -254,7 +254,7 @@
         }
     },
     "renoted": "リノートしました。",
-    "renoteInSpecificChannel": "{channelName}内にRenote",
+    "renoteInSpecificChannel": "{channelName}内にリノート",
     "@renoteInSpecificChannel": {
         "placeholders": {
             "channelName": {
@@ -262,7 +262,7 @@
             }
         }
     },
-    "quotedRenoteInSpecificChannel": "{channelName}内に引用Renote",
+    "quotedRenoteInSpecificChannel": "{channelName}内に引用",
     "@quotedRenoteInSpecificChannel": {
         "placeholders": {
             "channelName": {
@@ -270,11 +270,11 @@
             }
         }
     },
-    "renoteInChannel": "チャンネルへRenote",
-    "renoteInOtherChannel": "よそのチャンネルへRenote",
-    "quotedRenoteInChannel": "チャンネルへ引用Renote",
-    "quotedRenoteInOtherChannel": "よそのチャンネルへRenote",
-    "renotedUsers": "Renoteしたユーザー",
+    "renoteInChannel": "チャンネルへリノート",
+    "renoteInOtherChannel": "よそのチャンネルへリノート",
+    "quotedRenoteInChannel": "チャンネルへ引用",
+    "quotedRenoteInOtherChannel": "よそのチャンネルへ引用",
+    "renotedUsers": "リノートしたユーザー",
     "otherComplementReactions": "他のん",
     "openAsOtherAccount": "開くアカウントを選んでや",
     "pickColor": "色を選んでや",
@@ -329,7 +329,7 @@
     "renotedUsersInNotification": "リノートしてくれはった人",
     "reactionUsersInNotification": "リアクションしてくれはった人",
     "finishedVotedNotification": "投票が終わったみたいや",
-    "renoteAndReactionsNotification": "{reactionUser}さんたちがリアクションしはって、{renotedUser}さんたちがRenoteしはったで",
+    "renoteAndReactionsNotification": "{reactionUser}さんたちがリアクションしはって、{renotedUser}さんたちがリノートしはったで",
     "@renoteAndReactionsNotification": {
         "placeholders": {
             "reactionUser": {
@@ -340,7 +340,7 @@
             }
         }
     },
-    "renoteNotification": "{renoteUser}さんたちがRenoteしはったで",
+    "renoteNotification": "{renoteUser}さんたちがリノートしはったで",
     "@renoteNotification": {
         "placeholders": {
             "renoteUser": {
@@ -777,7 +777,7 @@
     "enableAnimatedMfm": "動きのあるMFM",
     "enableAnimatedMfmDescription": "動きのあるMFMを有効にします。",
     "collapseNotes": "ノートの省略",
-    "collapseReactionedRenotes": "リアクション済みノートのRenoteを省略します。",
+    "collapseReactionedRenotes": "リアクション済みノートのリノートを省略します。",
     "collapseLongNotes": "長いノートを省略します。",
     "tabPosition": "タブの位置",
     "tabPositionDescription": "{tabPosition}に表示する",
@@ -861,7 +861,7 @@
     "emojiCache": "絵文字の情報",
     "serverCache": "サーバーの情報",
     "instanceMuteDescription1": "設定したサーバーのノートを隠します。",
-    "instanceMuteDescription2": "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとRenoteをミュートします。\n改行で区切って設定します。",
+    "instanceMuteDescription2": "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとリノートをミュートします。\n改行で区切って設定します。",
     "bulkAddReactions": "一括追加",
     "bulkAddReactionsDescription1": "お使いのブラウザでリアクションデッキをコピーしたいアカウントにログインしてください",
     "bulkAddReactionsDescription2": "同じブラウザで以下のURLにアクセスして「値 (JSON)」の内容をすべて選択してコピーしてください",
@@ -901,8 +901,8 @@
     "addToList": "リストに追加",
     "addToAntenna": "アンテナに追加",
     "searchNote": "ノートを検索",
-    "deleteRenoteMute": "Renoteのミュートを解除する",
-    "createRenoteMute": "Renoteをミュートする",
+    "deleteRenoteMute": "リノートのミュートを解除する",
+    "createRenoteMute": "リノートをミュートする",
     "deleteMute": "ミュートを解除する",
     "createMute": "ミュートする",
     "deleteBlock": "ブロックを解除する",
@@ -913,7 +913,7 @@
     "selectDuration": "期限を選択してください。",
     "confirmUnfollow": "フォロー解除してもええか？",
     "deleteFollow": "解除する",
-    "renoteMuting": "Renoteのミュート中",
+    "renoteMuting": "リノートのミュート中",
     "muting": "ミュート中",
     "blocking": "ブロック中",
     "followed": "フォローされています",

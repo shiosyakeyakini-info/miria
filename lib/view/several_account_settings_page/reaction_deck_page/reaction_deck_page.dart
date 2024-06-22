@@ -1,19 +1,20 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:json5/json5.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
-import 'package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:reorderables/reorderables.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:json5/json5.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
+import "package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:reorderables/reorderables.dart";
 
 enum ReactionDeckPageMenuType { addMany, copy, clear }
 
@@ -21,7 +22,7 @@ enum ReactionDeckPageMenuType { addMany, copy, clear }
 class ReactionDeckPage extends ConsumerStatefulWidget {
   final Account account;
 
-  const ReactionDeckPage({super.key, required this.account});
+  const ReactionDeckPage({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -47,7 +48,8 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     reactions
       ..clear()
       ..addAll(
-          ref.read(emojiRepositoryProvider(widget.account)).defaultEmojis());
+        ref.read(emojiRepositoryProvider(widget.account)).defaultEmojis(),
+      );
   }
 
   @override
@@ -78,7 +80,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 child: Text(S.of(context).copy),
               ),
             ],
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -91,32 +93,33 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: ReorderableWrap(
-                      scrollPhysics: const NeverScrollableScrollPhysics(),
-                      spacing: 5,
-                      runSpacing: 5,
-                      children: [
-                        for (final reaction in reactions)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                reactions.remove(reaction);
-                                save();
-                              });
-                            },
-                            child: CustomEmoji(
-                              emojiData: reaction,
-                              fontSizeRatio: 2,
-                              isAttachTooltip: false,
-                            ),
-                          )
-                      ],
-                      onReorder: (int oldIndex, int newIndex) {
-                        setState(() {
-                          final element = reactions.removeAt(oldIndex);
-                          reactions.insert(newIndex, element);
-                          save();
-                        });
-                      }),
+                    scrollPhysics: const NeverScrollableScrollPhysics(),
+                    spacing: 5,
+                    runSpacing: 5,
+                    children: [
+                      for (final reaction in reactions)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              reactions.remove(reaction);
+                              save();
+                            });
+                          },
+                          child: CustomEmoji(
+                            emojiData: reaction,
+                            fontSizeRatio: 2,
+                            isAttachTooltip: false,
+                          ),
+                        ),
+                    ],
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        final element = reactions.removeAt(oldIndex);
+                        reactions.insert(newIndex, element);
+                        save();
+                      });
+                    },
+                  ),
                 ),
               ),
               Row(
@@ -148,7 +151,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                     child: Text(S.of(context).editReactionDeckDescription),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -167,13 +170,13 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 ),
               );
 
-      print(reactions);
+      logger.info(reactions);
     } catch (e) {
       final endpoints =
           await ref.read(misskeyProvider(widget.account)).endpoints();
       final domain =
           endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
-      if (!mounted) return;
+      if (!context.mounted) return;
       final emojiNames = await showDialog<List<String>>(
         context: context,
         builder: (context) => AddReactionsDialog(
@@ -204,8 +207,8 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     }
   }
 
-  void copyReactions({required BuildContext context}) {
-    Clipboard.setData(
+  Future<void> copyReactions({required BuildContext context}) async {
+    await Clipboard.setData(
       ClipboardData(
         text: JSON5.stringify(
           reactions
@@ -221,8 +224,12 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
         ),
       ),
     );
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(S.of(context).doneCopy)),
+      SnackBar(
+        content: Text(S.of(context).doneCopy),
+        duration: const Duration(seconds: 1),
+      ),
     );
   }
 

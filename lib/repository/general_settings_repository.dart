@@ -1,8 +1,8 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/foundation.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter/foundation.dart";
+import "package:miria/model/general_settings.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class GeneralSettingsRepository extends ChangeNotifier {
   var _settings = const GeneralSettings();

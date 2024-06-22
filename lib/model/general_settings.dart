@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'general_settings.freezed.dart';
-part 'general_settings.g.dart';
+part "general_settings.freezed.dart";
+part "general_settings.g.dart";
 
 enum ThemeColorSystem {
   forceLight,
@@ -73,7 +73,8 @@ enum EmojiType {
 
 enum Languages {
   jaJP("日本語", "ja", "JP"),
-  jaOJ("日本語（お嬢様）", "ja", "OJ");
+  jaOJ("日本語（お嬢様）", "ja", "OJ"),
+  zhCN("简体中文", "zh", "CN");
 
   final String displayName;
   final String countryCode;

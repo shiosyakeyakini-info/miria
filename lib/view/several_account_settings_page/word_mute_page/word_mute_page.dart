@@ -1,12 +1,12 @@
-import 'package:auto_route/annotations.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/futurable.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/annotations.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/futurable.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 enum MuteType { soft, hard }
 
@@ -16,9 +16,9 @@ class WordMutePage extends ConsumerStatefulWidget {
   final MuteType muteType;
 
   const WordMutePage({
-    super.key,
     required this.account,
     required this.muteType,
+    super.key,
   });
 
   @override
@@ -52,7 +52,7 @@ class WordMutePageState extends ConsumerState<WordMutePage> {
   Future<void> save() async {
     final text = controller.text;
 
-    final List<MuteWord> wordMutes =
+    final wordMutes =
         text.split("\n").whereNot((element) => element.trim().isEmpty).map((e) {
       if (e.startsWith("/")) {
         return MuteWord(regExp: e);
@@ -75,10 +75,12 @@ class WordMutePageState extends ConsumerState<WordMutePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(switch (widget.muteType) {
-          MuteType.soft => S.of(context).wordMute,
-          MuteType.hard => S.of(context).hardWordMute,
-        }),
+        title: Text(
+          switch (widget.muteType) {
+            MuteType.soft => S.of(context).wordMute,
+            MuteType.hard => S.of(context).hardWordMute,
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

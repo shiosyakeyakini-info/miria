@@ -1,11 +1,11 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
 
 @RoutePage()
 class ImportExportPage extends ConsumerStatefulWidget {
@@ -77,7 +77,6 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                           .import(context, account)
                           .expectFailure(context);
                     },
-                    child: Text(S.of(context).select),
                   ),
                 ],
               ),
@@ -107,25 +106,28 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                       },
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        final account = selectedExportAccount;
-                        if (account == null) {
-                          SimpleMessageDialog.show(
-                            context,
-                            S.of(context).pleaseSelectAccountToExportSettings,
-                          );
-                          return;
-                        }
-                        ref
-                            .read(importExportRepository)
-                            .export(context, account)
-                            .expectFailure(context);
-                      },
-                      child: Text(S.of(context).save)),
-                ],
-              ),
-            ]),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final account = selectedExportAccount;
+                    if (account == null) {
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectAccountToExportSettings,
+                      );
+                      return;
+                    }
+                    await ref
+                        .read(importExportRepositoryProvider)
+                        .export(context, account)
+                        .expectFailure(context);
+                  },
+                  child: Text(S.of(context).save),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
