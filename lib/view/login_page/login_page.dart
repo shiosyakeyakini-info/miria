@@ -1,9 +1,9 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/view/login_page/api_key_login.dart';
-import 'package:miria/view/login_page/mi_auth_login.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/view/login_page/api_key_login.dart";
+import "package:miria/view/login_page/mi_auth_login.dart";
 
 @RoutePage()
 class LoginPage extends ConsumerStatefulWidget {
@@ -19,20 +19,21 @@ class LoginPageState extends ConsumerState<LoginPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(S.of(context).login),
-            bottom: TabBar(
-              isScrollable: true,
-              tabs: [
-                Tab(text: S.of(context).loginAsMiAuth),
-                Tab(text: S.of(context).loginAsAPIKey),
-              ],
-              tabAlignment: TabAlignment.center,
-            ),
+        appBar: AppBar(
+          title: Text(S.of(context).login),
+          bottom: TabBar(
+            isScrollable: true,
+            tabs: [
+              Tab(text: S.of(context).loginAsMiAuth),
+              Tab(text: S.of(context).loginAsAPIKey),
+            ],
+            tabAlignment: TabAlignment.center,
           ),
-          body: const TabBarView(
-            children: [MiAuthLogin(), ApiKeyLogin()],
-          )),
+        ),
+        body: const TabBarView(
+          children: [MiAuthLogin(), ApiKeyLogin()],
+        ),
+      ),
     );
   }
 }

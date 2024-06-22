@@ -1,20 +1,22 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:json5/json5.dart';
+import "package:dio/dio.dart";
+import "package:flutter/services.dart";
+import "package:json5/json5.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class TestData {
   static Account account = Account(
-      host: "example.miria.shiosyakeyakini.info",
-      userId: "ai",
-      i: i1,
-      meta: meta);
+    host: "example.miria.shiosyakeyakini.info",
+    userId: "ai",
+    i: i1,
+    meta: meta,
+  );
 
   // i
-  static MeDetailed i1 = MeDetailed.fromJson(JSON5.parse(r"""
+  static MeDetailed i1 = MeDetailed.fromJson(
+    JSON5.parse(r"""
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -335,12 +337,14 @@ class TestData {
   securityKeysList: [],
 }
 
-"""));
+"""),
+  );
 
   // note
 
   /// 自身のノート（藍ちゃん）１
-  static Note note1 = Note.fromJson(JSON5.parse(r'''
+  static Note note1 = Note.fromJson(
+    JSON5.parse("""
 {
   id: '9g3rcngj3e',
   createdAt: '2023-06-17T16:08:52.675Z',
@@ -381,9 +385,11 @@ class TestData {
   renoteId: null,
 }
 
-  '''));
+  """),
+  );
 
-  static Note note2 = Note.fromJson(JSON5.parse(r'''
+  static Note note2 = Note.fromJson(
+    JSON5.parse(r"""
 {
   id: '9g4rtxu236',
   createdAt: '2023-06-18T09:10:05.450Z',
@@ -419,10 +425,12 @@ class TestData {
   replyId: null,
   renoteId: null,
 }
-  '''));
+  """),
+  );
 
   /// 自身でないノート１
-  static Note note3AsAnotherUser = Note.fromJson(JSON5.parse(r'''
+  static Note note3AsAnotherUser = Note.fromJson(
+    JSON5.parse("""
 {
   id: '9g2ja0y8ix',
   createdAt: '2023-06-16T19:35:07.088Z',
@@ -464,10 +472,12 @@ class TestData {
   replyId: null,
   renoteId: null,
 }
-  '''));
+  """),
+  );
 
   /// 自身のノート（投票込みのノート）
-  static Note note4AsVote = Note.fromJson(JSON5.parse('''
+  static Note note4AsVote = Note.fromJson(
+    JSON5.parse("""
 {
   id: '9h7cbiu7ab',
   createdAt: '2023-07-15T08:58:52.831Z',
@@ -533,10 +543,12 @@ class TestData {
   },
 }
 
-'''));
+"""),
+  );
 
   /// 自身でないノート２
-  static Note note5AsAnotherUser = Note.fromJson(JSON5.parse(r'''
+  static Note note5AsAnotherUser = Note.fromJson(
+    JSON5.parse(r"""
 {
   id: '9gdpe2xkeo',
   createdAt: '2023-06-24T15:11:41.912Z',
@@ -645,10 +657,12 @@ class TestData {
   renoteId: null,
   myReaction: ':ultra_igyo@.:',
 }
-  '''));
+  """),
+  );
 
   /// Renote
-  static Note note6AsRenote = Note.fromJson(JSON5.parse('''
+  static Note note6AsRenote = Note.fromJson(
+    JSON5.parse("""
 {
     id: '9lmbcrob34',
     createdAt: '2023-11-03T15:07:13.307Z',
@@ -738,27 +752,33 @@ class TestData {
       myReaction: ':miria@.:',
     },
   }
-'''));
+"""),
+  );
 
   // ドライブ（フォルダ）
-  static DriveFolder folder1 = DriveFolder.fromJson(JSON5.parse(r'''
+  static DriveFolder folder1 = DriveFolder.fromJson(
+    JSON5.parse("""
   {
     id: '9ettn0mv95',
     createdAt: '2023-05-16T12:35:31.447Z',
     name: '秘蔵の藍ちゃんフォルダ',
     parentId: null,
-  }'''));
+  }"""),
+  );
 
-  static DriveFolder folder1Child = DriveFolder.fromJson(JSON5.parse(r'''
+  static DriveFolder folder1Child = DriveFolder.fromJson(
+    JSON5.parse("""
   {
     id: '9ettn0mv95',
     createdAt: '2023-05-16T12:35:31.447Z',
     name: 'えっちなやつ',
     parentId: '9ettn0mv95',
-  }'''));
+  }"""),
+  );
 
   // ドライブ（ファイル）
-  static DriveFile drive1 = DriveFile.fromJson(JSON5.parse(r'''
+  static DriveFile drive1 = DriveFile.fromJson(
+    JSON5.parse(r"""
 {
     id: '9g6yuyisp3',
     createdAt: '2023-06-19T22:02:22.660Z',
@@ -780,9 +800,11 @@ class TestData {
     userId: null,
     user: null,
   }
-  '''));
+  """),
+  );
 
-  static DriveFile drive2AsVideo = DriveFile.fromJson(JSON5.parse(r'''
+  static DriveFile drive2AsVideo = DriveFile.fromJson(
+    JSON5.parse("""
 {
   id: '9g0kvlw8d3',
   createdAt: '2023-06-15T10:44:21.272Z',
@@ -801,18 +823,22 @@ class TestData {
   userId: null,
   user: null,
 }
-  '''));
+  """),
+  );
 
   static Future<Uint8List> get binaryImage async => Uint8List.fromList(
-      (await rootBundle.load("assets/images/icon.png")).buffer.asUint8List());
+        (await rootBundle.load("assets/images/icon.png")).buffer.asUint8List(),
+      );
 
   static Future<Response<Uint8List>> get binaryImageResponse async => Response(
-      requestOptions: RequestOptions(),
-      statusCode: 200,
-      data: await binaryImage);
+        requestOptions: RequestOptions(),
+        statusCode: 200,
+        data: await binaryImage,
+      );
 
   // ユーザー情報
-  static UserLite user1 = UserLite.fromJson(JSON5.parse(r'''
+  static UserLite user1 = UserLite.fromJson(
+    JSON5.parse("""
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -825,11 +851,13 @@ class TestData {
   emojis: {},
   onlineStatus: 'online',
   badgeRoles: [],
-}'''));
+}"""),
+  );
   static String user1ExpectId = "7rkr3b1c1c";
 
   static UserDetailedNotMeWithRelations detailedUser1 =
-      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
+      UserDetailedNotMeWithRelations.fromJson(
+    JSON5.parse(r"""
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -996,10 +1024,12 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}  '''));
+}  """),
+  );
 
   static UserDetailedNotMeWithRelations detailedUser2 =
-      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
+      UserDetailedNotMeWithRelations.fromJson(
+    JSON5.parse(r"""
 {
   id: '9gbzuv2cze',
   name: '藍ちゃんにおじさん構文でメンションを送るbot',
@@ -1106,13 +1136,15 @@ class TestData {
   isBlocked: false,
   isMuted: false,
   isRenoteMuted: false,
-}'''));
+}"""),
+  );
 
   static String detailedUser2ExpectedId = "9gbzuv2cze";
 
   // ユーザー情報
   static UserDetailedNotMeWithRelations usersShowResponse1 =
-      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
+      UserDetailedNotMeWithRelations.fromJson(
+    JSON5.parse(r"""
 {
   id: '7rkr3b1c1c',
   name: '藍',
@@ -1221,10 +1253,12 @@ class TestData {
   isRenoteMuted: false,
 }
 
-  '''));
+  """),
+  );
 
   static UserDetailedNotMeWithRelations usersShowResponse2 =
-      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
+      UserDetailedNotMeWithRelations.fromJson(
+    JSON5.parse(r"""
 {
   id: '7z9zua5kyv',
   name: 'おいしいBot',
@@ -1395,10 +1429,12 @@ class TestData {
   isRenoteMuted: false,
 }
 
-  '''));
+  """),
+  );
 
   static UserDetailedNotMeWithRelations usersShowResponse3AsRemoteUser =
-      UserDetailedNotMeWithRelations.fromJson(JSON5.parse(r'''
+      UserDetailedNotMeWithRelations.fromJson(
+    JSON5.parse(r'''
 {
   id: '9i08deo0vj',
   name: 'あけおめらんか～',
@@ -1476,10 +1512,12 @@ class TestData {
   isMuted: false,
   isRenoteMuted: false,
 }
-'''));
+'''),
+  );
 
   static UserDetailedNotMeWithRelations usersShowResponse3AsLocalUser =
-      UserDetailedNotMeWithRelations.fromJson(JSON5.parse('''
+      UserDetailedNotMeWithRelations.fromJson(
+    JSON5.parse('''
 {
   id: '9i07ia9bf0',
   name: 'あけおめらんか～',
@@ -1563,81 +1601,86 @@ class TestData {
   notify: 'none',
 }
 
-'''));
+'''),
+  );
 
   // カスタム絵文字
   static UnicodeEmojiData unicodeEmoji1 = const UnicodeEmojiData(char: "♥");
   static CustomEmojiData customEmoji1 = CustomEmojiData(
-      baseName: "ai_yay",
-      hostedName: "misskey.io",
-      url: Uri.parse("https://s3.arkjp.net/emoji/ai_yay.apng"),
-      isCurrentServer: true,
-      isSensitive: false);
+    baseName: "ai_yay",
+    hostedName: "misskey.io",
+    url: Uri.parse("https://s3.arkjp.net/emoji/ai_yay.apng"),
+    isCurrentServer: true,
+    isSensitive: false,
+  );
 
   static EmojiRepositoryData unicodeEmojiRepositoryData1 = EmojiRepositoryData(
-      emoji: unicodeEmoji1,
-      category: "symbols",
-      kanaName: "へあt",
-      aliases: ["heart", "ハート"],
-      kanaAliases: ["へあt", "ハート"]);
+    emoji: unicodeEmoji1,
+    category: "symbols",
+    kanaName: "へあt",
+    aliases: ["heart", "ハート"],
+    kanaAliases: ["へあt", "ハート"],
+  );
 
   static EmojiRepositoryData customEmojiRepositoryData1 = EmojiRepositoryData(
-      emoji: customEmoji1,
-      category: "02 Ai",
-      kanaName: "あいやy",
-      aliases: [
-        'yay_ai',
-        '藍',
-        'あい',
-        'ばんざい',
-        'バンザイ',
-        'ばんざーい',
-        'やった',
-        'やったぁ',
-        'わぁい',
-        'わーい',
-        'やったー',
-        'やったぁ',
-        'うれしい',
-        'ハッピー',
-        'たのしい',
-        'わーいわーい',
-        'よろこび',
-        'よろこぶ',
-        '',
-        'happy',
-        'yay',
-        'ai',
-        'praise',
-      ],
-      kanaAliases: [
-        'やyあい',
-        '藍',
-        'あい',
-        'ばんざい',
-        'バンザイ',
-        'ばんざーい',
-        'やった',
-        'やったぁ',
-        'わぁい',
-        'わーい',
-        'やったー',
-        'やったぁ',
-        'うれしい',
-        'ハッピー',
-        'たのしい',
-        'わーいわーい',
-        'よろこび',
-        'よろこぶ',
-        '',
-        'はppy',
-        'やy',
-        'あい',
-        'pらいせ',
-      ]);
+    emoji: customEmoji1,
+    category: "02 Ai",
+    kanaName: "あいやy",
+    aliases: [
+      "yay_ai",
+      "藍",
+      "あい",
+      "ばんざい",
+      "バンザイ",
+      "ばんざーい",
+      "やった",
+      "やったぁ",
+      "わぁい",
+      "わーい",
+      "やったー",
+      "やったぁ",
+      "うれしい",
+      "ハッピー",
+      "たのしい",
+      "わーいわーい",
+      "よろこび",
+      "よろこぶ",
+      "",
+      "happy",
+      "yay",
+      "ai",
+      "praise",
+    ],
+    kanaAliases: [
+      "やyあい",
+      "藍",
+      "あい",
+      "ばんざい",
+      "バンザイ",
+      "ばんざーい",
+      "やった",
+      "やったぁ",
+      "わぁい",
+      "わーい",
+      "やったー",
+      "やったぁ",
+      "うれしい",
+      "ハッピー",
+      "たのしい",
+      "わーいわーい",
+      "よろこび",
+      "よろこぶ",
+      "",
+      "はppy",
+      "やy",
+      "あい",
+      "pらいせ",
+    ],
+  );
 
   // チャンネル
-  static CommunityChannel channel1 = CommunityChannel.fromJson(JSON5.parse(r'''
+  static CommunityChannel channel1 = CommunityChannel.fromJson(
+    JSON5.parse(r"""
   {
     id: '9axtmmcxuy',
     createdAt: '2023-02-07T13:07:28.305Z',
@@ -1655,11 +1698,13 @@ class TestData {
     isFavorited: true,
     hasUnreadNote: false,
   }
-  '''));
+  """),
+  );
 
   static String expectChannel1DescriptionContaining = "ありがとうブルーアーカイブ";
 
-  static CommunityChannel channel2 = CommunityChannel.fromJson(JSON5.parse(r'''
+  static CommunityChannel channel2 = CommunityChannel.fromJson(
+    JSON5.parse(r"""
 {
   id: '9b3chwrm7f',
   createdAt: '2023-02-11T09:54:32.098Z',
@@ -1679,10 +1724,12 @@ class TestData {
   isFavorited: true,
   hasUnreadNote: false,
 }
-  '''));
+  """),
+  );
 
   // アンテナ
-  static Antenna antenna = Antenna.fromJson(JSON5.parse(r'''
+  static Antenna antenna = Antenna.fromJson(
+    JSON5.parse("""
 {
     id: '9f7kcbzcoe',
     createdAt: '2023-05-26T03:24:02.856Z',
@@ -1715,9 +1762,11 @@ class TestData {
     isActive: true,
     hasUnreadNote: false,
   }
-'''));
+"""),
+  );
 
-  static Clip clip = Clip.fromJson(JSON5.parse(r'''
+  static Clip clip = Clip.fromJson(
+    JSON5.parse("""
 {
     id: '9crm7l2n4k',
     createdAt: '2023-03-25T14:12:37.103Z',
@@ -1743,9 +1792,11 @@ class TestData {
     isFavorited: false,
   }
 
-'''));
+"""),
+  );
 
-  static RolesListResponse role = RolesListResponse.fromJson(JSON5.parse('''
+  static RolesListResponse role = RolesListResponse.fromJson(
+    JSON5.parse("""
 {
     id: '9diazxez3m',
     createdAt: '2023-04-13T06:28:30.827Z',
@@ -1901,10 +1952,11 @@ class TestData {
     },
     usersCount: 0,
   }
-'''));
+"""),
+  );
 
-  static HashtagsTrendResponse hashtagTrends =
-      HashtagsTrendResponse.fromJson(JSON5.parse(r'''
+  static HashtagsTrendResponse hashtagTrends = HashtagsTrendResponse.fromJson(
+    JSON5.parse("""
 {
     tag: 'ろぐぼチャレンジ',
     chart: [
@@ -1931,9 +1983,11 @@ class TestData {
     ],
     usersCount: 15,
   }
-'''));
+"""),
+  );
 
-  static Hashtag hashtag = Hashtag.fromJson(JSON5.parse(r'''
+  static Hashtag hashtag = Hashtag.fromJson(
+    JSON5.parse("""
 {
     tag: 'アークナイツ',
     mentionedUsersCount: 531,
@@ -1943,9 +1997,11 @@ class TestData {
     attachedLocalUsersCount: 2,
     attachedRemoteUsersCount: 65,
   }
-'''));
+"""),
+  );
 
-  static MetaResponse meta = MetaResponse.fromJson(JSON5.parse(r'''
+  static MetaResponse meta = MetaResponse.fromJson(
+    JSON5.parse("""
 {
   maintainerName: 'そらいろ',
   maintainerEmail: 'sorairo@shiosyakeyakini.info',
@@ -2037,11 +2093,13 @@ class TestData {
     miauth: true,
   },
 }
-'''));
+"""),
+  );
 
   // Dio
-  static DioError response404 = DioError(
-      requestOptions: RequestOptions(),
-      response: Response(requestOptions: RequestOptions(), statusCode: 404),
-      type: DioErrorType.unknown);
+  static DioException response404 = DioException(
+    requestOptions: RequestOptions(),
+    response: Response(requestOptions: RequestOptions(), statusCode: 404),
+    type: DioExceptionType.unknown,
+  );
 }

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_colorpicker/flutter_colorpicker.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class ColorPickerDialog extends StatefulWidget {
   const ColorPickerDialog({super.key});
@@ -15,17 +15,19 @@ class ColorPickerDialogState extends State<ColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title:  Text(S.of(context).pickColor),
-        content: ColorPicker(
-          pickerColor: pickedColor,
-          onColorChanged: (color) => setState(() => pickedColor = color),
+      title: Text(S.of(context).pickColor),
+      content: ColorPicker(
+        pickerColor: pickedColor,
+        onColorChanged: (color) => setState(() => pickedColor = color),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(pickedColor);
+          },
+          child: Text(S.of(context).decideColor),
         ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(pickedColor);
-              },
-              child: Text(S.of(context).decideColor))
-        ]);
+      ],
+    );
   }
 }
