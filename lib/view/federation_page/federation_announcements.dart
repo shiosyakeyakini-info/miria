@@ -1,33 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-class FederationAnnouncements extends ConsumerStatefulWidget {
+class FederationAnnouncements extends HookConsumerWidget {
   final String host;
   const FederationAnnouncements({
-    super.key,
     required this.host,
+    super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      FederationAnnouncementsState();
-}
-
-class FederationAnnouncementsState
-    extends ConsumerState<FederationAnnouncements> {
-  var isActive = true;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
-    final isCurrentServer = widget.host == AccountScope.of(context).host;
+    final isCurrentServer = host == AccountScope.of(context).host;
+
+    final isActive = useState(true);
+
     return Column(
       children: [
         Row(
@@ -36,26 +33,26 @@ class FederationAnnouncementsState
               child: Center(
                 child: ToggleButtons(
                   isSelected: [
-                    isActive,
-                    !isActive,
+                    isActive.value,
+                    !isActive.value,
                   ],
                   onPressed: (value) {
-                    setState(() {
-                      switch (value) {
-                        case 0:
-                          isActive = true;
-                        case 1:
-                          isActive = false;
-                      }
-                    });
+                    switch (value) {
+                      case 0:
+                        isActive.value = true;
+                      case 1:
+                        isActive.value = false;
+                    }
                   },
-                  children: const [
+                  children: [
                     Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("いまの")),
+                      padding: const EdgeInsets.only(left: 5, right: 5),
+                      child: Text(S.of(context).activeAnnouncements),
+                    ),
                     Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text("前の")),
+                      padding: const EdgeInsets.only(left: 5, right: 5),
+                      child: Text(S.of(context).inactiveAnnouncements),
+                    ),
                   ],
                 ),
               ),
@@ -64,41 +61,45 @@ class FederationAnnouncementsState
         ),
         Expanded(
           child: PushableListView(
-              listKey: isActive,
-              initializeFuture: () async {
-                final Iterable<AnnouncementsResponse> response;
-                final request =
-                    AnnouncementsRequest(isActive: isActive, limit: 10);
-                if (isCurrentServer) {
-                  response = await ref
-                      .read(misskeyProvider(account))
-                      .announcements(request);
-                } else {
-                  response =
-                      await MisskeyServer().announcements(widget.host, request);
-                }
-                return response.toList();
-              },
-              nextFuture: (lastItem, offset) async {
-                final Iterable<AnnouncementsResponse> response;
-                // 互換性のためにuntilIdとoffsetを両方いれる
-                final request = AnnouncementsRequest(
-                    untilId: lastItem.id,
-                    isActive: isActive,
-                    limit: 30,
-                    offset: offset);
-                if (isCurrentServer) {
-                  response = await ref
-                      .read(misskeyProvider(account))
-                      .announcements(request);
-                } else {
-                  response =
-                      await MisskeyServer().announcements(widget.host, request);
-                }
-                return response.toList();
-              },
-              itemBuilder: (context, data) =>
-                  Announcement(data: data, host: widget.host)),
+            listKey: isActive,
+            initializeFuture: () async {
+              final Iterable<AnnouncementsResponse> response;
+              final request =
+                  AnnouncementsRequest(isActive: isActive.value, limit: 10);
+              if (isCurrentServer) {
+                response = await ref
+                    .read(misskeyProvider(account))
+                    .announcements(request);
+              } else {
+                response = await ref
+                    .read(misskeyWithoutAccountProvider(host))
+                    .announcements(request);
+              }
+              return response.toList();
+            },
+            nextFuture: (lastItem, offset) async {
+              final Iterable<AnnouncementsResponse> response;
+              // 互換性のためにuntilIdとoffsetを両方いれる
+              final request = AnnouncementsRequest(
+                untilId: lastItem.id,
+                isActive: isActive.value,
+                limit: 30,
+                offset: offset,
+              );
+              if (isCurrentServer) {
+                response = await ref
+                    .read(misskeyProvider(account))
+                    .announcements(request);
+              } else {
+                response = await ref
+                    .read(misskeyWithoutAccountProvider(host))
+                    .announcements(request);
+              }
+              return response.toList();
+            },
+            itemBuilder: (context, data) =>
+                Announcement(data: data, host: host),
+          ),
         ),
       ],
     );
@@ -110,9 +111,9 @@ class Announcement extends ConsumerStatefulWidget {
   final String host;
 
   const Announcement({
-    super.key,
     required this.data,
     required this.host,
+    super.key,
   });
 
   @override
@@ -131,72 +132,89 @@ class AnnouncementState extends ConsumerState<Announcement> {
   @override
   Widget build(BuildContext context) {
     final icon = data.icon;
+    final imageUrl = data.imageUrl;
     return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                if (data.forYou == true)
-                  Text("あなた宛",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Theme.of(context).primaryColor)),
-                Row(
-                  children: [
-                    if (icon != null) AnnouncementIcon(iconType: icon),
-                    Expanded(
-                      child: MfmText(
-                        mfmText: data.title,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
+      padding: const EdgeInsets.all(10),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if (data.forYou == true)
+                Text(
+                  S.of(context).announcementsForYou,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Theme.of(context).primaryColor),
+                ),
+              Row(
+                children: [
+                  if (icon != null) AnnouncementIcon(iconType: icon),
+                  Expanded(
+                    child: MfmText(
+                      mfmText: data.title,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(data.createdAt.format(context)),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
+              MfmText(
+                mfmText: data.text,
+                host: AccountScope.of(context).host == widget.host
+                    ? null
+                    : widget.host,
+              ),
+              if (imageUrl != null)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: NetworkImageView(
+                      url: imageUrl.toString(),
+                      type: ImageType.image,
+                    ),
+                  ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(data.createdAt.format),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 10)),
-                MfmText(
-                  mfmText: data.text,
-                  host: AccountScope.of(context).host == widget.host
-                      ? null
-                      : widget.host,
-                ),
-                if (AccountScope.of(context).host == widget.host &&
-                    data.isRead == false)
-                  ElevatedButton(
-                      onPressed: () async {
-                        final account = AccountScope.of(context);
-                        if (data.needConfirmationToRead == true) {
-                          final isConfirmed = await SimpleConfirmDialog.show(
-                              context: context,
-                              message: "「${data.title}」の内容ちゃんと読んだか？",
-                              primary: "読んだ",
-                              secondary: "もうちょい待って");
-                          if (isConfirmed != true) return;
-                        }
+              if (AccountScope.of(context).host == widget.host &&
+                  data.isRead == false)
+                ElevatedButton(
+                  onPressed: () async {
+                    final account = AccountScope.of(context);
+                    if (data.needConfirmationToRead == true) {
+                      final isConfirmed = await SimpleConfirmDialog.show(
+                        context: context,
+                        message:
+                            S.of(context).confirmAnnouncementsRead(data.title),
+                        primary: S.of(context).readAnnouncement,
+                        secondary: S.of(context).didNotReadAnnouncement,
+                      );
+                      if (isConfirmed != true) return;
+                    }
 
-                        await ref
-                            .read(misskeyProvider(account))
-                            .i
-                            .readAnnouncement(IReadAnnouncementRequest(
-                                announcementId: data.id));
-                        setState(() {
-                          data = data.copyWith(isRead: true);
-                        });
-                      },
-                      child: const Text("ほい"))
-              ],
-            ),
+                    await ref.read(misskeyProvider(account)).i.readAnnouncement(
+                          IReadAnnouncementRequest(
+                            announcementId: data.id,
+                          ),
+                        );
+                    setState(() {
+                      data = data.copyWith(isRead: true);
+                    });
+                  },
+                  child: Text(S.of(context).done),
+                ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -204,8 +222,8 @@ class AnnouncementIcon extends StatelessWidget {
   final AnnouncementIconType iconType;
 
   const AnnouncementIcon({
-    super.key,
     required this.iconType,
+    super.key,
   });
 
   @override

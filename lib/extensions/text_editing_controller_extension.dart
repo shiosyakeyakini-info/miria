@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/input_completion_type.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/input_completion_type.dart";
 
 extension TextEditingControllerExtension on TextEditingController {
   String? get textBeforeSelection {
@@ -19,7 +19,7 @@ extension TextEditingControllerExtension on TextEditingController {
     if (lastColonIndex < 0) {
       return null;
     }
-    if (RegExp(r':[a-zA-z_0-9]+?:$')
+    if (RegExp(r":[a-zA-z_0-9]+?:$")
         .hasMatch(text.substring(0, lastColonIndex + 1))) {
       return null;
     } else {
@@ -37,7 +37,7 @@ extension TextEditingControllerExtension on TextEditingController {
       return null;
     }
     final query = textBeforeSelection.substring(lastOpenTagIndex + 2);
-    if (RegExp(r"^[a-z234]*$").hasMatch(query)) {
+    if (RegExp(r"^[a-zA-Z0-9_.,-=]*$").hasMatch(query)) {
       return query;
     } else {
       return null;
@@ -78,16 +78,18 @@ extension TextEditingControllerExtension on TextEditingController {
   }
 
   void insert(String insertText, {String? afterText}) {
-    final currentPosition = selection.base.offset;
-    final before = text.isEmpty ? "" : text.substring(0, currentPosition);
-    final after = (currentPosition == text.length || currentPosition == -1)
-        ? ""
-        : text.substring(currentPosition, text.length);
+    final start = selection.start < 0 ? 0 : selection.start;
+    final end = selection.end < 0 ? 0 : selection.end;
+    final before = text.substring(0, start);
+    final selectedText = text.substring(start, end);
+    final after = text.substring(end);
 
     value = TextEditingValue(
-        text: "$before$insertText${afterText ?? ""}$after",
-        selection: TextSelection.collapsed(
-            offset: (currentPosition == -1 ? 0 : currentPosition) +
-                insertText.length));
+      text: "$before$insertText$selectedText${afterText ?? ""}$after",
+      selection: TextSelection(
+        baseOffset: start + insertText.length,
+        extentOffset: end + insertText.length,
+      ),
+    );
   }
 }

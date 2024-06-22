@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class AntennaSelectDialog extends ConsumerStatefulWidget {
   final Account account;
 
-  const AntennaSelectDialog({super.key, required this.account});
+  const AntennaSelectDialog({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -27,6 +28,7 @@ class AntennaSelectDialogState extends ConsumerState<AntennaSelectDialog> {
       antennas
         ..clear()
         ..addAll(myAntennas);
+      if (!mounted) return;
       setState(() {});
     });
   }
@@ -36,7 +38,7 @@ class AntennaSelectDialogState extends ConsumerState<AntennaSelectDialog> {
     return AccountScope(
       account: widget.account,
       child: AlertDialog(
-        title: const Text("アンテナ選択"),
+        title: Text(S.of(context).selectAntenna),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
@@ -45,20 +47,22 @@ class AntennaSelectDialogState extends ConsumerState<AntennaSelectDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "アンテナ",
+                  S.of(context).antenna,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: antennas.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(antennas[index]);
-                          },
-                          title: Text(antennas[index].name));
-                    }),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: antennas.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(antennas[index]);
+                      },
+                      title: Text(antennas[index].name),
+                    );
+                  },
+                ),
               ],
             ),
           ),

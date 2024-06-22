@@ -1,15 +1,15 @@
-import 'dart:async';
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:miria/repository/main_stream_repository.dart';
-import 'package:miria/repository/time_line_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:miria/repository/main_stream_repository.dart";
+import "package:miria/repository/time_line_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 abstract class SocketTimelineRepository extends TimelineRepository {
   SocketController? socketController;
@@ -49,7 +49,8 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   void reloadLatestNotes() {
     moveToOlder();
-    requestNotes().then((resultNotes) {
+    unawaited(() async {
+      final resultNotes = await requestNotes();
       if (olderNotes.isEmpty) {
         olderNotes.addAll(resultNotes);
         notifyListeners();
@@ -75,14 +76,19 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         noteRepository.registerNote(note);
       }
       notifyListeners();
-    });
+    }());
   }
 
   @override
   Future<void> startTimeLine() async {
     try {
       await emojiRepository.loadFromSourceIfNeed();
-      await accountRepository.loadFromSourceIfNeed(tabSetting.acct);
+      // api/iおよびapi/metaはawaitしない
+      unawaited(
+        Future(() async {
+          await accountRepository.loadFromSourceIfNeed(tabSetting.acct);
+        }),
+      );
       await mainStreamRepository.reconnect();
       isLoading = false;
       error = null;
@@ -113,12 +119,15 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         if (emoji != null && !value.reaction.endsWith("@.:")) {
           reactionEmojis[emoji.name] = emoji.url;
         }
-        noteRepository.registerNote(registeredNote.copyWith(
+        noteRepository.registerNote(
+          registeredNote.copyWith(
             reactions: reaction,
             reactionEmojis: reactionEmojis,
             myReaction: value.userId == account.i.id
                 ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-                : registeredNote.myReaction));
+                : registeredNote.myReaction,
+          ),
+        );
       },
       onUnreacted: (id, value) {
         final registeredNote = noteRepository.notes[id];
@@ -133,11 +142,14 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         if (emoji != null && !value.reaction.endsWith("@.:")) {
           reactionEmojis[emoji.name] = emoji.url;
         }
-        noteRepository.registerNote(registeredNote.copyWith(
+        noteRepository.registerNote(
+          registeredNote.copyWith(
             reactions: reaction,
             reactionEmojis: reactionEmojis,
             myReaction:
-                value.userId == account.i.id ? "" : registeredNote.myReaction));
+                value.userId == account.i.id ? "" : registeredNote.myReaction,
+          ),
+        );
       },
       onVoted: (id, value) {
         final registeredNote = noteRepository.notes[id];
@@ -150,32 +162,40 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         choices[value.choice] = choices[value.choice]
             .copyWith(votes: choices[value.choice].votes + 1);
         noteRepository.registerNote(
-            registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
+          registeredNote.copyWith(poll: poll.copyWith(choices: choices)),
+        );
       },
       onUpdated: (id, value) {
         final note = noteRepository.notes[id];
         if (note == null) return;
-        noteRepository.registerNote(note.copyWith(
-            text: value.text, cw: value.cw, updatedAt: DateTime.now()));
+        noteRepository.registerNote(
+          note.copyWith(
+            text: value.text,
+            cw: value.cw,
+            updatedAt: DateTime.now(),
+          ),
+        );
       },
     );
-    await misskey.startStreaming();
-    Future(() async {
-      if (olderNotes.isEmpty) {
-        try {
-          final resultNotes = await requestNotes();
-          olderNotes.addAll(resultNotes);
-          notifyListeners();
-        } catch (e, s) {
-          if (kDebugMode) {
-            print(e);
-            print(s);
+    await Future.wait([
+      misskey.startStreaming(),
+      Future(() async {
+        if (olderNotes.isEmpty) {
+          try {
+            final resultNotes = await requestNotes();
+            olderNotes.addAll(resultNotes);
+            notifyListeners();
+          } catch (e, s) {
+            if (kDebugMode) {
+              print(e);
+              print(s);
+            }
           }
+        } else {
+          reloadLatestNotes();
         }
-      } else {
-        reloadLatestNotes();
-      }
-    });
+      }),
+    ]);
   }
 
   @override
@@ -220,19 +240,21 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   }
 
   @override
-  void subscribe(SubscribeItem item) {
+  Future<void> subscribe(SubscribeItem item) async {
     if (!tabSetting.isSubscribe) return;
     final index =
         subscribedList.indexWhere((element) => element.noteId == item.noteId);
-    final isSubscribed = subscribedList.indexWhere((element) =>
-        element.noteId == item.noteId ||
-        element.renoteId == item.noteId ||
-        element.replyId == item.noteId);
+    final isSubscribed = subscribedList.indexWhere(
+      (element) =>
+          element.noteId == item.noteId ||
+          element.renoteId == item.noteId ||
+          element.replyId == item.noteId,
+    );
 
     if (index == -1) {
       subscribedList.add(item);
       if (isSubscribed == -1) {
-        socketController?.subNote(item.noteId);
+        await socketController?.subNote(item.noteId);
       }
     } else {
       subscribedList[index] = item;
@@ -241,31 +263,35 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     final renoteId = item.renoteId;
 
     if (renoteId != null) {
-      final isRenoteSubscribed = subscribedList.indexWhere((element) =>
-          element.noteId == renoteId ||
-          element.renoteId == renoteId ||
-          element.replyId == renoteId);
+      final isRenoteSubscribed = subscribedList.indexWhere(
+        (element) =>
+            element.noteId == renoteId ||
+            element.renoteId == renoteId ||
+            element.replyId == renoteId,
+      );
       if (isRenoteSubscribed == -1) {
-        socketController?.subNote(renoteId);
+        await socketController?.subNote(renoteId);
       }
     }
 
     final replyId = item.replyId;
     if (replyId != null) {
-      socketController?.subNote(replyId);
-      final isRenoteSubscribed = subscribedList.indexWhere((element) =>
-          element.noteId == replyId ||
-          element.renoteId == replyId ||
-          element.replyId == replyId);
+      await socketController?.subNote(replyId);
+      final isRenoteSubscribed = subscribedList.indexWhere(
+        (element) =>
+            element.noteId == replyId ||
+            element.renoteId == replyId ||
+            element.replyId == replyId,
+      );
       if (isRenoteSubscribed == -1) {
-        socketController?.subNote(replyId);
+        await socketController?.subNote(replyId);
       }
     }
   }
 
   @override
-  void describe(String id) {
+  Future<void> describe(String id) async {
     if (!tabSetting.isSubscribe) return;
-    socketController?.unsubNote(id);
+    await socketController?.unsubNote(id);
   }
 }

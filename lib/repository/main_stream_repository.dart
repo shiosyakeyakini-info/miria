@@ -1,10 +1,9 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/widgets.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter/widgets.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class MainStreamRepository extends ChangeNotifier {
   var hasUnreadNotification = false;
@@ -23,29 +22,8 @@ class MainStreamRepository extends ChangeNotifier {
     this.accountRepository,
   );
 
-  Future<void> latestMarkAs(String id) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        "latestReadNotification@${account.userId}@${account.host}", id);
-    hasUnreadNotification = false;
-    notifyListeners();
-  }
-
   Future<void> confirmNotification() async {
-    final notifications = await misskey.i.notifications(
-        const INotificationsRequest(markAsRead: false, limit: 1));
-    final prefs = await SharedPreferences.getInstance();
-
-    if (notifications.isEmpty) return;
-
-    // 最後に読んだものと違うものがプッシュ通知にあれば通知をオン
-    if (prefs.getString(
-            "latestReadNotification@${account.userId}@${account.host}") ==
-        notifications.firstOrNull?.id) {
-      hasUnreadNotification = false;
-    } else {
-      hasUnreadNotification = true;
-    }
+    await accountRepository.updateI(account);
 
     notifyListeners();
   }
@@ -53,20 +31,10 @@ class MainStreamRepository extends ChangeNotifier {
   Future<void> connect() async {
     socketController = misskey.mainStream(
       onReadAllNotifications: () {
-        hasUnreadNotification = false;
-        Future(() async {
-          final notifications = await misskey.i.notifications(
-              const INotificationsRequest(markAsRead: false, limit: 1));
-
-          // 最後に読んだものとして記憶しておく
-          latestMarkAs(notifications.firstOrNull?.id ?? "");
-        });
-
-        notifyListeners();
+        accountRepository.readAllNotification(account);
       },
       onUnreadNotification: (_) {
-        hasUnreadNotification = true;
-        notifyListeners();
+        accountRepository.addUnreadNotification(account);
       },
       onReadAllAnnouncements: () {
         accountRepository.removeUnreadAnnouncement(account);
@@ -81,13 +49,12 @@ class MainStreamRepository extends ChangeNotifier {
         accountRepository.createUnreadAnnouncement(account, announcement);
       },
     );
-    await misskey.startStreaming();
-    confirmNotification();
+    await Future.wait([misskey.startStreaming(), confirmNotification()]);
   }
 
   Future<void> reconnect() async {
     if (isReconnecting) {
-      // 排他制御
+      // 排他制御11
       while (isReconnecting) {
         await Future.delayed(const Duration(milliseconds: 100));
       }
@@ -95,7 +62,9 @@ class MainStreamRepository extends ChangeNotifier {
     }
     isReconnecting = true;
     try {
-      print("main stream repository's socket controller will be disconnect");
+      logger.info(
+        "main stream repository's socket controller will be disconnect",
+      );
       socketController?.disconnect();
       socketController = null;
       await misskey.streamingService.restart();

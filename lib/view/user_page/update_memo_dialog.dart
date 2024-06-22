@@ -1,68 +1,48 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
 
-class UpdateMemoDialog extends ConsumerStatefulWidget {
+@RoutePage()
+class UpdateMemoDialog extends HookConsumerWidget {
   final Account account;
   final String initialMemo;
   final String userId;
 
   const UpdateMemoDialog({
-    super.key,
     required this.account,
     required this.initialMemo,
     required this.userId,
+    super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      UpdateMemoDialogState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController(text: initialMemo);
 
-class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
-  final controller = TextEditingController();
-
-  Future<void> memoSave() async {
-    await ref.read(misskeyProvider(widget.account)).users.updateMemo(
-        UsersUpdateMemoRequest(userId: widget.userId, memo: controller.text));
-    if (!mounted) return;
-    Navigator.of(context).pop(controller.text);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller.text = widget.initialMemo;
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("メモ"),
+      title: Text(S.of(context).memo),
       content: TextField(
         controller: controller,
         maxLines: null,
-        decoration: const InputDecoration(
-          hintText: "なんかメモることあったら書いとき",
+        decoration: InputDecoration(
+          hintText: S.of(context).memoDescription,
         ),
       ),
       actions: [
         OutlinedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("やめる")),
+          onPressed: () async => context.maybePop(),
+          child: Text(S.of(context).cancel),
+        ),
         ElevatedButton(
-            onPressed: memoSave.expectFailure(context), child: const Text("保存する"))
+          onPressed: () async => ref
+              .read(userInfoNotifierProvider(userId).notifier)
+              .updateMemo(controller.text),
+          child: Text(S.of(context).save),
+        ),
       ],
     );
   }

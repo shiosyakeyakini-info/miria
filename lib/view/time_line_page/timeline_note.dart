@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/view/themes/app_theme.dart";
 
 final timelineNoteProvider =
     ChangeNotifierProvider.autoDispose((ref) => TextEditingController());
@@ -33,6 +33,7 @@ class TimelineNoteFieldState extends ConsumerState<TimelineNoteField> {
         maxLines: null,
         controller: ref.watch(timelineNoteProvider),
         decoration: noteStyle,
+        // onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ),
     );
   }

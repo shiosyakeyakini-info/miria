@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/avatar_icon.dart';
-import 'package:miria/view/common/misskey_notes/local_only_icon.dart';
-import 'package:miria/view/note_create_page/note_visibility_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/note_create_page/reaction_acceptance_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/avatar_icon.dart";
+import "package:miria/view/common/misskey_notes/local_only_icon.dart";
+import "package:miria/view/note_create_page/note_visibility_dialog.dart";
+import "package:miria/view/note_create_page/reaction_acceptance_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class NoteCreateSettingTop extends ConsumerWidget {
   const NoteCreateSettingTop({super.key});
@@ -26,7 +26,9 @@ class NoteCreateSettingTop extends ConsumerWidget {
   }
 
   Widget resolveAcceptanceIcon(
-      ReactionAcceptance? acceptance, BuildContext context) {
+    ReactionAcceptance? acceptance,
+    BuildContext context,
+  ) {
     switch (acceptance) {
       case null:
         return SvgPicture.asset(
@@ -49,21 +51,25 @@ class NoteCreateSettingTop extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier =
-        ref.read(noteCreateProvider(AccountScope.of(context)).notifier);
+        ref.read(noteCreateNotifierProvider(AccountScope.of(context)).notifier);
 
     final noteVisibility = ref.watch(
-        noteCreateProvider(AccountScope.of(context))
-            .select((value) => value.noteVisibility));
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.noteVisibility),
+    );
     final reactionAcceptance = ref.watch(
-        noteCreateProvider(AccountScope.of(context))
-            .select((value) => value.reactionAcceptance));
-    final isLocal = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.localOnly));
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.reactionAcceptance),
+    );
+    final isLocal = ref.watch(
+      noteCreateNotifierProvider(AccountScope.of(context))
+          .select((value) => value.localOnly),
+    );
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 5)),
-        AvatarIcon.fromIResponse(
-          AccountScope.of(context).i,
+        AvatarIcon(
+          user: AccountScope.of(context).i,
           height:
               Theme.of(context).iconButtonTheme.style?.iconSize?.resolve({}) ??
                   32,
@@ -71,34 +77,38 @@ class NoteCreateSettingTop extends ConsumerWidget {
         Expanded(child: Container()),
         Builder(
           builder: (context2) => IconButton(
-              onPressed: () async {
-                final result = await showModalBottomSheet<NoteVisibility?>(
-                    context: context2,
-                    builder: (context3) => NoteVisibilityDialog(
-                          account: AccountScope.of(context),
-                        ));
-                if (result != null) {
-                  notifier.setNoteVisibility(result);
-                }
-              },
-              icon: Icon(resolveVisibilityIcon(noteVisibility))),
+            onPressed: () async {
+              final result = await showModalBottomSheet<NoteVisibility?>(
+                context: context2,
+                builder: (context3) => NoteVisibilityDialog(
+                  account: AccountScope.of(context),
+                ),
+              );
+              if (result != null) {
+                notifier.setNoteVisibility(result);
+              }
+            },
+            icon: Icon(resolveVisibilityIcon(noteVisibility)),
+          ),
         ),
         IconButton(
-            onPressed: () async {
-              notifier.toggleLocalOnly(context);
-            },
-            icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket)),
+          onPressed: () async {
+            notifier.toggleLocalOnly(context);
+          },
+          icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket),
+        ),
         Builder(
-            builder: (context2) => IconButton(
-                onPressed: () async {
-                  final result =
-                      await showModalBottomSheet<ReactionAcceptance?>(
-                          context: context2,
-                          builder: (context) =>
-                              const ReactionAcceptanceDialog());
-                  notifier.setReactionAcceptance(result);
-                },
-                icon: resolveAcceptanceIcon(reactionAcceptance, context2))),
+          builder: (context2) => IconButton(
+            onPressed: () async {
+              final result = await showModalBottomSheet<ReactionAcceptance?>(
+                context: context2,
+                builder: (context) => const ReactionAcceptanceDialog(),
+              );
+              notifier.setReactionAcceptance(result);
+            },
+            icon: resolveAcceptanceIcon(reactionAcceptance, context2),
+          ),
+        ),
       ],
     );
   }

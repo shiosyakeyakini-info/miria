@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/color_theme.dart";
 
 class AppTheme extends InheritedWidget {
   final AppThemeData themeData;
 
   const AppTheme({
-    super.key,
     required super.child,
     required this.themeData,
+    super.key,
   });
 
   @override
@@ -24,6 +25,7 @@ class AppTheme extends InheritedWidget {
 }
 
 class AppThemeData {
+  final ColorTheme colorTheme;
   final bool isDarkMode;
   final InputDecoration noteTextStyle;
   final ButtonStyle reactionButtonStyle;
@@ -43,11 +45,10 @@ class AppThemeData {
   final Radius renoteBorderRadius;
   final List<double> renoteDashPattern;
   final Color currentDisplayTabColor;
-  final Color voteColor1;
-  final Color voteColor2;
   final Color buttonBackground;
 
   const AppThemeData({
+    required this.colorTheme,
     required this.isDarkMode,
     required this.noteTextStyle,
     required this.reactionButtonStyle,
@@ -67,8 +68,6 @@ class AppThemeData {
     required this.renoteBorderRadius,
     required this.renoteDashPattern,
     required this.currentDisplayTabColor,
-    required this.voteColor1,
-    required this.voteColor2,
     required this.buttonBackground,
   });
 }

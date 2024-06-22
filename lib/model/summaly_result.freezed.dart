@@ -12,7 +12,7 @@ part of 'summaly_result.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 SummalyResult _$SummalyResultFromJson(Map<String, dynamic> json) {
   return _SummalyResult.fromJson(json);
@@ -20,11 +20,11 @@ SummalyResult _$SummalyResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SummalyResult {
+  Player get player => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get icon => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get thumbnail => throw _privateConstructorUsedError;
-  Player get player => throw _privateConstructorUsedError;
   String? get sitename => throw _privateConstructorUsedError;
   bool? get sensitive => throw _privateConstructorUsedError;
   String? get url => throw _privateConstructorUsedError;
@@ -42,11 +42,11 @@ abstract class $SummalyResultCopyWith<$Res> {
       _$SummalyResultCopyWithImpl<$Res, SummalyResult>;
   @useResult
   $Res call(
-      {String? title,
+      {Player player,
+      String? title,
       String? icon,
       String? description,
       String? thumbnail,
-      Player player,
       String? sitename,
       bool? sensitive,
       String? url});
@@ -67,16 +67,20 @@ class _$SummalyResultCopyWithImpl<$Res, $Val extends SummalyResult>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? player = null,
     Object? title = freezed,
     Object? icon = freezed,
     Object? description = freezed,
     Object? thumbnail = freezed,
-    Object? player = null,
     Object? sitename = freezed,
     Object? sensitive = freezed,
     Object? url = freezed,
   }) {
     return _then(_value.copyWith(
+      player: null == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -93,10 +97,6 @@ class _$SummalyResultCopyWithImpl<$Res, $Val extends SummalyResult>
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
               as String?,
-      player: null == player
-          ? _value.player
-          : player // ignore: cast_nullable_to_non_nullable
-              as Player,
       sitename: freezed == sitename
           ? _value.sitename
           : sitename // ignore: cast_nullable_to_non_nullable
@@ -130,11 +130,11 @@ abstract class _$$SummalyResultImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? title,
+      {Player player,
+      String? title,
       String? icon,
       String? description,
       String? thumbnail,
-      Player player,
       String? sitename,
       bool? sensitive,
       String? url});
@@ -154,16 +154,20 @@ class __$$SummalyResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? player = null,
     Object? title = freezed,
     Object? icon = freezed,
     Object? description = freezed,
     Object? thumbnail = freezed,
-    Object? player = null,
     Object? sitename = freezed,
     Object? sensitive = freezed,
     Object? url = freezed,
   }) {
     return _then(_$SummalyResultImpl(
+      player: null == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -180,10 +184,6 @@ class __$$SummalyResultImplCopyWithImpl<$Res>
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
               as String?,
-      player: null == player
-          ? _value.player
-          : player // ignore: cast_nullable_to_non_nullable
-              as Player,
       sitename: freezed == sitename
           ? _value.sitename
           : sitename // ignore: cast_nullable_to_non_nullable
@@ -204,11 +204,11 @@ class __$$SummalyResultImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SummalyResultImpl implements _SummalyResult {
   const _$SummalyResultImpl(
-      {this.title,
+      {required this.player,
+      this.title,
       this.icon,
       this.description,
       this.thumbnail,
-      required this.player,
       this.sitename,
       this.sensitive,
       this.url});
@@ -216,6 +216,8 @@ class _$SummalyResultImpl implements _SummalyResult {
   factory _$SummalyResultImpl.fromJson(Map<String, dynamic> json) =>
       _$$SummalyResultImplFromJson(json);
 
+  @override
+  final Player player;
   @override
   final String? title;
   @override
@@ -225,8 +227,6 @@ class _$SummalyResultImpl implements _SummalyResult {
   @override
   final String? thumbnail;
   @override
-  final Player player;
-  @override
   final String? sitename;
   @override
   final bool? sensitive;
@@ -235,21 +235,21 @@ class _$SummalyResultImpl implements _SummalyResult {
 
   @override
   String toString() {
-    return 'SummalyResult(title: $title, icon: $icon, description: $description, thumbnail: $thumbnail, player: $player, sitename: $sitename, sensitive: $sensitive, url: $url)';
+    return 'SummalyResult(player: $player, title: $title, icon: $icon, description: $description, thumbnail: $thumbnail, sitename: $sitename, sensitive: $sensitive, url: $url)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SummalyResultImpl &&
+            (identical(other.player, player) || other.player == player) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.thumbnail, thumbnail) ||
                 other.thumbnail == thumbnail) &&
-            (identical(other.player, player) || other.player == player) &&
             (identical(other.sitename, sitename) ||
                 other.sitename == sitename) &&
             (identical(other.sensitive, sensitive) ||
@@ -259,8 +259,8 @@ class _$SummalyResultImpl implements _SummalyResult {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, icon, description,
-      thumbnail, player, sitename, sensitive, url);
+  int get hashCode => Object.hash(runtimeType, player, title, icon, description,
+      thumbnail, sitename, sensitive, url);
 
   @JsonKey(ignore: true)
   @override
@@ -278,11 +278,11 @@ class _$SummalyResultImpl implements _SummalyResult {
 
 abstract class _SummalyResult implements SummalyResult {
   const factory _SummalyResult(
-      {final String? title,
+      {required final Player player,
+      final String? title,
       final String? icon,
       final String? description,
       final String? thumbnail,
-      required final Player player,
       final String? sitename,
       final bool? sensitive,
       final String? url}) = _$SummalyResultImpl;
@@ -291,6 +291,8 @@ abstract class _SummalyResult implements SummalyResult {
       _$SummalyResultImpl.fromJson;
 
   @override
+  Player get player;
+  @override
   String? get title;
   @override
   String? get icon;
@@ -298,8 +300,6 @@ abstract class _SummalyResult implements SummalyResult {
   String? get description;
   @override
   String? get thumbnail;
-  @override
-  Player get player;
   @override
   String? get sitename;
   @override
@@ -454,7 +454,7 @@ class _$PlayerImpl implements _Player {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PlayerImpl &&

@@ -12,20 +12,20 @@ part of 'note_create_state_notifier.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$NoteCreate {
   Account get account => throw _privateConstructorUsedError;
   NoteVisibility get noteVisibility => throw _privateConstructorUsedError;
   bool get localOnly => throw _privateConstructorUsedError;
+  ReactionAcceptance? get reactionAcceptance =>
+      throw _privateConstructorUsedError;
   List<User> get replyTo => throw _privateConstructorUsedError;
   List<MisskeyPostFile> get files => throw _privateConstructorUsedError;
   NoteCreateChannel? get channel => throw _privateConstructorUsedError;
   Note? get reply => throw _privateConstructorUsedError;
   Note? get renote => throw _privateConstructorUsedError;
-  ReactionAcceptance? get reactionAcceptance =>
-      throw _privateConstructorUsedError;
   bool get isCw => throw _privateConstructorUsedError;
   String get cwText => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
@@ -58,12 +58,12 @@ abstract class $NoteCreateCopyWith<$Res> {
       {Account account,
       NoteVisibility noteVisibility,
       bool localOnly,
+      ReactionAcceptance? reactionAcceptance,
       List<User> replyTo,
       List<MisskeyPostFile> files,
       NoteCreateChannel? channel,
       Note? reply,
       Note? renote,
-      ReactionAcceptance? reactionAcceptance,
       bool isCw,
       String cwText,
       String text,
@@ -102,12 +102,12 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? account = null,
     Object? noteVisibility = null,
     Object? localOnly = null,
+    Object? reactionAcceptance = freezed,
     Object? replyTo = null,
     Object? files = null,
     Object? channel = freezed,
     Object? reply = freezed,
     Object? renote = freezed,
-    Object? reactionAcceptance = freezed,
     Object? isCw = null,
     Object? cwText = null,
     Object? text = null,
@@ -137,6 +137,10 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.localOnly
           : localOnly // ignore: cast_nullable_to_non_nullable
               as bool,
+      reactionAcceptance: freezed == reactionAcceptance
+          ? _value.reactionAcceptance
+          : reactionAcceptance // ignore: cast_nullable_to_non_nullable
+              as ReactionAcceptance?,
       replyTo: null == replyTo
           ? _value.replyTo
           : replyTo // ignore: cast_nullable_to_non_nullable
@@ -157,10 +161,6 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
           ? _value.renote
           : renote // ignore: cast_nullable_to_non_nullable
               as Note?,
-      reactionAcceptance: freezed == reactionAcceptance
-          ? _value.reactionAcceptance
-          : reactionAcceptance // ignore: cast_nullable_to_non_nullable
-              as ReactionAcceptance?,
       isCw: null == isCw
           ? _value.isCw
           : isCw // ignore: cast_nullable_to_non_nullable
@@ -281,12 +281,12 @@ abstract class _$$NoteCreateImplCopyWith<$Res>
       {Account account,
       NoteVisibility noteVisibility,
       bool localOnly,
+      ReactionAcceptance? reactionAcceptance,
       List<User> replyTo,
       List<MisskeyPostFile> files,
       NoteCreateChannel? channel,
       Note? reply,
       Note? renote,
-      ReactionAcceptance? reactionAcceptance,
       bool isCw,
       String cwText,
       String text,
@@ -327,12 +327,12 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
     Object? account = null,
     Object? noteVisibility = null,
     Object? localOnly = null,
+    Object? reactionAcceptance = freezed,
     Object? replyTo = null,
     Object? files = null,
     Object? channel = freezed,
     Object? reply = freezed,
     Object? renote = freezed,
-    Object? reactionAcceptance = freezed,
     Object? isCw = null,
     Object? cwText = null,
     Object? text = null,
@@ -362,6 +362,10 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
           ? _value.localOnly
           : localOnly // ignore: cast_nullable_to_non_nullable
               as bool,
+      reactionAcceptance: freezed == reactionAcceptance
+          ? _value.reactionAcceptance
+          : reactionAcceptance // ignore: cast_nullable_to_non_nullable
+              as ReactionAcceptance?,
       replyTo: null == replyTo
           ? _value._replyTo
           : replyTo // ignore: cast_nullable_to_non_nullable
@@ -382,10 +386,6 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
           ? _value.renote
           : renote // ignore: cast_nullable_to_non_nullable
               as Note?,
-      reactionAcceptance: freezed == reactionAcceptance
-          ? _value.reactionAcceptance
-          : reactionAcceptance // ignore: cast_nullable_to_non_nullable
-              as ReactionAcceptance?,
       isCw: null == isCw
           ? _value.isCw
           : isCw // ignore: cast_nullable_to_non_nullable
@@ -457,12 +457,12 @@ class _$NoteCreateImpl implements _NoteCreate {
       {required this.account,
       required this.noteVisibility,
       required this.localOnly,
+      required this.reactionAcceptance,
       final List<User> replyTo = const [],
       final List<MisskeyPostFile> files = const [],
       this.channel,
       this.reply,
       this.renote,
-      required this.reactionAcceptance,
       this.isCw = false,
       this.cwText = "",
       this.text = "",
@@ -488,6 +488,8 @@ class _$NoteCreateImpl implements _NoteCreate {
   final NoteVisibility noteVisibility;
   @override
   final bool localOnly;
+  @override
+  final ReactionAcceptance? reactionAcceptance;
   final List<User> _replyTo;
   @override
   @JsonKey()
@@ -512,8 +514,6 @@ class _$NoteCreateImpl implements _NoteCreate {
   final Note? reply;
   @override
   final Note? renote;
-  @override
-  final ReactionAcceptance? reactionAcceptance;
   @override
   @JsonKey()
   final bool isCw;
@@ -563,11 +563,11 @@ class _$NoteCreateImpl implements _NoteCreate {
 
   @override
   String toString() {
-    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, reactionAcceptance: $reactionAcceptance, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
+    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoteCreateImpl &&
@@ -576,13 +576,13 @@ class _$NoteCreateImpl implements _NoteCreate {
                 other.noteVisibility == noteVisibility) &&
             (identical(other.localOnly, localOnly) ||
                 other.localOnly == localOnly) &&
+            (identical(other.reactionAcceptance, reactionAcceptance) ||
+                other.reactionAcceptance == reactionAcceptance) &&
             const DeepCollectionEquality().equals(other._replyTo, _replyTo) &&
             const DeepCollectionEquality().equals(other._files, _files) &&
             (identical(other.channel, channel) || other.channel == channel) &&
             (identical(other.reply, reply) || other.reply == reply) &&
             (identical(other.renote, renote) || other.renote == renote) &&
-            (identical(other.reactionAcceptance, reactionAcceptance) ||
-                other.reactionAcceptance == reactionAcceptance) &&
             (identical(other.isCw, isCw) || other.isCw == isCw) &&
             (identical(other.cwText, cwText) || other.cwText == cwText) &&
             (identical(other.text, text) || other.text == text) &&
@@ -616,12 +616,12 @@ class _$NoteCreateImpl implements _NoteCreate {
         account,
         noteVisibility,
         localOnly,
+        reactionAcceptance,
         const DeepCollectionEquality().hash(_replyTo),
         const DeepCollectionEquality().hash(_files),
         channel,
         reply,
         renote,
-        reactionAcceptance,
         isCw,
         cwText,
         text,
@@ -651,12 +651,12 @@ abstract class _NoteCreate implements NoteCreate {
       {required final Account account,
       required final NoteVisibility noteVisibility,
       required final bool localOnly,
+      required final ReactionAcceptance? reactionAcceptance,
       final List<User> replyTo,
       final List<MisskeyPostFile> files,
       final NoteCreateChannel? channel,
       final Note? reply,
       final Note? renote,
-      required final ReactionAcceptance? reactionAcceptance,
       final bool isCw,
       final String cwText,
       final String text,
@@ -680,6 +680,8 @@ abstract class _NoteCreate implements NoteCreate {
   @override
   bool get localOnly;
   @override
+  ReactionAcceptance? get reactionAcceptance;
+  @override
   List<User> get replyTo;
   @override
   List<MisskeyPostFile> get files;
@@ -689,8 +691,6 @@ abstract class _NoteCreate implements NoteCreate {
   Note? get reply;
   @override
   Note? get renote;
-  @override
-  ReactionAcceptance? get reactionAcceptance;
   @override
   bool get isCw;
   @override
@@ -829,7 +829,7 @@ class _$NoteCreateChannelImpl implements _NoteCreateChannel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoteCreateChannelImpl &&

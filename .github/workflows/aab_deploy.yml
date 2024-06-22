@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v4
 
         - name: Install flutter
           uses: subosito/flutter-action@v2
@@ -31,7 +31,7 @@ jobs:
       
 
         - name: Cache pubspec dependencies
-          uses: actions/cache@v2
+          uses: actions/cache@v3
           with:
             path: |
               ${{ env.FLUTTER_HOME }}/.pub-cache
@@ -63,7 +63,7 @@ jobs:
             export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
             flutter build appbundle --no-tree-shake-icons --release
         - name: Upload artifact
-          uses: actions/upload-artifact@v2.2.0
+          uses: actions/upload-artifact@v3
           with:
             name: app-release.aab
             # 保存するファイル

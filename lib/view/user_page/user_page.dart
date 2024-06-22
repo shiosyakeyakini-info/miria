@@ -1,41 +1,24 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/user_page/user_clips.dart';
-import 'package:miria/view/user_page/user_detail.dart';
-import 'package:miria/view/user_page/user_misskey_page.dart';
-import 'package:miria/view/user_page/user_notes.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/user_page/user_plays.dart';
-import 'package:miria/view/user_page/user_reactions.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-
-class UserInfo {
-  final String userId;
-  final UsersShowResponse? response;
-  final String? remoteUserId;
-  final UsersShowResponse? remoteResponse;
-
-  const UserInfo({
-    required this.userId,
-    required this.response,
-    required this.remoteUserId,
-    required this.remoteResponse,
-  });
-}
-
-final userInfoProvider =
-    StateProvider.family.autoDispose<UserInfo?, String>((ref, userId) => null);
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/user_page/user_clips.dart";
+import "package:miria/view/user_page/user_detail.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
+import "package:miria/view/user_page/user_misskey_page.dart";
+import "package:miria/view/user_page/user_notes.dart";
+import "package:miria/view/user_page/user_plays.dart";
+import "package:miria/view/user_page/user_reactions.dart";
 
 @RoutePage()
 class UserPage extends ConsumerStatefulWidget {
   final String userId;
   final Account account;
-  const UserPage({super.key, required this.userId, required this.account});
+  const UserPage({required this.userId, required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserPageState();
@@ -44,12 +27,16 @@ class UserPage extends ConsumerStatefulWidget {
 class UserPageState extends ConsumerState<UserPage> {
   @override
   Widget build(BuildContext context) {
-    final userInfo = ref.watch(userInfoProvider(widget.userId));
-    final isReactionAvailable = userInfo?.response?.publicReactions == true ||
-        (userInfo?.response?.host == null &&
-            userInfo?.response?.username == widget.account.userId);
+    final userInfo = ref.watch(
+      userInfoNotifierProvider(widget.userId)
+          .select((value) => value.valueOrNull),
+    );
+    final isReactionAvailable = userInfo?.response.publicReactions == true ||
+        (userInfo?.response.host == null &&
+            userInfo?.response.username == widget.account.userId);
     final isRemoteUser =
-        userInfo?.response?.host != null && userInfo?.remoteResponse != null;
+        userInfo?.response.host != null && userInfo?.remoteResponse != null;
+
     return AccountScope(
       account: widget.account,
       child: DefaultTabController(
@@ -57,26 +44,25 @@ class UserPageState extends ConsumerState<UserPage> {
         child: Scaffold(
           appBar: AppBar(
             title: SimpleMfmText(
-              userInfo?.response?.name ?? userInfo?.response?.username ?? "",
-              emojis: userInfo?.response?.emojis ?? {},
+              userInfo?.response.name ?? userInfo?.response.username ?? "",
+              emojis: userInfo?.response.emojis ?? {},
             ),
             actions: const [],
             bottom: TabBar(
               tabs: [
-                Tab(
-                  text:
-                      "アカウント情報${userInfo?.remoteResponse != null ? "（ローカル）" : ""}",
-                ),
-                if (isRemoteUser) const Tab(text: "アカウント情報（リモート）"),
-                Tab(
-                  text:
-                      "ノート${userInfo?.remoteResponse != null ? "（ローカル）" : ""}",
-                ),
-                if (isRemoteUser) const Tab(text: "ノート（リモート）"),
-                const Tab(text: "クリップ"),
-                if (isReactionAvailable) const Tab(text: "リアクション"),
-                const Tab(text: "ページ"),
-                const Tab(text: "Play"),
+                if (!isRemoteUser) ...[
+                  Tab(text: S.of(context).userInfomation),
+                  Tab(text: S.of(context).userNotes),
+                ] else ...[
+                  Tab(text: S.of(context).userInfomationLocal),
+                  Tab(text: S.of(context).userInfomationRemote),
+                  Tab(text: S.of(context).userNotesLocal),
+                  Tab(text: S.of(context).userNotesRemote),
+                ],
+                Tab(text: S.of(context).clip),
+                if (isReactionAvailable) Tab(text: S.of(context).userReactions),
+                Tab(text: S.of(context).userPages),
+                Tab(text: S.of(context).userPlays),
               ],
               isScrollable: true,
               tabAlignment: TabAlignment.center,
@@ -90,14 +76,17 @@ class UserPageState extends ConsumerState<UserPage> {
                     UserDetailTab(userId: widget.userId),
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
-                        child: SingleChildScrollView(
-                          child: UserDetail(
-                            response: userInfo.remoteResponse!,
-                            account:
-                                Account.demoAccount(userInfo.response!.host!),
-                            controlAccount: widget.account,
+                        account: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
+                        child: UserDetail(
+                          response: userInfo.remoteResponse!,
+                          account: Account.demoAccount(
+                            userInfo.response.host!,
+                            userInfo.metaResponse,
                           ),
+                          controlAccount: widget.account,
                         ),
                       ),
                     Padding(
@@ -108,7 +97,10 @@ class UserPageState extends ConsumerState<UserPage> {
                     ),
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserNotes(
@@ -133,22 +125,30 @@ class UserPageState extends ConsumerState<UserPage> {
                     // ページ
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserMisskeyPage(
-                              userId: userInfo.remoteResponse!.id),
+                            userId: userInfo.remoteResponse!.id,
+                          ),
                         ),
                       )
                     else
                       Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserMisskeyPage(userId: widget.userId)),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserMisskeyPage(userId: widget.userId),
+                      ),
 
                     // Play
                     if (isRemoteUser)
                       AccountScope(
-                        account: Account.demoAccount(userInfo!.response!.host!),
+                        account: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: UserPlays(userId: userInfo.remoteResponse!.id),
@@ -170,96 +170,28 @@ class UserPageState extends ConsumerState<UserPage> {
   }
 }
 
-class UserDetailTab extends ConsumerStatefulWidget {
+class UserDetailTab extends ConsumerWidget {
   final String userId;
 
-  const UserDetailTab({super.key, required this.userId});
+  const UserDetailTab({required this.userId, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => UserDetailTabState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userDetail = ref.watch(userInfoNotifierProvider(userId));
 
-class UserDetailTabState extends ConsumerState<UserDetailTab> {
-  UsersShowResponse? response;
-  UsersShowResponse? remoteResponse;
-  (Object?, StackTrace)? error;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future(() async {
-      try {
-        final account = AccountScope.of(context);
-        response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
-            .users
-            .show(UsersShowRequest(userId: widget.userId));
-        ref
-            .read(notesProvider(account))
-            .registerAll(response?.pinnedNotes ?? []);
-        ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
-          userId: widget.userId,
-          response: response,
-          remoteUserId: null,
-          remoteResponse: null,
-        );
-
-        final remoteHost = response?.host;
-        if (remoteHost != null) {
-          final remoteResponse = await ref
-              .read(misskeyProvider(Account.demoAccount(remoteHost)))
-              .users
-              .showByName(
-                UsersShowByUserNameRequest(userName: response!.username),
-              );
-
-          await ref
-              .read(emojiRepositoryProvider(Account.demoAccount(remoteHost)))
-              .loadFromSourceIfNeed();
-
-          ref
-              .read(notesProvider(Account.demoAccount(remoteHost)))
-              .registerAll(remoteResponse.pinnedNotes ?? []);
-          ref.read(userInfoProvider(widget.userId).notifier).state = UserInfo(
-            userId: widget.userId,
-            response: response,
-            remoteUserId: remoteResponse.id,
-            remoteResponse: remoteResponse,
-          );
-        }
-      } catch (e, s) {
-        setState(() {
-          error = (e, s);
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (response != null) {
-      return SingleChildScrollView(
-        child: UserDetail(
-          response: response!,
+    return switch (userDetail) {
+      AsyncLoading() => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      AsyncError(:final error, :final stackTrace) => ErrorDetail(
+          error: error,
+          stackTrace: stackTrace,
+        ),
+      AsyncData(:final value) => UserDetail(
+          response: value.response,
           account: AccountScope.of(context),
           controlAccount: null,
-        ),
-      );
-    }
-    if (error != null) {
-      return ErrorDetail(
-        error: error?.$1,
-        stackTrace: error?.$2,
-      );
-    }
-
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+        )
+    };
   }
 }

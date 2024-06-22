@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/user_page/user_page.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_info_notifier.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
@@ -14,8 +15,8 @@ class UserNotes extends ConsumerStatefulWidget {
   final Account? actualAccount;
 
   const UserNotes({
-    super.key,
     required this.userId,
+    super.key,
     this.remoteUserId,
     this.actualAccount,
   }) : assert((remoteUserId == null) == (actualAccount == null));
@@ -57,9 +58,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
                           switch (value) {
                             case 0:
                               withReply = !withReply;
+                              if (withReply) {
+                                isFileOnly = false;
+                              }
                               highlight = false;
                             case 1:
                               isFileOnly = !isFileOnly;
+                              if (isFileOnly) {
+                                withReply = false;
+                              }
                               highlight = false;
                             case 2:
                               renote = !renote;
@@ -72,23 +79,23 @@ class UserNotesState extends ConsumerState<UserNotes> {
                           }
                         });
                       },
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("返信つき"),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).includeRepliesShort),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("ファイルつき"),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).mediaOnlyShort),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("リノートも"),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).displayRenotesShort),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Text("ハイライト"),
-                        )
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Text(S.of(context).highlight),
+                        ),
                       ],
                     ),
                   ),
@@ -96,15 +103,18 @@ class UserNotesState extends ConsumerState<UserNotes> {
               ),
               IconButton(
                 onPressed: () async {
-                  final userInfo = ref.read(userInfoProvider(widget.userId));
+                  final userInfo = ref.read(
+                    userInfoNotifierProvider(widget.userId)
+                        .select((value) => value.requireValue),
+                  );
                   final firstDate = widget.actualAccount == null
-                      ? userInfo?.response?.createdAt
-                      : userInfo?.remoteResponse?.createdAt;
+                      ? userInfo.response.createdAt
+                      : userInfo.remoteResponse?.createdAt;
 
                   final result = await showDatePicker(
                     context: context,
                     initialDate: untilDate ?? DateTime.now(),
-                    helpText: "この日までを表示",
+                    helpText: S.of(context).showNotesBeforeThisDate,
                     firstDate: firstDate ?? DateTime.now(),
                     lastDate: DateTime.now(),
                   );
@@ -129,16 +139,18 @@ class UserNotesState extends ConsumerState<UserNotes> {
         Expanded(
           child: PushableListView<Note>(
             listKey: Object.hashAll(
-                [isFileOnly, withReply, renote, untilDate, highlight]),
+              [isFileOnly, withReply, renote, untilDate, highlight],
+            ),
             additionalErrorInfo: highlight
-                ? (context, e) => const Text("ハイライトはMisskey 2023.10.0以降の機能です。")
+                ? (context, e) => Text(S.of(context).userHighlightAvailability)
                 : null,
             initializeFuture: () async {
               final Iterable<Note> notes;
               if (highlight) {
                 notes = await misskey.users.featuredNotes(
                   UsersFeaturedNotesRequest(
-                      userId: widget.remoteUserId ?? widget.userId),
+                    userId: widget.remoteUserId ?? widget.userId,
+                  ),
                 );
               } else {
                 notes = await misskey.users.notes(
@@ -147,13 +159,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     withFiles: isFileOnly,
                     // 後方互換性のため
                     includeReplies: withReply,
-                    withReplies: withReply,
                     includeMyRenotes: renote,
-                    untilDate: untilDate?.millisecondsSinceEpoch,
+                    withReplies: withReply,
+                    withRenotes: renote,
+                    withChannelNotes: true,
+                    untilDate: untilDate,
                   ),
                 );
               }
-              if (!mounted) return [];
+              if (!context.mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
                   .registerAll(notes);
@@ -175,13 +189,15 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     untilId: lastElement.id,
                     withFiles: isFileOnly,
                     includeReplies: withReply,
-                    withReplies: withReply,
                     includeMyRenotes: renote,
-                    untilDate: untilDate?.millisecondsSinceEpoch,
+                    withReplies: withReply,
+                    withRenotes: renote,
+                    withChannelNotes: true,
+                    untilDate: untilDate,
                   ),
                 );
               }
-              if (!mounted) return [];
+              if (!context.mounted) return [];
               ref
                   .read(notesProvider(AccountScope.of(context)))
                   .registerAll(notes);

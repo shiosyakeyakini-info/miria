@@ -20,8 +20,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+
+      - run: dart format --output=none --set-exit-if-changed .
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
@@ -35,10 +37,12 @@ jobs:
       - name: Run flutter pub get
         run: flutter pub get
 
+      - run: flutter analyze
+
       - name: Run flutter test with coverage
         run: flutter test --coverage --coverage-path=~/coverage/lcov.info
 
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: ~/coverage/lcov.info

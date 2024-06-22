@@ -1,94 +1,15 @@
-import 'package:auto_route/annotations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/antenna_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/antenna_page/antenna_list.dart';
-import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-
-final antennasListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
-    AntennasListNotifier, List<Antenna>, Misskey>(AntennasListNotifier.new);
-
-class AntennasListNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<Antenna>, Misskey> {
-  @override
-  Future<List<Antenna>> build(Misskey arg) async {
-    final response = await _misskey.antennas.list();
-    return response.toList();
-  }
-
-  Misskey get _misskey => arg;
-
-  Future<void> create(AntennaSettings settings) async {
-    final antenna = await _misskey.antennas.create(
-      AntennasCreateRequest(
-        name: settings.name,
-        src: settings.src,
-        keywords: settings.keywords,
-        excludeKeywords: settings.excludeKeywords,
-        users: settings.users,
-        caseSensitive: settings.caseSensitive,
-        withReplies: settings.withReplies,
-        withFile: settings.withFile,
-        notify: settings.notify,
-        localOnly: settings.localOnly,
-      ),
-    );
-    state = AsyncValue.data([...?state.valueOrNull, antenna]);
-  }
-
-  Future<void> delete(String antennaId) async {
-    await _misskey.antennas.delete(AntennasDeleteRequest(antennaId: antennaId));
-    state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != antennaId).toList() ?? [],
-    );
-  }
-
-  Future<void> updateAntenna(
-    String antennaId,
-    AntennaSettings settings,
-  ) async {
-    await _misskey.antennas.update(
-      AntennasUpdateRequest(
-        antennaId: antennaId,
-        name: settings.name,
-        src: settings.src,
-        keywords: settings.keywords,
-        excludeKeywords: settings.excludeKeywords,
-        users: settings.users,
-        caseSensitive: settings.caseSensitive,
-        withReplies: settings.withReplies,
-        withFile: settings.withFile,
-        notify: settings.notify,
-        localOnly: settings.localOnly,
-      ),
-    );
-    state = AsyncValue.data(
-      state.valueOrNull
-              ?.map(
-                (antenna) => (antenna.id == antennaId)
-                    ? antenna.copyWith(
-                        name: settings.name,
-                        src: settings.src,
-                        keywords: settings.keywords,
-                        excludeKeywords: settings.excludeKeywords,
-                        users: settings.users,
-                        caseSensitive: settings.caseSensitive,
-                        withReplies: settings.withReplies,
-                        withFile: settings.withFile,
-                        notify: settings.notify,
-                      )
-                    : antenna,
-              )
-              .toList() ??
-          [],
-    );
-  }
-}
+import "package:auto_route/annotations.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
+import "package:miria/view/antenna_page/antenna_list.dart";
+import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
 
 @RoutePage()
 class AntennaPage extends ConsumerWidget {
@@ -104,7 +25,7 @@ class AntennaPage extends ConsumerWidget {
       account: account,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("アンテナ"),
+          title: Text(S.of(context).antenna),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -112,14 +33,14 @@ class AntennaPage extends ConsumerWidget {
                 final settings = await showDialog<AntennaSettings>(
                   context: context,
                   builder: (context) => AntennaSettingsDialog(
-                    title: const Text("作成"),
+                    title: Text(S.of(context).create),
                     account: account,
                   ),
                 );
                 if (!context.mounted) return;
                 if (settings != null) {
                   await ref
-                      .read(antennasListNotifierProvider(misskey).notifier)
+                      .read(antennasNotifierProvider(misskey).notifier)
                       .create(settings)
                       .expectFailure(context);
                 }

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
+import "package:flutter/material.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
 
 // blobs in community discord server
 final _discordOfficialEmojiList = [
@@ -16,7 +16,7 @@ final _discordOfficialEmojiList = [
 
   // meowmoji 2
   "https://cdn.discordapp.com/emojis/380080817214324739.png?size=32",
-  "https://cdn.discordapp.com/emojis/391358218971906050.png?size=32"
+  "https://cdn.discordapp.com/emojis/391358218971906050.png?size=32",
 
   //mewomoji 3
 ]..shuffle();

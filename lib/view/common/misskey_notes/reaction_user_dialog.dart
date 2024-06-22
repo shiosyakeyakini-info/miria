@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ReactionUserDialog extends ConsumerWidget {
   final Account account;
@@ -15,10 +15,10 @@ class ReactionUserDialog extends ConsumerWidget {
   final String noteId;
 
   const ReactionUserDialog({
-    super.key,
     required this.account,
     required this.emojiData,
     required this.noteId,
+    super.key,
   });
 
   @override
@@ -28,10 +28,8 @@ class ReactionUserDialog extends ConsumerWidget {
     switch (handled) {
       case CustomEmojiData():
         type = handled.hostedName;
-        break;
       case UnicodeEmojiData():
         type = handled.char;
-        break;
       default:
         type = "";
     }
@@ -50,39 +48,45 @@ class ReactionUserDialog extends ConsumerWidget {
             Text(
               emojiData.baseName,
               style: Theme.of(context).textTheme.bodySmall,
-            )
+            ),
           ],
         ),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.width * 0.8,
           child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: PushableListView(
-                initializeFuture: () async {
-                  final response = await ref
-                      .read(misskeyProvider(account))
-                      .notes
-                      .reactions
-                      .reactions(
-                          NotesReactionsRequest(noteId: noteId, type: type));
-                  return response.toList();
-                },
-                nextFuture: (item, index) async {
-                  // 後方互換性のためにoffsetとuntilIdの両方をリクエストに含める
-                  final response = await ref
-                      .read(misskeyProvider(account))
-                      .notes
-                      .reactions
-                      .reactions(NotesReactionsRequest(
-                          noteId: noteId,
-                          type: type,
-                          offset: index,
-                          untilId: item.id));
-                  return response.toList();
-                },
-                itemBuilder: (context, item) => UserListItem(user: item.user),
-              )),
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: PushableListView(
+              initializeFuture: () async {
+                final response = await ref
+                    .read(misskeyProvider(account))
+                    .notes
+                    .reactions
+                    .reactions(
+                      NotesReactionsRequest(noteId: noteId, type: type),
+                    );
+                return response.toList();
+              },
+              nextFuture: (item, index) async {
+                // 後方互換性のためにoffsetとuntilIdの両方をリクエストに含める
+                final response = await ref
+                    .read(misskeyProvider(account))
+                    .notes
+                    .reactions
+                    .reactions(
+                      NotesReactionsRequest(
+                        noteId: noteId,
+                        type: type,
+                        offset: index,
+                        untilId: item.id,
+                      ),
+                    );
+                return response.toList();
+              },
+              itemBuilder: (context, item) => UserListItem(user: item.user),
+              showAd: false,
+            ),
+          ),
         ),
       ),
     );

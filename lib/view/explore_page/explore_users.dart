@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/users_sort_type_extension.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ExploreUsers extends ConsumerStatefulWidget {
   const ExploreUsers({super.key});
@@ -32,6 +34,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
       final response = await ref
           .read(misskeyProvider(AccountScope.of(context)))
           .pinnedUsers();
+      if (!mounted) return;
       setState(() {
         pinnedUser
           ..clear()
@@ -57,61 +60,72 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                       padding: const EdgeInsets.only(top: 3, bottom: 3),
                       child: LayoutBuilder(
                         builder: (context, constraints) => ToggleButtons(
-                            constraints: BoxConstraints.expand(
-                                width: constraints.maxWidth / 3 -
-                                    Theme.of(context)
-                                            .toggleButtonsTheme
-                                            .borderWidth!
-                                            .toInt() *
-                                        3),
-                            onPressed: (index) => setState(() {
-                                  exploreUserType =
-                                      ExploreUserType.values[index];
-                                }),
-                            isSelected: [
-                              for (final element in ExploreUserType.values)
-                                element == exploreUserType
-                            ],
-                            children: const [
-                              Text("ピンどめ"),
-                              Text("ローカル"),
-                              Text("リモート"),
-                            ]),
+                          constraints: BoxConstraints.expand(
+                            width: constraints.maxWidth / 3 -
+                                Theme.of(context)
+                                        .toggleButtonsTheme
+                                        .borderWidth!
+                                        .toInt() *
+                                    3,
+                          ),
+                          onPressed: (index) => setState(() {
+                            exploreUserType = ExploreUserType.values[index];
+                          }),
+                          isSelected: [
+                            for (final element in ExploreUserType.values)
+                              element == exploreUserType,
+                          ],
+                          children: [
+                            Text(S.of(context).pinnedUser),
+                            Text(S.of(context).local),
+                            Text(S.of(context).remote),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   IconButton(
-                      onPressed: exploreUserType == ExploreUserType.pinned
-                          ? null
-                          : () {
-                              setState(() {
-                                isDetailOpen = !isDetailOpen;
-                              });
-                            },
-                      icon: Icon(isDetailOpen
+                    onPressed: exploreUserType == ExploreUserType.pinned
+                        ? null
+                        : () {
+                            setState(() {
+                              isDetailOpen = !isDetailOpen;
+                            });
+                          },
+                    icon: Icon(
+                      isDetailOpen
                           ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down)),
+                          : Icons.keyboard_arrow_down,
+                    ),
+                  ),
                 ],
               ),
               if (isDetailOpen) ...[
                 Row(
                   children: [
-                    const Expanded(child: Text("並び順", textAlign: TextAlign.center)),
+                    Expanded(
+                      child: Text(
+                        S.of(context).sort,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     Expanded(
                       child: DropdownButton<UsersSortType>(
-                          items: [
-                            for (final sortType in UsersSortType.values)
-                              DropdownMenuItem(
-                                  value: sortType,
-                                  child: Text(sortType.displayName))
-                          ],
-                          value: sortType,
-                          onChanged: (e) {
-                            setState(() {
-                              sortType = e ?? UsersSortType.followerDescendant;
-                            });
-                          }),
-                    )
+                        items: [
+                          for (final sortType in UsersSortType.values)
+                            DropdownMenuItem(
+                              value: sortType,
+                              child: Text(sortType.displayName(context)),
+                            ),
+                        ],
+                        value: sortType,
+                        onChanged: (e) {
+                          setState(() {
+                            sortType = e ?? UsersSortType.followerDescendant;
+                          });
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -123,6 +137,7 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                 itemCount: pinnedUser.length,
                 itemBuilder: (context, index) => UserListItem(
                   user: pinnedUser[index],
+                  isDetail: true,
                 ),
               ),
             )
@@ -134,32 +149,39 @@ class ExploreUsersState extends ConsumerState<ExploreUsers> {
                   final response = await ref
                       .read(misskeyProvider(AccountScope.of(context)))
                       .users
-                      .users(UsersUsersRequest(
-                        sort: sortType,
-                        state: UsersState.alive,
-                        origin: exploreUserType == ExploreUserType.remote
-                            ? Origin.remote
-                            : Origin.local,
-                      ));
+                      .users(
+                        UsersUsersRequest(
+                          sort: sortType,
+                          state: UsersState.alive,
+                          origin: exploreUserType == ExploreUserType.remote
+                              ? Origin.remote
+                              : Origin.local,
+                        ),
+                      );
                   return response.toList();
                 },
                 nextFuture: (_, index) async {
                   final response = await ref
                       .read(misskeyProvider(AccountScope.of(context)))
                       .users
-                      .users(UsersUsersRequest(
-                        sort: sortType,
-                        state: UsersState.alive,
-                        offset: index,
-                        origin: exploreUserType == ExploreUserType.remote
-                            ? Origin.remote
-                            : Origin.local,
-                      ));
+                      .users(
+                        UsersUsersRequest(
+                          sort: sortType,
+                          state: UsersState.alive,
+                          offset: index,
+                          origin: exploreUserType == ExploreUserType.remote
+                              ? Origin.remote
+                              : Origin.local,
+                        ),
+                      );
                   return response.toList();
                 },
-                itemBuilder: (context, user) => UserListItem(user: user),
+                itemBuilder: (context, user) => UserListItem(
+                  user: user,
+                  isDetail: true,
+                ),
               ),
-            )
+            ),
         ],
       ),
     );

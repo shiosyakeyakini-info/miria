@@ -1,29 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/input_completion_type.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/note_create/basic_keyboard.dart';
-import 'package:miria/view/common/note_create/custom_keyboard_button.dart';
-import 'package:miria/view/common/note_create/input_completation.dart';
-import 'package:misskey_dart/misskey_dart.dart' hide Hashtag;
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/text_editing_controller_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/input_completion_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/note_create/basic_keyboard.dart";
+import "package:miria/view/common/note_create/custom_keyboard_button.dart";
+import "package:miria/view/common/note_create/input_completation.dart";
+import "package:misskey_dart/misskey_dart.dart" hide Hashtag;
 
 final _hashtagsSearchProvider = AsyncNotifierProviderFamily<_HashtagsSearch,
-    List<String>, (String, String)>(_HashtagsSearch.new);
+    List<String>, (String, Account)>(_HashtagsSearch.new);
 
 class _HashtagsSearch
-    extends FamilyAsyncNotifier<List<String>, (String, String)> {
+    extends FamilyAsyncNotifier<List<String>, (String, Account)> {
   @override
-  Future<List<String>> build((String, String) arg) async {
-    final (host, query) = arg;
+  Future<List<String>> build((String, Account) arg) async {
+    final (query, account) = arg;
     if (query.isEmpty) {
       return [];
     } else {
-      final response = await ref
-          .read(misskeyProvider(Account.demoAccount(host)))
-          .hashtags
-          .search(
+      final response = await ref.read(misskeyProvider(account)).hashtags.search(
             HashtagsSearchRequest(
               query: query,
               limit: 30,
@@ -43,15 +40,16 @@ class _FilteredHashtags
   List<String> build(Account arg) {
     ref.listen(
       inputCompletionTypeProvider,
-      (_, type) {
-        _updateHashtags(type);
-      },
+      (_, type) async => await _updateHashtags(arg, type),
       fireImmediately: true,
     );
     return [];
   }
 
-  void _updateHashtags(InputCompletionType type) async {
+  Future<void> _updateHashtags(
+    Account account,
+    InputCompletionType type,
+  ) async {
     if (type is Hashtag) {
       final query = type.query;
       if (query.isEmpty) {
@@ -59,7 +57,7 @@ class _FilteredHashtags
         state = response.map((hashtag) => hashtag.tag).toList();
       } else {
         state = await ref.read(
-          _hashtagsSearchProvider((arg.host, query)).future,
+          _hashtagsSearchProvider((query, account)).future,
         );
       }
     }
@@ -68,10 +66,10 @@ class _FilteredHashtags
 
 class HashtagKeyboard extends ConsumerWidget {
   const HashtagKeyboard({
-    super.key,
     required this.account,
     required this.controller,
     required this.focusNode,
+    super.key,
   });
 
   final Account account;

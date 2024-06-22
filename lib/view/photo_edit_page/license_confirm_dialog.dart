@@ -1,20 +1,24 @@
-import 'dart:math';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-
+@RoutePage()
 class LicenseConfirmDialog extends ConsumerStatefulWidget {
   final String emoji;
   final Account account;
 
-  const LicenseConfirmDialog(
-      {super.key, required this.emoji, required this.account});
+  const LicenseConfirmDialog({
+    required this.emoji,
+    required this.account,
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -36,11 +40,13 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
         final response = await ref
             .read(misskeyProvider(widget.account))
             .emoji(EmojiRequest(name: widget.emoji));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
           data = response;
         });
       } catch (e) {
+        if (!mounted) return;
         setState(() {
           error = e;
         });
@@ -51,7 +57,9 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
   @override
   Widget build(BuildContext context) {
     if (error != null) {
-      return SimpleMessageDialog(message: "エラーが起きたみたいや。\n$error");
+      return SimpleMessageDialog(
+        message: "${S.of(context).thrownError}\n$error",
+      );
     }
     final data = this.data;
     if (isLoading || data == null) {
@@ -65,22 +73,26 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                  "このカスタム絵文字はこのようにライセンスされています。",
+                Text(
+                  S.of(context).customEmojiLicensedBy,
                 ),
                 MfmText(
-                    mfmText: data.license ?? "※このカスタム絵文字に対してライセンスは設定されていません。")
+                  mfmText:
+                      data.license ?? S.of(context).customEmojiLicensedByNone,
+                ),
               ],
             ),
           ),
         ),
         actions: [
           OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("わからへんからやめとく")),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(S.of(context).cancelEmojiChoosing),
+          ),
           ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text("使ってもだいじょうぶ"))
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(S.of(context).doneEmojiChoosing),
+          ),
         ],
       ),
     );

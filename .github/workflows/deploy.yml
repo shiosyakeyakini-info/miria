@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v4
 
         - name: Install flutter
           uses: subosito/flutter-action@v2
@@ -26,12 +26,12 @@ jobs:
         - uses: actions/setup-java@v3
           with:
             distribution: 'zulu'
-            java-version: '11'
+            java-version: '17'
             cache: 'gradle'
       
 
         - name: Cache pubspec dependencies
-          uses: actions/cache@v2
+          uses: actions/cache@v3
           with:
             path: |
               ${{ env.FLUTTER_HOME }}/.pub-cache

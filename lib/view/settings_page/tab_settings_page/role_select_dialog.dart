@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class RoleSelectDialog extends ConsumerStatefulWidget {
   final Account account;
 
-  const RoleSelectDialog({super.key, required this.account});
+  const RoleSelectDialog({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -22,10 +23,8 @@ class RoleSelectDialogState extends ConsumerState<RoleSelectDialog> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Future(() async {
-      final rolesList = await ref
-          .read(misskeyProvider(widget.account))
-          .roles
-          .list();
+      final rolesList =
+          await ref.read(misskeyProvider(widget.account)).roles.list();
       roles
         ..clear()
         ..addAll(rolesList);
@@ -38,7 +37,7 @@ class RoleSelectDialogState extends ConsumerState<RoleSelectDialog> {
     return AccountScope(
       account: widget.account,
       child: AlertDialog(
-        title: const Text("ロール選択"),
+        title: Text(S.of(context).selectRole),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
@@ -47,20 +46,22 @@ class RoleSelectDialogState extends ConsumerState<RoleSelectDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "ロール",
+                  S.of(context).role,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: roles.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          onTap: () {
-                            Navigator.of(context).pop(roles[index]);
-                          },
-                          title: Text(roles[index].name));
-                    }),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: roles.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(roles[index]);
+                      },
+                      title: Text(roles[index].name),
+                    );
+                  },
+                ),
               ],
             ),
           ),

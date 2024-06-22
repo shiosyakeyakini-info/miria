@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/futable_list_builder.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/futable_list_builder.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class FolderResult {
   const FolderResult(this.folder);
@@ -12,16 +14,17 @@ class FolderResult {
   final DriveFolder? folder;
 }
 
+@RoutePage()
 class FolderSelectDialog extends ConsumerStatefulWidget {
   final Account account;
   final List<String>? fileShowTarget;
   final String confirmationText;
 
   const FolderSelectDialog({
-    super.key,
     required this.account,
     required this.fileShowTarget,
     required this.confirmationText,
+    super.key,
   });
 
   @override
@@ -37,7 +40,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
     return AlertDialog(
       title: Column(
         children: [
-          const Text("フォルダー選択"),
+          Text(S.of(context).selectFolder),
           Row(
             children: [
               if (path.isNotEmpty)
@@ -51,7 +54,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                 ),
               Expanded(child: Text(path.map((e) => e.name).join("/"))),
             ],
-          )
+          ),
         ],
       ),
       content: SizedBox(
@@ -63,6 +66,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
               PushableListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
+                showAd: false,
                 initializeFuture: () async {
                   final misskey = ref.read(misskeyProvider(widget.account));
                   final response = await misskey.drive.folders.folders(
@@ -86,7 +90,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                 itemBuilder: (context, item) {
                   return ListTile(
                     leading: const Icon(Icons.folder),
-                    title: Text(item.name ?? ""),
+                    title: Text(item.name),
                     onTap: () {
                       setState(() {
                         path.add(item);
@@ -123,7 +127,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                       Expanded(child: Text(item.name)),
                     ],
                   ),
-                )
+                ),
             ],
           ),
         ),
@@ -134,7 +138,7 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
             Navigator.of(context).pop(FolderResult(path.lastOrNull));
           },
           child: Text(widget.confirmationText),
-        )
+        ),
       ],
     );
   }

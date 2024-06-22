@@ -1,13 +1,14 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/antenna_page/antenna_page.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 
 class AntennaList extends ConsumerWidget {
   const AntennaList({super.key});
@@ -16,11 +17,10 @@ class AntennaList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = AccountScope.of(context);
     final misskey = ref.watch(misskeyProvider(account));
-    final antennas = ref.watch(antennasListNotifierProvider(misskey));
+    final antennas = ref.watch(antennasNotifierProvider(misskey));
 
-    return antennas.when(
-      data: (antennas) {
-        return ListView.builder(
+    return switch (antennas) {
+      AsyncData(value: final antennas) => ListView.builder(
           itemCount: antennas.length,
           itemBuilder: (context, index) {
             final antenna = antennas[index];
@@ -31,22 +31,22 @@ class AntennaList extends ConsumerWidget {
                 onPressed: () async {
                   final result = await SimpleConfirmDialog.show(
                     context: context,
-                    message: "このアンテナを削除しますか？",
-                    primary: "削除する",
-                    secondary: "やめる",
+                    message: S.of(context).confirmDeletingAntenna,
+                    primary: S.of(context).delete,
+                    secondary: S.of(context).cancel,
                   );
                   if (!context.mounted) return;
                   if (result ?? false) {
                     await ref
                         .read(
-                          antennasListNotifierProvider(misskey).notifier,
+                          antennasNotifierProvider(misskey).notifier,
                         )
                         .delete(antenna.id)
                         .expectFailure(context);
                   }
                 },
               ),
-              onTap: () => context.pushRoute(
+              onTap: () async => context.pushRoute(
                 AntennaNotesRoute(
                   antenna: antenna,
                   account: account,
@@ -54,10 +54,10 @@ class AntennaList extends ConsumerWidget {
               ),
             );
           },
-        );
-      },
-      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
-      loading: () => const Center(child: CircularProgressIndicator()),
-    );
+        ),
+      AsyncError(error: final e, stackTrace: final st) =>
+        Center(child: ErrorDetail(error: e, stackTrace: st)),
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+    };
   }
 }

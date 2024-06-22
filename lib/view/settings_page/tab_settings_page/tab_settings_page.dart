@@ -1,21 +1,22 @@
-import 'package:auto_route/annotations.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/extensions/users_lists_show_response_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/common/tab_icon_view.dart';
-import 'package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart';
-import 'package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/annotations.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/users_lists_show_response_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/tab_icon_view.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class TabSettingsPage extends ConsumerStatefulWidget {
@@ -29,7 +30,7 @@ class TabSettingsPage extends ConsumerStatefulWidget {
 }
 
 class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
-  late Account? selectedAccount = ref.read(accountRepository).account.first;
+  late Account? selectedAccount = ref.read(accountsProvider).first;
   TabType? selectedTabType = TabType.localTimeline;
   RolesListResponse? selectedRole;
   CommunityChannel? selectedChannel;
@@ -46,6 +47,16 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       selectedTabType == TabType.localTimeline ||
       selectedTabType == TabType.hybridTimeline;
 
+  bool isTabTypeAvailable(TabType tabType) {
+    return switch (tabType) {
+      TabType.localTimeline =>
+        selectedAccount?.i.policies.ltlAvailable ?? false,
+      TabType.globalTimeline =>
+        selectedAccount?.i.policies.gtlAvailable ?? false,
+      _ => true,
+    };
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -55,12 +66,14 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
       final tabSetting =
           ref.read(tabSettingsRepositoryProvider).tabSettings.toList()[tab];
       selectedAccount = ref.read(accountProvider(tabSetting.acct));
-      selectedTabType = tabSetting.tabType;
+      selectedTabType =
+          isTabTypeAvailable(tabSetting.tabType) ? tabSetting.tabType : null;
       final roleId = tabSetting.roleId;
       final channelId = tabSetting.channelId;
       final listId = tabSetting.listId;
       final antennaId = tabSetting.antennaId;
-      nameController.text = tabSetting.name;
+      nameController.text =
+          tabSetting.name ?? tabSetting.tabType.displayName(context);
       selectedIcon = tabSetting.icon;
       renoteDisplay = tabSetting.renoteDisplay;
       isSubscribe = tabSetting.isSubscribe;
@@ -81,6 +94,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .read(misskeyProvider(selectedAccount!))
               .channels
               .show(ChannelsShowRequest(channelId: channelId));
+          if (!mounted) return;
           setState(() {});
         });
       }
@@ -92,6 +106,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .list
               .show(UsersListsShowRequest(listId: listId));
           selectedUserList = response.toUsersList();
+          if (!mounted) return;
           setState(() {});
         });
       }
@@ -101,6 +116,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               .read(misskeyProvider(selectedAccount!))
               .antennas
               .show(AntennasShowRequest(antennaId: antennaId));
+          if (!mounted) return;
           setState(() {});
         });
       }
@@ -115,23 +131,27 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("タブ設定"),
+        title: Text(S.of(context).tabSettings),
         actions: [
           if (widget.tabIndex != null)
             IconButton(
-                onPressed: () {
-                  ref.read(tabSettingsRepositoryProvider).save(ref
-                      .read(tabSettingsRepositoryProvider)
-                      .tabSettings
-                      .toList()
-                    ..removeAt(widget.tabIndex!));
+              onPressed: () async {
+                await ref.read(tabSettingsRepositoryProvider).save(
+                      ref
+                          .read(tabSettingsRepositoryProvider)
+                          .tabSettings
+                          .toList()
+                        ..removeAt(widget.tabIndex!),
+                    );
 
-                  if (!mounted) return;
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.delete_outline_outlined))
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.delete_outline_outlined),
+            ),
         ],
       ),
       body: SingleChildScrollView(
@@ -142,18 +162,23 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Text("アカウント"),
+              Text(S.of(context).account),
               DropdownButton<Account>(
                 items: [
-                  for (final account in ref.read(accountRepository).account)
+                  for (final account in accounts)
                     DropdownMenuItem(
                       value: account,
-                      child: Text("${account.userId}@${account.host}"),
-                    )
+                      child: Text(account.acct.toString()),
+                    ),
                 ],
                 onChanged: (value) {
+                  final tabType = selectedTabType;
                   setState(() {
                     selectedAccount = value;
+                    selectedTabType =
+                        tabType != null && isTabTypeAvailable(tabType)
+                            ? tabType
+                            : null;
                     selectedAntenna = null;
                     selectedUserList = null;
                     selectedChannel = null;
@@ -165,14 +190,15 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                 value: selectedAccount,
               ),
               const Padding(padding: EdgeInsets.all(10)),
-              const Text("タブの種類"),
+              Text(S.of(context).tabType),
               DropdownButton<TabType>(
                 items: [
                   for (final tabType in TabType.values)
-                    DropdownMenuItem(
-                      value: tabType,
-                      child: Text(tabType.displayName),
-                    ),
+                    if (isTabTypeAvailable(tabType))
+                      DropdownMenuItem(
+                        value: tabType,
+                        child: Text(tabType.displayName(context)),
+                      ),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -183,155 +209,177 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
               ),
               const Padding(padding: EdgeInsets.all(10)),
               if (selectedTabType == TabType.roleTimeline) ...[
-                const Text("ロールタイムライン"),
+                Text(S.of(context).roleTimeline),
                 Row(
                   children: [
                     Expanded(child: Text(selectedRole?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedRole = await showDialog<RolesListResponse>(
-                              context: context,
-                              builder: (context) =>
-                                  RoleSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedRole?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedRole = await showDialog<RolesListResponse>(
+                          context: context,
+                          builder: (context) =>
+                              RoleSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedRole?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               if (selectedTabType == TabType.channel) ...[
-                const Text("チャンネル"),
+                Text(S.of(context).channel),
                 Row(
                   children: [
                     Expanded(child: Text(selectedChannel?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedChannel = await showDialog<CommunityChannel>(
-                              context: context,
-                              builder: (context) =>
-                                  ChannelSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedChannel?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedChannel = await showDialog<CommunityChannel>(
+                          context: context,
+                          builder: (context) =>
+                              ChannelSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedChannel?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               if (selectedTabType == TabType.userList) ...[
-                const Text("リスト"),
+                Text(S.of(context).list),
                 Row(
                   children: [
                     Expanded(child: Text(selectedUserList?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedUserList = await showDialog<UsersList>(
-                              context: context,
-                              builder: (context) =>
-                                  UserListSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedUserList?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedUserList = await showDialog<UsersList>(
+                          context: context,
+                          builder: (context) =>
+                              UserListSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedUserList?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               if (selectedTabType == TabType.antenna) ...[
-                const Text("アンテナ"),
+                Text(S.of(context).antenna),
                 Row(
                   children: [
                     Expanded(child: Text(selectedAntenna?.name ?? "")),
                     IconButton(
-                        onPressed: () async {
-                          final selected = selectedAccount;
-                          if (selected == null) return;
+                      onPressed: () async {
+                        final selected = selectedAccount;
+                        if (selected == null) return;
 
-                          selectedAntenna = await showDialog<Antenna>(
-                              context: context,
-                              builder: (context) =>
-                                  AntennaSelectDialog(account: selected));
-                          setState(() {
-                            nameController.text =
-                                selectedAntenna?.name ?? nameController.text;
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next))
+                        selectedAntenna = await showDialog<Antenna>(
+                          context: context,
+                          builder: (context) =>
+                              AntennaSelectDialog(account: selected),
+                        );
+                        setState(() {
+                          nameController.text =
+                              selectedAntenna?.name ?? nameController.text;
+                        });
+                      },
+                      icon: const Icon(Icons.navigate_next),
+                    ),
                   ],
-                )
+                ),
               ],
               const Padding(padding: EdgeInsets.all(10)),
-              const Text("タブの名前"),
+              Text(S.of(context).tabName),
               TextField(
                 decoration: const InputDecoration(prefixIcon: Icon(Icons.edit)),
                 controller: nameController,
               ),
               const Padding(padding: EdgeInsets.all(10)),
-              const Text("アイコン"),
+              Text(S.of(context).icon),
               Row(
                 children: [
                   Expanded(
-                      child: selectedAccount == null
-                          ? Container()
-                          : AccountScope(
-                              account: selectedAccount!,
-                              child: SizedBox(
-                                height: 32,
-                                child: TabIconView(
-                                    icon: selectedIcon,
-                                    size: IconTheme.of(context).size),
-                              ))),
+                    child: selectedAccount == null
+                        ? Container()
+                        : AccountScope(
+                            account: selectedAccount!,
+                            child: SizedBox(
+                              height: 32,
+                              child: TabIconView(
+                                icon: selectedIcon,
+                                size: IconTheme.of(context).size,
+                              ),
+                            ),
+                          ),
+                  ),
                   IconButton(
-                      onPressed: () async {
-                        if (selectedAccount == null) return;
-                        selectedIcon = await showDialog<TabIcon>(
-                            context: context,
-                            builder: (context) => IconSelectDialog(
-                                  account: selectedAccount!,
-                                ));
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.navigate_next))
+                    onPressed: () async {
+                      if (selectedAccount == null) return;
+                      selectedIcon = await showDialog<TabIcon>(
+                        context: context,
+                        builder: (context) => IconSelectDialog(
+                          account: selectedAccount!,
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.navigate_next),
+                  ),
                 ],
               ),
               CheckboxListTile(
-                title: const Text("リノートを表示する"),
+                title: Text(S.of(context).displayRenotes),
                 value: renoteDisplay,
                 onChanged: (value) =>
                     setState(() => renoteDisplay = !renoteDisplay),
               ),
               if (availableIncludeReply)
                 CheckboxListTile(
-                  title: const Text("返信も入れる"),
-                  subtitle: const Text("Misskey v2023.10.1以降の機能です。"),
+                  title: Text(S.of(context).includeReplies),
+                  subtitle: Text(S.of(context).includeRepliesAvailability),
                   value: isIncludeReply,
-                  onChanged: (value) =>
-                      setState(() => isIncludeReply = !isIncludeReply),
+                  enabled: !isMediaOnly,
+                  onChanged: (value) => setState(() {
+                    isIncludeReply = !isIncludeReply;
+                    if (value ?? false) {
+                      isMediaOnly = false;
+                    }
+                  }),
                 ),
               CheckboxListTile(
-                title: const Text("ファイルのみにする"),
+                title: Text(S.of(context).mediaOnly),
                 value: isMediaOnly,
-                onChanged: (value) =>
-                    setState(() => isMediaOnly = !isMediaOnly),
+                enabled: !isIncludeReply,
+                onChanged: (value) => setState(() {
+                  isMediaOnly = !isMediaOnly;
+                  if (value ?? false) {
+                    isIncludeReply = false;
+                  }
+                }),
               ),
               CheckboxListTile(
-                title: const Text("リアクションや投票数を自動更新する"),
-                subtitle: const Text(
-                    "オフにすると、リアクションや投票数が自動更新されませんが、バッテリー消費を抑えられることがあります。"),
+                title: Text(S.of(context).subscribeNotes),
+                subtitle: Text(S.of(context).subscribeNotesDescription),
                 value: isSubscribe,
                 onChanged: (value) =>
                     setState(() => isSubscribe = !isSubscribe),
@@ -341,35 +389,61 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   onPressed: () async {
                     final account = selectedAccount;
                     if (account == null) {
-                      SimpleMessageDialog.show(context, "アカウントを選択してください。");
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectAccount,
+                      );
                       return;
                     }
 
                     final tabType = selectedTabType;
                     if (tabType == null) {
-                      SimpleMessageDialog.show(context, "タブの種類を選択してください。");
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectTabType,
+                      );
                       return;
                     }
 
                     final icon = selectedIcon;
                     if (icon == null) {
-                      SimpleMessageDialog.show(context, "アイコンを選択してください。");
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectIcon,
+                      );
                       return;
                     }
 
                     if (tabType == TabType.channel && selectedChannel == null) {
-                      SimpleMessageDialog.show(context, "チャンネルを指定してください。");
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectChannel,
+                      );
                       return;
                     }
 
                     if (tabType == TabType.userList &&
                         selectedUserList == null) {
-                      SimpleMessageDialog.show(context, "リストを指定してください。");
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectList,
+                      );
                       return;
                     }
 
                     if (tabType == TabType.antenna && selectedAntenna == null) {
-                      SimpleMessageDialog.show(context, "アンテナを指定してください。");
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectAntenna,
+                      );
+                      return;
+                    }
+                    if (tabType == TabType.roleTimeline &&
+                        selectedRole == null) {
+                      await SimpleMessageDialog.show(
+                        context,
+                        S.of(context).pleaseSelectRole,
+                      );
                       return;
                     }
 
@@ -400,12 +474,12 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                       await ref.read(tabSettingsRepositoryProvider).save(list);
                     }
 
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     Navigator.of(context).pop();
                   },
-                  child: const Text("ほい"),
+                  child: Text(S.of(context).done),
                 ),
-              )
+              ),
             ],
           ),
         ),
