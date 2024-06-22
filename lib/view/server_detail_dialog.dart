@@ -125,7 +125,9 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
     final currentStat = logged.lastOrNull;
     final currentQueueStats = queueLogged.lastOrNull;
 
-    useEffect(() {});
+    useEffect(() {
+      return null;
+    });
     return AlertDialog(
       title: Row(
         children: [

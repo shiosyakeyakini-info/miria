@@ -118,7 +118,7 @@ class FederationCustomEmojis extends ConsumerWidget {
                                                   .textTheme
                                                   .bodyMedium
                                                   ?.copyWith(
-                                                      color: Colors.white),
+                                                      color: Colors.white,),
                                             ),
                                           ),
                                         ),

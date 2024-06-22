@@ -16,6 +16,7 @@ import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/clip_modal_sheet.dart";
+import "package:miria/view/common/misskey_notes/copy_note_modal_sheet.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:path/path.dart";
@@ -227,9 +228,9 @@ class NoteModalSheet extends ConsumerWidget {
             );
           },
           trailing: IconButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              showModalBottomSheet(
+              await showModalBottomSheet(
                 context: context,
                 builder: (context) => CopyNoteModalSheet(
                   note: targetNote.text ?? "",

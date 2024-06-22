@@ -17,7 +17,6 @@ import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/user_page/update_memo_dialog.dart";
-import "package:miria/view/user_page/user_control_dialog.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_highlighting/flutter_highlighting.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_repository.dart";

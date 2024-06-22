@@ -1,8 +1,8 @@
 import "dart:convert";
 
 import "package:dio/dio.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:misskey_dart/misskey_dart.dart";

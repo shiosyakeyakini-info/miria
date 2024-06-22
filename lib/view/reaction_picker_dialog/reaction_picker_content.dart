@@ -201,38 +201,39 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      TextField(
-        decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-        autofocus: true,
-        onChanged: (value) {
-          Future(() async {
-            final result = await emojiRepository.searchEmojis(value);
-            if (!mounted) return;
-            setState(() {
-              emojis.clear();
-              emojis.addAll(result);
+    return Column(
+      children: [
+        TextField(
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+          autofocus: true,
+          onChanged: (value) {
+            Future(() async {
+              final result = await emojiRepository.searchEmojis(value);
+              if (!mounted) return;
+              setState(() {
+                emojis.clear();
+                emojis.addAll(result);
+              });
             });
           },
         ),
         const Padding(padding: EdgeInsets.only(top: 10)),
         Align(
-          alignment: Alignment.topLeft,
-          child: Wrap(
-            spacing: 5,
-            runSpacing: 5,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            children: [
-              for (final emoji in emojis)
-                EmojiButton(
-                  emoji: emoji,
-                  onTap: widget.onTap,
-                  isForceVisible: true,
-                  isAcceptSensitive: widget.isAcceptSensitive,
-                ),
-            ],
-          ),
-        ),
+            alignment: Alignment.topLeft,
+            child: Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: [
+                for (final emoji in emojis)
+                  EmojiButton(
+                    emoji: emoji,
+                    onTap: widget.onTap,
+                    isForceVisible: true,
+                    isAcceptSensitive: widget.isAcceptSensitive,
+                  ),
+              ],
+            ),),
       ],
     );
   }

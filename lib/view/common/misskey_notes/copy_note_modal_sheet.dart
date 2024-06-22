@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:miria/view/themes/app_theme.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/view/themes/app_theme.dart";
 
 class CopyNoteModalSheet extends ConsumerWidget{
 
   final String note;
 
   const CopyNoteModalSheet({
-    super.key,
-    required this.note,
+    required this.note, super.key,
   });
 
   @override
@@ -25,12 +24,12 @@ class CopyNoteModalSheet extends ConsumerWidget{
               trailing: IconButton(
                 onPressed: () {
                   Clipboard.setData(
-                    ClipboardData(text: note)
+                    ClipboardData(text: note),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(S.of(context).doneCopy),
-                      duration: const Duration(seconds: 1)
+                      duration: const Duration(seconds: 1),
                     ),
                   );
                 },
@@ -45,10 +44,10 @@ class CopyNoteModalSheet extends ConsumerWidget{
                   note,
                   style: AppTheme.of(context).monospaceStyle,
                 ),
-              )
-            )
+              ),
+            ),
           ],
-        )
+        ),
       ),
     );
   }

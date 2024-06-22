@@ -42,7 +42,7 @@ class AccountScopeMark2 extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        accountContextProvider.overrideWithValue(AccountContext.as(account))
+        accountContextProvider.overrideWithValue(AccountContext.as(account)),
       ],
       child: child,
     );

@@ -73,7 +73,7 @@ class CreateFileView extends ConsumerWidget {
                     height: 200,
                     child: GestureDetector(
                       onTap: () async => await onTap(context, ref),
-                      child: Image.memory(data.data)),
+                      child: Image.memory(data.data),),
                   ),
                 ),
                 Row(
@@ -83,17 +83,17 @@ class CreateFileView extends ConsumerWidget {
                     Expanded( 
                       child: Text(
                         data.fileName,
-                        overflow: TextOverflow.ellipsis
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     IconButton(
                         onPressed: () => detailTap(context, ref),
-                        icon: const Icon(Icons.more_vert)),
+                        icon: const Icon(Icons.more_vert),),
                     IconButton(
                         onPressed: () => delete(context, ref),
-                        icon: const Icon(Icons.delete)),
+                        icon: const Icon(Icons.delete),),
                   ],
-                )
+                ),
               ],
             ),
           ),

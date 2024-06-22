@@ -1,4 +1,3 @@
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/model/converters/icon_converter.dart";
