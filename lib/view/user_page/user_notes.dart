@@ -104,10 +104,8 @@ class UserNotesState extends ConsumerState<UserNotes> {
               IconButton(
                 onPressed: () async {
                   final userInfo = ref.read(
-                    userInfoNotifierProvider(
-                      AccountScope.of(context),
-                      widget.userId,
-                    ).select((value) => value.requireValue),
+                    userInfoNotifierProvider(widget.userId)
+                        .select((value) => value.requireValue),
                   );
                   final firstDate = widget.actualAccount == null
                       ? userInfo.response.createdAt

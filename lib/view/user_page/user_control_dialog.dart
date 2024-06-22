@@ -1,17 +1,18 @@
+import "dart:async";
+
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
-import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
-import "package:miria/view/user_page/antenna_modal_sheet.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
-import "package:miria/view/user_page/users_list_modal_sheet.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -24,7 +25,8 @@ enum UserControl {
   deleteBlock,
 }
 
-class UserControlDialog extends ConsumerStatefulWidget {
+@RoutePage()
+class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final UserDetailed response;
 
@@ -35,48 +37,12 @@ class UserControlDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      UserControlDialogState();
-}
-
-class UserControlDialogState extends ConsumerState<UserControlDialog> {
-  Future<void> addToList() async {
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) => UsersListModalSheet(
-        account: widget.account,
-        user: widget.response,
-      ),
-    );
-  }
-
-  Future<void> addToAntenna() async {
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) => AntennaModalSheet(
-        account: widget.account,
-        user: widget.response,
-      ),
-    );
-  }
-
-  Future<void> createMute() async {
-    final expires = await showDialog<Expire?>(
-      context: context,
-      builder: (context) => const ExpireSelectDialog(),
-    );
-    if (expires == null) return;
-    await ref
-        .read(
-          userInfoNotifierProvider(widget.account, widget.response.id).notifier,
-        )
-        .createMute(expires);
-  }
+  Widget wrappedRoute(BuildContext context) =>
+      AccountScopeMark2(account: account, child: this);
 
   @override
-  Widget build(BuildContext context) {
-    final provider =
-        userInfoNotifierProvider(widget.account, widget.response.id);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = userInfoNotifierProvider(response.id);
 
     final isLoading = ref.watch(
       provider.select(
@@ -109,7 +75,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
       return const Center(child: CircularProgressIndicator.adaptive());
     }
 
-    final user = widget.response;
+    final user = response;
     return ListView(
       children: [
         ListTile(
@@ -117,9 +83,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           title: Text(S.of(context).copyName),
           onTap: () async {
             await Clipboard.setData(
-              ClipboardData(
-                text: widget.response.name ?? widget.response.username,
-              ),
+              ClipboardData(text: response.name ?? response.username),
             );
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
@@ -135,7 +99,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           leading: const Icon(Icons.alternate_email),
           title: Text(S.of(context).copyUserScreenName),
           onTap: () async {
-            await Clipboard.setData(ClipboardData(text: widget.response.acct));
+            await Clipboard.setData(ClipboardData(text: response.acct));
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -154,8 +118,8 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
               ClipboardData(
                 text: Uri(
                   scheme: "https",
-                  host: widget.account.host,
-                  path: widget.response.acct,
+                  host: account.host,
+                  path: response.acct,
                 ).toString(),
               ),
             );
@@ -176,8 +140,8 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             await launchUrl(
               Uri(
                 scheme: "https",
-                host: widget.account.host,
-                path: widget.response.acct,
+                host: account.host,
+                path: response.acct,
               ),
               mode: LaunchMode.inAppWebView,
             );
@@ -185,12 +149,12 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             Navigator.of(context).pop();
           },
         ),
-        if (widget.response.host != null)
+        if (response.host != null)
           ListTile(
             leading: const Icon(Icons.rocket_launch),
             title: Text(S.of(context).openBrowsersAsRemote),
             onTap: () async {
-              final uri = widget.response.uri ?? widget.response.url;
+              final uri = response.uri ?? response.url;
               if (uri == null) return;
               await launchUrl(uri, mode: LaunchMode.inAppWebView);
               if (!context.mounted) return;
@@ -201,7 +165,7 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           leading: const Icon(Icons.open_in_new),
           title: Text(S.of(context).openInAnotherAccount),
           onTap: () async => ref
-              .read(misskeyNoteNotifierProvider(widget.account).notifier)
+              .read(misskeyNoteNotifierProvider(account).notifier)
               .openUserInOtherAccount(context, user),
         ),
         ListTile(
@@ -209,9 +173,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
           title: Text(S.of(context).searchNote),
           onTap: () async => context.pushRoute(
             SearchRoute(
-              account: widget.account,
+              account: account,
               initialNoteSearchCondition: NoteSearchCondition(
-                user: widget.response,
+                user: response,
               ),
             ),
           ),
@@ -219,12 +183,14 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
         ListTile(
           leading: const Icon(Icons.list),
           title: Text(S.of(context).addToList),
-          onTap: addToList,
+          onTap: () async => context
+              .pushRoute(UsersListModalRoute(account: account, user: response)),
         ),
         ListTile(
           leading: const Icon(Icons.settings_input_antenna),
           title: Text(S.of(context).addToAntenna),
-          onTap: addToAntenna,
+          onTap: () async => context
+              .pushRoute(AntennaModalRoute(account: account, user: user)),
         ),
         if (user is UserDetailedNotMeWithRelations) ...[
           if (user.isRenoteMuted)
@@ -249,7 +215,14 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             ListTile(
               leading: const Icon(Icons.visibility_off),
               title: Text(S.of(context).createMute),
-              onTap: createMute,
+              onTap: () async {
+                final expires =
+                    await context.pushRoute<Expire?>(const ExpireSelectRoute());
+                if (expires == null) return;
+                await ref
+                    .read(userInfoNotifierProvider(response.id).notifier)
+                    .createMute(expires);
+              },
             ),
           if (user.isBlocking)
             ListTile(
@@ -267,13 +240,9 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
             onTap: () async {
-              Navigator.of(context).pop();
-              await showDialog(
-                context: context,
-                builder: (context) => AbuseDialog(
-                  account: widget.account,
-                  targetUser: widget.response,
-                ),
+              unawaited(context.maybePop());
+              await context.pushRoute(
+                AbuseRoute(account: account, targetUser: response),
               );
             },
           ),
@@ -281,13 +250,6 @@ class UserControlDialogState extends ConsumerState<UserControlDialog> {
       ],
     );
   }
-}
-
-class ExpireSelectDialog extends StatefulWidget {
-  const ExpireSelectDialog({super.key});
-
-  @override
-  State<StatefulWidget> createState() => ExpireSelectDialogState();
 }
 
 enum Expire {
@@ -312,11 +274,14 @@ enum Expire {
   }
 }
 
-class ExpireSelectDialogState extends State<ExpireSelectDialog> {
-  Expire? selectedExpire = Expire.indefinite;
+@RoutePage()
+class ExpireSelectDialog extends HookWidget {
+  const ExpireSelectDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedExpire = useState<Expire?>(Expire.indefinite);
+
     return AlertDialog(
       title: Text(S.of(context).selectDuration),
       content: DropdownButton<Expire>(
@@ -327,8 +292,8 @@ class ExpireSelectDialogState extends State<ExpireSelectDialog> {
               child: Text(value.displayName(context)),
             ),
         ],
-        onChanged: (value) => setState(() => selectedExpire = value),
-        value: selectedExpire,
+        onChanged: (value) => selectedExpire.value = value,
+        value: selectedExpire.value,
       ),
       actions: [
         ElevatedButton(

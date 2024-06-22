@@ -3,6 +3,7 @@ import "package:file/file.dart";
 import "package:file/local.dart";
 import "package:flutter/widgets.dart";
 import "package:flutter_cache_manager/flutter_cache_manager.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/acct.dart";
@@ -29,15 +30,16 @@ import "package:miria/repository/user_list_time_line_repository.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
+part "providers.freezed.dart";
 part "providers.g.dart";
 
-@riverpod
+@Riverpod(keepAlive: true)
 Dio dio(DioRef ref) => Dio();
 
-@riverpod
+@Riverpod(keepAlive: true)
 FileSystem fileSystem(FileSystemRef ref) => const LocalFileSystem();
 
-@riverpod
+@Riverpod(keepAlive: true)
 Misskey misskey(MisskeyRef ref, Account account) => Misskey(
       token: account.token,
       host: account.host,
@@ -52,12 +54,12 @@ Misskey misskeyWithoutAccount(MisskeyWithoutAccountRef ref, String host) =>
       socketConnectionTimeout: const Duration(seconds: 20),
     );
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<LocalTimelineRepository> localTimeline(
   LocalTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return LocalTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -71,12 +73,12 @@ Raw<LocalTimelineRepository> localTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<HomeTimelineRepository> homeTimeline(
   HomeTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return HomeTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -90,12 +92,12 @@ Raw<HomeTimelineRepository> homeTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<GlobalTimelineRepository> globalTimeline(
   GlobalTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return GlobalTimelineRepository(
     ref.read(misskeyProvider(account)),
     ref.read(notesProvider(account)),
@@ -105,12 +107,12 @@ Raw<GlobalTimelineRepository> globalTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<HybridTimelineRepository> hybridTimeline(
   HybridTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return HybridTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -124,12 +126,12 @@ Raw<HybridTimelineRepository> hybridTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<RoleTimelineRepository> roleTimeline(
   RoleTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return RoleTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -143,12 +145,12 @@ Raw<RoleTimelineRepository> roleTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<ChannelTimelineRepository> channelTimeline(
   ChannelTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return ChannelTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -162,12 +164,12 @@ Raw<ChannelTimelineRepository> channelTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<UserListTimelineRepository> userListTimeline(
   UserListTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return UserListTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -181,12 +183,12 @@ Raw<UserListTimelineRepository> userListTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<AntennaTimelineRepository> antennaTimeline(
   AntennaTimelineRef ref,
   TabSetting tabSetting,
 ) {
-  final account = ref.watch(accountProvider(tabSetting.acct));
+  final account = ref.read(accountProvider(tabSetting.acct));
   return AntennaTimelineRepository(
     ref.read(misskeyProvider(account)),
     account,
@@ -200,7 +202,7 @@ Raw<AntennaTimelineRepository> antennaTimeline(
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<MainStreamRepository> mainStreamRepository(
   MainStreamRepositoryRef ref,
   Account account,
@@ -221,11 +223,11 @@ Raw<FavoriteRepository> favorite(FavoriteRef ref, Account account) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<NoteRepository> notes(NotesRef ref, Account account) =>
     NoteRepository(ref.read(misskeyProvider(account)), account);
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<EmojiRepository> emojiRepository(EmojiRepositoryRef ref, Account account) {
   return EmojiRepositoryImpl(
     misskey: ref.read(misskeyProvider(account)),
@@ -252,28 +254,28 @@ Account account(AccountRef ref, Acct acct) => ref.watch(
       ),
     );
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<TabSettingsRepository> tabSettingsRepository(
   TabSettingsRepositoryRef ref,
 ) {
   return TabSettingsRepository();
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<AccountSettingsRepository> accountSettingsRepository(
   AccountSettingsRepositoryRef ref,
 ) {
   return AccountSettingsRepository();
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<GeneralSettingsRepository> generalSettingsRepository(
   GeneralSettingsRepositoryRef ref,
 ) {
   return GeneralSettingsRepository();
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<DesktopSettingsRepository> desktopSettingsRepository(
   DesktopSettingsRepositoryRef ref,
 ) {
@@ -285,12 +287,28 @@ final errorEventProvider =
   (ref) => (null, null),
 );
 
-@riverpod
+@Riverpod(keepAlive: true)
 Raw<ImportExportRepository> importExportRepository(
   ImportExportRepositoryRef ref,
 ) {
   return ImportExportRepository(ref.read);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 BaseCacheManager? cacheManager(CacheManagerRef ref) => null;
+
+@freezed
+class AccountContext with _$AccountContext {
+  const factory AccountContext({
+    /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
+    required Account getAccount,
+    required Account postAccount,
+  }) = _AccountContext;
+
+  factory AccountContext.as(Account account) =>
+      AccountContext(getAccount: account, postAccount: account);
+}
+
+@Riverpod(dependencies: [])
+AccountContext accountContext(AccountContextRef ref) =>
+    throw UnimplementedError();

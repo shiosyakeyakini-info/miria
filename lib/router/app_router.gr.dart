@@ -15,6 +15,19 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    AbuseRoute.name: (routeData) {
+      final args = routeData.argsAs<AbuseRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: AbuseDialog(
+          account: args.account,
+          targetUser: args.targetUser,
+          key: args.key,
+          defaultText: args.defaultText,
+        )),
+      );
+    },
     AccountListRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -27,6 +40,17 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: AnnouncementPage(
           account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+    AntennaModalRoute.name: (routeData) {
+      final args = routeData.argsAs<AntennaModalRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AntennaModalSheet(
+          account: args.account,
+          user: args.user,
           key: args.key,
         ),
       );
@@ -79,6 +103,28 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ChannelRoute.name: (routeData) {
+      final args = routeData.argsAs<ChannelRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ChannelDialog(
+          channelId: args.channelId,
+          account: args.account,
+          key: args.key,
+        )),
+      );
+    },
+    ChannelSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<ChannelSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ChannelSelectDialog(
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
     ChannelsRoute.name: (routeData) {
       final args = routeData.argsAs<ChannelsRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -108,6 +154,12 @@ abstract class _$AppRouter extends RootStackRouter {
           account: args.account,
           key: args.key,
         ),
+      );
+    },
+    ExpireSelectRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ExpireSelectDialog(),
       );
     },
     ExploreRoute.name: (routeData) {
@@ -241,6 +293,19 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    NoteModalRoute.name: (routeData) {
+      final args = routeData.argsAs<NoteModalRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: NoteModalSheet(
+          baseNote: args.baseNote,
+          targetNote: args.targetNote,
+          account: args.account,
+          noteBoundaryKey: args.noteBoundaryKey,
+          key: args.key,
+        ),
+      );
+    },
     NotesAfterRenoteRoute.name: (routeData) {
       final args = routeData.argsAs<NotesAfterRenoteRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -282,6 +347,29 @@ abstract class _$AppRouter extends RootStackRouter {
           account: args.account,
           key: args.key,
         ),
+      );
+    },
+    RenoteModalRoute.name: (routeData) {
+      final args = routeData.argsAs<RenoteModalRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: RenoteModalSheet(
+          note: args.note,
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+    RenoteUserRoute.name: (routeData) {
+      final args = routeData.argsAs<RenoteUserRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: RenoteUserDialog(
+          account: args.account,
+          noteId: args.noteId,
+          key: args.key,
+        )),
       );
     },
     SearchRoute.name: (routeData) {
@@ -372,6 +460,30 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UpdateMemoRoute.name: (routeData) {
+      final args = routeData.argsAs<UpdateMemoRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UpdateMemoDialog(
+          account: args.account,
+          initialMemo: args.initialMemo,
+          userId: args.userId,
+          key: args.key,
+        ),
+      );
+    },
+    UserControlRoute.name: (routeData) {
+      final args = routeData.argsAs<UserControlRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: UserControlDialog(
+          account: args.account,
+          response: args.response,
+          key: args.key,
+        )),
+      );
+    },
     UserFolloweeRoute.name: (routeData) {
       final args = routeData.argsAs<UserFolloweeRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -416,6 +528,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UsersListModalRoute.name: (routeData) {
+      final args = routeData.argsAs<UsersListModalRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UsersListModalSheet(
+          account: args.account,
+          user: args.user,
+          key: args.key,
+        ),
+      );
+    },
     UsersListRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -449,6 +572,53 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
   };
+}
+
+/// generated route for
+/// [AbuseDialog]
+class AbuseRoute extends PageRouteInfo<AbuseRouteArgs> {
+  AbuseRoute({
+    required Account account,
+    required User targetUser,
+    Key? key,
+    String? defaultText,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AbuseRoute.name,
+          args: AbuseRouteArgs(
+            account: account,
+            targetUser: targetUser,
+            key: key,
+            defaultText: defaultText,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AbuseRoute';
+
+  static const PageInfo<AbuseRouteArgs> page = PageInfo<AbuseRouteArgs>(name);
+}
+
+class AbuseRouteArgs {
+  const AbuseRouteArgs({
+    required this.account,
+    required this.targetUser,
+    this.key,
+    this.defaultText,
+  });
+
+  final Account account;
+
+  final User targetUser;
+
+  final Key? key;
+
+  final String? defaultText;
+
+  @override
+  String toString() {
+    return 'AbuseRouteArgs{account: $account, targetUser: $targetUser, key: $key, defaultText: $defaultText}';
+  }
 }
 
 /// generated route for
@@ -500,6 +670,49 @@ class AnnouncementRouteArgs {
   @override
   String toString() {
     return 'AnnouncementRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [AntennaModalSheet]
+class AntennaModalRoute extends PageRouteInfo<AntennaModalRouteArgs> {
+  AntennaModalRoute({
+    required Account account,
+    required User user,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AntennaModalRoute.name,
+          args: AntennaModalRouteArgs(
+            account: account,
+            user: user,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AntennaModalRoute';
+
+  static const PageInfo<AntennaModalRouteArgs> page =
+      PageInfo<AntennaModalRouteArgs>(name);
+}
+
+class AntennaModalRouteArgs {
+  const AntennaModalRouteArgs({
+    required this.account,
+    required this.user,
+    this.key,
+  });
+
+  final Account account;
+
+  final User user;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AntennaModalRouteArgs{account: $account, user: $user, key: $key}';
   }
 }
 
@@ -680,6 +893,87 @@ class ChannelDetailRouteArgs {
 }
 
 /// generated route for
+/// [ChannelDialog]
+class ChannelRoute extends PageRouteInfo<ChannelRouteArgs> {
+  ChannelRoute({
+    required String channelId,
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChannelRoute.name,
+          args: ChannelRouteArgs(
+            channelId: channelId,
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChannelRoute';
+
+  static const PageInfo<ChannelRouteArgs> page =
+      PageInfo<ChannelRouteArgs>(name);
+}
+
+class ChannelRouteArgs {
+  const ChannelRouteArgs({
+    required this.channelId,
+    required this.account,
+    this.key,
+  });
+
+  final String channelId;
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChannelRouteArgs{channelId: $channelId, account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ChannelSelectDialog]
+class ChannelSelectRoute extends PageRouteInfo<ChannelSelectRouteArgs> {
+  ChannelSelectRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChannelSelectRoute.name,
+          args: ChannelSelectRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChannelSelectRoute';
+
+  static const PageInfo<ChannelSelectRouteArgs> page =
+      PageInfo<ChannelSelectRouteArgs>(name);
+}
+
+class ChannelSelectRouteArgs {
+  const ChannelSelectRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChannelSelectRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
 /// [ChannelsPage]
 class ChannelsRoute extends PageRouteInfo<ChannelsRouteArgs> {
   ChannelsRoute({
@@ -796,6 +1090,20 @@ class ClipListRouteArgs {
   String toString() {
     return 'ClipListRouteArgs{account: $account, key: $key}';
   }
+}
+
+/// generated route for
+/// [ExpireSelectDialog]
+class ExpireSelectRoute extends PageRouteInfo<void> {
+  const ExpireSelectRoute({List<PageRouteInfo>? children})
+      : super(
+          ExpireSelectRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ExpireSelectRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -1286,6 +1594,59 @@ class NoteDetailRouteArgs {
 }
 
 /// generated route for
+/// [NoteModalSheet]
+class NoteModalRoute extends PageRouteInfo<NoteModalRouteArgs> {
+  NoteModalRoute({
+    required Note baseNote,
+    required Note targetNote,
+    required Account account,
+    required GlobalKey<State<StatefulWidget>> noteBoundaryKey,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NoteModalRoute.name,
+          args: NoteModalRouteArgs(
+            baseNote: baseNote,
+            targetNote: targetNote,
+            account: account,
+            noteBoundaryKey: noteBoundaryKey,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NoteModalRoute';
+
+  static const PageInfo<NoteModalRouteArgs> page =
+      PageInfo<NoteModalRouteArgs>(name);
+}
+
+class NoteModalRouteArgs {
+  const NoteModalRouteArgs({
+    required this.baseNote,
+    required this.targetNote,
+    required this.account,
+    required this.noteBoundaryKey,
+    this.key,
+  });
+
+  final Note baseNote;
+
+  final Note targetNote;
+
+  final Account account;
+
+  final GlobalKey<State<StatefulWidget>> noteBoundaryKey;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'NoteModalRouteArgs{baseNote: $baseNote, targetNote: $targetNote, account: $account, noteBoundaryKey: $noteBoundaryKey, key: $key}';
+  }
+}
+
+/// generated route for
 /// [NotesAfterRenotePage]
 class NotesAfterRenoteRoute extends PageRouteInfo<NotesAfterRenoteRouteArgs> {
   NotesAfterRenoteRoute({
@@ -1449,6 +1810,92 @@ class ReactionDeckRouteArgs {
   @override
   String toString() {
     return 'ReactionDeckRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [RenoteModalSheet]
+class RenoteModalRoute extends PageRouteInfo<RenoteModalRouteArgs> {
+  RenoteModalRoute({
+    required Note note,
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RenoteModalRoute.name,
+          args: RenoteModalRouteArgs(
+            note: note,
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RenoteModalRoute';
+
+  static const PageInfo<RenoteModalRouteArgs> page =
+      PageInfo<RenoteModalRouteArgs>(name);
+}
+
+class RenoteModalRouteArgs {
+  const RenoteModalRouteArgs({
+    required this.note,
+    required this.account,
+    this.key,
+  });
+
+  final Note note;
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'RenoteModalRouteArgs{note: $note, account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [RenoteUserDialog]
+class RenoteUserRoute extends PageRouteInfo<RenoteUserRouteArgs> {
+  RenoteUserRoute({
+    required Account account,
+    required String noteId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RenoteUserRoute.name,
+          args: RenoteUserRouteArgs(
+            account: account,
+            noteId: noteId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RenoteUserRoute';
+
+  static const PageInfo<RenoteUserRouteArgs> page =
+      PageInfo<RenoteUserRouteArgs>(name);
+}
+
+class RenoteUserRouteArgs {
+  const RenoteUserRouteArgs({
+    required this.account,
+    required this.noteId,
+    this.key,
+  });
+
+  final Account account;
+
+  final String noteId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'RenoteUserRouteArgs{account: $account, noteId: $noteId, key: $key}';
   }
 }
 
@@ -1749,6 +2196,97 @@ class TimeLineRouteArgs {
 }
 
 /// generated route for
+/// [UpdateMemoDialog]
+class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
+  UpdateMemoRoute({
+    required Account account,
+    required String initialMemo,
+    required String userId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UpdateMemoRoute.name,
+          args: UpdateMemoRouteArgs(
+            account: account,
+            initialMemo: initialMemo,
+            userId: userId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UpdateMemoRoute';
+
+  static const PageInfo<UpdateMemoRouteArgs> page =
+      PageInfo<UpdateMemoRouteArgs>(name);
+}
+
+class UpdateMemoRouteArgs {
+  const UpdateMemoRouteArgs({
+    required this.account,
+    required this.initialMemo,
+    required this.userId,
+    this.key,
+  });
+
+  final Account account;
+
+  final String initialMemo;
+
+  final String userId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UpdateMemoRouteArgs{account: $account, initialMemo: $initialMemo, userId: $userId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UserControlDialog]
+class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
+  UserControlRoute({
+    required Account account,
+    required UserDetailed response,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserControlRoute.name,
+          args: UserControlRouteArgs(
+            account: account,
+            response: response,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserControlRoute';
+
+  static const PageInfo<UserControlRouteArgs> page =
+      PageInfo<UserControlRouteArgs>(name);
+}
+
+class UserControlRouteArgs {
+  const UserControlRouteArgs({
+    required this.account,
+    required this.response,
+    this.key,
+  });
+
+  final Account account;
+
+  final UserDetailed response;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UserControlRouteArgs{account: $account, response: $response, key: $key}';
+  }
+}
+
+/// generated route for
 /// [UserFolloweePage]
 class UserFolloweeRoute extends PageRouteInfo<UserFolloweeRouteArgs> {
   UserFolloweeRoute({
@@ -1916,6 +2454,49 @@ class UsersListDetailRouteArgs {
   @override
   String toString() {
     return 'UsersListDetailRouteArgs{account: $account, listId: $listId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UsersListModalSheet]
+class UsersListModalRoute extends PageRouteInfo<UsersListModalRouteArgs> {
+  UsersListModalRoute({
+    required Account account,
+    required User user,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UsersListModalRoute.name,
+          args: UsersListModalRouteArgs(
+            account: account,
+            user: user,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UsersListModalRoute';
+
+  static const PageInfo<UsersListModalRouteArgs> page =
+      PageInfo<UsersListModalRouteArgs>(name);
+}
+
+class UsersListModalRouteArgs {
+  const UsersListModalRouteArgs({
+    required this.account,
+    required this.user,
+    this.key,
+  });
+
+  final Account account;
+
+  final User user;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UsersListModalRouteArgs{account: $account, user: $user, key: $key}';
   }
 }
 

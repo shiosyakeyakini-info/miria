@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/time_line_repository.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 enum TabType {
   localTimeline,
@@ -29,7 +29,7 @@ enum TabType {
     };
   }
 
-  AutoDisposeProvider<TimelineRepository> timelineProvider(
+  Provider<Raw<TimelineRepository>> timelineProvider(
     TabSetting setting,
   ) {
     switch (this) {

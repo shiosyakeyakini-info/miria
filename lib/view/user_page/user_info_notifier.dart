@@ -38,19 +38,20 @@ class UserInfo with _$UserInfo {
   const UserInfo._();
 }
 
-@riverpod
+@Riverpod(dependencies: [accountContext])
 class UserInfoNotifier extends _$UserInfoNotifier {
   DialogStateNotifier get _dialog =>
       ref.read(dialogStateNotifierProvider.notifier);
+  Account get _account => ref.read(accountContextProvider).postAccount;
 
   @override
-  Future<UserInfo> build(Account account, String userId) async {
+  Future<UserInfo> build(String userId) async {
     final localResponse = await ref
-        .read(misskeyProvider(account))
+        .read(misskeyProvider(_account))
         .users
         .show(UsersShowRequest(userId: userId));
     ref
-        .read(notesProvider(account))
+        .read(notesProvider(_account))
         .registerAll(localResponse.pinnedNotes ?? []);
 
     final remoteHost = localResponse.host;
@@ -94,7 +95,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     var before = await future;
     state = AsyncData(before.copyWith(updateMemo: const AsyncLoading()));
     final result = await _dialog.guard(
-      () async => ref.read(misskeyProvider(this.account)).users.updateMemo(
+      () async => ref.read(misskeyProvider(_account)).users.updateMemo(
             UsersUpdateMemoRequest(userId: userId, memo: text),
           ),
     );
@@ -122,7 +123,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     state = AsyncData(before.copyWith(follow: const AsyncLoading()));
     final result = await _dialog.guard(
       () async => await ref
-          .read(misskeyProvider(this.account))
+          .read(misskeyProvider(_account))
           .following
           .create(FollowingCreateRequest(userId: userId)),
     );
@@ -156,7 +157,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
     final result = await _dialog.guard(
       () async => await ref
-          .read(misskeyProvider(this.account))
+          .read(misskeyProvider(_account))
           .following
           .delete(FollowingDeleteRequest(userId: userId)),
     );
@@ -180,7 +181,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     state = AsyncData(before.copyWith(follow: const AsyncLoading()));
     final result = await _dialog.guard(
       () async => await ref
-          .read(misskeyProvider(this.account))
+          .read(misskeyProvider(_account))
           .following
           .requests
           .cancel(FollowingRequestsCancelRequest(userId: userId)),
@@ -209,7 +210,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
         : DateTime.now().add(expires.expires!);
 
     final result = await _dialog.guard(
-      () async => await ref.read(misskeyProvider(this.account)).mute.create(
+      () async => await ref.read(misskeyProvider(_account)).mute.create(
             MuteCreateRequest(
               userId: userId,
               expiresAt: expiresDate,
@@ -238,7 +239,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
     final result = await _dialog.guard(
       () async => await ref
-          .read(misskeyProvider(this.account))
+          .read(misskeyProvider(_account))
           .mute
           .delete(MuteDeleteRequest(userId: userId)),
     );
@@ -263,10 +264,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     state = AsyncData(before.copyWith(renoteMute: const AsyncLoading()));
 
     final result = await _dialog.guard(
-      () async =>
-          await ref.read(misskeyProvider(this.account)).renoteMute.create(
-                RenoteMuteCreateRequest(userId: userId),
-              ),
+      () async => await ref.read(misskeyProvider(_account)).renoteMute.create(
+            RenoteMuteCreateRequest(userId: userId),
+          ),
     );
     before = await future;
     final response = before.response;
@@ -289,10 +289,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     state = AsyncData(before.copyWith(renoteMute: const AsyncLoading()));
 
     final result = await _dialog.guard(
-      () async =>
-          await ref.read(misskeyProvider(this.account)).renoteMute.delete(
-                RenoteMuteDeleteRequest(userId: userId),
-              ),
+      () async => await ref.read(misskeyProvider(_account)).renoteMute.delete(
+            RenoteMuteDeleteRequest(userId: userId),
+          ),
     );
     before = await future;
     final response = before.response;
@@ -325,7 +324,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
     final result = await _dialog.guard(
       () async => await ref
-          .read(misskeyProvider(this.account))
+          .read(misskeyProvider(_account))
           .blocking
           .create(BlockCreateRequest(userId: userId)),
     );
@@ -351,7 +350,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
     final result = await _dialog.guard(
       () async => await ref
-          .read(misskeyProvider(this.account))
+          .read(misskeyProvider(_account))
           .blocking
           .delete(BlockDeleteRequest(userId: userId)),
     );

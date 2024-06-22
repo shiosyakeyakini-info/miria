@@ -34,23 +34,24 @@ class UserDetail extends ConsumerWidget {
   });
 
   Future<void> userControl(BuildContext context) async {
-    await showModalBottomSheet<UserControl?>(
-      context: context,
-      builder: (context) => UserControlDialog(
-        account: account,
-        response: response,
-      ),
-    );
+    await context
+        .pushRoute(UserControlRoute(account: account, response: response));
+    // await showModalBottomSheet<UserControl?>(
+    //   context: context,
+    //   builder: (context) => UserControlDialog(
+    //     account: account,
+    //     response: response,
+    //   ),
+    // );
   }
 
   Widget buildContent(BuildContext context, WidgetRef ref) {
     final response = this.response;
     final isFollowEditing = ref.watch(
-      userInfoNotifierProvider(account, response.id)
+      userInfoNotifierProvider(response.id)
           .select((value) => value.value?.follow is AsyncLoading),
     );
-    final notifier =
-        ref.read(userInfoNotifierProvider(account, response.id).notifier);
+    final notifier = ref.read(userInfoNotifierProvider(response.id).notifier);
     final memo = response.memo ?? "";
 
     return Column(

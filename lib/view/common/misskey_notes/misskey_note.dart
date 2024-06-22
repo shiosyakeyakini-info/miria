@@ -640,16 +640,13 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     displayNote: displayNote,
                                   ),
                                   IconButton(
-                                    onPressed: () async => showModalBottomSheet(
-                                      context: context,
-                                      builder: (builder) {
-                                        return NoteModalSheet(
-                                          baseNote: widget.note,
-                                          targetNote: displayNote,
-                                          account: account,
-                                          noteBoundaryKey: globalKey,
-                                        );
-                                      },
+                                    onPressed: () async => context.pushRoute(
+                                      NoteModalRoute(
+                                        baseNote: widget.note,
+                                        targetNote: displayNote,
+                                        account: account,
+                                        noteBoundaryKey: globalKey,
+                                      ),
                                     ),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
@@ -984,16 +981,10 @@ class RenoteButton extends StatelessWidget {
     }
 
     return TextButton.icon(
-      onPressed: () async => showModalBottomSheet(
-        context: context,
-        builder: (innerContext) =>
-            RenoteModalSheet(note: displayNote, account: account),
-      ),
-      onLongPress: () async => showDialog(
-        context: context,
-        builder: (context) =>
-            RenoteUserDialog(account: account, noteId: displayNote.id),
-      ),
+      onPressed: () async => context
+          .pushRoute(RenoteModalRoute(note: displayNote, account: account)),
+      onLongPress: () async => context
+          .pushRoute(RenoteUserRoute(account: account, noteId: displayNote.id)),
       icon: Icon(
         Icons.repeat_rounded,
         size: MediaQuery.textScalerOf(context).scale(16),

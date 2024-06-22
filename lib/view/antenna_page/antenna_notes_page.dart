@@ -10,7 +10,6 @@ import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/view/antenna_page/antenna_notes.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()

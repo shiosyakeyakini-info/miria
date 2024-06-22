@@ -1,6 +1,9 @@
+import "dart:async";
+
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/model/account.dart";
@@ -82,7 +85,8 @@ class RenoteChannelNotifier extends _$RenoteChannelNotifier {
   }
 }
 
-class RenoteModalSheet extends ConsumerStatefulWidget {
+@RoutePage()
+class RenoteModalSheet extends HookConsumerWidget {
   final Note note;
   final Account account;
 
@@ -93,37 +97,14 @@ class RenoteModalSheet extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      RenoteModalSheetState();
-}
-
-class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
-  bool isLocalOnly = false;
-  var visibility = NoteVisibility.public;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final accountSettings =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
-    isLocalOnly = accountSettings.defaultIsLocalOnly;
-    visibility =
-        accountSettings.defaultNoteVisibility == NoteVisibility.specified
-            ? NoteVisibility.followers
-            : accountSettings.defaultNoteVisibility;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final channel = widget.note.channel;
-    final notifier =
-        renoteNotifierProvider(widget.account, widget.note).notifier;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final channel = note.channel;
+    final notifier = renoteNotifierProvider(account, note).notifier;
 
     ref
-      ..listen(renoteNotifierProvider(widget.account, widget.note), (_, next) {
+      ..listen(renoteNotifierProvider(account, note), (_, next) {
         if (next is! AsyncData) return;
-        Navigator.of(context).pop();
+        unawaited(context.maybePop());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).renoted),
@@ -131,22 +112,34 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
           ),
         );
       })
-      ..listen(renoteChannelNotifierProvider(widget.account), (_, next) async {
+      ..listen(renoteChannelNotifierProvider(account), (_, next) async {
         if (next is! AsyncData || next == null) return;
-        Navigator.of(context).pop();
+        unawaited(context.maybePop());
         await context.pushRoute(
           NoteCreateRoute(
-            renote: widget.note,
+            renote: note,
             channel: next.value,
-            initialAccount: widget.account,
+            initialAccount: account,
           ),
         );
       });
 
-    final renoteState =
-        ref.watch(renoteNotifierProvider(widget.account, widget.note));
+    final renoteState = ref.watch(renoteNotifierProvider(account, note));
     final renoteChannelState =
-        ref.watch(renoteChannelNotifierProvider(widget.account));
+        ref.watch(renoteChannelNotifierProvider(account));
+
+    final isLocalOnly = useState(false);
+    final visibility = useState(NoteVisibility.public);
+    useEffect(() {
+      final accountSettings =
+          ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+      isLocalOnly.value = accountSettings.defaultIsLocalOnly;
+      visibility.value =
+          accountSettings.defaultNoteVisibility == NoteVisibility.specified
+              ? NoteVisibility.followers
+              : accountSettings.defaultNoteVisibility;
+      return null;
+    });
 
     if (renoteState is AsyncLoading ||
         renoteChannelState is AsyncLoading ||
@@ -184,9 +177,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
           ListTile(
             onTap: () async {
               await ref
-                  .read(
-                    renoteChannelNotifierProvider(widget.account).notifier,
-                  )
+                  .read(renoteChannelNotifierProvider(account).notifier)
                   .findChannel(channel.id);
             },
             leading: const SizedBox(
@@ -213,10 +204,10 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
             ),
           ),
         ],
-        if (widget.note.channel?.allowRenoteToExternal != false) ...[
+        if (note.channel?.allowRenoteToExternal != false) ...[
           ListTile(
             onTap: () async =>
-                ref.read(notifier).renote(isLocalOnly, visibility),
+                ref.read(notifier).renote(isLocalOnly.value, visibility.value),
             leading: const Icon(Icons.repeat),
             title: const Padding(
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -236,17 +227,14 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
                           child: Text(element.displayName(context)),
                         ),
                     ],
-                    value: visibility,
-                    onChanged: (value) => setState(() {
-                      visibility = value ?? NoteVisibility.public;
-                    }),
+                    value: visibility.value,
+                    onChanged: (value) =>
+                        visibility.value = value ?? NoteVisibility.public,
                   ),
                 ),
                 IconButton(
-                  onPressed: () => setState(() {
-                    isLocalOnly = !isLocalOnly;
-                  }),
-                  icon: isLocalOnly
+                  onPressed: () => isLocalOnly.value = !isLocalOnly.value,
+                  icon: isLocalOnly.value
                       ? const LocalOnlyIcon()
                       : const Icon(Icons.rocket),
                 ),
@@ -257,10 +245,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
             onTap: () async {
               Navigator.of(context).pop();
               await context.pushRoute(
-                NoteCreateRoute(
-                  renote: widget.note,
-                  initialAccount: widget.account,
-                ),
+                NoteCreateRoute(renote: note, initialAccount: account),
               );
             },
             leading: const Icon(Icons.format_quote),
@@ -268,10 +253,8 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
           ),
           ListTile(
             onTap: () async {
-              final selected = await showDialog<CommunityChannel?>(
-                context: context,
-                builder: (context) =>
-                    ChannelSelectDialog(account: widget.account),
+              final selected = await context.pushRoute<CommunityChannel>(
+                ChannelSelectRoute(account: account),
               );
               if (selected != null) {
                 await ref.read(notifier).renoteInChannel(selected);
@@ -294,7 +277,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               ),
             ),
             title: Text(
-              widget.note.channel != null
+              note.channel != null
                   ? S.of(context).renoteInOtherChannel
                   : S.of(context).renoteInChannel,
             ),
@@ -304,16 +287,15 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               final navigator = Navigator.of(context);
               final selected = await showDialog<CommunityChannel?>(
                 context: context,
-                builder: (context) =>
-                    ChannelSelectDialog(account: widget.account),
+                builder: (context) => ChannelSelectDialog(account: account),
               );
               if (!context.mounted) return;
               if (selected == null) return;
               navigator.pop();
               await context.pushRoute(
                 NoteCreateRoute(
-                  renote: widget.note,
-                  initialAccount: widget.account,
+                  renote: note,
+                  initialAccount: account,
                   channel: selected,
                 ),
               );
@@ -335,7 +317,7 @@ class RenoteModalSheetState extends ConsumerState<RenoteModalSheet> {
               ),
             ),
             title: Text(
-              widget.note.channel != null
+              note.channel != null
                   ? S.of(context).quotedRenoteInOtherChannel
                   : S.of(context).quotedRenoteInOtherChannel,
             ),

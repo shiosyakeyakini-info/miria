@@ -6,11 +6,11 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'c62213bddb9aac89c0a19fe034ef243e2a285ba8';
+String _$dioHash() => r'41b696b35e5b56ccb124ee5abab8b893747d2153';
 
 /// See also [dio].
 @ProviderFor(dio)
-final dioProvider = AutoDisposeProvider<Dio>.internal(
+final dioProvider = Provider<Dio>.internal(
   dio,
   name: r'dioProvider',
   debugGetCreateSourceHash:
@@ -19,12 +19,12 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef DioRef = AutoDisposeProviderRef<Dio>;
-String _$fileSystemHash() => r'81435d2fdc96b2d66ccd223e5877584d6c588cd9';
+typedef DioRef = ProviderRef<Dio>;
+String _$fileSystemHash() => r'98684b2a2a8fd9ee5818ec713ba28d29da92c168';
 
 /// See also [fileSystem].
 @ProviderFor(fileSystem)
-final fileSystemProvider = AutoDisposeProvider<FileSystem>.internal(
+final fileSystemProvider = Provider<FileSystem>.internal(
   fileSystem,
   name: r'fileSystemProvider',
   debugGetCreateSourceHash:
@@ -33,8 +33,8 @@ final fileSystemProvider = AutoDisposeProvider<FileSystem>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FileSystemRef = AutoDisposeProviderRef<FileSystem>;
-String _$misskeyHash() => r'11d32a82920317b1fbc0b31245262292f7241e6b';
+typedef FileSystemRef = ProviderRef<FileSystem>;
+String _$misskeyHash() => r'0c0e98d0f1593809e90f0a6c4dcb182535149d84';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -122,7 +122,7 @@ class _$MisskeyFamilyOverride implements FamilyOverride {
 }
 
 /// See also [misskey].
-class MisskeyProvider extends AutoDisposeProvider<Misskey> {
+class MisskeyProvider extends Provider<Misskey> {
   /// See also [misskey].
   MisskeyProvider(
     Account account,
@@ -178,7 +178,7 @@ class MisskeyProvider extends AutoDisposeProvider<Misskey> {
   }
 
   @override
-  AutoDisposeProviderElement<Misskey> createElement() {
+  ProviderElement<Misskey> createElement() {
     return _MisskeyProviderElement(this);
   }
 
@@ -210,13 +210,12 @@ class MisskeyProvider extends AutoDisposeProvider<Misskey> {
   }
 }
 
-mixin MisskeyRef on AutoDisposeProviderRef<Misskey> {
+mixin MisskeyRef on ProviderRef<Misskey> {
   /// The parameter `account` of this provider.
   Account get account;
 }
 
-class _MisskeyProviderElement extends AutoDisposeProviderElement<Misskey>
-    with MisskeyRef {
+class _MisskeyProviderElement extends ProviderElement<Misskey> with MisskeyRef {
   _MisskeyProviderElement(super.provider);
 
   @override
@@ -393,7 +392,7 @@ class _MisskeyWithoutAccountProviderElement
   String get host => (origin as MisskeyWithoutAccountProvider).host;
 }
 
-String _$localTimelineHash() => r'e13c8b34c43a1a3f085c3400f1ee483724a6c85a';
+String _$localTimelineHash() => r'b42291d8ca5f5870dc6ebc527b98f2c060369b2e';
 
 /// See also [localTimeline].
 @ProviderFor(localTimeline)
@@ -461,8 +460,7 @@ class _$LocalTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [localTimeline].
-class LocalTimelineProvider
-    extends AutoDisposeProvider<Raw<LocalTimelineRepository>> {
+class LocalTimelineProvider extends Provider<Raw<LocalTimelineRepository>> {
   /// See also [localTimeline].
   LocalTimelineProvider(
     TabSetting tabSetting,
@@ -519,7 +517,7 @@ class LocalTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<LocalTimelineRepository>> createElement() {
+  ProviderElement<Raw<LocalTimelineRepository>> createElement() {
     return _LocalTimelineProviderElement(this);
   }
 
@@ -551,13 +549,13 @@ class LocalTimelineProvider
   }
 }
 
-mixin LocalTimelineRef on AutoDisposeProviderRef<Raw<LocalTimelineRepository>> {
+mixin LocalTimelineRef on ProviderRef<Raw<LocalTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _LocalTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<LocalTimelineRepository>>
+    extends ProviderElement<Raw<LocalTimelineRepository>>
     with LocalTimelineRef {
   _LocalTimelineProviderElement(super.provider);
 
@@ -565,7 +563,7 @@ class _LocalTimelineProviderElement
   TabSetting get tabSetting => (origin as LocalTimelineProvider).tabSetting;
 }
 
-String _$homeTimelineHash() => r'29b0651ab8327a75b9385eaff491cfb91e7c58a4';
+String _$homeTimelineHash() => r'0762e0258f4b24404994709357f5fe955254464d';
 
 /// See also [homeTimeline].
 @ProviderFor(homeTimeline)
@@ -633,8 +631,7 @@ class _$HomeTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [homeTimeline].
-class HomeTimelineProvider
-    extends AutoDisposeProvider<Raw<HomeTimelineRepository>> {
+class HomeTimelineProvider extends Provider<Raw<HomeTimelineRepository>> {
   /// See also [homeTimeline].
   HomeTimelineProvider(
     TabSetting tabSetting,
@@ -691,7 +688,7 @@ class HomeTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<HomeTimelineRepository>> createElement() {
+  ProviderElement<Raw<HomeTimelineRepository>> createElement() {
     return _HomeTimelineProviderElement(this);
   }
 
@@ -723,21 +720,20 @@ class HomeTimelineProvider
   }
 }
 
-mixin HomeTimelineRef on AutoDisposeProviderRef<Raw<HomeTimelineRepository>> {
+mixin HomeTimelineRef on ProviderRef<Raw<HomeTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _HomeTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<HomeTimelineRepository>>
-    with HomeTimelineRef {
+    extends ProviderElement<Raw<HomeTimelineRepository>> with HomeTimelineRef {
   _HomeTimelineProviderElement(super.provider);
 
   @override
   TabSetting get tabSetting => (origin as HomeTimelineProvider).tabSetting;
 }
 
-String _$globalTimelineHash() => r'57f1100997560a9f43e07e226492fc78161c65e0';
+String _$globalTimelineHash() => r'32aa1d9f509b06a36c1bc4e61c810e7f1e527476';
 
 /// See also [globalTimeline].
 @ProviderFor(globalTimeline)
@@ -805,8 +801,7 @@ class _$GlobalTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [globalTimeline].
-class GlobalTimelineProvider
-    extends AutoDisposeProvider<Raw<GlobalTimelineRepository>> {
+class GlobalTimelineProvider extends Provider<Raw<GlobalTimelineRepository>> {
   /// See also [globalTimeline].
   GlobalTimelineProvider(
     TabSetting tabSetting,
@@ -863,7 +858,7 @@ class GlobalTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<GlobalTimelineRepository>> createElement() {
+  ProviderElement<Raw<GlobalTimelineRepository>> createElement() {
     return _GlobalTimelineProviderElement(this);
   }
 
@@ -895,14 +890,13 @@ class GlobalTimelineProvider
   }
 }
 
-mixin GlobalTimelineRef
-    on AutoDisposeProviderRef<Raw<GlobalTimelineRepository>> {
+mixin GlobalTimelineRef on ProviderRef<Raw<GlobalTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _GlobalTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<GlobalTimelineRepository>>
+    extends ProviderElement<Raw<GlobalTimelineRepository>>
     with GlobalTimelineRef {
   _GlobalTimelineProviderElement(super.provider);
 
@@ -910,7 +904,7 @@ class _GlobalTimelineProviderElement
   TabSetting get tabSetting => (origin as GlobalTimelineProvider).tabSetting;
 }
 
-String _$hybridTimelineHash() => r'a1a76b3492fba2fa91e0ceb2faf641ba57efc670';
+String _$hybridTimelineHash() => r'46fe3e63769c3831fdb72dd1a975be972b93f5a3';
 
 /// See also [hybridTimeline].
 @ProviderFor(hybridTimeline)
@@ -978,8 +972,7 @@ class _$HybridTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [hybridTimeline].
-class HybridTimelineProvider
-    extends AutoDisposeProvider<Raw<HybridTimelineRepository>> {
+class HybridTimelineProvider extends Provider<Raw<HybridTimelineRepository>> {
   /// See also [hybridTimeline].
   HybridTimelineProvider(
     TabSetting tabSetting,
@@ -1036,7 +1029,7 @@ class HybridTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<HybridTimelineRepository>> createElement() {
+  ProviderElement<Raw<HybridTimelineRepository>> createElement() {
     return _HybridTimelineProviderElement(this);
   }
 
@@ -1068,14 +1061,13 @@ class HybridTimelineProvider
   }
 }
 
-mixin HybridTimelineRef
-    on AutoDisposeProviderRef<Raw<HybridTimelineRepository>> {
+mixin HybridTimelineRef on ProviderRef<Raw<HybridTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _HybridTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<HybridTimelineRepository>>
+    extends ProviderElement<Raw<HybridTimelineRepository>>
     with HybridTimelineRef {
   _HybridTimelineProviderElement(super.provider);
 
@@ -1083,7 +1075,7 @@ class _HybridTimelineProviderElement
   TabSetting get tabSetting => (origin as HybridTimelineProvider).tabSetting;
 }
 
-String _$roleTimelineHash() => r'8dffc36d62e1b361a10391948952464d2e0dbe05';
+String _$roleTimelineHash() => r'44be947db1aadf6e4e3d16b8ca38afb11e7ce911';
 
 /// See also [roleTimeline].
 @ProviderFor(roleTimeline)
@@ -1151,8 +1143,7 @@ class _$RoleTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [roleTimeline].
-class RoleTimelineProvider
-    extends AutoDisposeProvider<Raw<RoleTimelineRepository>> {
+class RoleTimelineProvider extends Provider<Raw<RoleTimelineRepository>> {
   /// See also [roleTimeline].
   RoleTimelineProvider(
     TabSetting tabSetting,
@@ -1209,7 +1200,7 @@ class RoleTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<RoleTimelineRepository>> createElement() {
+  ProviderElement<Raw<RoleTimelineRepository>> createElement() {
     return _RoleTimelineProviderElement(this);
   }
 
@@ -1241,21 +1232,20 @@ class RoleTimelineProvider
   }
 }
 
-mixin RoleTimelineRef on AutoDisposeProviderRef<Raw<RoleTimelineRepository>> {
+mixin RoleTimelineRef on ProviderRef<Raw<RoleTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _RoleTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<RoleTimelineRepository>>
-    with RoleTimelineRef {
+    extends ProviderElement<Raw<RoleTimelineRepository>> with RoleTimelineRef {
   _RoleTimelineProviderElement(super.provider);
 
   @override
   TabSetting get tabSetting => (origin as RoleTimelineProvider).tabSetting;
 }
 
-String _$channelTimelineHash() => r'f2ad33f57b9cf38c0cba65692acedef2fe9f60ee';
+String _$channelTimelineHash() => r'f43d78bbb5af2f3ecc8651c8541f9d771d0c91ad';
 
 /// See also [channelTimeline].
 @ProviderFor(channelTimeline)
@@ -1323,8 +1313,7 @@ class _$ChannelTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [channelTimeline].
-class ChannelTimelineProvider
-    extends AutoDisposeProvider<Raw<ChannelTimelineRepository>> {
+class ChannelTimelineProvider extends Provider<Raw<ChannelTimelineRepository>> {
   /// See also [channelTimeline].
   ChannelTimelineProvider(
     TabSetting tabSetting,
@@ -1381,7 +1370,7 @@ class ChannelTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<ChannelTimelineRepository>> createElement() {
+  ProviderElement<Raw<ChannelTimelineRepository>> createElement() {
     return _ChannelTimelineProviderElement(this);
   }
 
@@ -1413,14 +1402,13 @@ class ChannelTimelineProvider
   }
 }
 
-mixin ChannelTimelineRef
-    on AutoDisposeProviderRef<Raw<ChannelTimelineRepository>> {
+mixin ChannelTimelineRef on ProviderRef<Raw<ChannelTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _ChannelTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<ChannelTimelineRepository>>
+    extends ProviderElement<Raw<ChannelTimelineRepository>>
     with ChannelTimelineRef {
   _ChannelTimelineProviderElement(super.provider);
 
@@ -1428,7 +1416,7 @@ class _ChannelTimelineProviderElement
   TabSetting get tabSetting => (origin as ChannelTimelineProvider).tabSetting;
 }
 
-String _$userListTimelineHash() => r'c281ec3c9b765f7a8c51be745cec64db658b5e1b';
+String _$userListTimelineHash() => r'036a8a92ce6767f3d71a876d74a66a0ef8cccd81';
 
 /// See also [userListTimeline].
 @ProviderFor(userListTimeline)
@@ -1499,7 +1487,7 @@ class _$UserListTimelineFamilyOverride implements FamilyOverride {
 
 /// See also [userListTimeline].
 class UserListTimelineProvider
-    extends AutoDisposeProvider<Raw<UserListTimelineRepository>> {
+    extends Provider<Raw<UserListTimelineRepository>> {
   /// See also [userListTimeline].
   UserListTimelineProvider(
     TabSetting tabSetting,
@@ -1556,7 +1544,7 @@ class UserListTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<UserListTimelineRepository>> createElement() {
+  ProviderElement<Raw<UserListTimelineRepository>> createElement() {
     return _UserListTimelineProviderElement(this);
   }
 
@@ -1588,14 +1576,13 @@ class UserListTimelineProvider
   }
 }
 
-mixin UserListTimelineRef
-    on AutoDisposeProviderRef<Raw<UserListTimelineRepository>> {
+mixin UserListTimelineRef on ProviderRef<Raw<UserListTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _UserListTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<UserListTimelineRepository>>
+    extends ProviderElement<Raw<UserListTimelineRepository>>
     with UserListTimelineRef {
   _UserListTimelineProviderElement(super.provider);
 
@@ -1603,7 +1590,7 @@ class _UserListTimelineProviderElement
   TabSetting get tabSetting => (origin as UserListTimelineProvider).tabSetting;
 }
 
-String _$antennaTimelineHash() => r'580758d5ab323cd0fd8b1bb0809b2db4be05aef0';
+String _$antennaTimelineHash() => r'35018f9b3b2f17fe048e387d7ae5a9536bdbe162';
 
 /// See also [antennaTimeline].
 @ProviderFor(antennaTimeline)
@@ -1671,8 +1658,7 @@ class _$AntennaTimelineFamilyOverride implements FamilyOverride {
 }
 
 /// See also [antennaTimeline].
-class AntennaTimelineProvider
-    extends AutoDisposeProvider<Raw<AntennaTimelineRepository>> {
+class AntennaTimelineProvider extends Provider<Raw<AntennaTimelineRepository>> {
   /// See also [antennaTimeline].
   AntennaTimelineProvider(
     TabSetting tabSetting,
@@ -1729,7 +1715,7 @@ class AntennaTimelineProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<AntennaTimelineRepository>> createElement() {
+  ProviderElement<Raw<AntennaTimelineRepository>> createElement() {
     return _AntennaTimelineProviderElement(this);
   }
 
@@ -1761,14 +1747,13 @@ class AntennaTimelineProvider
   }
 }
 
-mixin AntennaTimelineRef
-    on AutoDisposeProviderRef<Raw<AntennaTimelineRepository>> {
+mixin AntennaTimelineRef on ProviderRef<Raw<AntennaTimelineRepository>> {
   /// The parameter `tabSetting` of this provider.
   TabSetting get tabSetting;
 }
 
 class _AntennaTimelineProviderElement
-    extends AutoDisposeProviderElement<Raw<AntennaTimelineRepository>>
+    extends ProviderElement<Raw<AntennaTimelineRepository>>
     with AntennaTimelineRef {
   _AntennaTimelineProviderElement(super.provider);
 
@@ -1777,7 +1762,7 @@ class _AntennaTimelineProviderElement
 }
 
 String _$mainStreamRepositoryHash() =>
-    r'0e59b6281e96c6515324d206d6518ff0801cb09e';
+    r'59aaded945a1457c2c2c1c6a2fca70dea91bef0a';
 
 /// See also [mainStreamRepository].
 @ProviderFor(mainStreamRepository)
@@ -1845,8 +1830,7 @@ class _$MainStreamRepositoryFamilyOverride implements FamilyOverride {
 }
 
 /// See also [mainStreamRepository].
-class MainStreamRepositoryProvider
-    extends AutoDisposeProvider<Raw<MainStreamRepository>> {
+class MainStreamRepositoryProvider extends Provider<Raw<MainStreamRepository>> {
   /// See also [mainStreamRepository].
   MainStreamRepositoryProvider(
     Account account,
@@ -1903,7 +1887,7 @@ class MainStreamRepositoryProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<MainStreamRepository>> createElement() {
+  ProviderElement<Raw<MainStreamRepository>> createElement() {
     return _MainStreamRepositoryProviderElement(this);
   }
 
@@ -1935,14 +1919,13 @@ class MainStreamRepositoryProvider
   }
 }
 
-mixin MainStreamRepositoryRef
-    on AutoDisposeProviderRef<Raw<MainStreamRepository>> {
+mixin MainStreamRepositoryRef on ProviderRef<Raw<MainStreamRepository>> {
   /// The parameter `account` of this provider.
   Account get account;
 }
 
 class _MainStreamRepositoryProviderElement
-    extends AutoDisposeProviderElement<Raw<MainStreamRepository>>
+    extends ProviderElement<Raw<MainStreamRepository>>
     with MainStreamRepositoryRef {
   _MainStreamRepositoryProviderElement(super.provider);
 
@@ -2120,7 +2103,7 @@ class _FavoriteProviderElement
   Account get account => (origin as FavoriteProvider).account;
 }
 
-String _$notesHash() => r'e3a497ab84cec97e7b295afcc9df7c46f9993453';
+String _$notesHash() => r'04a928de5c1cc38e3f99dab3b9f953502c70b41b';
 
 /// See also [notes].
 @ProviderFor(notes)
@@ -2187,7 +2170,7 @@ class _$NotesFamilyOverride implements FamilyOverride {
 }
 
 /// See also [notes].
-class NotesProvider extends AutoDisposeProvider<Raw<NoteRepository>> {
+class NotesProvider extends Provider<Raw<NoteRepository>> {
   /// See also [notes].
   NotesProvider(
     Account account,
@@ -2243,7 +2226,7 @@ class NotesProvider extends AutoDisposeProvider<Raw<NoteRepository>> {
   }
 
   @override
-  AutoDisposeProviderElement<Raw<NoteRepository>> createElement() {
+  ProviderElement<Raw<NoteRepository>> createElement() {
     return _NotesProviderElement(this);
   }
 
@@ -2275,20 +2258,20 @@ class NotesProvider extends AutoDisposeProvider<Raw<NoteRepository>> {
   }
 }
 
-mixin NotesRef on AutoDisposeProviderRef<Raw<NoteRepository>> {
+mixin NotesRef on ProviderRef<Raw<NoteRepository>> {
   /// The parameter `account` of this provider.
   Account get account;
 }
 
-class _NotesProviderElement
-    extends AutoDisposeProviderElement<Raw<NoteRepository>> with NotesRef {
+class _NotesProviderElement extends ProviderElement<Raw<NoteRepository>>
+    with NotesRef {
   _NotesProviderElement(super.provider);
 
   @override
   Account get account => (origin as NotesProvider).account;
 }
 
-String _$emojiRepositoryHash() => r'5555050040d4a5be7cdef1dde6f74e7c7fd3ae30';
+String _$emojiRepositoryHash() => r'10c9c434d4d72f088acd5e0870525aca32ca08dc';
 
 /// See also [emojiRepository].
 @ProviderFor(emojiRepository)
@@ -2356,8 +2339,7 @@ class _$EmojiRepositoryFamilyOverride implements FamilyOverride {
 }
 
 /// See also [emojiRepository].
-class EmojiRepositoryProvider
-    extends AutoDisposeProvider<Raw<EmojiRepository>> {
+class EmojiRepositoryProvider extends Provider<Raw<EmojiRepository>> {
   /// See also [emojiRepository].
   EmojiRepositoryProvider(
     Account account,
@@ -2414,7 +2396,7 @@ class EmojiRepositoryProvider
   }
 
   @override
-  AutoDisposeProviderElement<Raw<EmojiRepository>> createElement() {
+  ProviderElement<Raw<EmojiRepository>> createElement() {
     return _EmojiRepositoryProviderElement(this);
   }
 
@@ -2446,14 +2428,13 @@ class EmojiRepositoryProvider
   }
 }
 
-mixin EmojiRepositoryRef on AutoDisposeProviderRef<Raw<EmojiRepository>> {
+mixin EmojiRepositoryRef on ProviderRef<Raw<EmojiRepository>> {
   /// The parameter `account` of this provider.
   Account get account;
 }
 
 class _EmojiRepositoryProviderElement
-    extends AutoDisposeProviderElement<Raw<EmojiRepository>>
-    with EmojiRepositoryRef {
+    extends ProviderElement<Raw<EmojiRepository>> with EmojiRepositoryRef {
   _EmojiRepositoryProviderElement(super.provider);
 
   @override
@@ -2809,12 +2790,12 @@ class _AccountProviderElement extends AutoDisposeProviderElement<Account>
 }
 
 String _$tabSettingsRepositoryHash() =>
-    r'90b04cbf70463ef04cabf95a222784b3ddfde185';
+    r'6675b868ae3b51e0f67ec7aa9f89c7011fe4db9a';
 
 /// See also [tabSettingsRepository].
 @ProviderFor(tabSettingsRepository)
 final tabSettingsRepositoryProvider =
-    AutoDisposeProvider<Raw<TabSettingsRepository>>.internal(
+    Provider<Raw<TabSettingsRepository>>.internal(
   tabSettingsRepository,
   name: r'tabSettingsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -2824,15 +2805,14 @@ final tabSettingsRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef TabSettingsRepositoryRef
-    = AutoDisposeProviderRef<Raw<TabSettingsRepository>>;
+typedef TabSettingsRepositoryRef = ProviderRef<Raw<TabSettingsRepository>>;
 String _$accountSettingsRepositoryHash() =>
-    r'452a8ccc331afbb92b22086fce99e7480c84d47d';
+    r'02c2995f7e9314b65c79bae2c0d38cf89b9a077c';
 
 /// See also [accountSettingsRepository].
 @ProviderFor(accountSettingsRepository)
 final accountSettingsRepositoryProvider =
-    AutoDisposeProvider<Raw<AccountSettingsRepository>>.internal(
+    Provider<Raw<AccountSettingsRepository>>.internal(
   accountSettingsRepository,
   name: r'accountSettingsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -2843,14 +2823,14 @@ final accountSettingsRepositoryProvider =
 );
 
 typedef AccountSettingsRepositoryRef
-    = AutoDisposeProviderRef<Raw<AccountSettingsRepository>>;
+    = ProviderRef<Raw<AccountSettingsRepository>>;
 String _$generalSettingsRepositoryHash() =>
-    r'62651f8aa5e2312aac29bb1b471ae44a7361ee90';
+    r'47c691c340da25226c88a47abc8450dd09b2b3e9';
 
 /// See also [generalSettingsRepository].
 @ProviderFor(generalSettingsRepository)
 final generalSettingsRepositoryProvider =
-    AutoDisposeProvider<Raw<GeneralSettingsRepository>>.internal(
+    Provider<Raw<GeneralSettingsRepository>>.internal(
   generalSettingsRepository,
   name: r'generalSettingsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -2861,14 +2841,14 @@ final generalSettingsRepositoryProvider =
 );
 
 typedef GeneralSettingsRepositoryRef
-    = AutoDisposeProviderRef<Raw<GeneralSettingsRepository>>;
+    = ProviderRef<Raw<GeneralSettingsRepository>>;
 String _$desktopSettingsRepositoryHash() =>
-    r'cfafb8572899e81b6907d52af3d6e0b2e336c8a3';
+    r'7fd8217abafd907c7cc81d64c6aa9dc5322bc20d';
 
 /// See also [desktopSettingsRepository].
 @ProviderFor(desktopSettingsRepository)
 final desktopSettingsRepositoryProvider =
-    AutoDisposeProvider<Raw<DesktopSettingsRepository>>.internal(
+    Provider<Raw<DesktopSettingsRepository>>.internal(
   desktopSettingsRepository,
   name: r'desktopSettingsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -2879,14 +2859,14 @@ final desktopSettingsRepositoryProvider =
 );
 
 typedef DesktopSettingsRepositoryRef
-    = AutoDisposeProviderRef<Raw<DesktopSettingsRepository>>;
+    = ProviderRef<Raw<DesktopSettingsRepository>>;
 String _$importExportRepositoryHash() =>
-    r'7ad9ad123cf53f5de1c0deec380142711d7b020a';
+    r'7b626c1005a7ce26081eba79d186da4cea6c0717';
 
 /// See also [importExportRepository].
 @ProviderFor(importExportRepository)
 final importExportRepositoryProvider =
-    AutoDisposeProvider<Raw<ImportExportRepository>>.internal(
+    Provider<Raw<ImportExportRepository>>.internal(
   importExportRepository,
   name: r'importExportRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -2896,13 +2876,12 @@ final importExportRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef ImportExportRepositoryRef
-    = AutoDisposeProviderRef<Raw<ImportExportRepository>>;
-String _$cacheManagerHash() => r'5c40203a1630d49a1df471ade2656c36c2752971';
+typedef ImportExportRepositoryRef = ProviderRef<Raw<ImportExportRepository>>;
+String _$cacheManagerHash() => r'0e854572e1bd7223650c8437a463a060314d0531';
 
 /// See also [cacheManager].
 @ProviderFor(cacheManager)
-final cacheManagerProvider = AutoDisposeProvider<BaseCacheManager?>.internal(
+final cacheManagerProvider = Provider<BaseCacheManager?>.internal(
   cacheManager,
   name: r'cacheManagerProvider',
   debugGetCreateSourceHash:
@@ -2911,6 +2890,21 @@ final cacheManagerProvider = AutoDisposeProvider<BaseCacheManager?>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef CacheManagerRef = AutoDisposeProviderRef<BaseCacheManager?>;
+typedef CacheManagerRef = ProviderRef<BaseCacheManager?>;
+String _$accountContextHash() => r'1c9bff1004e7054ed091327e5a83c07d9da2c20a';
+
+/// See also [accountContext].
+@ProviderFor(accountContext)
+final accountContextProvider = AutoDisposeProvider<AccountContext>.internal(
+  accountContext,
+  name: r'accountContextProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$accountContextHash,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
+);
+
+typedef AccountContextRef = AutoDisposeProviderRef<AccountContext>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

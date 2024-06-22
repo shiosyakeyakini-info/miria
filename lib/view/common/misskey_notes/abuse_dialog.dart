@@ -1,5 +1,7 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
@@ -11,16 +13,16 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "abuse_dialog.g.dart";
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: false, dependencies: [accountContext])
 class AbuseDialogNotifier extends _$AbuseDialogNotifier {
   @override
   AsyncValue<void>? build() => null;
 
   Future<void> abuse(
-    Account account,
     User targetUser,
     String abuseText,
   ) async {
+    final account = ref.read(accountContextProvider).postAccount;
     state = const AsyncLoading();
     state =
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
@@ -34,7 +36,8 @@ class AbuseDialogNotifier extends _$AbuseDialogNotifier {
   }
 }
 
-class AbuseDialog extends ConsumerStatefulWidget {
+@RoutePage()
+class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final User targetUser;
   final String? defaultText;
@@ -47,20 +50,14 @@ class AbuseDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => AbuseDialogState();
-}
-
-class AbuseDialogState extends ConsumerState<AbuseDialog> {
-  final controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    controller.text = widget.defaultText ?? "";
-  }
+  Widget wrappedRoute(BuildContext context) => AccountScopeMark2(
+        account: account,
+        child: this,
+      );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController(text: defaultText);
     final abuse = ref.watch(abuseDialogNotifierProvider);
 
     ref.listen(abuseDialogNotifierProvider, (_, next) {
@@ -68,48 +65,43 @@ class AbuseDialogState extends ConsumerState<AbuseDialog> {
       Navigator.of(context).pop();
     });
 
-    return AccountScope(
-      account: widget.account,
-      child: AlertDialog(
-        title: SimpleMfmText(
-          S.of(context).reportAbuseOf(
-                widget.targetUser.name ?? widget.targetUser.username,
-              ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(S.of(context).detail),
-              TextField(
-                controller: controller,
-                maxLines: null,
-                minLines: 5,
-                autofocus: true,
-              ),
-              Text(
-                S.of(context).pleaseInputReasonWhyAbuse,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          switch (abuse) {
-            AsyncLoading() => ElevatedButton.icon(
-                onPressed: null,
-                label: Text(S.of(context).loading),
-                icon: const CircularProgressIndicator.adaptive(),
-              ),
-            _ => ElevatedButton(
-                onPressed: () async => ref
-                    .read(abuseDialogNotifierProvider.notifier)
-                    .abuse(widget.account, widget.targetUser, controller.text),
-                child: Text(S.of(context).reportAbuse),
-              ),
-          },
-        ],
+    return AlertDialog(
+      title: SimpleMfmText(
+        S.of(context).reportAbuseOf(targetUser.name ?? targetUser.username),
       ),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(S.of(context).detail),
+            TextField(
+              controller: controller,
+              maxLines: null,
+              minLines: 5,
+              autofocus: true,
+            ),
+            Text(
+              S.of(context).pleaseInputReasonWhyAbuse,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        switch (abuse) {
+          AsyncLoading() => ElevatedButton.icon(
+              onPressed: null,
+              label: Text(S.of(context).loading),
+              icon: const CircularProgressIndicator.adaptive(),
+            ),
+          _ => ElevatedButton(
+              onPressed: () async => ref
+                  .read(abuseDialogNotifierProvider.notifier)
+                  .abuse(targetUser, controller.text),
+              child: Text(S.of(context).reportAbuse),
+            ),
+        },
+      ],
     );
   }
 }

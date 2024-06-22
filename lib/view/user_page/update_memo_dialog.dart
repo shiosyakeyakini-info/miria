@@ -1,10 +1,13 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 
-class UpdateMemoDialog extends ConsumerStatefulWidget {
+@RoutePage()
+class UpdateMemoDialog extends HookConsumerWidget {
   final Account account;
   final String initialMemo;
   final String userId;
@@ -17,27 +20,9 @@ class UpdateMemoDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      UpdateMemoDialogState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController(text: initialMemo);
 
-class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
-  final controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    controller.text = widget.initialMemo;
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(S.of(context).memo),
       content: TextField(
@@ -49,17 +34,12 @@ class UpdateMemoDialogState extends ConsumerState<UpdateMemoDialog> {
       ),
       actions: [
         OutlinedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () async => context.maybePop(),
           child: Text(S.of(context).cancel),
         ),
         ElevatedButton(
           onPressed: () async => ref
-              .read(
-                userInfoNotifierProvider(widget.account, widget.userId)
-                    .notifier,
-              )
+              .read(userInfoNotifierProvider(userId).notifier)
               .updateMemo(controller.text),
           child: Text(S.of(context).save),
         ),

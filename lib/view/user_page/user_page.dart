@@ -28,7 +28,7 @@ class UserPageState extends ConsumerState<UserPage> {
   @override
   Widget build(BuildContext context) {
     final userInfo = ref.watch(
-      userInfoNotifierProvider(widget.account, widget.userId)
+      userInfoNotifierProvider(widget.userId)
           .select((value) => value.valueOrNull),
     );
     final isReactionAvailable = userInfo?.response.publicReactions == true ||
@@ -177,9 +177,7 @@ class UserDetailTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userDetail = ref.watch(
-      userInfoNotifierProvider(AccountScope.of(context), userId),
-    );
+    final userDetail = ref.watch(userInfoNotifierProvider(userId));
 
     return switch (userDetail) {
       AsyncLoading() => const Center(

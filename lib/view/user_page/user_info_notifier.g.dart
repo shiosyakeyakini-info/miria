@@ -6,7 +6,7 @@ part of 'user_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userInfoNotifierHash() => r'6aad9a9460ca2fed49b94073f9ef85fff0721252';
+String _$userInfoNotifierHash() => r'599f611a70bf6a4f2f0779ae8d9a4331c0c0f493';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,11 +31,9 @@ class _SystemHash {
 
 abstract class _$UserInfoNotifier
     extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {
-  late final Account account;
   late final String userId;
 
   FutureOr<UserInfo> build(
-    Account account,
     String userId,
   );
 }
@@ -49,9 +47,15 @@ class UserInfoNotifierFamily extends Family {
   /// See also [UserInfoNotifier].
   const UserInfoNotifierFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    accountContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -65,11 +69,9 @@ class UserInfoNotifierFamily extends Family {
 
   /// See also [UserInfoNotifier].
   UserInfoNotifierProvider call(
-    Account account,
     String userId,
   ) {
     return UserInfoNotifierProvider(
-      account,
       userId,
     );
   }
@@ -80,7 +82,6 @@ class UserInfoNotifierFamily extends Family {
     covariant UserInfoNotifierProvider provider,
   ) {
     return call(
-      provider.account,
       provider.userId,
     );
   }
@@ -112,12 +113,9 @@ class UserInfoNotifierProvider
     extends AutoDisposeAsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
   /// See also [UserInfoNotifier].
   UserInfoNotifierProvider(
-    Account account,
     String userId,
   ) : this._internal(
-          () => UserInfoNotifier()
-            ..account = account
-            ..userId = userId,
+          () => UserInfoNotifier()..userId = userId,
           from: userInfoNotifierProvider,
           name: r'userInfoNotifierProvider',
           debugGetCreateSourceHash:
@@ -127,7 +125,6 @@ class UserInfoNotifierProvider
           dependencies: UserInfoNotifierFamily._dependencies,
           allTransitiveDependencies:
               UserInfoNotifierFamily._allTransitiveDependencies,
-          account: account,
           userId: userId,
         );
 
@@ -138,11 +135,9 @@ class UserInfoNotifierProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.account,
     required this.userId,
   }) : super.internal();
 
-  final Account account;
   final String userId;
 
   @override
@@ -150,7 +145,6 @@ class UserInfoNotifierProvider
     covariant UserInfoNotifier notifier,
   ) {
     return notifier.build(
-      account,
       userId,
     );
   }
@@ -160,29 +154,20 @@ class UserInfoNotifierProvider
     return ProviderOverride(
       origin: this,
       override: UserInfoNotifierProvider._internal(
-        () => create()
-          ..account = account
-          ..userId = userId,
+        () => create()..userId = userId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        account: account,
         userId: userId,
       ),
     );
   }
 
   @override
-  (
-    Account,
-    String,
-  ) get argument {
-    return (
-      account,
-      userId,
-    );
+  (String,) get argument {
+    return (userId,);
   }
 
   @override
@@ -195,30 +180,24 @@ class UserInfoNotifierProvider
     UserInfoNotifier Function() create,
   ) {
     return UserInfoNotifierProvider._internal(
-      () => create()
-        ..account = account
-        ..userId = userId,
+      () => create()..userId = userId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      account: account,
       userId: userId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UserInfoNotifierProvider &&
-        other.account == account &&
-        other.userId == userId;
+    return other is UserInfoNotifierProvider && other.userId == userId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
     hash = _SystemHash.combine(hash, userId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -226,9 +205,6 @@ class UserInfoNotifierProvider
 }
 
 mixin UserInfoNotifierRef on AutoDisposeAsyncNotifierProviderRef<UserInfo> {
-  /// The parameter `account` of this provider.
-  Account get account;
-
   /// The parameter `userId` of this provider.
   String get userId;
 }
@@ -238,8 +214,6 @@ class _UserInfoNotifierProviderElement
     with UserInfoNotifierRef {
   _UserInfoNotifierProviderElement(super.provider);
 
-  @override
-  Account get account => (origin as UserInfoNotifierProvider).account;
   @override
   String get userId => (origin as UserInfoNotifierProvider).userId;
 }

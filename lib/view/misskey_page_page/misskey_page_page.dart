@@ -9,13 +9,12 @@ import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/image_dialog.dart";
 import "package:miria/view/common/misskey_notes/link_preview.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
-import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/misskey_page_page/misskey_page_notifier.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart" as misskey;
@@ -129,7 +128,7 @@ Future<Note> fetchNote(FetchNoteRef ref, Account account, String noteId) async {
   final note = await ref
       .read(misskeyProvider(account))
       .notes
-      .show(misskey.NotesShowRequest(noteId: /*content.note*/ noteId));
+      .show(misskey.NotesShowRequest(noteId: noteId));
   ref.read(notesProvider(account)).registerNote(note);
   return note;
 }
@@ -236,7 +235,7 @@ class PageContent extends ConsumerWidget {
   }
 }
 
-class PageLikeButton extends ConsumerStatefulWidget {
+class PageLikeButton extends ConsumerWidget {
   final bool initialLiked;
   final int likeCount;
   final String pageId;
@@ -249,29 +248,24 @@ class PageLikeButton extends ConsumerStatefulWidget {
     required this.userId,
     super.key,
   });
-
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => PageLikeButtonState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider =
+        misskeyPageNotifierProvider(AccountScope.of(context), pageId);
+    final liked = ref.watch(
+      provider.select((value) => value.valueOrNull?.page.isLiked ?? false),
+    );
+    final likeCount = ref.watch(
+      provider.select((value) => value.valueOrNull?.page.likedCount ?? 0),
+    );
+    final isLoading = ref.watch(
+      provider.select((value) => value.valueOrNull?.likeOr is AsyncLoading),
+    );
 
-class PageLikeButtonState extends ConsumerState<PageLikeButton> {
-  late bool liked = widget.initialLiked;
-  late int likeCount = widget.likeCount;
-
-  @override
-  Widget build(BuildContext context) {
     if (liked) {
       return ElevatedButton.icon(
-        onPressed: () async {
-          await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .pages
-              .unlike(misskey.PagesUnlikeRequest(pageId: widget.pageId));
-          setState(() {
-            liked = false;
-            likeCount--;
-          });
-        }.expectFailure(context),
+        onPressed:
+            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
           size: MediaQuery.textScalerOf(context)
@@ -281,23 +275,8 @@ class PageLikeButtonState extends ConsumerState<PageLikeButton> {
       );
     } else {
       return OutlinedButton.icon(
-        onPressed: () async {
-          if (AccountScope.of(context).i.id == widget.userId) {
-            await SimpleMessageDialog.show(
-              context,
-              S.of(context).canNotFavoriteMyPage,
-            );
-            return;
-          }
-          await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .pages
-              .like(misskey.PagesLikeRequest(pageId: widget.pageId));
-          setState(() {
-            liked = true;
-            likeCount++;
-          });
-        }.expectFailure(context),
+        onPressed:
+            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
           size: MediaQuery.textScalerOf(context)

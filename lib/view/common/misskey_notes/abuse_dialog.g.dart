@@ -7,7 +7,7 @@ part of 'abuse_dialog.dart';
 // **************************************************************************
 
 String _$abuseDialogNotifierHash() =>
-    r'18ccedc14cd6fe143b89e250e7a01888d8fc2aa2';
+    r'bc095c2478f01f199613d6259efa411d13052ce6';
 
 /// See also [AbuseDialogNotifier].
 @ProviderFor(AbuseDialogNotifier)
@@ -18,8 +18,11 @@ final abuseDialogNotifierProvider = AutoDisposeNotifierProvider<
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$abuseDialogNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[accountContextProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$AbuseDialogNotifier = AutoDisposeNotifier<AsyncValue<void>?>;

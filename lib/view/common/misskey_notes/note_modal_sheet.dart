@@ -7,18 +7,16 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
-import "package:miria/view/common/misskey_notes/abuse_dialog.dart";
 import "package:miria/view/common/misskey_notes/clip_modal_sheet.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
-import "package:miria/view/user_page/user_control_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:path/path.dart";
 import "package:path_provider/path_provider.dart";
@@ -176,6 +174,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   }
 }
 
+@RoutePage()
 class NoteModalSheet extends ConsumerWidget {
   final Note baseNote;
   final Note targetNote;
@@ -198,12 +197,8 @@ class NoteModalSheet extends ConsumerWidget {
 
     ref.listen(notifierProvider.select((value) => value.user), (_, next) async {
       if (next! is AsyncData) return;
-      await showModalBottomSheet<void>(
-        context: context,
-        builder: (context) => UserControlDialog(
-          account: account,
-          response: next.value!,
-        ),
+      await context.pushRoute(
+        UserControlRoute(account: account, response: next.value!),
       );
     });
     final noteStatus =
@@ -398,10 +393,9 @@ class NoteModalSheet extends ConsumerWidget {
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
             onTap: () async {
-              Navigator.of(context).pop();
-              await showDialog(
-                context: context,
-                builder: (context) => AbuseDialog(
+              // Navigator.of(context).pop();
+              await context.pushRoute(
+                AbuseRoute(
                   account: account,
                   targetUser: targetNote.user,
                   defaultText:

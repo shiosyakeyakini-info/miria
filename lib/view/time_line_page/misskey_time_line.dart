@@ -15,7 +15,7 @@ import "package:miria/view/common/timeline_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class MisskeyTimeline extends ConsumerStatefulWidget {
-  final AutoDisposeProvider<TimelineRepository> timeLineRepositoryProvider;
+  final Provider<TimelineRepository> timeLineRepositoryProvider;
   final TimelineScrollController controller;
 
   MisskeyTimeline({
