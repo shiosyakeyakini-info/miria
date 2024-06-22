@@ -1,11 +1,11 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class AvatarIcon extends StatefulWidget {
   final User user;
@@ -13,44 +13,11 @@ class AvatarIcon extends StatefulWidget {
   final VoidCallback? onTap;
 
   const AvatarIcon({
-    super.key,
     required this.user,
+    super.key,
     this.height = 48,
     this.onTap,
   });
-
-  factory AvatarIcon.fromIResponse(IResponse response, {double height = 48}) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
-
-  factory AvatarIcon.fromUserResponse(
-    UsersShowResponse response, {
-    double height = 48,
-  }) {
-    return AvatarIcon(
-      user: User(
-        id: response.id,
-        username: response.username,
-        avatarUrl: response.avatarUrl,
-        avatarBlurhash: response.avatarBlurhash,
-        avatarDecorations: response.avatarDecorations,
-        isCat: response.isCat,
-        isBot: response.isBot,
-      ),
-      height: height,
-    );
-  }
 
   @override
   State<StatefulWidget> createState() => AvatarIconState();
@@ -69,7 +36,7 @@ class AvatarIconState extends State<AvatarIcon> {
         .substring(2, 6)
         .split("")
         .map(
-          r'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~'
+          r"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~"
               .indexOf,
         )
         .fold(0, (acc, i) => acc * 83 + i);
@@ -89,12 +56,12 @@ class AvatarIconState extends State<AvatarIcon> {
 
     return GestureDetector(
       onTap: widget.onTap ??
-          () {
-            context.pushRoute(
-              UserRoute(
-                  userId: widget.user.id, account: AccountScope.of(context)),
-            );
-          },
+          () async => context.pushRoute(
+                UserRoute(
+                  userId: widget.user.id,
+                  account: AccountScope.of(context),
+                ),
+              ),
       child: Padding(
         padding: EdgeInsets.only(
           top: 3,
@@ -175,14 +142,18 @@ class AvatarIconState extends State<AvatarIcon> {
                             child: SizedBox(
                               width: baseHeight,
                               child: NetworkImageView(
-                                  url: decoration.url, type: ImageType.other),
+                                url: decoration.url,
+                                type: ImageType.other,
+                              ),
                             ),
                           )
                         : SizedBox(
                             width: baseHeight,
                             child: NetworkImageView(
-                                url: decoration.url,
-                                type: ImageType.avatarDecoration)),
+                              url: decoration.url,
+                              type: ImageType.avatarDecoration,
+                            ),
+                          ),
                   ),
                 ),
               ),

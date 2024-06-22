@@ -1,17 +1,18 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:miria/const.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/misskey_notes/reaction_user_dialog.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/const.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ReactionButton extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -21,12 +22,12 @@ class ReactionButton extends ConsumerStatefulWidget {
   final Account? loginAs;
 
   const ReactionButton({
-    super.key,
     required this.emojiData,
     required this.reactionCount,
     required this.myReaction,
     required this.noteId,
     required this.loginAs,
+    super.key,
   });
 
   @override
@@ -71,10 +72,11 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         final account = AccountScope.of(context);
         if (isMyReaction) {
           if (await SimpleConfirmDialog.show(
-                  context: context,
-                  message: "リアクション取り消してもええか？",
-                  primary: "取り消す",
-                  secondary: "やっぱりやめる") !=
+                context: context,
+                message: S.of(context).confirmDeleteReaction,
+                primary: S.of(context).cancelReaction,
+                secondary: S.of(context).cancel,
+              ) !=
               true) {
             return;
           }
@@ -86,7 +88,8 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
               .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
           if (account.host == "misskey.io") {
             await Future.delayed(
-                const Duration(milliseconds: misskeyIOReactionDelay));
+              const Duration(milliseconds: misskeyIOReactionDelay),
+            );
           }
 
           await ref.read(notesProvider(account)).refresh(widget.noteId);
@@ -102,40 +105,44 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
         switch (emojiData) {
           case UnicodeEmojiData():
             reactionString = emojiData.char;
-            break;
           case CustomEmojiData():
             if (!emojiData.isCurrentServer) return;
             reactionString = ":${emojiData.baseName}:";
-            break;
           case NotEmojiData():
             return;
         }
 
         await ref.read(misskeyProvider(account)).notes.reactions.create(
-            NotesReactionsCreateRequest(
-                noteId: widget.noteId, reaction: reactionString));
+              NotesReactionsCreateRequest(
+                noteId: widget.noteId,
+                reaction: reactionString,
+              ),
+            );
 
         // misskey.ioはただちにリアクションを反映してくれない
         if (account.host == "misskey.io") {
           await Future.delayed(
-              const Duration(milliseconds: misskeyIOReactionDelay));
+            const Duration(milliseconds: misskeyIOReactionDelay),
+          );
         }
 
         await ref.read(notesProvider(account)).refresh(widget.noteId);
       },
-      onLongPress: () {
-        showDialog(
-            context: context,
-            builder: (context2) {
-              return ReactionUserDialog(
-                  account: AccountScope.of(context),
-                  emojiData: widget.emojiData,
-                  noteId: widget.noteId);
-            });
+      onLongPress: () async {
+        await showDialog(
+          context: context,
+          builder: (context2) {
+            return ReactionUserDialog(
+              account: AccountScope.of(context),
+              emojiData: widget.emojiData,
+              noteId: widget.noteId,
+            );
+          },
+        );
       },
       style: AppTheme.of(context).reactionButtonStyle.copyWith(
-            backgroundColor: MaterialStatePropertyAll(backgroundColor),
-            side: MaterialStatePropertyAll(
+            backgroundColor: WidgetStatePropertyAll(backgroundColor),
+            side: WidgetStatePropertyAll(
               BorderSide(color: borderColor),
             ),
           ),

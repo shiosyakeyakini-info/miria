@@ -1,14 +1,16 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/users_list_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/users_list_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/user_list_page/users_lists_notifier.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/users_list_page/users_list_settings_dialog.dart";
 
 @RoutePage()
 class UsersListPage extends ConsumerWidget {
@@ -23,20 +25,20 @@ class UsersListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("リスト"),
+        title: Text(S.of(context).list),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
               final settings = await showDialog<UsersListSettings>(
                 context: context,
-                builder: (context) => const UsersListSettingsDialog(
-                  title: Text("作成"),
+                builder: (context) => UsersListSettingsDialog(
+                  title: Text(S.of(context).create),
                 ),
               );
               if (!context.mounted) return;
               if (settings != null) {
-                ref
+                await ref
                     .read(usersListsNotifierProvider(misskey).notifier)
                     .create(settings)
                     .expectFailure(context);
@@ -60,9 +62,9 @@ class UsersListPage extends ConsumerWidget {
                     onPressed: () async {
                       final result = await SimpleConfirmDialog.show(
                         context: context,
-                        message: "このリストを削除しますか？",
-                        primary: "削除する",
-                        secondary: "やめる",
+                        message: S.of(context).confirmDeleteList,
+                        primary: S.of(context).doDeleting,
+                        secondary: S.of(context).cancel,
                       );
                       if (!context.mounted) return;
                       if (result ?? false) {
@@ -75,7 +77,7 @@ class UsersListPage extends ConsumerWidget {
                       }
                     },
                   ),
-                  onTap: () => context.pushRoute(
+                  onTap: () async => context.pushRoute(
                     UsersListTimelineRoute(
                       account: account,
                       list: list,

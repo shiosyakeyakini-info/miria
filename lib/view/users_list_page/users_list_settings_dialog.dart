@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/users_list_settings.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/users_list_settings.dart";
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -34,6 +36,7 @@ class _UsersListSettingsNotifier
   }
 }
 
+@RoutePage()
 class UsersListSettingsDialog extends StatelessWidget {
   const UsersListSettingsDialog({
     super.key,
@@ -75,13 +78,13 @@ class UsersListSettingsForm extends ConsumerWidget {
           TextFormField(
             initialValue: initialSettings.name,
             maxLength: 100,
-            decoration: const InputDecoration(
-              labelText: "リスト名",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+            decoration: InputDecoration(
+              labelText: S.of(context).listName,
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "入力してください";
+                return S.of(context).pleaseInput;
               }
               return null;
             },
@@ -90,14 +93,14 @@ class UsersListSettingsForm extends ConsumerWidget {
                 .updateName,
           ),
           CheckboxListTile(
-            title: const Text("パブリック"),
+            title: Text(S.of(context).public),
             value: settings.isPublic,
             onChanged: ref
                 .read(_usersListSettingsNotifierProvider.notifier)
                 .updateIsPublic,
           ),
           ElevatedButton(
-            child: const Text("決定"),
+            child: Text(S.of(context).done),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();

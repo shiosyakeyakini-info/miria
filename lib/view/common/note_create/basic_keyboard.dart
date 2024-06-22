@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import "package:flutter/cupertino.dart";
 
-import 'custom_keyboard_button.dart';
+import "package:miria/view/common/note_create/custom_keyboard_button.dart";
 
 class BasicKeyboard extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
 
   const BasicKeyboard({
-    super.key,
     required this.controller,
     required this.focusNode,
+    super.key,
   });
 
   @override

@@ -12,7 +12,7 @@ part of 'account.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Account _$AccountFromJson(Map<String, dynamic> json) {
   return _Account.fromJson(json);
@@ -22,8 +22,8 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
 mixin _$Account {
   String get host => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
+  MeDetailed get i => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
-  IResponse get i => throw _privateConstructorUsedError;
   MetaResponse? get meta => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,11 +39,11 @@ abstract class $AccountCopyWith<$Res> {
   $Res call(
       {String host,
       String userId,
+      MeDetailed i,
       String? token,
-      IResponse i,
       MetaResponse? meta});
 
-  $IResponseCopyWith<$Res> get i;
+  $MeDetailedCopyWith<$Res> get i;
   $MetaResponseCopyWith<$Res>? get meta;
 }
 
@@ -62,8 +62,8 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
   $Res call({
     Object? host = null,
     Object? userId = null,
-    Object? token = freezed,
     Object? i = null,
+    Object? token = freezed,
     Object? meta = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,14 +75,14 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      i: null == i
+          ? _value.i
+          : i // ignore: cast_nullable_to_non_nullable
+              as MeDetailed,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      i: null == i
-          ? _value.i
-          : i // ignore: cast_nullable_to_non_nullable
-              as IResponse,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -92,8 +92,8 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
 
   @override
   @pragma('vm:prefer-inline')
-  $IResponseCopyWith<$Res> get i {
-    return $IResponseCopyWith<$Res>(_value.i, (value) {
+  $MeDetailedCopyWith<$Res> get i {
+    return $MeDetailedCopyWith<$Res>(_value.i, (value) {
       return _then(_value.copyWith(i: value) as $Val);
     });
   }
@@ -121,12 +121,12 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
   $Res call(
       {String host,
       String userId,
+      MeDetailed i,
       String? token,
-      IResponse i,
       MetaResponse? meta});
 
   @override
-  $IResponseCopyWith<$Res> get i;
+  $MeDetailedCopyWith<$Res> get i;
   @override
   $MetaResponseCopyWith<$Res>? get meta;
 }
@@ -144,8 +144,8 @@ class __$$AccountImplCopyWithImpl<$Res>
   $Res call({
     Object? host = null,
     Object? userId = null,
-    Object? token = freezed,
     Object? i = null,
+    Object? token = freezed,
     Object? meta = freezed,
   }) {
     return _then(_$AccountImpl(
@@ -157,14 +157,14 @@ class __$$AccountImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      i: null == i
+          ? _value.i
+          : i // ignore: cast_nullable_to_non_nullable
+              as MeDetailed,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      i: null == i
-          ? _value.i
-          : i // ignore: cast_nullable_to_non_nullable
-              as IResponse,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -179,8 +179,8 @@ class _$AccountImpl extends _Account {
   const _$AccountImpl(
       {required this.host,
       required this.userId,
-      this.token,
       required this.i,
+      this.token,
       this.meta})
       : super._();
 
@@ -192,15 +192,15 @@ class _$AccountImpl extends _Account {
   @override
   final String userId;
   @override
-  final String? token;
+  final MeDetailed i;
   @override
-  final IResponse i;
+  final String? token;
   @override
   final MetaResponse? meta;
 
   @override
   String toString() {
-    return 'Account(host: $host, userId: $userId, token: $token, i: $i, meta: $meta)';
+    return 'Account(host: $host, userId: $userId, i: $i, token: $token, meta: $meta)';
   }
 
   @JsonKey(ignore: true)
@@ -221,8 +221,8 @@ abstract class _Account extends Account {
   const factory _Account(
       {required final String host,
       required final String userId,
+      required final MeDetailed i,
       final String? token,
-      required final IResponse i,
       final MetaResponse? meta}) = _$AccountImpl;
   const _Account._() : super._();
 
@@ -233,9 +233,9 @@ abstract class _Account extends Account {
   @override
   String get userId;
   @override
-  String? get token;
+  MeDetailed get i;
   @override
-  IResponse get i;
+  String? get token;
   @override
   MetaResponse? get meta;
   @override

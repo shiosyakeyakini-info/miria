@@ -1,47 +1,60 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:dio/dio.dart';
-import 'package:file/file.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mfm_parser/mfm_parser.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/image_file.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/note_create_page/drive_file_select_dialog.dart';
-import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
-import 'package:miria/view/note_create_page/file_settings_dialog.dart';
-import 'package:miria/view/note_create_page/note_create_page.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:dio/dio.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/image_file.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
+import "package:miria/view/note_create_page/drive_modal_sheet.dart";
+import "package:miria/view/note_create_page/file_settings_dialog.dart";
+import "package:miria/view/note_create_page/note_create_page.dart";
+import "package:miria/view/user_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'note_create_state_notifier.freezed.dart';
+part "note_create_state_notifier.freezed.dart";
+part "note_create_state_notifier.g.dart";
 
 enum NoteSendStatus { sending, finished, error }
 
 enum VoteExpireType {
-  unlimited("無期限"),
-  date("日時指定"),
-  duration("期間指定");
+  unlimited,
+  date,
+  duration;
 
-  final String displayText;
-
-  const VoteExpireType(this.displayText);
+  String displayText(BuildContext context) {
+    return switch (this) {
+      VoteExpireType.unlimited => S.of(context).unlimited,
+      VoteExpireType.date => S.of(context).specifyByDate,
+      VoteExpireType.duration => S.of(context).specifyByDuration,
+    };
+  }
 }
 
 enum VoteExpireDurationType {
-  seconds("秒"),
-  minutes("分"),
-  hours("時間"),
-  day("日");
+  seconds,
+  minutes,
+  hours,
+  day;
 
-  final String displayText;
-  const VoteExpireDurationType(this.displayText);
+  String displayText(BuildContext context) {
+    return switch (this) {
+      VoteExpireDurationType.seconds => S.of(context).seconds,
+      VoteExpireDurationType.minutes => S.of(context).minutes,
+      VoteExpireDurationType.hours => S.of(context).hours,
+      VoteExpireDurationType.day => S.of(context).days,
+    };
+  }
 }
 
 @freezed
@@ -50,12 +63,12 @@ class NoteCreate with _$NoteCreate {
     required Account account,
     required NoteVisibility noteVisibility,
     required bool localOnly,
+    required ReactionAcceptance? reactionAcceptance,
     @Default([]) List<User> replyTo,
     @Default([]) List<MisskeyPostFile> files,
     NoteCreateChannel? channel,
     Note? reply,
     Note? renote,
-    required ReactionAcceptance? reactionAcceptance,
     @Default(false) bool isCw,
     @Default("") String cwText,
     @Default("") String text,
@@ -83,21 +96,33 @@ class NoteCreateChannel with _$NoteCreateChannel {
   }) = _NoteCreateChannel;
 }
 
-class NoteCreateNotifier extends StateNotifier<NoteCreate> {
-  FileSystem fileSystem;
-  Dio dio;
-  Misskey misskey;
-  NoteRepository noteRepository;
-  StateNotifier<(Object? error, BuildContext? context)> errorNotifier;
+@riverpod
+class NoteCreateNotifier extends _$NoteCreateNotifier {
+  late final _fileSystem = ref.read(fileSystemProvider);
+  late final _dio = ref.read(dioProvider);
+  late final _misskey = ref.read(misskeyProvider(state.account));
+  late final _noteRepository = ref.read(notesProvider(state.account));
+  late final _errorNotifier = ref.read(errorEventProvider.notifier);
+  late final _dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
 
-  NoteCreateNotifier(
-    super.state,
-    this.fileSystem,
-    this.dio,
-    this.misskey,
-    this.errorNotifier,
-    this.noteRepository,
-  );
+  @override
+  NoteCreate build(Account account) {
+    return NoteCreate(
+      account: account,
+      noteVisibility: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultNoteVisibility,
+      localOnly: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultIsLocalOnly,
+      reactionAcceptance: ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account)
+          .defaultReactionAcceptance,
+    );
+  }
 
   /// 初期化する
   Future<void> initialize(
@@ -127,11 +152,11 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     if (initialText != null) {
       resultState = resultState.copyWith(text: initialText);
     }
-    if (initialMediaFiles != null && initialMediaFiles.isNotEmpty == true) {
+    if (initialMediaFiles != null && initialMediaFiles.isNotEmpty) {
       resultState = resultState.copyWith(
         files: await Future.wait(
           initialMediaFiles.map((media) async {
-            final file = fileSystem.file(media);
+            final file = _fileSystem.file(media);
             final contents = await file.readAsBytes();
             final fileName = file.basename;
             final extension = fileName.split(".").last.toLowerCase();
@@ -156,8 +181,10 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final files = <MisskeyPostFile>[];
       for (final file in note.files) {
         if (file.type.startsWith("image")) {
-          final response = await dio.get(file.url,
-              options: Options(responseType: ResponseType.bytes));
+          final response = await _dio.get(
+            file.url,
+            options: Options(responseType: ResponseType.bytes),
+          );
           files.add(
             ImageFileAlreadyPostedFile(
               fileName: file.name,
@@ -181,23 +208,29 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       }
       final deletedNoteChannel = note.channel;
 
+      final replyTo = <User>[];
+      if (note.mentions.isNotEmpty) {
+        replyTo.addAll(
+          await _misskey.users
+              .showByIds(UsersShowByIdsRequest(userIds: note.mentions)),
+        );
+      }
+
       resultState = resultState.copyWith(
         noteVisibility: note.visibility,
         localOnly: note.localOnly,
         files: files,
         channel: deletedNoteChannel != null
             ? NoteCreateChannel(
-                id: deletedNoteChannel.id, name: deletedNoteChannel.name)
+                id: deletedNoteChannel.id,
+                name: deletedNoteChannel.name,
+              )
             : null,
         cwText: note.cw ?? "",
         isCw: note.cw?.isNotEmpty == true,
         text: note.text ?? "",
         reactionAcceptance: note.reactionAcceptance,
-        replyTo: [
-          for (final userId in note.mentions)
-            (await misskey.users.show(UsersShowRequest(userId: userId)))
-                .toUser()
-        ],
+        replyTo: replyTo.toList(),
         isVote: note.poll != null,
         isVoteMultiple: note.poll?.multiple ?? false,
         voteExpireType: note.poll?.expiresAt == null
@@ -217,12 +250,23 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     if (renote != null) {
       resultState = resultState.copyWith(
-          renote: renote,
-          noteVisibility: NoteVisibility.min(
-              resultState.noteVisibility, renote.visibility));
+        renote: renote,
+        noteVisibility: NoteVisibility.min(
+          resultState.noteVisibility,
+          renote.visibility,
+        ),
+      );
     }
 
     if (reply != null) {
+      final replyTo = <User>[];
+      if (reply.mentions.isNotEmpty) {
+        replyTo.addAll(
+          await _misskey.users
+              .showByIds(UsersShowByIdsRequest(userIds: reply.mentions)),
+        );
+      }
+
       resultState = resultState.copyWith(
         reply: reply,
         noteVisibility:
@@ -231,9 +275,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         isCw: reply.cw?.isNotEmpty == true,
         replyTo: [
           reply.user,
-          for (final userId in reply.mentions)
-            (await misskey.users.show(UsersShowRequest(userId: userId)))
-                .toUser()
+          ...replyTo,
         ]..removeWhere((element) => element.id == state.account.i.id),
       );
     }
@@ -248,10 +290,13 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
     // サイレンスの場合、ホーム以下に強制
     final isSilenced = state.account.i.isSilenced;
-    if (isSilenced == true) {
+    if (isSilenced) {
       resultState = resultState.copyWith(
-          noteVisibility: NoteVisibility.min(
-              resultState.noteVisibility, NoteVisibility.home));
+        noteVisibility: NoteVisibility.min(
+          resultState.noteVisibility,
+          NoteVisibility.home,
+        ),
+      );
     }
 
     state = resultState;
@@ -260,24 +305,36 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// ノートを投稿する
   Future<void> note() async {
     if (state.text.isEmpty && state.files.isEmpty && !state.isVote) {
-      throw SpecifiedException("なんか入れてや");
+      await _dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseInputSomething,
+      );
+      return;
     }
 
     if (state.isVote &&
         state.voteContent.where((e) => e.isNotEmpty).length < 2) {
-      throw SpecifiedException("投票の選択肢を2つ以上入れてや");
+      await _dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseAddVoteChoice,
+      );
+      return;
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.date &&
         state.voteDate == null) {
-      throw SpecifiedException("投票がいつまでか入れてや");
+      await _dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseSpecifyExpirationDate,
+      );
+      return;
     }
 
     if (state.isVote &&
         state.voteExpireType == VoteExpireType.duration &&
         state.voteDuration == null) {
-      throw SpecifiedException("投票期間を入れてや");
+      await _dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).pleaseSpecifyExpirationDuration,
+      );
+      return;
     }
 
     try {
@@ -286,6 +343,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final fileIds = <String>[];
 
       for (final file in state.files) {
+        DriveFile? response;
+
         switch (file) {
           case ImageFile():
             final fileName = file.fileName.toLowerCase();
@@ -299,10 +358,10 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
                     await FlutterImageCompress.compressWithList(file.data);
               }
             } catch (e) {
-              print("failed to compress file");
+              logger.shout("failed to compress file");
             }
 
-            final response = await misskey.drive.files.createAsBinary(
+            response = await _misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -313,9 +372,8 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             );
             fileIds.add(response.id);
 
-            break;
           case UnknownFile():
-            final response = await misskey.drive.files.createAsBinary(
+            response = await _misskey.drive.files.createAsBinary(
               DriveFilesCreateRequest(
                 force: true,
                 name: file.fileName,
@@ -326,34 +384,51 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
             );
             fileIds.add(response.id);
 
-            break;
           case UnknownAlreadyPostedFile():
             if (file.isEdited) {
-              await misskey.drive.files.update(DriveFilesUpdateRequest(
-                fileId: file.id,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ));
+              await _misskey.drive.files.update(
+                DriveFilesUpdateRequest(
+                  fileId: file.id,
+                  name: file.fileName,
+                  isSensitive: file.isNsfw,
+                  comment: file.caption,
+                ),
+              );
             }
             fileIds.add(file.id);
-            break;
           case ImageFileAlreadyPostedFile():
             if (file.isEdited) {
-              await misskey.drive.files.update(DriveFilesUpdateRequest(
-                fileId: file.id,
-                name: file.fileName,
-                isSensitive: file.isNsfw,
-                comment: file.caption,
-              ));
+              response = await _misskey.drive.files.update(
+                DriveFilesUpdateRequest(
+                  fileId: file.id,
+                  name: file.fileName,
+                  isSensitive: file.isNsfw,
+                  comment: file.caption,
+                ),
+              );
             }
 
             fileIds.add(file.id);
-            break;
+        }
+
+        if (response?.isSensitive == true &&
+            !file.isNsfw &&
+            !state.account.i.alwaysMarkNsfw) {
+          final result = await _dialogNotifier.showDialog(
+            message: (context) => S.of(context).unexpectedSensitive,
+            actions: (context) =>
+                [S.of(context).staySensitive, S.of(context).unsetSensitive],
+          );
+          if (result == 1) {
+            await _misskey.drive.files.update(
+              DriveFilesUpdateRequest(
+                fileId: fileIds.last,
+                isSensitive: false,
+              ),
+            );
+          }
         }
       }
-
-      if (!mounted) return;
 
       final nodes = const MfmParser().parse(state.text);
       final userList = <MfmMention>[];
@@ -371,19 +446,28 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
       // 連合オフなのに他のサーバーの人がメンションに含まれている
       if (state.localOnly &&
-          userList.any((element) =>
-              element.host != null &&
-              element.host != misskey.apiService.host)) {
-        throw SpecifiedException("連合オフやのによそのサーバーの人がメンションに含まれてるで");
+          userList.any(
+            (element) =>
+                element.host != null &&
+                element.host != _misskey.apiService.host,
+          )) {
+        await _dialogNotifier.showSimpleDialog(
+          message: (context) =>
+              S.of(context).cannotMentionToRemoteInLocalOnlyNote,
+        );
       }
 
       final mentionTargetUsers = [
         for (final user in userList)
-          await misskey.users.showByName(UsersShowByUserNameRequest(
-              userName: user.username, host: user.host))
+          await _misskey.users.showByName(
+            UsersShowByUserNameRequest(
+              userName: user.username,
+              host: user.host,
+            ),
+          ),
       ];
-      final visibleUserIds = state.replyTo.map((e) => e.id).toList();
-      visibleUserIds.addAll(mentionTargetUsers.map((e) => e.id));
+      final visibleUserIds = state.replyTo.map((e) => e.id).toList()
+        ..addAll(mentionTargetUsers.map((e) => e.id));
 
       final baseText =
           "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}";
@@ -406,40 +490,46 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       );
 
       final poll = NotesCreatePollRequest(
-          choices: state.voteContent,
-          multiple: state.isVoteMultiple,
-          expiresAt: state.voteExpireType == VoteExpireType.date
-              ? state.voteDate
-              : null,
-          expiredAfter: state.voteExpireType == VoteExpireType.duration
-              ? voteDuration
-              : null);
+        choices: state.voteContent,
+        multiple: state.isVoteMultiple,
+        expiresAt:
+            state.voteExpireType == VoteExpireType.date ? state.voteDate : null,
+        expiredAfter: state.voteExpireType == VoteExpireType.duration
+            ? voteDuration
+            : null,
+      );
 
       if (state.noteCreationMode == NoteCreationMode.update) {
-        await misskey.notes.update(NotesUpdateRequest(
-          noteId: state.noteId!,
-          text: postText ?? "",
-          cw: state.isCw ? state.cwText : null,
-        ));
-        noteRepository.registerNote(noteRepository.notes[state.noteId!]!
-            .copyWith(
-                text: postText ?? "", cw: state.isCw ? state.cwText : null));
+        await _misskey.notes.update(
+          NotesUpdateRequest(
+            noteId: state.noteId!,
+            text: postText ?? "",
+            cw: state.isCw ? state.cwText : null,
+          ),
+        );
+        _noteRepository.registerNote(
+          _noteRepository.notes[state.noteId!]!.copyWith(
+            text: postText ?? "",
+            cw: state.isCw ? state.cwText : null,
+          ),
+        );
       } else {
-        await misskey.notes.create(NotesCreateRequest(
-          visibility: state.noteVisibility,
-          text: postText,
-          cw: state.isCw ? state.cwText : null,
-          localOnly: state.localOnly,
-          replyId: state.reply?.id,
-          renoteId: state.renote?.id,
-          channelId: state.channel?.id,
-          fileIds: fileIds.isEmpty ? null : fileIds,
-          visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
-          reactionAcceptance: state.reactionAcceptance,
-          poll: state.isVote ? poll : null,
-        ));
+        await _misskey.notes.create(
+          NotesCreateRequest(
+            visibility: state.noteVisibility,
+            text: postText,
+            cw: state.isCw ? state.cwText : null,
+            localOnly: state.localOnly,
+            replyId: state.reply?.id,
+            renoteId: state.renote?.id,
+            channelId: state.channel?.id,
+            fileIds: fileIds.isEmpty ? null : fileIds,
+            visibleUserIds: visibleUserIds.toSet().toList(), //distinct list
+            reactionAcceptance: state.reactionAcceptance,
+            poll: state.isVote ? poll : null,
+          ),
+        );
       }
-      if (!mounted) return;
       state = state.copyWith(isNoteSending: NoteSendStatus.finished);
     } catch (e) {
       state = state.copyWith(isNoteSending: NoteSendStatus.error);
@@ -450,10 +540,12 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// メディアを選択する
   Future<void> chooseFile(BuildContext context) async {
     final result = await showModalBottomSheet<DriveModalSheetReturnValue?>(
-        context: context, builder: (context) => const DriveModalSheet());
+      context: context,
+      builder: (context) => const DriveModalSheet(),
+    );
 
     if (result == DriveModalSheetReturnValue.drive) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       final result = await showDialog<List<DriveFile>?>(
         context: context,
         builder: (context) => DriveFileSelectDialog(
@@ -465,7 +557,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final files = await Future.wait(
         result.map((file) async {
           if (file.type.startsWith("image")) {
-            final fileContentResponse = await dio.get<Uint8List>(
+            final fileContentResponse = await _dio.get<Uint8List>(
               file.url,
               options: Options(responseType: ResponseType.bytes),
             );
@@ -486,7 +578,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           );
         }),
       );
-      if (!mounted) return;
       state = state.copyWith(
         files: [
           ...state.files,
@@ -503,7 +594,7 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
       final fsFiles = result.files.map((file) {
         final path = file.path;
         if (path != null) {
-          return fileSystem.file(path);
+          return _fileSystem.file(path);
         }
         return null;
       }).nonNulls;
@@ -516,7 +607,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
         ),
       );
 
-      if (!mounted) return;
       state = state.copyWith(
         files: [
           ...state.files,
@@ -534,32 +624,32 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     switch (file) {
       case ImageFile():
         files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
+          data: content,
+          fileName: file.fileName,
+          caption: file.caption,
+          isNsfw: file.isNsfw,
+        );
       case ImageFileAlreadyPostedFile():
         files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
+          data: content,
+          fileName: file.fileName,
+          caption: file.caption,
+          isNsfw: file.isNsfw,
+        );
       case UnknownFile():
         files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
+          data: content,
+          fileName: file.fileName,
+          caption: file.caption,
+          isNsfw: file.isNsfw,
+        );
       case UnknownAlreadyPostedFile():
         files[files.indexOf(file)] = ImageFile(
-            data: content,
-            fileName: file.fileName,
-            caption: file.caption,
-            isNsfw: file.isNsfw);
-        break;
+          data: content,
+          fileName: file.fileName,
+          caption: file.caption,
+          isNsfw: file.isNsfw,
+        );
     }
 
     state = state.copyWith(files: files);
@@ -578,7 +668,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           caption: result.caption,
           isNsfw: result.isNsfw,
         );
-        break;
       case ImageFileAlreadyPostedFile():
         files[index] = ImageFileAlreadyPostedFile(
           data: file.data,
@@ -588,14 +677,13 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           caption: result.caption,
           isEdited: true,
         );
-        break;
       case UnknownFile():
         files[index] = UnknownFile(
-            data: file.data,
-            fileName: result.fileName,
-            isNsfw: result.isNsfw,
-            caption: result.caption);
-        break;
+          data: file.data,
+          fileName: result.fileName,
+          isNsfw: result.isNsfw,
+          caption: result.caption,
+        );
       case UnknownAlreadyPostedFile():
         files[index] = UnknownAlreadyPostedFile(
           url: file.url,
@@ -605,7 +693,6 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
           caption: result.caption,
           isEdited: true,
         );
-        break;
     }
 
     state = state.copyWith(files: files);
@@ -613,23 +700,21 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
 
   /// メディアを削除する
   void deleteFile(int index) {
-    final list = state.files.toList();
-    list.removeAt(index);
-
-    state = state.copyWith(files: list);
+    state = state.copyWith(files: state.files.toList()..removeAt(index));
   }
 
   /// リプライ先ユーザーを追加する
   Future<void> addReplyUser(BuildContext context) async {
     final user = await showDialog<User?>(
-        context: context,
-        builder: (context) => UserSelectDialog(account: state.account));
+      context: context,
+      builder: (context) => UserSelectDialog(account: state.account),
+    );
     if (user != null) {
       state = state.copyWith(replyTo: [...state.replyTo, user]);
     }
   }
 
-  void deleteReplyUser(User user) async {
+  Future<void> deleteReplyUser(User user) async {
     final list = state.replyTo.toList();
     state = state.copyWith(replyTo: list..remove(user));
   }
@@ -639,17 +724,25 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
     state = state.copyWith(isCw: !state.isCw);
   }
 
-  bool validateNoteVisibility(NoteVisibility visibility, BuildContext context) {
+  Future<bool> validateNoteVisibility(
+    NoteVisibility visibility,
+  ) async {
     final replyVisibility = state.reply?.visibility;
     if (replyVisibility == NoteVisibility.specified ||
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
-      SimpleMessageDialog.show(
-          context, "リプライが${replyVisibility!.displayName}やから、パブリックにでけへん");
+      await _dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).cannotPublicReplyToPrivateNote(
+              replyVisibility!.displayName(context),
+            ),
+      );
+
       return false;
     }
-    if (state.account.i.isSilenced == true) {
-      SimpleMessageDialog.show(context, "サイレンスロールになっているため、パブリックで投稿することはできません。");
+    if (state.account.i.isSilenced) {
+      await _dialogNotifier.showSimpleDialog(
+        message: (context) => S.of(context).cannotPublicNoteBySilencedUser,
+      );
       return false;
     }
     return true;
@@ -664,20 +757,22 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   void toggleLocalOnly(BuildContext context) {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      errorNotifier.state =
-          (SpecifiedException("チャンネルのノートを連合にすることはでけへんねん。"), context);
+      _errorNotifier.state = (
+        SpecifiedException(S.of(context).cannotFederateNoteToChannel),
+        context
+      );
       return;
     }
     if (state.reply?.localOnly == true) {
-      errorNotifier.state = (
-        SpecifiedException("リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
+      _errorNotifier.state = (
+        SpecifiedException(S.of(context).cannotFederateReplyToLocalOnlyNote),
         context
       );
       return;
     }
     if (state.renote?.localOnly == true) {
-      errorNotifier.state = (
-        SpecifiedException("リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。"),
+      _errorNotifier.state = (
+        SpecifiedException(S.of(context).cannotFederateRenoteToLocalOnlyNote),
         context
       );
       return;
@@ -717,19 +812,21 @@ class NoteCreateNotifier extends StateNotifier<NoteCreate> {
   /// 投票を追加する
   void addVoteContent() {
     if (state.voteContentCount == 10) return;
-    final list = state.voteContent.toList();
-    list.add("");
+    final list = [...state.voteContent, ""];
     state = state.copyWith(
-        voteContentCount: state.voteContentCount + 1, voteContent: list);
+      voteContentCount: state.voteContentCount + 1,
+      voteContent: list,
+    );
   }
 
   /// 投票の行を削除する
   void deleteVoteContent(int index) {
     if (state.voteContentCount == 2) return;
-    final list = state.voteContent.toList();
-    list.removeAt(index);
+    final list = state.voteContent.toList()..removeAt(index);
     state = state.copyWith(
-        voteContentCount: state.voteContentCount - 1, voteContent: list);
+      voteContentCount: state.voteContentCount - 1,
+      voteContent: list,
+    );
   }
 
   /// 投票の内容を設定する
