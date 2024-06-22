@@ -1,12 +1,14 @@
-import 'package:miria/repository/time_line_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "dart:async";
 
-class GlobalTimeLineRepository extends TimelineRepository {
+import "package:miria/repository/time_line_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
+
+class GlobalTimelineRepository extends TimelineRepository {
   SocketController? socketController;
 
   final Misskey misskey;
 
-  GlobalTimeLineRepository(
+  GlobalTimelineRepository(
     this.misskey,
     super.noteRepository,
     super.globalNotificationRepository,
@@ -27,7 +29,7 @@ class GlobalTimeLineRepository extends TimelineRepository {
         notifyListeners();
       },
     );
-    misskey.startStreaming();
+    unawaited(misskey.startStreaming());
   }
 
   @override

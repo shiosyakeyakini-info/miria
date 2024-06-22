@@ -1,4 +1,6 @@
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
   final String id;
@@ -21,13 +23,28 @@ class RenoteReactionNotificationData extends NotificationData {
   });
 }
 
-enum MentionQuoteNotificationDataType {
-  mention(name: "メンション"),
-  quote(name: "引用リノート"),
-  reply(name: "");
+sealed class MentionQuoteNotificationDataType {
+  String Function(BuildContext) get name;
+  static final mention = _Mention();
+  static final quote = _QuotedRenote();
+  static final reply = _Reply();
+}
 
-  final String name;
-  const MentionQuoteNotificationDataType({required this.name});
+class _Mention implements MentionQuoteNotificationDataType {
+  @override
+  String Function(BuildContext context) get name =>
+      (context) => S.of(context).mention;
+}
+
+class _QuotedRenote implements MentionQuoteNotificationDataType {
+  @override
+  String Function(BuildContext context) get name =>
+      (context) => S.of(context).quotedRenote;
+}
+
+class _Reply implements MentionQuoteNotificationDataType {
+  @override
+  String Function(BuildContext context) get name => (context) => "";
 }
 
 class MentionQuoteNotificationData extends NotificationData {
@@ -44,13 +61,31 @@ class MentionQuoteNotificationData extends NotificationData {
   });
 }
 
-enum FollowNotificationDataType {
-  follow("フォローされたで"),
-  followRequestAccepted("フォローしてもええでってなったで"),
-  receiveFollowRequest("フォローさせてほしそうにしてるで");
+sealed class FollowNotificationDataType {
+  String Function(BuildContext, String) get name;
+  static final follow = _Follow();
+  static final followRequestAccepted = _FollowRequestAccepted();
+  static final receiveFollowRequest = _ReceiveFollowRequest();
+}
 
-  final String name;
-  const FollowNotificationDataType(this.name);
+class _Follow implements FollowNotificationDataType {
+  @override
+  String Function(BuildContext context, String userName) get name =>
+      (context, userName) => S.of(context).followedNotification(userName);
+}
+
+class _FollowRequestAccepted implements FollowNotificationDataType {
+  @override
+  String Function(BuildContext context, String userName) get name =>
+      (context, userName) =>
+          S.of(context).followRequestAcceptedNotification(userName);
+}
+
+class _ReceiveFollowRequest implements FollowNotificationDataType {
+  @override
+  String Function(BuildContext context, String userName) get name =>
+      (context, userName) =>
+          S.of(context).receiveFollowRequestNotification(userName);
 }
 
 class FollowNotificationData extends NotificationData {
@@ -103,7 +138,7 @@ class RoleNotification extends NotificationData {
 }
 
 extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
-  List<NotificationData> toNotificationData() {
+  List<NotificationData> toNotificationData(S localize) {
     final resultList = <NotificationData>[];
 
     for (final element in this) {
@@ -121,15 +156,17 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           });
 
           if (!isSummarize) {
-            resultList.add(RenoteReactionNotificationData(
+            resultList.add(
+              RenoteReactionNotificationData(
                 note: element.note,
                 reactionUsers: [(element.reaction, element.user)],
                 renoteUsers: [],
                 createdAt: element.createdAt,
-                id: element.id));
+                id: element.id,
+              ),
+            );
           }
 
-          break;
         case NotificationType.renote:
           var isSummarize = false;
           resultList
@@ -141,103 +178,131 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
           });
 
           if (!isSummarize) {
-            resultList.add(RenoteReactionNotificationData(
+            resultList.add(
+              RenoteReactionNotificationData(
                 note: element.note?.renote,
                 reactionUsers: [],
                 renoteUsers: [element.user],
                 createdAt: element.createdAt,
-                id: element.id));
+                id: element.id,
+              ),
+            );
           }
 
-          break;
-
         case NotificationType.quote:
-          resultList.add(MentionQuoteNotificationData(
+          resultList.add(
+            MentionQuoteNotificationData(
               createdAt: element.createdAt,
               note: element.note,
               user: element.user,
               type: MentionQuoteNotificationDataType.quote,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
-          break;
         case NotificationType.mention:
-          resultList.add(MentionQuoteNotificationData(
+          resultList.add(
+            MentionQuoteNotificationData(
               createdAt: element.createdAt,
               note: element.note,
               user: element.user,
               type: MentionQuoteNotificationDataType.mention,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
-          break;
         case NotificationType.reply:
-          resultList.add(MentionQuoteNotificationData(
+          resultList.add(
+            MentionQuoteNotificationData(
               createdAt: element.createdAt,
               note: element.note,
               user: element.user,
               type: MentionQuoteNotificationDataType.reply,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
 
         case NotificationType.follow:
-          resultList.add(FollowNotificationData(
+          resultList.add(
+            FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.follow,
-              id: element.id));
+              id: element.id,
+            ),
+          );
 
-          break;
         case NotificationType.followRequestAccepted:
-          resultList.add(FollowNotificationData(
+          resultList.add(
+            FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
         case NotificationType.receiveFollowRequest:
-          resultList.add(FollowNotificationData(
+          resultList.add(
+            FollowNotificationData(
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.receiveFollowRequest,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
 
         case NotificationType.achievementEarned:
-          resultList.add(SimpleNotificationData(
-              text: "実績を解除しました。[${element.achievement}]",
+          resultList.add(
+            SimpleNotificationData(
+              text:
+                  "${localize.achievementEarnedNotification}[${element.achievement}]",
               createdAt: element.createdAt,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
 
         case NotificationType.pollVote:
-          resultList.add(PollNotification(
+          resultList.add(
+            PollNotification(
               note: element.note,
               createdAt: element.createdAt,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
         case NotificationType.pollEnded:
-          resultList.add(PollNotification(
+          resultList.add(
+            PollNotification(
               note: element.note,
               createdAt: element.createdAt,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
         case NotificationType.test:
-          resultList.add(SimpleNotificationData(
-              text: "テストやで", createdAt: element.createdAt, id: element.id));
-          break;
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.testNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
 
         case NotificationType.note:
-          resultList.add(NoteNotification(
+          resultList.add(
+            NoteNotification(
               note: element.note,
               createdAt: element.createdAt,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
 
         case NotificationType.roleAssigned:
-          resultList.add(RoleNotification(
+          resultList.add(
+            RoleNotification(
               role: element.role,
               createdAt: element.createdAt,
-              id: element.id));
-          break;
+              id: element.id,
+            ),
+          );
 
         default:
           break;

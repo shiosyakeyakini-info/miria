@@ -1,16 +1,17 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/model/acct.dart';
-import 'package:miria/model/converters/icon_converter.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/repository/time_line_repository.dart';
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/model/acct.dart";
+import "package:miria/model/converters/icon_converter.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/repository/time_line_repository.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'tab_setting.freezed.dart';
-part 'tab_setting.g.dart';
+part "tab_setting.freezed.dart";
+part "tab_setting.g.dart";
 
 Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
-  final account = json["account"];
+  final account = json["account"] as Map<String, dynamic>?;
   if (account != null) {
     return {
       "host": account["host"],
@@ -24,7 +25,7 @@ Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
 class TabSetting with _$TabSetting {
   const TabSetting._();
 
-  ChangeNotifierProvider<TimelineRepository> get timelineProvider =>
+  Provider<Raw<TimelineRepository>> get timelineProvider =>
       tabType.timelineProvider(this);
 
   const factory TabSetting({
@@ -32,6 +33,11 @@ class TabSetting with _$TabSetting {
 
     /// タブ種別
     required TabType tabType,
+
+    /// アカウント情報
+    // https://github.com/rrousselGit/freezed/issues/488
+    // ignore: invalid_annotation_target
+    @JsonKey(readValue: _readAcct) required Acct acct,
 
     /// ロールタイムラインのノートの場合、ロールID
     String? roleId,
@@ -55,12 +61,7 @@ class TabSetting with _$TabSetting {
     @Default(false) bool isMediaOnly,
 
     /// タブ名
-    required String name,
-
-    /// アカウント情報
-    // https://github.com/rrousselGit/freezed/issues/488
-    // ignore: invalid_annotation_target
-    @JsonKey(readValue: _readAcct) required Acct acct,
+    String? name,
 
     /// Renoteを表示するかどうか
     @Default(true) bool renoteDisplay,

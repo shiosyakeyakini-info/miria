@@ -1,9 +1,9 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/model/acct.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/model/acct.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'account.freezed.dart';
-part 'account.g.dart';
+part "account.freezed.dart";
+part "account.g.dart";
 
 @Freezed(equal: false)
 class Account with _$Account {
@@ -12,8 +12,8 @@ class Account with _$Account {
   const factory Account({
     required String host,
     required String userId,
+    required MeDetailed i,
     String? token,
-    required IResponse i,
     MetaResponse? meta,
   }) = _Account;
 
@@ -39,11 +39,11 @@ class Account with _$Account {
   }
 
   factory Account.demoAccount(String host, MetaResponse? meta) => Account(
-      host: host,
-      userId: "",
-      token: null,
-      meta: meta,
-      i: IResponse(
+        host: host,
+        userId: "",
+        token: null,
+        meta: meta,
+        i: MeDetailed(
           id: "",
           username: "",
           createdAt: DateTime.now(),
@@ -58,7 +58,6 @@ class Account with _$Account {
           followersCount: 0,
           notesCount: 0,
           publicReactions: false,
-          ffVisibility: "",
           twoFactorEnabled: false,
           usePasswordLessLogin: false,
           securityKeys: false,
@@ -83,25 +82,27 @@ class Account with _$Account {
           hasUnreadSpecifiedNotes: false,
           mutedWords: [],
           mutedInstances: [],
-          mutingNotificationTypes: [],
           emailNotificationTypes: [],
           achievements: [],
           loggedInDays: 0,
           policies: const UserPolicies(
-              gtlAvailable: false,
-              ltlAvailable: false,
-              canPublicNote: false,
-              canInvite: false,
-              canManageCustomEmojis: false,
-              canHideAds: false,
-              driveCapacityMb: 0,
-              pinLimit: 0,
-              antennaLimit: 0,
-              wordMuteLimit: 0,
-              webhookLimit: 0,
-              clipLimit: 0,
-              noteEachClipsLimit: 0,
-              userListLimit: 0,
-              userEachUserListsLimit: 0,
-              rateLimitFactor: 0)));
+            gtlAvailable: false,
+            ltlAvailable: false,
+            canPublicNote: false,
+            canInvite: false,
+            canManageCustomEmojis: false,
+            canHideAds: false,
+            driveCapacityMb: 0,
+            pinLimit: 0,
+            antennaLimit: 0,
+            wordMuteLimit: 0,
+            webhookLimit: 0,
+            clipLimit: 0,
+            noteEachClipsLimit: 0,
+            userListLimit: 0,
+            userEachUserListsLimit: 0,
+            rateLimitFactor: 0,
+          ),
+        ),
+      );
 }

@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'image_meta_dialog.freezed.dart';
+part "image_meta_dialog.freezed.dart";
 
 @freezed
 class ImageMeta with _$ImageMeta {
@@ -14,7 +15,7 @@ class ImageMeta with _$ImageMeta {
 }
 
 class ImageMetaDialog extends ConsumerStatefulWidget {
-  const ImageMetaDialog({super.key, required this.initialMeta});
+  const ImageMetaDialog({required this.initialMeta, super.key});
 
   final ImageMeta initialMeta;
 
@@ -40,33 +41,34 @@ class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
-          child: Column(
-            children: [
-              const Text("ファイル名"),
-              TextField(
-                controller: fileNameController,
-                decoration:
-                    const InputDecoration(prefixIcon: Icon(Icons.file_present)),
-              ),
-              CheckboxListTile(
-                value: isNsfw,
-                onChanged: (value) => setState(() {
-                  isNsfw = !isNsfw;
-                }),
-                title: const Text("閲覧注意としてマークする"),
-              ),
-              const Text("キャプション"),
-              TextField(
-                controller: fileNameController,
-                decoration:
-                    const InputDecoration(prefixIcon: Icon(Icons.file_present)),
-                minLines: 5,
-                maxLines: null,
-              ),
-            ],
-          )),
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Column(
+          children: [
+            Text(S.of(context).fileName),
+            TextField(
+              controller: fileNameController,
+              decoration:
+                  const InputDecoration(prefixIcon: Icon(Icons.file_present)),
+            ),
+            CheckboxListTile(
+              value: isNsfw,
+              onChanged: (value) => setState(() {
+                isNsfw = !isNsfw;
+              }),
+              title: Text(S.of(context).markAsSensitive),
+            ),
+            Text(S.of(context).caption),
+            TextField(
+              controller: fileNameController,
+              decoration:
+                  const InputDecoration(prefixIcon: Icon(Icons.file_present)),
+              minLines: 5,
+              maxLines: null,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

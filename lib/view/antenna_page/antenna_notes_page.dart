@@ -1,23 +1,27 @@
-import 'package:auto_route/annotations.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/antenna_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/antenna_page/antenna_notes.dart';
-import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/annotations.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
+import "package:miria/view/antenna_page/antenna_notes.dart";
+import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
 class AntennaNotesPage extends ConsumerWidget {
   final Antenna antenna;
   final Account account;
 
-  const AntennaNotesPage(
-      {super.key, required this.antenna, required this.account});
+  const AntennaNotesPage({
+    required this.antenna,
+    required this.account,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,17 +46,16 @@ class AntennaNotesPage extends ConsumerWidget {
                 final settings = await showDialog<AntennaSettings>(
                   context: context,
                   builder: (context) => AntennaSettingsDialog(
-                    title: const Text("編集"),
+                    title: Text(S.of(context).edit),
                     initialSettings: AntennaSettings.fromAntenna(antenna),
                     account: account,
                   ),
                 );
                 if (!context.mounted) return;
                 if (settings != null) {
-                  ref
+                  await ref
                       .read(antennasNotifierProvider(misskey).notifier)
-                      .updateAntenna(antenna.id, settings)
-                      .expectFailure(context);
+                      .updateAntenna(antenna.id, settings);
                 }
               },
             ),

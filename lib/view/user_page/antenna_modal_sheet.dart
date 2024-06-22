@@ -1,19 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/antenna_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/antenna_page/antenna_settings_dialog.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
+import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
+@RoutePage()
 class AntennaModalSheet extends ConsumerWidget {
   const AntennaModalSheet({
-    super.key,
     required this.account,
     required this.user,
+    super.key,
   });
 
   final Account account;
@@ -69,12 +73,12 @@ class AntennaModalSheet extends ConsumerWidget {
             } else {
               return ListTile(
                 leading: const Icon(Icons.add),
-                title: const Text("アンテナを作成"),
+                title: Text(S.of(context).createAntenna),
                 onTap: () async {
                   final settings = await showDialog<AntennaSettings>(
                     context: context,
                     builder: (context) => AntennaSettingsDialog(
-                      title: const Text("作成"),
+                      title: Text(S.of(context).create),
                       initialSettings: const AntennaSettings(
                         src: AntennaSource.users,
                       ),

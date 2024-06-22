@@ -1,13 +1,14 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/tab_icon_view.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/tab_icon_view.dart";
 
 @RoutePage()
 class TabSettingsListPage extends ConsumerWidget {
@@ -25,12 +26,10 @@ class TabSettingsListPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: const Text("タブ設定"),
+        title: Text(S.of(context).tabSettings),
         actions: [
           IconButton(
-            onPressed: () {
-              context.pushRoute(TabSettingsRoute());
-            },
+            onPressed: () async => await context.pushRoute(TabSettingsRoute()),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -64,13 +63,13 @@ class TabSettingsListPage extends ConsumerWidget {
                   );
                 }
               },
-              onReorder: (oldIndex, newIndex) {
+              onReorder: (oldIndex, newIndex) async {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
                 final item = tabSettings.removeAt(oldIndex);
                 tabSettings.insert(newIndex, item);
-                ref.read(tabSettingsRepositoryProvider).save(tabSettings);
+                await ref.read(tabSettingsRepositoryProvider).save(tabSettings);
               },
             ),
           ),
@@ -79,12 +78,11 @@ class TabSettingsListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () {
-                  context.router
-                    ..removeWhere((route) => true)
-                    ..push(const SplashRoute());
+                onPressed: () async {
+                  context.router.removeWhere((route) => true);
+                  await context.router.push(const SplashRoute());
                 },
-                child: const Text("反映する"),
+                child: Text(S.of(context).apply),
               ),
             ),
           ),
@@ -96,9 +94,9 @@ class TabSettingsListPage extends ConsumerWidget {
 
 class TabSettingsListItem extends ConsumerWidget {
   const TabSettingsListItem({
-    super.key,
     required this.tabSetting,
     required this.index,
+    super.key,
   });
 
   final TabSetting tabSetting;
@@ -112,12 +110,12 @@ class TabSettingsListItem extends ConsumerWidget {
         account: account,
         child: TabIconView(icon: tabSetting.icon),
       ),
-      title: Text(tabSetting.name),
+      title: Text(tabSetting.name ?? tabSetting.tabType.displayName(context)),
       subtitle: Text(
-        "${tabSetting.tabType.displayName} / ${tabSetting.acct}",
+        "${tabSetting.tabType.displayName(context)} / ${tabSetting.acct}",
       ),
       trailing: const Icon(Icons.drag_handle),
-      onTap: () => context.pushRoute(TabSettingsRoute(tabIndex: index)),
+      onTap: () async => context.pushRoute(TabSettingsRoute(tabIndex: index)),
     );
   }
 }

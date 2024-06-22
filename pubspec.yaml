@@ -2,7 +2,7 @@ name: miria
 description: Miria is Misskey Client for Mobile App.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.15+96
+version: 2.0.0+101
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -13,8 +13,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_html: 3.0.0-alpha.6
-  flutter_riverpod: ^2.3.2
+  flutter_html: ^3.0.0-beta.2
   misskey_dart:
     git: https://github.com/shiosyakeyakini-info/misskey_dart.git
   mfm: ^1.0.5
@@ -22,21 +21,21 @@ dependencies:
   path_provider: ^2.0.14
   dio: ^5.1.1
   path: ^1.8.2
-  auto_route: ^6.0.5
+  auto_route: ^8.1.3
   freezed_annotation: ^2.2.0
   url_launcher: ^6.1.10
-  intl: ^0.18.0
+  intl: ^0.19.0
   scrollable_positioned_list: ^0.3.6
   kana_kit: ^2.0.0
   cached_network_image: ^3.2.3
   json_annotation: ^4.8.0
   shared_preferences: ^2.1.0
   badges: ^3.1.1
-  flutter_secure_storage: ^8.0.0
+  flutter_secure_storage: ^9.2.2
   google_fonts: ^6.1.0
-  uuid: ^3.0.7
-  file_picker: ^5.3.0
-  package_info_plus: ^4.0.0
+  uuid: ^4.4.0
+  file_picker: ^8.0.3
+  package_info_plus: ^8.0.0
   reorderables: ^0.6.0
   confetti: ^0.7.0
   flutter_highlighting: ^0.9.0+11.8.0
@@ -44,17 +43,17 @@ dependencies:
   dotted_border: ^2.0.0+3
   visibility_detector: ^0.4.0+2
   percent_indicator: ^4.2.3
-  fl_chart: ^0.62.0
-  receive_sharing_intent: ^1.4.5
-  share_plus: ^7.0.2
+  fl_chart: ^0.68.0
+  receive_sharing_intent: 1.4.5
+  share_plus: ^9.0.0
   mfm_parser: ^1.0.3
   flutter_svg: ^2.0.6
   image_editor: ^1.3.0
   json5: ^0.8.0
-  file: ^6.1.4
+  file: ^7.0.0
   image_gallery_saver: ^2.0.3
-  permission_handler: ^10.4.2
-  device_info_plus: ^9.0.2
+  permission_handler: ^11.3.1
+  device_info_plus: ^10.1.0
   colorfilter_generator: ^0.0.8
   matrix2d: ^1.0.4
   twemoji_v2: ^0.5.3
@@ -65,7 +64,16 @@ dependencies:
   media_kit: ^1.1.8+2
   media_kit_video: ^1.2.1
   media_kit_libs_video: ^1.0.3
-  flutter_colorpicker: ^1.0.3
+  flutter_colorpicker: ^1.1.0
+  volume_controller: ^2.0.7
+  window_manager: ^0.3.8
+  shared_preference_app_group: ^1.0.0+1
+  stack_trace: ^1.11.1
+  flutter_cache_manager: ^3.3.2
+  riverpod_annotation: ^3.0.0-dev.3
+  simple_logger: ^1.9.0+3
+  hooks_riverpod: ^3.0.0-dev.3
+  flutter_hooks: ^0.20.5
 
 dependency_overrides:
   image_editor:
@@ -81,19 +89,20 @@ dependency_overrides:
       url: https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git
       path: ./image_editor_platform_interface/
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
-  auto_route_generator: ^6.0.0
+  flutter_lints: ^4.0.0
+  auto_route_generator: ^8.0.0
   build_runner: ^2.3.3
   freezed: ^2.3.2
   json_serializable: ^6.6.1
   flutter_launcher_icons: ^0.13.1
   mockito: ^5.4.2
   cider: ^0.2.3
+  riverpod_generator: ^3.0.0-dev.3
+  riverpod_lint: ^3.0.0-dev.4
 
 flutter:
   uses-material-design: true

@@ -8,11 +8,11 @@ part of 'summaly_result.dart';
 
 _$SummalyResultImpl _$$SummalyResultImplFromJson(Map<String, dynamic> json) =>
     _$SummalyResultImpl(
+      player: Player.fromJson(json['player'] as Map<String, dynamic>),
       title: json['title'] as String?,
       icon: json['icon'] as String?,
       description: json['description'] as String?,
       thumbnail: json['thumbnail'] as String?,
-      player: Player.fromJson(json['player'] as Map<String, dynamic>),
       sitename: json['sitename'] as String?,
       sensitive: json['sensitive'] as bool?,
       url: json['url'] as String?,
@@ -20,11 +20,11 @@ _$SummalyResultImpl _$$SummalyResultImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$SummalyResultImplToJson(_$SummalyResultImpl instance) =>
     <String, dynamic>{
+      'player': instance.player.toJson(),
       'title': instance.title,
       'icon': instance.icon,
       'description': instance.description,
       'thumbnail': instance.thumbnail,
-      'player': instance.player.toJson(),
       'sitename': instance.sitename,
       'sensitive': instance.sensitive,
       'url': instance.url,
