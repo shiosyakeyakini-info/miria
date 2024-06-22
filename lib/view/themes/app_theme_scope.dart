@@ -244,19 +244,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       textTheme: textTheme,
       iconTheme: IconThemeData(color: theme.foreground),
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-          textStyle: WidgetStatePropertyAll(
-            textTheme.bodyMedium?.copyWith(
-              inherit: false,
-              color: Colors.white,
-            ),
+        style: ElevatedButton.styleFrom(
+          textStyle: textTheme.bodyMedium?.copyWith(
+            inherit: false,
+            color: Colors.white,
           ),
-          backgroundColor: WidgetStatePropertyAll(theme.primary),
-          foregroundColor: const WidgetStatePropertyAll(Colors.white),
-          elevation: const WidgetStatePropertyAll(0),
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-          ),
+          backgroundColor: theme.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           tapTargetSize: MaterialTapTargetSize.padded,
         ),
