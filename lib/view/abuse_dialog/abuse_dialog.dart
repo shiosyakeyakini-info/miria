@@ -13,7 +13,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "abuse_dialog.g.dart";
 
-@Riverpod(keepAlive: false, dependencies: [accountContext])
+@Riverpod(keepAlive: false, dependencies: [misskeyPostContext])
 class AbuseDialogNotifier extends _$AbuseDialogNotifier {
   @override
   AsyncValue<void>? build() => null;
@@ -22,11 +22,10 @@ class AbuseDialogNotifier extends _$AbuseDialogNotifier {
     User targetUser,
     String abuseText,
   ) async {
-    final account = ref.read(accountContextProvider).postAccount;
     state = const AsyncLoading();
     state =
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(account)).users.reportAbuse(
+      await ref.read(misskeyPostContextProvider).users.reportAbuse(
             UsersReportAbuseRequest(userId: targetUser.id, comment: abuseText),
           );
       await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
@@ -50,7 +49,7 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountScopeMark2(
+  Widget wrappedRoute(BuildContext context) => AccountContextScope.as(
         account: account,
         child: this,
       );

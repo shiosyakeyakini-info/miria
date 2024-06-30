@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/misskey_notes/note_modal_sheet.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/note_modal_sheet/note_modal_sheet.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
 

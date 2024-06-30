@@ -26,7 +26,7 @@ class UserNotes extends ConsumerStatefulWidget {
 }
 
 class UserNotesState extends ConsumerState<UserNotes> {
-  Misskey get misskey => ref.read(misskeyProvider(AccountScope.of(context)));
+  Misskey get misskey => ref.read(misskeyPostContextProvider);
 
   bool isFileOnly = false;
   bool withReply = false;
@@ -168,9 +168,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                 );
               }
               if (!context.mounted) return [];
-              ref
-                  .read(notesProvider(AccountScope.of(context)))
-                  .registerAll(notes);
+              ref.read(notesWithProvider).registerAll(notes);
               return notes.toList();
             },
             nextFuture: (lastElement, _) async {
@@ -198,9 +196,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                 );
               }
               if (!context.mounted) return [];
-              ref
-                  .read(notesProvider(AccountScope.of(context)))
-                  .registerAll(notes);
+              ref.read(notesWithProvider).registerAll(notes);
               return notes.toList();
             },
             itemBuilder: (context, element) {

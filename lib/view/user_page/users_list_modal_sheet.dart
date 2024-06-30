@@ -23,8 +23,7 @@ class UsersListModalSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(account));
-    final lists = ref.watch(usersListsNotifierProvider(misskey));
+    final lists = ref.watch(usersListsNotifierProvider);
 
     return lists.when(
       data: (lists) {
@@ -41,11 +40,11 @@ class UsersListModalSheet extends ConsumerWidget {
                   }
                   if (value) {
                     await ref
-                        .read(usersListsNotifierProvider(misskey).notifier)
+                        .read(usersListsNotifierProvider.notifier)
                         .push(list.id, user);
                   } else {
                     await ref
-                        .read(usersListsNotifierProvider(misskey).notifier)
+                        .read(usersListsNotifierProvider.notifier)
                         .pull(list.id, user);
                   }
                 },
@@ -65,7 +64,7 @@ class UsersListModalSheet extends ConsumerWidget {
                   if (!context.mounted) return;
                   if (settings != null) {
                     await ref
-                        .read(usersListsNotifierProvider(misskey).notifier)
+                        .read(usersListsNotifierProvider.notifier)
                         .create(settings);
                   }
                 },

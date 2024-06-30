@@ -8,11 +8,15 @@ import "package:miria/view/users_list_page/users_list_timeline.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class UsersListTimelinePage extends ConsumerWidget {
+class UsersListTimelinePage extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final UsersList list;
 
   const UsersListTimelinePage(this.account, this.list, {super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,12 +35,9 @@ class UsersListTimelinePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: AccountScope(
-        account: account,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: UsersListTimeline(listId: list.id),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.only(right: 10),
+        child: UsersListTimeline(listId: list.id),
       ),
     );
   }

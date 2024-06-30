@@ -13,18 +13,17 @@ class ChannelFollowed extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
     return PushableListView(
       initializeFuture: () async {
         final response = await ref
-            .read(misskeyProvider(account))
+            .read(misskeyPostContextProvider)
             .channels
             .followed(const ChannelsFollowedRequest());
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
         final response = await ref
-            .read(misskeyProvider(account))
+            .read(misskeyPostContextProvider)
             .channels
             .followed(ChannelsFollowedRequest(untilId: lastItem.id));
         return response.toList();

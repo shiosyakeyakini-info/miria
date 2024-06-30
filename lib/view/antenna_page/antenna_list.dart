@@ -4,10 +4,8 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
-import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 
 class AntennaList extends ConsumerWidget {
@@ -15,9 +13,7 @@ class AntennaList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
-    final misskey = ref.watch(misskeyProvider(account));
-    final antennas = ref.watch(antennasNotifierProvider(misskey));
+    final antennas = ref.watch(antennasNotifierProvider);
 
     return switch (antennas) {
       AsyncData(value: final antennas) => ListView.builder(
@@ -38,18 +34,15 @@ class AntennaList extends ConsumerWidget {
                   if (!context.mounted) return;
                   if (result ?? false) {
                     await ref
-                        .read(
-                          antennasNotifierProvider(misskey).notifier,
-                        )
-                        .delete(antenna.id)
-                        .expectFailure(context);
+                        .read(antennasNotifierProvider.notifier)
+                        .delete(antenna.id);
                   }
                 },
               ),
               onTap: () async => context.pushRoute(
                 AntennaNotesRoute(
                   antenna: antenna,
-                  account: account,
+                  account: ref.read(accountContextProvider).postAccount,
                 ),
               ),
             );

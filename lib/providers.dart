@@ -42,6 +42,8 @@ Dio dio(DioRef ref) => Dio();
 FileSystem fileSystem(FileSystemRef ref) => const LocalFileSystem();
 
 @Riverpod(keepAlive: true)
+@Deprecated(
+    "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain")
 Misskey misskey(MisskeyRef ref, Account account) => Misskey(
       token: account.token,
       host: account.host,
@@ -77,6 +79,11 @@ final favoriteProvider =
 final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
   (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
 );
+
+@Riverpod(dependencies: [accountContext])
+Raw<NoteRepository> notesWith(NotesWithRef ref) {
+  return ref.read(notesProvider(ref.read(accountContextProvider).getAccount));
+}
 
 @Riverpod(keepAlive: true)
 EmojiRepository emojiRepository(EmojiRepositoryRef ref, Account account) =>
@@ -137,11 +144,35 @@ class AccountContext with _$AccountContext {
 
   factory AccountContext.as(Account account) =>
       AccountContext(getAccount: account, postAccount: account);
+
+  const AccountContext._();
+
+  bool get isSame => getAccount == postAccount;
 }
 
 @Riverpod(dependencies: [])
 AccountContext accountContext(AccountContextRef ref) =>
     throw UnimplementedError();
+
+@Riverpod(keepAlive: false, dependencies: [accountContext])
+Misskey misskeyGetContext(MisskeyGetContextRef ref) {
+  final account = ref.read(accountContextProvider).getAccount;
+  return Misskey(
+    token: account.token,
+    host: account.host,
+    socketConnectionTimeout: const Duration(seconds: 20),
+  );
+}
+
+@Riverpod(keepAlive: false, dependencies: [accountContext])
+Misskey misskeyPostContext(MisskeyPostContextRef ref) {
+  final account = ref.read(accountContextProvider).postAccount;
+  return Misskey(
+    token: account.token,
+    host: account.host,
+    socketConnectionTimeout: const Duration(seconds: 20),
+  );
+}
 
 final timelineProvider =
     ChangeNotifierProvider.family<TimelineRepository, TabSetting>(

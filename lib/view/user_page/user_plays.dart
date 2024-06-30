@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -18,14 +17,14 @@ class UserPlays extends ConsumerWidget {
     return PushableListView(
       initializeFuture: () async {
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .flashs(UsersFlashsRequest(userId: userId));
         return response.toList();
       },
       nextFuture: (item, _) async {
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .flashs(UsersFlashsRequest(userId: userId, untilId: item.id));
         return response.toList();
@@ -44,7 +43,7 @@ class UserPlays extends ConsumerWidget {
             await launchUrl(
               Uri(
                 scheme: "https",
-                host: AccountScope.of(context).host,
+                host: ref.read(accountContextProvider).getAccount.host,
                 pathSegments: ["play", play.id],
               ),
               mode: LaunchMode.externalApplication,

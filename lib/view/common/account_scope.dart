@@ -28,21 +28,28 @@ class AccountScope extends InheritedWidget {
 }
 
 //TODO: refactor from AccountScopeMark2 to AccountScope
-class AccountScopeMark2 extends ConsumerWidget {
-  final Account account;
+
+class AccountContextScope extends ConsumerWidget {
+  final AccountContext context;
   final Widget child;
 
-  const AccountScopeMark2({
-    required this.account,
+  const AccountContextScope({
+    required this.context,
     required this.child,
     super.key,
   });
+
+  factory AccountContextScope.as({
+    required Account account,
+    required Widget child,
+  }) =>
+      AccountContextScope(context: AccountContext.as(account), child: child);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
       overrides: [
-        accountContextProvider.overrideWithValue(AccountContext.as(account)),
+        accountContextProvider.overrideWithValue(this.context),
       ],
       child: child,
     );

@@ -13,22 +13,21 @@ class UsersListTimeline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
     return PushableListView<Note>(
       initializeFuture: () async {
         final response = await ref
-            .read(misskeyProvider(account))
+            .read(misskeyGetContextProvider)
             .notes
             .userListTimeline(UserListTimelineRequest(listId: listId));
-        ref.read(notesProvider(account)).registerAll(response);
+        ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
         final response =
-            await ref.read(misskeyProvider(account)).notes.userListTimeline(
+            await ref.read(misskeyGetContextProvider).notes.userListTimeline(
                   UserListTimelineRequest(listId: listId, untilId: lastItem.id),
                 );
-        ref.read(notesProvider(account)).registerAll(response);
+        ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },
       itemBuilder: (context, item) {

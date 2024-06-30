@@ -6,7 +6,7 @@ part of 'channel_detail_info.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelDetailHash() => r'548b99f1fb66c1490a5fac7e6abb41d6ed90900a';
+String _$channelDetailHash() => r'f8a55187780eb1e455637c3b306790d93e25818b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,27 +31,31 @@ class _SystemHash {
 
 abstract class _$ChannelDetail
     extends BuildlessAutoDisposeAsyncNotifier<ChannelDetailState> {
-  late final Account account;
   late final String channelId;
 
   FutureOr<ChannelDetailState> build(
-    Account account,
     String channelId,
   );
 }
 
-/// See also [_ChannelDetail].
-@ProviderFor(_ChannelDetail)
-const _channelDetailProvider = _ChannelDetailFamily();
+/// See also [ChannelDetail].
+@ProviderFor(ChannelDetail)
+const channelDetailProvider = ChannelDetailFamily();
 
-/// See also [_ChannelDetail].
-class _ChannelDetailFamily extends Family {
-  /// See also [_ChannelDetail].
-  const _ChannelDetailFamily();
+/// See also [ChannelDetail].
+class ChannelDetailFamily extends Family {
+  /// See also [ChannelDetail].
+  const ChannelDetailFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyGetContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyGetContextProvider,
+    ...?misskeyGetContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -61,32 +65,29 @@ class _ChannelDetailFamily extends Family {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'_channelDetailProvider';
+  String? get name => r'channelDetailProvider';
 
-  /// See also [_ChannelDetail].
-  _ChannelDetailProvider call(
-    Account account,
+  /// See also [ChannelDetail].
+  ChannelDetailProvider call(
     String channelId,
   ) {
-    return _ChannelDetailProvider(
-      account,
+    return ChannelDetailProvider(
       channelId,
     );
   }
 
   @visibleForOverriding
   @override
-  _ChannelDetailProvider getProviderOverride(
-    covariant _ChannelDetailProvider provider,
+  ChannelDetailProvider getProviderOverride(
+    covariant ChannelDetailProvider provider,
   ) {
     return call(
-      provider.account,
       provider.channelId,
     );
   }
 
   /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(_ChannelDetail Function() create) {
+  Override overrideWith(ChannelDetail Function() create) {
     return _$ChannelDetailFamilyOverride(this, create);
   }
 }
@@ -94,155 +95,128 @@ class _ChannelDetailFamily extends Family {
 class _$ChannelDetailFamilyOverride implements FamilyOverride {
   _$ChannelDetailFamilyOverride(this.overriddenFamily, this.create);
 
-  final _ChannelDetail Function() create;
+  final ChannelDetail Function() create;
 
   @override
-  final _ChannelDetailFamily overriddenFamily;
+  final ChannelDetailFamily overriddenFamily;
 
   @override
-  _ChannelDetailProvider getProviderOverride(
-    covariant _ChannelDetailProvider provider,
+  ChannelDetailProvider getProviderOverride(
+    covariant ChannelDetailProvider provider,
   ) {
     return provider._copyWith(create);
   }
 }
 
-/// See also [_ChannelDetail].
-class _ChannelDetailProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    _ChannelDetail, ChannelDetailState> {
-  /// See also [_ChannelDetail].
-  _ChannelDetailProvider(
-    Account account,
+/// See also [ChannelDetail].
+class ChannelDetailProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    ChannelDetail, ChannelDetailState> {
+  /// See also [ChannelDetail].
+  ChannelDetailProvider(
     String channelId,
   ) : this._internal(
-          () => _ChannelDetail()
-            ..account = account
-            ..channelId = channelId,
-          from: _channelDetailProvider,
-          name: r'_channelDetailProvider',
+          () => ChannelDetail()..channelId = channelId,
+          from: channelDetailProvider,
+          name: r'channelDetailProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
                   : _$channelDetailHash,
-          dependencies: _ChannelDetailFamily._dependencies,
+          dependencies: ChannelDetailFamily._dependencies,
           allTransitiveDependencies:
-              _ChannelDetailFamily._allTransitiveDependencies,
-          account: account,
+              ChannelDetailFamily._allTransitiveDependencies,
           channelId: channelId,
         );
 
-  _ChannelDetailProvider._internal(
+  ChannelDetailProvider._internal(
     super.create, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.account,
     required this.channelId,
   }) : super.internal();
 
-  final Account account;
   final String channelId;
 
   @override
   FutureOr<ChannelDetailState> runNotifierBuild(
-    covariant _ChannelDetail notifier,
+    covariant ChannelDetail notifier,
   ) {
     return notifier.build(
-      account,
       channelId,
     );
   }
 
   @override
-  Override overrideWith(_ChannelDetail Function() create) {
+  Override overrideWith(ChannelDetail Function() create) {
     return ProviderOverride(
       origin: this,
-      override: _ChannelDetailProvider._internal(
-        () => create()
-          ..account = account
-          ..channelId = channelId,
+      override: ChannelDetailProvider._internal(
+        () => create()..channelId = channelId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        account: account,
         channelId: channelId,
       ),
     );
   }
 
   @override
-  (
-    Account,
-    String,
-  ) get argument {
-    return (
-      account,
-      channelId,
-    );
+  (String,) get argument {
+    return (channelId,);
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<_ChannelDetail, ChannelDetailState>
+  AutoDisposeAsyncNotifierProviderElement<ChannelDetail, ChannelDetailState>
       createElement() {
     return _ChannelDetailProviderElement(this);
   }
 
-  _ChannelDetailProvider _copyWith(
-    _ChannelDetail Function() create,
+  ChannelDetailProvider _copyWith(
+    ChannelDetail Function() create,
   ) {
-    return _ChannelDetailProvider._internal(
-      () => create()
-        ..account = account
-        ..channelId = channelId,
+    return ChannelDetailProvider._internal(
+      () => create()..channelId = channelId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      account: account,
       channelId: channelId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is _ChannelDetailProvider &&
-        other.account == account &&
-        other.channelId == channelId;
+    return other is ChannelDetailProvider && other.channelId == channelId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
     hash = _SystemHash.combine(hash, channelId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin _ChannelDetailRef
+mixin ChannelDetailRef
     on AutoDisposeAsyncNotifierProviderRef<ChannelDetailState> {
-  /// The parameter `account` of this provider.
-  Account get account;
-
   /// The parameter `channelId` of this provider.
   String get channelId;
 }
 
 class _ChannelDetailProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<_ChannelDetail,
-        ChannelDetailState> with _ChannelDetailRef {
+    extends AutoDisposeAsyncNotifierProviderElement<ChannelDetail,
+        ChannelDetailState> with ChannelDetailRef {
   _ChannelDetailProviderElement(super.provider);
 
   @override
-  Account get account => (origin as _ChannelDetailProvider).account;
-  @override
-  String get channelId => (origin as _ChannelDetailProvider).channelId;
+  String get channelId => (origin as ChannelDetailProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

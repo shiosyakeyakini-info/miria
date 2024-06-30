@@ -15,7 +15,6 @@ import "package:miria/view/common/constants.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class ServerDetailDialog extends ConsumerStatefulWidget {
-  //TODO: 本当はサーバー情報取るのにアカウントいらない...
   final Account account;
 
   const ServerDetailDialog({

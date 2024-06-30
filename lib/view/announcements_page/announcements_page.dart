@@ -6,10 +6,14 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/federation_page/federation_announcements.dart";
 
 @RoutePage()
-class AnnouncementPage extends StatelessWidget {
+class AnnouncementPage extends StatelessWidget implements AutoRouteWrapper {
   final Account account;
 
   const AnnouncementPage({required this.account, super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +21,7 @@ class AnnouncementPage extends StatelessWidget {
       appBar: AppBar(title: Text(S.of(context).announcement)),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
-        child: AccountScope(
-          account: account,
-          child: FederationAnnouncements(host: account.host),
-        ),
+        child: FederationAnnouncements(host: account.host),
       ),
     );
   }

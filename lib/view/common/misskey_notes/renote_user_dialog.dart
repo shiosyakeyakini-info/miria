@@ -16,7 +16,7 @@ class RenoteUserDialog extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountScopeMark2(account: account, child: this);
+      AccountContextScope.as(account: account, child: this);
 
   const RenoteUserDialog({
     required this.account,

@@ -4,6 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_select_dialog.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -127,20 +128,17 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
   Future<void> openNoteInOtherAccount(BuildContext context, Note note) async {
     final selectedAccount = await context.pushRoute<Account>(
-      AccountSelectRoute(
-        host: note.localOnly ? this.account.host : null,
-      ),
-    );
+        AccountSelectRoute(host: note.localOnly ? this.account.host : null));
     if (selectedAccount == null) return;
     if (!context.mounted) return;
     await navigateToNoteDetailPage(context, note, selectedAccount);
   }
 
   Future<void> openUserInOtherAccount(BuildContext context, User user) async {
-    final selectedAccount = await context.pushRoute<Account>(
-      AccountSelectRoute(),
+    final selectedAccount = await showDialog<Account?>(
+      context: context,
+      builder: (context) => const AccountSelectDialog(),
     );
-
     if (selectedAccount == null) return;
     if (!context.mounted) return;
     await navigateToUserPage(context, user, selectedAccount);

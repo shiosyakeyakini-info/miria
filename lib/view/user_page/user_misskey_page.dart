@@ -18,14 +18,14 @@ class UserMisskeyPage extends ConsumerWidget {
     return PushableListView(
       initializeFuture: () async {
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .pages(UsersPagesRequest(userId: userId));
         return response.toList();
       },
       nextFuture: (item, _) async {
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .pages(UsersPagesRequest(userId: userId, untilId: item.id));
         return response.toList();
@@ -33,16 +33,19 @@ class UserMisskeyPage extends ConsumerWidget {
       itemBuilder: (context, page) {
         return ListTile(
           title: MfmText(
-              mfmText: page.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold),),
+            mfmText: page.title,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
           subtitle: MfmText(mfmText: page.summary),
-          onTap: () {
-            context.pushRoute(MisskeyRouteRoute(
-                account: AccountScope.of(context), page: page,),);
-          },
+          onTap: () async => context.pushRoute(
+            MisskeyRouteRoute(
+              account: ref.read(accountContextProvider).getAccount,
+              page: page,
+            ),
+          ),
         );
       },
     );

@@ -49,10 +49,11 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<AnnouncementRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: AnnouncementPage(
+        child: WrappedRoute(
+            child: AnnouncementPage(
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     AntennaModalRoute.name: (routeData) {
@@ -70,21 +71,23 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<AntennaNotesRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: AntennaNotesPage(
+        child: WrappedRoute(
+            child: AntennaNotesPage(
           antenna: args.antenna,
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     AntennaRoute.name: (routeData) {
       final args = routeData.argsAs<AntennaRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: AntennaPage(
+        child: WrappedRoute(
+            child: AntennaPage(
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     AntennaSettingsRoute.name: (routeData) {
@@ -119,11 +122,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ChannelDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ChannelDetailPage(
+        child: WrappedRoute(
+            child: ChannelDetailPage(
           account: args.account,
           channelId: args.channelId,
           key: args.key,
-        ),
+        )),
       );
     },
     ChannelRoute.name: (routeData) {
@@ -152,10 +156,11 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ChannelsRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ChannelsPage(
+        child: WrappedRoute(
+            child: ChannelsPage(
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     ClipDetailRoute.name: (routeData) {
@@ -255,11 +260,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<FederationRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: FederationPage(
+        child: WrappedRoute(
+            child: FederationPage(
           account: args.account,
           host: args.host,
           key: args.key,
-        ),
+        )),
       );
     },
     FolderSelectRoute.name: (routeData) {
@@ -586,43 +592,47 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<UserFolloweeRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UserFolloweePage(
+        child: WrappedRoute(
+            child: UserFolloweePage(
           userId: args.userId,
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     UserFollowerRoute.name: (routeData) {
       final args = routeData.argsAs<UserFollowerRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UserFollowerPage(
+        child: WrappedRoute(
+            child: UserFollowerPage(
           userId: args.userId,
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     UserRoute.name: (routeData) {
       final args = routeData.argsAs<UserRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UserPage(
+        child: WrappedRoute(
+            child: UserPage(
           userId: args.userId,
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     UserSelectRoute.name: (routeData) {
       final args = routeData.argsAs<UserSelectRouteArgs>();
       return AutoRoutePage<User>(
         routeData: routeData,
-        child: UserSelectDialog(
+        child: WrappedRoute(
+            child: UserSelectDialog(
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     UsersListDetailRoute.name: (routeData) {
@@ -651,33 +661,36 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<UsersListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UsersListPage(
+        child: WrappedRoute(
+            child: UsersListPage(
           args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     UsersListSettingsRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListSettingsRouteArgs>(
           orElse: () => const UsersListSettingsRouteArgs());
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<UsersListSettings>(
         routeData: routeData,
-        child: UsersListSettingsDialog(
+        child: WrappedRoute(
+            child: UsersListSettingsDialog(
           key: args.key,
           title: args.title,
           initialSettings: args.initialSettings,
-        ),
+        )),
       );
     },
     UsersListTimelineRoute.name: (routeData) {
       final args = routeData.argsAs<UsersListTimelineRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UsersListTimelinePage(
+        child: WrappedRoute(
+            child: UsersListTimelinePage(
           args.account,
           args.list,
           key: args.key,
-        ),
+        )),
       );
     },
     WordMuteRoute.name: (routeData) {

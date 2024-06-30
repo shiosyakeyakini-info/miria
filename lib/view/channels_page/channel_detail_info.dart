@@ -3,9 +3,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
@@ -25,19 +23,18 @@ class ChannelDetailState with _$ChannelDetailState {
   }) = _ChannelDetailState;
 }
 
-@riverpod
-class _ChannelDetail extends _$ChannelDetail {
+@Riverpod(dependencies: [misskeyGetContext])
+class ChannelDetail extends _$ChannelDetail {
   @override
   Future<ChannelDetailState> build(
-    Account account,
     String channelId,
   ) async {
     final result = await ref
-        .read(misskeyProvider(account))
+        .read(misskeyGetContextProvider)
         .channels
         .show(ChannelsShowRequest(channelId: channelId));
 
-    ref.read(notesProvider(account)).registerAll(result.pinnedNotes ?? []);
+    ref.read(notesWithProvider).registerAll(result.pinnedNotes ?? []);
 
     return ChannelDetailState(channel: result);
   }
@@ -50,7 +47,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFollowing: true),
         follow: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(this.account))
+              .read(misskeyPostContextProvider)
               .channels
               .follow(ChannelsFollowRequest(channelId: channelId)),
         ),
@@ -66,7 +63,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFollowing: false),
         follow: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(this.account))
+              .read(misskeyPostContextProvider)
               .channels
               .unfollow(ChannelsUnfollowRequest(channelId: channelId)),
         ),
@@ -82,7 +79,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFavorited: true),
         favorite: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(this.account))
+              .read(misskeyPostContextProvider)
               .channels
               .favorite(ChannelsFavoriteRequest(channelId: channelId)),
         ),
@@ -97,7 +94,7 @@ class _ChannelDetail extends _$ChannelDetail {
         channel: before.channel.copyWith(isFavorited: false),
         favorite: await AsyncValue.guard(
           () async => ref
-              .read(misskeyProvider(this.account))
+              .read(misskeyPostContextProvider)
               .channels
               .unfavorite(ChannelsUnfavoriteRequest(channelId: channelId)),
         ),
@@ -119,9 +116,7 @@ class ChannelDetailInfo extends ConsumerStatefulWidget {
 class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(
-      _channelDetailProvider(AccountScope.of(context), widget.channelId),
-    );
+    final data = ref.watch(channelDetailProvider(widget.channelId));
 
     return switch (data) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
@@ -226,8 +221,7 @@ class ChannelFavoriteButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider =
-        _channelDetailProvider(AccountScope.of(context), channelId);
+    final provider = channelDetailProvider(channelId);
     final followingState = ref.watch(
       provider.select((value) => value.valueOrNull?.favorite),
     );
@@ -269,8 +263,7 @@ class ChannelFollowingButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider =
-        _channelDetailProvider(AccountScope.of(context), channelId);
+    final provider = channelDetailProvider(channelId);
     final followState = ref.watch(
       provider.select((value) => value.valueOrNull?.follow),
     );

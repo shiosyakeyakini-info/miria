@@ -127,9 +127,10 @@ class __$$AccountContextImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AccountContextImpl implements _AccountContext {
+class _$AccountContextImpl extends _AccountContext {
   const _$AccountContextImpl(
-      {required this.getAccount, required this.postAccount});
+      {required this.getAccount, required this.postAccount})
+      : super._();
 
   /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
   @override
@@ -164,10 +165,11 @@ class _$AccountContextImpl implements _AccountContext {
           this, _$identity);
 }
 
-abstract class _AccountContext implements AccountContext {
+abstract class _AccountContext extends AccountContext {
   const factory _AccountContext(
       {required final Account getAccount,
       required final Account postAccount}) = _$AccountContextImpl;
+  const _AccountContext._() : super._();
 
   @override
 

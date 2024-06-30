@@ -34,7 +34,7 @@ final fileSystemProvider = Provider<FileSystem>.internal(
 );
 
 typedef FileSystemRef = ProviderRef<FileSystem>;
-String _$misskeyHash() => r'0c0e98d0f1593809e90f0a6c4dcb182535149d84';
+String _$misskeyHash() => r'796d9e849aca70f97031c38e646439a01bc5abe5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -59,6 +59,8 @@ class _SystemHash {
 
 /// See also [misskey].
 @ProviderFor(misskey)
+@Deprecated(
+    "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain")
 const misskeyProvider = MisskeyFamily();
 
 /// See also [misskey].
@@ -392,6 +394,23 @@ class _MisskeyWithoutAccountProviderElement
   String get host => (origin as MisskeyWithoutAccountProvider).host;
 }
 
+String _$notesWithHash() => r'0650987360236bb7d00f08b92ab03ebb6bfeb413';
+
+/// See also [notesWith].
+@ProviderFor(notesWith)
+final notesWithProvider = AutoDisposeProvider<Raw<NoteRepository>>.internal(
+  notesWith,
+  name: r'notesWithProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$notesWithHash,
+  dependencies: <ProviderOrFamily>[accountContextProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  },
+);
+
+typedef NotesWithRef = AutoDisposeProviderRef<Raw<NoteRepository>>;
 String _$emojiRepositoryHash() => r'cce1a6d3e6daba91779840fde7973c6e6987e471';
 
 /// See also [emojiRepository].
@@ -939,5 +958,42 @@ final accountContextProvider = AutoDisposeProvider<AccountContext>.internal(
 );
 
 typedef AccountContextRef = AutoDisposeProviderRef<AccountContext>;
+String _$misskeyGetContextHash() => r'856e0720ad5d5a6fc0195f9974b0ae011677da27';
+
+/// See also [misskeyGetContext].
+@ProviderFor(misskeyGetContext)
+final misskeyGetContextProvider = AutoDisposeProvider<Misskey>.internal(
+  misskeyGetContext,
+  name: r'misskeyGetContextProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$misskeyGetContextHash,
+  dependencies: <ProviderOrFamily>[accountContextProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  },
+);
+
+typedef MisskeyGetContextRef = AutoDisposeProviderRef<Misskey>;
+String _$misskeyPostContextHash() =>
+    r'4ca2dd620727f94948027056882dace0ef16e955';
+
+/// See also [misskeyPostContext].
+@ProviderFor(misskeyPostContext)
+final misskeyPostContextProvider = AutoDisposeProvider<Misskey>.internal(
+  misskeyPostContext,
+  name: r'misskeyPostContextProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$misskeyPostContextHash,
+  dependencies: <ProviderOrFamily>[accountContextProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  },
+);
+
+typedef MisskeyPostContextRef = AutoDisposeProviderRef<Misskey>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

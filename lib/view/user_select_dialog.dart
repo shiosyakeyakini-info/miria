@@ -10,22 +10,23 @@ import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage<User>()
-class UserSelectDialog extends StatelessWidget {
+class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final Account account;
 
   const UserSelectDialog({required this.account, super.key});
 
   @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
+
+  @override
   Widget build(BuildContext context) {
-    return AccountScope(
-      account: account,
-      child: AlertDialog(
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
-          child: UserSelectContent(
-            onSelected: (item) async => context.maybePop(item),
-          ),
+    return AlertDialog(
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: UserSelectContent(
+          onSelected: (item) async => context.maybePop(item),
         ),
       ),
     );
@@ -131,39 +132,30 @@ class UsersSelectContentList extends ConsumerWidget {
     final origin = ref.watch(usersSelectDialogOriginProvider);
 
     return PushableListView(
-      listKey: ObjectKey(
-        Object.hashAll([
-          query,
-          origin,
-        ]),
-      ),
+      listKey: ObjectKey(Object.hashAll([query, origin])),
       initializeFuture: () async {
         if (query.isEmpty) {
           final response = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
+              .read(misskeyGetContextProvider)
               .users
               .getFrequentlyRepliedUsers(
                 UsersGetFrequentlyRepliedUsersRequest(
-                  userId: AccountScope.of(context).i.id,
+                  userId: ref.read(accountContextProvider).getAccount.i.id,
                 ),
               );
           return response.map((e) => e.user).toList();
         }
 
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .search(UsersSearchRequest(query: query, origin: origin));
         return response.toList();
       },
       nextFuture: (lastItem, length) async {
-        if (query.isEmpty) {
-          return [];
-        }
-        final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
-            .users
-            .search(
+        if (query.isEmpty) return [];
+
+        final response = await ref.read(misskeyGetContextProvider).users.search(
               UsersSearchRequest(
                 query: query,
                 origin: origin,

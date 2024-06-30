@@ -2,8 +2,8 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -26,7 +26,10 @@ class UserListItem extends ConsumerWidget {
     return InkWell(
       onTap: onTap ??
           () async => context.pushRoute(
-                UserRoute(userId: user.id, account: AccountScope.of(context)),
+                UserRoute(
+                  userId: user.id,
+                  account: ref.read(accountContextProvider).getAccount,
+                ),
               ),
       child: Padding(
         padding: const EdgeInsets.all(10),

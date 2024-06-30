@@ -1,4 +1,5 @@
 import "package:auto_route/annotations.dart";
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
@@ -9,10 +10,13 @@ import "package:miria/view/channels_page/channel_trend.dart";
 import "package:miria/view/common/account_scope.dart";
 
 @RoutePage()
-class ChannelsPage extends StatelessWidget {
+class ChannelsPage extends StatelessWidget implements AutoRouteWrapper {
   final Account account;
 
   const ChannelsPage({required this.account, super.key});
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +38,26 @@ class ChannelsPage extends StatelessWidget {
             tabAlignment: TabAlignment.center,
           ),
         ),
-        body: AccountScope(
-          account: account,
-          child: TabBarView(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: ChannelSearch(),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: ChannelTrend(),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: ChannelFavorited(),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: ChannelFollowed(),
-              ),
-              Text(S.of(context).notImplemented),
-            ],
-          ),
+        body: TabBarView(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: ChannelSearch(),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: ChannelTrend(),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: ChannelFavorited(),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: ChannelFollowed(),
+            ),
+            Text(S.of(context).notImplemented),
+          ],
         ),
       ),
     );

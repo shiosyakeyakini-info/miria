@@ -16,32 +16,25 @@ class UserReactions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
     return PushableListView(
       initializeFuture: () async {
         final response = await ref
-            .read(misskeyProvider(account))
+            .read(misskeyGetContextProvider)
             .users
             .reactions(UsersReactionsRequest(userId: userId));
-        ref
-            .read(notesProvider(account))
-            .registerAll(response.map((e) => e.note));
+        ref.read(notesWithProvider).registerAll(response.map((e) => e.note));
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
         final response =
-            await ref.read(misskeyProvider(account)).users.reactions(
+            await ref.read(misskeyGetContextProvider).users.reactions(
                   UsersReactionsRequest(userId: userId, untilId: lastItem.id),
                 );
-        ref
-            .read(notesProvider(account))
-            .registerAll(response.map((e) => e.note));
+        ref.read(notesWithProvider).registerAll(response.map((e) => e.note));
 
         return response.toList();
       },
-      itemBuilder: (context, item) {
-        return UserReaction(response: item);
-      },
+      itemBuilder: (context, item) => UserReaction(response: item),
     );
   }
 }
@@ -82,7 +75,9 @@ class UserReaction extends ConsumerWidget {
                       emojiName: response.type,
                       emojiInfo: response.note.reactionEmojis,
                       repository: ref.read(
-                        emojiRepositoryProvider(AccountScope.of(context)),
+                        emojiRepositoryProvider(
+                          ref.read(accountContextProvider).getAccount,
+                        ),
                       ),
                     ),
                     fontSizeRatio: 2,

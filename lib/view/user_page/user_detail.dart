@@ -6,43 +6,24 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/extensions/string_extensions.dart";
 import "package:miria/extensions/user_extension.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
-import "package:miria/view/user_page/update_memo_dialog.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class UserDetail extends ConsumerWidget {
-  final Account account;
-  final Account? controlAccount;
   final UserDetailed response;
 
   const UserDetail({
     required this.response,
-    required this.account,
-    required this.controlAccount,
     super.key,
   });
-
-  Future<void> userControl(BuildContext context) async {
-    await context
-        .pushRoute(UserControlRoute(account: account, response: response));
-    // await showModalBottomSheet<UserControl?>(
-    //   context: context,
-    //   builder: (context) => UserControlDialog(
-    //     account: account,
-    //     response: response,
-    //   ),
-    // );
-  }
 
   Widget buildContent(BuildContext context, WidgetRef ref) {
     final response = this.response;
@@ -53,9 +34,11 @@ class UserDetail extends ConsumerWidget {
     final notifier = ref.read(userInfoNotifierProvider(response.id).notifier);
     final memo = response.memo ?? "";
 
+    final isSameAccount = ref.read(accountContextProvider).isSame;
+
     return Column(
       children: [
-        if (controlAccount == null)
+        if (isSameAccount)
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Row(
@@ -155,7 +138,12 @@ class UserDetail extends ConsumerWidget {
                 Align(
                   alignment: Alignment.center,
                   child: IconButton(
-                    onPressed: () async => userControl(context),
+                    onPressed: () async => await context.pushRoute(
+                      UserControlRoute(
+                        account: ref.read(accountContextProvider).postAccount,
+                        response: response,
+                      ),
+                    ),
                     icon: const Icon(Icons.more_vert),
                   ),
                 ),
@@ -197,7 +185,7 @@ class UserDetail extends ConsumerWidget {
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 5)),
-              if (controlAccount == null)
+              if (isSameAccount)
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(10),
@@ -217,16 +205,14 @@ class UserDetail extends ConsumerWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => UpdateMemoDialog(
-                                account: account,
+                          onPressed: () async => await context.pushRoute(
+                            UpdateMemoRoute(
+                                account: ref
+                                    .read(accountContextProvider)
+                                    .postAccount,
                                 initialMemo: memo,
-                                userId: response.id,
-                              ),
-                            );
-                          },
+                                userId: response.id),
+                          ),
                           icon: const Icon(Icons.edit),
                         ),
                       ],
@@ -260,7 +246,8 @@ class UserDetail extends ConsumerWidget {
                         GestureDetector(
                           onTap: () async => context.pushRoute(
                             FederationRoute(
-                              account: AccountScope.of(context),
+                              account:
+                                  ref.read(accountContextProvider).getAccount,
                               host: response.host!,
                             ),
                           ),
@@ -375,7 +362,7 @@ class UserDetail extends ConsumerWidget {
                       onTap: () async => context.pushRoute(
                         UserFolloweeRoute(
                           userId: response.id,
-                          account: AccountScope.of(context),
+                          account: ref.read(accountContextProvider).getAccount,
                         ),
                       ),
                       child: Column(
@@ -396,7 +383,7 @@ class UserDetail extends ConsumerWidget {
                       onTap: () async => context.pushRoute(
                         UserFollowerRoute(
                           userId: response.id,
-                          account: AccountScope.of(context),
+                          account: ref.read(accountContextProvider).getAccount,
                         ),
                       ),
                       child: Column(
@@ -452,7 +439,6 @@ class UserDetail extends ConsumerWidget {
               itemCount: response.pinnedNotes!.length,
               itemBuilder: (context, index) => MisskeyNote(
                 note: response.pinnedNotes![index],
-                loginAs: controlAccount,
               ),
             ),
           ),
@@ -515,7 +501,6 @@ class RoleChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
     final textStyle = Theme.of(context).textTheme.bodyMedium;
     final height = MediaQuery.textScalerOf(context)
         .scale((textStyle?.fontSize ?? 14) * (textStyle?.height ?? 1));
@@ -524,13 +509,15 @@ class RoleChip extends ConsumerWidget {
       child: GestureDetector(
         onTap: () async {
           final response = await ref
-              .read(misskeyProvider(account))
+              .read(misskeyGetContextProvider)
               .roles
               .show(RolesShowRequest(roleId: role.id));
           if (response.isPublic && response.isExplorable) {
             if (!context.mounted) return;
             await context.pushRoute(
-              ExploreRoleUsersRoute(item: response, account: account),
+              ExploreRoleUsersRoute(
+                  item: response,
+                  account: ref.read(accountContextProvider).getAccount),
             );
           }
         },

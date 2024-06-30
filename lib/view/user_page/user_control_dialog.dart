@@ -38,7 +38,7 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountScopeMark2(account: account, child: this);
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

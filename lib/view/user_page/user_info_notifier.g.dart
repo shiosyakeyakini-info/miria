@@ -6,7 +6,7 @@ part of 'user_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userInfoNotifierHash() => r'599f611a70bf6a4f2f0779ae8d9a4331c0c0f493';
+String _$userInfoNotifierHash() => r'b92d65faddd89c9559bac8769111d8709ce18ba5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -48,13 +48,16 @@ class UserInfoNotifierFamily extends Family {
   const UserInfoNotifierFamily();
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    accountContextProvider
+    misskeyGetContextProvider,
+    notesWithProvider
   ];
 
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
+    misskeyGetContextProvider,
+    ...?misskeyGetContextProvider.allTransitiveDependencies,
+    notesWithProvider,
+    ...?notesWithProvider.allTransitiveDependencies
   };
 
   @override

@@ -10,7 +10,7 @@ import "package:miria/view/common/account_scope.dart";
 class ChannelDialog extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountScopeMark2(account: account, child: this);
+      AccountContextScope.as(account: account, child: this);
 
   final String channelId;
   final Account account;
@@ -22,26 +22,21 @@ class ChannelDialog extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AccountScope(
-      account: account,
-      child: AlertDialog(
-        titlePadding: EdgeInsets.zero,
-        title: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(color: Theme.of(context).primaryColorDark),
-          child: Text(
-            S.of(context).channelInformation,
-            style: const TextStyle(color: Colors.white),
-          ),
+    return AlertDialog(
+      titlePadding: EdgeInsets.zero,
+      title: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(color: Theme.of(context).primaryColorDark),
+        child: Text(
+          S.of(context).channelInformation,
+          style: const TextStyle(color: Colors.white),
         ),
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
-          child: SingleChildScrollView(
-            child: ChannelDetailInfo(
-              channelId: channelId,
-            ),
-          ),
+      ),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: SingleChildScrollView(
+          child: ChannelDetailInfo(channelId: channelId),
         ),
       ),
     );

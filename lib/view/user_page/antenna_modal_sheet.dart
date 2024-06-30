@@ -5,11 +5,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
-import "package:miria/providers.dart";
-import "package:miria/state_notifier/antenna_page/antennas_notifier.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
+import "package:miria/view/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
@@ -25,8 +23,7 @@ class AntennaModalSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(account));
-    final antennas = ref.watch(antennasNotifierProvider(misskey));
+    final antennas = ref.watch(antennasNotifierProvider);
 
     return antennas.when(
       data: (antennas) {
@@ -46,17 +43,16 @@ class AntennaModalSheet extends ConsumerWidget {
                   }
                   if (value) {
                     await ref
-                        .read(antennasNotifierProvider(misskey).notifier)
+                        .read(antennasNotifierProvider.notifier)
                         .updateAntenna(
                           antenna.id,
                           AntennaSettings.fromAntenna(antenna).copyWith(
                             users: [...antenna.users, user.acct],
                           ),
-                        )
-                        .expectFailure(context);
+                        );
                   } else {
                     await ref
-                        .read(antennasNotifierProvider(misskey).notifier)
+                        .read(antennasNotifierProvider.notifier)
                         .updateAntenna(
                           antenna.id,
                           AntennaSettings.fromAntenna(antenna).copyWith(
@@ -64,8 +60,7 @@ class AntennaModalSheet extends ConsumerWidget {
                                 .where((acct) => acct != user.acct)
                                 .toList(),
                           ),
-                        )
-                        .expectFailure(context);
+                        );
                   }
                 },
                 title: Text(antenna.name),
@@ -88,9 +83,8 @@ class AntennaModalSheet extends ConsumerWidget {
                   if (!context.mounted) return;
                   if (settings != null) {
                     await ref
-                        .read(antennasNotifierProvider(misskey).notifier)
-                        .create(settings)
-                        .expectFailure(context);
+                        .read(antennasNotifierProvider.notifier)
+                        .create(settings);
                   }
                 },
               );

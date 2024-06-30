@@ -38,14 +38,14 @@ class FederationData with _$FederationData {
   }) = _FederationData;
 }
 
-@riverpod
+@Riverpod(dependencies: [accountContext, misskeyGetContext])
 class FederationState extends _$FederationState {
   @override
-  Future<FederationData> build(Account account, String host) async {
-    if (host == account.host) {
+  Future<FederationData> build(String host) async {
+    if (host == ref.read(accountContextProvider).getAccount.host) {
       // 自分のサーバーの場合
-      final metaResponse = await ref.read(misskeyProvider(account)).meta();
-      final statsResponse = await ref.read(misskeyProvider(account)).stats();
+      final metaResponse = await ref.read(misskeyGetContextProvider).meta();
+      final statsResponse = await ref.read(misskeyGetContextProvider).stats();
 
       unawaited(
         ref
@@ -82,7 +82,7 @@ class FederationState extends _$FederationState {
       );
     }
     final federation = await ref
-        .read(misskeyProvider(account))
+        .read(misskeyGetContextProvider)
         .federation
         .showInstance(FederationShowInstanceRequest(host: host));
 
