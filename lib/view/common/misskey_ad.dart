@@ -23,15 +23,15 @@ class MisskeyAdState extends ConsumerState<MisskeyAd> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (AccountScope.of(context).i.policies.canHideAds &&
+    if (ref.read(accountContextProvider).getAccount.i.policies.canHideAds &&
         !ref
             .read(accountSettingsRepositoryProvider)
-            .fromAccount(AccountScope.of(context))
+            .fromAccount(ref.read(accountContextProvider).getAccount)
             .forceShowAd) {
       return;
     }
 
-    final ads = AccountScope.of(context).meta?.ads ?? [];
+    final ads = ref.read(accountContextProvider).getAccount.meta?.ads ?? [];
     final totalRatio = ads.map((e) => e.ratio).sum;
     final choosenRatio = Random().nextDouble() * totalRatio;
 

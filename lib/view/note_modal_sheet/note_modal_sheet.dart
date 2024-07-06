@@ -298,7 +298,7 @@ class NoteModalSheet extends ConsumerWidget {
             leading: const Icon(Icons.open_in_new),
             title: Text(S.of(context).openInAnotherAccount),
             onTap: () async => ref
-                .read(misskeyNoteNotifierProvider(account).notifier)
+                .read(misskeyNoteNotifierProvider.notifier)
                 .openNoteInOtherAccount(context, targetNote),
           ),
         ListTile(

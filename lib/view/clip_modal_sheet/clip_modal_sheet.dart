@@ -8,7 +8,6 @@ import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
-import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:misskey_dart/misskey_dart.dart";

@@ -6,7 +6,7 @@ part of 'misskey_page_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchNoteHash() => r'19df39fbffe9dff5fee801e90a30981b4121f708';
+String _$fetchNoteHash() => r'93baa5042998814028ccf0597aeee9d344c2e189';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -38,9 +38,18 @@ class FetchNoteFamily extends Family {
   /// See also [fetchNote].
   const FetchNoteFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyGetContextProvider,
+    notesWithProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyGetContextProvider,
+    ...?misskeyGetContextProvider.allTransitiveDependencies,
+    notesWithProvider,
+    ...?notesWithProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -54,11 +63,9 @@ class FetchNoteFamily extends Family {
 
   /// See also [fetchNote].
   FetchNoteProvider call(
-    Account account,
     String noteId,
   ) {
     return FetchNoteProvider(
-      account,
       noteId,
     );
   }
@@ -69,7 +76,6 @@ class FetchNoteFamily extends Family {
     covariant FetchNoteProvider provider,
   ) {
     return call(
-      provider.account,
       provider.noteId,
     );
   }
@@ -100,12 +106,10 @@ class _$FetchNoteFamilyOverride implements FamilyOverride {
 class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
   /// See also [fetchNote].
   FetchNoteProvider(
-    Account account,
     String noteId,
   ) : this._internal(
           (ref) => fetchNote(
             ref as FetchNoteRef,
-            account,
             noteId,
           ),
           from: fetchNoteProvider,
@@ -116,7 +120,6 @@ class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
                   : _$fetchNoteHash,
           dependencies: FetchNoteFamily._dependencies,
           allTransitiveDependencies: FetchNoteFamily._allTransitiveDependencies,
-          account: account,
           noteId: noteId,
         );
 
@@ -127,11 +130,9 @@ class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.account,
     required this.noteId,
   }) : super.internal();
 
-  final Account account;
   final String noteId;
 
   @override
@@ -147,21 +148,14 @@ class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        account: account,
         noteId: noteId,
       ),
     );
   }
 
   @override
-  (
-    Account,
-    String,
-  ) get argument {
-    return (
-      account,
-      noteId,
-    );
+  (String,) get argument {
+    return (noteId,);
   }
 
   @override
@@ -179,22 +173,18 @@ class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      account: account,
       noteId: noteId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FetchNoteProvider &&
-        other.account == account &&
-        other.noteId == noteId;
+    return other is FetchNoteProvider && other.noteId == noteId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
     hash = _SystemHash.combine(hash, noteId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -202,9 +192,6 @@ class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
 }
 
 mixin FetchNoteRef on AutoDisposeFutureProviderRef<Note> {
-  /// The parameter `account` of this provider.
-  Account get account;
-
   /// The parameter `noteId` of this provider.
   String get noteId;
 }
@@ -213,8 +200,6 @@ class _FetchNoteProviderElement extends AutoDisposeFutureProviderElement<Note>
     with FetchNoteRef {
   _FetchNoteProviderElement(super.provider);
 
-  @override
-  Account get account => (origin as FetchNoteProvider).account;
   @override
   String get noteId => (origin as FetchNoteProvider).noteId;
 }

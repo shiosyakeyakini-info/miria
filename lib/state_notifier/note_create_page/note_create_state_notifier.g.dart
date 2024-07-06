@@ -7,7 +7,7 @@ part of 'note_create_state_notifier.dart';
 // **************************************************************************
 
 String _$noteCreateNotifierHash() =>
-    r'e4f27cc424696b29ae8619532fdee426493b4691';
+    r'2c97d94482937fad9949829c46507b072da21bde';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -48,9 +48,18 @@ class NoteCreateNotifierFamily extends Family {
   /// See also [NoteCreateNotifier].
   const NoteCreateNotifierFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyPostContextProvider,
+    notesWithProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyPostContextProvider,
+    ...?misskeyPostContextProvider.allTransitiveDependencies,
+    notesWithProvider,
+    ...?notesWithProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;

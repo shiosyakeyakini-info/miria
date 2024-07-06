@@ -16,14 +16,14 @@ class UserClips extends ConsumerWidget {
     return PushableListView(
       initializeFuture: () async {
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .clips(UsersClipsRequest(userId: userId));
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
         final response = await ref
-            .read(misskeyProvider(AccountScope.of(context)))
+            .read(misskeyGetContextProvider)
             .users
             .clips(UsersClipsRequest(userId: userId, untilId: lastItem.id));
         return response.toList();

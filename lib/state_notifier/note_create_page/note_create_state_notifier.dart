@@ -16,11 +16,9 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
-import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
-import "package:miria/view/user_select_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
@@ -98,12 +96,12 @@ class NoteCreateChannel with _$NoteCreateChannel {
   }) = _NoteCreateChannel;
 }
 
-@riverpod
+@Riverpod(dependencies: [misskeyPostContext, notesWith])
 class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _fileSystem = ref.read(fileSystemProvider);
   late final _dio = ref.read(dioProvider);
-  late final _misskey = ref.read(misskeyProvider(state.account));
-  late final _noteRepository = ref.read(notesProvider(state.account));
+  late final _misskey = ref.read(misskeyPostContextProvider);
+  late final _noteRepository = ref.read(notesWithProvider);
   late final _errorNotifier = ref.read(errorEventProvider.notifier);
   late final _dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
 

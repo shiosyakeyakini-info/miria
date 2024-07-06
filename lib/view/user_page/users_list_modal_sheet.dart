@@ -4,7 +4,6 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/users_list_settings.dart";
-import "package:miria/providers.dart";
 import "package:miria/state_notifier/user_list_page/users_lists_notifier.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/users_list_page/users_list_settings_dialog.dart";

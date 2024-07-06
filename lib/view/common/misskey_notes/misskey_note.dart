@@ -38,7 +38,6 @@ class MisskeyNote extends ConsumerStatefulWidget {
   final Note note;
   final bool isDisplayBorder;
   final int recursive;
-  final Account? loginAs;
   final bool isForceUnvisibleReply;
   final bool isForceUnvisibleRenote;
   final bool isVisibleAllReactions;
@@ -49,7 +48,6 @@ class MisskeyNote extends ConsumerStatefulWidget {
     super.key,
     this.isDisplayBorder = true,
     this.recursive = 1,
-    this.loginAs,
     this.isForceUnvisibleReply = false,
     this.isForceUnvisibleRenote = false,
     this.isVisibleAllReactions = false,
@@ -105,7 +103,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
   @override
   Widget build(BuildContext context) {
-    final account = AccountScope.of(context);
+    final account = ref.read(accountContextProvider).getAccount;
+    final isPostAccountContext = ref.read(accountContextProvider).isSame;
 
     final latestActualNote = ref.watch(
       notesProvider(account).select((value) => value.notes[widget.note.id]),
@@ -273,7 +272,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                     padding: const EdgeInsets.only(bottom: 2),
                     child: RenoteHeader(
                       note: widget.note,
-                      loginAs: widget.loginAs,
                     ),
                   ),
                 if (displayNote.reply != null && !widget.isForceUnvisibleReply)
@@ -288,11 +286,10 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                     AvatarIcon(
                       user: displayNote.user,
                       onTap: () async => ref
-                          .read(misskeyNoteNotifierProvider(account).notifier)
+                          .read(misskeyNoteNotifierProvider.notifier)
                           .navigateToUserPage(
                             context,
                             displayNote.user,
-                            widget.loginAs,
                           ),
                     ),
                     const Padding(padding: EdgeInsets.only(left: 10)),
@@ -301,10 +298,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          NoteHeader1(
-                            displayNote: displayNote,
-                            loginAs: widget.loginAs,
-                          ),
+                          NoteHeader1(displayNote: displayNote),
                           Row(
                             children: [
                               Expanded(
@@ -319,7 +313,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                 GestureDetector(
                                   onTap: () async => context.pushRoute(
                                     FederationRoute(
-                                      account: widget.loginAs ?? account,
+                                      account: account,
                                       host: displayNote.user.host!,
                                     ),
                                   ),
@@ -456,7 +450,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                 NoteVote(
                                   displayNote: displayNote,
                                   poll: displayNote.poll!,
-                                  loginAs: widget.loginAs,
                                 ),
                               if (isLongVisible && widget.recursive < 2)
                                 ...links.map(
@@ -486,7 +479,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                         note: displayNote.renote!,
                                         isDisplayBorder: false,
                                         recursive: widget.recursive + 1,
-                                        loginAs: widget.loginAs,
                                       ),
                                     ),
                                   ),
@@ -530,7 +522,6 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     reactionCount: reaction.element.value,
                                     myReaction: displayNote.myReaction,
                                     noteId: displayNote.id,
-                                    loginAs: widget.loginAs,
                                   ),
                                 if (!isAllReactionVisible &&
                                     displayNote.reactions.length > 16)
@@ -552,12 +543,12 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                             NoteChannelView(channel: displayNote.channel!),
                           if (!isReactionedRenote)
                             Row(
-                              mainAxisAlignment: widget.loginAs != null
+                              mainAxisAlignment: !isPostAccountContext
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.spaceAround,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                if (widget.loginAs != null) ...[
+                                if (!isPostAccountContext) ...[
                                   IconButton(
                                     constraints: const BoxConstraints(),
                                     padding: EdgeInsets.zero,
@@ -573,13 +564,11 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                     ),
                                     onPressed: () async => ref
                                         .read(
-                                          misskeyNoteNotifierProvider(account)
-                                              .notifier,
+                                          misskeyNoteNotifierProvider.notifier,
                                         )
                                         .navigateToNoteDetailPage(
                                           context,
                                           displayNote,
-                                          widget.loginAs,
                                         )
                                         .expectFailure(context),
                                     icon: Icon(
@@ -689,9 +678,9 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
     MisskeyEmojiData? requestEmoji,
   }) async {
     // 他のサーバーからログインしている場合は不可
-    if (widget.loginAs != null) return;
+    if (!ref.read(accountContextProvider).isSame) return;
 
-    final account = AccountScope.of(context);
+    final account = ref.read(accountContextProvider).postAccount;
     final isLikeOnly =
         displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
             (displayNote.reactionAcceptance ==
@@ -725,7 +714,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       }
 
       await ref
-          .read(misskeyProvider(account))
+          .read(misskeyPostContextProvider)
           .notes
           .reactions
           .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
@@ -737,7 +726,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
       await ref.read(notesProvider(account)).refresh(displayNote.id);
       return;
     }
-    final misskey = ref.read(misskeyProvider(account));
+    final misskey = ref.read(misskeyPostContextProvider);
     final note = ref.read(notesProvider(account));
     final MisskeyEmojiData? selectedEmoji;
     if (isLikeOnly) {
@@ -775,18 +764,14 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
 
 class NoteHeader1 extends ConsumerWidget {
   final Note displayNote;
-  final Account? loginAs;
 
   const NoteHeader1({
     required this.displayNote,
-    required this.loginAs,
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
-
     return Row(
       children: [
         Expanded(
@@ -806,8 +791,8 @@ class NoteHeader1 extends ConsumerWidget {
           ),
         GestureDetector(
           onTap: () async => ref
-              .read(misskeyNoteNotifierProvider(account).notifier)
-              .navigateToNoteDetailPage(context, displayNote, loginAs)
+              .read(misskeyNoteNotifierProvider.notifier)
+              .navigateToNoteDetailPage(context, displayNote)
               .expectFailure(context),
           child: Text(
             displayNote.createdAt.differenceNow(context),
@@ -852,7 +837,6 @@ class RenoteHeader extends ConsumerWidget {
     final renoteTextStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           color: AppTheme.of(context).renoteBorderColor,
         );
-    final account = AccountScope.of(context);
 
     return Row(
       children: [
@@ -860,8 +844,8 @@ class RenoteHeader extends ConsumerWidget {
         Expanded(
           child: GestureDetector(
             onTap: () async => ref
-                .read(misskeyNoteNotifierProvider(account).notifier)
-                .navigateToUserPage(context, note.user, loginAs)
+                .read(misskeyNoteNotifierProvider.notifier)
+                .navigateToUserPage(context, note.user)
                 .expectFailure(context),
             child: SimpleMfmText(
               note.user.name ?? note.user.username,
@@ -954,7 +938,7 @@ class NoteChannelView extends StatelessWidget {
   }
 }
 
-class RenoteButton extends StatelessWidget {
+class RenoteButton extends ConsumerWidget {
   final Note displayNote;
   const RenoteButton({
     required this.displayNote,
@@ -962,8 +946,8 @@ class RenoteButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final account = AccountScope.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final account = ref.read(accountContextProvider).getAccount;
 
     // 他人のノートで、ダイレクトまたはフォロワーのみへの公開の場合、リノート不可
     if ((displayNote.visibility == NoteVisibility.specified ||

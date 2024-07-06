@@ -63,7 +63,6 @@ class InputComplementState extends ConsumerState<InputComplement> {
   Widget build(BuildContext context) {
     final inputCompletionType = ref.watch(inputCompletionTypeProvider);
     final focusNode = ref.watch(widget.focusNode);
-    final account = AccountScope.of(context);
 
     ref.listen(widget.focusNode, (previous, next) async {
       if (!next.hasFocus) {
@@ -105,7 +104,6 @@ class InputComplementState extends ConsumerState<InputComplement> {
                       focusNode: focusNode,
                     ),
                   Emoji() => EmojiKeyboard(
-                      account: account,
                       controller: widget.controller,
                       focusNode: focusNode,
                     ),
@@ -115,7 +113,6 @@ class InputComplementState extends ConsumerState<InputComplement> {
                       parentContext: context,
                     ),
                   Hashtag() => HashtagKeyboard(
-                      account: account,
                       controller: widget.controller,
                       focusNode: focusNode,
                     ),

@@ -1,4 +1,3 @@
-import "package:auto_route/annotations.dart";
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
@@ -10,9 +9,7 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
 import "package:miria/view/clip_list_page/clip_detail_note_list.dart";
-import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 
 @RoutePage()
 class ClipDetailPage extends ConsumerWidget {

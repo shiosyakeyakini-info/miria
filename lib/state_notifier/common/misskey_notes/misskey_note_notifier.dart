@@ -11,19 +11,19 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "misskey_note_notifier.g.dart";
 
-@riverpod
+@Riverpod(dependencies: [accountContext, misskeyGetContext])
 class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
   @override
-  void build(Account account) {
+  void build() {
     return;
   }
 
   /// 指定したアカウントから見たNoteを返す
   Future<Note?> lookupNote({
-    required Account account,
     required Note note,
   }) async {
-    if (account.host == this.account.host) {
+    final accountContext = ref.read(accountContextProvider);
+    if (accountContext.isSame) {
       return note;
     }
 
@@ -35,18 +35,18 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
       return null;
     }
 
-    final host = note.user.host ?? this.account.host;
+    final host = note.user.host ?? accountContext.getAccount.host;
 
     try {
       // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
-      final user = await ref.read(misskeyProvider(account)).users.showByName(
+      final user = await ref.read(misskeyGetContextProvider).users.showByName(
             UsersShowByUserNameRequest(
               userName: note.user.username,
               host: host,
             ),
           );
 
-      final userNotes = await ref.read(misskeyProvider(account)).users.notes(
+      final userNotes = await ref.read(misskeyGetContextProvider).users.notes(
             UsersNotesRequest(
               userId: user.id,
               untilDate: note.createdAt.add(const Duration(seconds: 1)),
@@ -59,7 +59,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
       // 最終手段として、連合で照会する
       final response =
           await ref.read(dialogStateNotifierProvider.notifier).guard(
-                () async => await ref.read(misskeyProvider(account)).ap.show(
+                () async => await ref.read(misskeyGetContextProvider).ap.show(
                       ApShowRequest(
                         uri: note.uri ??
                             Uri(
@@ -78,17 +78,17 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
   /// 指定したアカウントから見たUserを返す
   Future<User?> lookupUser({
-    required Account account,
     required User user,
   }) async {
-    if (account.host == this.account.host) {
+    final accountContext = ref.read(accountContextProvider);
+    if (accountContext.isSame) {
       return user;
     }
 
-    final host = user.host ?? this.account.host;
+    final host = user.host ?? accountContext.getAccount.host;
 
     final response = await ref.read(dialogStateNotifierProvider.notifier).guard(
-          () async => ref.read(misskeyProvider(account)).users.showByName(
+          () async => ref.read(misskeyGetContextProvider).users.showByName(
                 UsersShowByUserNameRequest(
                   userName: user.username,
                   host: host,
@@ -100,38 +100,45 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
 
   Future<void> navigateToNoteDetailPage(
     BuildContext context,
-    Note note,
-    Account? loginAs,
-  ) async {
+    Note note, {
+    Account? account,
+  }) async {
+    final accountContext = ref.read(accountContextProvider);
     final foundNote =
-        loginAs == null ? note : await lookupNote(note: note, account: loginAs);
+        accountContext.isSame ? note : await lookupNote(note: note);
     if (!context.mounted) return;
     if (foundNote == null) return;
     await context.pushRoute(
-      NoteDetailRoute(note: foundNote, account: loginAs ?? this.account),
+      NoteDetailRoute(
+          note: foundNote, account: account ?? accountContext.postAccount),
     );
   }
 
   Future<void> navigateToUserPage(
     BuildContext context,
-    User user,
-    Account? loginAs,
-  ) async {
+    User user, {
+    Account? account,
+  }) async {
+    final accountContext = ref.read(accountContextProvider);
     final foundUser =
-        loginAs == null ? user : await lookupUser(account: loginAs, user: user);
+        accountContext.isSame ? user : await lookupUser(user: user);
     if (foundUser == null) return;
     if (!context.mounted) return;
     await context.pushRoute(
-      UserRoute(userId: foundUser.id, account: loginAs ?? this.account),
+      UserRoute(
+          userId: foundUser.id, account: account ?? accountContext.getAccount),
     );
   }
 
   Future<void> openNoteInOtherAccount(BuildContext context, Note note) async {
+    final accountContext = ref.read(accountContextProvider);
     final selectedAccount = await context.pushRoute<Account>(
-        AccountSelectRoute(host: note.localOnly ? this.account.host : null));
+      AccountSelectRoute(
+          host: note.localOnly ? accountContext.getAccount.host : null),
+    );
     if (selectedAccount == null) return;
     if (!context.mounted) return;
-    await navigateToNoteDetailPage(context, note, selectedAccount);
+    await navigateToNoteDetailPage(context, note, account: selectedAccount);
   }
 
   Future<void> openUserInOtherAccount(BuildContext context, User user) async {
@@ -141,6 +148,6 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     );
     if (selectedAccount == null) return;
     if (!context.mounted) return;
-    await navigateToUserPage(context, user, selectedAccount);
+    await navigateToUserPage(context, user, account: selectedAccount);
   }
 }

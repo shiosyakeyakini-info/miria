@@ -66,13 +66,11 @@ class _FilteredHashtags
 
 class HashtagKeyboard extends ConsumerWidget {
   const HashtagKeyboard({
-    required this.account,
     required this.controller,
     required this.focusNode,
     super.key,
   });
 
-  final Account account;
   final TextEditingController controller;
   final FocusNode focusNode;
 
@@ -86,7 +84,8 @@ class HashtagKeyboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filteredHashtags = ref.watch(_filteredHashtagsProvider(account));
+    final filteredHashtags = ref.watch(
+        _filteredHashtagsProvider(ref.read(accountContextProvider).getAccount));
 
     if (filteredHashtags.isEmpty) {
       return BasicKeyboard(

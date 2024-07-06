@@ -43,7 +43,7 @@ FileSystem fileSystem(FileSystemRef ref) => const LocalFileSystem();
 
 @Riverpod(keepAlive: true)
 @Deprecated(
-    "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain")
+    "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",)
 Misskey misskey(MisskeyRef ref, Account account) => Misskey(
       token: account.token,
       host: account.host,

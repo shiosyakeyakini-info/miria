@@ -3,7 +3,6 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
@@ -12,21 +11,19 @@ import "package:misskey_dart/misskey_dart.dart";
 class UserNotes extends ConsumerStatefulWidget {
   final String userId;
   final String? remoteUserId;
-  final Account? actualAccount;
 
   const UserNotes({
     required this.userId,
     super.key,
     this.remoteUserId,
-    this.actualAccount,
-  }) : assert((remoteUserId == null) == (actualAccount == null));
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => UserNotesState();
 }
 
 class UserNotesState extends ConsumerState<UserNotes> {
-  Misskey get misskey => ref.read(misskeyPostContextProvider);
+  Misskey get misskey => ref.read(misskeyGetContextProvider);
 
   bool isFileOnly = false;
   bool withReply = false;
@@ -107,7 +104,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
                     userInfoNotifierProvider(widget.userId)
                         .select((value) => value.requireValue),
                   );
-                  final firstDate = widget.actualAccount == null
+                  final firstDate = ref.read(accountContextProvider).isSame
                       ? userInfo.response.createdAt
                       : userInfo.remoteResponse?.createdAt;
 
@@ -200,10 +197,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
               return notes.toList();
             },
             itemBuilder: (context, element) {
-              return MisskeyNote(
-                note: element,
-                loginAs: widget.actualAccount,
-              );
+              return MisskeyNote(note: element);
             },
           ),
         ),

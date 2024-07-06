@@ -19,14 +19,12 @@ class ReactionButton extends ConsumerStatefulWidget {
   final int reactionCount;
   final String? myReaction;
   final String noteId;
-  final Account? loginAs;
 
   const ReactionButton({
     required this.emojiData,
     required this.reactionCount,
     required this.myReaction,
     required this.noteId,
-    required this.loginAs,
     super.key,
   });
 
@@ -67,9 +65,10 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
     return ElevatedButton(
       onPressed: () async {
-        if (widget.loginAs != null) return;
+        final accountContext = ref.read(accountContextProvider);
+        if (!accountContext.isSame) return;
         // リアクション取り消し
-        final account = AccountScope.of(context);
+        final account = accountContext.postAccount;
         if (isMyReaction) {
           if (await SimpleConfirmDialog.show(
                 context: context,
@@ -82,7 +81,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           }
 
           await ref
-              .read(misskeyProvider(account))
+              .read(misskeyPostContextProvider)
               .notes
               .reactions
               .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
@@ -112,7 +111,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
             return;
         }
 
-        await ref.read(misskeyProvider(account)).notes.reactions.create(
+        await ref.read(misskeyPostContextProvider).notes.reactions.create(
               NotesReactionsCreateRequest(
                 noteId: widget.noteId,
                 reaction: reactionString,
@@ -133,7 +132,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           context: context,
           builder: (context2) {
             return ReactionUserDialog(
-              account: AccountScope.of(context),
+              account: ref.read(accountContextProvider).getAccount,
               emojiData: widget.emojiData,
               noteId: widget.noteId,
             );

@@ -4,7 +4,6 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -16,13 +15,11 @@ class NoteVote extends ConsumerStatefulWidget {
   const NoteVote({
     required this.displayNote,
     required this.poll,
-    required this.loginAs,
     super.key,
   });
 
   final Note displayNote;
   final NotePoll poll;
-  final Account? loginAs;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => NoteVoteState();
@@ -32,7 +29,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
   var isOpened = false;
 
   bool isAnyVotable() {
-    if (widget.loginAs != null) return false;
+    if (!ref.read(accountContextProvider).isSame) return false;
     final expiresAt = widget.poll.expiresAt;
     return (expiresAt == null || expiresAt > DateTime.now()) &&
         ((widget.poll.multiple && widget.poll.choices.any((e) => !e.isVoted)) ||
@@ -63,7 +60,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
     if (!isVotable(choice)) {
       return;
     }
-    final account = AccountScope.of(context);
+    final account = ref.read(accountContextProvider).postAccount;
 
     final dialogValue = await showDialog<bool>(
       context: context,
@@ -72,11 +69,11 @@ class NoteVoteState extends ConsumerState<NoteVote> {
         primary: S.of(context).doVoting,
         secondary: S.of(context).cancel,
         isMfm: true,
-        account: AccountScope.of(context),
+        account: ref.read(accountContextProvider).postAccount,
       ),
     );
     if (dialogValue == true) {
-      await ref.read(misskeyProvider(account)).notes.polls.vote(
+      await ref.read(misskeyPostContextProvider).notes.polls.vote(
             NotesPollsVoteRequest(
               noteId: widget.displayNote.id,
               choice: choice,

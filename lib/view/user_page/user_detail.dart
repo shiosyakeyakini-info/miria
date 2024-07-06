@@ -211,7 +211,7 @@ class UserDetail extends ConsumerWidget {
                                     .read(accountContextProvider)
                                     .postAccount,
                                 initialMemo: memo,
-                                userId: response.id),
+                                userId: response.id,),
                           ),
                           icon: const Icon(Icons.edit),
                         ),
@@ -517,7 +517,7 @@ class RoleChip extends ConsumerWidget {
             await context.pushRoute(
               ExploreRoleUsersRoute(
                   item: response,
-                  account: ref.read(accountContextProvider).getAccount),
+                  account: ref.read(accountContextProvider).getAccount,),
             );
           }
         },

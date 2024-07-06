@@ -36,13 +36,11 @@ class _FilteredEmojis
 
 class EmojiKeyboard extends ConsumerWidget {
   const EmojiKeyboard({
-    required this.account,
     required this.controller,
     required this.focusNode,
     super.key,
   });
 
-  final Account account;
   final TextEditingController controller;
   final FocusNode focusNode;
 
@@ -80,7 +78,9 @@ class EmojiKeyboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filteredEmojis = ref.watch(_filteredEmojisProvider(account));
+    final filteredEmojis = ref.watch(
+      _filteredEmojisProvider(ref.read(accountContextProvider).getAccount),
+    );
 
     if (filteredEmojis.isEmpty) {
       return BasicKeyboard(
@@ -110,7 +110,7 @@ class EmojiKeyboard extends ConsumerWidget {
             final selected = await showDialog(
               context: context,
               builder: (context2) => ReactionPickerDialog(
-                account: account,
+                account: ref.read(accountContextProvider).getAccount,
                 isAcceptSensitive: true,
               ),
             );

@@ -1,9 +1,9 @@
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 part "users_lists_notifier.g.dart";
 

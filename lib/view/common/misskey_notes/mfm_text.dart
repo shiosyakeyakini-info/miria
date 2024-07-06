@@ -113,8 +113,11 @@ class MfmTextState extends ConsumerState<MfmText> {
       emojiBuilder: (builderContext, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
           emojiName: ":$emojiName:",
-          repository: ref
-              .read(emojiRepositoryProvider(AccountScope.of(builderContext))),
+          repository: ref.read(
+            emojiRepositoryProvider(
+              ref.read(accountContextProvider).getAccount,
+            ),
+          ),
           emojiInfo: widget.emoji,
         );
         return DefaultTextStyle(
@@ -281,8 +284,11 @@ class SimpleMfmText extends ConsumerWidget {
         child: CustomEmoji(
           emojiData: MisskeyEmojiData.fromEmojiName(
             emojiName: ":$emojiName:",
-            repository:
-                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            repository: ref.read(
+              emojiRepositoryProvider(
+                ref.read(accountContextProvider).getAccount,
+              ),
+            ),
             emojiInfo: emojis,
           ),
           fontSizeRatio: 1,

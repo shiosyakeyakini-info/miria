@@ -327,7 +327,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 itemBuilder: (_, index) {
                   final tabSetting = tabSettings[index];
                   final account = ref.watch(accountProvider(tabSetting.acct));
-                  return AccountScope(
+                  return AccountContextScope.as(
                     account: account,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,

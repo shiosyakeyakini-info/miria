@@ -17,13 +17,13 @@ class MisskeyPageNotifierState with _$MisskeyPageNotifierState {
   }) = _MisskeyPageNotifierState;
 }
 
-@riverpod
+@Riverpod(dependencies: [accountContext, misskeyGetContext, misskeyPostContext])
 class MisskeyPageNotifier extends _$MisskeyPageNotifier {
   @override
-  Future<MisskeyPageNotifierState> build(Account account, String pageId) async {
+  Future<MisskeyPageNotifierState> build(String pageId) async {
     return MisskeyPageNotifierState(
       page: await ref
-          .read(misskeyProvider(account))
+          .read(misskeyGetContextProvider)
           .pages
           .show(PagesShowRequest(pageId: pageId)),
     );
@@ -32,7 +32,8 @@ class MisskeyPageNotifier extends _$MisskeyPageNotifier {
   Future<void> likeOr() async {
     final before = await future;
 
-    if (this.account.i.id == before.page.userId) {
+    if (ref.read(accountContextProvider).postAccount.i.id ==
+        before.page.userId) {
       await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
             message: (context) => S.of(context).canNotFavoriteMyPage,
           );
@@ -43,7 +44,7 @@ class MisskeyPageNotifier extends _$MisskeyPageNotifier {
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       if (before.page.isLiked ?? false) {
         await ref
-            .read(misskeyProvider(this.account))
+            .read(misskeyPostContextProvider)
             .pages
             .unlike(PagesUnlikeRequest(pageId: pageId));
         state = AsyncData(
@@ -56,7 +57,7 @@ class MisskeyPageNotifier extends _$MisskeyPageNotifier {
         );
       } else {
         await ref
-            .read(misskeyProvider(this.account))
+            .read(misskeyPostContextProvider)
             .pages
             .like(PagesLikeRequest(pageId: pageId));
         state = AsyncData(

@@ -7,7 +7,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/log.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/model/tab_setting.dart";
-import "package:miria/model/tab_type.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -223,8 +222,7 @@ class NoteWrapperState extends ConsumerState<NoteWrapper> {
   @override
   Widget build(BuildContext context) {
     final note = ref.watch(
-      notesProvider(AccountScope.of(context))
-          .select((note) => note.notes[widget.targetNote.id]),
+      notesWithProvider.select((note) => note.notes[widget.targetNote.id]),
     );
     if (note == null) {
       logger.info("note was not found. ${widget.targetNote}");

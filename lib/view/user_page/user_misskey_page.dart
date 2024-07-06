@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -39,7 +38,7 @@ class UserMisskeyPage extends ConsumerWidget {
                 .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          subtitle: MfmText(mfmText: page.summary),
+          subtitle: MfmText(mfmText: page.summary ?? ""),
           onTap: () async => context.pushRoute(
             MisskeyRouteRoute(
               account: ref.read(accountContextProvider).getAccount,

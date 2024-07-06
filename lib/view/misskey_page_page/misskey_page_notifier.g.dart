@@ -7,7 +7,7 @@ part of 'misskey_page_notifier.dart';
 // **************************************************************************
 
 String _$misskeyPageNotifierHash() =>
-    r'a48c3db37f278a6213bb6d7f5c67c30339ab5acb';
+    r'584b3c35a6e2456887fdce91f96ef3da288044f7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,11 +32,9 @@ class _SystemHash {
 
 abstract class _$MisskeyPageNotifier
     extends BuildlessAutoDisposeAsyncNotifier<MisskeyPageNotifierState> {
-  late final Account account;
   late final String pageId;
 
   FutureOr<MisskeyPageNotifierState> build(
-    Account account,
     String pageId,
   );
 }
@@ -50,9 +48,15 @@ class MisskeyPageNotifierFamily extends Family {
   /// See also [MisskeyPageNotifier].
   const MisskeyPageNotifierFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyGetContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyGetContextProvider,
+    ...?misskeyGetContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -66,11 +70,9 @@ class MisskeyPageNotifierFamily extends Family {
 
   /// See also [MisskeyPageNotifier].
   MisskeyPageNotifierProvider call(
-    Account account,
     String pageId,
   ) {
     return MisskeyPageNotifierProvider(
-      account,
       pageId,
     );
   }
@@ -81,7 +83,6 @@ class MisskeyPageNotifierFamily extends Family {
     covariant MisskeyPageNotifierProvider provider,
   ) {
     return call(
-      provider.account,
       provider.pageId,
     );
   }
@@ -113,12 +114,9 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     MisskeyPageNotifier, MisskeyPageNotifierState> {
   /// See also [MisskeyPageNotifier].
   MisskeyPageNotifierProvider(
-    Account account,
     String pageId,
   ) : this._internal(
-          () => MisskeyPageNotifier()
-            ..account = account
-            ..pageId = pageId,
+          () => MisskeyPageNotifier()..pageId = pageId,
           from: misskeyPageNotifierProvider,
           name: r'misskeyPageNotifierProvider',
           debugGetCreateSourceHash:
@@ -128,7 +126,6 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
           dependencies: MisskeyPageNotifierFamily._dependencies,
           allTransitiveDependencies:
               MisskeyPageNotifierFamily._allTransitiveDependencies,
-          account: account,
           pageId: pageId,
         );
 
@@ -139,11 +136,9 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.account,
     required this.pageId,
   }) : super.internal();
 
-  final Account account;
   final String pageId;
 
   @override
@@ -151,7 +146,6 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     covariant MisskeyPageNotifier notifier,
   ) {
     return notifier.build(
-      account,
       pageId,
     );
   }
@@ -161,29 +155,20 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: MisskeyPageNotifierProvider._internal(
-        () => create()
-          ..account = account
-          ..pageId = pageId,
+        () => create()..pageId = pageId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        account: account,
         pageId: pageId,
       ),
     );
   }
 
   @override
-  (
-    Account,
-    String,
-  ) get argument {
-    return (
-      account,
-      pageId,
-    );
+  (String,) get argument {
+    return (pageId,);
   }
 
   @override
@@ -196,30 +181,24 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     MisskeyPageNotifier Function() create,
   ) {
     return MisskeyPageNotifierProvider._internal(
-      () => create()
-        ..account = account
-        ..pageId = pageId,
+      () => create()..pageId = pageId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      account: account,
       pageId: pageId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MisskeyPageNotifierProvider &&
-        other.account == account &&
-        other.pageId == pageId;
+    return other is MisskeyPageNotifierProvider && other.pageId == pageId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
     hash = _SystemHash.combine(hash, pageId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -228,9 +207,6 @@ class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
 
 mixin MisskeyPageNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<MisskeyPageNotifierState> {
-  /// The parameter `account` of this provider.
-  Account get account;
-
   /// The parameter `pageId` of this provider.
   String get pageId;
 }
@@ -240,8 +216,6 @@ class _MisskeyPageNotifierProviderElement
         MisskeyPageNotifierState> with MisskeyPageNotifierRef {
   _MisskeyPageNotifierProviderElement(super.provider);
 
-  @override
-  Account get account => (origin as MisskeyPageNotifierProvider).account;
   @override
   String get pageId => (origin as MisskeyPageNotifierProvider).pageId;
 }

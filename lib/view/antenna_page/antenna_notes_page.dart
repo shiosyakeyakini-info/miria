@@ -5,7 +5,6 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
-import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/antenna_page/antenna_notes.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";

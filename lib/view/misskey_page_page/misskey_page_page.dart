@@ -37,7 +37,7 @@ class MisskeyPagePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AccountScope(
+    return AccountContextScope.as(
       account: account,
       child: Scaffold(
         appBar: AppBar(title: Text(S.of(context).page)),
@@ -123,13 +123,13 @@ class MisskeyPagePage extends ConsumerWidget {
   }
 }
 
-@riverpod
-Future<Note> fetchNote(FetchNoteRef ref, Account account, String noteId) async {
+@Riverpod(dependencies: [misskeyGetContext, notesWith])
+Future<Note> fetchNote(FetchNoteRef ref, String noteId) async {
   final note = await ref
-      .read(misskeyProvider(account))
+      .read(misskeyGetContextProvider)
       .notes
       .show(misskey.NotesShowRequest(noteId: noteId));
-  ref.read(notesProvider(account)).registerNote(note);
+  ref.read(notesWithProvider).registerNote(note);
   return note;
 }
 
@@ -146,7 +146,7 @@ class PageContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final content = this.content;
     if (content is misskey.PageText) {
-      final account = AccountScope.of(context);
+      final account = ref.read(accountContextProvider).getAccount;
       final nodes = const MfmParser().parse(content.text);
       return Column(
         children: [
@@ -187,8 +187,7 @@ class PageContent extends ConsumerWidget {
       }
     }
     if (content is misskey.PageNote) {
-      final note =
-          ref.watch(fetchNoteProvider(AccountScope.of(context), content.note));
+      final note = ref.watch(fetchNoteProvider(content.note));
       return switch (note) {
         AsyncLoading() => const Center(
             child: SizedBox.square(
@@ -250,8 +249,7 @@ class PageLikeButton extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider =
-        misskeyPageNotifierProvider(AccountScope.of(context), pageId);
+    final provider = misskeyPageNotifierProvider(pageId);
     final liked = ref.watch(
       provider.select((value) => value.valueOrNull?.page.isLiked ?? false),
     );

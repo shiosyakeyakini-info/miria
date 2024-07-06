@@ -34,7 +34,7 @@ import "package:miria/view/login_page/login_page.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
 import "package:miria/view/misskey_page_page/misskey_page_page.dart";
 import "package:miria/view/note_create_page/drive_file_select_dialog.dart";
-import 'package:miria/view/note_create_page/drive_modal_sheet.dart';
+import "package:miria/view/note_create_page/drive_modal_sheet.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
 import "package:miria/view/note_detail_page/note_detail_page.dart";
 import "package:miria/view/note_modal_sheet/note_modal_sheet.dart";
