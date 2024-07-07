@@ -224,6 +224,20 @@ class _MisskeyProviderElement extends ProviderElement<Misskey> with MisskeyRef {
   Account get account => (origin as MisskeyProvider).account;
 }
 
+String _$appRouterHash() => r'bb30ea3f6e2863af290ea7544f9a9bd2a53f79f4';
+
+/// See also [appRouter].
+@ProviderFor(appRouter)
+final appRouterProvider = Provider<Raw<AppRouter>>.internal(
+  appRouter,
+  name: r'appRouterProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$appRouterHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AppRouterRef = ProviderRef<Raw<AppRouter>>;
 String _$misskeyWithoutAccountHash() =>
     r'69fd2ed57ba01ab828bd39dd8adde72f977dd91e';
 

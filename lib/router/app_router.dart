@@ -6,6 +6,7 @@ import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/model/image_file.dart";
+import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/users_list_settings.dart";
@@ -23,6 +24,7 @@ import "package:miria/view/clip_list_page/clip_list_page.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/common/account_select_dialog.dart";
 import "package:miria/view/common/color_picker_dialog.dart";
+import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
 import "package:miria/view/common/misskey_notes/renote_user_dialog.dart";
 import "package:miria/view/explore_page/explore_page.dart";
@@ -147,6 +149,8 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: UserSelectRoute.page),
     AutoDialogRoute(page: ChannelDetailRoute.page),
     AutoDialogRoute(page: ServerDetailRoute.page),
+    AutoDialogRoute(page: ReactionUserRoute.page),
+    AutoDialogRoute(page: AccountSelectRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),

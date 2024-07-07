@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
@@ -11,7 +12,7 @@ import "package:miria/view/common/misskey_notes/video_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher.dart";
 
-class MisskeyFileView extends ConsumerStatefulWidget {
+class MisskeyFileView extends HookConsumerWidget {
   final List<DriveFile> files;
 
   final double height;
@@ -23,15 +24,9 @@ class MisskeyFileView extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => MisskeyFileViewState();
-}
-
-class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
-  late bool isElipsed = widget.files.length >= 5;
-
-  @override
-  Widget build(BuildContext context) {
-    final targetFiles = widget.files;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isElipsed = useState(files.length >= 5);
+    final targetFiles = files;
 
     if (targetFiles.isEmpty) {
       return Container();
@@ -40,7 +35,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
       return Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: widget.height,
+            maxHeight: height,
             maxWidth: double.infinity,
           ),
           child: MisskeyImage(
@@ -68,9 +63,9 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                   .mapIndexed(
                     (index, element) => (element: element, index: index),
                   )
-                  .take(isElipsed ? 4 : targetFiles.length))
+                  .take(isElipsed.value ? 4 : targetFiles.length))
                 SizedBox(
-                  height: widget.height,
+                  height: height,
                   width: double.infinity,
                   child: MisskeyImage(
                     isSensitive: targetFile.element.isSensitive,
@@ -83,11 +78,9 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
                 ),
             ],
           ),
-          if (isElipsed)
+          if (isElipsed.value)
             InNoteButton(
-              onPressed: () => setState(() {
-                isElipsed = !isElipsed;
-              }),
+              onPressed: () => isElipsed.value = !isElipsed.value,
               child: Text(S.of(context).showMoreFiles),
             ),
         ],
@@ -96,7 +89,7 @@ class MisskeyFileViewState extends ConsumerState<MisskeyFileView> {
   }
 }
 
-class MisskeyImage extends ConsumerStatefulWidget {
+class MisskeyImage extends HookConsumerWidget {
   final bool isSensitive;
   final String? thumbnailUrl;
   final List<String> targetFiles;
@@ -115,88 +108,66 @@ class MisskeyImage extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MisskeyImage> createState() => MisskeyImageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final initialNsfw = useMemoized(() {
+      final nsfwSetting = ref.read(
+        generalSettingsRepositoryProvider
+            .select((repository) => repository.settings.nsfwInherit),
+      );
+      if (nsfwSetting == NSFWInherit.allHidden) {
+        // 強制的にNSFW表示
+        return false;
+      } else if (nsfwSetting == NSFWInherit.ignore) {
+        // 設定を無視
+        return true;
+      } else if (nsfwSetting == NSFWInherit.inherit && !isSensitive) {
+        // 閲覧注意ではなく、継承する
+        return true;
+      } else if (nsfwSetting == NSFWInherit.removeNsfw && !isSensitive) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    final nsfwAccepted = useState(initialNsfw);
 
-class MisskeyImageState extends ConsumerState<MisskeyImage> {
-  var nsfwAccepted = false;
-  Widget? cachedWidget;
-
-  @override
-  void didUpdateWidget(covariant MisskeyImage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!const ListEquality()
-        .equals(oldWidget.targetFiles, widget.targetFiles)) {
-      cachedWidget = null;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final nsfwSetting = ref.read(
-      generalSettingsRepositoryProvider
-          .select((repository) => repository.settings.nsfwInherit),
-    );
-    if (nsfwSetting == NSFWInherit.allHidden) {
-      // 強制的にNSFW表示
-      setState(() {
-        nsfwAccepted = false;
-      });
-    } else if (nsfwSetting == NSFWInherit.ignore) {
-      // 設定を無視
-      setState(() {
-        nsfwAccepted = true;
-      });
-    } else if (nsfwSetting == NSFWInherit.inherit && !widget.isSensitive) {
-      // 閲覧注意ではなく、継承する
-      setState(() {
-        nsfwAccepted = true;
-      });
-    } else if (nsfwSetting == NSFWInherit.removeNsfw && !widget.isSensitive) {
-      setState(() {
-        nsfwAccepted = true;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     final nsfwSetting = ref.watch(
       generalSettingsRepositoryProvider
           .select((repository) => repository.settings.nsfwInherit),
     );
+    final delayed =
+        useFuture(Future.delayed(const Duration(milliseconds: 100)));
+
+    if (delayed.connectionState != ConnectionState.done) return Container();
+
     return Stack(
       children: [
         Align(
           child: GestureDetector(
             onTap: () async {
-              if (!nsfwAccepted) {
-                setState(() {
-                  nsfwAccepted = true;
-                });
+              if (!nsfwAccepted.value) {
+                nsfwAccepted.value = true;
                 return;
               } else {
-                if (widget.fileType.startsWith("image")) {
+                if (fileType.startsWith("image")) {
                   await showDialog(
                     context: context,
                     builder: (context) => ImageDialog(
-                      imageUrlList: widget.targetFiles,
-                      initialPage: widget.position,
+                      imageUrlList: targetFiles,
+                      initialPage: position,
                     ),
                   );
-                } else if (widget.fileType.startsWith(RegExp("video|audio"))) {
+                } else if (fileType.startsWith(RegExp("video|audio"))) {
                   await showDialog(
                     context: context,
                     builder: (context) => VideoDialog(
-                      url: widget.targetFiles[widget.position],
-                      fileType: widget.fileType,
+                      url: targetFiles[position],
+                      fileType: fileType,
                     ),
                   );
                 } else {
                   await launchUrl(
-                    Uri.parse(widget.targetFiles[widget.position]),
+                    Uri.parse(targetFiles[position]),
                     mode: LaunchMode.externalApplication,
                   );
                 }
@@ -204,7 +175,7 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
             },
             child: Builder(
               builder: (context) {
-                if (!nsfwAccepted) {
+                if (!nsfwAccepted.value) {
                   return Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Container(
@@ -245,80 +216,61 @@ class MisskeyImageState extends ConsumerState<MisskeyImage> {
                   );
                 }
 
-                if (cachedWidget != null) {
-                  return cachedWidget!;
-                }
-
-                cachedWidget = FutureBuilder(
-                  future: Future.delayed(const Duration(milliseconds: 100)),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (widget.fileType.startsWith("image")) {
-                        cachedWidget = SizedBox(
+                if (fileType.startsWith("image")) {
+                  return SizedBox(
+                    height: 200,
+                    child: NetworkImageView(
+                      url: thumbnailUrl ?? targetFiles[position],
+                      type: ImageType.imageThumbnail,
+                      loadingBuilder: (context, widget, chunkEvent) => SizedBox(
+                        width: double.infinity,
+                        height: 200,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else if (fileType.startsWith(RegExp("video|audio"))) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: SizedBox(
                           height: 200,
-                          child: NetworkImageView(
-                            url: widget.thumbnailUrl ??
-                                widget.targetFiles[widget.position],
-                            type: ImageType.imageThumbnail,
-                            loadingBuilder: (context, widget, chunkEvent) =>
-                                SizedBox(
-                              width: double.infinity,
-                              height: 200,
-                              child: widget,
-                            ),
-                          ),
-                        );
-                      } else if (widget.fileType
-                          .startsWith(RegExp("video|audio"))) {
-                        cachedWidget = Stack(
-                          children: [
-                            Positioned.fill(
-                              child: SizedBox(
-                                height: 200,
-                                child: widget.thumbnailUrl != null
-                                    ? NetworkImageView(
-                                        url: widget.thumbnailUrl!,
-                                        type: ImageType.imageThumbnail,
-                                        loadingBuilder:
-                                            (context, widget, chunkEvent) =>
-                                                SizedBox(
-                                          width: double.infinity,
-                                          height: 200,
-                                          child: widget,
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ),
-                            ),
-                            const Positioned.fill(
-                              child: Center(
-                                child: Icon(Icons.play_circle, size: 60),
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        cachedWidget = TextButton.icon(
-                          onPressed: () async => launchUrl(
-                            Uri.parse(widget.targetFiles[widget.position]),
-                            mode: LaunchMode.externalApplication,
-                          ),
-                          icon: const Icon(Icons.file_download_outlined),
-                          label: Text(widget.name),
-                        );
-                      }
-
-                      return cachedWidget!;
-                    }
-                    return Container();
-                  },
-                );
-                return cachedWidget!;
+                          child: thumbnailUrl != null
+                              ? NetworkImageView(
+                                  url: thumbnailUrl!,
+                                  type: ImageType.imageThumbnail,
+                                  loadingBuilder:
+                                      (context, widget, chunkEvent) => SizedBox(
+                                    width: double.infinity,
+                                    height: 200,
+                                    child: widget,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ),
+                      const Positioned.fill(
+                        child: Center(
+                          child: Icon(Icons.play_circle, size: 60),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return TextButton.icon(
+                    onPressed: () async => launchUrl(
+                      Uri.parse(targetFiles[position]),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                    icon: const Icon(Icons.file_download_outlined),
+                    label: Text(name),
+                  );
+                }
               },
             ),
           ),
         ),
-        if (widget.isSensitive &&
+        if (isSensitive &&
             (nsfwSetting == NSFWInherit.ignore ||
                 nsfwSetting == NSFWInherit.allHidden))
           Positioned(

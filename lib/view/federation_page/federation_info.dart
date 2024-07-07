@@ -93,9 +93,7 @@ class FederationInfo extends ConsumerWidget {
                       S.of(context).software,
                       textAlign: TextAlign.center,
                     ),
-                    Text(
-                      "${data.softwareName} ${data.softwareVersion}",
-                    ),
+                    Text("${data.softwareName} ${data.softwareVersion}"),
                   ],
                 ),
                 if (data.languages.isNotEmpty)
@@ -105,9 +103,7 @@ class FederationInfo extends ConsumerWidget {
                         S.of(context).language,
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        data.languages.join(", "),
-                      ),
+                      Text(data.languages.join(", ")),
                     ],
                   ),
                 if (data.maintainerName != null)
@@ -117,9 +113,7 @@ class FederationInfo extends ConsumerWidget {
                         S.of(context).administrator,
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        "${data.maintainerName}",
-                      ),
+                      Text("${data.maintainerName}"),
                     ],
                   ),
                 if (data.maintainerEmail != null)
@@ -129,9 +123,7 @@ class FederationInfo extends ConsumerWidget {
                         S.of(context).contact,
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        "${data.maintainerEmail}",
-                      ),
+                      Text("${data.maintainerEmail}"),
                     ],
                   ),
                 if (data.serverRules.isNotEmpty)

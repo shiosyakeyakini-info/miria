@@ -14,7 +14,6 @@ import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/link_navigator.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
@@ -56,7 +55,7 @@ InlineSpan _unicodeEmojiBuilder(
   }
 }
 
-class MfmText extends ConsumerStatefulWidget {
+class MfmText extends ConsumerWidget {
   final String? mfmText;
   final List<MfmNode>? mfmNode;
   final String? host;
@@ -84,11 +83,6 @@ class MfmText extends ConsumerStatefulWidget {
     this.maxLines,
   }) : assert(mfmText != null || mfmNode != null);
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => MfmTextState();
-}
-
-class MfmTextState extends ConsumerState<MfmText> {
   Future<void> onSearch(String query) async {
     final uri = Uri(
       scheme: "https",
@@ -99,18 +93,11 @@ class MfmTextState extends ConsumerState<MfmText> {
     await launchUrl(uri);
   }
 
-  Future<void> onHashtagTap(String hashtag) async {
-    await context.pushRoute(
-      HashtagRoute(
-          accountContext: ref.read(accountContextProvider), hashtag: hashtag,),
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Mfm(
-      mfmText: widget.mfmText,
-      mfmNode: widget.mfmNode,
+      mfmText: mfmText,
+      mfmNode: mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
           emojiName: ":$emojiName:",
@@ -119,14 +106,14 @@ class MfmTextState extends ConsumerState<MfmText> {
               ref.read(accountContextProvider).getAccount,
             ),
           ),
-          emojiInfo: widget.emoji,
+          emojiInfo: emoji,
         );
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,
           child: GestureDetector(
             onTap: MfmBlurScope.of(builderContext)
                 ? null
-                : () => widget.onEmojiTap?.call(emojiData),
+                : () => onEmojiTap?.call(emojiData),
             child: EmojiInk(
               child: CustomEmoji(
                 emojiData: emojiData,
@@ -142,7 +129,7 @@ class MfmTextState extends ConsumerState<MfmText> {
         emoji,
         style,
         ref,
-        () => widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+        () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
       ),
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
@@ -173,28 +160,31 @@ class MfmTextState extends ConsumerState<MfmText> {
       monospaceStyle: AppTheme.of(context).monospaceStyle,
       cursiveStyle: AppTheme.of(context).cursiveStyle,
       fantasyStyle: AppTheme.of(context).fantasyStyle,
-      linkTap: (src) async => const LinkNavigator()
-          .onTapLink(context, ref, src, widget.host)
-          .expectFailure(context),
+      linkTap: (src) async =>
+          const LinkNavigator().onTapLink(context, ref, src, host),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
-      mentionTap: (userName, host, acct) async => const LinkNavigator()
-          .onMentionTap(
-            context,
-            ref,
-            acct,
-            widget.host,
-          )
-          .expectFailure(context),
-      hashtagTap: onHashtagTap,
+      mentionTap: (userName, host, acct) async =>
+          const LinkNavigator().onMentionTap(
+        context,
+        ref,
+        acct,
+        host,
+      ),
+      hashtagTap: (hashtag) async => await context.pushRoute(
+        HashtagRoute(
+          accountContext: ref.read(accountContextProvider),
+          hashtag: hashtag,
+        ),
+      ),
       searchTap: onSearch,
-      style: widget.style,
-      isNyaize: widget.isNyaize,
-      suffixSpan: widget.suffixSpan,
-      prefixSpan: widget.prefixSpan,
-      isUseAnimation: widget.isEnableAnimatedMFM,
+      style: style,
+      isNyaize: isNyaize,
+      suffixSpan: suffixSpan,
+      prefixSpan: prefixSpan,
+      isUseAnimation: isEnableAnimatedMFM,
       defaultBorderColor: Theme.of(context).primaryColor,
-      maxLines: widget.maxLines,
+      maxLines: maxLines,
     );
   }
 }

@@ -34,7 +34,7 @@ class FederationCustomEmojis extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final emoji = ref.read(fetchEmojiProvider(host, meta));
+    final emoji = ref.watch(fetchEmojiProvider(host, meta));
     return switch (emoji) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(

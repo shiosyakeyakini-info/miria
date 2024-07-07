@@ -208,8 +208,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         if (widget.noteCreationMode !=
                             NoteCreationMode.update) ...[
                           IconButton(
-                            onPressed: () async =>
-                                await notifier.chooseFile(context),
+                            onPressed: () async => await notifier.chooseFile(),
                             icon: const Icon(Icons.image),
                           ),
                           if (widget.noteCreationMode !=
@@ -226,8 +225,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         const CwToggleButton(),
                         if (widget.noteCreationMode != NoteCreationMode.update)
                           IconButton(
-                            onPressed: () async =>
-                                notifier.addReplyUser(context),
+                            onPressed: () async => notifier.addReplyUser(),
                             icon: const Icon(Icons.mail_outline),
                           ),
                         IconButton(

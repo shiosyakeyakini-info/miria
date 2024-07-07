@@ -3,7 +3,6 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/misskey_notes/local_only_icon.dart";
 import "package:miria/view/note_create_page/note_visibility_dialog.dart";
@@ -89,9 +88,7 @@ class NoteCreateSettingTop extends ConsumerWidget {
           ),
         ),
         IconButton(
-          onPressed: () async {
-            notifier.toggleLocalOnly(context);
-          },
+          onPressed: () async => notifier.toggleLocalOnly(),
           icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket),
         ),
         Builder(

@@ -1,39 +1,22 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/themes/app_theme.dart";
 
-class CwTextArea extends ConsumerStatefulWidget {
+class CwTextArea extends ConsumerWidget {
   const CwTextArea({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => CwTextAreaState();
-}
-
-class CwTextAreaState extends ConsumerState<CwTextArea> {
-  final cwController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cwController = useTextEditingController();
     cwController.addListener(() {
       ref
           .watch(noteCreateNotifierProvider.notifier)
           .setCwText(cwController.text);
     });
-  }
 
-  @override
-  void dispose() {
-    cwController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     ref.listen(
       noteCreateNotifierProvider.select((value) => value.cwText),
       (_, next) {

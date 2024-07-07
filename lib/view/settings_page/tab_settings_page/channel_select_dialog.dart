@@ -58,7 +58,7 @@ class ChannelSelectDialog extends StatelessWidget implements AutoRouteWrapper {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ChannelSearch(
                           onChannelSelected: (channel) async =>
-                              context.maybePop(channel)),
+                              context.maybePop(channel),),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

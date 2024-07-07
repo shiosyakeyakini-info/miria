@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
@@ -7,7 +8,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class UserNotes extends ConsumerStatefulWidget {
+class UserNotes extends HookConsumerWidget {
   final String userId;
   final String? remoteUserId;
 
@@ -18,25 +19,13 @@ class UserNotes extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => UserNotesState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFileOnly = useState(false);
+    final withReply = useState(false);
+    final renote = useState(true);
+    final highlight = useState(false);
+    final untilDate = useState<DateTime?>(null);
 
-class UserNotesState extends ConsumerState<UserNotes> {
-  Misskey get misskey => ref.read(misskeyGetContextProvider);
-
-  bool isFileOnly = false;
-  bool withReply = false;
-  bool renote = true;
-  bool highlight = false;
-  DateTime? untilDate;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
@@ -48,32 +37,35 @@ class UserNotesState extends ConsumerState<UserNotes> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: ToggleButtons(
-                      isSelected: [withReply, isFileOnly, renote, highlight],
+                      isSelected: [
+                        withReply.value,
+                        isFileOnly.value,
+                        renote.value,
+                        highlight.value,
+                      ],
                       onPressed: (value) {
-                        setState(() {
-                          switch (value) {
-                            case 0:
-                              withReply = !withReply;
-                              if (withReply) {
-                                isFileOnly = false;
-                              }
-                              highlight = false;
-                            case 1:
-                              isFileOnly = !isFileOnly;
-                              if (isFileOnly) {
-                                withReply = false;
-                              }
-                              highlight = false;
-                            case 2:
-                              renote = !renote;
-                              highlight = false;
-                            case 3:
-                              withReply = false;
-                              isFileOnly = false;
-                              renote = false;
-                              highlight = true;
-                          }
-                        });
+                        switch (value) {
+                          case 0:
+                            withReply.value = !withReply.value;
+                            if (withReply.value) {
+                              isFileOnly.value = false;
+                            }
+                            highlight.value = false;
+                          case 1:
+                            isFileOnly.value = !isFileOnly.value;
+                            if (isFileOnly.value) {
+                              withReply.value = false;
+                            }
+                            highlight.value = false;
+                          case 2:
+                            renote.value = !renote.value;
+                            highlight.value = false;
+                          case 3:
+                            withReply.value = false;
+                            isFileOnly.value = false;
+                            renote.value = false;
+                            highlight.value = true;
+                        }
                       },
                       children: [
                         Padding(
@@ -100,7 +92,7 @@ class UserNotesState extends ConsumerState<UserNotes> {
               IconButton(
                 onPressed: () async {
                   final userInfo = ref.read(
-                    userInfoNotifierProvider(widget.userId)
+                    userInfoNotifierProvider(userId)
                         .select((value) => value.requireValue),
                   );
                   final firstDate = ref.read(accountContextProvider).isSame
@@ -109,13 +101,13 @@ class UserNotesState extends ConsumerState<UserNotes> {
 
                   final result = await showDatePicker(
                     context: context,
-                    initialDate: untilDate ?? DateTime.now(),
+                    initialDate: untilDate.value ?? DateTime.now(),
                     helpText: S.of(context).showNotesBeforeThisDate,
                     firstDate: firstDate ?? DateTime.now(),
                     lastDate: DateTime.now(),
                   );
                   if (result != null) {
-                    untilDate = DateTime(
+                    untilDate.value = DateTime(
                       result.year,
                       result.month,
                       result.day,
@@ -125,7 +117,6 @@ class UserNotesState extends ConsumerState<UserNotes> {
                       999,
                     );
                   }
-                  setState(() {});
                 },
                 icon: const Icon(Icons.date_range),
               ),
@@ -137,31 +128,34 @@ class UserNotesState extends ConsumerState<UserNotes> {
             listKey: Object.hashAll(
               [isFileOnly, withReply, renote, untilDate, highlight],
             ),
-            additionalErrorInfo: highlight
+            additionalErrorInfo: highlight.value
                 ? (context, e) => Text(S.of(context).userHighlightAvailability)
                 : null,
             initializeFuture: () async {
               final Iterable<Note> notes;
-              if (highlight) {
-                notes = await misskey.users.featuredNotes(
-                  UsersFeaturedNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
-                  ),
-                );
+              if (highlight.value) {
+                notes = await ref
+                    .read(misskeyGetContextProvider)
+                    .users
+                    .featuredNotes(
+                      UsersFeaturedNotesRequest(
+                        userId: remoteUserId ?? userId,
+                      ),
+                    );
               } else {
-                notes = await misskey.users.notes(
-                  UsersNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
-                    withFiles: isFileOnly,
-                    // 後方互換性のため
-                    includeReplies: withReply,
-                    includeMyRenotes: renote,
-                    withReplies: withReply,
-                    withRenotes: renote,
-                    withChannelNotes: true,
-                    untilDate: untilDate,
-                  ),
-                );
+                notes = await ref.read(misskeyGetContextProvider).users.notes(
+                      UsersNotesRequest(
+                        userId: remoteUserId ?? userId,
+                        withFiles: isFileOnly.value,
+                        // 後方互換性のため
+                        includeReplies: withReply.value,
+                        includeMyRenotes: renote.value,
+                        withReplies: withReply.value,
+                        withRenotes: renote.value,
+                        withChannelNotes: true,
+                        untilDate: untilDate.value,
+                      ),
+                    );
               }
               if (!context.mounted) return [];
               ref.read(notesWithProvider).registerAll(notes);
@@ -169,27 +163,30 @@ class UserNotesState extends ConsumerState<UserNotes> {
             },
             nextFuture: (lastElement, _) async {
               final Iterable<Note> notes;
-              if (highlight) {
-                notes = await misskey.users.featuredNotes(
-                  UsersFeaturedNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
-                    untilId: lastElement.id,
-                  ),
-                );
+              if (highlight.value) {
+                notes = await ref
+                    .read(misskeyGetContextProvider)
+                    .users
+                    .featuredNotes(
+                      UsersFeaturedNotesRequest(
+                        userId: remoteUserId ?? userId,
+                        untilId: lastElement.id,
+                      ),
+                    );
               } else {
-                notes = await misskey.users.notes(
-                  UsersNotesRequest(
-                    userId: widget.remoteUserId ?? widget.userId,
-                    untilId: lastElement.id,
-                    withFiles: isFileOnly,
-                    includeReplies: withReply,
-                    includeMyRenotes: renote,
-                    withReplies: withReply,
-                    withRenotes: renote,
-                    withChannelNotes: true,
-                    untilDate: untilDate,
-                  ),
-                );
+                notes = await ref.read(misskeyGetContextProvider).users.notes(
+                      UsersNotesRequest(
+                        userId: remoteUserId ?? userId,
+                        untilId: lastElement.id,
+                        withFiles: isFileOnly.value,
+                        includeReplies: withReply.value,
+                        includeMyRenotes: renote.value,
+                        withReplies: withReply.value,
+                        withRenotes: renote.value,
+                        withChannelNotes: true,
+                        untilDate: untilDate.value,
+                      ),
+                    );
               }
               if (!context.mounted) return [];
               ref.read(notesWithProvider).registerAll(notes);

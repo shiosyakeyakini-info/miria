@@ -286,10 +286,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                       user: displayNote.user,
                       onTap: () async => ref
                           .read(misskeyNoteNotifierProvider.notifier)
-                          .navigateToUserPage(
-                            context,
-                            displayNote.user,
-                          ),
+                          .navigateToUserPage(displayNote.user),
                     ),
                     const Padding(padding: EdgeInsets.only(left: 10)),
                     Expanded(
@@ -566,10 +563,7 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                         .read(
                                           misskeyNoteNotifierProvider.notifier,
                                         )
-                                        .navigateToNoteDetailPage(
-                                          context,
-                                          displayNote,
-                                        )
+                                        .navigateToNoteDetailPage(displayNote)
                                         .expectFailure(context),
                                     icon: Icon(
                                       Icons.u_turn_left,
@@ -793,8 +787,7 @@ class NoteHeader1 extends ConsumerWidget {
         GestureDetector(
           onTap: () async => ref
               .read(misskeyNoteNotifierProvider.notifier)
-              .navigateToNoteDetailPage(context, displayNote)
-              .expectFailure(context),
+              .navigateToNoteDetailPage(displayNote),
           child: Text(
             displayNote.createdAt.differenceNow(context),
             textAlign: TextAlign.right,
@@ -846,8 +839,7 @@ class RenoteHeader extends ConsumerWidget {
           child: GestureDetector(
             onTap: () async => ref
                 .read(misskeyNoteNotifierProvider.notifier)
-                .navigateToUserPage(context, note.user)
-                .expectFailure(context),
+                .navigateToUserPage(note.user),
             child: SimpleMfmText(
               note.user.name ?? note.user.username,
               style: renoteTextStyle?.copyWith(

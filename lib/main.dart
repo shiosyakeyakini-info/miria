@@ -10,7 +10,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
 import "package:miria/model/desktop_settings.dart";
 import "package:miria/providers.dart";
-import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
@@ -40,8 +39,8 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindingObserver {
-  final _appRouter = AppRouter();
+class _MyAppState extends ConsumerState<MyApp>
+    with WindowListener, WidgetsBindingObserver {
   final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
   @override
@@ -143,6 +142,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
       generalSettingsRepositoryProvider
           .select((value) => value.settings.languages),
     );
+    final appRouter = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
       title: "Miria",
@@ -164,7 +164,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
         return DialogScope(
           child: AppThemeScope(
             child: SharingIntentListener(
-              router: _appRouter,
+              router: appRouter,
               child: ErrorDialogListener(
                 child: widget ?? Container(),
               ),
@@ -172,7 +172,7 @@ class _MyAppState extends ConsumerState<MyApp> with WindowListener, WidgetsBindi
           ),
         );
       },
-      routerConfig: _appRouter.config(),
+      routerConfig: appRouter.config(),
     );
   }
 }

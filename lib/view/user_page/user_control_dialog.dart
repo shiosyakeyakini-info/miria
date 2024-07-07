@@ -167,7 +167,7 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
           title: Text(S.of(context).openInAnotherAccount),
           onTap: () async => ref
               .read(misskeyNoteNotifierProvider.notifier)
-              .openUserInOtherAccount(context, user),
+              .openUserInOtherAccount(user),
         ),
         ListTile(
           leading: const Icon(Icons.search),

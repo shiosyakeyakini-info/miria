@@ -17,7 +17,6 @@ import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/notification_icon.dart";
 import "package:miria/view/common/tab_icon_view.dart";
 import "package:miria/view/common/timeline_listview.dart";
-import "package:miria/view/server_detail_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/time_line_page/misskey_time_line.dart";
 import "package:miria/view/time_line_page/nyanpuppu.dart";

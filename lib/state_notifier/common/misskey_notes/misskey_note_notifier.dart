@@ -1,10 +1,7 @@
-import "package:auto_route/auto_route.dart";
-import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_select_dialog.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -99,54 +96,51 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
   }
 
   Future<void> navigateToNoteDetailPage(
-    BuildContext context,
     Note note, {
     Account? account,
   }) async {
-    final accountContext = ref.read(accountContextProvider);
-    final foundNote =
-        accountContext.isSame ? note : await lookupNote(note: note);
-    if (!context.mounted) return;
-    if (foundNote == null) return;
-    await context.pushRoute(
-      NoteDetailRoute(note: foundNote, accountContext: accountContext),
-    );
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final accountContext = ref.read(accountContextProvider);
+      final foundNote =
+          accountContext.isSame ? note : await lookupNote(note: note);
+      if (foundNote == null) return;
+      await ref.read(appRouterProvider).push(
+            NoteDetailRoute(note: foundNote, accountContext: accountContext),
+          );
+    });
   }
 
   Future<void> navigateToUserPage(
-    BuildContext context,
     User user, {
     Account? account,
   }) async {
-    final accountContext = ref.read(accountContextProvider);
-    final foundUser =
-        accountContext.isSame ? user : await lookupUser(user: user);
-    if (foundUser == null) return;
-    if (!context.mounted) return;
-    await context.pushRoute(
-      UserRoute(userId: foundUser.id, accountContext: accountContext),
-    );
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final accountContext = ref.read(accountContextProvider);
+      final foundUser =
+          accountContext.isSame ? user : await lookupUser(user: user);
+      if (foundUser == null) return;
+      await ref.read(appRouterProvider).push(
+            UserRoute(userId: foundUser.id, accountContext: accountContext),
+          );
+    });
   }
 
-  Future<void> openNoteInOtherAccount(BuildContext context, Note note) async {
+  Future<void> openNoteInOtherAccount(Note note) async {
     final accountContext = ref.read(accountContextProvider);
-    final selectedAccount = await context.pushRoute<Account>(
-      AccountSelectRoute(
-        host: note.localOnly ? accountContext.getAccount.host : null,
-      ),
-    );
+    final selectedAccount = await ref.read(appRouterProvider).push<Account>(
+          AccountSelectRoute(
+            host: note.localOnly ? accountContext.getAccount.host : null,
+          ),
+        );
     if (selectedAccount == null) return;
-    if (!context.mounted) return;
-    await navigateToNoteDetailPage(context, note, account: selectedAccount);
+    await navigateToNoteDetailPage(note, account: selectedAccount);
   }
 
-  Future<void> openUserInOtherAccount(BuildContext context, User user) async {
-    final selectedAccount = await showDialog<Account?>(
-      context: context,
-      builder: (context) => const AccountSelectDialog(),
-    );
+  Future<void> openUserInOtherAccount(User user) async {
+    final selectedAccount =
+        await ref.read(appRouterProvider).push<Account>(AccountSelectRoute());
+
     if (selectedAccount == null) return;
-    if (!context.mounted) return;
-    await navigateToUserPage(context, user, account: selectedAccount);
+    await navigateToUserPage(user, account: selectedAccount);
   }
 }

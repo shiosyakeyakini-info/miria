@@ -8,22 +8,11 @@ final timelineNoteProvider =
 final timelineFocusNode =
     ChangeNotifierProvider.autoDispose((ref) => FocusNode());
 
-class TimelineNoteField extends ConsumerStatefulWidget {
+class TimelineNoteField extends ConsumerWidget {
   const TimelineNoteField({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      TimelineNoteFieldState();
-}
-
-class TimelineNoteFieldState extends ConsumerState<TimelineNoteField> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final noteStyle = AppTheme.of(context).noteTextStyle;
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),

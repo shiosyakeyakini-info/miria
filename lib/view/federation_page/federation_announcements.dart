@@ -79,7 +79,7 @@ class FederationAnnouncements extends HookConsumerWidget {
               return response.toList();
             },
             itemBuilder: (context, data) =>
-                Announcement(data: data, host: host),
+                Announcement(initialData: data, host: host),
           ),
         ),
       ],
@@ -87,33 +87,21 @@ class FederationAnnouncements extends HookConsumerWidget {
   }
 }
 
-class Announcement extends ConsumerStatefulWidget {
-  final AnnouncementsResponse data;
+class Announcement extends HookConsumerWidget {
+  final AnnouncementsResponse initialData;
   final String host;
 
   const Announcement({
-    required this.data,
+    required this.initialData,
     required this.host,
     super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => AnnouncementState();
-}
-
-class AnnouncementState extends ConsumerState<Announcement> {
-  late AnnouncementsResponse data;
-
-  @override
-  void initState() {
-    super.initState();
-    data = widget.data;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final icon = data.icon;
-    final imageUrl = data.imageUrl;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = useState(initialData);
+    final icon = data.value.icon;
+    final imageUrl = data.value.imageUrl;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
@@ -124,7 +112,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              if (data.forYou == true)
+              if (data.value.forYou == true)
                 Text(
                   S.of(context).announcementsForYou,
                   style: Theme.of(context)
@@ -137,7 +125,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
                   if (icon != null) AnnouncementIcon(iconType: icon),
                   Expanded(
                     child: MfmText(
-                      mfmText: data.title,
+                      mfmText: data.value.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -145,14 +133,12 @@ class AnnouncementState extends ConsumerState<Announcement> {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text(data.createdAt.format(context)),
+                child: Text(data.value.createdAt.format(context)),
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               MfmText(
-                mfmText: data.text,
-                host: ref.read(accountContextProvider).isSame
-                    ? null
-                    : widget.host,
+                mfmText: data.value.text,
+                host: ref.read(accountContextProvider).isSame ? null : host,
               ),
               if (imageUrl != null)
                 Center(
@@ -165,14 +151,15 @@ class AnnouncementState extends ConsumerState<Announcement> {
                   ),
                 ),
               if (ref.read(accountContextProvider).isSame &&
-                  data.isRead == false)
+                  data.value.isRead == false)
                 ElevatedButton(
                   onPressed: () async {
-                    if (data.needConfirmationToRead == true) {
+                    if (data.value.needConfirmationToRead == true) {
                       final isConfirmed = await SimpleConfirmDialog.show(
                         context: context,
-                        message:
-                            S.of(context).confirmAnnouncementsRead(data.title),
+                        message: S
+                            .of(context)
+                            .confirmAnnouncementsRead(data.value.title),
                         primary: S.of(context).readAnnouncement,
                         secondary: S.of(context).didNotReadAnnouncement,
                       );
@@ -184,12 +171,10 @@ class AnnouncementState extends ConsumerState<Announcement> {
                         .i
                         .readAnnouncement(
                           IReadAnnouncementRequest(
-                            announcementId: data.id,
+                            announcementId: data.value.id,
                           ),
                         );
-                    setState(() {
-                      data = data.copyWith(isRead: true);
-                    });
+                    data.value = data.value.copyWith(isRead: true);
                   },
                   child: Text(S.of(context).done),
                 ),

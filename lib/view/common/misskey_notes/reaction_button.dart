@@ -1,18 +1,19 @@
 import "dart:math";
 
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
-import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class ReactionButton extends ConsumerStatefulWidget {
+class ReactionButton extends ConsumerWidget {
   final MisskeyEmojiData emojiData;
   final int reactionCount;
   final String? myReaction;
@@ -27,26 +28,11 @@ class ReactionButton extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => ReactionButtonState();
-}
-
-class ReactionButtonState extends ConsumerState<ReactionButton> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final emojiData = widget.emojiData;
-    final isMyReaction = (emojiData is CustomEmojiData &&
-            widget.myReaction == emojiData.hostedName) ||
-        (emojiData is UnicodeEmojiData && widget.myReaction == emojiData.char);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final emojiData = this.emojiData;
+    final isMyReaction =
+        (emojiData is CustomEmojiData && myReaction == emojiData.hostedName) ||
+            (emojiData is UnicodeEmojiData && myReaction == emojiData.char);
 
     final backgroundColor = isMyReaction
         ? AppTheme.of(context).reactionButtonMeReactedColor
@@ -82,23 +68,22 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
               .read(misskeyPostContextProvider)
               .notes
               .reactions
-              .delete(NotesReactionsDeleteRequest(noteId: widget.noteId));
+              .delete(NotesReactionsDeleteRequest(noteId: noteId));
           if (account.host == "misskey.io") {
             await Future.delayed(
               const Duration(milliseconds: misskeyIOReactionDelay),
             );
           }
 
-          await ref.read(notesProvider(account)).refresh(widget.noteId);
+          await ref.read(notesWithProvider).refresh(noteId);
 
           return;
         }
 
         // すでに別のリアクションを行っている
-        if (widget.myReaction != null) return;
+        if (myReaction != null) return;
 
         final String reactionString;
-        final emojiData = widget.emojiData;
         switch (emojiData) {
           case UnicodeEmojiData():
             reactionString = emojiData.char;
@@ -111,7 +96,7 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
 
         await ref.read(misskeyPostContextProvider).notes.reactions.create(
               NotesReactionsCreateRequest(
-                noteId: widget.noteId,
+                noteId: noteId,
                 reaction: reactionString,
               ),
             );
@@ -123,18 +108,15 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
           );
         }
 
-        await ref.read(notesProvider(account)).refresh(widget.noteId);
+        await ref.read(notesWithProvider).refresh(noteId);
       },
       onLongPress: () async {
-        await showDialog(
-          context: context,
-          builder: (context2) {
-            return ReactionUserDialog(
-              account: ref.read(accountContextProvider).getAccount,
-              emojiData: widget.emojiData,
-              noteId: widget.noteId,
-            );
-          },
+        await context.pushRoute(
+          ReactionUserRoute(
+            accountContext: ref.read(accountContextProvider),
+            emojiData: emojiData,
+            noteId: noteId,
+          ),
         );
       },
       style: AppTheme.of(context).reactionButtonStyle.copyWith(
@@ -154,13 +136,13 @@ class ReactionButtonState extends ConsumerState<ReactionButton> {
               maxHeight: MediaQuery.textScalerOf(context).scale(24),
             ),
             child: CustomEmoji(
-              emojiData: widget.emojiData,
+              emojiData: emojiData,
               isAttachTooltip: false,
             ),
           ),
           const Padding(padding: EdgeInsets.only(left: 5)),
           Text(
-            widget.reactionCount.toString(),
+            reactionCount.toString(),
             style: TextStyle(color: foreground),
           ),
         ],

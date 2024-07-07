@@ -19,8 +19,11 @@ import "package:miria/view/user_page/user_reactions.dart";
 class UserPage extends ConsumerWidget implements AutoRouteWrapper {
   final String userId;
   final AccountContext accountContext;
-  const UserPage(
-      {required this.userId, required this.accountContext, super.key,});
+  const UserPage({
+    required this.userId,
+    required this.accountContext,
+    super.key,
+  });
 
   @override
   Widget wrappedRoute(BuildContext context) =>

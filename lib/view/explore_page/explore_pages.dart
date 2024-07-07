@@ -6,16 +6,11 @@ import "package:miria/router/app_router.dart";
 import "package:miria/view/common/futable_list_builder.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
-class ExplorePages extends ConsumerStatefulWidget {
+class ExplorePages extends ConsumerWidget {
   const ExplorePages({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => ExplorePagesState();
-}
-
-class ExplorePagesState extends ConsumerState<ExplorePages> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView(

@@ -2,7 +2,6 @@ import "dart:math";
 import "dart:typed_data";
 import "dart:ui";
 
-import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
@@ -11,6 +10,7 @@ import "package:image_editor/image_editor.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/photo_edit_page/color_filter_preset.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -340,20 +340,19 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
   }
 
   /// リアクションを追加する
-  Future<void> addReaction(Account account, BuildContext context) async {
-    final reaction = await context.pushRoute<MisskeyEmojiData>(
-      ReactionPickerRoute(account: account, isAcceptSensitive: true),
-    );
+  Future<void> addReaction(Account account) async {
+    final reaction = await ref.read(appRouterProvider).push<MisskeyEmojiData>(
+          ReactionPickerRoute(account: account, isAcceptSensitive: true),
+        );
     if (reaction == null) return;
 
     switch (reaction) {
       case CustomEmojiData():
         // カスタム絵文字の場合、ライセンスを確認する
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
-          if (!context.mounted) return;
-          final dialogResult = await context.pushRoute<bool>(
-            LicenseConfirmRoute(emoji: reaction.baseName, account: account),
-          );
+          final dialogResult = await ref.read(appRouterProvider).push<bool>(
+                LicenseConfirmRoute(emoji: reaction.baseName, account: account),
+              );
           if (dialogResult != true) return;
           _acceptReactions.add(reaction.baseName);
         }

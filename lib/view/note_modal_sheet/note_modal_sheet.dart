@@ -317,7 +317,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             title: Text(S.of(context).openInAnotherAccount),
             onTap: () async => ref
                 .read(misskeyNoteNotifierProvider.notifier)
-                .openNoteInOtherAccount(context, targetNote),
+                .openNoteInOtherAccount(targetNote),
           ),
         ListTile(
           leading: const Icon(Icons.share),

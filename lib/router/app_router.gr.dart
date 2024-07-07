@@ -468,6 +468,19 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ReactionUserRoute.name: (routeData) {
+      final args = routeData.argsAs<ReactionUserRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ReactionUserDialog(
+          accountContext: args.accountContext,
+          emojiData: args.emojiData,
+          noteId: args.noteId,
+          key: args.key,
+        )),
+      );
+    },
     RenoteModalRoute.name: (routeData) {
       final args = routeData.argsAs<RenoteModalRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -2319,6 +2332,54 @@ class ReactionPickerRouteArgs {
   @override
   String toString() {
     return 'ReactionPickerRouteArgs{account: $account, isAcceptSensitive: $isAcceptSensitive, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ReactionUserDialog]
+class ReactionUserRoute extends PageRouteInfo<ReactionUserRouteArgs> {
+  ReactionUserRoute({
+    required AccountContext accountContext,
+    required MisskeyEmojiData emojiData,
+    required String noteId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ReactionUserRoute.name,
+          args: ReactionUserRouteArgs(
+            accountContext: accountContext,
+            emojiData: emojiData,
+            noteId: noteId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ReactionUserRoute';
+
+  static const PageInfo<ReactionUserRouteArgs> page =
+      PageInfo<ReactionUserRouteArgs>(name);
+}
+
+class ReactionUserRouteArgs {
+  const ReactionUserRouteArgs({
+    required this.accountContext,
+    required this.emojiData,
+    required this.noteId,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final MisskeyEmojiData emojiData;
+
+  final String noteId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ReactionUserRouteArgs{accountContext: $accountContext, emojiData: $emojiData, noteId: $noteId, key: $key}';
   }
 }
 

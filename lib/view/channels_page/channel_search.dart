@@ -7,18 +7,13 @@ import "package:misskey_dart/misskey_dart.dart";
 
 final channelSearchProvider = StateProvider.autoDispose((ref) => "");
 
-class ChannelSearch extends ConsumerStatefulWidget {
+class ChannelSearch extends ConsumerWidget {
   const ChannelSearch({super.key, this.onChannelSelected});
 
   final void Function(CommunityChannel channel)? onChannelSelected;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => ChannelSearchState();
-}
-
-class ChannelSearchState extends ConsumerState<ChannelSearch> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         const Padding(padding: EdgeInsets.only(top: 5)),
@@ -32,9 +27,7 @@ class ChannelSearchState extends ConsumerState<ChannelSearch> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
-            child: ChannelSearchList(
-              onChannelSelected: widget.onChannelSelected,
-            ),
+            child: ChannelSearchList(onChannelSelected: onChannelSelected),
           ),
         ),
       ],

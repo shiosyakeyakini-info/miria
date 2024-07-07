@@ -1,6 +1,5 @@
 import "dart:typed_data";
 
-import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
@@ -14,7 +13,6 @@ import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/note_create_page/drive_modal_sheet.dart";
 import "package:miria/view/note_create_page/file_settings_dialog.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
@@ -100,7 +98,6 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _dio = ref.read(dioProvider);
   late final _misskey = ref.read(misskeyPostContextProvider);
   late final _noteRepository = ref.read(notesWithProvider);
-  late final _errorNotifier = ref.read(errorEventProvider.notifier);
   late final _dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
 
   @override
@@ -274,8 +271,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         replyTo: [
           reply.user,
           ...replyTo,
-        ]..removeWhere((element) =>
-            element.id == ref.read(accountContextProvider).postAccount.i.id),
+        ]..removeWhere(
+            (element) =>
+                element.id == ref.read(accountContextProvider).postAccount.i.id,
+          ),
       );
     }
 
@@ -538,18 +537,18 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   }
 
   /// メディアを選択する
-  Future<void> chooseFile(BuildContext context) async {
-    final result = await context
-        .pushRoute<DriveModalSheetReturnValue>(const DriveModalRoute());
+  Future<void> chooseFile() async {
+    final result = await ref
+        .read(appRouterProvider)
+        .push<DriveModalSheetReturnValue>(const DriveModalRoute());
 
     if (result == DriveModalSheetReturnValue.drive) {
-      if (!context.mounted) return;
-      final result = await context.pushRoute<List<DriveFile>?>(
-        DriveFileSelectRoute(
-          account: ref.read(accountContextProvider).postAccount,
-          allowMultiple: true,
-        ),
-      );
+      final result = await ref.read(appRouterProvider).push<List<DriveFile>?>(
+            DriveFileSelectRoute(
+              account: ref.read(accountContextProvider).postAccount,
+              allowMultiple: true,
+            ),
+          );
       if (result == null) return;
       final files = await Future.wait(
         result.map((file) async {
@@ -696,9 +695,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   }
 
   /// リプライ先ユーザーを追加する
-  Future<void> addReplyUser(BuildContext context) async {
-    final user = await context.pushRoute<User>(
-        UserSelectRoute(accountContext: ref.read(accountContextProvider)));
+  Future<void> addReplyUser() async {
+    final user = await ref.read(appRouterProvider).push<User>(
+          UserSelectRoute(accountContext: ref.read(accountContextProvider)),
+        );
     if (user != null) {
       state = state.copyWith(replyTo: [...state.replyTo, user]);
     }
@@ -744,27 +744,25 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   }
 
   /// ノートの連合オン・オフを設定する
-  void toggleLocalOnly(BuildContext context) {
+  Future<void> toggleLocalOnly() async {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      _errorNotifier.state = (
-        SpecifiedException(S.of(context).cannotFederateNoteToChannel),
-        context
-      );
-      return;
+      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+            message: (context) => S.of(context).cannotFederateNoteToChannel,
+          );
     }
     if (state.reply?.localOnly == true) {
-      _errorNotifier.state = (
-        SpecifiedException(S.of(context).cannotFederateReplyToLocalOnlyNote),
-        context
-      );
+      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+            message: (context) =>
+                S.of(context).cannotFederateReplyToLocalOnlyNote,
+          );
       return;
     }
     if (state.renote?.localOnly == true) {
-      _errorNotifier.state = (
-        SpecifiedException(S.of(context).cannotFederateRenoteToLocalOnlyNote),
-        context
-      );
+      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+            message: (context) =>
+                S.of(context).cannotFederateRenoteToLocalOnlyNote,
+          );
       return;
     }
     state = state.copyWith(localOnly: !state.localOnly);

@@ -29,6 +29,7 @@ import "package:miria/repository/shared_preference_controller.dart";
 import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
@@ -43,12 +44,16 @@ FileSystem fileSystem(FileSystemRef ref) => const LocalFileSystem();
 
 @Riverpod(keepAlive: true)
 @Deprecated(
-    "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",)
+  "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
+)
 Misskey misskey(MisskeyRef ref, Account account) => Misskey(
       token: account.token,
       host: account.host,
       socketConnectionTimeout: const Duration(seconds: 20),
     );
+
+@Riverpod(keepAlive: true)
+Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 
 @riverpod
 Misskey misskeyWithoutAccount(MisskeyWithoutAccountRef ref, String host) =>
