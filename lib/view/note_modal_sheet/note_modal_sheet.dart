@@ -41,10 +41,13 @@ class NoteModalSheetState with _$NoteModalSheetState {
   }) = _NoteModalSheetState;
 }
 
-@Riverpod(keepAlive: false)
+@Riverpod(
+  keepAlive: false,
+  dependencies: [misskeyPostContext, misskeyGetContext, accountContext],
+)
 class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   @override
-  NoteModalSheetState build(Account account, Note note) {
+  NoteModalSheetState build(Note note) {
     unawaited(_status());
     return NoteModalSheetState(noteState: const AsyncLoading());
   }
@@ -53,7 +56,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(
       noteState: await ref.read(dialogStateNotifierProvider.notifier).guard(
             () async => ref
-                .read(misskeyProvider(this.account))
+                .read(misskeyPostContextProvider)
                 .notes
                 .state(NotesStateRequest(noteId: note.id)),
           ),
@@ -64,10 +67,9 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(user: const AsyncLoading());
     state = state.copyWith(
       user: await ref.read(dialogStateNotifierProvider.notifier).guard(
-            () async =>
-                await ref.read(misskeyProvider(this.account)).users.show(
-                      UsersShowRequest(userId: note.userId),
-                    ),
+            () async => await ref.read(misskeyGetContextProvider).users.show(
+                  UsersShowRequest(userId: note.userId),
+                ),
           ),
     );
   }
@@ -80,11 +82,11 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
       favorite:
           await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
         if (isFavorited) {
-          await ref.read(misskeyProvider(this.account)).notes.favorites.delete(
+          await ref.read(misskeyPostContextProvider).notes.favorites.delete(
                 NotesFavoritesDeleteRequest(noteId: note.id),
               );
         } else {
-          await ref.read(misskeyProvider(this.account)).notes.favorites.create(
+          await ref.read(misskeyPostContextProvider).notes.favorites.create(
                 NotesFavoritesCreateRequest(noteId: note.id),
               );
         }
@@ -100,6 +102,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     final image = await boundary.toImage(pixelRatio: devicePixelRatio);
     final byteData = await image.toByteData(format: ImageByteFormat.png);
     state = state.copyWith(isSharingMode: false);
+    final host = ref.read(accountContextProvider).postAccount.host;
 
     final path =
         "${(await getApplicationDocumentsDirectory()).path}${separator}share.png";
@@ -114,7 +117,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     final xFile = XFile(path, mimeType: "image/png");
     await Share.shareXFiles(
       [xFile],
-      text: "https://${this.account.host}/notes/${note.id}",
+      text: "https://$host/notes/${note.id}",
       sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
     );
   }
@@ -124,7 +127,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(
       delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
             () async => await ref
-                .read(misskeyProvider(this.account))
+                .read(misskeyPostContextProvider)
                 .notes
                 .delete(NotesDeleteRequest(noteId: note.id)),
           ),
@@ -145,7 +148,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(
       delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
             () async => await ref
-                .read(misskeyProvider(this.account))
+                .read(misskeyPostContextProvider)
                 .notes
                 .delete(NotesDeleteRequest(noteId: note.id)),
           ),
@@ -167,7 +170,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
       deleteRecreate:
           await ref.read(dialogStateNotifierProvider.notifier).guard(
                 () async => await ref
-                    .read(misskeyProvider(this.account))
+                    .read(misskeyPostContextProvider)
                     .notes
                     .delete(NotesDeleteRequest(noteId: note.id)),
               ),
@@ -179,13 +182,13 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
 class NoteModalSheet extends ConsumerWidget {
   final Note baseNote;
   final Note targetNote;
-  final Account account;
+  final AccountContext accountContext;
   final GlobalKey noteBoundaryKey;
 
   const NoteModalSheet({
     required this.baseNote,
     required this.targetNote,
-    required this.account,
+    required this.accountContext,
     required this.noteBoundaryKey,
     super.key,
   });
@@ -193,13 +196,13 @@ class NoteModalSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
-    final notifierProvider =
-        noteModalSheetNotifierProvider(account, targetNote);
+    final notifierProvider = noteModalSheetNotifierProvider(targetNote);
 
     ref.listen(notifierProvider.select((value) => value.user), (_, next) async {
       if (next! is AsyncData) return;
       await context.pushRoute(
-        UserControlRoute(account: account, response: next.value!),
+        UserControlRoute(
+            account: accountContext.postAccount, response: next.value!),
       );
     });
     final noteStatus =
@@ -210,8 +213,8 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: Text(S.of(context).detail),
-          onTap: () async => context
-              .pushRoute(NoteDetailRoute(note: targetNote, account: account)),
+          onTap: () async => context.pushRoute(NoteDetailRoute(
+              note: targetNote, accountContext: accountContext)),
         ),
         ListTile(
           leading: const Icon(Icons.copy),
@@ -247,7 +250,8 @@ class NoteModalSheet extends ConsumerWidget {
           onTap: () async {
             await Clipboard.setData(
               ClipboardData(
-                text: "https://${account.host}/notes/${targetNote.id}",
+                text:
+                    "https://${accountContext.getAccount.host}/notes/${targetNote.id}",
               ),
             );
             if (!context.mounted) return;
@@ -271,7 +275,7 @@ class NoteModalSheet extends ConsumerWidget {
           title: Text(S.of(context).openBrowsers),
           onTap: () async {
             await launchUrlString(
-              "https://${account.host}/notes/${targetNote.id}",
+              "https://${accountContext.getAccount.host}/notes/${targetNote.id}",
               mode: LaunchMode.externalApplication,
             );
 
@@ -293,7 +297,10 @@ class NoteModalSheet extends ConsumerWidget {
           ),
         // ノートが連合なしのときは現在のアカウントと同じサーバーのアカウントが複数ある場合のみ表示する
         if (!targetNote.localOnly ||
-            accounts.where((e) => e.host == account.host).length > 1)
+            accounts
+                    .where((e) => e.host == accountContext.postAccount.host)
+                    .length >
+                1)
           ListTile(
             leading: const Icon(Icons.open_in_new),
             title: Text(S.of(context).openInAnotherAccount),
@@ -341,8 +348,8 @@ class NoteModalSheet extends ConsumerWidget {
 
             await showModalBottomSheet(
               context: context,
-              builder: (context2) =>
-                  ClipModalSheet(account: account, noteId: targetNote.id),
+              builder: (context2) => ClipModalSheet(
+                  account: accountContext.postAccount, noteId: targetNote.id),
             );
           },
         ),
@@ -352,17 +359,17 @@ class NoteModalSheet extends ConsumerWidget {
           onTap: () async => context.pushRoute(
             NotesAfterRenoteRoute(
               note: targetNote,
-              account: account,
+              accountContext: accountContext,
             ),
           ),
         ),
         if (baseNote.user.host == null &&
-            baseNote.user.username == account.userId &&
+            baseNote.user.username == accountContext.postAccount.userId &&
             !(baseNote.text == null &&
                 baseNote.renote != null &&
                 baseNote.poll == null &&
                 baseNote.files.isEmpty)) ...[
-          if (account.i.policies.canEditNote)
+          if (accountContext.postAccount.i.policies.canEditNote)
             ListTile(
               leading: const Icon(Icons.edit),
               title: Text(S.of(context).edit),
@@ -370,7 +377,7 @@ class NoteModalSheet extends ConsumerWidget {
                 Navigator.of(context).pop();
                 await context.pushRoute(
                   NoteCreateRoute(
-                    initialAccount: account,
+                    initialAccount: accountContext.postAccount,
                     note: targetNote,
                     noteCreationMode: NoteCreationMode.update,
                   ),
@@ -390,7 +397,7 @@ class NoteModalSheet extends ConsumerWidget {
           ),
         ],
         if (baseNote.user.host == null &&
-            baseNote.user.username == account.userId &&
+            baseNote.user.username == accountContext.postAccount.userId &&
             baseNote.renote != null &&
             baseNote.files.isEmpty &&
             baseNote.poll == null) ...[
@@ -402,7 +409,7 @@ class NoteModalSheet extends ConsumerWidget {
         ],
         if (baseNote.user.host != null ||
             (baseNote.user.host == null &&
-                baseNote.user.username != account.userId))
+                baseNote.user.username != accountContext.postAccount.userId))
           ListTile(
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
@@ -410,10 +417,10 @@ class NoteModalSheet extends ConsumerWidget {
               // Navigator.of(context).pop();
               await context.pushRoute(
                 AbuseRoute(
-                  account: account,
+                  account: accountContext.postAccount,
                   targetUser: targetNote.user,
                   defaultText:
-                      "Note:\nhttps://${account.host}/notes/${targetNote.id}\n-----",
+                      "Note:\nhttps://${accountContext.postAccount.host}/notes/${targetNote.id}\n-----",
                 ),
               );
             },

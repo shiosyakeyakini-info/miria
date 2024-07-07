@@ -20,9 +20,6 @@ class FederationAnnouncements extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
-    final isCurrentServer = host == AccountScope.of(context).host;
-
     final isActive = useState(true);
 
     return Column(
@@ -66,15 +63,9 @@ class FederationAnnouncements extends HookConsumerWidget {
               final Iterable<AnnouncementsResponse> response;
               final request =
                   AnnouncementsRequest(isActive: isActive.value, limit: 10);
-              if (isCurrentServer) {
-                response = await ref
-                    .read(misskeyProvider(account))
-                    .announcements(request);
-              } else {
-                response = await ref
-                    .read(misskeyWithoutAccountProvider(host))
-                    .announcements(request);
-              }
+              response = await ref
+                  .read(misskeyGetContextProvider)
+                  .announcements(request);
               return response.toList();
             },
             nextFuture: (lastItem, offset) async {
@@ -86,15 +77,9 @@ class FederationAnnouncements extends HookConsumerWidget {
                 limit: 30,
                 offset: offset,
               );
-              if (isCurrentServer) {
-                response = await ref
-                    .read(misskeyProvider(account))
-                    .announcements(request);
-              } else {
-                response = await ref
-                    .read(misskeyWithoutAccountProvider(host))
-                    .announcements(request);
-              }
+              response = await ref
+                  .read(misskeyGetContextProvider)
+                  .announcements(request);
               return response.toList();
             },
             itemBuilder: (context, data) =>
@@ -169,7 +154,7 @@ class AnnouncementState extends ConsumerState<Announcement> {
               const Padding(padding: EdgeInsets.only(top: 10)),
               MfmText(
                 mfmText: data.text,
-                host: AccountScope.of(context).host == widget.host
+                host: ref.read(accountContextProvider).isSame
                     ? null
                     : widget.host,
               ),
@@ -183,11 +168,10 @@ class AnnouncementState extends ConsumerState<Announcement> {
                     ),
                   ),
                 ),
-              if (AccountScope.of(context).host == widget.host &&
+              if (ref.read(accountContextProvider).isSame &&
                   data.isRead == false)
                 ElevatedButton(
                   onPressed: () async {
-                    final account = AccountScope.of(context);
                     if (data.needConfirmationToRead == true) {
                       final isConfirmed = await SimpleConfirmDialog.show(
                         context: context,
@@ -199,7 +183,10 @@ class AnnouncementState extends ConsumerState<Announcement> {
                       if (isConfirmed != true) return;
                     }
 
-                    await ref.read(misskeyProvider(account)).i.readAnnouncement(
+                    await ref
+                        .read(misskeyPostContextProvider)
+                        .i
+                        .readAnnouncement(
                           IReadAnnouncementRequest(
                             announcementId: data.id,
                           ),

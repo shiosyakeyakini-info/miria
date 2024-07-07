@@ -9,6 +9,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -173,7 +174,7 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
           title: Text(S.of(context).searchNote),
           onTap: () async => context.pushRoute(
             SearchRoute(
-              account: account,
+              accountContext: ref.read(accountContextProvider),
               initialNoteSearchCondition: NoteSearchCondition(
                 user: response,
               ),

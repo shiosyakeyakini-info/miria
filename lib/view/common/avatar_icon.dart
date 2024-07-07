@@ -2,12 +2,13 @@ import "dart:math";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class AvatarIcon extends StatefulWidget {
+class AvatarIcon extends ConsumerStatefulWidget {
   final User user;
   final double height;
   final VoidCallback? onTap;
@@ -20,10 +21,10 @@ class AvatarIcon extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => AvatarIconState();
+  ConsumerState<ConsumerStatefulWidget> createState() => AvatarIconState();
 }
 
-class AvatarIconState extends State<AvatarIcon> {
+class AvatarIconState extends ConsumerState<AvatarIcon> {
   Color? catEarColor;
 
   Color? averageColor() {
@@ -59,7 +60,7 @@ class AvatarIconState extends State<AvatarIcon> {
           () async => context.pushRoute(
                 UserRoute(
                   userId: widget.user.id,
-                  account: AccountScope.of(context),
+                  accountContext: ref.read(accountContextProvider),
                 ),
               ),
       child: Padding(

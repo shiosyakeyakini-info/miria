@@ -24,7 +24,7 @@ void main() {
           child: DefaultRootWidget(
             initialRoute: ClipDetailRoute(
               id: TestData.clip.id,
-              account: TestData.account,
+              accountContext: TestData.accountContext,
             ),
           ),
         ),

@@ -18,12 +18,13 @@ import "package:miria/view/user_page/user_reactions.dart";
 @RoutePage()
 class UserPage extends ConsumerWidget implements AutoRouteWrapper {
   final String userId;
-  final Account account;
-  const UserPage({required this.userId, required this.account, super.key});
+  final AccountContext accountContext;
+  const UserPage(
+      {required this.userId, required this.accountContext, super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: account, child: this);
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,143 +33,140 @@ class UserPage extends ConsumerWidget implements AutoRouteWrapper {
     );
     final isReactionAvailable = userInfo?.response.publicReactions == true ||
         (userInfo?.response.host == null &&
-            userInfo?.response.username == account.userId);
+            userInfo?.response.username == accountContext.postAccount.userId);
     final isRemoteUser =
         userInfo?.response.host != null && userInfo?.remoteResponse != null;
 
-    return AccountContextScope(
-      context: AccountContext.as(account),
-      child: DefaultTabController(
-        length: 5 + (isReactionAvailable ? 1 : 0) + (isRemoteUser ? 2 : 0),
-        child: Scaffold(
-          appBar: AppBar(
-            title: SimpleMfmText(
-              userInfo?.response.name ?? userInfo?.response.username ?? "",
-              emojis: userInfo?.response.emojis ?? {},
-            ),
-            actions: const [],
-            bottom: TabBar(
-              tabs: [
-                if (!isRemoteUser) ...[
-                  Tab(text: S.of(context).userInfomation),
-                  Tab(text: S.of(context).userNotes),
-                ] else ...[
-                  Tab(text: S.of(context).userInfomationLocal),
-                  Tab(text: S.of(context).userInfomationRemote),
-                  Tab(text: S.of(context).userNotesLocal),
-                  Tab(text: S.of(context).userNotesRemote),
-                ],
-                Tab(text: S.of(context).clip),
-                if (isReactionAvailable) Tab(text: S.of(context).userReactions),
-                Tab(text: S.of(context).userPages),
-                Tab(text: S.of(context).userPlays),
+    return DefaultTabController(
+      length: 5 + (isReactionAvailable ? 1 : 0) + (isRemoteUser ? 2 : 0),
+      child: Scaffold(
+        appBar: AppBar(
+          title: SimpleMfmText(
+            userInfo?.response.name ?? userInfo?.response.username ?? "",
+            emojis: userInfo?.response.emojis ?? {},
+          ),
+          actions: const [],
+          bottom: TabBar(
+            tabs: [
+              if (!isRemoteUser) ...[
+                Tab(text: S.of(context).userInfomation),
+                Tab(text: S.of(context).userNotes),
+              ] else ...[
+                Tab(text: S.of(context).userInfomationLocal),
+                Tab(text: S.of(context).userInfomationRemote),
+                Tab(text: S.of(context).userNotesLocal),
+                Tab(text: S.of(context).userNotesRemote),
               ],
-              isScrollable: true,
-              tabAlignment: TabAlignment.center,
-            ),
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    UserDetailTab(userId: userId),
-                    if (isRemoteUser)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(
-                            userInfo!.response.host!,
-                            userInfo.metaResponse,
-                          ),
-                          postAccount:
-                              ref.read(accountContextProvider).postAccount,
-                        ),
-                        child: UserDetail(response: userInfo.remoteResponse!),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: UserNotes(
-                        userId: userId,
-                      ),
-                    ),
-                    if (isRemoteUser)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(
-                            userInfo!.response.host!,
-                            userInfo.metaResponse,
-                          ),
-                          postAccount:
-                              ref.read(accountContextProvider).postAccount,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserNotes(
-                            userId: userId,
-                            remoteUserId: userInfo.remoteResponse!.id,
-                          ),
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: UserClips(userId: userId),
-                    ),
-                    if (isReactionAvailable)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: UserReactions(userId: userId),
-                      ),
-
-                    // ページ
-                    if (isRemoteUser)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(
-                            userInfo!.response.host!,
-                            userInfo.metaResponse,
-                          ),
-                          postAccount:
-                              ref.read(accountContextProvider).postAccount,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserMisskeyPage(
-                            userId: userInfo.remoteResponse!.id,
-                          ),
-                        ),
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: UserMisskeyPage(userId: userId),
-                      ),
-
-                    // Play
-                    if (isRemoteUser)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(
-                            userInfo!.response.host!,
-                            userInfo.metaResponse,
-                          ),
-                          postAccount:
-                              ref.read(accountContextProvider).postAccount,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: UserPlays(userId: userInfo.remoteResponse!.id),
-                        ),
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: UserPlays(userId: userId),
-                      ),
-                  ],
-                ),
-              ),
+              Tab(text: S.of(context).clip),
+              if (isReactionAvailable) Tab(text: S.of(context).userReactions),
+              Tab(text: S.of(context).userPages),
+              Tab(text: S.of(context).userPlays),
             ],
+            isScrollable: true,
+            tabAlignment: TabAlignment.center,
           ),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: TabBarView(
+                children: [
+                  UserDetailTab(userId: userId),
+                  if (isRemoteUser)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
+                        postAccount:
+                            ref.read(accountContextProvider).postAccount,
+                      ),
+                      child: UserDetail(response: userInfo.remoteResponse!),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: UserNotes(
+                      userId: userId,
+                    ),
+                  ),
+                  if (isRemoteUser)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
+                        postAccount:
+                            ref.read(accountContextProvider).postAccount,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserNotes(
+                          userId: userId,
+                          remoteUserId: userInfo.remoteResponse!.id,
+                        ),
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: UserClips(userId: userId),
+                  ),
+                  if (isReactionAvailable)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: UserReactions(userId: userId),
+                    ),
+
+                  // ページ
+                  if (isRemoteUser)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
+                        postAccount:
+                            ref.read(accountContextProvider).postAccount,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserMisskeyPage(
+                          userId: userInfo.remoteResponse!.id,
+                        ),
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: UserMisskeyPage(userId: userId),
+                    ),
+
+                  // Play
+                  if (isRemoteUser)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
+                        postAccount:
+                            ref.read(accountContextProvider).postAccount,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserPlays(userId: userInfo.remoteResponse!.id),
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: UserPlays(userId: userId),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

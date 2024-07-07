@@ -24,7 +24,7 @@ class CommonDrawer extends ConsumerWidget {
         child: ListView(
           children: [
             for (final account in accounts) ...[
-              AccountScope(
+              AccountContextScope.as(
                 account: account,
                 child: ExpansionTile(
                   leading: AvatarIcon(user: account.i),
@@ -43,8 +43,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).notification),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context
-                            .pushRoute(NotificationRoute(account: account));
+                        await context.pushRoute(
+                          NotificationRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -52,8 +55,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).favorite),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context
-                            .pushRoute(FavoritedNoteRoute(account: account));
+                        await context.pushRoute(
+                          FavoritedNoteRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -61,8 +67,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).list),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context
-                            .pushRoute(UsersListRoute(account: account));
+                        await context.pushRoute(
+                          UsersListRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -70,7 +79,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).antenna),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context.pushRoute(AntennaRoute(account: account));
+                        await context.pushRoute(
+                          AntennaRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -78,8 +91,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).clip),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context
-                            .pushRoute(ClipListRoute(account: account));
+                        await context.pushRoute(
+                          ClipListRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -87,8 +103,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).channel),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context
-                            .pushRoute(ChannelsRoute(account: account));
+                        await context.pushRoute(
+                          ChannelsRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -96,7 +115,8 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).search),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context.pushRoute(SearchRoute(account: account));
+                        await context.pushRoute(SearchRoute(
+                            accountContext: AccountContext.as(account)));
                       },
                     ),
                     ListTile(
@@ -104,7 +124,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).explore),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context.pushRoute(ExploreRoute(account: account));
+                        await context.pushRoute(
+                          ExploreRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -112,8 +136,11 @@ class CommonDrawer extends ConsumerWidget {
                       title: Text(S.of(context).misskeyGames),
                       onTap: () async {
                         Navigator.of(context).pop();
-                        await context
-                            .pushRoute(MisskeyGamesRoute(account: account));
+                        await context.pushRoute(
+                          MisskeyGamesRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(

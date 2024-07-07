@@ -124,9 +124,6 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
     final currentStat = logged.lastOrNull;
     final currentQueueStats = queueLogged.lastOrNull;
 
-    useEffect(() {
-      return null;
-    });
     return AlertDialog(
       title: Row(
         children: [
@@ -136,7 +133,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
               Navigator.of(context).pop();
               await context.pushRoute(
                 FederationRoute(
-                  account: widget.account,
+                  accountContext: ref.read(accountContextProvider),
                   host: widget.account.host,
                 ),
               );

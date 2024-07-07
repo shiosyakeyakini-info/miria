@@ -20,7 +20,7 @@ void main() {
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
-            initialRoute: AntennaRoute(account: TestData.account),
+            initialRoute: AntennaRoute(accountContext: TestData.accountContext),
           ),
         ),
       );

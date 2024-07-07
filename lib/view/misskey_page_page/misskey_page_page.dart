@@ -25,95 +25,95 @@ import "package:url_launcher/url_launcher.dart";
 part "misskey_page_page.g.dart";
 
 @RoutePage()
-class MisskeyPagePage extends ConsumerWidget {
-  final Account account;
+class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
+  final AccountContext accountContext;
   final misskey.Page page;
 
   const MisskeyPagePage({
-    required this.account,
+    required this.accountContext,
     required this.page,
     super.key,
   });
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AccountContextScope.as(
-      account: account,
-      child: Scaffold(
-        appBar: AppBar(title: Text(S.of(context).page)),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    MfmText(
-                      mfmText: page.title,
-                      style: Theme.of(context).textTheme.headlineSmall,
+    return Scaffold(
+      appBar: AppBar(title: Text(S.of(context).page)),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  MfmText(
+                    mfmText: page.title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  MfmText(
+                    mfmText: page.summary ?? "",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const Divider(),
+                  if (page.eyeCatchingImage != null)
+                    NetworkImageView(
+                      url: page.eyeCatchingImage!.url,
+                      type: ImageType.image,
                     ),
-                    MfmText(
-                      mfmText: page.summary ?? "",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const Divider(),
-                    if (page.eyeCatchingImage != null)
-                      NetworkImageView(
-                        url: page.eyeCatchingImage!.url,
-                        type: ImageType.image,
+                  for (final content in page.content)
+                    PageContent(content: content, page: page),
+                  const Divider(),
+                  Text(S.of(context).pageWrittenBy),
+                  UserListItem(user: page.user),
+                  Row(
+                    children: [
+                      PageLikeButton(
+                        initialLiked: page.isLiked ?? false,
+                        likeCount: page.likedCount,
+                        pageId: page.id,
+                        userId: page.userId,
                       ),
-                    for (final content in page.content)
-                      PageContent(content: content, page: page),
-                    const Divider(),
-                    Text(S.of(context).pageWrittenBy),
-                    UserListItem(user: page.user),
-                    Row(
+                      const Padding(padding: EdgeInsets.only(left: 10)),
+                      GestureDetector(
+                        onTap: () async => launchUrl(
+                          Uri(
+                            scheme: "https",
+                            host: accountContext.getAccount.host,
+                            pathSegments: [
+                              "@${page.user.username}",
+                              "pages",
+                              page.name,
+                            ],
+                          ),
+                        ),
+                        child: Text(
+                          S.of(context).openBrowsers,
+                          style: AppTheme.of(context).linkStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        PageLikeButton(
-                          initialLiked: page.isLiked ?? false,
-                          likeCount: page.likedCount,
-                          pageId: page.id,
-                          userId: page.userId,
-                        ),
-                        const Padding(padding: EdgeInsets.only(left: 10)),
-                        GestureDetector(
-                          onTap: () async => launchUrl(
-                            Uri(
-                              scheme: "https",
-                              host: account.host,
-                              pathSegments: [
-                                "@${page.user.username}",
-                                "pages",
-                                page.name,
-                              ],
-                            ),
-                          ),
-                          child: Text(
-                            S.of(context).openBrowsers,
-                            style: AppTheme.of(context).linkStyle,
-                          ),
-                        ),
+                        Text(S.of(context).pageCreatedAt(page.createdAt)),
+                        Text(S.of(context).pageUpdatedAt(page.updatedAt)),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(S.of(context).pageCreatedAt(page.createdAt)),
-                          Text(S.of(context).pageUpdatedAt(page.updatedAt)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

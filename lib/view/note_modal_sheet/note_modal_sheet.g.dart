@@ -7,7 +7,7 @@ part of 'note_modal_sheet.dart';
 // **************************************************************************
 
 String _$noteModalSheetNotifierHash() =>
-    r'98e4aed7397e1e253e3d847625b8ade6e9485916';
+    r'e741939a59bd500e8d4410533a74e7707b634ca8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,11 +32,9 @@ class _SystemHash {
 
 abstract class _$NoteModalSheetNotifier
     extends BuildlessAutoDisposeNotifier<NoteModalSheetState> {
-  late final Account account;
   late final Note note;
 
   NoteModalSheetState build(
-    Account account,
     Note note,
   );
 }
@@ -50,9 +48,21 @@ class NoteModalSheetNotifierFamily extends Family {
   /// See also [NoteModalSheetNotifier].
   const NoteModalSheetNotifierFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyPostContextProvider,
+    misskeyGetContextProvider,
+    accountContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyPostContextProvider,
+    ...?misskeyPostContextProvider.allTransitiveDependencies,
+    misskeyGetContextProvider,
+    ...?misskeyGetContextProvider.allTransitiveDependencies,
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -66,11 +76,9 @@ class NoteModalSheetNotifierFamily extends Family {
 
   /// See also [NoteModalSheetNotifier].
   NoteModalSheetNotifierProvider call(
-    Account account,
     Note note,
   ) {
     return NoteModalSheetNotifierProvider(
-      account,
       note,
     );
   }
@@ -81,7 +89,6 @@ class NoteModalSheetNotifierFamily extends Family {
     covariant NoteModalSheetNotifierProvider provider,
   ) {
     return call(
-      provider.account,
       provider.note,
     );
   }
@@ -113,12 +120,9 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
     NoteModalSheetNotifier, NoteModalSheetState> {
   /// See also [NoteModalSheetNotifier].
   NoteModalSheetNotifierProvider(
-    Account account,
     Note note,
   ) : this._internal(
-          () => NoteModalSheetNotifier()
-            ..account = account
-            ..note = note,
+          () => NoteModalSheetNotifier()..note = note,
           from: noteModalSheetNotifierProvider,
           name: r'noteModalSheetNotifierProvider',
           debugGetCreateSourceHash:
@@ -128,7 +132,6 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
           dependencies: NoteModalSheetNotifierFamily._dependencies,
           allTransitiveDependencies:
               NoteModalSheetNotifierFamily._allTransitiveDependencies,
-          account: account,
           note: note,
         );
 
@@ -139,11 +142,9 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.account,
     required this.note,
   }) : super.internal();
 
-  final Account account;
   final Note note;
 
   @override
@@ -151,7 +152,6 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
     covariant NoteModalSheetNotifier notifier,
   ) {
     return notifier.build(
-      account,
       note,
     );
   }
@@ -161,29 +161,20 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: NoteModalSheetNotifierProvider._internal(
-        () => create()
-          ..account = account
-          ..note = note,
+        () => create()..note = note,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        account: account,
         note: note,
       ),
     );
   }
 
   @override
-  (
-    Account,
-    Note,
-  ) get argument {
-    return (
-      account,
-      note,
-    );
+  (Note,) get argument {
+    return (note,);
   }
 
   @override
@@ -196,30 +187,24 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
     NoteModalSheetNotifier Function() create,
   ) {
     return NoteModalSheetNotifierProvider._internal(
-      () => create()
-        ..account = account
-        ..note = note,
+      () => create()..note = note,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      account: account,
       note: note,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is NoteModalSheetNotifierProvider &&
-        other.account == account &&
-        other.note == note;
+    return other is NoteModalSheetNotifierProvider && other.note == note;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
     hash = _SystemHash.combine(hash, note.hashCode);
 
     return _SystemHash.finish(hash);
@@ -228,9 +213,6 @@ class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
 
 mixin NoteModalSheetNotifierRef
     on AutoDisposeNotifierProviderRef<NoteModalSheetState> {
-  /// The parameter `account` of this provider.
-  Account get account;
-
   /// The parameter `note` of this provider.
   Note get note;
 }
@@ -240,8 +222,6 @@ class _NoteModalSheetNotifierProviderElement
         NoteModalSheetState> with NoteModalSheetNotifierRef {
   _NoteModalSheetNotifierProviderElement(super.provider);
 
-  @override
-  Account get account => (origin as NoteModalSheetNotifierProvider).account;
   @override
   Note get note => (origin as NoteModalSheetNotifierProvider).note;
 }

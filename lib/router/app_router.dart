@@ -9,6 +9,7 @@ import "package:miria/model/image_file.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/users_list_settings.dart";
+import "package:miria/providers.dart";
 import "package:miria/view/abuse_dialog/abuse_dialog.dart";
 import "package:miria/view/announcements_page/announcements_page.dart";
 import "package:miria/view/antenna_page/antenna_notes_page.dart";

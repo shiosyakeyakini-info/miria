@@ -206,7 +206,6 @@ class NoteSearchList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = AccountScope.of(context);
     final parsedSearchValue = const MfmParser().parse(query);
     final isHashtagOnly =
         parsedSearchValue.length == 1 && parsedSearchValue[0] is MfmHashTag;
@@ -216,13 +215,13 @@ class NoteSearchList extends ConsumerWidget {
       initializeFuture: () async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyProvider(account)).notes.search(
+          notes = await ref.read(misskeyGetContextProvider).notes.search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,
@@ -232,20 +231,20 @@ class NoteSearchList extends ConsumerWidget {
               );
         }
 
-        ref.read(notesProvider(account)).registerAll(notes);
+        ref.read(notesWithProvider).registerAll(notes);
         return notes.toList();
       },
       nextFuture: (lastItem, _) async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyProvider(account)).notes.searchByTag(
+          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                   untilId: lastItem.id,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyProvider(account)).notes.search(
+          notes = await ref.read(misskeyGetContextProvider).notes.search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,
@@ -255,7 +254,7 @@ class NoteSearchList extends ConsumerWidget {
                 ),
               );
         }
-        ref.read(notesProvider(account)).registerAll(notes);
+        ref.read(notesWithProvider).registerAll(notes);
         return notes.toList();
       },
       itemBuilder: (context, item) {

@@ -24,7 +24,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),
@@ -55,7 +55,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),
@@ -80,7 +80,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),
@@ -115,7 +115,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),
@@ -150,7 +150,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),
@@ -185,7 +185,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),
@@ -224,7 +224,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               channelId: TestData.channel1.id,
             ),
           ),

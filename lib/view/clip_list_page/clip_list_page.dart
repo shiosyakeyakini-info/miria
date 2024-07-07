@@ -2,7 +2,6 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart" hide Clip;
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -12,13 +11,18 @@ import "package:miria/view/common/clip_item.dart";
 import "package:miria/view/common/error_detail.dart";
 
 @RoutePage()
-class ClipListPage extends ConsumerWidget {
-  const ClipListPage({required this.account, super.key});
-  final Account account;
+class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
+  final AccountContext accountContext;
+
+  const ClipListPage({required this.accountContext, super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(account));
+    final misskey = ref.watch(misskeyProvider(accountContext.postAccount));
     final clips = ref.watch(clipsNotifierProvider(misskey));
 
     return Scaffold(
@@ -44,23 +48,20 @@ class ClipListPage extends ConsumerWidget {
         AsyncLoading() => const Center(child: CircularProgressIndicator()),
         AsyncError(:final error, :final stackTrace) =>
           Center(child: ErrorDetail(error: error, stackTrace: stackTrace)),
-        AsyncData(:final value) => AccountScope(
-            account: account,
-            child: ListView.builder(
-              itemCount: value.length,
-              itemBuilder: (context, index) {
-                final clip = value[index];
-                return ClipItem(
-                  clip: value[index],
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () async => ref
-                        .read(clipsNotifierProvider(misskey).notifier)
-                        .delete(clip.id),
-                  ),
-                );
-              },
-            ),
+        AsyncData(:final value) => ListView.builder(
+            itemCount: value.length,
+            itemBuilder: (context, index) {
+              final clip = value[index];
+              return ClipItem(
+                clip: value[index],
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () async => ref
+                      .read(clipsNotifierProvider(misskey).notifier)
+                      .delete(clip.id),
+                ),
+              );
+            },
           )
       },
     );

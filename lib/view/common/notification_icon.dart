@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 
 /// 通知アイコン
 class NotificationIcon extends ConsumerWidget {
@@ -12,14 +11,17 @@ class NotificationIcon extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasUnread = ref.watch(
-      iProvider(AccountScope.of(context).acct)
+      iProvider(ref.read(accountContextProvider).postAccount.acct)
           .select((value) => value.hasUnreadNotification),
     );
 
     if (hasUnread) {
       return IconButton(
-        onPressed: () async => context
-            .pushRoute(NotificationRoute(account: AccountScope.of(context))),
+        onPressed: () async => context.pushRoute(
+          NotificationRoute(
+            accountContext: ref.read(accountContextProvider),
+          ),
+        ),
         icon: Stack(
           children: [
             const Icon(Icons.notifications),
@@ -42,8 +44,11 @@ class NotificationIcon extends ConsumerWidget {
       );
     } else {
       return IconButton(
-        onPressed: () async => context
-            .pushRoute(NotificationRoute(account: AccountScope.of(context))),
+        onPressed: () async => context.pushRoute(
+          NotificationRoute(
+            accountContext: ref.read(accountContextProvider),
+          ),
+        ),
         icon: const Icon(Icons.notifications),
       );
     }

@@ -11,18 +11,18 @@ import "package:miria/view/common/account_scope.dart";
 
 @RoutePage()
 class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
-  final Account account;
+  final AccountContext accountContext;
   final String channelId;
 
   const ChannelDetailPage({
-    required this.account,
+    required this.accountContext,
     required this.channelId,
     super.key,
   });
 
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: account, child: this);
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,6 +1,5 @@
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";

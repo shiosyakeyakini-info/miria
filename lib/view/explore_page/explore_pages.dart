@@ -21,10 +21,8 @@ class ExplorePagesState extends ConsumerState<ExplorePages> {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView(
         future: () async {
-          final result = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .pages
-              .featured();
+          final result =
+              await ref.read(misskeyGetContextProvider).pages.featured();
           return result.toList();
         }(),
         builder: (context, item) {
@@ -32,7 +30,7 @@ class ExplorePagesState extends ConsumerState<ExplorePages> {
             onTap: () async {
               await context.pushRoute(
                 MisskeyRouteRoute(
-                  account: AccountScope.of(context),
+                  accountContext: ref.read(accountContextProvider),
                   page: item,
                 ),
               );

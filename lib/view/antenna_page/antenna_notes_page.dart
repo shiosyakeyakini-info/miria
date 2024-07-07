@@ -3,8 +3,8 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/antenna_page/antenna_notes.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
@@ -14,17 +14,17 @@ import "package:misskey_dart/misskey_dart.dart";
 @RoutePage()
 class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
   final Antenna antenna;
-  final Account account;
+  final AccountContext accountContext;
 
   const AntennaNotesPage({
     required this.antenna,
-    required this.account,
+    required this.accountContext,
     super.key,
   });
 
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: account, child: this);
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,7 +47,7 @@ class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
                 AntennaSettingsRoute(
                   title: Text(S.of(context).edit),
                   initialSettings: AntennaSettings.fromAntenna(antenna),
-                  account: account,
+                  account: accountContext.postAccount,
                 ),
               );
               if (!context.mounted) return;

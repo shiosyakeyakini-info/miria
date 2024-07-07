@@ -269,7 +269,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       onPressed: () async {
                         await context.pushRoute(
                           UsersListDetailRoute(
-                            account: account,
+                            accountContext: ref.read(accountContextProvider),
                             listId: currentTabSetting.listId!,
                           ),
                         );
@@ -463,7 +463,9 @@ class AnnoucementInfo extends ConsumerWidget {
 
   Future<void> announcementsRoute(BuildContext context, WidgetRef ref) async {
     final account = ref.read(accountProvider(tabSetting.acct));
-    await context.pushRoute(AnnouncementRoute(account: account));
+    await context.pushRoute(
+      AnnouncementRoute(accountContext: AccountContext.as(account)),
+    );
   }
 
   @override

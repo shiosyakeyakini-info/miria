@@ -42,7 +42,7 @@ class AntennaList extends ConsumerWidget {
               onTap: () async => context.pushRoute(
                 AntennaNotesRoute(
                   antenna: antenna,
-                  account: ref.read(accountContextProvider).postAccount,
+                  accountContext: ref.read(accountContextProvider),
                 ),
               ),
             );

@@ -4,6 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/search_page/note_search.dart";
@@ -18,18 +19,22 @@ final noteSearchChannelProvider =
 final noteSearchLocalOnlyProvider = StateProvider.autoDispose((ref) => false);
 
 @RoutePage()
-class SearchPage extends ConsumerStatefulWidget {
+class SearchPage extends ConsumerStatefulWidget implements AutoRouteWrapper {
   final NoteSearchCondition? initialNoteSearchCondition;
-  final Account account;
+  final AccountContext accountContext;
 
   const SearchPage({
-    required this.account,
+    required this.accountContext,
     super.key,
     this.initialNoteSearchCondition,
   });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => SearchPageState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 }
 
 class SearchPageState extends ConsumerState<SearchPage> {
@@ -54,54 +59,50 @@ class SearchPageState extends ConsumerState<SearchPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: AccountScope(
-        account: widget.account,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(S.of(context).search),
-            bottom: TabBar(
-              tabs: [
-                Tab(text: S.of(context).note),
-                Tab(text: S.of(context).user),
-              ],
-            ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(S.of(context).search),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: S.of(context).note),
+              Tab(text: S.of(context).user),
+            ],
           ),
-          body: Builder(
-            builder: (context) {
-              final tabController = DefaultTabController.of(context);
-              tabController.addListener(() {
-                if (tabController.index != tabIndex) {
-                  focusNodes[tabController.index].requestFocus();
-                  setState(() {
-                    tabIndex = tabController.index;
-                  });
-                }
-              });
-              return TabBarView(
-                controller: tabController,
-                children: [
-                  NoteSearch(
-                    initialCondition: widget.initialNoteSearchCondition,
-                    focusNode: focusNodes[0],
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: UserSelectContent(
-                      focusNode: focusNodes[1],
-                      isDetail: true,
-                      onSelected: (item) async => context.pushRoute(
-                        UserRoute(
-                          userId: item.id,
-                          account: widget.account,
-                        ),
+        ),
+        body: Builder(
+          builder: (context) {
+            final tabController = DefaultTabController.of(context);
+            tabController.addListener(() {
+              if (tabController.index != tabIndex) {
+                focusNodes[tabController.index].requestFocus();
+                setState(() {
+                  tabIndex = tabController.index;
+                });
+              }
+            });
+            return TabBarView(
+              controller: tabController,
+              children: [
+                NoteSearch(
+                  initialCondition: widget.initialNoteSearchCondition,
+                  focusNode: focusNodes[0],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: UserSelectContent(
+                    focusNode: focusNodes[1],
+                    isDetail: true,
+                    onSelected: (item) async => context.pushRoute(
+                      UserRoute(
+                        userId: item.id,
+                        accountContext: ref.read(accountContextProvider),
                       ),
                     ),
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

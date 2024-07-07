@@ -85,7 +85,7 @@ class HashtagKeyboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filteredHashtags = ref.watch(
-        _filteredHashtagsProvider(ref.read(accountContextProvider).getAccount));
+        _filteredHashtagsProvider(ref.read(accountContextProvider).getAccount),);
 
     if (filteredHashtags.isEmpty) {
       return BasicKeyboard(

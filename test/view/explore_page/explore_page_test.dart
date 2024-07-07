@@ -23,7 +23,9 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute: ExploreRoute(
+                accountContext: TestData.accountContext,
+              ),
             ),
           ),
         );
@@ -56,7 +58,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -92,7 +95,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -116,7 +120,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -170,7 +175,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -225,7 +231,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -253,7 +260,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -275,7 +283,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );
@@ -312,7 +321,8 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
             ),
           ),
         );

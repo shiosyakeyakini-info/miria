@@ -28,7 +28,7 @@ class UserListItem extends ConsumerWidget {
           () async => context.pushRoute(
                 UserRoute(
                   userId: user.id,
-                  account: ref.read(accountContextProvider).getAccount,
+                  accountContext: ref.read(accountContextProvider),
                 ),
               ),
       child: Padding(

@@ -26,7 +26,9 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ChannelsRoute(account: TestData.account),
+              initialRoute: ChannelsRoute(
+                accountContext: TestData.accountContext,
+              ),
             ),
           ),
         );
@@ -75,7 +77,9 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ChannelsRoute(account: TestData.account),
+              initialRoute: ChannelsRoute(
+                accountContext: TestData.accountContext,
+              ),
             ),
           ),
         );
@@ -101,7 +105,9 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ChannelsRoute(account: TestData.account),
+              initialRoute: ChannelsRoute(
+                accountContext: TestData.accountContext,
+              ),
             ),
           ),
         );
@@ -131,7 +137,9 @@ void main() {
           ProviderScope(
             overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ChannelsRoute(account: TestData.account),
+              initialRoute: ChannelsRoute(
+                accountContext: TestData.accountContext,
+              ),
             ),
           ),
         );

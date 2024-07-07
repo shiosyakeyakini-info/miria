@@ -207,11 +207,11 @@ class UserDetail extends ConsumerWidget {
                         IconButton(
                           onPressed: () async => await context.pushRoute(
                             UpdateMemoRoute(
-                                account: ref
-                                    .read(accountContextProvider)
-                                    .postAccount,
-                                initialMemo: memo,
-                                userId: response.id,),
+                              account:
+                                  ref.read(accountContextProvider).postAccount,
+                              initialMemo: memo,
+                              userId: response.id,
+                            ),
                           ),
                           icon: const Icon(Icons.edit),
                         ),
@@ -246,8 +246,7 @@ class UserDetail extends ConsumerWidget {
                         GestureDetector(
                           onTap: () async => context.pushRoute(
                             FederationRoute(
-                              account:
-                                  ref.read(accountContextProvider).getAccount,
+                              accountContext: ref.read(accountContextProvider),
                               host: response.host!,
                             ),
                           ),
@@ -362,7 +361,7 @@ class UserDetail extends ConsumerWidget {
                       onTap: () async => context.pushRoute(
                         UserFolloweeRoute(
                           userId: response.id,
-                          account: ref.read(accountContextProvider).getAccount,
+                          accountContext: ref.read(accountContextProvider),
                         ),
                       ),
                       child: Column(
@@ -383,7 +382,7 @@ class UserDetail extends ConsumerWidget {
                       onTap: () async => context.pushRoute(
                         UserFollowerRoute(
                           userId: response.id,
-                          account: ref.read(accountContextProvider).getAccount,
+                          accountContext: ref.read(accountContextProvider),
                         ),
                       ),
                       child: Column(
@@ -516,8 +515,9 @@ class RoleChip extends ConsumerWidget {
             if (!context.mounted) return;
             await context.pushRoute(
               ExploreRoleUsersRoute(
-                  item: response,
-                  account: ref.read(accountContextProvider).getAccount,),
+                item: response,
+                account: ref.read(accountContextProvider).getAccount,
+              ),
             );
           }
         },

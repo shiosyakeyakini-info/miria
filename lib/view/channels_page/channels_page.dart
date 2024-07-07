@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
 import "package:miria/view/channels_page/channel_favorited.dart";
 import "package:miria/view/channels_page/channel_followed.dart";
 import "package:miria/view/channels_page/channel_search.dart";
@@ -10,12 +10,12 @@ import "package:miria/view/common/account_scope.dart";
 
 @RoutePage()
 class ChannelsPage extends StatelessWidget implements AutoRouteWrapper {
-  final Account account;
+  final AccountContext accountContext;
 
-  const ChannelsPage({required this.account, super.key});
+  const ChannelsPage({required this.accountContext, super.key});
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: account, child: this);
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context) {

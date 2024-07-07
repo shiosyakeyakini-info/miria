@@ -3,9 +3,11 @@ import "package:flutter/services.dart";
 import "package:json5/json5.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
 import "package:miria/repository/emoji_repository.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
+// ignore: avoid_classes_with_only_static_members
 class TestData {
   static Account account = Account(
     host: "example.miria.shiosyakeyakini.info",
@@ -13,7 +15,8 @@ class TestData {
     i: i1,
     meta: meta,
   );
-
+  static AccountContext accountContext =
+      AccountContext(getAccount: account, postAccount: account);
   // i
   static MeDetailed i1 = MeDetailed.fromJson(
     JSON5.parse(r"""

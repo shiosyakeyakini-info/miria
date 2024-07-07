@@ -41,7 +41,7 @@ class UserMisskeyPage extends ConsumerWidget {
           subtitle: MfmText(mfmText: page.summary ?? ""),
           onTap: () async => context.pushRoute(
             MisskeyRouteRoute(
-              account: ref.read(accountContextProvider).getAccount,
+              accountContext: ref.read(accountContextProvider),
               page: page,
             ),
           ),

@@ -109,8 +109,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     if (!context.mounted) return;
     if (foundNote == null) return;
     await context.pushRoute(
-      NoteDetailRoute(
-          note: foundNote, account: account ?? accountContext.postAccount),
+      NoteDetailRoute(note: foundNote, accountContext: accountContext),
     );
   }
 
@@ -125,8 +124,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     if (foundUser == null) return;
     if (!context.mounted) return;
     await context.pushRoute(
-      UserRoute(
-          userId: foundUser.id, account: account ?? accountContext.getAccount),
+      UserRoute(userId: foundUser.id, accountContext: accountContext),
     );
   }
 
@@ -134,7 +132,8 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     final accountContext = ref.read(accountContextProvider);
     final selectedAccount = await context.pushRoute<Account>(
       AccountSelectRoute(
-          host: note.localOnly ? accountContext.getAccount.host : null),
+        host: note.localOnly ? accountContext.getAccount.host : null,
+      ),
     );
     if (selectedAccount == null) return;
     if (!context.mounted) return;

@@ -23,7 +23,7 @@ void main() {
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
             initialRoute: AntennaNotesRoute(
-              account: TestData.account,
+              accountContext: TestData.accountContext,
               antenna: TestData.antenna,
             ),
           ),

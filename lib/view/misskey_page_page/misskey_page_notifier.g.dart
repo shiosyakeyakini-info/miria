@@ -7,7 +7,7 @@ part of 'misskey_page_notifier.dart';
 // **************************************************************************
 
 String _$misskeyPageNotifierHash() =>
-    r'584b3c35a6e2456887fdce91f96ef3da288044f7';
+    r'ee6d060c8b5eddfefb89f6062692fdfa8b0e4d47';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -49,13 +49,19 @@ class MisskeyPageNotifierFamily extends Family {
   const MisskeyPageNotifierFamily();
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyGetContextProvider
+    accountContextProvider,
+    misskeyGetContextProvider,
+    misskeyPostContextProvider
   ];
 
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies,
     misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
+    ...?misskeyGetContextProvider.allTransitiveDependencies,
+    misskeyPostContextProvider,
+    ...?misskeyPostContextProvider.allTransitiveDependencies
   };
 
   @override

@@ -51,7 +51,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: AnnouncementPage(
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -74,7 +74,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: AntennaNotesPage(
           antenna: args.antenna,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -85,7 +85,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: AntennaPage(
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -124,7 +124,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: ChannelDetailPage(
-          account: args.account,
+          accountContext: args.accountContext,
           channelId: args.channelId,
           key: args.key,
         )),
@@ -158,7 +158,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: ChannelsPage(
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -167,21 +167,23 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ClipDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ClipDetailPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: ClipDetailPage(
+          accountContext: args.accountContext,
           id: args.id,
           key: args.key,
-        ),
+        )),
       );
     },
     ClipListRoute.name: (routeData) {
       final args = routeData.argsAs<ClipListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ClipListPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: ClipListPage(
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     ClipSettingsRoute.name: (routeData) {
@@ -229,10 +231,11 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ExploreRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ExplorePage(
-          account: args.account,
+        child: WrappedRoute(
+            child: ExplorePage(
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     ExploreRoleUsersRoute.name: (routeData) {
@@ -250,10 +253,11 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<FavoritedNoteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: FavoritedNotePage(
-          account: args.account,
+        child: WrappedRoute(
+            child: FavoritedNotePage(
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     FederationRoute.name: (routeData) {
@@ -262,7 +266,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: FederationPage(
-          account: args.account,
+          accountContext: args.accountContext,
           host: args.host,
           key: args.key,
         )),
@@ -290,11 +294,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<HashtagRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: HashtagPage(
+        child: WrappedRoute(
+            child: HashtagPage(
           hashtag: args.hashtag,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     ImportExportRoute.name: (routeData) {
@@ -334,21 +339,23 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<MisskeyGamesRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: MisskeyGamesPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: MisskeyGamesPage(
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     MisskeyRouteRoute.name: (routeData) {
       final args = routeData.argsAs<MisskeyRouteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: MisskeyPagePage(
-          account: args.account,
+        child: WrappedRoute(
+            child: MisskeyPagePage(
+          accountContext: args.accountContext,
           page: args.page,
           key: args.key,
-        ),
+        )),
       );
     },
     MisskeyServerListRoute.name: (routeData) {
@@ -361,7 +368,8 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<NoteCreateRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NoteCreatePage(
+        child: WrappedRoute(
+            child: NoteCreatePage(
           initialAccount: args.initialAccount,
           key: args.key,
           initialText: args.initialText,
@@ -372,18 +380,19 @@ abstract class _$AppRouter extends RootStackRouter {
           renote: args.renote,
           note: args.note,
           noteCreationMode: args.noteCreationMode,
-        ),
+        )),
       );
     },
     NoteDetailRoute.name: (routeData) {
       final args = routeData.argsAs<NoteDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NoteDetailPage(
+        child: WrappedRoute(
+            child: NoteDetailPage(
           note: args.note,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     NoteModalRoute.name: (routeData) {
@@ -393,7 +402,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: NoteModalSheet(
           baseNote: args.baseNote,
           targetNote: args.targetNote,
-          account: args.account,
+          accountContext: args.accountContext,
           noteBoundaryKey: args.noteBoundaryKey,
           key: args.key,
         ),
@@ -403,33 +412,36 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<NotesAfterRenoteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NotesAfterRenotePage(
+        child: WrappedRoute(
+            child: NotesAfterRenotePage(
           note: args.note,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     NotificationRoute.name: (routeData) {
       final args = routeData.argsAs<NotificationRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NotificationPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: NotificationPage(
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     PhotoEditRoute.name: (routeData) {
       final args = routeData.argsAs<PhotoEditRouteArgs>();
       return AutoRoutePage<Uint8List?>(
         routeData: routeData,
-        child: PhotoEditPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: PhotoEditPage(
+          accountContext: args.accountContext,
           file: args.file,
           onSubmit: args.onSubmit,
           key: args.key,
-        ),
+        )),
       );
     },
     ReactionDeckRoute.name: (routeData) {
@@ -480,11 +492,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<SearchRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SearchPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: SearchPage(
+          accountContext: args.accountContext,
           key: args.key,
           initialNoteSearchCondition: args.initialNoteSearchCondition,
-        ),
+        )),
       );
     },
     SettingsRoute.name: (routeData) {
@@ -595,7 +608,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: UserFolloweePage(
           userId: args.userId,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -607,7 +620,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: UserFollowerPage(
           userId: args.userId,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -619,7 +632,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: UserPage(
           userId: args.userId,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -639,11 +652,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<UsersListDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UsersListDetailPage(
-          account: args.account,
+        child: WrappedRoute(
+            child: UsersListDetailPage(
+          accountContext: args.accountContext,
           listId: args.listId,
           key: args.key,
-        ),
+        )),
       );
     },
     UsersListModalRoute.name: (routeData) {
@@ -663,7 +677,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: UsersListPage(
-          args.account,
+          args.accountContext,
           key: args.key,
         )),
       );
@@ -687,7 +701,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: WrappedRoute(
             child: UsersListTimelinePage(
-          args.account,
+          args.accountContext,
           args.list,
           key: args.key,
         )),
@@ -810,13 +824,13 @@ class AccountSelectRouteArgs {
 /// [AnnouncementPage]
 class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
   AnnouncementRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           AnnouncementRoute.name,
           args: AnnouncementRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -830,17 +844,17 @@ class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
 
 class AnnouncementRouteArgs {
   const AnnouncementRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'AnnouncementRouteArgs{account: $account, key: $key}';
+    return 'AnnouncementRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -892,14 +906,14 @@ class AntennaModalRouteArgs {
 class AntennaNotesRoute extends PageRouteInfo<AntennaNotesRouteArgs> {
   AntennaNotesRoute({
     required Antenna antenna,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           AntennaNotesRoute.name,
           args: AntennaNotesRouteArgs(
             antenna: antenna,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -914,19 +928,19 @@ class AntennaNotesRoute extends PageRouteInfo<AntennaNotesRouteArgs> {
 class AntennaNotesRouteArgs {
   const AntennaNotesRouteArgs({
     required this.antenna,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final Antenna antenna;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'AntennaNotesRouteArgs{antenna: $antenna, account: $account, key: $key}';
+    return 'AntennaNotesRouteArgs{antenna: $antenna, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -934,13 +948,13 @@ class AntennaNotesRouteArgs {
 /// [AntennaPage]
 class AntennaRoute extends PageRouteInfo<AntennaRouteArgs> {
   AntennaRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           AntennaRoute.name,
           args: AntennaRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -954,17 +968,17 @@ class AntennaRoute extends PageRouteInfo<AntennaRouteArgs> {
 
 class AntennaRouteArgs {
   const AntennaRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'AntennaRouteArgs{account: $account, key: $key}';
+    return 'AntennaRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1072,14 +1086,14 @@ class CacheManagementRouteArgs {
 /// [ChannelDetailPage]
 class ChannelDetailRoute extends PageRouteInfo<ChannelDetailRouteArgs> {
   ChannelDetailRoute({
-    required Account account,
+    required AccountContext accountContext,
     required String channelId,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ChannelDetailRoute.name,
           args: ChannelDetailRouteArgs(
-            account: account,
+            accountContext: accountContext,
             channelId: channelId,
             key: key,
           ),
@@ -1094,12 +1108,12 @@ class ChannelDetailRoute extends PageRouteInfo<ChannelDetailRouteArgs> {
 
 class ChannelDetailRouteArgs {
   const ChannelDetailRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.channelId,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final String channelId;
 
@@ -1107,7 +1121,7 @@ class ChannelDetailRouteArgs {
 
   @override
   String toString() {
-    return 'ChannelDetailRouteArgs{account: $account, channelId: $channelId, key: $key}';
+    return 'ChannelDetailRouteArgs{accountContext: $accountContext, channelId: $channelId, key: $key}';
   }
 }
 
@@ -1196,13 +1210,13 @@ class ChannelSelectRouteArgs {
 /// [ChannelsPage]
 class ChannelsRoute extends PageRouteInfo<ChannelsRouteArgs> {
   ChannelsRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ChannelsRoute.name,
           args: ChannelsRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1216,17 +1230,17 @@ class ChannelsRoute extends PageRouteInfo<ChannelsRouteArgs> {
 
 class ChannelsRouteArgs {
   const ChannelsRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'ChannelsRouteArgs{account: $account, key: $key}';
+    return 'ChannelsRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1234,14 +1248,14 @@ class ChannelsRouteArgs {
 /// [ClipDetailPage]
 class ClipDetailRoute extends PageRouteInfo<ClipDetailRouteArgs> {
   ClipDetailRoute({
-    required Account account,
+    required AccountContext accountContext,
     required String id,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ClipDetailRoute.name,
           args: ClipDetailRouteArgs(
-            account: account,
+            accountContext: accountContext,
             id: id,
             key: key,
           ),
@@ -1256,12 +1270,12 @@ class ClipDetailRoute extends PageRouteInfo<ClipDetailRouteArgs> {
 
 class ClipDetailRouteArgs {
   const ClipDetailRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.id,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final String id;
 
@@ -1269,7 +1283,7 @@ class ClipDetailRouteArgs {
 
   @override
   String toString() {
-    return 'ClipDetailRouteArgs{account: $account, id: $id, key: $key}';
+    return 'ClipDetailRouteArgs{accountContext: $accountContext, id: $id, key: $key}';
   }
 }
 
@@ -1277,13 +1291,13 @@ class ClipDetailRouteArgs {
 /// [ClipListPage]
 class ClipListRoute extends PageRouteInfo<ClipListRouteArgs> {
   ClipListRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ClipListRoute.name,
           args: ClipListRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1297,17 +1311,17 @@ class ClipListRoute extends PageRouteInfo<ClipListRouteArgs> {
 
 class ClipListRouteArgs {
   const ClipListRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'ClipListRouteArgs{account: $account, key: $key}';
+    return 'ClipListRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1443,13 +1457,13 @@ class ExpireSelectRoute extends PageRouteInfo<void> {
 /// [ExplorePage]
 class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
   ExploreRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ExploreRoute.name,
           args: ExploreRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1463,17 +1477,17 @@ class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
 
 class ExploreRouteArgs {
   const ExploreRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'ExploreRouteArgs{account: $account, key: $key}';
+    return 'ExploreRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1524,13 +1538,13 @@ class ExploreRoleUsersRouteArgs {
 /// [FavoritedNotePage]
 class FavoritedNoteRoute extends PageRouteInfo<FavoritedNoteRouteArgs> {
   FavoritedNoteRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           FavoritedNoteRoute.name,
           args: FavoritedNoteRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1544,17 +1558,17 @@ class FavoritedNoteRoute extends PageRouteInfo<FavoritedNoteRouteArgs> {
 
 class FavoritedNoteRouteArgs {
   const FavoritedNoteRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'FavoritedNoteRouteArgs{account: $account, key: $key}';
+    return 'FavoritedNoteRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1562,14 +1576,14 @@ class FavoritedNoteRouteArgs {
 /// [FederationPage]
 class FederationRoute extends PageRouteInfo<FederationRouteArgs> {
   FederationRoute({
-    required Account account,
+    required AccountContext accountContext,
     required String host,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           FederationRoute.name,
           args: FederationRouteArgs(
-            account: account,
+            accountContext: accountContext,
             host: host,
             key: key,
           ),
@@ -1584,12 +1598,12 @@ class FederationRoute extends PageRouteInfo<FederationRouteArgs> {
 
 class FederationRouteArgs {
   const FederationRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.host,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final String host;
 
@@ -1597,7 +1611,7 @@ class FederationRouteArgs {
 
   @override
   String toString() {
-    return 'FederationRouteArgs{account: $account, host: $host, key: $key}';
+    return 'FederationRouteArgs{accountContext: $accountContext, host: $host, key: $key}';
   }
 }
 
@@ -1668,14 +1682,14 @@ class GeneralSettingsRoute extends PageRouteInfo<void> {
 class HashtagRoute extends PageRouteInfo<HashtagRouteArgs> {
   HashtagRoute({
     required String hashtag,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           HashtagRoute.name,
           args: HashtagRouteArgs(
             hashtag: hashtag,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1690,19 +1704,19 @@ class HashtagRoute extends PageRouteInfo<HashtagRouteArgs> {
 class HashtagRouteArgs {
   const HashtagRouteArgs({
     required this.hashtag,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final String hashtag;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'HashtagRouteArgs{hashtag: $hashtag, account: $account, key: $key}';
+    return 'HashtagRouteArgs{hashtag: $hashtag, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1819,13 +1833,13 @@ class LoginRoute extends PageRouteInfo<void> {
 /// [MisskeyGamesPage]
 class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
   MisskeyGamesRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           MisskeyGamesRoute.name,
           args: MisskeyGamesRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1839,17 +1853,17 @@ class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
 
 class MisskeyGamesRouteArgs {
   const MisskeyGamesRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'MisskeyGamesRouteArgs{account: $account, key: $key}';
+    return 'MisskeyGamesRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -1857,14 +1871,14 @@ class MisskeyGamesRouteArgs {
 /// [MisskeyPagePage]
 class MisskeyRouteRoute extends PageRouteInfo<MisskeyRouteRouteArgs> {
   MisskeyRouteRoute({
-    required Account account,
+    required AccountContext accountContext,
     required Page page,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           MisskeyRouteRoute.name,
           args: MisskeyRouteRouteArgs(
-            account: account,
+            accountContext: accountContext,
             page: page,
             key: key,
           ),
@@ -1879,12 +1893,12 @@ class MisskeyRouteRoute extends PageRouteInfo<MisskeyRouteRouteArgs> {
 
 class MisskeyRouteRouteArgs {
   const MisskeyRouteRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.page,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Page page;
 
@@ -1892,7 +1906,7 @@ class MisskeyRouteRouteArgs {
 
   @override
   String toString() {
-    return 'MisskeyRouteRouteArgs{account: $account, page: $page, key: $key}';
+    return 'MisskeyRouteRouteArgs{accountContext: $accountContext, page: $page, key: $key}';
   }
 }
 
@@ -1993,14 +2007,14 @@ class NoteCreateRouteArgs {
 class NoteDetailRoute extends PageRouteInfo<NoteDetailRouteArgs> {
   NoteDetailRoute({
     required Note note,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           NoteDetailRoute.name,
           args: NoteDetailRouteArgs(
             note: note,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2015,19 +2029,19 @@ class NoteDetailRoute extends PageRouteInfo<NoteDetailRouteArgs> {
 class NoteDetailRouteArgs {
   const NoteDetailRouteArgs({
     required this.note,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final Note note;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'NoteDetailRouteArgs{note: $note, account: $account, key: $key}';
+    return 'NoteDetailRouteArgs{note: $note, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2037,7 +2051,7 @@ class NoteModalRoute extends PageRouteInfo<NoteModalRouteArgs> {
   NoteModalRoute({
     required Note baseNote,
     required Note targetNote,
-    required Account account,
+    required AccountContext accountContext,
     required GlobalKey<State<StatefulWidget>> noteBoundaryKey,
     Key? key,
     List<PageRouteInfo>? children,
@@ -2046,7 +2060,7 @@ class NoteModalRoute extends PageRouteInfo<NoteModalRouteArgs> {
           args: NoteModalRouteArgs(
             baseNote: baseNote,
             targetNote: targetNote,
-            account: account,
+            accountContext: accountContext,
             noteBoundaryKey: noteBoundaryKey,
             key: key,
           ),
@@ -2063,7 +2077,7 @@ class NoteModalRouteArgs {
   const NoteModalRouteArgs({
     required this.baseNote,
     required this.targetNote,
-    required this.account,
+    required this.accountContext,
     required this.noteBoundaryKey,
     this.key,
   });
@@ -2072,7 +2086,7 @@ class NoteModalRouteArgs {
 
   final Note targetNote;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final GlobalKey<State<StatefulWidget>> noteBoundaryKey;
 
@@ -2080,7 +2094,7 @@ class NoteModalRouteArgs {
 
   @override
   String toString() {
-    return 'NoteModalRouteArgs{baseNote: $baseNote, targetNote: $targetNote, account: $account, noteBoundaryKey: $noteBoundaryKey, key: $key}';
+    return 'NoteModalRouteArgs{baseNote: $baseNote, targetNote: $targetNote, accountContext: $accountContext, noteBoundaryKey: $noteBoundaryKey, key: $key}';
   }
 }
 
@@ -2089,14 +2103,14 @@ class NoteModalRouteArgs {
 class NotesAfterRenoteRoute extends PageRouteInfo<NotesAfterRenoteRouteArgs> {
   NotesAfterRenoteRoute({
     required Note note,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           NotesAfterRenoteRoute.name,
           args: NotesAfterRenoteRouteArgs(
             note: note,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2111,19 +2125,19 @@ class NotesAfterRenoteRoute extends PageRouteInfo<NotesAfterRenoteRouteArgs> {
 class NotesAfterRenoteRouteArgs {
   const NotesAfterRenoteRouteArgs({
     required this.note,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final Note note;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'NotesAfterRenoteRouteArgs{note: $note, account: $account, key: $key}';
+    return 'NotesAfterRenoteRouteArgs{note: $note, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2131,13 +2145,13 @@ class NotesAfterRenoteRouteArgs {
 /// [NotificationPage]
 class NotificationRoute extends PageRouteInfo<NotificationRouteArgs> {
   NotificationRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           NotificationRoute.name,
           args: NotificationRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2151,17 +2165,17 @@ class NotificationRoute extends PageRouteInfo<NotificationRouteArgs> {
 
 class NotificationRouteArgs {
   const NotificationRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'NotificationRouteArgs{account: $account, key: $key}';
+    return 'NotificationRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2169,7 +2183,7 @@ class NotificationRouteArgs {
 /// [PhotoEditPage]
 class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
   PhotoEditRoute({
-    required Account account,
+    required AccountContext accountContext,
     required MisskeyPostFile file,
     required void Function(Uint8List) onSubmit,
     Key? key,
@@ -2177,7 +2191,7 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
   }) : super(
           PhotoEditRoute.name,
           args: PhotoEditRouteArgs(
-            account: account,
+            accountContext: accountContext,
             file: file,
             onSubmit: onSubmit,
             key: key,
@@ -2193,13 +2207,13 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
 
 class PhotoEditRouteArgs {
   const PhotoEditRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.file,
     required this.onSubmit,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final MisskeyPostFile file;
 
@@ -2209,7 +2223,7 @@ class PhotoEditRouteArgs {
 
   @override
   String toString() {
-    return 'PhotoEditRouteArgs{account: $account, file: $file, onSubmit: $onSubmit, key: $key}';
+    return 'PhotoEditRouteArgs{accountContext: $accountContext, file: $file, onSubmit: $onSubmit, key: $key}';
   }
 }
 
@@ -2384,14 +2398,14 @@ class RenoteUserRouteArgs {
 /// [SearchPage]
 class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
   SearchRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     NoteSearchCondition? initialNoteSearchCondition,
     List<PageRouteInfo>? children,
   }) : super(
           SearchRoute.name,
           args: SearchRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
             initialNoteSearchCondition: initialNoteSearchCondition,
           ),
@@ -2405,12 +2419,12 @@ class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
 
 class SearchRouteArgs {
   const SearchRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
     this.initialNoteSearchCondition,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
@@ -2418,7 +2432,7 @@ class SearchRouteArgs {
 
   @override
   String toString() {
-    return 'SearchRouteArgs{account: $account, key: $key, initialNoteSearchCondition: $initialNoteSearchCondition}';
+    return 'SearchRouteArgs{accountContext: $accountContext, key: $key, initialNoteSearchCondition: $initialNoteSearchCondition}';
   }
 }
 
@@ -2772,14 +2786,14 @@ class UserControlRouteArgs {
 class UserFolloweeRoute extends PageRouteInfo<UserFolloweeRouteArgs> {
   UserFolloweeRoute({
     required String userId,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UserFolloweeRoute.name,
           args: UserFolloweeRouteArgs(
             userId: userId,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2794,19 +2808,19 @@ class UserFolloweeRoute extends PageRouteInfo<UserFolloweeRouteArgs> {
 class UserFolloweeRouteArgs {
   const UserFolloweeRouteArgs({
     required this.userId,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final String userId;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UserFolloweeRouteArgs{userId: $userId, account: $account, key: $key}';
+    return 'UserFolloweeRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2815,14 +2829,14 @@ class UserFolloweeRouteArgs {
 class UserFollowerRoute extends PageRouteInfo<UserFollowerRouteArgs> {
   UserFollowerRoute({
     required String userId,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UserFollowerRoute.name,
           args: UserFollowerRouteArgs(
             userId: userId,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2837,19 +2851,19 @@ class UserFollowerRoute extends PageRouteInfo<UserFollowerRouteArgs> {
 class UserFollowerRouteArgs {
   const UserFollowerRouteArgs({
     required this.userId,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final String userId;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UserFollowerRouteArgs{userId: $userId, account: $account, key: $key}';
+    return 'UserFollowerRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2858,14 +2872,14 @@ class UserFollowerRouteArgs {
 class UserRoute extends PageRouteInfo<UserRouteArgs> {
   UserRoute({
     required String userId,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UserRoute.name,
           args: UserRouteArgs(
             userId: userId,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2879,19 +2893,19 @@ class UserRoute extends PageRouteInfo<UserRouteArgs> {
 class UserRouteArgs {
   const UserRouteArgs({
     required this.userId,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final String userId;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UserRouteArgs{userId: $userId, account: $account, key: $key}';
+    return 'UserRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2937,14 +2951,14 @@ class UserSelectRouteArgs {
 /// [UsersListDetailPage]
 class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
   UsersListDetailRoute({
-    required Account account,
+    required AccountContext accountContext,
     required String listId,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UsersListDetailRoute.name,
           args: UsersListDetailRouteArgs(
-            account: account,
+            accountContext: accountContext,
             listId: listId,
             key: key,
           ),
@@ -2959,12 +2973,12 @@ class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
 
 class UsersListDetailRouteArgs {
   const UsersListDetailRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.listId,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final String listId;
 
@@ -2972,7 +2986,7 @@ class UsersListDetailRouteArgs {
 
   @override
   String toString() {
-    return 'UsersListDetailRouteArgs{account: $account, listId: $listId, key: $key}';
+    return 'UsersListDetailRouteArgs{accountContext: $accountContext, listId: $listId, key: $key}';
   }
 }
 
@@ -3023,13 +3037,13 @@ class UsersListModalRouteArgs {
 /// [UsersListPage]
 class UsersListRoute extends PageRouteInfo<UsersListRouteArgs> {
   UsersListRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UsersListRoute.name,
           args: UsersListRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -3043,17 +3057,17 @@ class UsersListRoute extends PageRouteInfo<UsersListRouteArgs> {
 
 class UsersListRouteArgs {
   const UsersListRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UsersListRouteArgs{account: $account, key: $key}';
+    return 'UsersListRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -3104,14 +3118,14 @@ class UsersListSettingsRouteArgs {
 /// [UsersListTimelinePage]
 class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
   UsersListTimelineRoute({
-    required Account account,
+    required AccountContext accountContext,
     required UsersList list,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UsersListTimelineRoute.name,
           args: UsersListTimelineRouteArgs(
-            account: account,
+            accountContext: accountContext,
             list: list,
             key: key,
           ),
@@ -3126,12 +3140,12 @@ class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
 
 class UsersListTimelineRouteArgs {
   const UsersListTimelineRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.list,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final UsersList list;
 
@@ -3139,7 +3153,7 @@ class UsersListTimelineRouteArgs {
 
   @override
   String toString() {
-    return 'UsersListTimelineRouteArgs{account: $account, list: $list, key: $key}';
+    return 'UsersListTimelineRouteArgs{accountContext: $accountContext, list: $list, key: $key}';
   }
 }
 

@@ -31,7 +31,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: TestData.note1,
                 targetNote: TestData.note1,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -69,7 +69,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: TestData.note1,
                 targetNote: TestData.note1,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -107,7 +107,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: TestData.note1,
                 targetNote: TestData.note1,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -148,7 +148,7 @@ void main() {
                 baseNote:
                     TestData.note1.copyWith(text: null, renote: TestData.note2),
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -178,7 +178,7 @@ void main() {
                 baseNote: TestData.note3AsAnotherUser
                     .copyWith(text: null, renote: TestData.note1),
                 targetNote: TestData.note1,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -212,7 +212,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: testNote,
                 targetNote: testNote,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -255,7 +255,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: testNote,
                 targetNote: testNote,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -284,7 +284,7 @@ void main() {
                 baseNote: TestData.note1
                     .copyWith(text: "やっほー", renote: TestData.note2),
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -319,7 +319,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: note,
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -364,7 +364,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: note,
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -396,7 +396,7 @@ void main() {
                 baseNote:
                     TestData.note1.copyWith(text: null, renote: TestData.note2),
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -434,7 +434,7 @@ void main() {
                 baseNote: TestData.note1
                     .copyWith(text: "やっほー", renote: TestData.note2),
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -468,7 +468,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: note,
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -512,7 +512,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: note,
                 targetNote: TestData.note2,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -542,7 +542,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: note,
                 targetNote: TestData.note1,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -574,7 +574,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: TestData.note3AsAnotherUser,
                 targetNote: TestData.note3AsAnotherUser,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),
@@ -625,7 +625,7 @@ void main() {
               body: NoteModalSheet(
                 baseNote: TestData.note1,
                 targetNote: TestData.note1,
-                account: TestData.account,
+                accountContext: TestData.accountContext,
                 noteBoundaryKey: GlobalKey(),
               ),
             ),

@@ -108,17 +108,18 @@ class ExploreHashtagsState extends ConsumerState<ExploreHashtags> {
   }
 }
 
-class Hashtag extends StatelessWidget {
+class Hashtag extends ConsumerWidget {
   final String hashtag;
   final int usersCount;
 
   const Hashtag({required this.hashtag, required this.usersCount, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       onTap: () async => context.pushRoute(
-        HashtagRoute(hashtag: hashtag, account: AccountScope.of(context)),
+        HashtagRoute(
+            hashtag: hashtag, accountContext: ref.read(accountContextProvider)),
       ),
       title: Text("#$hashtag", style: AppTheme.of(context).hashtagStyle),
       trailing: MfmText(mfmText: S.of(context).joiningHashtagUsers(usersCount)),

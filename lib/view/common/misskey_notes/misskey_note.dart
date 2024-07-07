@@ -313,7 +313,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                 GestureDetector(
                                   onTap: () async => context.pushRoute(
                                     FederationRoute(
-                                      account: account,
+                                      accountContext:
+                                          ref.read(accountContextProvider),
                                       host: displayNote.user.host!,
                                     ),
                                   ),
@@ -630,7 +631,8 @@ class MisskeyNoteState extends ConsumerState<MisskeyNote> {
                                       NoteModalRoute(
                                         baseNote: widget.note,
                                         targetNote: displayNote,
-                                        account: account,
+                                        accountContext:
+                                            ref.read(accountContextProvider),
                                         noteBoundaryKey: globalKey,
                                       ),
                                     ),
@@ -900,19 +902,17 @@ class RenoteHeader extends ConsumerWidget {
   }
 }
 
-class NoteChannelView extends StatelessWidget {
+class NoteChannelView extends ConsumerWidget {
   final NoteChannelInfo channel;
 
   const NoteChannelView({required this.channel, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final account = AccountScope.of(context);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () async => context.pushRoute(
         ChannelDetailRoute(
-          account: account,
+          accountContext: ref.read(accountContextProvider),
           channelId: channel.id,
         ),
       ),

@@ -12,16 +12,16 @@ import "package:misskey_dart/misskey_dart.dart";
 @RoutePage()
 class UserFolloweePage extends ConsumerWidget implements AutoRouteWrapper {
   final String userId;
-  final Account account;
+  final AccountContext accountContext;
 
   const UserFolloweePage({
     required this.userId,
-    required this.account,
+    required this.accountContext,
     super.key,
   });
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: account, child: this);
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

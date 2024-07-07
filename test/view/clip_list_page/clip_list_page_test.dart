@@ -20,7 +20,8 @@ void main() {
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((_) => misskey)],
           child: DefaultRootWidget(
-            initialRoute: ClipListRoute(account: TestData.account),
+            initialRoute:
+                ClipListRoute(accountContext: TestData.accountContext),
           ),
         ),
       );

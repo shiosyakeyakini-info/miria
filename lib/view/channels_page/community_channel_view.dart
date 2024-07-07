@@ -1,12 +1,13 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class CommunityChannelView extends StatelessWidget {
+class CommunityChannelView extends ConsumerWidget {
   final CommunityChannel channel;
   final void Function()? onTap;
 
@@ -17,14 +18,14 @@ class CommunityChannelView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
         onTap: onTap ??
             () async => context.pushRoute(
                   ChannelDetailRoute(
-                    account: AccountScope.of(context),
+                    accountContext: ref.read(accountContextProvider),
                     channelId: channel.id,
                   ),
                 ),

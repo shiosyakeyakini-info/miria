@@ -101,7 +101,8 @@ class MfmTextState extends ConsumerState<MfmText> {
 
   Future<void> onHashtagTap(String hashtag) async {
     await context.pushRoute(
-      HashtagRoute(account: AccountScope.of(context), hashtag: hashtag),
+      HashtagRoute(
+          accountContext: ref.read(accountContextProvider), hashtag: hashtag),
     );
   }
 
@@ -181,7 +182,6 @@ class MfmTextState extends ConsumerState<MfmText> {
           .onMentionTap(
             context,
             ref,
-            AccountScope.of(context),
             acct,
             widget.host,
           )

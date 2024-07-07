@@ -2,8 +2,8 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:url_launcher/url_launcher_string.dart";
@@ -11,10 +11,15 @@ import "package:url_launcher/url_launcher_string.dart";
 part "misskey_games_page.g.dart";
 
 @RoutePage()
-class MisskeyGamesPage extends ConsumerWidget {
-  final Account account;
+class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
+  final AccountContext accountContext;
 
-  const MisskeyGamesPage({required this.account, super.key});
+  const MisskeyGamesPage({required this.accountContext, super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -26,22 +31,22 @@ class MisskeyGamesPage extends ConsumerWidget {
           ListTile(
             title: Text(S.of(context).cookieCliker),
             onTap: () async => launchUrlString(
-              "https://${account.host}/clicker",
+              "https://${accountContext.postAccount.host}/clicker",
               mode: LaunchMode.externalApplication,
             ),
           ),
           ListTile(
             title: Text(S.of(context).bubbleGame),
             onTap: () async => launchUrlString(
-              "https://${account.host}/bubble-game",
+              "https://${accountContext.postAccount.host}/bubble-game",
               mode: LaunchMode.externalApplication,
             ),
           ),
           ListTile(
             title: Text(S.of(context).reversi),
-            subtitle: ReversiInvite(account: account),
+            subtitle: const ReversiInvite(),
             onTap: () async => launchUrlString(
-              "https://${account.host}/reversi",
+              "https://${accountContext.postAccount.host}/reversi",
               mode: LaunchMode.externalApplication,
             ),
           ),
@@ -51,22 +56,19 @@ class MisskeyGamesPage extends ConsumerWidget {
   }
 }
 
-@riverpod
+@Riverpod(dependencies: [misskeyPostContext])
 Future<List<User>> _fetchReversiData(
   _FetchReversiDataRef ref,
-  Account account,
 ) async {
-  return [...await ref.read(misskeyProvider(account)).reversi.invitations()];
+  return [...await ref.read(misskeyPostContextProvider).reversi.invitations()];
 }
 
 class ReversiInvite extends ConsumerWidget {
-  final Account account;
-
-  const ReversiInvite({required this.account, super.key});
+  const ReversiInvite({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reversiInvitation = ref.watch(_fetchReversiDataProvider(account));
+    final reversiInvitation = ref.watch(_fetchReversiDataProvider);
 
     return switch (reversiInvitation) {
       AsyncLoading() => Text(S.of(context).loading),

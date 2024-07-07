@@ -3,6 +3,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/image_file.dart";
+import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -22,10 +23,10 @@ class CreateFileView extends ConsumerWidget {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.android) {
-      final account = AccountScope.of(context);
+      final account = ref.read(accountContextProvider).postAccount;
       await context.pushRoute<Uint8List?>(
         PhotoEditRoute(
-          account: AccountScope.of(context),
+          accountContext: ref.read(accountContextProvider),
           file: file,
           onSubmit: (result) {
             ref
@@ -73,25 +74,28 @@ class CreateFileView extends ConsumerWidget {
                     height: 200,
                     child: GestureDetector(
                       onTap: () async => await onTap(context, ref),
-                      child: Image.memory(data.data),),
+                      child: Image.memory(data.data),
+                    ),
                   ),
                 ),
                 Row(
                   children: [
                     if (data.isNsfw) const Icon(Icons.details_rounded),
                     if (!data.isNsfw) const SizedBox(width: 5),
-                    Expanded( 
+                    Expanded(
                       child: Text(
                         data.fileName,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     IconButton(
-                        onPressed: () => detailTap(context, ref),
-                        icon: const Icon(Icons.more_vert),),
+                      onPressed: () => detailTap(context, ref),
+                      icon: const Icon(Icons.more_vert),
+                    ),
                     IconButton(
-                        onPressed: () => delete(context, ref),
-                        icon: const Icon(Icons.delete),),
+                      onPressed: () => delete(context, ref),
+                      icon: const Icon(Icons.delete),
+                    ),
                   ],
                 ),
               ],
