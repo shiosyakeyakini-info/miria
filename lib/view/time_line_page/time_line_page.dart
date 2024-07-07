@@ -167,7 +167,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                 color: tabSetting == currentTabSetting
                     ? AppTheme.of(context).currentDisplayTabColor
                     : Colors.transparent,
-                child: AccountScope(
+                child: AccountContextScope.as(
                   account: account,
                   child: IconButton(
                     icon: TabIconView(

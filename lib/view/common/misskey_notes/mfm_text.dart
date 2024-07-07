@@ -13,7 +13,6 @@ import "package:miria/model/general_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/link_navigator.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
@@ -315,7 +314,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
   String resolveIconUrl(Uri uri) {
     final baseUrl = uri.toString();
     if (baseUrl.startsWith("/")) {
-      return "https://${widget.user.host ?? AccountScope.of(context).host}$baseUrl";
+      return "https://${widget.user.host ?? ref.read(accountContextProvider).getAccount.host}$baseUrl";
     } else {
       return baseUrl;
     }

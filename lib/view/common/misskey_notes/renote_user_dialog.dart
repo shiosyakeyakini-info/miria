@@ -26,44 +26,41 @@ class RenoteUserDialog extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AccountScope(
-      account: account,
-      child: AlertDialog(
-        title: Text(S.of(context).renotedUsers),
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.width * 0.8,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: PushableListView<Note>(
-              initializeFuture: () async {
-                final response =
-                    await ref.read(misskeyProvider(account)).notes.renotes(
-                          NotesRenoteRequest(noteId: noteId),
-                        );
-                ref
-                    .read(notesProvider(account))
-                    .registerAll(response.where((e) => e.text != null));
-                return response.toList();
-              },
-              nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyProvider(account)).notes.renotes(
-                          NotesRenoteRequest(
-                            noteId: noteId,
-                            untilId: lastItem.id,
-                          ),
-                        );
-                ref
-                    .read(notesProvider(account))
-                    .registerAll(response.where((e) => e.text != null));
-                return response.toList();
-              },
-              itemBuilder: (context, note) {
-                return UserListItem(user: note.user);
-              },
-              showAd: false,
-            ),
+    return AlertDialog(
+      title: Text(S.of(context).renotedUsers),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.width * 0.8,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: PushableListView<Note>(
+            initializeFuture: () async {
+              final response =
+                  await ref.read(misskeyGetContextProvider).notes.renotes(
+                        NotesRenoteRequest(noteId: noteId),
+                      );
+              ref
+                  .read(notesWithProvider)
+                  .registerAll(response.where((e) => e.text != null));
+              return response.toList();
+            },
+            nextFuture: (lastItem, _) async {
+              final response =
+                  await ref.read(misskeyGetContextProvider).notes.renotes(
+                        NotesRenoteRequest(
+                          noteId: noteId,
+                          untilId: lastItem.id,
+                        ),
+                      );
+              ref
+                  .read(notesWithProvider)
+                  .registerAll(response.where((e) => e.text != null));
+              return response.toList();
+            },
+            itemBuilder: (context, note) {
+              return UserListItem(user: note.user);
+            },
+            showAd: false,
           ),
         ),
       ),

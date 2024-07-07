@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
-import "package:miria/view/common/account_scope.dart";
 
 class PhotoEditBottomBar extends ConsumerWidget {
   const PhotoEditBottomBar({super.key});
@@ -46,8 +45,7 @@ class PhotoEditBottomBar extends ConsumerWidget {
             ),
           ),
           IconButton(
-            onPressed: () async =>
-                photoEdit.addReaction(AccountScope.of(context)),
+            onPressed: () async => photoEdit.addReaction(),
             icon: const Icon(Icons.add_reaction_outlined, color: Colors.white),
           ),
         ],

@@ -106,7 +106,7 @@ class TabSettingsListItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider(tabSetting.acct));
     return ListTile(
-      leading: AccountScope(
+      leading: AccountContextScope.as(
         account: account,
         child: TabIconView(icon: tabSetting.icon),
       ),

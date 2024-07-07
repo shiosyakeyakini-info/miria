@@ -117,7 +117,7 @@ class IconSelectDialog extends StatelessWidget {
                         ],
                       ),
                     ),
-                    AccountScope(
+                    AccountContextScope.as(
                       account: account,
                       child: ReactionPickerContent(
                         isAcceptSensitive: true,

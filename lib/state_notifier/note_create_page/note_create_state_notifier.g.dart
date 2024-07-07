@@ -7,7 +7,7 @@ part of 'note_create_state_notifier.dart';
 // **************************************************************************
 
 String _$noteCreateNotifierHash() =>
-    r'6a41b63919247acf708bf952804bc2fe14c9f6a7';
+    r'feaa0a961a3e80cd245e380ca30af4a6835474b3';
 
 /// See also [NoteCreateNotifier].
 @ProviderFor(NoteCreateNotifier)

@@ -6,7 +6,7 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_content.dart";
 
 @RoutePage()
-class ReactionPickerDialog extends ConsumerStatefulWidget {
+class ReactionPickerDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final bool isAcceptSensitive;
 
@@ -17,29 +17,19 @@ class ReactionPickerDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ReactionPickerDialogState();
-}
-
-class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(5),
-      content: AccountScope(
-        account: widget.account,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: ReactionPickerContent(
-            isAcceptSensitive: widget.isAcceptSensitive,
-            onTap: (emoji) => Navigator.of(context).pop(emoji),
-          ),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: ReactionPickerContent(
+          isAcceptSensitive: isAcceptSensitive,
+          onTap: (emoji) => Navigator.of(context).pop(emoji),
         ),
       ),
     );

@@ -54,9 +54,12 @@ import "package:miria/view/settings_page/general_settings_page/general_settings_
 import "package:miria/view/settings_page/import_export_page/folder_select_dialog.dart";
 import "package:miria/view/settings_page/import_export_page/import_export_page.dart";
 import "package:miria/view/settings_page/settings_page.dart";
+import "package:miria/view/settings_page/tab_settings_page/antenna_select_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_list_page.dart";
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_page.dart";
+import "package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart";
 import "package:miria/view/several_account_settings_page/cache_management_page/cache_management_page.dart";
 import "package:miria/view/several_account_settings_page/instance_mute_page/instance_mute_page.dart";
 import "package:miria/view/several_account_settings_page/reaction_deck_page/reaction_deck_page.dart";
@@ -151,6 +154,9 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: ServerDetailRoute.page),
     AutoDialogRoute(page: ReactionUserRoute.page),
     AutoDialogRoute(page: AccountSelectRoute.page),
+    AutoDialogRoute(page: RoleSelectRoute.page),
+    AutoDialogRoute(page: AntennaSelectRoute.page),
+    AutoDialogRoute(page: UserListSelectRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),

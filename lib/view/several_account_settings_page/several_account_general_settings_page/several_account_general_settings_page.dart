@@ -75,7 +75,7 @@ class SeveralAccountGeneralSettingsPageState
 
   @override
   Widget build(BuildContext context) {
-    return AccountScope(
+    return AccountContextScope.as(
       account: widget.account,
       child: Scaffold(
         appBar: AppBar(

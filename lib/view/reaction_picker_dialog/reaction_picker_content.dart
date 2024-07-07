@@ -7,7 +7,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/emoji_repository.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
@@ -30,8 +29,9 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
 
 class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
   final categoryList = <String>[];
-  EmojiRepository get emojiRepository =>
-      ref.read(emojiRepositoryProvider(AccountScope.of(context)));
+  EmojiRepository get emojiRepository => ref.read(
+        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+      );
 
   @override
   void didChangeDependencies() {
@@ -188,8 +188,9 @@ class EmojiSearch extends ConsumerStatefulWidget {
 class EmojiSearchState extends ConsumerState<EmojiSearch> {
   final emojis = <MisskeyEmojiData>[];
 
-  EmojiRepository get emojiRepository =>
-      ref.read(emojiRepositoryProvider(AccountScope.of(context)));
+  EmojiRepository get emojiRepository => ref.read(
+        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+      );
 
   @override
   void didChangeDependencies() {
@@ -219,21 +220,22 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
         ),
         const Padding(padding: EdgeInsets.only(top: 10)),
         Align(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              crossAxisAlignment: WrapCrossAlignment.start,
-              children: [
-                for (final emoji in emojis)
-                  EmojiButton(
-                    emoji: emoji,
-                    onTap: widget.onTap,
-                    isForceVisible: true,
-                    isAcceptSensitive: widget.isAcceptSensitive,
-                  ),
-              ],
-            ),),
+          alignment: Alignment.topLeft,
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            children: [
+              for (final emoji in emojis)
+                EmojiButton(
+                  emoji: emoji,
+                  onTap: widget.onTap,
+                  isForceVisible: true,
+                  isAcceptSensitive: widget.isAcceptSensitive,
+                ),
+            ],
+          ),
+        ),
       ],
     );
   }

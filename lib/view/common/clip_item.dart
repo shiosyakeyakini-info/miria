@@ -21,7 +21,9 @@ class ClipItem extends ConsumerWidget {
     return ListTile(
       onTap: () async => context.pushRoute(
         ClipDetailRoute(
-            accountContext: ref.read(accountContextProvider), id: clip.id,),
+          accountContext: ref.read(accountContextProvider),
+          id: clip.id,
+        ),
       ),
       title: Text(clip.name ?? ""),
       subtitle: SimpleMfmText(clip.description ?? ""),

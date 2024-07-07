@@ -26,7 +26,7 @@ class AccountSelectDialog extends ConsumerWidget {
           children: accounts
               .where((account) => host == null || account.host == host)
               .map(
-                (account) => AccountScope(
+                (account) => AccountContextScope.as(
                   account: account,
                   child: ListTile(
                     leading: AvatarIcon(user: account.i),

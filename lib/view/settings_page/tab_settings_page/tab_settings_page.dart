@@ -321,7 +321,7 @@ class TabSettingsAddDialogState extends ConsumerState<TabSettingsPage> {
                   Expanded(
                     child: selectedAccount == null
                         ? Container()
-                        : AccountScope(
+                        : AccountContextScope.as(
                             account: selectedAccount!,
                             child: SizedBox(
                               height: 32,

@@ -7,7 +7,7 @@ part of 'photo_edit_state_notifier.dart';
 // **************************************************************************
 
 String _$photoEditStateNotifierHash() =>
-    r'54a94a6f8404212bebd4c4a47cf156bfb05b69a1';
+    r'8775951cc945fb8d595f0c3ac490e2e3d8820039';
 
 /// See also [PhotoEditStateNotifier].
 @ProviderFor(PhotoEditStateNotifier)
@@ -18,8 +18,11 @@ final photoEditStateNotifierProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$photoEditStateNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[accountContextProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$PhotoEditStateNotifier = AutoDisposeNotifier<PhotoEdit>;

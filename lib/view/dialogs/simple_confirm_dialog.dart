@@ -41,7 +41,7 @@ class SimpleConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isMfm) {
-      return AccountScope(
+      return AccountContextScope.as(
         account: account!,
         child: AlertDialog(
           content: SimpleMfmText(message),

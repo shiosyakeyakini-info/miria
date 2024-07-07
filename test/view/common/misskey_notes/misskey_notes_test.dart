@@ -34,7 +34,7 @@ Widget buildTestWidget({
     ],
     child: DefaultRootNoRouterWidget(
       child: Scaffold(
-        body: AccountScope(
+        body: AccountContextScope.as(
           account: TestData.account,
           child: SingleChildScrollView(child: MisskeyNote(note: note)),
         ),

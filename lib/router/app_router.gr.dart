@@ -90,6 +90,17 @@ abstract class _$AppRouter extends RootStackRouter {
         )),
       );
     },
+    AntennaSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<AntennaSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: AntennaSelectDialog(
+          account: args.account,
+          key: args.key,
+        )),
+      );
+    },
     AntennaSettingsRoute.name: (routeData) {
       final args = routeData.argsAs<AntennaSettingsRouteArgs>();
       return AutoRoutePage<AntennaSettings>(
@@ -461,11 +472,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ReactionPickerRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ReactionPickerDialog(
+        child: WrappedRoute(
+            child: ReactionPickerDialog(
           account: args.account,
           isAcceptSensitive: args.isAcceptSensitive,
           key: args.key,
-        ),
+        )),
       );
     },
     ReactionUserRoute.name: (routeData) {
@@ -500,6 +512,17 @@ abstract class _$AppRouter extends RootStackRouter {
             child: RenoteUserDialog(
           account: args.account,
           noteId: args.noteId,
+          key: args.key,
+        )),
+      );
+    },
+    RoleSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<RoleSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: RoleSelectDialog(
+          account: args.account,
           key: args.key,
         )),
       );
@@ -648,6 +671,17 @@ abstract class _$AppRouter extends RootStackRouter {
             child: UserFollowerPage(
           userId: args.userId,
           accountContext: args.accountContext,
+          key: args.key,
+        )),
+      );
+    },
+    UserListSelectRoute.name: (routeData) {
+      final args = routeData.argsAs<UserListSelectRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: UserListSelectDialog(
+          account: args.account,
           key: args.key,
         )),
       );
@@ -1006,6 +1040,44 @@ class AntennaRouteArgs {
   @override
   String toString() {
     return 'AntennaRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+}
+
+/// generated route for
+/// [AntennaSelectDialog]
+class AntennaSelectRoute extends PageRouteInfo<AntennaSelectRouteArgs> {
+  AntennaSelectRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AntennaSelectRoute.name,
+          args: AntennaSelectRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AntennaSelectRoute';
+
+  static const PageInfo<AntennaSelectRouteArgs> page =
+      PageInfo<AntennaSelectRouteArgs>(name);
+}
+
+class AntennaSelectRouteArgs {
+  const AntennaSelectRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AntennaSelectRouteArgs{account: $account, key: $key}';
   }
 }
 
@@ -2470,6 +2542,44 @@ class RenoteUserRouteArgs {
 }
 
 /// generated route for
+/// [RoleSelectDialog]
+class RoleSelectRoute extends PageRouteInfo<RoleSelectRouteArgs> {
+  RoleSelectRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RoleSelectRoute.name,
+          args: RoleSelectRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RoleSelectRoute';
+
+  static const PageInfo<RoleSelectRouteArgs> page =
+      PageInfo<RoleSelectRouteArgs>(name);
+}
+
+class RoleSelectRouteArgs {
+  const RoleSelectRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'RoleSelectRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
 /// [SearchPage]
 class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
   SearchRoute({
@@ -2977,6 +3087,44 @@ class UserFollowerRouteArgs {
   @override
   String toString() {
     return 'UserFollowerRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UserListSelectDialog]
+class UserListSelectRoute extends PageRouteInfo<UserListSelectRouteArgs> {
+  UserListSelectRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserListSelectRoute.name,
+          args: UserListSelectRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserListSelectRoute';
+
+  static const PageInfo<UserListSelectRouteArgs> page =
+      PageInfo<UserListSelectRouteArgs>(name);
+}
+
+class UserListSelectRouteArgs {
+  const UserListSelectRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UserListSelectRouteArgs{account: $account, key: $key}';
   }
 }
 

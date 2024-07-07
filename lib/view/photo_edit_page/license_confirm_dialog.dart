@@ -66,7 +66,7 @@ class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return AccountScope(
+    return AccountContextScope.as(
       account: widget.account,
       child: AlertDialog(
         content: SizedBox(
