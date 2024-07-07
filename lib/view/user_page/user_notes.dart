@@ -126,7 +126,13 @@ class UserNotes extends HookConsumerWidget {
         Expanded(
           child: PushableListView<Note>(
             listKey: Object.hashAll(
-              [isFileOnly, withReply, renote, untilDate, highlight],
+              [
+                isFileOnly.value,
+                withReply.value,
+                renote.value,
+                untilDate.value,
+                highlight.value
+              ],
             ),
             additionalErrorInfo: highlight.value
                 ? (context, e) => Text(S.of(context).userHighlightAvailability)

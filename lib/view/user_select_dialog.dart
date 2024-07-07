@@ -1,5 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/origin_extension.dart";
 import "package:miria/providers.dart";
@@ -8,7 +9,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage()
+@RoutePage<User>()
 class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
 
@@ -32,7 +33,7 @@ class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   }
 }
 
-class UserSelectContent extends ConsumerStatefulWidget {
+class UserSelectContent extends HookConsumerWidget {
   final void Function(User) onSelected;
   final FocusNode? focusNode;
   final bool isDetail;
@@ -45,26 +46,9 @@ class UserSelectContent extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      UserSelectContentState();
-}
-
-final usersSelectDialogQueryProvider = StateProvider.autoDispose((ref) => "");
-final usersSelectDialogOriginProvider =
-    StateProvider.autoDispose((ref) => Origin.combined);
-
-class UserSelectContentState extends ConsumerState<UserSelectContent> {
-  final queryController = TextEditingController();
-
-  @override
-  void dispose() {
-    queryController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final origin = ref.watch(usersSelectDialogOriginProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queryController = useTextEditingController();
+    final origin = useState(Origin.combined);
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,29 +56,23 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
       children: [
         TextField(
           controller: queryController,
-          focusNode: widget.focusNode,
+          focusNode: focusNode,
           autofocus: true,
           decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-          onSubmitted: (value) {
-            ref.read(usersSelectDialogQueryProvider.notifier).state = value;
-          },
         ),
         const Padding(padding: EdgeInsets.only(bottom: 10)),
         LayoutBuilder(
           builder: (context, constraints) {
             return ToggleButtons(
               isSelected: [
-                for (final element in Origin.values) element == origin,
+                for (final element in Origin.values) element == origin.value,
               ],
               constraints: BoxConstraints.expand(
                 width: constraints.maxWidth / Origin.values.length -
                     Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
                         Origin.values.length,
               ),
-              onPressed: (index) {
-                ref.read(usersSelectDialogOriginProvider.notifier).state =
-                    Origin.values[index];
-              },
+              onPressed: (index) => origin.value = Origin.values[index],
               children: [
                 for (final element in Origin.values)
                   Padding(
@@ -107,8 +85,10 @@ class UserSelectContentState extends ConsumerState<UserSelectContent> {
         ),
         Expanded(
           child: UsersSelectContentList(
-            onSelected: widget.onSelected,
-            isDetail: widget.isDetail,
+            onSelected: onSelected,
+            isDetail: isDetail,
+            query: queryController.text,
+            origin: origin.value,
           ),
         ),
       ],
@@ -120,16 +100,17 @@ class UsersSelectContentList extends ConsumerWidget {
   const UsersSelectContentList({
     required this.onSelected,
     required this.isDetail,
+    required this.query,
+    required this.origin,
     super.key,
   });
   final void Function(User) onSelected;
   final bool isDetail;
+  final String query;
+  final Origin origin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final query = ref.watch(usersSelectDialogQueryProvider);
-    final origin = ref.watch(usersSelectDialogOriginProvider);
-
     return PushableListView(
       listKey: ObjectKey(Object.hashAll([query, origin])),
       initializeFuture: () async {

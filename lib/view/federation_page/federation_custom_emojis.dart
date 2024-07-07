@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
@@ -35,6 +36,7 @@ class FederationCustomEmojis extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final emoji = ref.watch(fetchEmojiProvider(host, meta));
+
     return switch (emoji) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(

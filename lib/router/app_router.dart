@@ -145,11 +145,11 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
     AutoDialogRoute(page: ClipSettingsRoute.page),
-    AutoDialogRoute(page: ReactionPickerRoute.page),
+    AutoDialogRoute<MisskeyEmojiData>(page: ReactionPickerRoute.page),
     AutoDialogRoute(page: LicenseConfirmRoute.page),
     AutoDialogRoute(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
-    AutoDialogRoute(page: UserSelectRoute.page),
+    AutoDialogRoute<User>(page: UserSelectRoute.page),
     AutoDialogRoute(page: ChannelDetailRoute.page),
     AutoDialogRoute(page: ServerDetailRoute.page),
     AutoDialogRoute(page: ReactionUserRoute.page),
@@ -157,6 +157,8 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: RoleSelectRoute.page),
     AutoDialogRoute(page: AntennaSelectRoute.page),
     AutoDialogRoute(page: UserListSelectRoute.page),
+    AutoDialogRoute<UsersListSettings>(page: UsersListSettingsRoute.page),
+    AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),
@@ -169,20 +171,18 @@ class AppRouter extends _$AppRouter {
 }
 
 /// ダイアログ
-class AutoDialogRoute<T> extends CustomRoute {
+class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
   AutoDialogRoute({
-    required PageInfo<T> page,
+    required super.page,
   }) : super(
           transitionsBuilder: TransitionsBuilders.fadeIn,
           durationInMilliseconds: 200,
           fullscreenDialog: false,
-          customRouteBuilder: (context, widget, page) =>
-              DialogRoute<PageInfo<T>>(
+          customRouteBuilder: (context, widget, page) => DialogRoute<ReturnT>(
             context: context,
             builder: (context) => widget,
             settings: page,
           ),
-          page: page,
         );
 }
 

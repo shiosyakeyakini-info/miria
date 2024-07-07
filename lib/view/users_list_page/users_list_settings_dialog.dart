@@ -8,11 +8,11 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "users_list_settings_dialog.g.dart";
 
-@riverpod
+@Riverpod(dependencies: [])
 UsersListSettings _initialSettings(_InitialSettingsRef ref) =>
     throw UnimplementedError();
 
-@riverpod
+@Riverpod(dependencies: [_initialSettings])
 class _UsersListSettingsNotifier extends _$UsersListSettingsNotifier {
   @override
   UsersListSettings build() {

@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:json5/json5.dart";
 import "package:miria/model/account.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:url_launcher/url_launcher.dart";
 
-class AddReactionsDialog extends StatefulWidget {
+class AddReactionsDialog extends HookConsumerWidget {
   const AddReactionsDialog({
     required this.account,
     super.key,
@@ -16,29 +18,17 @@ class AddReactionsDialog extends StatefulWidget {
   final String domain;
 
   @override
-  State<AddReactionsDialog> createState() => _AddReactionsDialogState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useState(GlobalKey<FormState>());
 
-class _AddReactionsDialogState extends State<AddReactionsDialog> {
-  final controller = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final host = widget.account.host;
+    final host = account.host;
     final uri = Uri(
       scheme: "https",
       host: host,
       pathSegments: [
         "registry",
         "value",
-        widget.domain,
+        domain,
         "client",
         "base",
         "reactions",
@@ -48,7 +38,7 @@ class _AddReactionsDialogState extends State<AddReactionsDialog> {
       title: Text(S.of(context).bulkAddReactions),
       scrollable: true,
       content: Form(
-        key: formKey,
+        key: formKey.value,
         child: Column(
           children: [
             Column(
@@ -106,7 +96,7 @@ class _AddReactionsDialogState extends State<AddReactionsDialog> {
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
               onSaved: (value) {
-                if (formKey.currentState!.validate()) {
+                if (formKey.value.currentState!.validate()) {
                   final emojiNames = JSON5.parse(value!) as List;
                   Navigator.of(context)
                       .pop(emojiNames.map((name) => name as String).toList());
@@ -114,7 +104,7 @@ class _AddReactionsDialogState extends State<AddReactionsDialog> {
               },
             ),
             ElevatedButton(
-              onPressed: () => formKey.currentState?.save.call(),
+              onPressed: () => formKey.value.currentState?.save(),
               child: Text(S.of(context).done),
             ),
           ],

@@ -33,12 +33,10 @@ class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
               final settings = await context.pushRoute<UsersListSettings>(
                 UsersListSettingsRoute(title: Text(S.of(context).create)),
               );
-              if (!context.mounted) return;
-              if (settings != null) {
-                await ref
-                    .read(usersListsNotifierProvider.notifier)
-                    .create(settings);
-              }
+              if (settings == null) return;
+              await ref
+                  .read(usersListsNotifierProvider.notifier)
+                  .create(settings);
             },
           ),
         ],

@@ -12,6 +12,31 @@ import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+
+part "server_detail_dialog.g.dart";
+
+@Riverpod(dependencies: [misskeyGetContext])
+Future<int> _onlineCounts(_OnlineCountsRef ref) async {
+  final onlineUserCountsResponse =
+      await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
+  return onlineUserCountsResponse.count;
+}
+
+@Riverpod(dependencies: [misskeyGetContext])
+Future<int> _totalMemories(_TotalMemoriesRef ref) async {
+  final serverInfoResponse =
+      await ref.read(misskeyGetContextProvider).serverInfo();
+  return serverInfoResponse.mem.total;
+}
+
+@Riverpod(dependencies: [misskeyGetContext])
+Future<int> _ping(_PingRef ref) async {
+  final sendDate = DateTime.now();
+  final pingResponse = await ref.read(misskeyGetContextProvider).ping();
+
+  return pingResponse.pong - sendDate.millisecondsSinceEpoch;
+}
 
 @RoutePage()
 class ServerDetailDialog extends ConsumerStatefulWidget
@@ -35,9 +60,6 @@ class ServerDetailDialog extends ConsumerStatefulWidget
 class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   SocketController? controller;
   SocketController? queueController;
-  int? onlineUsers;
-  int? totalMemories;
-  int? ping;
 
   List<StatsLogResponse> logged = [];
   List<QueueStatsLogResponse> queueLogged = [];
@@ -76,46 +98,6 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
       },
     );
     unawaited(misskey.startStreaming());
-
-    Future(() async {
-      try {
-        final onlineUserCountsResponse =
-            await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
-
-        if (!mounted) return;
-        setState(() {
-          onlineUsers = onlineUserCountsResponse.count;
-        });
-      } catch (e) {
-        //TODO
-      }
-      try {
-        final serverInfoResponse =
-            await ref.read(misskeyGetContextProvider).serverInfo();
-        if (!mounted) return;
-        setState(() {
-          totalMemories = serverInfoResponse.mem.total;
-        });
-      } catch (e) {
-        //TODO
-      }
-
-      await refreshPing();
-    });
-  }
-
-  Future<void> refreshPing() async {
-    try {
-      final sendDate = DateTime.now();
-      final pingResponse = await ref.read(misskeyGetContextProvider).ping();
-
-      if (!mounted) return;
-      setState(() {
-        ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
-      });
-    } catch (e) {
-      //TODO
-    }
   }
 
   String format(double value) {
@@ -124,6 +106,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final onlineUsers = ref.watch(_onlineCountsProvider).valueOrNull;
+    final totalMemories = ref.watch(_totalMemoriesProvider).valueOrNull;
+    final ping = ref.watch(_pingProvider).valueOrNull;
+
     final currentStat = logged.lastOrNull;
     final currentQueueStats = queueLogged.lastOrNull;
 
@@ -222,7 +208,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                               children: [
                                 TextSpan(
                                   text: format(
-                                    currentStat.mem.used / totalMemories!,
+                                    currentStat.mem.used / totalMemories,
                                   ),
                                   style:
                                       Theme.of(context).textTheme.headlineSmall,
@@ -241,7 +227,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                                 .mapIndexed(
                                   (index, element) => FlSpot(
                                     index.toDouble(),
-                                    element.mem.used / totalMemories!,
+                                    element.mem.used / totalMemories,
                                   ),
                                 )
                                 .toList(),
@@ -276,7 +262,8 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                                 WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
                                   child: IconButton(
-                                    onPressed: () async => refreshPing(),
+                                    onPressed: () =>
+                                        ref.invalidate(_pingProvider),
                                     icon: const Icon(Icons.refresh),
                                   ),
                                 ),

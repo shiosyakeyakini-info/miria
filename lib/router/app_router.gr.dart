@@ -220,11 +220,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<DriveFileSelectRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: DriveFileSelectDialog(
+        child: WrappedRoute(
+            child: DriveFileSelectDialog(
           account: args.account,
           key: args.key,
           allowMultiple: args.allowMultiple,
-        ),
+        )),
       );
     },
     DriveModalRoute.name: (routeData) {
@@ -335,11 +336,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<LicenseConfirmRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LicenseConfirmDialog(
+        child: WrappedRoute(
+            child: LicenseConfirmDialog(
           emoji: args.emoji,
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     LoginRoute.name: (routeData) {
@@ -470,7 +472,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     ReactionPickerRoute.name: (routeData) {
       final args = routeData.argsAs<ReactionPickerRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<MisskeyEmojiData>(
         routeData: routeData,
         child: WrappedRoute(
             child: ReactionPickerDialog(
@@ -700,7 +702,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     UserSelectRoute.name: (routeData) {
       final args = routeData.argsAs<UserSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<User>(
         routeData: routeData,
         child: WrappedRoute(
             child: UserSelectDialog(

@@ -4,7 +4,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
-class FutureListView<T> extends StatefulWidget {
+class FutureListView<T> extends StatelessWidget {
   final Future<Iterable<T>> future;
   final Widget Function(BuildContext, T) builder;
   final bool shrinkWrap;
@@ -19,14 +19,9 @@ class FutureListView<T> extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => FutureListViewState<T>();
-}
-
-class FutureListViewState<T> extends State<FutureListView<T>> {
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<Iterable<T>>(
-      future: widget.future,
+      future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final data = snapshot.data;
@@ -40,11 +35,10 @@ class FutureListViewState<T> extends State<FutureListView<T>> {
           final list = data.toList();
 
           return ListView.builder(
-            shrinkWrap: widget.shrinkWrap,
-            physics: widget.physics,
+            shrinkWrap: shrinkWrap,
+            physics: physics,
             itemCount: data.length,
-            itemBuilder: (context, index) =>
-                widget.builder(context, list[index]),
+            itemBuilder: (context, index) => builder(context, list[index]),
           );
         } else if (snapshot.hasError) {
           if (kDebugMode) {

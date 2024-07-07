@@ -299,38 +299,33 @@ class SimpleMfmText extends ConsumerWidget {
   }
 }
 
-class UserInformation extends ConsumerStatefulWidget {
+class UserInformation extends ConsumerWidget {
   final User user;
   const UserInformation({
     required this.user,
     super.key,
   });
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => UserInformationState();
-}
-
-class UserInformationState extends ConsumerState<UserInformation> {
-  String resolveIconUrl(Uri uri) {
+  String resolveIconUrl(Uri uri, WidgetRef ref) {
     final baseUrl = uri.toString();
     if (baseUrl.startsWith("/")) {
-      return "https://${widget.user.host ?? ref.read(accountContextProvider).getAccount.host}$baseUrl";
+      return "https://${user.host ?? ref.read(accountContextProvider).getAccount.host}$baseUrl";
     } else {
       return baseUrl;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfmText(
-      widget.user.name ?? widget.user.username,
+      user.name ?? user.username,
       style: Theme.of(context)
           .textTheme
           .bodyMedium
           ?.copyWith(fontWeight: FontWeight.bold),
-      emojis: widget.user.emojis,
+      emojis: user.emojis,
       suffixSpan: [
-        for (final badge in widget.user.badgeRoles)
+        for (final badge in user.badgeRoles)
           if (badge.iconUrl != null)
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -338,7 +333,7 @@ class UserInformationState extends ConsumerState<UserInformation> {
                 message: badge.name,
                 child: NetworkImageView(
                   type: ImageType.role,
-                  url: resolveIconUrl(badge.iconUrl!),
+                  url: resolveIconUrl(badge.iconUrl!, ref),
                   height: DefaultTextStyle.of(context).style.fontSize ?? 22,
                   loadingBuilder: (context, widget, event) => SizedBox(
                     width: DefaultTextStyle.of(context).style.fontSize ?? 22,

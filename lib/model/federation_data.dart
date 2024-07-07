@@ -159,6 +159,8 @@ class FederationState extends _$FederationState {
       isSupportedEmoji: isSupportedEmoji,
       isSupportedLocalTimeline: isSupportedLocalTimeline,
       isSupportedAnnouncement: isSupportedAnnouncement,
+      usersCount: federation.usersCount,
+      notesCount: federation.notesCount,
       meta: misskeyMeta,
     );
   }

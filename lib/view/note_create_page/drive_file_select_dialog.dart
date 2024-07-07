@@ -1,16 +1,19 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class DriveFileSelectDialog extends ConsumerStatefulWidget {
+class DriveFileSelectDialog extends HookConsumerWidget
+    implements AutoRouteWrapper {
   final Account account;
   final bool allowMultiple;
 
@@ -21,43 +24,36 @@ class DriveFileSelectDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      DriveFileSelectDialogState();
-}
-
-class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
-  final List<DriveFolder> path = [];
-  final List<DriveFile> files = [];
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final path = useState<List<DriveFolder>>([]);
+    final files = useState<List<DriveFile>>([]);
+
     return AlertDialog(
       title: AppBar(
         leading: IconButton(
-          onPressed: path.isEmpty
-              ? null
-              : () {
-                  setState(() {
-                    path.removeLast();
-                  });
-                },
+          onPressed: path.value.isEmpty ? null : () => path.value.removeLast(),
           icon: const Icon(Icons.arrow_back),
         ),
-        title: path.isEmpty
+        title: path.value.isEmpty
             ? Text(S.of(context).chooseFile)
-            : Text(path.map((e) => e.name).join("/")),
+            : Text(path.value.map((e) => e.name).join("/")),
         actions: [
-          if (files.isNotEmpty)
+          if (files.value.isNotEmpty)
             Center(
               child: Text(
-                "(${files.length})",
+                "(${files.value.length})",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
-          if (widget.allowMultiple)
+          if (allowMultiple)
             IconButton(
-              onPressed:
-                  files.isEmpty ? null : () => Navigator.of(context).pop(files),
+              onPressed: files.value.isEmpty
+                  ? null
+                  : () => Navigator.of(context).pop(files),
               icon: const Icon(Icons.check),
             ),
         ],
@@ -74,34 +70,30 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                 physics: const NeverScrollableScrollPhysics(),
                 showAd: false,
                 initializeFuture: () async {
-                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final misskey = ref.read(misskeyGetContextProvider);
                   final response = await misskey.drive.folders.folders(
                     DriveFoldersRequest(
-                      folderId: path.isEmpty ? null : path.last.id,
+                      folderId: path.value.isEmpty ? null : path.value.last.id,
                     ),
                   );
                   return response.toList();
                 },
                 nextFuture: (lastItem, _) async {
-                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final misskey = ref.read(misskeyGetContextProvider);
                   final response = await misskey.drive.folders.folders(
                     DriveFoldersRequest(
                       untilId: lastItem.id,
-                      folderId: path.isEmpty ? null : path.last.id,
+                      folderId: path.value.isEmpty ? null : path.value.last.id,
                     ),
                   );
                   return response.toList();
                 },
-                listKey: path.map((e) => e.id).join("/"),
+                listKey: path.value.map((e) => e.id).join("/"),
                 itemBuilder: (context, item) {
                   return ListTile(
                     leading: const Icon(Icons.folder),
                     title: Text(item.name),
-                    onTap: () {
-                      setState(() {
-                        path.add(item);
-                      });
-                    },
+                    onTap: () => path.value.add(item),
                   );
                 },
               ),
@@ -110,27 +102,28 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                 physics: const NeverScrollableScrollPhysics(),
                 showAd: false,
                 initializeFuture: () async {
-                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final misskey = ref.read(misskeyGetContextProvider);
                   final response = await misskey.drive.files.files(
                     DriveFilesRequest(
-                      folderId: path.isEmpty ? null : path.last.id,
+                      folderId: path.value.isEmpty ? null : path.value.last.id,
                     ),
                   );
                   return response.toList();
                 },
                 nextFuture: (lastItem, _) async {
-                  final misskey = ref.read(misskeyProvider(widget.account));
+                  final misskey = ref.read(misskeyGetContextProvider);
                   final response = await misskey.drive.files.files(
                     DriveFilesRequest(
                       untilId: lastItem.id,
-                      folderId: path.isEmpty ? null : path.last.id,
+                      folderId: path.value.isEmpty ? null : path.value.last.id,
                     ),
                   );
                   return response.toList();
                 },
-                listKey: path.map((e) => e.id).join("/"),
+                listKey: path.value.map((e) => e.id).join("/"),
                 itemBuilder: (context, item) {
-                  final isSelected = files.any((file) => file.id == item.id);
+                  final isSelected =
+                      files.value.any((file) => file.id == item.id);
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     child: InkWell(
@@ -138,21 +131,20 @@ class DriveFileSelectDialogState extends ConsumerState<DriveFileSelectDialog> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       onTap: () {
-                        if (widget.allowMultiple) {
-                          setState(() {
-                            if (isSelected) {
-                              files.removeWhere((file) => file.id == item.id);
-                            } else {
-                              files.add(item);
-                            }
-                          });
+                        if (allowMultiple) {
+                          if (isSelected) {
+                            files.value
+                                .removeWhere((file) => file.id == item.id);
+                          } else {
+                            files.value.add(item);
+                          }
                         } else {
                           Navigator.of(context).pop(item);
                         }
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: (widget.allowMultiple && isSelected)
+                        decoration: (allowMultiple && isSelected)
                             ? BoxDecoration(
                                 color: AppTheme.of(context)
                                     .currentDisplayTabColor

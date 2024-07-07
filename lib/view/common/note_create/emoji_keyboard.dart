@@ -1,3 +1,4 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -5,10 +6,10 @@ import "package:miria/model/account.dart";
 import "package:miria/model/input_completion_type.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
-import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 
 final _filteredEmojisProvider = NotifierProvider.autoDispose
     .family<_FilteredEmojis, List<MisskeyEmojiData>, Account>(
@@ -107,13 +108,13 @@ class EmojiKeyboard extends ConsumerWidget {
           ),
         TextButton.icon(
           onPressed: () async {
-            final selected = await showDialog(
-              context: context,
-              builder: (context2) => ReactionPickerDialog(
+            final selected = await context.pushRoute<MisskeyEmojiData>(
+              ReactionPickerRoute(
                 account: ref.read(accountContextProvider).getAccount,
                 isAcceptSensitive: true,
               ),
             );
+
             if (selected != null) {
               insertEmoji(selected, ref);
             }

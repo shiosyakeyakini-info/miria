@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -14,31 +15,18 @@ class ImageMeta with _$ImageMeta {
   }) = _ImageMeta;
 }
 
-class ImageMetaDialog extends ConsumerStatefulWidget {
+class ImageMetaDialog extends HookConsumerWidget {
   const ImageMetaDialog({required this.initialMeta, super.key});
 
   final ImageMeta initialMeta;
-
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => ImageMetaDialogState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fileNameController =
+        useTextEditingController(text: initialMeta.fileName);
+    final isNsfw = useState(initialMeta.isNsfw);
+    final captionController =
+        useTextEditingController(text: initialMeta.caption);
 
-class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
-  late final TextEditingController fileNameController = TextEditingController()
-    ..text = widget.initialMeta.fileName;
-  late bool isNsfw = widget.initialMeta.isNsfw;
-  late final TextEditingController captionController = TextEditingController()
-    ..text = widget.initialMeta.caption;
-
-  @override
-  void dispose() {
-    fileNameController.dispose();
-    captionController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AlertDialog(
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8,
@@ -52,15 +40,13 @@ class ImageMetaDialogState extends ConsumerState<ImageMetaDialog> {
                   const InputDecoration(prefixIcon: Icon(Icons.file_present)),
             ),
             CheckboxListTile(
-              value: isNsfw,
-              onChanged: (value) => setState(() {
-                isNsfw = !isNsfw;
-              }),
+              value: isNsfw.value,
+              onChanged: (value) => isNsfw.value = !isNsfw.value,
               title: Text(S.of(context).markAsSensitive),
             ),
             Text(S.of(context).caption),
             TextField(
-              controller: fileNameController,
+              controller: captionController,
               decoration:
                   const InputDecoration(prefixIcon: Icon(Icons.file_present)),
               minLines: 5,

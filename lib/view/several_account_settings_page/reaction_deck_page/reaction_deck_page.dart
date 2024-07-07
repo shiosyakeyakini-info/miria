@@ -9,9 +9,9 @@ import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
-import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:miria/view/several_account_settings_page/reaction_deck_page/add_reactions_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:reorderables/reorderables.dart";
@@ -126,9 +126,9 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 children: [
                   IconButton(
                     onPressed: () async {
-                      final reaction = await showDialog<MisskeyEmojiData?>(
-                        context: context,
-                        builder: (context) => ReactionPickerDialog(
+                      final reaction =
+                          await context.pushRoute<MisskeyEmojiData>(
+                        ReactionPickerRoute(
                           account: widget.account,
                           isAcceptSensitive: true,
                         ),

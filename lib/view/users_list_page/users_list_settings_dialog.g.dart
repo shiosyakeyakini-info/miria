@@ -6,7 +6,7 @@ part of 'users_list_settings_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$initialSettingsHash() => r'2af96eff96158ab15dd248199c0f69e6db518cbf';
+String _$initialSettingsHash() => r'dfac19098b98ae3956aa22d651861d1133c68289';
 
 /// See also [_initialSettings].
 @ProviderFor(_initialSettings)
@@ -17,13 +17,13 @@ final _initialSettingsProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$initialSettingsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
 typedef _InitialSettingsRef = AutoDisposeProviderRef<UsersListSettings>;
 String _$usersListSettingsNotifierHash() =>
-    r'38adf50ce093cb9deae068c62a8737e644d56b8b';
+    r'6e354936966b2a1d0e0c4dca6d41e74ff0ccb243';
 
 /// See also [_UsersListSettingsNotifier].
 @ProviderFor(_UsersListSettingsNotifier)
@@ -34,8 +34,11 @@ final _usersListSettingsNotifierProvider = AutoDisposeNotifierProvider<
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$usersListSettingsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[_initialSettingsProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    _initialSettingsProvider,
+    ...?_initialSettingsProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$UsersListSettingsNotifier = AutoDisposeNotifier<UsersListSettings>;

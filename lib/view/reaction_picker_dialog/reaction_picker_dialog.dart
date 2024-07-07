@@ -2,10 +2,11 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_content.dart";
 
-@RoutePage()
+@RoutePage<MisskeyEmojiData>()
 class ReactionPickerDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final bool isAcceptSensitive;
@@ -29,7 +30,7 @@ class ReactionPickerDialog extends ConsumerWidget implements AutoRouteWrapper {
         height: MediaQuery.of(context).size.height * 0.9,
         child: ReactionPickerContent(
           isAcceptSensitive: isAcceptSensitive,
-          onTap: (emoji) => Navigator.of(context).pop(emoji),
+          onTap: (emoji) async => context.maybePop(emoji),
         ),
       ),
     );

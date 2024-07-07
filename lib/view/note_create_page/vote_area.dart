@@ -1,20 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 
-class VoteArea extends ConsumerStatefulWidget {
+class VoteArea extends ConsumerWidget {
   const VoteArea({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => VoteAreaState();
-}
-
-class VoteAreaState extends ConsumerState<VoteArea> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final expireType = ref.watch(
       noteCreateNotifierProvider.select((value) => value.voteExpireType),
     );
@@ -45,16 +41,11 @@ class VoteAreaState extends ConsumerState<VoteArea> {
   }
 }
 
-class VoteContentList extends ConsumerStatefulWidget {
+class VoteContentList extends ConsumerWidget {
   const VoteContentList({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => VoteContentListState();
-}
-
-class VoteContentListState extends ConsumerState<VoteContentList> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final contentCount = ref.watch(
       noteCreateNotifierProvider.select((value) => value.voteContentCount),
     );
@@ -68,55 +59,22 @@ class VoteContentListState extends ConsumerState<VoteContentList> {
   }
 }
 
-class VoteContentListItem extends ConsumerStatefulWidget {
+class VoteContentListItem extends HookConsumerWidget {
   final int index;
 
   const VoteContentListItem({required this.index, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      VoteContentListItemState();
-}
-
-class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
-  final controller = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-
-    controller.addListener(() {
-      ref
-          .read(noteCreateNotifierProvider.notifier)
-          .setVoteContent(widget.index, controller.text);
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant VoteContentListItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      controller.text =
-          ref.read(noteCreateNotifierProvider).voteContent[widget.index];
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      controller.text =
-          ref.read(noteCreateNotifierProvider).voteContent[widget.index];
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController();
+    useEffect(
+      () {
+        controller.text =
+            ref.read(noteCreateNotifierProvider).voteContent[index];
+        return null;
+      },
+      [index],
+    );
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
@@ -125,7 +83,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
-                hintText: S.of(context).choiceNumber(widget.index + 1),
+                hintText: S.of(context).choiceNumber(index + 1),
               ),
             ),
           ),
@@ -133,7 +91,7 @@ class VoteContentListItemState extends ConsumerState<VoteContentListItem> {
             onPressed: () {
               ref
                   .read(noteCreateNotifierProvider.notifier)
-                  .deleteVoteContent(widget.index);
+                  .deleteVoteContent(index);
             },
             icon: const Icon(Icons.close),
           ),
@@ -188,16 +146,13 @@ class VoteDuration extends ConsumerWidget {
   }
 }
 
-class VoteUntilDate extends ConsumerStatefulWidget {
-  const VoteUntilDate({super.key});
+class VoteUntilDate extends ConsumerWidget {
+  const VoteUntilDate({
+    super.key,
+  });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => VoteUntilDateState();
-}
-
-class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final date = ref.watch(
       noteCreateNotifierProvider.select((value) => value.voteDate),
     );
@@ -261,44 +216,20 @@ class VoteUntilDateState extends ConsumerState<VoteUntilDate> {
   }
 }
 
-class VoteUntilDuration extends ConsumerStatefulWidget {
+class VoteUntilDuration extends HookConsumerWidget {
   const VoteUntilDuration({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      VoteUntilDurationState();
-}
-
-class VoteUntilDurationState extends ConsumerState<VoteUntilDuration> {
-  final controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    Future(() async {
-      controller.addListener(() {
-        final value = int.tryParse(controller.text);
-        if (value == null) return;
-        ref.read(noteCreateNotifierProvider.notifier).setVoteDuration(value);
-      });
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController(
+      text: ref.read(noteCreateNotifierProvider).voteDuration?.toString() ?? "",
+    );
+    controller.addListener(() {
+      final value = int.tryParse(controller.text);
+      if (value == null) return;
+      ref.read(noteCreateNotifierProvider.notifier).setVoteDuration(value);
     });
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    controller.text =
-        ref.read(noteCreateNotifierProvider).voteDuration?.toString() ?? "";
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(

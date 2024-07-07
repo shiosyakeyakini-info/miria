@@ -9,6 +9,7 @@ import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/modal_indicator.dart";
@@ -23,7 +24,6 @@ import "package:miria/view/note_create_page/renote_area.dart";
 import "package:miria/view/note_create_page/reply_area.dart";
 import "package:miria/view/note_create_page/reply_to_area.dart";
 import "package:miria/view/note_create_page/vote_area.dart";
-import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -231,9 +231,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         IconButton(
                           onPressed: () async {
                             final selectedEmoji =
-                                await showDialog<MisskeyEmojiData?>(
-                              context: context,
-                              builder: (context) => ReactionPickerDialog(
+                                await context.pushRoute<MisskeyEmojiData>(
+                              ReactionPickerRoute(
                                 account: ref
                                     .read(accountContextProvider)
                                     .postAccount,

@@ -22,24 +22,16 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "notification_page.g.dart";
 
 @RoutePage()
-class NotificationPage extends ConsumerStatefulWidget
-    implements AutoRouteWrapper {
+class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
 
   const NotificationPage({required this.accountContext, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      NotificationPageState();
-
-  @override
   Widget wrappedRoute(BuildContext context) =>
       AccountContextScope(context: accountContext, child: this);
-}
-
-class NotificationPageState extends ConsumerState<NotificationPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.read(misskeyPostContextProvider);
     return DefaultTabController(
       length: 3,
@@ -73,7 +65,7 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
 
                   await ref
                       .read(accountRepositoryProvider.notifier)
-                      .readAllNotification(widget.accountContext.postAccount);
+                      .readAllNotification(accountContext.postAccount);
                   return result.toNotificationData(localize);
                 },
                 nextFuture: (lastElement, _) async {
