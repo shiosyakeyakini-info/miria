@@ -4,7 +4,6 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/pushable_listview.dart";
@@ -13,10 +12,7 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class FederationAnnouncements extends HookConsumerWidget {
   final String host;
-  const FederationAnnouncements({
-    required this.host,
-    super.key,
-  });
+  const FederationAnnouncements({required this.host, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,7 +54,7 @@ class FederationAnnouncements extends HookConsumerWidget {
         ),
         Expanded(
           child: PushableListView(
-            listKey: isActive,
+            listKey: isActive.value,
             initializeFuture: () async {
               final Iterable<AnnouncementsResponse> response;
               final request =

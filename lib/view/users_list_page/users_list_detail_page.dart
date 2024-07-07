@@ -1,10 +1,8 @@
-import "package:auto_route/annotations.dart";
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/users_lists_show_response_extension.dart";
-import "package:miria/model/account.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -169,7 +167,8 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                       final user = await showDialog<User>(
                         context: context,
                         builder: (context) => UserSelectDialog(
-                            account: accountContext.getAccount),
+                          accountContext: accountContext,
+                        ),
                       );
                       if (user == null) {
                         return;

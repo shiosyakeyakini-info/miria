@@ -2,7 +2,6 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -12,14 +11,13 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "federation_custom_emojis.g.dart";
 
-@riverpod
+@Riverpod(dependencies: [misskeyGetContext])
 Future<Map<String, List<Emoji>>> fetchEmoji(
   FetchEmojiRef ref,
   String host,
   MetaResponse meta,
 ) async {
-  final result =
-      await ref.read(misskeyProvider(Account.demoAccount(host, meta))).emojis();
+  final result = await ref.read(misskeyGetContextProvider).emojis();
 
   return result.emojis.groupListsBy((e) => e.category ?? "");
 }
@@ -118,7 +116,8 @@ class FederationCustomEmojis extends ConsumerWidget {
                                                   .textTheme
                                                   .bodyMedium
                                                   ?.copyWith(
-                                                      color: Colors.white,),
+                                                    color: Colors.white,
+                                                  ),
                                             ),
                                           ),
                                         ),

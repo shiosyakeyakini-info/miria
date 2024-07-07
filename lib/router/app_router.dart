@@ -45,6 +45,7 @@ import "package:miria/view/photo_edit_page/license_confirm_dialog.dart";
 import "package:miria/view/photo_edit_page/photo_edit_page.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart";
 import "package:miria/view/search_page/search_page.dart";
+import "package:miria/view/server_detail_dialog.dart";
 import "package:miria/view/settings_page/account_settings_page/account_list.dart";
 import "package:miria/view/settings_page/app_info_page/app_info_page.dart";
 import "package:miria/view/settings_page/general_settings_page/general_settings_page.dart";
@@ -143,6 +144,9 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: LicenseConfirmRoute.page),
     AutoDialogRoute(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
+    AutoDialogRoute(page: UserSelectRoute.page),
+    AutoDialogRoute(page: ChannelDetailRoute.page),
+    AutoDialogRoute(page: ServerDetailRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),

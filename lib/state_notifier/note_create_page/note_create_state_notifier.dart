@@ -10,7 +10,6 @@ import "package:freezed_annotation/freezed_annotation.dart";
 import "package:mfm_parser/mfm_parser.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/log.dart";
-import "package:miria/model/account.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -60,7 +59,6 @@ enum VoteExpireDurationType {
 @freezed
 class NoteCreate with _$NoteCreate {
   const factory NoteCreate({
-    required Account account,
     required NoteVisibility noteVisibility,
     required bool localOnly,
     required ReactionAcceptance? reactionAcceptance,
@@ -106,9 +104,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _dialogNotifier = ref.read(dialogStateNotifierProvider.notifier);
 
   @override
-  NoteCreate build(Account account) {
+  NoteCreate build() {
+    final account = ref.read(accountContextProvider).postAccount;
     return NoteCreate(
-      account: account,
       noteVisibility: ref
           .read(accountSettingsRepositoryProvider)
           .fromAccount(account)
@@ -276,7 +274,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         replyTo: [
           reply.user,
           ...replyTo,
-        ]..removeWhere((element) => element.id == state.account.i.id),
+        ]..removeWhere((element) =>
+            element.id == ref.read(accountContextProvider).postAccount.i.id),
       );
     }
 
@@ -289,7 +288,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     }
 
     // サイレンスの場合、ホーム以下に強制
-    final isSilenced = state.account.i.isSilenced;
+    final isSilenced =
+        ref.read(accountContextProvider).postAccount.i.isSilenced;
     if (isSilenced) {
       resultState = resultState.copyWith(
         noteVisibility: NoteVisibility.min(
@@ -413,7 +413,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
         if (response?.isSensitive == true &&
             !file.isNsfw &&
-            !state.account.i.alwaysMarkNsfw) {
+            !ref.read(accountContextProvider).postAccount.i.alwaysMarkNsfw) {
           final result = await _dialogNotifier.showDialog(
             message: (context) => S.of(context).unexpectedSensitive,
             actions: (context) =>
@@ -546,7 +546,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       if (!context.mounted) return;
       final result = await context.pushRoute<List<DriveFile>?>(
         DriveFileSelectRoute(
-          account: state.account,
+          account: ref.read(accountContextProvider).postAccount,
           allowMultiple: true,
         ),
       );
@@ -697,8 +697,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   /// リプライ先ユーザーを追加する
   Future<void> addReplyUser(BuildContext context) async {
-    final user =
-        await context.pushRoute<User>(UserSelectRoute(account: state.account));
+    final user = await context.pushRoute<User>(
+        UserSelectRoute(accountContext: ref.read(accountContextProvider)));
     if (user != null) {
       state = state.copyWith(replyTo: [...state.replyTo, user]);
     }
@@ -729,7 +729,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
       return false;
     }
-    if (state.account.i.isSilenced) {
+    if (ref.read(accountContextProvider).postAccount.i.isSilenced) {
       await _dialogNotifier.showSimpleDialog(
         message: (context) => S.of(context).cannotPublicNoteBySilencedUser,
       );

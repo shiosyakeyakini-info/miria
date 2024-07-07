@@ -2,22 +2,21 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/origin_extension.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<User>()
+@RoutePage()
 class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
-  final Account account;
+  final AccountContext accountContext;
 
-  const UserSelectDialog({required this.account, super.key});
+  const UserSelectDialog({required this.accountContext, super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: account, child: this);
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context) {

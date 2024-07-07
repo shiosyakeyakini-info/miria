@@ -6,7 +6,7 @@ part of 'channel_detail_info.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelDetailHash() => r'f8a55187780eb1e455637c3b306790d93e25818b';
+String _$channelDetailHash() => r'1856423bc5f37b9238872a785f42fa214c0bb2c5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -48,13 +48,19 @@ class ChannelDetailFamily extends Family {
   const ChannelDetailFamily();
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyGetContextProvider
+    misskeyGetContextProvider,
+    misskeyPostContextProvider,
+    notesWithProvider
   ];
 
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
     misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
+    ...?misskeyGetContextProvider.allTransitiveDependencies,
+    misskeyPostContextProvider,
+    ...?misskeyPostContextProvider.allTransitiveDependencies,
+    notesWithProvider,
+    ...?notesWithProvider.allTransitiveDependencies
   };
 
   @override

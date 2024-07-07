@@ -146,10 +146,11 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ChannelSelectRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ChannelSelectDialog(
+        child: WrappedRoute(
+            child: ChannelSelectDialog(
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     ChannelsRoute.name: (routeData) {
@@ -242,11 +243,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ExploreRoleUsersRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ExploreRoleUsersPage(
+        child: WrappedRoute(
+            child: ExploreRoleUsersPage(
           item: args.item,
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
-        ),
+        )),
       );
     },
     FavoritedNoteRoute.name: (routeData) {
@@ -399,13 +401,14 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<NoteModalRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NoteModalSheet(
+        child: WrappedRoute(
+            child: NoteModalSheet(
           baseNote: args.baseNote,
           targetNote: args.targetNote,
           accountContext: args.accountContext,
           noteBoundaryKey: args.noteBoundaryKey,
           key: args.key,
-        ),
+        )),
       );
     },
     NotesAfterRenoteRoute.name: (routeData) {
@@ -497,6 +500,17 @@ abstract class _$AppRouter extends RootStackRouter {
           accountContext: args.accountContext,
           key: args.key,
           initialNoteSearchCondition: args.initialNoteSearchCondition,
+        )),
+      );
+    },
+    ServerDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<ServerDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ServerDetailDialog(
+          accountContext: args.accountContext,
+          key: args.key,
         )),
       );
     },
@@ -639,11 +653,11 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     UserSelectRoute.name: (routeData) {
       final args = routeData.argsAs<UserSelectRouteArgs>();
-      return AutoRoutePage<User>(
+      return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: WrappedRoute(
             child: UserSelectDialog(
-          account: args.account,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -1496,14 +1510,14 @@ class ExploreRouteArgs {
 class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
   ExploreRoleUsersRoute({
     required RolesListResponse item,
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ExploreRoleUsersRoute.name,
           args: ExploreRoleUsersRouteArgs(
             item: item,
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -1518,19 +1532,19 @@ class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
 class ExploreRoleUsersRouteArgs {
   const ExploreRoleUsersRouteArgs({
     required this.item,
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
   final RolesListResponse item;
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'ExploreRoleUsersRouteArgs{item: $item, account: $account, key: $key}';
+    return 'ExploreRoleUsersRouteArgs{item: $item, accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -2437,6 +2451,44 @@ class SearchRouteArgs {
 }
 
 /// generated route for
+/// [ServerDetailDialog]
+class ServerDetailRoute extends PageRouteInfo<ServerDetailRouteArgs> {
+  ServerDetailRoute({
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ServerDetailRoute.name,
+          args: ServerDetailRouteArgs(
+            accountContext: accountContext,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ServerDetailRoute';
+
+  static const PageInfo<ServerDetailRouteArgs> page =
+      PageInfo<ServerDetailRouteArgs>(name);
+}
+
+class ServerDetailRouteArgs {
+  const ServerDetailRouteArgs({
+    required this.accountContext,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ServerDetailRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+}
+
+/// generated route for
 /// [SettingsPage]
 class SettingsRoute extends PageRouteInfo<void> {
   const SettingsRoute({List<PageRouteInfo>? children})
@@ -2913,13 +2965,13 @@ class UserRouteArgs {
 /// [UserSelectDialog]
 class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
   UserSelectRoute({
-    required Account account,
+    required AccountContext accountContext,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UserSelectRoute.name,
           args: UserSelectRouteArgs(
-            account: account,
+            accountContext: accountContext,
             key: key,
           ),
           initialChildren: children,
@@ -2933,17 +2985,17 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
 
 class UserSelectRouteArgs {
   const UserSelectRouteArgs({
-    required this.account,
+    required this.accountContext,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UserSelectRouteArgs{account: $account, key: $key}';
+    return 'UserSelectRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 

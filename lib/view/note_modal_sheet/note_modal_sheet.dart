@@ -9,12 +9,12 @@ import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/clip_modal_sheet/clip_modal_sheet.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/copy_modal_sheet/copy_note_modal_sheet.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
@@ -48,8 +48,9 @@ class NoteModalSheetState with _$NoteModalSheetState {
 class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   @override
   NoteModalSheetState build(Note note) {
+    state = NoteModalSheetState(noteState: const AsyncLoading());
     unawaited(_status());
-    return NoteModalSheetState(noteState: const AsyncLoading());
+    return state;
   }
 
   Future<void> _status() async {
@@ -179,7 +180,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
 }
 
 @RoutePage()
-class NoteModalSheet extends ConsumerWidget {
+class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   final Note baseNote;
   final Note targetNote;
   final AccountContext accountContext;
@@ -194,6 +195,10 @@ class NoteModalSheet extends ConsumerWidget {
   });
 
   @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
     final notifierProvider = noteModalSheetNotifierProvider(targetNote);
@@ -202,7 +207,9 @@ class NoteModalSheet extends ConsumerWidget {
       if (next! is AsyncData) return;
       await context.pushRoute(
         UserControlRoute(
-            account: accountContext.postAccount, response: next.value!),
+          account: accountContext.postAccount,
+          response: next.value!,
+        ),
       );
     });
     final noteStatus =
@@ -213,8 +220,12 @@ class NoteModalSheet extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: Text(S.of(context).detail),
-          onTap: () async => context.pushRoute(NoteDetailRoute(
-              note: targetNote, accountContext: accountContext)),
+          onTap: () async => context.pushRoute(
+            NoteDetailRoute(
+              note: targetNote,
+              accountContext: accountContext,
+            ),
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.copy),
@@ -349,7 +360,9 @@ class NoteModalSheet extends ConsumerWidget {
             await showModalBottomSheet(
               context: context,
               builder: (context2) => ClipModalSheet(
-                  account: accountContext.postAccount, noteId: targetNote.id),
+                account: accountContext.postAccount,
+                noteId: targetNote.id,
+              ),
             );
           },
         ),

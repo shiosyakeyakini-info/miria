@@ -1,3 +1,4 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
@@ -5,12 +6,12 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog.dart";
 import "package:miria/view/user_page/user_list_item.dart";
-import "package:miria/view/user_select_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class NoteSearch extends HookConsumerWidget {
@@ -103,10 +104,11 @@ class NoteSearch extends HookConsumerWidget {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      final selected = await showDialog<User?>(
-                                        context: context,
-                                        builder: (context2) => UserSelectDialog(
-                                          account: AccountScope.of(context),
+                                      final selected =
+                                          await context.pushRoute<User?>(
+                                        UserSelectRoute(
+                                          accountContext:
+                                              ref.read(accountContextProvider),
                                         ),
                                       );
                                       selectedUser.value = selected;
@@ -133,14 +135,12 @@ class NoteSearch extends HookConsumerWidget {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      final selected =
-                                          await showDialog<CommunityChannel?>(
-                                        context: context,
-                                        builder: (context2) =>
-                                            ChannelSelectDialog(
-                                          account: AccountScope.of(
-                                            context,
-                                          ),
+                                      final selected = await context
+                                          .pushRoute<CommunityChannel>(
+                                        ChannelSelectRoute(
+                                          account: ref
+                                              .read(accountContextProvider)
+                                              .postAccount,
                                         ),
                                       );
                                       selectedChannel.value = selected;

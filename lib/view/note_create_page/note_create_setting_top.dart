@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
@@ -50,26 +51,22 @@ class NoteCreateSettingTop extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier =
-        ref.read(noteCreateNotifierProvider(AccountScope.of(context)).notifier);
+    final notifier = ref.read(noteCreateNotifierProvider.notifier);
 
     final noteVisibility = ref.watch(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.noteVisibility),
+      noteCreateNotifierProvider.select((value) => value.noteVisibility),
     );
     final reactionAcceptance = ref.watch(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.reactionAcceptance),
+      noteCreateNotifierProvider.select((value) => value.reactionAcceptance),
     );
     final isLocal = ref.watch(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.localOnly),
+      noteCreateNotifierProvider.select((value) => value.localOnly),
     );
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 5)),
         AvatarIcon(
-          user: AccountScope.of(context).i,
+          user: ref.read(accountContextProvider).postAccount.i,
           height:
               Theme.of(context).iconButtonTheme.style?.iconSize?.resolve({}) ??
                   32,
@@ -81,7 +78,7 @@ class NoteCreateSettingTop extends ConsumerWidget {
               final result = await showModalBottomSheet<NoteVisibility?>(
                 context: context2,
                 builder: (context3) => NoteVisibilityDialog(
-                  account: AccountScope.of(context),
+                  account: ref.read(accountContextProvider).postAccount,
                 ),
               );
               if (result != null) {

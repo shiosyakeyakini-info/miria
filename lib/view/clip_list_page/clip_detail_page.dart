@@ -16,7 +16,7 @@ class ClipDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   final String id;
 
   const ClipDetailPage(
-      {required this.accountContext, required this.id, super.key});
+      {required this.accountContext, required this.id, super.key,});
   @override
   Widget wrappedRoute(BuildContext context) =>
       AccountContextScope(context: accountContext, child: this);

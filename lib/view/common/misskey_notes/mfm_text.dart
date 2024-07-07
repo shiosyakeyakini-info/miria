@@ -102,7 +102,7 @@ class MfmTextState extends ConsumerState<MfmText> {
   Future<void> onHashtagTap(String hashtag) async {
     await context.pushRoute(
       HashtagRoute(
-          accountContext: ref.read(accountContextProvider), hashtag: hashtag),
+          accountContext: ref.read(accountContextProvider), hashtag: hashtag,),
     );
   }
 

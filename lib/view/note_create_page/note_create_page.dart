@@ -8,6 +8,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/modal_indicator.dart";
@@ -75,10 +76,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   late final focusNode = ref.watch(noteFocusProvider);
   var isFirstChangeDependenciesCalled = false;
 
-  NoteCreate get data =>
-      ref.read(noteCreateNotifierProvider(widget.initialAccount));
+  NoteCreate get data => ref.read(noteCreateNotifierProvider);
   NoteCreateNotifier get notifier =>
-      ref.read(noteCreateNotifierProvider(widget.initialAccount).notifier);
+      ref.read(noteCreateNotifierProvider.notifier);
 
   static const shareExtensionMethodChannel =
       MethodChannel("info.shiosyakeyakini.miria/share_extension");
@@ -117,8 +117,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
   Widget build(BuildContext context) {
     ref
       ..listen(
-        noteCreateNotifierProvider(widget.initialAccount)
-            .select((value) => value.text),
+        noteCreateNotifierProvider.select((value) => value.text),
         (_, next) {
           if (next != ref.read(noteInputTextProvider).text) {
             ref.read(noteInputTextProvider).text = next;
@@ -126,8 +125,8 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
         },
       )
       ..listen(
-          noteCreateNotifierProvider(widget.initialAccount)
-              .select((value) => value.isNoteSending), (_, next) async {
+          noteCreateNotifierProvider.select((value) => value.isNoteSending),
+          (_, next) async {
         switch (next) {
           case NoteSendStatus.sending:
             IndicatorView.showIndicator(context);
@@ -218,11 +217,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                             IconButton(
                               onPressed: () {
                                 ref
-                                    .read(
-                                      noteCreateNotifierProvider(
-                                        widget.initialAccount,
-                                      ).notifier,
-                                    )
+                                    .read(noteCreateNotifierProvider.notifier)
                                     .toggleVote();
                               },
                               icon: const Icon(Icons.how_to_vote),
@@ -241,7 +236,9 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                                 await showDialog<MisskeyEmojiData?>(
                               context: context,
                               builder: (context) => ReactionPickerDialog(
-                                account: data.account,
+                                account: ref
+                                    .read(accountContextProvider)
+                                    .postAccount,
                                 isAcceptSensitive: true,
                               ),
                             );

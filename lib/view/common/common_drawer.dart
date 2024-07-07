@@ -116,7 +116,7 @@ class CommonDrawer extends ConsumerWidget {
                       onTap: () async {
                         Navigator.of(context).pop();
                         await context.pushRoute(SearchRoute(
-                            accountContext: AccountContext.as(account)));
+                            accountContext: AccountContext.as(account),),);
                       },
                     ),
                     ListTile(

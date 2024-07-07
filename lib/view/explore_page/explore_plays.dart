@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/futable_list_builder.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -20,10 +19,8 @@ class ExplorePagesState extends ConsumerState<ExplorePlay> {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView(
         future: () async {
-          final result = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .flash
-              .featured();
+          final result =
+              await ref.read(misskeyGetContextProvider).flash.featured();
           return result.toList();
         }(),
         builder: (context, item) {
@@ -32,7 +29,7 @@ class ExplorePagesState extends ConsumerState<ExplorePlay> {
               await launchUrl(
                 Uri(
                   scheme: "https",
-                  host: AccountScope.of(context).host,
+                  host: ref.read(accountContextProvider).getAccount.host,
                   pathSegments: ["play", item.id],
                 ),
                 mode: LaunchMode.externalApplication,

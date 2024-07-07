@@ -6,25 +6,30 @@ import "package:collection/collection.dart";
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class ServerDetailDialog extends ConsumerStatefulWidget {
-  final Account account;
+@RoutePage()
+class ServerDetailDialog extends ConsumerStatefulWidget
+    implements AutoRouteWrapper {
+  final AccountContext accountContext;
 
   const ServerDetailDialog({
-    required this.account,
+    required this.accountContext,
     super.key,
   });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       ServerDetailDialogState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 }
 
 class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
@@ -46,7 +51,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 
   @override
   void didChangeDependencies() {
-    final misskey = ref.read(misskeyProvider(widget.account));
+    final misskey = ref.read(misskeyGetContextProvider);
     super.didChangeDependencies();
     controller?.disconnect();
     controller = misskey.serverStatsLogStream(
@@ -74,9 +79,8 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 
     Future(() async {
       try {
-        final onlineUserCountsResponse = await ref
-            .read(misskeyProvider(widget.account))
-            .getOnlineUsersCount();
+        final onlineUserCountsResponse =
+            await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
 
         if (!mounted) return;
         setState(() {
@@ -87,7 +91,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
       }
       try {
         final serverInfoResponse =
-            await ref.read(misskeyProvider(widget.account)).serverInfo();
+            await ref.read(misskeyGetContextProvider).serverInfo();
         if (!mounted) return;
         setState(() {
           totalMemories = serverInfoResponse.mem.total;
@@ -103,8 +107,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   Future<void> refreshPing() async {
     try {
       final sendDate = DateTime.now();
-      final pingResponse =
-          await ref.read(misskeyProvider(widget.account)).ping();
+      final pingResponse = await ref.read(misskeyGetContextProvider).ping();
 
       if (!mounted) return;
       setState(() {
@@ -127,14 +130,14 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
     return AlertDialog(
       title: Row(
         children: [
-          Expanded(child: Text(widget.account.host)),
+          Expanded(child: Text(widget.accountContext.getAccount.host)),
           IconButton(
             onPressed: () async {
               Navigator.of(context).pop();
               await context.pushRoute(
                 FederationRoute(
                   accountContext: ref.read(accountContextProvider),
-                  host: widget.account.host,
+                  host: widget.accountContext.getAccount.host,
                 ),
               );
             },

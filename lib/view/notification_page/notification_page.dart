@@ -4,12 +4,11 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
-import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart"
@@ -18,6 +17,9 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/notification_page/notification_page_data.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+
+part "notification_page.g.dart";
 
 @RoutePage()
 class NotificationPage extends ConsumerStatefulWidget
@@ -153,15 +155,15 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
 final showActionsProvider =
     StateProvider.autoDispose.family<bool, NotificationData>((ref, _) => true);
 
-final followRequestsProvider = FutureProvider.autoDispose
-    .family<List<FollowRequest>, Account>((ref, account) async {
+@Riverpod(dependencies: [misskeyPostContext])
+Future<List<FollowRequest>> followRequests(FollowRequestsRef ref) async {
   final response = await ref
       .watch(misskeyPostContextProvider)
       .following
       .requests
       .list(const FollowingRequestsListRequest());
   return response.toList();
-});
+}
 
 class NotificationItem extends ConsumerWidget {
   final NotificationData notification;
@@ -175,9 +177,7 @@ class NotificationItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notification = this.notification;
     final showActions = ref.watch(showActionsProvider(notification));
-    final followRequests = ref.watch(
-      followRequestsProvider(ref.read(accountContextProvider).postAccount),
-    );
+    final followRequests = ref.watch(followRequestsProvider);
 
     switch (notification) {
       case RenoteReactionNotificationData():
@@ -379,7 +379,7 @@ class NotificationItem extends ConsumerWidget {
                                   ref,
                                   accept: true,
                                   userId: user.id,
-                                ).expectFailure(context),
+                                ),
                                 child: Text(S.of(context).accept),
                               ),
                             ),
@@ -392,7 +392,7 @@ class NotificationItem extends ConsumerWidget {
                                   ref,
                                   accept: false,
                                   userId: user.id,
-                                ).expectFailure(context),
+                                ),
                                 child: Text(S.of(context).reject),
                               ),
                             ),
@@ -485,19 +485,19 @@ class NotificationItem extends ConsumerWidget {
     required bool accept,
     required String userId,
   }) async {
-    final misskey = ref.watch(misskeyPostContextProvider);
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final misskey = ref.watch(misskeyPostContextProvider);
 
-    if (accept) {
-      await misskey.following.requests
-          .accept(FollowingRequestsAcceptRequest(userId: userId));
-    } else {
-      await misskey.following.requests
-          .reject(FollowingRequestsRejectRequest(userId: userId));
-    }
+      if (accept) {
+        await misskey.following.requests
+            .accept(FollowingRequestsAcceptRequest(userId: userId));
+      } else {
+        await misskey.following.requests
+            .reject(FollowingRequestsRejectRequest(userId: userId));
+      }
 
-    ref.invalidate(
-      followRequestsProvider(ref.read(accountContextProvider).postAccount),
-    );
-    ref.read(showActionsProvider(notification).notifier).state = false;
+      ref.invalidate(followRequestsProvider);
+      ref.read(showActionsProvider(notification).notifier).state = false;
+    });
   }
 }

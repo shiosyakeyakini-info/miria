@@ -4,7 +4,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -66,13 +65,13 @@ class LinkNavigator {
       // クリップはクリップの画面で開く
       await context.pushRoute(
         ClipDetailRoute(
-            accountContext: accountContext, id: uri.pathSegments[1]),
+            accountContext: accountContext, id: uri.pathSegments[1],),
       );
     } else if (uri.pathSegments.length == 2 &&
         uri.pathSegments.first == "channels") {
       await context.pushRoute(
         ChannelDetailRoute(
-            accountContext: accountContext, channelId: uri.pathSegments[1]),
+            accountContext: accountContext, channelId: uri.pathSegments[1],),
       );
     } else if (uri.pathSegments.length == 2 &&
         uri.pathSegments.first == "notes") {
@@ -82,7 +81,7 @@ class LinkNavigator {
           .show(NotesShowRequest(noteId: uri.pathSegments[1]));
       if (!context.mounted) return;
       await context.pushRoute(
-          NoteDetailRoute(accountContext: accountContext, note: note));
+          NoteDetailRoute(accountContext: accountContext, note: note),);
     } else if (uri.pathSegments.length == 2 &&
         uri.pathSegments.first == "announcements") {
       //TODO: とりあえずはこれでゆるして
@@ -99,7 +98,7 @@ class LinkNavigator {
               );
       if (!context.mounted) return;
       await context.pushRoute(
-          MisskeyRouteRoute(accountContext: accountContext, page: page));
+          MisskeyRouteRoute(accountContext: accountContext, page: page),);
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
       await onMentionTap(context, ref, uri.pathSegments.first, host);
@@ -149,6 +148,6 @@ class LinkNavigator {
 
     if (!context.mounted) return;
     await context.pushRoute(
-        UserRoute(userId: response.id, accountContext: accountContext));
+        UserRoute(userId: response.id, accountContext: accountContext),);
   }
 }

@@ -5,7 +5,6 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/futable_list_builder.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
@@ -19,29 +18,27 @@ class ExploreRole extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView<RolesListResponse>(
-        future: () async {
-          final response = await ref
-              .read(misskeyProvider(AccountScope.of(context)))
-              .roles
-              .list();
+        future: Future(() async {
+          final response =
+              await ref.read(misskeyGetContextProvider).roles.list();
 
           return response
               .where((element) => element.usersCount != 0)
               .sorted((a, b) => b.displayOrder.compareTo(a.displayOrder));
-        }(),
+        }),
         builder: (context, item) => RoleListItem(item: item),
       ),
     );
   }
 }
 
-class RoleListItem extends StatelessWidget {
+class RoleListItem extends ConsumerWidget {
   final RolesListResponse item;
 
   const RoleListItem({required this.item, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final iconHeight = MediaQuery.textScalerOf(context)
         .scale(Theme.of(context).textTheme.bodyMedium!.fontSize!);
 
@@ -50,7 +47,7 @@ class RoleListItem extends StatelessWidget {
         await context.pushRoute(
           ExploreRoleUsersRoute(
             item: item,
-            account: AccountScope.of(context),
+            accountContext: ref.read(accountContextProvider),
           ),
         );
       },

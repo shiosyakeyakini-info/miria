@@ -23,7 +23,7 @@ class ChannelDetailState with _$ChannelDetailState {
   }) = _ChannelDetailState;
 }
 
-@Riverpod(dependencies: [misskeyGetContext])
+@Riverpod(dependencies: [misskeyGetContext, misskeyPostContext, notesWith])
 class ChannelDetail extends _$ChannelDetail {
   @override
   Future<ChannelDetailState> build(
@@ -103,20 +103,14 @@ class ChannelDetail extends _$ChannelDetail {
   }
 }
 
-class ChannelDetailInfo extends ConsumerStatefulWidget {
+class ChannelDetailInfo extends ConsumerWidget {
   final String channelId;
 
   const ChannelDetailInfo({required this.channelId, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      ChannelDetailInfoState();
-}
-
-class ChannelDetailInfoState extends ConsumerState<ChannelDetailInfo> {
-  @override
-  Widget build(BuildContext context) {
-    final data = ref.watch(channelDetailProvider(widget.channelId));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(channelDetailProvider(channelId));
 
     return switch (data) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),

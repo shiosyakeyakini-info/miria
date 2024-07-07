@@ -253,8 +253,11 @@ class AntennaSettingsForm extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () async {
-                final user = await context
-                    .pushRoute<User>(UserSelectRoute(account: account));
+                final user = await context.pushRoute<User>(
+                  UserSelectRoute(
+                    accountContext: AccountContext.as(account),
+                  ),
+                );
                 if (user == null) {
                   return;
                 }

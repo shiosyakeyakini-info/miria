@@ -9,10 +9,14 @@ import "package:miria/view/channels_page/channel_trend.dart";
 import "package:miria/view/common/account_scope.dart";
 
 @RoutePage()
-class ChannelSelectDialog extends StatelessWidget {
+class ChannelSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final Account account;
 
   const ChannelSelectDialog({required this.account, super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context) {
@@ -48,40 +52,36 @@ class ChannelSelectDialog extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: AccountScope(
-                  account: account,
-                  child: TabBarView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ChannelSearch(
-                          onChannelSelected: (channel) =>
-                              Navigator.of(context).pop(channel),
-                        ),
+                child: TabBarView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ChannelSearch(
+                          onChannelSelected: (channel) async =>
+                              context.maybePop(channel)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ChannelTrend(
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ChannelTrend(
-                          onChannelSelected: (channel) =>
-                              Navigator.of(context).pop(channel),
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ChannelFavorited(
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ChannelFavorited(
-                          onChannelSelected: (channel) =>
-                              Navigator.of(context).pop(channel),
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ChannelFollowed(
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ChannelFollowed(
-                          onChannelSelected: (channel) =>
-                              Navigator.of(context).pop(channel),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],

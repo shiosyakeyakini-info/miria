@@ -18,8 +18,6 @@ class FederationTimeline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final demoAccount = Account.demoAccount(host, meta);
-
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: PushableListView(
@@ -28,7 +26,7 @@ class FederationTimeline extends ConsumerWidget {
               .read(misskeyGetContextProvider)
               .notes
               .localTimeline(const NotesLocalTimelineRequest());
-          ref.read(notesProvider(demoAccount)).registerAll(result);
+          ref.read(notesWithProvider).registerAll(result);
           return result.toList();
         },
         nextFuture: (lastItem, _) async {
@@ -36,7 +34,7 @@ class FederationTimeline extends ConsumerWidget {
               await ref.read(misskeyGetContextProvider).notes.localTimeline(
                     NotesLocalTimelineRequest(untilId: lastItem.id),
                   );
-          ref.read(notesProvider(demoAccount)).registerAll(result);
+          ref.read(notesWithProvider).registerAll(result);
           return result.toList();
         },
         itemBuilder: (context2, item) => Padding(

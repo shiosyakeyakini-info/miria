@@ -18,7 +18,6 @@ import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/error_dialog_handler.dart";

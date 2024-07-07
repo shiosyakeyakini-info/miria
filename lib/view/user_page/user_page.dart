@@ -20,7 +20,7 @@ class UserPage extends ConsumerWidget implements AutoRouteWrapper {
   final String userId;
   final AccountContext accountContext;
   const UserPage(
-      {required this.userId, required this.accountContext, super.key});
+      {required this.userId, required this.accountContext, super.key,});
 
   @override
   Widget wrappedRoute(BuildContext context) =>

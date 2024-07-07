@@ -516,7 +516,7 @@ class RoleChip extends ConsumerWidget {
             await context.pushRoute(
               ExploreRoleUsersRoute(
                 item: response,
-                account: ref.read(accountContextProvider).getAccount,
+                accountContext: ref.read(accountContextProvider),
               ),
             );
           }

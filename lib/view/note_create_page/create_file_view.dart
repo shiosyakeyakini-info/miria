@@ -30,7 +30,7 @@ class CreateFileView extends ConsumerWidget {
           file: file,
           onSubmit: (result) {
             ref
-                .read(noteCreateNotifierProvider(account).notifier)
+                .read(noteCreateNotifierProvider.notifier)
                 .setFileContent(file, result);
           },
         ),
@@ -39,7 +39,6 @@ class CreateFileView extends ConsumerWidget {
   }
 
   Future<void> detailTap(BuildContext context, WidgetRef ref) async {
-    final account = AccountScope.of(context);
     final result = await showDialog<FileSettingsDialogResult?>(
       context: context,
       builder: (context) => FileSettingsDialog(file: file),
@@ -47,14 +46,12 @@ class CreateFileView extends ConsumerWidget {
     if (result == null) return;
 
     ref
-        .read(noteCreateNotifierProvider(account).notifier)
+        .read(noteCreateNotifierProvider.notifier)
         .setFileMetaData(index, result);
   }
 
   void delete(BuildContext context, WidgetRef ref) {
-    ref
-        .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
-        .deleteFile(index);
+    ref.read(noteCreateNotifierProvider.notifier).deleteFile(index);
   }
 
   @override

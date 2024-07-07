@@ -21,7 +21,7 @@ class CwTextAreaState extends ConsumerState<CwTextArea> {
 
     cwController.addListener(() {
       ref
-          .watch(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
+          .watch(noteCreateNotifierProvider.notifier)
           .setCwText(cwController.text);
     });
   }
@@ -35,16 +35,14 @@ class CwTextAreaState extends ConsumerState<CwTextArea> {
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.cwText),
+      noteCreateNotifierProvider.select((value) => value.cwText),
       (_, next) {
         if (next != cwController.text) cwController.text = next;
       },
     );
 
     final cw = ref.watch(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.isCw),
+      noteCreateNotifierProvider.select((value) => value.isCw),
     );
 
     if (!cw) return const SizedBox.shrink();

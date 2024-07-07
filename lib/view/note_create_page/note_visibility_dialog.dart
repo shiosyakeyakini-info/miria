@@ -20,7 +20,7 @@ class NoteVisibilityDialog extends ConsumerWidget {
         ListTile(
           onTap: () async {
             if (await ref
-                .read(noteCreateNotifierProvider(account).notifier)
+                .read(noteCreateNotifierProvider.notifier)
                 .validateNoteVisibility(NoteVisibility.public)) {
               if (!context.mounted) return;
               Navigator.of(context).pop(NoteVisibility.public);

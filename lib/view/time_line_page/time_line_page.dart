@@ -188,7 +188,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
         ),
       ),
       actions: [
-        AccountScope(
+        AccountContextScope.as(
           account: account,
           child: const NotificationIcon(),
         ),
@@ -284,10 +284,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     AnnoucementInfo(tabSetting: currentTabSetting),
                     IconButton(
                       onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) => ServerDetailDialog(
-                            account: account,
+                        await context.pushRoute(
+                          ServerDetailRoute(
+                            accountContext: AccountContext.as(account),
                           ),
                         );
                       },

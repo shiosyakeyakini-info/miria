@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
 class MfmPreview extends ConsumerWidget {
@@ -10,14 +10,12 @@ class MfmPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final previewText = ref.watch(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.text),
+      noteCreateNotifierProvider.select((value) => value.text),
     );
 
     final replyTo = ref
         .watch(
-          noteCreateNotifierProvider(AccountScope.of(context))
-              .select((value) => value.replyTo),
+          noteCreateNotifierProvider.select((value) => value.replyTo),
         )
         .map((e) => "@${e.username}${e.host == null ? " " : "@${e.host}"} ")
         .join("");
@@ -26,7 +24,7 @@ class MfmPreview extends ConsumerWidget {
       padding: const EdgeInsets.all(5),
       child: MfmText(
         mfmText: "$replyTo$previewText",
-        isNyaize: AccountScope.of(context).i.isCat,
+        isNyaize: ref.read(accountContextProvider).postAccount.i.isCat,
       ),
     );
   }

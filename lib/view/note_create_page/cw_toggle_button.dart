@@ -9,13 +9,10 @@ class CwToggleButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cw = ref.watch(
-      noteCreateNotifierProvider(AccountScope.of(context))
-          .select((value) => value.isCw),
+      noteCreateNotifierProvider.select((value) => value.isCw),
     );
     return IconButton(
-      onPressed: () => ref
-          .read(noteCreateNotifierProvider(AccountScope.of(context)).notifier)
-          .toggleCw(),
+      onPressed: () => ref.read(noteCreateNotifierProvider.notifier).toggleCw(),
       icon: Icon(cw ? Icons.visibility_off : Icons.remove_red_eye),
     );
   }

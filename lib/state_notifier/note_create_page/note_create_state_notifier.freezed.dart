@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$NoteCreate {
-  Account get account => throw _privateConstructorUsedError;
   NoteVisibility get noteVisibility => throw _privateConstructorUsedError;
   bool get localOnly => throw _privateConstructorUsedError;
   ReactionAcceptance? get reactionAcceptance =>
@@ -55,8 +54,7 @@ abstract class $NoteCreateCopyWith<$Res> {
       _$NoteCreateCopyWithImpl<$Res, NoteCreate>;
   @useResult
   $Res call(
-      {Account account,
-      NoteVisibility noteVisibility,
+      {NoteVisibility noteVisibility,
       bool localOnly,
       ReactionAcceptance? reactionAcceptance,
       List<User> replyTo,
@@ -80,7 +78,6 @@ abstract class $NoteCreateCopyWith<$Res> {
       NoteCreationMode? noteCreationMode,
       String? noteId});
 
-  $AccountCopyWith<$Res> get account;
   $NoteCreateChannelCopyWith<$Res>? get channel;
   $NoteCopyWith<$Res>? get reply;
   $NoteCopyWith<$Res>? get renote;
@@ -99,7 +96,6 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? account = null,
     Object? noteVisibility = null,
     Object? localOnly = null,
     Object? reactionAcceptance = freezed,
@@ -125,10 +121,6 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     Object? noteId = freezed,
   }) {
     return _then(_value.copyWith(
-      account: null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Account,
       noteVisibility: null == noteVisibility
           ? _value.noteVisibility
           : noteVisibility // ignore: cast_nullable_to_non_nullable
@@ -226,14 +218,6 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
 
   @override
   @pragma('vm:prefer-inline')
-  $AccountCopyWith<$Res> get account {
-    return $AccountCopyWith<$Res>(_value.account, (value) {
-      return _then(_value.copyWith(account: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
   $NoteCreateChannelCopyWith<$Res>? get channel {
     if (_value.channel == null) {
       return null;
@@ -278,8 +262,7 @@ abstract class _$$NoteCreateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Account account,
-      NoteVisibility noteVisibility,
+      {NoteVisibility noteVisibility,
       bool localOnly,
       ReactionAcceptance? reactionAcceptance,
       List<User> replyTo,
@@ -304,8 +287,6 @@ abstract class _$$NoteCreateImplCopyWith<$Res>
       String? noteId});
 
   @override
-  $AccountCopyWith<$Res> get account;
-  @override
   $NoteCreateChannelCopyWith<$Res>? get channel;
   @override
   $NoteCopyWith<$Res>? get reply;
@@ -324,7 +305,6 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? account = null,
     Object? noteVisibility = null,
     Object? localOnly = null,
     Object? reactionAcceptance = freezed,
@@ -350,10 +330,6 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
     Object? noteId = freezed,
   }) {
     return _then(_$NoteCreateImpl(
-      account: null == account
-          ? _value.account
-          : account // ignore: cast_nullable_to_non_nullable
-              as Account,
       noteVisibility: null == noteVisibility
           ? _value.noteVisibility
           : noteVisibility // ignore: cast_nullable_to_non_nullable
@@ -454,8 +430,7 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
 
 class _$NoteCreateImpl implements _NoteCreate {
   const _$NoteCreateImpl(
-      {required this.account,
-      required this.noteVisibility,
+      {required this.noteVisibility,
       required this.localOnly,
       required this.reactionAcceptance,
       final List<User> replyTo = const [],
@@ -482,8 +457,6 @@ class _$NoteCreateImpl implements _NoteCreate {
         _files = files,
         _voteContent = voteContent;
 
-  @override
-  final Account account;
   @override
   final NoteVisibility noteVisibility;
   @override
@@ -563,7 +536,7 @@ class _$NoteCreateImpl implements _NoteCreate {
 
   @override
   String toString() {
-    return 'NoteCreate(account: $account, noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
+    return 'NoteCreate(noteVisibility: $noteVisibility, localOnly: $localOnly, reactionAcceptance: $reactionAcceptance, replyTo: $replyTo, files: $files, channel: $channel, reply: $reply, renote: $renote, isCw: $isCw, cwText: $cwText, text: $text, isTextFocused: $isTextFocused, isNoteSending: $isNoteSending, isVote: $isVote, voteContent: $voteContent, voteContentCount: $voteContentCount, voteExpireType: $voteExpireType, isVoteMultiple: $isVoteMultiple, voteDate: $voteDate, voteDuration: $voteDuration, voteDurationType: $voteDurationType, noteCreationMode: $noteCreationMode, noteId: $noteId)';
   }
 
   @override
@@ -571,7 +544,6 @@ class _$NoteCreateImpl implements _NoteCreate {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoteCreateImpl &&
-            (identical(other.account, account) || other.account == account) &&
             (identical(other.noteVisibility, noteVisibility) ||
                 other.noteVisibility == noteVisibility) &&
             (identical(other.localOnly, localOnly) ||
@@ -613,7 +585,6 @@ class _$NoteCreateImpl implements _NoteCreate {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        account,
         noteVisibility,
         localOnly,
         reactionAcceptance,
@@ -648,8 +619,7 @@ class _$NoteCreateImpl implements _NoteCreate {
 
 abstract class _NoteCreate implements NoteCreate {
   const factory _NoteCreate(
-      {required final Account account,
-      required final NoteVisibility noteVisibility,
+      {required final NoteVisibility noteVisibility,
       required final bool localOnly,
       required final ReactionAcceptance? reactionAcceptance,
       final List<User> replyTo,
@@ -673,8 +643,6 @@ abstract class _NoteCreate implements NoteCreate {
       final NoteCreationMode? noteCreationMode,
       final String? noteId}) = _$NoteCreateImpl;
 
-  @override
-  Account get account;
   @override
   NoteVisibility get noteVisibility;
   @override

@@ -6,7 +6,7 @@ part of 'federation_custom_emojis.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchEmojiHash() => r'9f7271a3e3365dca42f75fa7b5f3d0917950870f';
+String _$fetchEmojiHash() => r'9384ae1ca986e12b77f51e9b692a0355d6deaebc';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -38,9 +38,15 @@ class FetchEmojiFamily extends Family {
   /// See also [fetchEmoji].
   const FetchEmojiFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyGetContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyGetContextProvider,
+    ...?misskeyGetContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
