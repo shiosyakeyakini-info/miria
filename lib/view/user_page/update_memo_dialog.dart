@@ -3,25 +3,38 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/model/account.dart";
+import "package:miria/hooks/use_async.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/sending_elevated_button.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
 
 @RoutePage()
-class UpdateMemoDialog extends HookConsumerWidget {
-  final Account account;
+class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
+  final AccountContext accountContext;
   final String initialMemo;
   final String userId;
 
   const UpdateMemoDialog({
-    required this.account,
+    required this.accountContext,
     required this.initialMemo,
     required this.userId,
     super.key,
   });
 
   @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: initialMemo);
+    final updateMemo = useAsync(() async {
+      await ref
+          .read(userInfoNotifierProvider(userId).notifier)
+          .updateMemo(controller.text);
+      await ref.read(appRouterProvider).maybePop();
+    });
 
     return AlertDialog(
       title: Text(S.of(context).memo),
@@ -37,12 +50,13 @@ class UpdateMemoDialog extends HookConsumerWidget {
           onPressed: () async => context.maybePop(),
           child: Text(S.of(context).cancel),
         ),
-        ElevatedButton(
-          onPressed: () async => ref
-              .read(userInfoNotifierProvider(userId).notifier)
-              .updateMemo(controller.text),
-          child: Text(S.of(context).save),
-        ),
+        switch (updateMemo.value) {
+          AsyncLoading() => const SendingElevatedButton(),
+          _ => ElevatedButton(
+              onPressed: () async => updateMemo.execute(),
+              child: Text(S.of(context).save),
+            ),
+        }
       ],
     );
   }

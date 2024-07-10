@@ -22,21 +22,6 @@ mixin _$UserInfo {
   UserDetailed? get remoteResponse => throw _privateConstructorUsedError;
   MetaResponse? get metaResponse => throw _privateConstructorUsedError;
 
-  /// メモの更新中
-  AsyncValue<void>? get updateMemo => throw _privateConstructorUsedError;
-
-  /// フォロー操作中
-  AsyncValue<void>? get follow => throw _privateConstructorUsedError;
-
-  /// ミュート操作中
-  AsyncValue<void>? get mute => throw _privateConstructorUsedError;
-
-  /// リノート操作中
-  AsyncValue<void>? get renoteMute => throw _privateConstructorUsedError;
-
-  /// ブロック操作中
-  AsyncValue<void>? get block => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $UserInfoCopyWith<UserInfo> get copyWith =>
       throw _privateConstructorUsedError;
@@ -52,12 +37,7 @@ abstract class $UserInfoCopyWith<$Res> {
       UserDetailed response,
       String? remoteUserId,
       UserDetailed? remoteResponse,
-      MetaResponse? metaResponse,
-      AsyncValue<void>? updateMemo,
-      AsyncValue<void>? follow,
-      AsyncValue<void>? mute,
-      AsyncValue<void>? renoteMute,
-      AsyncValue<void>? block});
+      MetaResponse? metaResponse});
 
   $MetaResponseCopyWith<$Res>? get metaResponse;
 }
@@ -80,11 +60,6 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     Object? remoteUserId = freezed,
     Object? remoteResponse = freezed,
     Object? metaResponse = freezed,
-    Object? updateMemo = freezed,
-    Object? follow = freezed,
-    Object? mute = freezed,
-    Object? renoteMute = freezed,
-    Object? block = freezed,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -107,26 +82,6 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.metaResponse
           : metaResponse // ignore: cast_nullable_to_non_nullable
               as MetaResponse?,
-      updateMemo: freezed == updateMemo
-          ? _value.updateMemo
-          : updateMemo // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      follow: freezed == follow
-          ? _value.follow
-          : follow // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      mute: freezed == mute
-          ? _value.mute
-          : mute // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      renoteMute: freezed == renoteMute
-          ? _value.renoteMute
-          : renoteMute // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      block: freezed == block
-          ? _value.block
-          : block // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
     ) as $Val);
   }
 
@@ -156,12 +111,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       UserDetailed response,
       String? remoteUserId,
       UserDetailed? remoteResponse,
-      MetaResponse? metaResponse,
-      AsyncValue<void>? updateMemo,
-      AsyncValue<void>? follow,
-      AsyncValue<void>? mute,
-      AsyncValue<void>? renoteMute,
-      AsyncValue<void>? block});
+      MetaResponse? metaResponse});
 
   @override
   $MetaResponseCopyWith<$Res>? get metaResponse;
@@ -183,11 +133,6 @@ class __$$UserInfoImplCopyWithImpl<$Res>
     Object? remoteUserId = freezed,
     Object? remoteResponse = freezed,
     Object? metaResponse = freezed,
-    Object? updateMemo = freezed,
-    Object? follow = freezed,
-    Object? mute = freezed,
-    Object? renoteMute = freezed,
-    Object? block = freezed,
   }) {
     return _then(_$UserInfoImpl(
       userId: null == userId
@@ -210,26 +155,6 @@ class __$$UserInfoImplCopyWithImpl<$Res>
           ? _value.metaResponse
           : metaResponse // ignore: cast_nullable_to_non_nullable
               as MetaResponse?,
-      updateMemo: freezed == updateMemo
-          ? _value.updateMemo
-          : updateMemo // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      follow: freezed == follow
-          ? _value.follow
-          : follow // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      mute: freezed == mute
-          ? _value.mute
-          : mute // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      renoteMute: freezed == renoteMute
-          ? _value.renoteMute
-          : renoteMute // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      block: freezed == block
-          ? _value.block
-          : block // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
     ));
   }
 }
@@ -242,12 +167,7 @@ class _$UserInfoImpl extends _UserInfo {
       required this.response,
       this.remoteUserId,
       this.remoteResponse,
-      this.metaResponse,
-      this.updateMemo,
-      this.follow,
-      this.mute,
-      this.renoteMute,
-      this.block})
+      this.metaResponse})
       : super._();
 
   @override
@@ -261,29 +181,9 @@ class _$UserInfoImpl extends _UserInfo {
   @override
   final MetaResponse? metaResponse;
 
-  /// メモの更新中
-  @override
-  final AsyncValue<void>? updateMemo;
-
-  /// フォロー操作中
-  @override
-  final AsyncValue<void>? follow;
-
-  /// ミュート操作中
-  @override
-  final AsyncValue<void>? mute;
-
-  /// リノート操作中
-  @override
-  final AsyncValue<void>? renoteMute;
-
-  /// ブロック操作中
-  @override
-  final AsyncValue<void>? block;
-
   @override
   String toString() {
-    return 'UserInfo(userId: $userId, response: $response, remoteUserId: $remoteUserId, remoteResponse: $remoteResponse, metaResponse: $metaResponse, updateMemo: $updateMemo, follow: $follow, mute: $mute, renoteMute: $renoteMute, block: $block)';
+    return 'UserInfo(userId: $userId, response: $response, remoteUserId: $remoteUserId, remoteResponse: $remoteResponse, metaResponse: $metaResponse)';
   }
 
   @override
@@ -299,29 +199,12 @@ class _$UserInfoImpl extends _UserInfo {
             (identical(other.remoteResponse, remoteResponse) ||
                 other.remoteResponse == remoteResponse) &&
             (identical(other.metaResponse, metaResponse) ||
-                other.metaResponse == metaResponse) &&
-            (identical(other.updateMemo, updateMemo) ||
-                other.updateMemo == updateMemo) &&
-            (identical(other.follow, follow) || other.follow == follow) &&
-            (identical(other.mute, mute) || other.mute == mute) &&
-            (identical(other.renoteMute, renoteMute) ||
-                other.renoteMute == renoteMute) &&
-            (identical(other.block, block) || other.block == block));
+                other.metaResponse == metaResponse));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      userId,
-      response,
-      remoteUserId,
-      remoteResponse,
-      metaResponse,
-      updateMemo,
-      follow,
-      mute,
-      renoteMute,
-      block);
+  int get hashCode => Object.hash(runtimeType, userId, response, remoteUserId,
+      remoteResponse, metaResponse);
 
   @JsonKey(ignore: true)
   @override
@@ -336,12 +219,7 @@ abstract class _UserInfo extends UserInfo {
       required final UserDetailed response,
       final String? remoteUserId,
       final UserDetailed? remoteResponse,
-      final MetaResponse? metaResponse,
-      final AsyncValue<void>? updateMemo,
-      final AsyncValue<void>? follow,
-      final AsyncValue<void>? mute,
-      final AsyncValue<void>? renoteMute,
-      final AsyncValue<void>? block}) = _$UserInfoImpl;
+      final MetaResponse? metaResponse}) = _$UserInfoImpl;
   const _UserInfo._() : super._();
 
   @override
@@ -354,26 +232,6 @@ abstract class _UserInfo extends UserInfo {
   UserDetailed? get remoteResponse;
   @override
   MetaResponse? get metaResponse;
-  @override
-
-  /// メモの更新中
-  AsyncValue<void>? get updateMemo;
-  @override
-
-  /// フォロー操作中
-  AsyncValue<void>? get follow;
-  @override
-
-  /// ミュート操作中
-  AsyncValue<void>? get mute;
-  @override
-
-  /// リノート操作中
-  AsyncValue<void>? get renoteMute;
-  @override
-
-  /// ブロック操作中
-  AsyncValue<void>? get block;
   @override
   @JsonKey(ignore: true)
   _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>

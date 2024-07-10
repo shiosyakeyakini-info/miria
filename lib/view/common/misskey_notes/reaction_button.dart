@@ -5,15 +5,17 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
+import "package:miria/hooks/use_async.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class ReactionButton extends ConsumerWidget {
+class ReactionButton extends HookConsumerWidget {
   final MisskeyEmojiData emojiData;
   final int reactionCount;
   final String? myReaction;
@@ -47,23 +49,23 @@ class ReactionButton extends ConsumerWidget {
     final borderColor =
         isMyReaction ? Theme.of(context).primaryColor : Colors.transparent;
 
-    return ElevatedButton(
-      onPressed: () async {
-        final accountContext = ref.read(accountContextProvider);
-        if (!accountContext.isSame) return;
-        // リアクション取り消し
-        final account = accountContext.postAccount;
-        if (isMyReaction) {
-          if (await SimpleConfirmDialog.show(
-                context: context,
-                message: S.of(context).confirmDeleteReaction,
-                primary: S.of(context).cancelReaction,
-                secondary: S.of(context).cancel,
-              ) !=
-              true) {
-            return;
-          }
+    final reaction = useAsync(() async {
+      final accountContext = ref.read(accountContextProvider);
+      if (!accountContext.isSame) return;
+      // リアクション取り消し
+      final account = accountContext.postAccount;
+      if (isMyReaction) {
+        final dialogValue =
+            await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+                  message: (context) => S.of(context).confirmDeleteReaction,
+                  actions: (context) => [
+                    S.of(context).cancelReaction,
+                    S.of(context).cancel,
+                  ],
+                );
+        if (dialogValue != 0) return;
 
+        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
           await ref
               .read(misskeyPostContextProvider)
               .notes
@@ -76,24 +78,25 @@ class ReactionButton extends ConsumerWidget {
           }
 
           await ref.read(notesWithProvider).refresh(noteId);
+        });
 
+        return;
+      }
+
+      // すでに別のリアクションを行っている
+      if (myReaction != null) return;
+
+      final String reactionString;
+      switch (emojiData) {
+        case UnicodeEmojiData():
+          reactionString = emojiData.char;
+        case CustomEmojiData():
+          if (!emojiData.isCurrentServer) return;
+          reactionString = ":${emojiData.baseName}:";
+        case NotEmojiData():
           return;
-        }
-
-        // すでに別のリアクションを行っている
-        if (myReaction != null) return;
-
-        final String reactionString;
-        switch (emojiData) {
-          case UnicodeEmojiData():
-            reactionString = emojiData.char;
-          case CustomEmojiData():
-            if (!emojiData.isCurrentServer) return;
-            reactionString = ":${emojiData.baseName}:";
-          case NotEmojiData():
-            return;
-        }
-
+      }
+      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
         await ref.read(misskeyPostContextProvider).notes.reactions.create(
               NotesReactionsCreateRequest(
                 noteId: noteId,
@@ -109,7 +112,11 @@ class ReactionButton extends ConsumerWidget {
         }
 
         await ref.read(notesWithProvider).refresh(noteId);
-      },
+      });
+    });
+
+    return ElevatedButton(
+      onPressed: reaction.executeOrNull,
       onLongPress: () async {
         await context.pushRoute(
           ReactionUserRoute(

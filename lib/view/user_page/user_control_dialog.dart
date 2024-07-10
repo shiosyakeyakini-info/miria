@@ -7,6 +7,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
+import "package:miria/hooks/use_async.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
@@ -27,7 +28,7 @@ enum UserControl {
 }
 
 @RoutePage()
-class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
+class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final UserDetailed response;
 
@@ -45,32 +46,78 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = userInfoNotifierProvider(response.id);
 
-    final isLoading = ref.watch(
-      provider.select(
-        (value) =>
-            value.valueOrNull?.mute is AsyncLoading ||
-            value.valueOrNull?.renoteMute is AsyncLoading ||
-            value.valueOrNull?.block is AsyncLoading,
-      ),
-    );
-    ref
-      ..listen(provider.select((value) => value.valueOrNull?.mute),
-          (_, next) async {
-        if (next is! AsyncData) return;
-        Navigator.of(context).pop();
-      })
-      ..listen(provider.select((value) => value.valueOrNull?.renoteMute),
-          (_, next) {
-        if (next is! AsyncData) return;
-        Navigator.of(context).pop();
-      })
-      ..listen(
-        provider.select((value) => value.valueOrNull?.block),
-        (_, next) async {
-          if (next is! AsyncData) return;
-          Navigator.of(context).pop();
-        },
+    final createBlocking = useAsync(ref.read(provider.notifier).createBlocking);
+    final deleteBlocking = useAsync(ref.read(provider.notifier).deleteBlocking);
+    final createRenoteMute =
+        useAsync(ref.read(provider.notifier).createRenoteMute);
+    final deleteRenoteMute =
+        useAsync(ref.read(provider.notifier).deleteRenoteMute);
+    final createMute = useAsync(ref.read(provider.notifier).createMute);
+    final deleteMute = useAsync(ref.read(provider.notifier).deleteMute);
+    final copyName = useAsync(() async {
+      await Clipboard.setData(
+        ClipboardData(text: response.name ?? response.username),
       );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).doneCopy),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      Navigator.of(context).pop();
+    });
+    final copyScreenName = useAsync(() async {
+      await Clipboard.setData(ClipboardData(text: response.acct));
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).doneCopy),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      Navigator.of(context).pop();
+    });
+    final copyLinks = useAsync(() async {
+      await Clipboard.setData(
+        ClipboardData(
+          text: Uri(
+            scheme: "https",
+            host: account.host,
+            path: response.acct,
+          ).toString(),
+        ),
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).doneCopy),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      Navigator.of(context).pop();
+    });
+    final openBrowserAsRemote = useAsync(() async {
+      final uri = response.uri ?? response.url;
+      if (uri == null) return;
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+    });
+    final openUserInOtherAccount = useAsync(
+      () async => ref
+          .read(misskeyNoteNotifierProvider.notifier)
+          .openUserInOtherAccount(response),
+    );
+
+    final isLoading = [
+      createBlocking.value,
+      deleteBlocking.value,
+      createRenoteMute.value,
+      deleteRenoteMute.value,
+      createMute.value,
+      deleteMute.value,
+    ].where((e) => e is AsyncData || e is AsyncLoading).isNotEmpty;
 
     if (isLoading) {
       return const Center(child: CircularProgressIndicator.adaptive());
@@ -82,57 +129,17 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
         ListTile(
           leading: const Icon(Icons.copy),
           title: Text(S.of(context).copyName),
-          onTap: () async {
-            await Clipboard.setData(
-              ClipboardData(text: response.name ?? response.username),
-            );
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(S.of(context).doneCopy),
-                duration: const Duration(seconds: 1),
-              ),
-            );
-            Navigator.of(context).pop();
-          },
+          onTap: copyName.executeOrNull,
         ),
         ListTile(
           leading: const Icon(Icons.alternate_email),
           title: Text(S.of(context).copyUserScreenName),
-          onTap: () async {
-            await Clipboard.setData(ClipboardData(text: response.acct));
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(S.of(context).doneCopy),
-                duration: const Duration(seconds: 1),
-              ),
-            );
-            Navigator.of(context).pop();
-          },
+          onTap: copyScreenName.executeOrNull,
         ),
         ListTile(
           leading: const Icon(Icons.link),
           title: Text(S.of(context).copyLinks),
-          onTap: () async {
-            await Clipboard.setData(
-              ClipboardData(
-                text: Uri(
-                  scheme: "https",
-                  host: account.host,
-                  path: response.acct,
-                ).toString(),
-              ),
-            );
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(S.of(context).doneCopy),
-                duration: const Duration(seconds: 1),
-              ),
-            );
-            Navigator.of(context).pop();
-          },
+          onTap: copyLinks.executeOrNull,
         ),
         ListTile(
           leading: const Icon(Icons.open_in_browser),
@@ -154,20 +161,12 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
           ListTile(
             leading: const Icon(Icons.rocket_launch),
             title: Text(S.of(context).openBrowsersAsRemote),
-            onTap: () async {
-              final uri = response.uri ?? response.url;
-              if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.externalApplication);
-              if (!context.mounted) return;
-              Navigator.of(context).pop();
-            },
+            onTap: openBrowserAsRemote.executeOrNull,
           ),
         ListTile(
           leading: const Icon(Icons.open_in_new),
           title: Text(S.of(context).openInAnotherAccount),
-          onTap: () async => ref
-              .read(misskeyNoteNotifierProvider.notifier)
-              .openUserInOtherAccount(user),
+          onTap: openUserInOtherAccount.executeOrNull,
         ),
         ListTile(
           leading: const Icon(Icons.search),
@@ -198,53 +197,48 @@ class UserControlDialog extends ConsumerWidget implements AutoRouteWrapper {
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).deleteRenoteMute),
-              onTap: ref.read(provider.notifier).deleteRenoteMute,
+              onTap: deleteRenoteMute.executeOrNull,
             )
           else
             ListTile(
               leading: const Icon(Icons.repeat_rounded),
               title: Text(S.of(context).createRenoteMute),
-              onTap: ref.read(provider.notifier).createRenoteMute,
+              onTap: createRenoteMute.executeOrNull,
             ),
           if (user.isMuted)
             ListTile(
               leading: const Icon(Icons.visibility),
               title: Text(S.of(context).deleteMute),
-              onTap: ref.read(provider.notifier).deleteMute,
+              onTap: deleteMute.executeOrNull,
             )
           else
             ListTile(
               leading: const Icon(Icons.visibility_off),
               title: Text(S.of(context).createMute),
-              onTap: () async {
-                final expires =
-                    await context.pushRoute<Expire?>(const ExpireSelectRoute());
-                if (expires == null) return;
-                await ref
-                    .read(userInfoNotifierProvider(response.id).notifier)
-                    .createMute(expires);
-              },
+              onTap: createMute.executeOrNull,
             ),
           if (user.isBlocking)
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).deleteBlock),
-              onTap: ref.read(provider.notifier).deleteBlocking,
+              onTap: deleteBlocking.executeOrNull,
             )
           else
             ListTile(
               leading: const Icon(Icons.block),
               title: Text(S.of(context).createBlock),
-              onTap: ref.read(provider.notifier).createBlocking,
+              onTap: createBlocking.executeOrNull,
             ),
           ListTile(
             leading: const Icon(Icons.report),
             title: Text(S.of(context).reportAbuse),
             onTap: () async {
-              unawaited(context.maybePop());
-              await context.pushRoute(
-                AbuseRoute(account: account, targetUser: response),
-              );
+              await (
+                context.maybePop(),
+                context.pushRoute(
+                  AbuseRoute(account: account, targetUser: response),
+                )
+              ).wait;
             },
           ),
         ],

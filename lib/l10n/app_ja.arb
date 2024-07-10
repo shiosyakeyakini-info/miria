@@ -72,6 +72,7 @@
     "apiKey": "APIキー",
     "contentWarning": "注釈",
     "follower": "フォロワー",
+    "sending": "送信中",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",

@@ -159,24 +159,18 @@ class AccountContext with _$AccountContext {
 AccountContext accountContext(AccountContextRef ref) =>
     throw UnimplementedError();
 
-@Riverpod(keepAlive: false, dependencies: [accountContext])
+@Riverpod(dependencies: [accountContext])
 Misskey misskeyGetContext(MisskeyGetContextRef ref) {
-  final account = ref.read(accountContextProvider).getAccount;
-  return Misskey(
-    token: account.token,
-    host: account.host,
-    socketConnectionTimeout: const Duration(seconds: 20),
-  );
+  final account =
+      ref.read(accountContextProvider.select((value) => value.getAccount));
+  return ref.read(misskeyProvider(account));
 }
 
-@Riverpod(keepAlive: false, dependencies: [accountContext])
+@Riverpod(dependencies: [accountContext])
 Misskey misskeyPostContext(MisskeyPostContextRef ref) {
-  final account = ref.read(accountContextProvider).postAccount;
-  return Misskey(
-    token: account.token,
-    host: account.host,
-    socketConnectionTimeout: const Duration(seconds: 20),
-  );
+  final account =
+      ref.read(accountContextProvider.select((value) => value.postAccount));
+  return ref.read(misskeyProvider(account));
 }
 
 final timelineProvider =

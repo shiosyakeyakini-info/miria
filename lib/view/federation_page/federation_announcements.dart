@@ -3,11 +3,13 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/pushable_listview.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/common/sending_elevated_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class FederationAnnouncements extends HookConsumerWidget {
@@ -102,6 +104,30 @@ class Announcement extends HookConsumerWidget {
     final data = useState(initialData);
     final icon = data.value.icon;
     final imageUrl = data.value.imageUrl;
+
+    final confirm = useAsync(() async {
+      if (data.value.needConfirmationToRead == true) {
+        final isConfirmed =
+            await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+                  message: (context) =>
+                      S.of(context).confirmAnnouncementsRead(data.value.title),
+                  actions: (context) => [
+                    S.of(context).readAnnouncement,
+                    S.of(context).didNotReadAnnouncement
+                  ],
+                );
+        if (isConfirmed != 0) return;
+      }
+      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        await ref.read(misskeyPostContextProvider).i.readAnnouncement(
+              IReadAnnouncementRequest(
+                announcementId: data.value.id,
+              ),
+            );
+        data.value = data.value.copyWith(isRead: true);
+      });
+    });
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
@@ -153,29 +179,7 @@ class Announcement extends HookConsumerWidget {
               if (ref.read(accountContextProvider).isSame &&
                   data.value.isRead == false)
                 ElevatedButton(
-                  onPressed: () async {
-                    if (data.value.needConfirmationToRead == true) {
-                      final isConfirmed = await SimpleConfirmDialog.show(
-                        context: context,
-                        message: S
-                            .of(context)
-                            .confirmAnnouncementsRead(data.value.title),
-                        primary: S.of(context).readAnnouncement,
-                        secondary: S.of(context).didNotReadAnnouncement,
-                      );
-                      if (isConfirmed != true) return;
-                    }
-
-                    await ref
-                        .read(misskeyPostContextProvider)
-                        .i
-                        .readAnnouncement(
-                          IReadAnnouncementRequest(
-                            announcementId: data.value.id,
-                          ),
-                        );
-                    data.value = data.value.copyWith(isRead: true);
-                  },
+                  onPressed: confirm.executeOrNull,
                   child: Text(S.of(context).done),
                 ),
             ],

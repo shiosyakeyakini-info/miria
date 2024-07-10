@@ -146,6 +146,10 @@ mixin _$DialogData {
   List<String> Function(BuildContext) get actions =>
       throw _privateConstructorUsedError;
   Completer<int> get completer => throw _privateConstructorUsedError;
+  @Assert("!isMFM || isMFM && accountContext != null",
+      "account context must not be null when isMFM is true")
+  AccountContext? get accountContext => throw _privateConstructorUsedError;
+  bool get isMFM => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DialogDataCopyWith<DialogData> get copyWith =>
@@ -161,7 +165,13 @@ abstract class $DialogDataCopyWith<$Res> {
   $Res call(
       {String Function(BuildContext) message,
       List<String> Function(BuildContext) actions,
-      Completer<int> completer});
+      Completer<int> completer,
+      @Assert("!isMFM || isMFM && accountContext != null",
+          "account context must not be null when isMFM is true")
+      AccountContext? accountContext,
+      bool isMFM});
+
+  $AccountContextCopyWith<$Res>? get accountContext;
 }
 
 /// @nodoc
@@ -180,6 +190,8 @@ class _$DialogDataCopyWithImpl<$Res, $Val extends DialogData>
     Object? message = null,
     Object? actions = null,
     Object? completer = null,
+    Object? accountContext = freezed,
+    Object? isMFM = null,
   }) {
     return _then(_value.copyWith(
       message: null == message
@@ -194,7 +206,27 @@ class _$DialogDataCopyWithImpl<$Res, $Val extends DialogData>
           ? _value.completer
           : completer // ignore: cast_nullable_to_non_nullable
               as Completer<int>,
+      accountContext: freezed == accountContext
+          ? _value.accountContext
+          : accountContext // ignore: cast_nullable_to_non_nullable
+              as AccountContext?,
+      isMFM: null == isMFM
+          ? _value.isMFM
+          : isMFM // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AccountContextCopyWith<$Res>? get accountContext {
+    if (_value.accountContext == null) {
+      return null;
+    }
+
+    return $AccountContextCopyWith<$Res>(_value.accountContext!, (value) {
+      return _then(_value.copyWith(accountContext: value) as $Val);
+    });
   }
 }
 
@@ -209,7 +241,14 @@ abstract class _$$DialogDataImplCopyWith<$Res>
   $Res call(
       {String Function(BuildContext) message,
       List<String> Function(BuildContext) actions,
-      Completer<int> completer});
+      Completer<int> completer,
+      @Assert("!isMFM || isMFM && accountContext != null",
+          "account context must not be null when isMFM is true")
+      AccountContext? accountContext,
+      bool isMFM});
+
+  @override
+  $AccountContextCopyWith<$Res>? get accountContext;
 }
 
 /// @nodoc
@@ -226,6 +265,8 @@ class __$$DialogDataImplCopyWithImpl<$Res>
     Object? message = null,
     Object? actions = null,
     Object? completer = null,
+    Object? accountContext = freezed,
+    Object? isMFM = null,
   }) {
     return _then(_$DialogDataImpl(
       message: null == message
@@ -240,6 +281,14 @@ class __$$DialogDataImplCopyWithImpl<$Res>
           ? _value.completer
           : completer // ignore: cast_nullable_to_non_nullable
               as Completer<int>,
+      accountContext: freezed == accountContext
+          ? _value.accountContext
+          : accountContext // ignore: cast_nullable_to_non_nullable
+              as AccountContext?,
+      isMFM: null == isMFM
+          ? _value.isMFM
+          : isMFM // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -248,7 +297,13 @@ class __$$DialogDataImplCopyWithImpl<$Res>
 
 class _$DialogDataImpl implements _DialogData {
   _$DialogDataImpl(
-      {required this.message, required this.actions, required this.completer});
+      {required this.message,
+      required this.actions,
+      required this.completer,
+      @Assert("!isMFM || isMFM && accountContext != null",
+          "account context must not be null when isMFM is true")
+      this.accountContext,
+      this.isMFM = false});
 
   @override
   final String Function(BuildContext) message;
@@ -256,10 +311,17 @@ class _$DialogDataImpl implements _DialogData {
   final List<String> Function(BuildContext) actions;
   @override
   final Completer<int> completer;
+  @override
+  @Assert("!isMFM || isMFM && accountContext != null",
+      "account context must not be null when isMFM is true")
+  final AccountContext? accountContext;
+  @override
+  @JsonKey()
+  final bool isMFM;
 
   @override
   String toString() {
-    return 'DialogData(message: $message, actions: $actions, completer: $completer)';
+    return 'DialogData(message: $message, actions: $actions, completer: $completer, accountContext: $accountContext, isMFM: $isMFM)';
   }
 
   @override
@@ -270,11 +332,15 @@ class _$DialogDataImpl implements _DialogData {
             (identical(other.message, message) || other.message == message) &&
             (identical(other.actions, actions) || other.actions == actions) &&
             (identical(other.completer, completer) ||
-                other.completer == completer));
+                other.completer == completer) &&
+            (identical(other.accountContext, accountContext) ||
+                other.accountContext == accountContext) &&
+            (identical(other.isMFM, isMFM) || other.isMFM == isMFM));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message, actions, completer);
+  int get hashCode => Object.hash(
+      runtimeType, message, actions, completer, accountContext, isMFM);
 
   @JsonKey(ignore: true)
   @override
@@ -287,7 +353,11 @@ abstract class _DialogData implements DialogData {
   factory _DialogData(
       {required final String Function(BuildContext) message,
       required final List<String> Function(BuildContext) actions,
-      required final Completer<int> completer}) = _$DialogDataImpl;
+      required final Completer<int> completer,
+      @Assert("!isMFM || isMFM && accountContext != null",
+          "account context must not be null when isMFM is true")
+      final AccountContext? accountContext,
+      final bool isMFM}) = _$DialogDataImpl;
 
   @override
   String Function(BuildContext) get message;
@@ -295,6 +365,12 @@ abstract class _DialogData implements DialogData {
   List<String> Function(BuildContext) get actions;
   @override
   Completer<int> get completer;
+  @override
+  @Assert("!isMFM || isMFM && accountContext != null",
+      "account context must not be null when isMFM is true")
+  AccountContext? get accountContext;
+  @override
+  bool get isMFM;
   @override
   @JsonKey(ignore: true)
   _$$DialogDataImplCopyWith<_$DialogDataImpl> get copyWith =>

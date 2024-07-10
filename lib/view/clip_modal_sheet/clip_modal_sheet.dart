@@ -3,11 +3,13 @@ import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/hooks/use_async.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -15,13 +17,13 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "clip_modal_sheet.g.dart";
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: false, dependencies: [misskeyPostContext])
 class _NotesClipsNotifier extends _$NotesClipsNotifier {
   @override
-  Future<List<Clip>> build(Misskey misskey, String noteId) async {
-    final response = await misskey.notes.clips(
-      NotesClipsRequest(noteId: noteId),
-    );
+  Future<List<Clip>> build(String noteId) async {
+    final response = await ref.read(misskeyPostContextProvider).notes.clips(
+          NotesClipsRequest(noteId: noteId),
+        );
     return response.toList();
   }
 
@@ -36,14 +38,18 @@ class _NotesClipsNotifier extends _$NotesClipsNotifier {
   }
 }
 
-@Riverpod(keepAlive: false)
+@Riverpod(keepAlive: false, dependencies: [
+  ClipsNotifier,
+  _NotesClipsNotifier,
+  misskeyPostContext,
+])
 class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   @override
-  Future<List<(Clip, bool)>> build(Misskey misskey, String noteId) async {
-    final [userClips, noteClips] = await Future.wait([
-      ref.watch(clipsNotifierProvider(misskey).future),
-      ref.watch(_notesClipsNotifierProvider(misskey, noteId).future),
-    ]);
+  Future<List<(Clip, bool)>> build(String noteId) async {
+    final (userClips, noteClips) = await (
+      ref.watch(clipsNotifierProvider.future),
+      ref.watch(_notesClipsNotifierProvider(noteId).future),
+    ).wait;
 
     return [
       for (final userClip in userClips)
@@ -54,12 +60,10 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   Future<void> addToClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       try {
-        await this.misskey.clips.addNote(
+        await ref.read(misskeyPostContextProvider).clips.addNote(
               ClipsAddNoteRequest(clipId: clip.id, noteId: noteId),
             );
-        ref
-            .read(_notesClipsNotifierProvider(this.misskey, noteId).notifier)
-            .addClip(clip);
+        ref.read(_notesClipsNotifierProvider(noteId).notifier).addClip(clip);
       } on DioException catch (e) {
         if (e.response != null) {
           // すでにクリップに追加されている場合、削除するかどうかを確認する
@@ -72,12 +76,7 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
                           [S.of(context).deleteClip, S.of(context).noneAction],
                     );
             if (confirm == 0) {
-              await ref
-                  .read(
-                    _clipModalSheetNotifierProvider(this.misskey, noteId)
-                        .notifier,
-                  )
-                  .removeFromClip(clip);
+              await removeFromClip(clip);
             }
             return;
           }
@@ -89,34 +88,47 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
 
   Future<void> removeFromClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await this.misskey.clips.removeNote(
+      await ref.read(misskeyPostContextProvider).clips.removeNote(
             ClipsRemoveNoteRequest(
               clipId: clip.id,
               noteId: noteId,
             ),
           );
       ref
-          .read(_notesClipsNotifierProvider(this.misskey, noteId).notifier)
+          .read(_notesClipsNotifierProvider(noteId).notifier)
           .removeClip(clip.id);
     });
   }
 }
 
-class ClipModalSheet extends ConsumerWidget {
+@RoutePage()
+class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
+  final Account account;
+  final String noteId;
+
   const ClipModalSheet({
     required this.account,
     required this.noteId,
     super.key,
   });
 
-  final Account account;
-  final String noteId;
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(account));
-    final state = ref.watch(_clipModalSheetNotifierProvider(misskey, noteId));
-    final notifier = _clipModalSheetNotifierProvider(misskey, noteId).notifier;
+    final state = ref.watch(_clipModalSheetNotifierProvider(noteId));
+    final notifier = _clipModalSheetNotifierProvider(noteId).notifier;
+
+    final create = useAsync(() async {
+      final settings = await context.pushRoute<ClipSettings>(
+        ClipSettingsRoute(title: Text(S.of(context).create)),
+      );
+      if (settings == null) return;
+      await ref.read(clipsNotifierProvider.notifier).create(settings);
+    });
+
     return switch (state) {
       AsyncData(:final value) => ListView.builder(
           itemCount: value.length + 1,
@@ -141,16 +153,7 @@ class ClipModalSheet extends ConsumerWidget {
               return ListTile(
                 leading: const Icon(Icons.add),
                 title: Text(S.of(context).createClip),
-                onTap: () async {
-                  final settings = await context.pushRoute<ClipSettings>(
-                    ClipSettingsRoute(title: Text(S.of(context).create)),
-                  );
-                  if (!context.mounted) return;
-                  if (settings == null) return;
-                  await ref
-                      .read(clipsNotifierProvider(misskey).notifier)
-                      .create(settings);
-                },
+                onTap: create.executeOrNull,
               );
             }
           },

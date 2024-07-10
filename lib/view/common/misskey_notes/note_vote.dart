@@ -2,15 +2,52 @@ import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class NoteVote extends ConsumerStatefulWidget {
+part "note_vote.g.dart";
+
+@Riverpod(dependencies: [misskeyPostContext, notesWith])
+class NoteVoteNotifier extends _$NoteVoteNotifier {
+  @override
+  AsyncValue? build(Note note) => null;
+
+  Future<bool> vote(int index) async {
+    final poll = note.poll!;
+
+    final dialogValue = await ref
+        .read(dialogStateNotifierProvider.notifier)
+        .showDialog(
+          message: (context) =>
+              S.of(context).confirmPoll(poll.choices[index].text),
+          actions: (context) => [S.of(context).doVoting, S.of(context).cancel],
+        );
+
+    if (dialogValue != 0) return false;
+    state = const AsyncLoading();
+
+    state =
+        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref.read(misskeyPostContextProvider).notes.polls.vote(
+            NotesPollsVoteRequest(
+              noteId: note.id,
+              choice: index,
+            ),
+          );
+      await ref.read(notesWithProvider).refresh(note.id);
+    });
+    return true;
+  }
+}
+
+class NoteVote extends HookConsumerWidget {
   const NoteVote({
     required this.displayNote,
     required this.poll,
@@ -20,90 +57,37 @@ class NoteVote extends ConsumerStatefulWidget {
   final Note displayNote;
   final NotePoll poll;
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => NoteVoteState();
-}
-
-class NoteVoteState extends ConsumerState<NoteVote> {
-  var isOpened = false;
-
-  bool isAnyVotable() {
+  bool isAnyVotable(WidgetRef ref) {
     if (!ref.read(accountContextProvider).isSame) return false;
-    final expiresAt = widget.poll.expiresAt;
+    final expiresAt = poll.expiresAt;
     return (expiresAt == null || expiresAt > DateTime.now()) &&
-        ((widget.poll.multiple && widget.poll.choices.any((e) => !e.isVoted)) ||
-            (!widget.poll.multiple &&
-                widget.poll.choices.every((e) => !e.isVoted)));
+        ((poll.multiple && poll.choices.any((e) => !e.isVoted)) ||
+            (!poll.multiple && poll.choices.every((e) => !e.isVoted)));
   }
 
-  bool isVotable(int choice) {
-    return isAnyVotable() &&
-        ((!widget.poll.multiple) ||
-            widget.poll.multiple && !widget.poll.choices[choice].isVoted);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (!isAnyVotable()) {
-      setState(() {
-        isOpened = true;
-      });
-    }
-  }
-
-  Future<void> vote(int choice) async {
-    // 複数投票可能ですでに対象を投票しているか、
-    // 単一投票でいずれかを投票している場合、なにもしない
-    if (!isVotable(choice)) {
-      return;
-    }
-    final account = ref.read(accountContextProvider).postAccount;
-
-    final dialogValue = await showDialog<bool>(
-      context: context,
-      builder: (context2) => SimpleConfirmDialog(
-        message: S.of(context).confirmPoll(widget.poll.choices[choice].text),
-        primary: S.of(context).doVoting,
-        secondary: S.of(context).cancel,
-        isMfm: true,
-        account: ref.read(accountContextProvider).postAccount,
-      ),
-    );
-    if (dialogValue == true) {
-      await ref.read(misskeyPostContextProvider).notes.polls.vote(
-            NotesPollsVoteRequest(
-              noteId: widget.displayNote.id,
-              choice: choice,
-            ),
-          );
-      await ref.read(notesProvider(account)).refresh(widget.displayNote.id);
-      if (!widget.poll.multiple) {
-        if (!mounted) return;
-        setState(() {
-          isOpened = true;
-        });
-      }
-    }
+  bool isVotable(int choice, WidgetRef ref) {
+    return isAnyVotable(ref) &&
+        ((!poll.multiple) || poll.multiple && !poll.choices[choice].isVoted);
   }
 
   @override
-  Widget build(BuildContext context) {
-    final totalVotes = widget.poll.choices.map((e) => e.votes).sum;
-    final expiresAt = widget.poll.expiresAt;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final totalVotes = poll.choices.map((e) => e.votes).sum;
+    final expiresAt = poll.expiresAt;
     final isExpired = expiresAt != null && expiresAt < DateTime.now();
     final differ = isExpired
         ? null
-        : widget.poll.expiresAt?.difference(DateTime.now()).format(context);
+        : poll.expiresAt?.difference(DateTime.now()).format(context);
     final colorTheme = AppTheme.of(context).colorTheme;
+
+    final isOpened = useState(useMemoized(() => !isAnyVotable(ref)));
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
-        for (final choice in widget.poll.choices.mapIndexed(
+        for (final choice in poll.choices.mapIndexed(
           (index, element) => (index: index, element: element),
         )) ...[
           SizedBox(
@@ -112,8 +96,8 @@ class NoteVoteState extends ConsumerState<NoteVote> {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(5),
-                color: isOpened ? null : colorTheme.accentedBackground,
-                gradient: isOpened
+                color: isOpened.value ? null : colorTheme.accentedBackground,
+                gradient: isOpened.value
                     ? LinearGradient(
                         colors: [
                           colorTheme.buttonGradateA,
@@ -136,7 +120,16 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                onPressed: () async => vote(choice.index),
+                onPressed: () async {
+                  // 複数投票可能ですでに対象を投票しているか、
+                  // 単一投票でいずれかを投票している場合、なにもしない
+                  if (!isVotable(choice.index, ref)) {
+                    return;
+                  }
+                  isOpened.value = await ref
+                      .read(noteVoteNotifierProvider(displayNote).notifier)
+                      .vote(choice.index);
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(2),
                   child: DecoratedBox(
@@ -178,7 +171,7 @@ class NoteVoteState extends ConsumerState<NoteVote> {
                               padding: EdgeInsets.only(left: 5),
                             ),
                           ),
-                          if (isOpened)
+                          if (isOpened.value)
                             TextSpan(
                               text: S
                                   .of(context)
@@ -202,17 +195,13 @@ class NoteVoteState extends ConsumerState<NoteVote> {
               TextSpan(
                 text: isExpired
                     ? S.of(context).finished
-                    : !isOpened
+                    : !isOpened.value
                         ? S.of(context).openResult
-                        : isAnyVotable()
+                        : isAnyVotable(ref)
                             ? S.of(context).doVoting
                             : S.of(context).alreadyVoted,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => setState(() {
-                        setState(() {
-                          isOpened = !isOpened;
-                        });
-                      }),
+                  ..onTap = () => isOpened.value = !isOpened.value,
               ),
               const WidgetSpan(
                 child: Padding(

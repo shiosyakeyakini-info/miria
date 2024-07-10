@@ -7,7 +7,7 @@ part of 'clip_modal_sheet.dart';
 // **************************************************************************
 
 String _$notesClipsNotifierHash() =>
-    r'd440e238ab0a6083c104b43f562518d9a8e0c88c';
+    r'7962974959d64b1ca68c7365025f910dc39e75e8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,11 +32,9 @@ class _SystemHash {
 
 abstract class _$NotesClipsNotifier
     extends BuildlessAutoDisposeAsyncNotifier<List<Clip>> {
-  late final Misskey misskey;
   late final String noteId;
 
   FutureOr<List<Clip>> build(
-    Misskey misskey,
     String noteId,
   );
 }
@@ -50,9 +48,15 @@ class _NotesClipsNotifierFamily extends Family {
   /// See also [_NotesClipsNotifier].
   const _NotesClipsNotifierFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    misskeyPostContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    misskeyPostContextProvider,
+    ...?misskeyPostContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -66,11 +70,9 @@ class _NotesClipsNotifierFamily extends Family {
 
   /// See also [_NotesClipsNotifier].
   _NotesClipsNotifierProvider call(
-    Misskey misskey,
     String noteId,
   ) {
     return _NotesClipsNotifierProvider(
-      misskey,
       noteId,
     );
   }
@@ -81,7 +83,6 @@ class _NotesClipsNotifierFamily extends Family {
     covariant _NotesClipsNotifierProvider provider,
   ) {
     return call(
-      provider.misskey,
       provider.noteId,
     );
   }
@@ -113,12 +114,9 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     _NotesClipsNotifier, List<Clip>> {
   /// See also [_NotesClipsNotifier].
   _NotesClipsNotifierProvider(
-    Misskey misskey,
     String noteId,
   ) : this._internal(
-          () => _NotesClipsNotifier()
-            ..misskey = misskey
-            ..noteId = noteId,
+          () => _NotesClipsNotifier()..noteId = noteId,
           from: _notesClipsNotifierProvider,
           name: r'_notesClipsNotifierProvider',
           debugGetCreateSourceHash:
@@ -128,7 +126,6 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
           dependencies: _NotesClipsNotifierFamily._dependencies,
           allTransitiveDependencies:
               _NotesClipsNotifierFamily._allTransitiveDependencies,
-          misskey: misskey,
           noteId: noteId,
         );
 
@@ -139,11 +136,9 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.misskey,
     required this.noteId,
   }) : super.internal();
 
-  final Misskey misskey;
   final String noteId;
 
   @override
@@ -151,7 +146,6 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     covariant _NotesClipsNotifier notifier,
   ) {
     return notifier.build(
-      misskey,
       noteId,
     );
   }
@@ -161,29 +155,20 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: _NotesClipsNotifierProvider._internal(
-        () => create()
-          ..misskey = misskey
-          ..noteId = noteId,
+        () => create()..noteId = noteId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        misskey: misskey,
         noteId: noteId,
       ),
     );
   }
 
   @override
-  (
-    Misskey,
-    String,
-  ) get argument {
-    return (
-      misskey,
-      noteId,
-    );
+  (String,) get argument {
+    return (noteId,);
   }
 
   @override
@@ -196,30 +181,24 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
     _NotesClipsNotifier Function() create,
   ) {
     return _NotesClipsNotifierProvider._internal(
-      () => create()
-        ..misskey = misskey
-        ..noteId = noteId,
+      () => create()..noteId = noteId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      misskey: misskey,
       noteId: noteId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is _NotesClipsNotifierProvider &&
-        other.misskey == misskey &&
-        other.noteId == noteId;
+    return other is _NotesClipsNotifierProvider && other.noteId == noteId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, misskey.hashCode);
     hash = _SystemHash.combine(hash, noteId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -228,9 +207,6 @@ class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
 
 mixin _NotesClipsNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<List<Clip>> {
-  /// The parameter `misskey` of this provider.
-  Misskey get misskey;
-
   /// The parameter `noteId` of this provider.
   String get noteId;
 }
@@ -241,21 +217,17 @@ class _NotesClipsNotifierProviderElement
   _NotesClipsNotifierProviderElement(super.provider);
 
   @override
-  Misskey get misskey => (origin as _NotesClipsNotifierProvider).misskey;
-  @override
   String get noteId => (origin as _NotesClipsNotifierProvider).noteId;
 }
 
 String _$clipModalSheetNotifierHash() =>
-    r'62537b29c05a8b1d14498895c97e395cd2772d6d';
+    r'978ab378797102eac12dd3714bf742a671d769ad';
 
 abstract class _$ClipModalSheetNotifier
     extends BuildlessAutoDisposeAsyncNotifier<List<(Clip, bool)>> {
-  late final Misskey misskey;
   late final String noteId;
 
   FutureOr<List<(Clip, bool)>> build(
-    Misskey misskey,
     String noteId,
   );
 }
@@ -269,9 +241,21 @@ class _ClipModalSheetNotifierFamily extends Family {
   /// See also [_ClipModalSheetNotifier].
   const _ClipModalSheetNotifierFamily();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    clipsNotifierProvider,
+    _notesClipsNotifierProvider,
+    misskeyPostContextProvider
+  ];
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    clipsNotifierProvider,
+    ...?clipsNotifierProvider.allTransitiveDependencies,
+    _notesClipsNotifierProvider,
+    ...?_notesClipsNotifierProvider.allTransitiveDependencies,
+    misskeyPostContextProvider,
+    ...?misskeyPostContextProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -285,11 +269,9 @@ class _ClipModalSheetNotifierFamily extends Family {
 
   /// See also [_ClipModalSheetNotifier].
   _ClipModalSheetNotifierProvider call(
-    Misskey misskey,
     String noteId,
   ) {
     return _ClipModalSheetNotifierProvider(
-      misskey,
       noteId,
     );
   }
@@ -300,7 +282,6 @@ class _ClipModalSheetNotifierFamily extends Family {
     covariant _ClipModalSheetNotifierProvider provider,
   ) {
     return call(
-      provider.misskey,
       provider.noteId,
     );
   }
@@ -333,12 +314,9 @@ class _ClipModalSheetNotifierProvider
         List<(Clip, bool)>> {
   /// See also [_ClipModalSheetNotifier].
   _ClipModalSheetNotifierProvider(
-    Misskey misskey,
     String noteId,
   ) : this._internal(
-          () => _ClipModalSheetNotifier()
-            ..misskey = misskey
-            ..noteId = noteId,
+          () => _ClipModalSheetNotifier()..noteId = noteId,
           from: _clipModalSheetNotifierProvider,
           name: r'_clipModalSheetNotifierProvider',
           debugGetCreateSourceHash:
@@ -348,7 +326,6 @@ class _ClipModalSheetNotifierProvider
           dependencies: _ClipModalSheetNotifierFamily._dependencies,
           allTransitiveDependencies:
               _ClipModalSheetNotifierFamily._allTransitiveDependencies,
-          misskey: misskey,
           noteId: noteId,
         );
 
@@ -359,11 +336,9 @@ class _ClipModalSheetNotifierProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.misskey,
     required this.noteId,
   }) : super.internal();
 
-  final Misskey misskey;
   final String noteId;
 
   @override
@@ -371,7 +346,6 @@ class _ClipModalSheetNotifierProvider
     covariant _ClipModalSheetNotifier notifier,
   ) {
     return notifier.build(
-      misskey,
       noteId,
     );
   }
@@ -381,29 +355,20 @@ class _ClipModalSheetNotifierProvider
     return ProviderOverride(
       origin: this,
       override: _ClipModalSheetNotifierProvider._internal(
-        () => create()
-          ..misskey = misskey
-          ..noteId = noteId,
+        () => create()..noteId = noteId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        misskey: misskey,
         noteId: noteId,
       ),
     );
   }
 
   @override
-  (
-    Misskey,
-    String,
-  ) get argument {
-    return (
-      misskey,
-      noteId,
-    );
+  (String,) get argument {
+    return (noteId,);
   }
 
   @override
@@ -416,30 +381,24 @@ class _ClipModalSheetNotifierProvider
     _ClipModalSheetNotifier Function() create,
   ) {
     return _ClipModalSheetNotifierProvider._internal(
-      () => create()
-        ..misskey = misskey
-        ..noteId = noteId,
+      () => create()..noteId = noteId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      misskey: misskey,
       noteId: noteId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is _ClipModalSheetNotifierProvider &&
-        other.misskey == misskey &&
-        other.noteId == noteId;
+    return other is _ClipModalSheetNotifierProvider && other.noteId == noteId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, misskey.hashCode);
     hash = _SystemHash.combine(hash, noteId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -448,9 +407,6 @@ class _ClipModalSheetNotifierProvider
 
 mixin _ClipModalSheetNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<List<(Clip, bool)>> {
-  /// The parameter `misskey` of this provider.
-  Misskey get misskey;
-
   /// The parameter `noteId` of this provider.
   String get noteId;
 }
@@ -460,8 +416,6 @@ class _ClipModalSheetNotifierProviderElement
         List<(Clip, bool)>> with _ClipModalSheetNotifierRef {
   _ClipModalSheetNotifierProviderElement(super.provider);
 
-  @override
-  Misskey get misskey => (origin as _ClipModalSheetNotifierProvider).misskey;
   @override
   String get noteId => (origin as _ClipModalSheetNotifierProvider).noteId;
 }

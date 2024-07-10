@@ -22,6 +22,7 @@ import "package:miria/view/channels_page/channels_page.dart";
 import "package:miria/view/clip_list_page/clip_detail_page.dart";
 import "package:miria/view/clip_list_page/clip_list_page.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
+import "package:miria/view/clip_modal_sheet/clip_modal_sheet.dart";
 import "package:miria/view/common/account_select_dialog.dart";
 import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
@@ -144,7 +145,7 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: ChannelSelectRoute.page),
     AutoDialogRoute(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
-    AutoDialogRoute(page: ClipSettingsRoute.page),
+    AutoDialogRoute<ClipSettings>(page: ClipSettingsRoute.page),
     AutoDialogRoute<MisskeyEmojiData>(page: ReactionPickerRoute.page),
     AutoDialogRoute(page: LicenseConfirmRoute.page),
     AutoDialogRoute(page: ColorPickerRoute.page),
@@ -165,6 +166,7 @@ class AppRouter extends _$AppRouter {
     AutoModalRouteSheet(page: NoteModalRoute.page),
     AutoModalRouteSheet(page: RenoteModalRoute.page),
     AutoModalRouteSheet(page: AntennaModalRoute.page),
+    AutoModalRouteSheet(page: ClipModalRoute.page),
     AutoModalRouteSheet(page: UsersListModalRoute.page),
     AutoModalRouteSheet(page: DriveModalRoute.page),
   ];

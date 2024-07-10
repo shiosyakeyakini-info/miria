@@ -6,7 +6,7 @@ part of 'user_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userInfoNotifierHash() => r'b92d65faddd89c9559bac8769111d8709ce18ba5';
+String _$userInfoNotifierHash() => r'95694d95b5db66d8965219ea91fa2e00b7247af9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,8 +29,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$UserInfoNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {
+abstract class _$UserInfoNotifier extends BuildlessAsyncNotifier<UserInfo> {
   late final String userId;
 
   FutureOr<UserInfo> build(
@@ -48,14 +47,14 @@ class UserInfoNotifierFamily extends Family {
   const UserInfoNotifierFamily();
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyGetContextProvider,
+    accountContextProvider,
     notesWithProvider
   ];
 
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies,
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies,
     notesWithProvider,
     ...?notesWithProvider.allTransitiveDependencies
   };
@@ -113,7 +112,7 @@ class _$UserInfoNotifierFamilyOverride implements FamilyOverride {
 
 /// See also [UserInfoNotifier].
 class UserInfoNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
+    extends AsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
   /// See also [UserInfoNotifier].
   UserInfoNotifierProvider(
     String userId,
@@ -174,8 +173,7 @@ class UserInfoNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
-      createElement() {
+  AsyncNotifierProviderElement<UserInfoNotifier, UserInfo> createElement() {
     return _UserInfoNotifierProviderElement(this);
   }
 
@@ -207,13 +205,13 @@ class UserInfoNotifierProvider
   }
 }
 
-mixin UserInfoNotifierRef on AutoDisposeAsyncNotifierProviderRef<UserInfo> {
+mixin UserInfoNotifierRef on AsyncNotifierProviderRef<UserInfo> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
 class _UserInfoNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
+    extends AsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
     with UserInfoNotifierRef {
   _UserInfoNotifierProviderElement(super.provider);
 

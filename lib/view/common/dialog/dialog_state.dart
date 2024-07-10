@@ -4,6 +4,7 @@ import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/providers.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
@@ -23,6 +24,12 @@ class DialogData with _$DialogData {
     required String Function(BuildContext context) message,
     required List<String> Function(BuildContext context) actions,
     required Completer<int> completer,
+    @Assert(
+      "!isMFM || isMFM && accountContext != null",
+      "account context must not be null when isMFM is true",
+    )
+    AccountContext? accountContext,
+    @Default(false) bool isMFM,
   }) = _DialogData;
 }
 
@@ -34,12 +41,20 @@ class DialogStateNotifier extends _$DialogStateNotifier {
   Future<int> showDialog({
     required String Function(BuildContext context) message,
     required List<String> Function(BuildContext context) actions,
+    bool isMFM = false,
+    AccountContext? accountContext,
   }) {
     final completer = Completer<int>();
     state = state.copyWith(
       dialogs: [
         ...state.dialogs,
-        DialogData(message: message, actions: actions, completer: completer),
+        DialogData(
+          message: message,
+          actions: actions,
+          completer: completer,
+          isMFM: isMFM,
+          accountContext: accountContext,
+        ),
       ],
     );
     return completer.future;

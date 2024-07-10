@@ -31,9 +31,8 @@ class UserPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfo = ref.watch(
-      userInfoNotifierProvider(userId).select((value) => value.valueOrNull),
-    );
+    final userInfo = ref.watch(userInfoNotifierProvider(userId)).valueOrNull;
+
     final isReactionAvailable = userInfo?.response.publicReactions == true ||
         (userInfo?.response.host == null &&
             userInfo?.response.username == accountContext.postAccount.userId);
@@ -186,16 +185,13 @@ class UserDetailTab extends ConsumerWidget {
     final userDetail = ref.watch(userInfoNotifierProvider(userId));
 
     return switch (userDetail) {
-      AsyncLoading() => const Center(
-          child: CircularProgressIndicator(),
-        ),
+      AsyncLoading() =>
+        const Center(child: CircularProgressIndicator.adaptive()),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(
           error: error,
           stackTrace: stackTrace,
         ),
-      AsyncData(:final value) => UserDetail(
-          response: value.response,
-        )
+      AsyncData(:final value) => UserDetail(response: value.response)
     };
   }
 }

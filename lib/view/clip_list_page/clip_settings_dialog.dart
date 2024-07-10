@@ -43,7 +43,7 @@ class _ClipSettingsNotifier extends AutoDisposeNotifier<ClipSettings> {
   }
 }
 
-@RoutePage()
+@RoutePage<ClipSettings>()
 class ClipSettingsDialog extends StatelessWidget {
   const ClipSettingsDialog({
     super.key,

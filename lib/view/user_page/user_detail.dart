@@ -27,10 +27,10 @@ class UserDetail extends ConsumerWidget {
 
   Widget buildContent(BuildContext context, WidgetRef ref) {
     final response = this.response;
-    final isFollowEditing = ref.watch(
-      userInfoNotifierProvider(response.id)
-          .select((value) => value.value?.follow is AsyncLoading),
-    );
+    // final isFollowEditing = ref.watch(
+    //   userInfoNotifierProvider(response.id)
+    //       .select((value) => value.value?.follow is AsyncLoading),
+    // );
     final notifier = ref.read(userInfoNotifierProvider(response.id).notifier);
     final memo = response.memo ?? "";
 
@@ -85,29 +85,29 @@ class UserDetail extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                            if (!isFollowEditing)
-                              if (response.isFollowing)
-                                ElevatedButton(
-                                  onPressed: notifier.deleteFollow,
-                                  child: Text(S.of(context).unfollow),
-                                )
-                              else if (response.hasPendingFollowRequestFromYou)
-                                ElevatedButton(
-                                  onPressed: notifier.cancelFollowRequest,
-                                  child: Text(
-                                    S.of(context).followRequestPending,
-                                  ),
-                                )
-                              else
-                                OutlinedButton(
-                                  onPressed: notifier.createFollow,
-                                  child: Text(
-                                    response.isLocked
-                                        ? S.of(context).followRequest
-                                        : S.of(context).createFollow,
-                                  ),
-                                )
+                            //if (!isFollowEditing)
+                            if (response.isFollowing)
+                              ElevatedButton(
+                                onPressed: notifier.deleteFollow,
+                                child: Text(S.of(context).unfollow),
+                              )
+                            else if (response.hasPendingFollowRequestFromYou)
+                              ElevatedButton(
+                                onPressed: notifier.cancelFollowRequest,
+                                child: Text(
+                                  S.of(context).followRequestPending,
+                                ),
+                              )
                             else
+                              OutlinedButton(
+                                onPressed: notifier.createFollow,
+                                child: Text(
+                                  response.isLocked
+                                      ? S.of(context).followRequest
+                                      : S.of(context).createFollow,
+                                ),
+                              )
+                            /*else
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton.icon(
@@ -127,7 +127,7 @@ class UserDetail extends ConsumerWidget {
                                   ),
                                   label: Text(S.of(context).refreshing),
                                 ),
-                              ),
+                              ),*/
                           ],
                         ),
                       ),
@@ -207,8 +207,7 @@ class UserDetail extends ConsumerWidget {
                         IconButton(
                           onPressed: () async => await context.pushRoute(
                             UpdateMemoRoute(
-                              account:
-                                  ref.read(accountContextProvider).postAccount,
+                              accountContext: ref.read(accountContextProvider),
                               initialMemo: memo,
                               userId: response.id,
                             ),

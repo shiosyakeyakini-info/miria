@@ -2,6 +2,7 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart" hide Clip;
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/hooks/use_async.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -22,8 +23,7 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(accountContext.postAccount));
-    final clips = ref.watch(clipsNotifierProvider(misskey));
+    final clips = ref.watch(clipsNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,9 +37,7 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
               );
               if (!context.mounted) return;
               if (settings == null) return;
-              await ref
-                  .read(clipsNotifierProvider(misskey).notifier)
-                  .create(settings);
+              await ref.read(clipsNotifierProvider.notifier).create(settings);
             },
           ),
         ],
@@ -52,18 +50,27 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
             itemCount: value.length,
             itemBuilder: (context, index) {
               final clip = value[index];
-              return ClipItem(
-                clip: value[index],
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () async => ref
-                      .read(clipsNotifierProvider(misskey).notifier)
-                      .delete(clip.id),
-                ),
-              );
+              return ClipItem(clip: clip, trailing: _RemoveButton(id: clip.id));
             },
           )
       },
+    );
+  }
+}
+
+class _RemoveButton extends HookConsumerWidget {
+  final String id;
+
+  const _RemoveButton({required this.id});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final delete = useAsync(
+      () async => ref.read(clipsNotifierProvider.notifier).delete(id),
+    );
+    return IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: delete.executeOrNull,
     );
   }
 }

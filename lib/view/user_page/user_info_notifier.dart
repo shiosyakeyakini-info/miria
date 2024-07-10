@@ -2,6 +2,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/user_page/user_control_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -18,27 +19,15 @@ class UserInfo with _$UserInfo {
     String? remoteUserId,
     UserDetailed? remoteResponse,
     MetaResponse? metaResponse,
-
-    /// メモの更新中
-    AsyncValue<void>? updateMemo,
-
-    /// フォロー操作中
-    AsyncValue<void>? follow,
-
-    /// ミュート操作中
-    AsyncValue<void>? mute,
-
-    /// リノート操作中
-    AsyncValue<void>? renoteMute,
-
-    /// ブロック操作中
-    AsyncValue<void>? block,
   }) = _UserInfo;
 
   const UserInfo._();
 }
 
-@Riverpod(dependencies: [misskeyGetContext, notesWith])
+@Riverpod(
+  dependencies: [misskeyGetContext, misskeyPostContext, notesWith],
+  keepAlive: true,
+)
 class UserInfoNotifier extends _$UserInfoNotifier {
   DialogStateNotifier get _dialog =>
       ref.read(dialogStateNotifierProvider.notifier);
@@ -86,227 +75,190 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     );
   }
 
-  Future<void> updateMemo(String text) async {
-    var before = await future;
-    state = AsyncData(before.copyWith(updateMemo: const AsyncLoading()));
-    final result = await _dialog.guard(
-      () async => ref.read(misskeyPostContextProvider).users.updateMemo(
+  Future<AsyncValue<void>> updateMemo(String text) async {
+    return await _dialog.guard(() async {
+      await ref.read(misskeyPostContextProvider).users.updateMemo(
             UsersUpdateMemoRequest(userId: userId, memo: text),
-          ),
-    );
-    before = await future;
+          );
 
-    state = AsyncData(
-      before.copyWith(
-        //TODO: こういう使い方するならAPIの結果をsealed classにしてあげたい
-        response: switch (before.response) {
-          UserDetailedNotMe(:final copyWith) => copyWith(memo: text),
-          UserDetailedNotMeWithRelations(:final copyWith) =>
-            copyWith(memo: text),
-          MeDetailed(:final copyWith) => copyWith(memo: text),
-          UserDetailed() => before.response,
-        },
-        updateMemo: result,
-      ),
-    );
+      final before = await future;
+      state = AsyncData(
+        before.copyWith(
+          //TODO: こういう使い方するならAPIの結果をsealed classにしてあげたい
+          response: switch (before.response) {
+            UserDetailedNotMe(:final copyWith) => copyWith(memo: text),
+            UserDetailedNotMeWithRelations(:final copyWith) =>
+              copyWith(memo: text),
+            MeDetailed(:final copyWith) => copyWith(memo: text),
+            UserDetailed() => before.response,
+          },
+        ),
+      );
+    });
   }
 
-  Future<void> createFollow() async {
-    var before = await future;
-    if (before.follow is AsyncLoading) return;
-
-    state = AsyncData(before.copyWith(follow: const AsyncLoading()));
-    final result = await _dialog.guard(
-      () async => await ref
+  Future<AsyncValue<void>> createFollow() async {
+    return await _dialog.guard(() async {
+      await ref
           .read(misskeyPostContextProvider)
           .following
-          .create(FollowingCreateRequest(userId: userId)),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          .create(FollowingCreateRequest(userId: userId));
 
-    final requiresFollowRequest = response.isLocked && !response.isFollowed;
-    state = AsyncData(
-      before.copyWith(
-        response: (before.response as UserDetailedNotMeWithRelations).copyWith(
-          isFollowing: !requiresFollowRequest,
-          hasPendingFollowRequestFromYou: requiresFollowRequest,
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
+
+      final requiresFollowRequest = response.isLocked && !response.isFollowed;
+      state = AsyncData(
+        before.copyWith(
+          response: response.copyWith(
+            isFollowing: !requiresFollowRequest,
+            hasPendingFollowRequestFromYou: requiresFollowRequest,
+          ),
         ),
-        follow: result,
-      ),
-    );
+      );
+    });
   }
 
-  Future<void> deleteFollow() async {
-    var before = await future;
-    if (before is AsyncLoading) return;
+  Future<AsyncValue<void>?> deleteFollow() async {
     final confirm = await _dialog.showDialog(
       message: (context) => S.of(context).confirmUnfollow,
       actions: (context) => [S.of(context).deleteFollow, S.of(context).cancel],
     );
-    if (confirm == 1) return;
-    state = AsyncData(before.copyWith(follow: const AsyncLoading()));
+    if (confirm == 1) return null;
 
-    final result = await _dialog.guard(
-      () async => await ref
+    return await _dialog.guard(() async {
+      await ref
           .read(misskeyPostContextProvider)
           .following
-          .delete(FollowingDeleteRequest(userId: userId)),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          .delete(FollowingDeleteRequest(userId: userId));
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isFollowing: false),
-        follow: result,
-      ),
-    );
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
+
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isFollowing: false)),
+      );
+    });
   }
 
-  Future<void> cancelFollowRequest() async {
-    var before = await future;
-    if (before.follow is AsyncLoading) return;
-    state = AsyncData(before.copyWith(follow: const AsyncLoading()));
-    final result = await _dialog.guard(
-      () async => await ref
+  Future<AsyncValue<void>> cancelFollowRequest() async {
+    return await _dialog.guard(() async {
+      await ref
           .read(misskeyPostContextProvider)
           .following
           .requests
-          .cancel(FollowingRequestsCancelRequest(userId: userId)),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          .cancel(FollowingRequestsCancelRequest(userId: userId));
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(hasPendingFollowRequestFromYou: false),
-        follow: result,
-      ),
-    );
+      state = AsyncData(
+        before.copyWith(
+          response: response.copyWith(hasPendingFollowRequestFromYou: false),
+        ),
+      );
+    });
   }
 
   /// ミュートする
-  Future<void> createMute(Expire expires) async {
-    var before = await future;
-    if (before.mute is AsyncLoading) return;
-    state = AsyncData(before.copyWith(mute: const AsyncLoading()));
+  Future<AsyncValue<void>?> createMute() async {
+    final expires = await ref.read(appRouterProvider).push<Expire?>(
+          const ExpireSelectRoute(),
+        );
+    if (expires == null) return null;
     final expiresDate = expires == Expire.indefinite
         ? null
         : DateTime.now().add(expires.expires!);
 
-    final result = await _dialog.guard(
-      () async => await ref.read(misskeyPostContextProvider).mute.create(
+    return await _dialog.guard(() async {
+      await ref.read(misskeyPostContextProvider).mute.create(
             MuteCreateRequest(
               userId: userId,
               expiresAt: expiresDate,
             ),
-          ),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          );
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isMuted: true),
-        mute: result,
-      ),
-    );
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
+
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isMuted: true)),
+      );
+      await ref.read(appRouterProvider).maybePop();
+    });
   }
 
   /// ミュートを解除する
-  Future<void> deleteMute() async {
-    var before = await future;
-    if (before.mute is AsyncLoading) return;
-    state = AsyncData(before.copyWith(mute: const AsyncLoading()));
-
-    final result = await _dialog.guard(
-      () async => await ref
+  Future<AsyncValue<void>?> deleteMute() async {
+    return await _dialog.guard(() async {
+      await ref
           .read(misskeyPostContextProvider)
           .mute
-          .delete(MuteDeleteRequest(userId: userId)),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          .delete(MuteDeleteRequest(userId: userId));
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isMuted: false),
-        mute: result,
-      ),
-    );
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isMuted: false)),
+      );
+      await ref.read(appRouterProvider).maybePop();
+    });
   }
 
   /// Renoteをミュートする
-  Future<void> createRenoteMute() async {
-    var before = await future;
-    if (before.renoteMute is AsyncLoading) return;
-    state = AsyncData(before.copyWith(renoteMute: const AsyncLoading()));
-
-    final result = await _dialog.guard(
-      () async => await ref.read(misskeyPostContextProvider).renoteMute.create(
+  Future<AsyncValue<void>> createRenoteMute() async {
+    return await _dialog.guard(() async {
+      await ref.read(misskeyPostContextProvider).renoteMute.create(
             RenoteMuteCreateRequest(userId: userId),
-          ),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          );
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isRenoteMuted: true),
-        renoteMute: result,
-      ),
-    );
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isRenoteMuted: true)),
+      );
+      await ref.read(appRouterProvider).maybePop();
+    });
   }
 
   /// Renoteのミュートを解除する
-  Future<void> deleteRenoteMute() async {
-    var before = await future;
-    if (before.renoteMute is AsyncLoading) return;
-    state = AsyncData(before.copyWith(renoteMute: const AsyncLoading()));
-
-    final result = await _dialog.guard(
-      () async => await ref.read(misskeyPostContextProvider).renoteMute.delete(
+  Future<AsyncValue<void>> deleteRenoteMute() async {
+    return await _dialog.guard(() async {
+      await ref.read(misskeyPostContextProvider).renoteMute.delete(
             RenoteMuteDeleteRequest(userId: userId),
-          ),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          );
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isRenoteMuted: false),
-        renoteMute: result,
-      ),
-    );
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isRenoteMuted: false)),
+      );
+      await ref.read(appRouterProvider).maybePop();
+    });
   }
 
   /// ブロックする
-  Future<void> createBlocking() async {
-    var before = await future;
-    if (before.block is AsyncLoading) return;
-
+  Future<AsyncValue<void>?> createBlocking() async {
     final confirm = await _dialog.showDialog(
       message: (context) => S.of(context).confirmCreateBlock,
       actions: (context) => [
@@ -314,52 +266,45 @@ class UserInfoNotifier extends _$UserInfoNotifier {
         S.of(context).cancel,
       ],
     );
-    if (confirm == 1) return;
-    state = AsyncData(before.copyWith(block: const AsyncLoading()));
+    if (confirm == 1) return null;
 
-    final result = await _dialog.guard(
-      () async => await ref
+    return await _dialog.guard(() async {
+      await ref
           .read(misskeyPostContextProvider)
           .blocking
-          .create(BlockCreateRequest(userId: userId)),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          .create(BlockCreateRequest(userId: userId));
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isBlocking: true),
-        block: result,
-      ),
-    );
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
+
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isBlocking: true)),
+      );
+      await ref.read(appRouterProvider).maybePop();
+    });
   }
 
   /// ブロックを解除する
-  Future<void> deleteBlocking() async {
-    var before = await future;
-    if (before.block is AsyncLoading) return;
-    state = AsyncData(before.copyWith(block: const AsyncLoading()));
-
-    final result = await _dialog.guard(
-      () async => await ref
+  Future<AsyncValue<void>> deleteBlocking() async {
+    return await _dialog.guard(() async {
+      await ref
           .read(misskeyPostContextProvider)
           .blocking
-          .delete(BlockDeleteRequest(userId: userId)),
-    );
-    before = await future;
-    final response = before.response;
-    if (response is! UserDetailedNotMeWithRelations) {
-      return;
-    }
+          .delete(BlockDeleteRequest(userId: userId));
 
-    state = AsyncData(
-      before.copyWith(
-        response: response.copyWith(isBlocking: false),
-        block: result,
-      ),
-    );
+      final before = await future;
+      final response = before.response;
+      if (response is! UserDetailedNotMeWithRelations) {
+        return;
+      }
+
+      state = AsyncData(
+        before.copyWith(response: response.copyWith(isBlocking: false)),
+      );
+      await ref.read(appRouterProvider).maybePop();
+    });
   }
 }

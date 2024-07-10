@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mfm/mfm.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 
 class DialogScope extends ConsumerWidget {
@@ -32,7 +34,14 @@ class DialogScope extends ConsumerWidget {
                 .read(dialogStateNotifierProvider.notifier)
                 .completeDialog(dialog, null),
             child: AlertDialog.adaptive(
-              content: Text(dialog.message(context)),
+              content: dialog.isMFM
+                  ? AccountContextScope(
+                      context: dialog.accountContext!,
+                      child: Mfm(
+                        mfmText: dialog.message(context),
+                      ),
+                    )
+                  : Text(dialog.message(context)),
               actions: [
                 for (final action in dialog.actions(context).indexed)
                   TextButton(

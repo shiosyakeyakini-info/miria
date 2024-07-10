@@ -198,10 +198,22 @@ abstract class _$AppRouter extends RootStackRouter {
         )),
       );
     },
+    ClipModalRoute.name: (routeData) {
+      final args = routeData.argsAs<ClipModalRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ClipModalSheet(
+          account: args.account,
+          noteId: args.noteId,
+          key: args.key,
+        )),
+      );
+    },
     ClipSettingsRoute.name: (routeData) {
       final args = routeData.argsAs<ClipSettingsRouteArgs>(
           orElse: () => const ClipSettingsRouteArgs());
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<ClipSettings>(
         routeData: routeData,
         child: ClipSettingsDialog(
           key: args.key,
@@ -633,12 +645,13 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<UpdateMemoRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UpdateMemoDialog(
-          account: args.account,
+        child: WrappedRoute(
+            child: UpdateMemoDialog(
+          accountContext: args.accountContext,
           initialMemo: args.initialMemo,
           userId: args.userId,
           key: args.key,
-        ),
+        )),
       );
     },
     UserControlRoute.name: (routeData) {
@@ -1423,6 +1436,49 @@ class ClipListRouteArgs {
   @override
   String toString() {
     return 'ClipListRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ClipModalSheet]
+class ClipModalRoute extends PageRouteInfo<ClipModalRouteArgs> {
+  ClipModalRoute({
+    required Account account,
+    required String noteId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ClipModalRoute.name,
+          args: ClipModalRouteArgs(
+            account: account,
+            noteId: noteId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ClipModalRoute';
+
+  static const PageInfo<ClipModalRouteArgs> page =
+      PageInfo<ClipModalRouteArgs>(name);
+}
+
+class ClipModalRouteArgs {
+  const ClipModalRouteArgs({
+    required this.account,
+    required this.noteId,
+    this.key,
+  });
+
+  final Account account;
+
+  final String noteId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ClipModalRouteArgs{account: $account, noteId: $noteId, key: $key}';
   }
 }
 
@@ -2919,7 +2975,7 @@ class TimeLineRouteArgs {
 /// [UpdateMemoDialog]
 class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
   UpdateMemoRoute({
-    required Account account,
+    required AccountContext accountContext,
     required String initialMemo,
     required String userId,
     Key? key,
@@ -2927,7 +2983,7 @@ class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
   }) : super(
           UpdateMemoRoute.name,
           args: UpdateMemoRouteArgs(
-            account: account,
+            accountContext: accountContext,
             initialMemo: initialMemo,
             userId: userId,
             key: key,
@@ -2943,13 +2999,13 @@ class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
 
 class UpdateMemoRouteArgs {
   const UpdateMemoRouteArgs({
-    required this.account,
+    required this.accountContext,
     required this.initialMemo,
     required this.userId,
     this.key,
   });
 
-  final Account account;
+  final AccountContext accountContext;
 
   final String initialMemo;
 
@@ -2959,7 +3015,7 @@ class UpdateMemoRouteArgs {
 
   @override
   String toString() {
-    return 'UpdateMemoRouteArgs{account: $account, initialMemo: $initialMemo, userId: $userId, key: $key}';
+    return 'UpdateMemoRouteArgs{accountContext: $accountContext, initialMemo: $initialMemo, userId: $userId, key: $key}';
   }
 }
 
