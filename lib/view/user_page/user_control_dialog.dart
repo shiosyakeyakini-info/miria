@@ -44,16 +44,14 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = userInfoNotifierProvider(response.id);
+    final provider = userInfoNotifierProxyProvider(response.id);
 
-    final createBlocking = useAsync(ref.read(provider.notifier).createBlocking);
-    final deleteBlocking = useAsync(ref.read(provider.notifier).deleteBlocking);
-    final createRenoteMute =
-        useAsync(ref.read(provider.notifier).createRenoteMute);
-    final deleteRenoteMute =
-        useAsync(ref.read(provider.notifier).deleteRenoteMute);
-    final createMute = useAsync(ref.read(provider.notifier).createMute);
-    final deleteMute = useAsync(ref.read(provider.notifier).deleteMute);
+    final createBlocking = useAsync(ref.read(provider).createBlocking);
+    final deleteBlocking = useAsync(ref.read(provider).deleteBlocking);
+    final createRenoteMute = useAsync(ref.read(provider).createRenoteMute);
+    final deleteRenoteMute = useAsync(ref.read(provider).deleteRenoteMute);
+    final createMute = useAsync(ref.read(provider).createMute);
+    final deleteMute = useAsync(ref.read(provider).deleteMute);
     final copyName = useAsync(() async {
       await Clipboard.setData(
         ClipboardData(text: response.name ?? response.username),

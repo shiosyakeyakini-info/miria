@@ -6,7 +6,8 @@ part of 'user_info_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userInfoNotifierHash() => r'95694d95b5db66d8965219ea91fa2e00b7247af9';
+String _$userInfoNotifierProxyHash() =>
+    r'a037ea58aeb7dca78033b5f2813cdc19e25a4ac8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,12 +30,370 @@ class _SystemHash {
   }
 }
 
-abstract class _$UserInfoNotifier extends BuildlessAsyncNotifier<UserInfo> {
-  late final String userId;
+/// See also [userInfoNotifierProxy].
+@ProviderFor(userInfoNotifierProxy)
+const userInfoNotifierProxyProvider = UserInfoNotifierProxyFamily();
 
-  FutureOr<UserInfo> build(
+/// See also [userInfoNotifierProxy].
+class UserInfoNotifierProxyFamily extends Family {
+  /// See also [userInfoNotifierProxy].
+  const UserInfoNotifierProxyFamily();
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    accountContextProvider
+  ];
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userInfoNotifierProxyProvider';
+
+  /// See also [userInfoNotifierProxy].
+  UserInfoNotifierProxyProvider call(
     String userId,
-  );
+  ) {
+    return UserInfoNotifierProxyProvider(
+      userId,
+    );
+  }
+
+  @visibleForOverriding
+  @override
+  UserInfoNotifierProxyProvider getProviderOverride(
+    covariant UserInfoNotifierProxyProvider provider,
+  ) {
+    return call(
+      provider.userId,
+    );
+  }
+
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(
+      UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create) {
+    return _$UserInfoNotifierProxyFamilyOverride(this, create);
+  }
+}
+
+class _$UserInfoNotifierProxyFamilyOverride implements FamilyOverride {
+  _$UserInfoNotifierProxyFamilyOverride(this.overriddenFamily, this.create);
+
+  final UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create;
+
+  @override
+  final UserInfoNotifierProxyFamily overriddenFamily;
+
+  @override
+  UserInfoNotifierProxyProvider getProviderOverride(
+    covariant UserInfoNotifierProxyProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
+}
+
+/// See also [userInfoNotifierProxy].
+class UserInfoNotifierProxyProvider
+    extends AutoDisposeProvider<UserInfoNotifier> {
+  /// See also [userInfoNotifierProxy].
+  UserInfoNotifierProxyProvider(
+    String userId,
+  ) : this._internal(
+          (ref) => userInfoNotifierProxy(
+            ref as UserInfoNotifierProxyRef,
+            userId,
+          ),
+          from: userInfoNotifierProxyProvider,
+          name: r'userInfoNotifierProxyProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userInfoNotifierProxyHash,
+          dependencies: UserInfoNotifierProxyFamily._dependencies,
+          allTransitiveDependencies:
+              UserInfoNotifierProxyFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  UserInfoNotifierProxyProvider._internal(
+    super.create, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final String userId;
+
+  @override
+  Override overrideWith(
+    UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserInfoNotifierProxyProvider._internal(
+        (ref) => create(ref as UserInfoNotifierProxyRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  (String,) get argument {
+    return (userId,);
+  }
+
+  @override
+  AutoDisposeProviderElement<UserInfoNotifier> createElement() {
+    return _UserInfoNotifierProxyProviderElement(this);
+  }
+
+  UserInfoNotifierProxyProvider _copyWith(
+    UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create,
+  ) {
+    return UserInfoNotifierProxyProvider._internal(
+      (ref) => create(ref as UserInfoNotifierProxyRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      userId: userId,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserInfoNotifierProxyProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UserInfoNotifierProxyRef on AutoDisposeProviderRef<UserInfoNotifier> {
+  /// The parameter `userId` of this provider.
+  String get userId;
+}
+
+class _UserInfoNotifierProxyProviderElement
+    extends AutoDisposeProviderElement<UserInfoNotifier>
+    with UserInfoNotifierProxyRef {
+  _UserInfoNotifierProxyProviderElement(super.provider);
+
+  @override
+  String get userId => (origin as UserInfoNotifierProxyProvider).userId;
+}
+
+String _$userInfoProxyHash() => r'f05bda4353cb2f3c6459b1548021ad68fb66bd5e';
+
+/// See also [userInfoProxy].
+@ProviderFor(userInfoProxy)
+const userInfoProxyProvider = UserInfoProxyFamily();
+
+/// See also [userInfoProxy].
+class UserInfoProxyFamily extends Family {
+  /// See also [userInfoProxy].
+  const UserInfoProxyFamily();
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    accountContextProvider
+  ];
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userInfoProxyProvider';
+
+  /// See also [userInfoProxy].
+  UserInfoProxyProvider call(
+    String userId,
+  ) {
+    return UserInfoProxyProvider(
+      userId,
+    );
+  }
+
+  @visibleForOverriding
+  @override
+  UserInfoProxyProvider getProviderOverride(
+    covariant UserInfoProxyProvider provider,
+  ) {
+    return call(
+      provider.userId,
+    );
+  }
+
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(
+      AsyncValue<UserInfo> Function(UserInfoProxyRef ref) create) {
+    return _$UserInfoProxyFamilyOverride(this, create);
+  }
+}
+
+class _$UserInfoProxyFamilyOverride implements FamilyOverride {
+  _$UserInfoProxyFamilyOverride(this.overriddenFamily, this.create);
+
+  final AsyncValue<UserInfo> Function(UserInfoProxyRef ref) create;
+
+  @override
+  final UserInfoProxyFamily overriddenFamily;
+
+  @override
+  UserInfoProxyProvider getProviderOverride(
+    covariant UserInfoProxyProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
+}
+
+/// See also [userInfoProxy].
+class UserInfoProxyProvider extends AutoDisposeProvider<AsyncValue<UserInfo>> {
+  /// See also [userInfoProxy].
+  UserInfoProxyProvider(
+    String userId,
+  ) : this._internal(
+          (ref) => userInfoProxy(
+            ref as UserInfoProxyRef,
+            userId,
+          ),
+          from: userInfoProxyProvider,
+          name: r'userInfoProxyProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userInfoProxyHash,
+          dependencies: UserInfoProxyFamily._dependencies,
+          allTransitiveDependencies:
+              UserInfoProxyFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  UserInfoProxyProvider._internal(
+    super.create, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final String userId;
+
+  @override
+  Override overrideWith(
+    AsyncValue<UserInfo> Function(UserInfoProxyRef ref) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserInfoProxyProvider._internal(
+        (ref) => create(ref as UserInfoProxyRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  (String,) get argument {
+    return (userId,);
+  }
+
+  @override
+  AutoDisposeProviderElement<AsyncValue<UserInfo>> createElement() {
+    return _UserInfoProxyProviderElement(this);
+  }
+
+  UserInfoProxyProvider _copyWith(
+    AsyncValue<UserInfo> Function(UserInfoProxyRef ref) create,
+  ) {
+    return UserInfoProxyProvider._internal(
+      (ref) => create(ref as UserInfoProxyRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      userId: userId,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserInfoProxyProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UserInfoProxyRef on AutoDisposeProviderRef<AsyncValue<UserInfo>> {
+  /// The parameter `userId` of this provider.
+  String get userId;
+}
+
+class _UserInfoProxyProviderElement
+    extends AutoDisposeProviderElement<AsyncValue<UserInfo>>
+    with UserInfoProxyRef {
+  _UserInfoProxyProviderElement(super.provider);
+
+  @override
+  String get userId => (origin as UserInfoProxyProvider).userId;
+}
+
+String _$userInfoNotifierHash() => r'b2c2aa433c8054aede793c4e209486fb20952859';
+
+abstract class _$UserInfoNotifier
+    extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {
+  late final String userId;
+  late final AccountContext context;
+
+  FutureOr<UserInfo> build({
+    required String userId,
+    required AccountContext context,
+  });
 }
 
 /// See also [UserInfoNotifier].
@@ -46,18 +405,9 @@ class UserInfoNotifierFamily extends Family {
   /// See also [UserInfoNotifier].
   const UserInfoNotifierFamily();
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    accountContextProvider,
-    notesWithProvider
-  ];
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
 
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies,
-    notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies
-  };
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
@@ -70,11 +420,13 @@ class UserInfoNotifierFamily extends Family {
   String? get name => r'userInfoNotifierProvider';
 
   /// See also [UserInfoNotifier].
-  UserInfoNotifierProvider call(
-    String userId,
-  ) {
+  UserInfoNotifierProvider call({
+    required String userId,
+    required AccountContext context,
+  }) {
     return UserInfoNotifierProvider(
-      userId,
+      userId: userId,
+      context: context,
     );
   }
 
@@ -84,7 +436,8 @@ class UserInfoNotifierFamily extends Family {
     covariant UserInfoNotifierProvider provider,
   ) {
     return call(
-      provider.userId,
+      userId: provider.userId,
+      context: provider.context,
     );
   }
 
@@ -112,12 +465,15 @@ class _$UserInfoNotifierFamilyOverride implements FamilyOverride {
 
 /// See also [UserInfoNotifier].
 class UserInfoNotifierProvider
-    extends AsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
+    extends AutoDisposeAsyncNotifierProviderImpl<UserInfoNotifier, UserInfo> {
   /// See also [UserInfoNotifier].
-  UserInfoNotifierProvider(
-    String userId,
-  ) : this._internal(
-          () => UserInfoNotifier()..userId = userId,
+  UserInfoNotifierProvider({
+    required String userId,
+    required AccountContext context,
+  }) : this._internal(
+          () => UserInfoNotifier()
+            ..userId = userId
+            ..context = context,
           from: userInfoNotifierProvider,
           name: r'userInfoNotifierProvider',
           debugGetCreateSourceHash:
@@ -128,6 +484,7 @@ class UserInfoNotifierProvider
           allTransitiveDependencies:
               UserInfoNotifierFamily._allTransitiveDependencies,
           userId: userId,
+          context: context,
         );
 
   UserInfoNotifierProvider._internal(
@@ -138,16 +495,19 @@ class UserInfoNotifierProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.userId,
+    required this.context,
   }) : super.internal();
 
   final String userId;
+  final AccountContext context;
 
   @override
   FutureOr<UserInfo> runNotifierBuild(
     covariant UserInfoNotifier notifier,
   ) {
     return notifier.build(
-      userId,
+      userId: userId,
+      context: context,
     );
   }
 
@@ -156,24 +516,34 @@ class UserInfoNotifierProvider
     return ProviderOverride(
       origin: this,
       override: UserInfoNotifierProvider._internal(
-        () => create()..userId = userId,
+        () => create()
+          ..userId = userId
+          ..context = context,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         userId: userId,
+        context: context,
       ),
     );
   }
 
   @override
-  (String,) get argument {
-    return (userId,);
+  ({
+    String userId,
+    AccountContext context,
+  }) get argument {
+    return (
+      userId: userId,
+      context: context,
+    );
   }
 
   @override
-  AsyncNotifierProviderElement<UserInfoNotifier, UserInfo> createElement() {
+  AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
+      createElement() {
     return _UserInfoNotifierProviderElement(this);
   }
 
@@ -181,42 +551,53 @@ class UserInfoNotifierProvider
     UserInfoNotifier Function() create,
   ) {
     return UserInfoNotifierProvider._internal(
-      () => create()..userId = userId,
+      () => create()
+        ..userId = userId
+        ..context = context,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
       userId: userId,
+      context: context,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UserInfoNotifierProvider && other.userId == userId;
+    return other is UserInfoNotifierProvider &&
+        other.userId == userId &&
+        other.context == context;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, userId.hashCode);
+    hash = _SystemHash.combine(hash, context.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin UserInfoNotifierRef on AsyncNotifierProviderRef<UserInfo> {
+mixin UserInfoNotifierRef on AutoDisposeAsyncNotifierProviderRef<UserInfo> {
   /// The parameter `userId` of this provider.
   String get userId;
+
+  /// The parameter `context` of this provider.
+  AccountContext get context;
 }
 
 class _UserInfoNotifierProviderElement
-    extends AsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
+    extends AutoDisposeAsyncNotifierProviderElement<UserInfoNotifier, UserInfo>
     with UserInfoNotifierRef {
   _UserInfoNotifierProviderElement(super.provider);
 
   @override
   String get userId => (origin as UserInfoNotifierProvider).userId;
+  @override
+  AccountContext get context => (origin as UserInfoNotifierProvider).context;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

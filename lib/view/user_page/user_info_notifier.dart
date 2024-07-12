@@ -2,6 +2,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/note_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/user_page/user_control_dialog.dart";
@@ -24,28 +25,59 @@ class UserInfo with _$UserInfo {
   const UserInfo._();
 }
 
-@Riverpod(
-  dependencies: [misskeyGetContext, misskeyPostContext, notesWith],
-  keepAlive: true,
-)
+// Riverpod 3.0ではこのようなことをする必要がないはず
+// でもまだ https://github.com/rrousselGit/riverpod/issues/767 の機能がないことに加え、
+// https://github.com/rrousselGit/riverpod/issues/2383 のようなこともあるので、
+// UserInfoNotifierが直接accountContextにdependenciesを設定したり、引数のデフォルトにしたりすることが現状できない。
+@Riverpod(dependencies: [accountContext])
+Raw<UserInfoNotifier> userInfoNotifierProxy(
+  UserInfoNotifierProxyRef ref,
+  String userId,
+) {
+  return ref.read(
+    userInfoNotifierProvider(
+      userId: userId,
+      context: ref.read(accountContextProvider),
+    ).notifier,
+  );
+}
+
+@Riverpod(dependencies: [accountContext])
+AsyncValue<UserInfo> userInfoProxy(UserInfoProxyRef ref, String userId) {
+  return ref.watch(
+    userInfoNotifierProvider(
+      userId: userId,
+      context: ref.read(accountContextProvider),
+    ),
+  );
+}
+
+@Riverpod()
 class UserInfoNotifier extends _$UserInfoNotifier {
   DialogStateNotifier get _dialog =>
       ref.read(dialogStateNotifierProvider.notifier);
 
+  Misskey get _getMisskey => ref.read(misskeyProvider(context.getAccount));
+  Misskey get _postMisskey => ref.read(misskeyProvider(context.postAccount));
+  NoteRepository get _noteRepo => ref.read(notesProvider(context.getAccount));
+
   @override
-  Future<UserInfo> build(String userId) async {
-    final localResponse = await ref
-        .read(misskeyGetContextProvider)
-        .users
-        .show(UsersShowRequest(userId: userId));
-    ref.read(notesWithProvider).registerAll(localResponse.pinnedNotes ?? []);
+  Future<UserInfo> build({
+    required String userId,
+    required AccountContext context,
+  }) async {
+    final localResponse =
+        await _getMisskey.users.show(UsersShowRequest(userId: userId));
+    _noteRepo.registerAll(localResponse.pinnedNotes ?? []);
 
     final remoteHost = localResponse.host;
     final localOnlyState = AsyncData(
       UserInfo(userId: userId, response: localResponse),
     );
     state = localOnlyState;
-    if (remoteHost == null) return localOnlyState.value;
+    if (remoteHost == null) {
+      return localOnlyState.value;
+    }
 
     final meta =
         await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
@@ -77,9 +109,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
   Future<AsyncValue<void>> updateMemo(String text) async {
     return await _dialog.guard(() async {
-      await ref.read(misskeyPostContextProvider).users.updateMemo(
-            UsersUpdateMemoRequest(userId: userId, memo: text),
-          );
+      await _postMisskey.users.updateMemo(
+        UsersUpdateMemoRequest(userId: userId, memo: text),
+      );
 
       final before = await future;
       state = AsyncData(
@@ -99,9 +131,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
   Future<AsyncValue<void>> createFollow() async {
     return await _dialog.guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .following
+      await _postMisskey.following
           .create(FollowingCreateRequest(userId: userId));
 
       final before = await future;
@@ -130,9 +160,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     if (confirm == 1) return null;
 
     return await _dialog.guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .following
+      await _postMisskey.following
           .delete(FollowingDeleteRequest(userId: userId));
 
       final before = await future;
@@ -149,10 +177,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
   Future<AsyncValue<void>> cancelFollowRequest() async {
     return await _dialog.guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .following
-          .requests
+      await _postMisskey.following.requests
           .cancel(FollowingRequestsCancelRequest(userId: userId));
       final before = await future;
       final response = before.response;
@@ -179,12 +204,12 @@ class UserInfoNotifier extends _$UserInfoNotifier {
         : DateTime.now().add(expires.expires!);
 
     return await _dialog.guard(() async {
-      await ref.read(misskeyPostContextProvider).mute.create(
-            MuteCreateRequest(
-              userId: userId,
-              expiresAt: expiresDate,
-            ),
-          );
+      await _postMisskey.mute.create(
+        MuteCreateRequest(
+          userId: userId,
+          expiresAt: expiresDate,
+        ),
+      );
 
       final before = await future;
       final response = before.response;
@@ -202,10 +227,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
   /// ミュートを解除する
   Future<AsyncValue<void>?> deleteMute() async {
     return await _dialog.guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .mute
-          .delete(MuteDeleteRequest(userId: userId));
+      await _postMisskey.mute.delete(MuteDeleteRequest(userId: userId));
       final before = await future;
       final response = before.response;
       if (response is! UserDetailedNotMeWithRelations) {
@@ -222,9 +244,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
   /// Renoteをミュートする
   Future<AsyncValue<void>> createRenoteMute() async {
     return await _dialog.guard(() async {
-      await ref.read(misskeyPostContextProvider).renoteMute.create(
-            RenoteMuteCreateRequest(userId: userId),
-          );
+      await _postMisskey.renoteMute.create(
+        RenoteMuteCreateRequest(userId: userId),
+      );
       final before = await future;
       final response = before.response;
       if (response is! UserDetailedNotMeWithRelations) {
@@ -241,9 +263,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
   /// Renoteのミュートを解除する
   Future<AsyncValue<void>> deleteRenoteMute() async {
     return await _dialog.guard(() async {
-      await ref.read(misskeyPostContextProvider).renoteMute.delete(
-            RenoteMuteDeleteRequest(userId: userId),
-          );
+      await _postMisskey.renoteMute.delete(
+        RenoteMuteDeleteRequest(userId: userId),
+      );
       final before = await future;
       final response = before.response;
       if (response is! UserDetailedNotMeWithRelations) {
@@ -269,10 +291,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     if (confirm == 1) return null;
 
     return await _dialog.guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .blocking
-          .create(BlockCreateRequest(userId: userId));
+      await _postMisskey.blocking.create(BlockCreateRequest(userId: userId));
 
       final before = await future;
       final response = before.response;
@@ -290,10 +309,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
   /// ブロックを解除する
   Future<AsyncValue<void>> deleteBlocking() async {
     return await _dialog.guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .blocking
-          .delete(BlockDeleteRequest(userId: userId));
+      await _postMisskey.blocking.delete(BlockDeleteRequest(userId: userId));
 
       final before = await future;
       final response = before.response;

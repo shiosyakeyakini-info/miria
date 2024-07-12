@@ -1,6 +1,9 @@
+import "dart:async";
+
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
@@ -16,7 +19,7 @@ import "package:miria/view/user_page/user_plays.dart";
 import "package:miria/view/user_page/user_reactions.dart";
 
 @RoutePage()
-class UserPage extends ConsumerWidget implements AutoRouteWrapper {
+class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
   final String userId;
   final AccountContext accountContext;
   const UserPage({
@@ -31,7 +34,7 @@ class UserPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfo = ref.watch(userInfoNotifierProvider(userId)).valueOrNull;
+    final userInfo = ref.watch(userInfoProxyProvider(userId)).valueOrNull;
 
     final isReactionAvailable = userInfo?.response.publicReactions == true ||
         (userInfo?.response.host == null &&
@@ -182,7 +185,7 @@ class UserDetailTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userDetail = ref.watch(userInfoNotifierProvider(userId));
+    final userDetail = ref.watch(userInfoProxyProvider(userId));
 
     return switch (userDetail) {
       AsyncLoading() =>

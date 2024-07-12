@@ -92,7 +92,7 @@ class UserNotes extends HookConsumerWidget {
               IconButton(
                 onPressed: () async {
                   final userInfo = ref.read(
-                    userInfoNotifierProvider(userId)
+                    userInfoProxyProvider(userId)
                         .select((value) => value.requireValue),
                   );
                   final firstDate = ref.read(accountContextProvider).isSame

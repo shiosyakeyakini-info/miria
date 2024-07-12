@@ -1,7 +1,10 @@
+import "dart:async";
+
 import "package:auto_route/auto_route.dart";
 import "package:confetti/confetti.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/extensions/string_extensions.dart";
@@ -31,7 +34,7 @@ class UserDetail extends ConsumerWidget {
     //   userInfoNotifierProvider(response.id)
     //       .select((value) => value.value?.follow is AsyncLoading),
     // );
-    final notifier = ref.read(userInfoNotifierProvider(response.id).notifier);
+    final notifier = ref.read(userInfoNotifierProxyProvider(response.id));
     final memo = response.memo ?? "";
 
     final isSameAccount = ref.read(accountContextProvider).isSame;
