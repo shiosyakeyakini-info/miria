@@ -169,10 +169,10 @@ class UserDetail extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          MfmText(
-                            mfmText: response.name ?? response.username,
+                          SimpleMfmText(
+                            response.name ?? response.username,
                             style: Theme.of(context).textTheme.headlineSmall,
-                            emoji: response.emojis,
+                            emojis: response.emojis,
                           ),
                           Text(
                             response.acct,
