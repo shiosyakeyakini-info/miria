@@ -7,7 +7,7 @@ part of 'user_info_notifier.dart';
 // **************************************************************************
 
 String _$userInfoNotifierProxyHash() =>
-    r'a037ea58aeb7dca78033b5f2813cdc19e25a4ac8';
+    r'45c3a25fbd146b289be6e8929752418ed1adf59a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -80,7 +80,7 @@ class UserInfoNotifierProxyFamily extends Family {
 
   /// Enables overriding the behavior of this provider, no matter the parameters.
   Override overrideWith(
-      UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create) {
+      Raw<UserInfoNotifier> Function(UserInfoNotifierProxyRef ref) create) {
     return _$UserInfoNotifierProxyFamilyOverride(this, create);
   }
 }
@@ -88,7 +88,7 @@ class UserInfoNotifierProxyFamily extends Family {
 class _$UserInfoNotifierProxyFamilyOverride implements FamilyOverride {
   _$UserInfoNotifierProxyFamilyOverride(this.overriddenFamily, this.create);
 
-  final UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create;
+  final Raw<UserInfoNotifier> Function(UserInfoNotifierProxyRef ref) create;
 
   @override
   final UserInfoNotifierProxyFamily overriddenFamily;
@@ -103,7 +103,7 @@ class _$UserInfoNotifierProxyFamilyOverride implements FamilyOverride {
 
 /// See also [userInfoNotifierProxy].
 class UserInfoNotifierProxyProvider
-    extends AutoDisposeProvider<UserInfoNotifier> {
+    extends AutoDisposeProvider<Raw<UserInfoNotifier>> {
   /// See also [userInfoNotifierProxy].
   UserInfoNotifierProxyProvider(
     String userId,
@@ -138,7 +138,7 @@ class UserInfoNotifierProxyProvider
 
   @override
   Override overrideWith(
-    UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create,
+    Raw<UserInfoNotifier> Function(UserInfoNotifierProxyRef ref) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -160,12 +160,12 @@ class UserInfoNotifierProxyProvider
   }
 
   @override
-  AutoDisposeProviderElement<UserInfoNotifier> createElement() {
+  AutoDisposeProviderElement<Raw<UserInfoNotifier>> createElement() {
     return _UserInfoNotifierProxyProviderElement(this);
   }
 
   UserInfoNotifierProxyProvider _copyWith(
-    UserInfoNotifier Function(UserInfoNotifierProxyRef ref) create,
+    Raw<UserInfoNotifier> Function(UserInfoNotifierProxyRef ref) create,
   ) {
     return UserInfoNotifierProxyProvider._internal(
       (ref) => create(ref as UserInfoNotifierProxyRef),
@@ -192,13 +192,14 @@ class UserInfoNotifierProxyProvider
   }
 }
 
-mixin UserInfoNotifierProxyRef on AutoDisposeProviderRef<UserInfoNotifier> {
+mixin UserInfoNotifierProxyRef
+    on AutoDisposeProviderRef<Raw<UserInfoNotifier>> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
 class _UserInfoNotifierProxyProviderElement
-    extends AutoDisposeProviderElement<UserInfoNotifier>
+    extends AutoDisposeProviderElement<Raw<UserInfoNotifier>>
     with UserInfoNotifierProxyRef {
   _UserInfoNotifierProxyProviderElement(super.provider);
 
@@ -383,7 +384,7 @@ class _UserInfoProxyProviderElement
   String get userId => (origin as UserInfoProxyProvider).userId;
 }
 
-String _$userInfoNotifierHash() => r'b2c2aa433c8054aede793c4e209486fb20952859';
+String _$userInfoNotifierHash() => r'1a6283b0f9585b638d1ccda567b05336f32960a6';
 
 abstract class _$UserInfoNotifier
     extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {

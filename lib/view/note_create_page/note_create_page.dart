@@ -4,6 +4,7 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/account.dart";
@@ -39,8 +40,7 @@ final noteFocusProvider =
 enum NoteCreationMode { update, recreate }
 
 @RoutePage()
-class NoteCreatePage extends ConsumerStatefulWidget
-    implements AutoRouteWrapper {
+class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
   final Account initialAccount;
   final String? initialText;
   final List<String>? initialMediaFiles;
@@ -64,57 +64,40 @@ class NoteCreatePage extends ConsumerStatefulWidget
     this.noteCreationMode,
   });
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => NoteCreatePageState();
-
-  @override
-  Widget wrappedRoute(BuildContext context) =>
-      AccountContextScope.as(account: initialAccount, child: this);
-}
-
-class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
-  late final focusNode = ref.watch(noteFocusProvider);
-  var isFirstChangeDependenciesCalled = false;
-
-  NoteCreate get data => ref.read(noteCreateNotifierProvider);
-  NoteCreateNotifier get notifier =>
-      ref.read(noteCreateNotifierProvider.notifier);
-
   static const shareExtensionMethodChannel =
       MethodChannel("info.shiosyakeyakini.miria/share_extension");
 
   @override
-  void initState() {
-    super.initState();
-  }
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: initialAccount, child: this);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (isFirstChangeDependenciesCalled) return;
-    isFirstChangeDependenciesCalled = true;
-    Future(() async {
-      await notifier.initialize(
-        widget.channel,
-        widget.initialText,
-        widget.initialMediaFiles,
-        widget.note,
-        widget.renote,
-        widget.reply,
-        widget.noteCreationMode,
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final focusNode = ref.watch(noteFocusProvider);
+    final notifier = ref.read(noteCreateNotifierProvider.notifier);
+    final controller = ref.watch(noteInputTextProvider);
 
-      ref.read(noteInputTextProvider).addListener(() {
+    useMemoized(() {
+      unawaited(() async {
+        await notifier.initialize(
+          channel,
+          initialText,
+          initialMediaFiles,
+          note,
+          renote,
+          reply,
+          noteCreationMode,
+        );
+      }());
+
+      controller.addListener(() {
         notifier.setContentText(ref.read(noteInputTextProvider).text);
       });
       focusNode.addListener(() {
         notifier.setContentTextFocused(focusNode.hasFocus);
       });
     });
-  }
 
-  @override
-  Widget build(BuildContext context) {
     ref
       ..listen(
         noteCreateNotifierProvider.select((value) => value.text),
@@ -132,7 +115,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
             IndicatorView.showIndicator(context);
           case NoteSendStatus.finished:
             IndicatorView.hideIndicator(context);
-            if (widget.exitOnNoted) {
+            if (exitOnNoted) {
               await shareExtensionMethodChannel.invokeMethod("exit");
             } else {
               Navigator.of(context).pop();
@@ -146,7 +129,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
       });
 
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
-          hintText: (widget.renote != null || widget.reply != null)
+          hintText: (renote != null || reply != null)
               ? S.of(context).replyNotePlaceholder
               : S.of(context).defaultNotePlaceholder,
           contentPadding: const EdgeInsets.all(5),
@@ -174,7 +157,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    if (widget.noteCreationMode != NoteCreationMode.update)
+                    if (noteCreationMode != NoteCreationMode.update)
                       const NoteCreateSettingTop()
                     else
                       const Padding(padding: EdgeInsets.only(top: 30)),
@@ -194,7 +177,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                         return KeyEventResult.ignored;
                       },
                       child: TextField(
-                        controller: ref.watch(noteInputTextProvider),
+                        controller: controller,
                         focusNode: focusNode,
                         maxLines: null,
                         minLines: 5,
@@ -205,14 +188,12 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                     ),
                     Row(
                       children: [
-                        if (widget.noteCreationMode !=
-                            NoteCreationMode.update) ...[
+                        if (noteCreationMode != NoteCreationMode.update) ...[
                           IconButton(
                             onPressed: () async => await notifier.chooseFile(),
                             icon: const Icon(Icons.image),
                           ),
-                          if (widget.noteCreationMode !=
-                              NoteCreationMode.update)
+                          if (noteCreationMode != NoteCreationMode.update)
                             IconButton(
                               onPressed: () {
                                 ref
@@ -223,7 +204,7 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                             ),
                         ],
                         const CwToggleButton(),
-                        if (widget.noteCreationMode != NoteCreationMode.update)
+                        if (noteCreationMode != NoteCreationMode.update)
                           IconButton(
                             onPressed: () async => notifier.addReplyUser(),
                             icon: const Icon(Icons.mail_outline),
@@ -259,14 +240,14 @@ class NoteCreatePageState extends ConsumerState<NoteCreatePage> {
                       ],
                     ),
                     const MfmPreview(),
-                    if (widget.noteCreationMode != NoteCreationMode.update)
+                    if (noteCreationMode != NoteCreationMode.update)
                       const FilePreview()
-                    else if (widget.note?.files.isNotEmpty == true)
+                    else if (note?.files.isNotEmpty == true)
                       Text(S.of(context).hasMediaButCannotEdit),
                     const RenoteArea(),
-                    if (widget.noteCreationMode != NoteCreationMode.update)
+                    if (noteCreationMode != NoteCreationMode.update)
                       const VoteArea()
-                    else if (widget.note?.poll != null)
+                    else if (note?.poll != null)
                       Text(S.of(context).hasVoteButCannotEdit),
                   ],
                 ),

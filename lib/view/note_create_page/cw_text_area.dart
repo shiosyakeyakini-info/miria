@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/themes/app_theme.dart";
 
-class CwTextArea extends ConsumerWidget {
+class CwTextArea extends HookConsumerWidget {
   const CwTextArea({super.key});
 
   @override

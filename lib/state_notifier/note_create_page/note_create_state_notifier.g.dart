@@ -7,7 +7,7 @@ part of 'note_create_state_notifier.dart';
 // **************************************************************************
 
 String _$noteCreateNotifierHash() =>
-    r'feaa0a961a3e80cd245e380ca30af4a6835474b3';
+    r'90dc06116b77586a124014703498e8c6e00118f5';
 
 /// See also [NoteCreateNotifier].
 @ProviderFor(NoteCreateNotifier)
@@ -20,13 +20,16 @@ final noteCreateNotifierProvider =
       : _$noteCreateNotifierHash,
   dependencies: <ProviderOrFamily>[
     misskeyPostContextProvider,
-    notesWithProvider
+    notesWithProvider,
+    accountContextProvider
   ],
   allTransitiveDependencies: <ProviderOrFamily>{
     misskeyPostContextProvider,
     ...?misskeyPostContextProvider.allTransitiveDependencies,
     notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies
+    ...?notesWithProvider.allTransitiveDependencies,
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
   },
 );
 

@@ -92,7 +92,11 @@ class NoteCreateChannel with _$NoteCreateChannel {
   }) = _NoteCreateChannel;
 }
 
-@Riverpod(dependencies: [misskeyPostContext, notesWith])
+@Riverpod(dependencies: [
+  misskeyPostContext,
+  notesWith,
+  accountContext,
+])
 class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _fileSystem = ref.read(fileSystemProvider);
   late final _dio = ref.read(dioProvider);
