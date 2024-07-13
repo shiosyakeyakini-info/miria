@@ -247,39 +247,42 @@ class MisskeyNote extends HookConsumerWidget {
     }
 
     // 初期化処理
-    useMemoized(() {
-      if (!noteStatus.isLongVisibleInitialized ||
-          isForceUnvisibleRenote ||
-          isForceUnvisibleReply ||
-          isForceVisibleLong) {
-        final isReactionedRenote = ref
-                .read(generalSettingsRepositoryProvider)
-                .settings
-                .enableFavoritedRenoteElipsed &&
-            !isForceVisibleLong &&
-            !(displayNote.cw?.isNotEmpty == true) &&
-            (renoteId != null && displayNote.myReaction != null);
+    useMemoized(
+      () {
+        if (!noteStatus.isLongVisibleInitialized ||
+            isForceUnvisibleRenote ||
+            isForceUnvisibleReply ||
+            isForceVisibleLong) {
+          final isReactionedRenote = ref
+                  .read(generalSettingsRepositoryProvider)
+                  .settings
+                  .enableFavoritedRenoteElipsed &&
+              !isForceVisibleLong &&
+              !(displayNote.cw?.isNotEmpty == true) &&
+              (renoteId != null && displayNote.myReaction != null);
 
-        final isLongVisible = !(ref
-                .read(generalSettingsRepositoryProvider)
-                .settings
-                .enableLongTextElipsed &&
-            !isReactionedRenote &&
-            !isForceVisibleLong &&
-            !(displayNote.cw?.isNotEmpty == true) &&
-            shouldCollaposed(displayTextNodes));
+          final isLongVisible = !(ref
+                  .read(generalSettingsRepositoryProvider)
+                  .settings
+                  .enableLongTextElipsed &&
+              !isReactionedRenote &&
+              !isForceVisibleLong &&
+              !(displayNote.cw?.isNotEmpty == true) &&
+              shouldCollaposed(displayTextNodes));
 
-        ref.read(notesProvider(account)).updateNoteStatus(
-              note.id,
-              (status) => status.copyWith(
-                isLongVisible: isLongVisible,
-                isReactionedRenote: isReactionedRenote,
-                isLongVisibleInitialized: true,
-              ),
-              isNotify: false,
-            );
-      }
-    });
+          ref.read(notesProvider(account)).updateNoteStatus(
+                note.id,
+                (status) => status.copyWith(
+                  isLongVisible: isLongVisible,
+                  isReactionedRenote: isReactionedRenote,
+                  isLongVisibleInitialized: true,
+                ),
+                isNotify: false,
+              );
+        }
+      },
+      [note],
+    );
 
     final userId =
         "@${displayNote.user.username}${displayNote.user.host == null ? "" : "@${displayNote.user.host}"}";

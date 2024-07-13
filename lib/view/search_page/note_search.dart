@@ -208,6 +208,8 @@ class NoteSearchList extends ConsumerWidget {
     final isHashtagOnly =
         parsedSearchValue.length == 1 && parsedSearchValue[0] is MfmHashTag;
 
+    if (query.isEmpty) return const SizedBox.shrink();
+
     return PushableListView(
       listKey: Object.hash(query, localOnly, channelId, userId),
       initializeFuture: () async {

@@ -19,6 +19,13 @@ class CommonDrawer extends ConsumerWidget {
     super.key,
   });
 
+  void closeDrawer(BuildContext context) {
+    final state = Scaffold.of(context);
+    if (state.isDrawerOpen) {
+      state.closeDrawer();
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountsProvider);
@@ -47,7 +54,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.notifications),
                       title: Text(S.of(context).notification),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           NotificationRoute(
                             accountContext: AccountContext.as(account),
@@ -59,7 +66,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.star),
                       title: Text(S.of(context).favorite),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           FavoritedNoteRoute(
                             accountContext: AccountContext.as(account),
@@ -71,7 +78,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.list),
                       title: Text(S.of(context).list),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           UsersListRoute(
                             accountContext: AccountContext.as(account),
@@ -83,7 +90,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.settings_input_antenna),
                       title: Text(S.of(context).antenna),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           AntennaRoute(
                             accountContext: AccountContext.as(account),
@@ -95,7 +102,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.attach_file),
                       title: Text(S.of(context).clip),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           ClipListRoute(
                             accountContext: AccountContext.as(account),
@@ -107,7 +114,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.tv),
                       title: Text(S.of(context).channel),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           ChannelsRoute(
                             accountContext: AccountContext.as(account),
@@ -119,7 +126,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.search),
                       title: Text(S.of(context).search),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           SearchRoute(
                             accountContext: AccountContext.as(account),
@@ -131,7 +138,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.tag),
                       title: Text(S.of(context).explore),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           ExploreRoute(
                             accountContext: AccountContext.as(account),
@@ -143,7 +150,7 @@ class CommonDrawer extends ConsumerWidget {
                       leading: const Icon(Icons.gamepad),
                       title: Text(S.of(context).misskeyGames),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           MisskeyGamesRoute(
                             accountContext: AccountContext.as(account),
@@ -159,7 +166,7 @@ class CommonDrawer extends ConsumerWidget {
                             ),
                       ),
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        closeDrawer(context);
                         await context.pushRoute(
                           SeveralAccountSettingsRoute(account: account),
                         );
@@ -173,7 +180,7 @@ class CommonDrawer extends ConsumerWidget {
               leading: const Icon(Icons.settings),
               title: Text(S.of(context).settings),
               onTap: () async {
-                Navigator.of(context).pop();
+                closeDrawer(context);
                 await context.pushRoute(const SettingsRoute());
               },
             ),
