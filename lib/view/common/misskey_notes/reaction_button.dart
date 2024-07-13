@@ -11,7 +11,6 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 

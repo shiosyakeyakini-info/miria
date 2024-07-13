@@ -131,7 +131,7 @@ class UserNotes extends HookConsumerWidget {
                 withReply.value,
                 renote.value,
                 untilDate.value,
-                highlight.value
+                highlight.value,
               ],
             ),
             additionalErrorInfo: highlight.value

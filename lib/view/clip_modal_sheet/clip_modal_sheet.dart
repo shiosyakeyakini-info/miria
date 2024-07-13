@@ -38,11 +38,14 @@ class _NotesClipsNotifier extends _$NotesClipsNotifier {
   }
 }
 
-@Riverpod(keepAlive: false, dependencies: [
-  ClipsNotifier,
-  _NotesClipsNotifier,
-  misskeyPostContext,
-])
+@Riverpod(
+  keepAlive: false,
+  dependencies: [
+    ClipsNotifier,
+    _NotesClipsNotifier,
+    misskeyPostContext,
+  ],
+)
 class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   @override
   Future<List<(Clip, bool)>> build(String noteId) async {

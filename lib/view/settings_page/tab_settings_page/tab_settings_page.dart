@@ -222,7 +222,8 @@ class TabSettingsPage extends HookConsumerWidget {
                   AsyncData() => Row(
                       children: [
                         Expanded(
-                            child: Text(selectedChannel.value?.name ?? "")),
+                          child: Text(selectedChannel.value?.name ?? ""),
+                        ),
                         IconButton(
                           onPressed: () async {
                             final selected = selectedAccount.value;
@@ -247,7 +248,8 @@ class TabSettingsPage extends HookConsumerWidget {
                   AsyncData() => Row(
                       children: [
                         Expanded(
-                            child: Text(selectedUserList.value?.name ?? "")),
+                          child: Text(selectedUserList.value?.name ?? ""),
+                        ),
                         IconButton(
                           onPressed: () async {
                             final selected = selectedAccount.value;
@@ -279,7 +281,8 @@ class TabSettingsPage extends HookConsumerWidget {
                             if (selected == null) return;
 
                             selectedAntenna.value = await context.pushRoute(
-                                AntennaSelectRoute(account: selected));
+                              AntennaSelectRoute(account: selected),
+                            );
                             nameController.text = selectedAntenna.value?.name ??
                                 nameController.text;
                           },

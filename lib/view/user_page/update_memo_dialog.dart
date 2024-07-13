@@ -58,7 +58,7 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
               onPressed: () async => updateMemo.execute(),
               child: Text(S.of(context).save),
             ),
-        }
+        },
       ],
     );
   }

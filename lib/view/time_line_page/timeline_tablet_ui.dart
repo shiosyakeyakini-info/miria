@@ -112,7 +112,7 @@ class Timeline extends HookConsumerWidget {
               tabSetting: tabSetting,
               controller: scrollController,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -267,15 +267,17 @@ class EmojiInputComplement extends HookWidget {
   Widget build(BuildContext context) {
     final overlayEntry = useState<OverlayEntry?>(null);
     final layerLink = useMemoized(() => LayerLink());
-    final options = useMemoized(() => [
-          "apple",
-          "banana",
-          "grape",
-          "orange",
-          "pineapple",
-          "strawberry",
-          "watermelon"
-        ]);
+    final options = useMemoized(
+      () => [
+        "apple",
+        "banana",
+        "grape",
+        "orange",
+        "pineapple",
+        "strawberry",
+        "watermelon",
+      ],
+    );
 
     final hideOverlay = useCallback(
       () {

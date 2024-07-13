@@ -65,49 +65,49 @@ class InstanceMutePage extends HookConsumerWidget {
       appBar: AppBar(title: Text(S.of(context).instanceMute)),
       body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: switch (state) {
-              AsyncLoading() =>
-                const Center(child: CircularProgressIndicator()),
-              AsyncError(:final error, :final stackTrace) =>
-                ErrorDetail(error: error, stackTrace: stackTrace),
-              AsyncValue() => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(S.of(context).instanceMuteDescription1),
-                        ),
+          padding: const EdgeInsets.all(10),
+          child: switch (state) {
+            AsyncLoading() => const Center(child: CircularProgressIndicator()),
+            AsyncError(:final error, :final stackTrace) =>
+              ErrorDetail(error: error, stackTrace: stackTrace),
+            AsyncValue() => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(S.of(context).instanceMuteDescription1),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10),
-                    ),
-                    TextField(
-                      maxLines: null,
-                      minLines: 5,
-                      controller: controller,
-                      autofocus: true,
-                      textCapitalization: TextCapitalization.none,
-                    ),
-                    Text(
-                      S.of(context).instanceMuteDescription2,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () async => ref
-                          .read(instanceMutePageNotifierProvider.notifier)
-                          .save(controller.text),
-                      icon: const Icon(Icons.save),
-                      label: Text(S.of(context).save),
-                    ),
-                  ],
-                ),
-            }),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  TextField(
+                    maxLines: null,
+                    minLines: 5,
+                    controller: controller,
+                    autofocus: true,
+                    textCapitalization: TextCapitalization.none,
+                  ),
+                  Text(
+                    S.of(context).instanceMuteDescription2,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () async => ref
+                        .read(instanceMutePageNotifierProvider.notifier)
+                        .save(controller.text),
+                    icon: const Icon(Icons.save),
+                    label: Text(S.of(context).save),
+                  ),
+                ],
+              ),
+          },
+        ),
       ),
     );
   }

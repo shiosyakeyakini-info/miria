@@ -9,7 +9,6 @@ import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/pushable_listview.dart";
-import "package:miria/view/common/sending_elevated_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class FederationAnnouncements extends HookConsumerWidget {
@@ -113,7 +112,7 @@ class Announcement extends HookConsumerWidget {
                       S.of(context).confirmAnnouncementsRead(data.value.title),
                   actions: (context) => [
                     S.of(context).readAnnouncement,
-                    S.of(context).didNotReadAnnouncement
+                    S.of(context).didNotReadAnnouncement,
                   ],
                 );
         if (isConfirmed != 0) return;

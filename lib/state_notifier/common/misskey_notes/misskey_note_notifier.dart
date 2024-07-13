@@ -1,6 +1,5 @@
 import "package:flutter/foundation.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";

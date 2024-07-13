@@ -35,33 +35,34 @@ class UserListSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.8,
         child: SingleChildScrollView(
-            child: switch (usersList) {
-          AsyncLoading() => const Center(child: CircularProgressIndicator()),
-          AsyncError(:final error, :final stackTrace) =>
-            ErrorDetail(error: error, stackTrace: stackTrace),
-          AsyncData(:final value) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).list,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.of(context).pop(value[index]);
-                      },
-                      title: Text(value[index].name ?? ""),
-                    );
-                  },
-                ),
-              ],
-            ),
-        }),
+          child: switch (usersList) {
+            AsyncLoading() => const Center(child: CircularProgressIndicator()),
+            AsyncError(:final error, :final stackTrace) =>
+              ErrorDetail(error: error, stackTrace: stackTrace),
+            AsyncData(:final value) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context).list,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {
+                          Navigator.of(context).pop(value[index]);
+                        },
+                        title: Text(value[index].name ?? ""),
+                      );
+                    },
+                  ),
+                ],
+              ),
+          },
+        ),
       ),
     );
   }

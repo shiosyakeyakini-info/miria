@@ -106,7 +106,7 @@ class UserDetail extends ConsumerWidget {
                                       ? S.of(context).followRequest
                                       : S.of(context).createFollow,
                                 ),
-                              )
+                              ),
                             /*else
                               Align(
                                 alignment: Alignment.centerRight,

@@ -24,7 +24,9 @@ import "package:vector_math/vector_math_64.dart" show Matrix4, Quad, Vector3;
 ///   * [InteractiveViewer.builder], whose builder is of this type.
 ///   * [WidgetBuilder], which is similar, but takes no viewport.
 typedef InteractiveViewerWidgetBuilder = Widget Function(
-    BuildContext context, Quad viewport);
+  BuildContext context,
+  Quad viewport,
+);
 
 /// A widget that enables pan and zoom interactions with its child.
 ///
@@ -974,8 +976,10 @@ class _InteractiveViewerState extends State<InteractiveViewer>
         details.scaleVelocity / 10,
       );
       final tFinal = _getFinalTime(
-          details.scaleVelocity.abs(), widget.interactionEndFrictionCoefficient,
-          effectivelyMotionless: 0.1);
+        details.scaleVelocity.abs(),
+        widget.interactionEndFrictionCoefficient,
+        effectivelyMotionless: 0.1,
+      );
       _scaleAnimation = Tween<double>(
         begin: scale,
         end: frictionSimulation.x(tFinal),
@@ -1342,8 +1346,11 @@ enum _GestureType {
 
 // Given a velocity and drag, calculate the time at which motion will come to
 // a stop, within the margin of effectivelyMotionless.
-double _getFinalTime(double velocity, double drag,
-    {double effectivelyMotionless = 10}) {
+double _getFinalTime(
+  double velocity,
+  double drag, {
+  double effectivelyMotionless = 10,
+}) {
   return math.log(effectivelyMotionless / velocity) / math.log(drag / 100);
 }
 

@@ -320,8 +320,9 @@ class MisskeyNote extends HookConsumerWidget {
     );
 
     final reactionControl =
-        useCallback<Future<void> Function({MisskeyEmojiData? requestEmoji})>((
-            {requestEmoji}) async {
+        useCallback<Future<void> Function({MisskeyEmojiData? requestEmoji})>(({
+      requestEmoji,
+    }) async {
       // 他のサーバーからログインしている場合は不可
       if (!ref.read(accountContextProvider).isSame) return;
 
