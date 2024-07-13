@@ -95,7 +95,7 @@ class Timeline extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider(tabSetting.acct));
     final scrollController = useMemoized(() => TimelineScrollController());
-    useEffect(() => scrollController.dispose);
+    useEffect(() => scrollController.dispose, []);
 
     return AccountContextScope.as(
       account: account,

@@ -111,7 +111,9 @@ class FederationState extends _$FederationState {
 
       try {
         final misskeyServer = ref.read(misskeyWithoutAccountProvider(host));
-        final endpoints = await misskeyServer.endpoints();
+        final (endpoints, meta) =
+            await (misskeyServer.endpoints(), misskeyServer.meta()).wait;
+        misskeyMeta = meta;
 
         if (endpoints.contains("announcement")) {
           isSupportedAnnouncement = true;
@@ -135,8 +137,6 @@ class FederationState extends _$FederationState {
                 .loadFromSourceIfNeed(),
           );
         }
-
-        misskeyMeta = await misskeyServer.meta();
       } catch (e) {
         logger.warning(e);
       }
@@ -159,6 +159,7 @@ class FederationState extends _$FederationState {
       isSupportedEmoji: isSupportedEmoji,
       isSupportedLocalTimeline: isSupportedLocalTimeline,
       isSupportedAnnouncement: isSupportedAnnouncement,
+      softwareName: federation.softwareName ?? "",
       usersCount: federation.usersCount,
       notesCount: federation.notesCount,
       meta: misskeyMeta,

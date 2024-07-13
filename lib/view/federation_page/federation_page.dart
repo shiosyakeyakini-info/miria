@@ -60,7 +60,7 @@ class FederationPage extends ConsumerWidget implements AutoRouteWrapper {
                   (isAnotherHost ? 1 : 0) +
                   (adsAvailable ? 1 : 0) +
                   (isMisskey ? 1 : 0) +
-                  (isSupportedTimeline ? 1 : 0) +
+                  (isSupportedTimeline ? 2 : 0) +
                   (enableLocalTimeline ? 1 : 0) +
                   (enableSearch ? 1 : 0),
               child: Scaffold(

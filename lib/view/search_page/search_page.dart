@@ -49,6 +49,7 @@ class SearchPage extends HookConsumerWidget implements AutoRouteWrapper {
       appBar: AppBar(
         title: Text(S.of(context).search),
         bottom: TabBar(
+          controller: tabController,
           tabs: [
             Tab(text: S.of(context).note),
             Tab(text: S.of(context).user),

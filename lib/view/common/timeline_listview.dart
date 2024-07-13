@@ -370,6 +370,7 @@ class TimelineScrollController extends ScrollController {
   double _previousMaxExtent = 0.0;
 
   void forceScrollToTop() {
+    if (isDisposed) return;
     if (positions.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         forceScrollToTop();

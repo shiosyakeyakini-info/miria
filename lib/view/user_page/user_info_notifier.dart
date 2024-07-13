@@ -79,32 +79,36 @@ class UserInfoNotifier extends _$UserInfoNotifier {
       return localOnlyState.value;
     }
 
-    final meta =
-        await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
-    final remoteResponse = await ref
-        .read(misskeyWithoutAccountProvider(remoteHost))
-        .users
-        .showByName(
-          UsersShowByUserNameRequest(userName: localResponse.username),
-        );
+    try {
+      final meta =
+          await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
+      final remoteResponse = await ref
+          .read(misskeyWithoutAccountProvider(remoteHost))
+          .users
+          .showByName(
+            UsersShowByUserNameRequest(userName: localResponse.username),
+          );
 
-    await ref
-        .read(
-          emojiRepositoryProvider(Account.demoAccount(remoteHost, meta)),
-        )
-        .loadFromSourceIfNeed();
+      await ref
+          .read(
+            emojiRepositoryProvider(Account.demoAccount(remoteHost, meta)),
+          )
+          .loadFromSourceIfNeed();
 
-    ref
-        .read(notesProvider(Account.demoAccount(remoteHost, meta)))
-        .registerAll(remoteResponse.pinnedNotes ?? []);
+      ref
+          .read(notesProvider(Account.demoAccount(remoteHost, meta)))
+          .registerAll(remoteResponse.pinnedNotes ?? []);
 
-    return UserInfo(
-      userId: userId,
-      response: localResponse,
-      remoteUserId: remoteResponse.id,
-      remoteResponse: remoteResponse,
-      metaResponse: meta,
-    );
+      return UserInfo(
+        userId: userId,
+        response: localResponse,
+        remoteUserId: remoteResponse.id,
+        remoteResponse: remoteResponse,
+        metaResponse: meta,
+      );
+    } catch (e) {
+      return localOnlyState.value;
+    }
   }
 
   Future<AsyncValue<void>> updateMemo(String text) async {
