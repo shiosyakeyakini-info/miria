@@ -37,11 +37,12 @@ abstract class _$AppRouter extends RootStackRouter {
     AccountSelectRoute.name: (routeData) {
       final args = routeData.argsAs<AccountSelectRouteArgs>(
           orElse: () => const AccountSelectRouteArgs());
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<Account>(
         routeData: routeData,
         child: AccountSelectDialog(
           key: args.key,
           host: args.host,
+          remoteHost: args.remoteHost,
         ),
       );
     },
@@ -155,7 +156,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     ChannelSelectRoute.name: (routeData) {
       final args = routeData.argsAs<ChannelSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<CommunityChannel>(
         routeData: routeData,
         child: WrappedRoute(
             child: ChannelSelectDialog(
@@ -864,12 +865,14 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
   AccountSelectRoute({
     Key? key,
     String? host,
+    String? remoteHost,
     List<PageRouteInfo>? children,
   }) : super(
           AccountSelectRoute.name,
           args: AccountSelectRouteArgs(
             key: key,
             host: host,
+            remoteHost: remoteHost,
           ),
           initialChildren: children,
         );
@@ -884,15 +887,18 @@ class AccountSelectRouteArgs {
   const AccountSelectRouteArgs({
     this.key,
     this.host,
+    this.remoteHost,
   });
 
   final Key? key;
 
   final String? host;
 
+  final String? remoteHost;
+
   @override
   String toString() {
-    return 'AccountSelectRouteArgs{key: $key, host: $host}';
+    return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost}';
   }
 }
 

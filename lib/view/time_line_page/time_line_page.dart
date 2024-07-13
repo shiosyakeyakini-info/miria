@@ -22,6 +22,7 @@ import "package:miria/view/time_line_page/misskey_time_line.dart";
 import "package:miria/view/time_line_page/nyanpuppu.dart";
 import "package:miria/view/time_line_page/timeline_emoji.dart";
 import "package:miria/view/time_line_page/timeline_note.dart";
+import "package:miria/view/time_line_page/timeline_tablet_ui.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
@@ -201,6 +202,12 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
 
   @override
   Widget build(BuildContext context) {
+    final deckMode = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.isDeckMode),
+    );
+    if (deckMode) return const TimelineTablet();
+
     final socketTimelineBase = ref.watch(timelineProvider(currentTabSetting));
     final socketTimeline = socketTimelineBase is SocketTimelineRepository
         ? socketTimelineBase
@@ -393,9 +400,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       ),
       resizeToAvoidBottomInset: true,
       drawerEnableOpenDragGesture: true,
-      drawer: CommonDrawer(
-        initialOpenAcct: currentTabSetting.acct,
-      ),
+      drawer: CommonDrawer(initialOpenAcct: currentTabSetting.acct),
     );
   }
 }

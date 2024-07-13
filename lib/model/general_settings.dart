@@ -134,6 +134,9 @@ class GeneralSettings with _$GeneralSettings {
 
     /// 言語設定
     @Default(Languages.jaJP) Languages languages,
+
+    /// デッキモード
+    @Default(false) bool isDeckMode,
   }) = _GeneralSettings;
 
   factory GeneralSettings.fromJson(Map<String, dynamic> json) =>

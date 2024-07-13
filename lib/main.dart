@@ -5,6 +5,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
@@ -14,8 +15,11 @@ import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
 import "package:miria/view/themes/app_theme_scope.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:stack_trace/stack_trace.dart" as stack_trace;
 import "package:window_manager/window_manager.dart";
+
+part "main.g.dart";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,69 +33,14 @@ Future<void> main() async {
     return stack;
   };
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: Miria()));
 }
 
-class MyApp extends ConsumerStatefulWidget {
-  const MyApp({super.key});
+bool get isDesktop =>
+    Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
-  @override
-  ConsumerState<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends ConsumerState<MyApp>
-    with WindowListener, WidgetsBindingObserver {
-  final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
-
-  @override
-  void initState() {
-    if (isDesktop) {
-      WidgetsBinding.instance.addObserver(this);
-      windowManager.addListener(this);
-      unawaited(() async {
-        await ref.read(desktopSettingsRepositoryProvider).load();
-        await _initWindow();
-      }());
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (isDesktop) {
-      WidgetsBinding.instance.removeObserver(this);
-      windowManager.removeListener(this);
-    }
-    super.dispose();
-  }
-
-  @override
-  Future<void> onWindowClose() async {
-    if (!isDesktop) return;
-
-    final isPreventClose = await windowManager.isPreventClose();
-    if (isPreventClose) {
-      final size = await windowManager.getSize();
-      final position = await windowManager.getPosition();
-      try {
-        final settings = ref.read(desktopSettingsRepositoryProvider).settings;
-        await ref.read(desktopSettingsRepositoryProvider).update(
-              settings.copyWith(
-                window: DesktopWindowSettings(
-                  w: size.width,
-                  h: size.height,
-                  x: position.dx,
-                  y: position.dy,
-                ),
-              ),
-            );
-      } catch (e) {
-        if (kDebugMode) print(e);
-      } finally {
-        await windowManager.destroy();
-      }
-    }
-  }
+class Miria extends HookConsumerWidget with WidgetsBindingObserver {
+  const Miria({super.key});
 
   @override
   Future<void> didChangePlatformBrightness() async {
@@ -106,7 +55,7 @@ class _MyAppState extends ConsumerState<MyApp>
     await WindowManager.instance.setTitleBarStyle(TitleBarStyle.normal);
   }
 
-  Future<void> _initWindow() async {
+  Future<void> _initWindow(WidgetRef ref) async {
     await windowManager.setPreventClose(true);
     final config = ref.read(desktopSettingsRepositoryProvider).settings;
 
@@ -135,9 +84,28 @@ class _MyAppState extends ConsumerState<MyApp>
     });
   }
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(
+      () {
+        if (!isDesktop) return null;
+        final windowListener = ref.read(miriaWindowListenerProvider);
+        WidgetsBinding.instance.addObserver(this);
+        windowManager.addListener(windowListener);
+        return () {
+          WidgetsBinding.instance.removeObserver(this);
+          windowManager.removeListener(windowListener);
+        };
+      },
+      const [],
+    );
+    useMemoized(() {
+      unawaited(() async {
+        await ref.read(desktopSettingsRepositoryProvider).load();
+        await _initWindow(ref);
+      }());
+    });
+
     final language = ref.watch(
       generalSettingsRepositoryProvider
           .select((value) => value.settings.languages),
@@ -184,4 +152,42 @@ class AppScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.mouse,
         PointerDeviceKind.trackpad,
       };
+}
+
+@riverpod
+MiriaWindowListener miriaWindowListener(MiriaWindowListenerRef ref) =>
+    MiriaWindowListener(ref);
+
+class MiriaWindowListener with WindowListener {
+  final Ref ref;
+
+  MiriaWindowListener(this.ref);
+
+  @override
+  Future<void> onWindowClose() async {
+    if (!isDesktop) return;
+
+    final isPreventClose = await windowManager.isPreventClose();
+    if (!isPreventClose) return;
+
+    final size = await windowManager.getSize();
+    final position = await windowManager.getPosition();
+    try {
+      final settings = ref.read(desktopSettingsRepositoryProvider).settings;
+      await ref.read(desktopSettingsRepositoryProvider).update(
+            settings.copyWith(
+              window: DesktopWindowSettings(
+                w: size.width,
+                h: size.height,
+                x: position.dx,
+                y: position.dy,
+              ),
+            ),
+          );
+    } catch (e) {
+      if (kDebugMode) print(e);
+    } finally {
+      await windowManager.destroy();
+    }
+  }
 }

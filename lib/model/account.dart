@@ -38,6 +38,8 @@ class Account with _$Account {
     );
   }
 
+  bool get isDemoAccount => userId.isEmpty;
+
   factory Account.demoAccount(String host, MetaResponse? meta) => Account(
         host: host,
         userId: "",

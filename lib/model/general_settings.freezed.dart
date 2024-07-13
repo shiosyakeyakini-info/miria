@@ -69,6 +69,9 @@ mixin _$GeneralSettings {
   /// 言語設定
   Languages get languages => throw _privateConstructorUsedError;
 
+  /// デッキモード
+  bool get isDeckMode => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
@@ -99,7 +102,8 @@ abstract class $GeneralSettingsCopyWith<$Res> {
       String monospaceFontName,
       String cursiveFontName,
       String fantasyFontName,
-      Languages languages});
+      Languages languages,
+      bool isDeckMode});
 }
 
 /// @nodoc
@@ -133,6 +137,7 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
     Object? cursiveFontName = null,
     Object? fantasyFontName = null,
     Object? languages = null,
+    Object? isDeckMode = null,
   }) {
     return _then(_value.copyWith(
       lightColorThemeId: null == lightColorThemeId
@@ -207,6 +212,10 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
           ? _value.languages
           : languages // ignore: cast_nullable_to_non_nullable
               as Languages,
+      isDeckMode: null == isDeckMode
+          ? _value.isDeckMode
+          : isDeckMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -237,7 +246,8 @@ abstract class _$$GeneralSettingsImplCopyWith<$Res>
       String monospaceFontName,
       String cursiveFontName,
       String fantasyFontName,
-      Languages languages});
+      Languages languages,
+      bool isDeckMode});
 }
 
 /// @nodoc
@@ -269,6 +279,7 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
     Object? cursiveFontName = null,
     Object? fantasyFontName = null,
     Object? languages = null,
+    Object? isDeckMode = null,
   }) {
     return _then(_$GeneralSettingsImpl(
       lightColorThemeId: null == lightColorThemeId
@@ -343,6 +354,10 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
           ? _value.languages
           : languages // ignore: cast_nullable_to_non_nullable
               as Languages,
+      isDeckMode: null == isDeckMode
+          ? _value.isDeckMode
+          : isDeckMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -368,7 +383,8 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
       this.monospaceFontName = "",
       this.cursiveFontName = "",
       this.fantasyFontName = "",
-      this.languages = Languages.jaJP});
+      this.languages = Languages.jaJP,
+      this.isDeckMode = false});
 
   factory _$GeneralSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$GeneralSettingsImplFromJson(json);
@@ -458,9 +474,14 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
   @JsonKey()
   final Languages languages;
 
+  /// デッキモード
+  @override
+  @JsonKey()
+  final bool isDeckMode;
+
   @override
   String toString() {
-    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType, defaultFontName: $defaultFontName, serifFontName: $serifFontName, monospaceFontName: $monospaceFontName, cursiveFontName: $cursiveFontName, fantasyFontName: $fantasyFontName, languages: $languages)';
+    return 'GeneralSettings(lightColorThemeId: $lightColorThemeId, darkColorThemeId: $darkColorThemeId, themeColorSystem: $themeColorSystem, nsfwInherit: $nsfwInherit, enableDirectReaction: $enableDirectReaction, automaticPush: $automaticPush, enableAnimatedMFM: $enableAnimatedMFM, enableLongTextElipsed: $enableLongTextElipsed, enableFavoritedRenoteElipsed: $enableFavoritedRenoteElipsed, tabPosition: $tabPosition, textScaleFactor: $textScaleFactor, emojiType: $emojiType, defaultFontName: $defaultFontName, serifFontName: $serifFontName, monospaceFontName: $monospaceFontName, cursiveFontName: $cursiveFontName, fantasyFontName: $fantasyFontName, languages: $languages, isDeckMode: $isDeckMode)';
   }
 
   @override
@@ -505,31 +526,35 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
             (identical(other.fantasyFontName, fantasyFontName) ||
                 other.fantasyFontName == fantasyFontName) &&
             (identical(other.languages, languages) ||
-                other.languages == languages));
+                other.languages == languages) &&
+            (identical(other.isDeckMode, isDeckMode) ||
+                other.isDeckMode == isDeckMode));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      lightColorThemeId,
-      darkColorThemeId,
-      themeColorSystem,
-      nsfwInherit,
-      enableDirectReaction,
-      automaticPush,
-      enableAnimatedMFM,
-      enableLongTextElipsed,
-      enableFavoritedRenoteElipsed,
-      tabPosition,
-      textScaleFactor,
-      emojiType,
-      defaultFontName,
-      serifFontName,
-      monospaceFontName,
-      cursiveFontName,
-      fantasyFontName,
-      languages);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        lightColorThemeId,
+        darkColorThemeId,
+        themeColorSystem,
+        nsfwInherit,
+        enableDirectReaction,
+        automaticPush,
+        enableAnimatedMFM,
+        enableLongTextElipsed,
+        enableFavoritedRenoteElipsed,
+        tabPosition,
+        textScaleFactor,
+        emojiType,
+        defaultFontName,
+        serifFontName,
+        monospaceFontName,
+        cursiveFontName,
+        fantasyFontName,
+        languages,
+        isDeckMode
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -565,7 +590,8 @@ abstract class _GeneralSettings implements GeneralSettings {
       final String monospaceFontName,
       final String cursiveFontName,
       final String fantasyFontName,
-      final Languages languages}) = _$GeneralSettingsImpl;
+      final Languages languages,
+      final bool isDeckMode}) = _$GeneralSettingsImpl;
 
   factory _GeneralSettings.fromJson(Map<String, dynamic> json) =
       _$GeneralSettingsImpl.fromJson;
@@ -636,6 +662,10 @@ abstract class _GeneralSettings implements GeneralSettings {
 
   /// 言語設定
   Languages get languages;
+  @override
+
+  /// デッキモード
+  bool get isDeckMode;
   @override
   @JsonKey(ignore: true)
   _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>

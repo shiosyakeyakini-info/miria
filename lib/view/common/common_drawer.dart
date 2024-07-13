@@ -11,8 +11,13 @@ import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
 class CommonDrawer extends ConsumerWidget {
   final Acct initialOpenAcct;
+  final bool allOpen;
 
-  const CommonDrawer({required this.initialOpenAcct, super.key});
+  const CommonDrawer({
+    required this.initialOpenAcct,
+    this.allOpen = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +33,7 @@ class CommonDrawer extends ConsumerWidget {
                 account: account,
                 child: ExpansionTile(
                   leading: AvatarIcon(user: account.i),
-                  initiallyExpanded: account.acct == initialOpenAcct,
+                  initiallyExpanded: account.acct == initialOpenAcct || allOpen,
                   title: SimpleMfmText(
                     account.i.name ?? account.i.username,
                     style: Theme.of(context).textTheme.titleMedium,

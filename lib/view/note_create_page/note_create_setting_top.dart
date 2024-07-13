@@ -9,44 +9,44 @@ import "package:miria/view/note_create_page/note_visibility_dialog.dart";
 import "package:miria/view/note_create_page/reaction_acceptance_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class NoteCreateSettingTop extends ConsumerWidget {
-  const NoteCreateSettingTop({super.key});
-
-  IconData resolveVisibilityIcon(NoteVisibility visibility) {
-    switch (visibility) {
-      case NoteVisibility.public:
-        return Icons.public;
-      case NoteVisibility.home:
-        return Icons.home;
-      case NoteVisibility.followers:
-        return Icons.lock_outline;
-      case NoteVisibility.specified:
-        return Icons.mail;
-    }
+IconData resolveVisibilityIcon(NoteVisibility visibility) {
+  switch (visibility) {
+    case NoteVisibility.public:
+      return Icons.public;
+    case NoteVisibility.home:
+      return Icons.home;
+    case NoteVisibility.followers:
+      return Icons.lock_outline;
+    case NoteVisibility.specified:
+      return Icons.mail;
   }
+}
 
-  Widget resolveAcceptanceIcon(
-    ReactionAcceptance? acceptance,
-    BuildContext context,
-  ) {
-    switch (acceptance) {
-      case null:
-        return SvgPicture.asset(
+class AcceptanceIcon extends StatelessWidget {
+  final ReactionAcceptance? acceptance;
+  const AcceptanceIcon({required this.acceptance, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return switch (acceptance) {
+      null => SvgPicture.asset(
           "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
           color: Theme.of(context).textTheme.bodyMedium!.color,
           width: 28,
           height: 28,
-        );
-      case ReactionAcceptance.likeOnly:
-        return const Icon(Icons.favorite_border);
-      case ReactionAcceptance.likeOnlyForRemote:
-        return const Icon(Icons.add_reaction_outlined);
-      case ReactionAcceptance.nonSensitiveOnly:
-        return const Icon(Icons.shield_outlined);
-      case ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote:
-        return const Icon(Icons.add_moderator_outlined);
-    }
+        ),
+      ReactionAcceptance.likeOnly => const Icon(Icons.favorite_border),
+      ReactionAcceptance.likeOnlyForRemote =>
+        const Icon(Icons.add_reaction_outlined),
+      ReactionAcceptance.nonSensitiveOnly => const Icon(Icons.shield_outlined),
+      ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote =>
+        const Icon(Icons.add_moderator_outlined),
+    };
   }
+}
+
+class NoteCreateSettingTop extends ConsumerWidget {
+  const NoteCreateSettingTop({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -100,7 +100,7 @@ class NoteCreateSettingTop extends ConsumerWidget {
               );
               notifier.setReactionAcceptance(result);
             },
-            icon: resolveAcceptanceIcon(reactionAcceptance, context2),
+            icon: AcceptanceIcon(acceptance: reactionAcceptance),
           ),
         ),
       ],

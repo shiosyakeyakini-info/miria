@@ -91,7 +91,7 @@ class __$$DialogsStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DialogsStateImpl implements _DialogsState {
+class _$DialogsStateImpl with DiagnosticableTreeMixin implements _DialogsState {
   _$DialogsStateImpl({final List<DialogData> dialogs = const []})
       : _dialogs = dialogs;
 
@@ -105,8 +105,16 @@ class _$DialogsStateImpl implements _DialogsState {
   }
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'DialogsState(dialogs: $dialogs)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'DialogsState'))
+      ..add(DiagnosticsProperty('dialogs', dialogs));
   }
 
   @override
@@ -295,7 +303,7 @@ class __$$DialogDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DialogDataImpl implements _DialogData {
+class _$DialogDataImpl with DiagnosticableTreeMixin implements _DialogData {
   _$DialogDataImpl(
       {required this.message,
       required this.actions,
@@ -320,8 +328,20 @@ class _$DialogDataImpl implements _DialogData {
   final bool isMFM;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'DialogData(message: $message, actions: $actions, completer: $completer, accountContext: $accountContext, isMFM: $isMFM)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'DialogData'))
+      ..add(DiagnosticsProperty('message', message))
+      ..add(DiagnosticsProperty('actions', actions))
+      ..add(DiagnosticsProperty('completer', completer))
+      ..add(DiagnosticsProperty('accountContext', accountContext))
+      ..add(DiagnosticsProperty('isMFM', isMFM));
   }
 
   @override

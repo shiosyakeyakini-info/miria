@@ -120,16 +120,12 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   _InfiniteScrollPosition? _negativeOffset;
 
-  //FIXME static
-  static double minMaxExtent = 0.0;
-
   void timingCallback(_) {
-    final extent = _negativeOffset?.maxScrollExtent;
-    if (extent != null) {
-      minMaxExtent = -extent;
-    } else {
-      minMaxExtent = 0;
-    }
+    final negativeOffset = _negativeOffset;
+    if (negativeOffset == null) return;
+    final extent = negativeOffset.maxScrollExtent;
+    negativeOffset._minMaxExtent = -extent;
+    _effectiveController._offset = -extent;
   }
 
   @override
@@ -247,14 +243,13 @@ class _TimelineListViewState extends State<TimelineListView> {
     return SliverChildBuilderDelegate(
       (context, index) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          final extent = (_negativeOffset?.hasContentDimensions ?? false)
-              ? _negativeOffset?.maxScrollExtent
+          final negativeOffset = _negativeOffset;
+          if (negativeOffset == null) return;
+          final extent = negativeOffset.hasContentDimensions
+              ? negativeOffset.maxScrollExtent
               : null;
-          if (extent != null) {
-            minMaxExtent = -extent;
-          } else {
-            minMaxExtent = 0;
-          }
+          negativeOffset._minMaxExtent = -(extent ?? 0);
+          _controller?._offset = -(extent ?? 0);
         });
         final separatorBuilder = widget.separatorBuilder;
         if (separatorBuilder != null) {
@@ -365,8 +360,11 @@ class TimelineScrollController extends ScrollController {
       keepScrollOffset: keepScrollOffset,
       oldPosition: oldPosition,
       debugLabel: debugLabel,
+      negativePredicate: () => _offset,
     );
   }
+
+  double _offset = 0.0;
 
   double _previousPosition = 0.0;
   double _previousMaxExtent = 0.0;
@@ -381,10 +379,22 @@ class TimelineScrollController extends ScrollController {
     scrollToTop();
   }
 
+  bool isDisposed = false;
+
+  @override
+  void dispose() {
+    if (isDisposed) return;
+    isDisposed = true;
+    super.dispose();
+  }
+
   void scrollToTop() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (isDisposed) return;
+
       if (positions.isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if (isDisposed) return;
           scrollToTop();
         });
         return;
@@ -398,6 +408,8 @@ class TimelineScrollController extends ScrollController {
 
       if (_previousPosition == _previousMaxExtent) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if (isDisposed) return;
+
           scrollToTop();
         });
       }
@@ -414,9 +426,11 @@ class _InfiniteScrollPosition extends ScrollPositionWithSingleContext {
     super.oldPosition,
     super.debugLabel,
     this.negativeScroll = false,
+    this.negativePredicate,
   });
 
   final bool negativeScroll;
+  final double Function()? negativePredicate;
 
   void _forceNegativePixels(double value) {
     super.forcePixels(-value);
@@ -437,5 +451,7 @@ class _InfiniteScrollPosition extends ScrollPositionWithSingleContext {
   }
 
   @override
-  double get minScrollExtent => _TimelineListViewState.minMaxExtent;
+  double get minScrollExtent => negativePredicate?.call() ?? _minMaxExtent;
+
+  double _minMaxExtent = 0;
 }

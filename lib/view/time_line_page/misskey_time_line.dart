@@ -3,18 +3,18 @@ import "dart:math";
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/log.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/time_line_repository.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/timeline_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-class MisskeyTimeline extends ConsumerStatefulWidget {
+class MisskeyTimeline extends HookConsumerWidget {
   final TabSetting tabSetting;
   final TimelineScrollController controller;
 
@@ -25,84 +25,55 @@ class MisskeyTimeline extends ConsumerStatefulWidget {
   }) : controller = controller ?? TimelineScrollController();
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => MisskeyTimelineState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timelineRepository = ref.read(timelineProvider(tabSetting));
+    final isDownDirectionLoading = useState(false);
+    final isLastLoaded = useState(false);
 
-class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
-  List<Note> showingNotes = [];
-  late final TimelineScrollController scrollController = widget.controller;
-  bool isScrolling = false;
-  late TimelineRepository timelineRepository =
-      ref.read(timelineProvider(widget.tabSetting));
-  bool contextAccessed = false;
+    useEffect(
+      () {
+        timelineRepository.startTimeLine();
+        return () => timelineRepository.disconnect();
+      },
+      [tabSetting],
+    );
 
-  bool isInitStated = false;
-  bool isDownDirectionLoading = false;
-  bool isLastLoaded = false;
+    useMemoized(
+      () {
+        isDownDirectionLoading.value = false;
+        isLastLoaded.value = false;
+      },
+      [tabSetting],
+    );
 
-  Future<void> downDirectionLoad() async {
-    if (isDownDirectionLoading) return;
-    try {
-      if (!mounted) return;
-      setState(() {
-        isDownDirectionLoading = true;
-      });
-      final result = await timelineRepository.previousLoad();
-      if (!mounted) return;
-      setState(() {
-        isDownDirectionLoading = false;
-        isLastLoaded = result == 0;
-      });
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isDownDirectionLoading = false;
+    final downDirectionLoad = useCallback(
+      () {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          if (isDownDirectionLoading.value) return;
+          try {
+            isDownDirectionLoading.value = true;
+            final result = await timelineRepository.previousLoad();
+            isDownDirectionLoading.value = false;
+            isLastLoaded.value = result == 0;
+          } catch (e) {
+            isDownDirectionLoading.value = false;
+            rethrow;
+          }
         });
-      }
-      rethrow;
+      },
+      [isDownDirectionLoading],
+    );
+
+    if (controller.positions.isNotEmpty) {
+      controller.scrollToTop();
     }
-  }
-
-  @override
-  void didUpdateWidget(covariant MisskeyTimeline oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    contextAccessed = true;
-    if (oldWidget.tabSetting != widget.tabSetting) {
-      ref.read(timelineProvider(oldWidget.tabSetting)).disconnect();
-      ref.read(timelineProvider(widget.tabSetting)).startTimeLine();
-      timelineRepository = ref.read(timelineProvider(widget.tabSetting));
-      isDownDirectionLoading = false;
-      isLastLoaded = false;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (isInitStated) return;
-    unawaited(() {
-      ref.read(timelineProvider(widget.tabSetting)).startTimeLine();
-    }());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    if (contextAccessed) timelineRepository.disconnect();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (scrollController.positions.isNotEmpty) {
-      scrollController.scrollToTop();
-    }
-    final repository = ref.watch(timelineProvider(widget.tabSetting));
+    final repository = ref.watch(timelineProvider(tabSetting));
 
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: TimelineListView.builder(
         reverse: true,
-        controller: scrollController,
+        controller: controller,
         itemCount:
             repository.newerNotes.length + repository.olderNotes.length + 1,
         itemBuilder: (context, index) {
@@ -132,11 +103,11 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
           }
 
           if (-index == correctedOlder.length) {
-            if (isLastLoaded) {
+            if (isLastLoaded.value) {
               return const SizedBox.shrink();
             }
 
-            if (isDownDirectionLoading &&
+            if (isDownDirectionLoading.value &&
                 repository.newerNotes.length + repository.olderNotes.length !=
                     0) {
               return const Padding(
@@ -155,7 +126,7 @@ class MisskeyTimelineState extends ConsumerState<MisskeyTimeline> {
 
             return Center(
               child: IconButton(
-                onPressed: downDirectionLoad.expectFailure(context),
+                onPressed: downDirectionLoad,
                 icon: const Icon(Icons.keyboard_arrow_down),
               ),
             );

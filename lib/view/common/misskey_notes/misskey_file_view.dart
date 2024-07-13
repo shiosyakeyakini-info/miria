@@ -135,8 +135,13 @@ class MisskeyImage extends HookConsumerWidget {
       generalSettingsRepositoryProvider
           .select((repository) => repository.settings.nsfwInherit),
     );
-    final delayed =
-        useFuture(Future.delayed(const Duration(milliseconds: 100)));
+
+    final delayed = useFuture(
+      // ignore: discarded_futures
+      useMemoized(
+        () => Future.delayed(const Duration(milliseconds: 100)),
+      ),
+    );
 
     if (delayed.connectionState != ConnectionState.done) return Container();
 

@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/input_completion_type.dart";
@@ -15,7 +16,7 @@ final inputCompletionTypeProvider =
 
 final inputComplementDelayedProvider = Provider((ref) => 300);
 
-class InputComplement extends ConsumerStatefulWidget {
+class InputComplement extends HookConsumerWidget {
   final TextEditingController controller;
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
@@ -26,62 +27,38 @@ class InputComplement extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => InputComplementState();
-}
-
-class InputComplementState extends ConsumerState<InputComplement> {
-  bool isClose = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    widget.controller.addListener(updateType);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    isClose = !ref.read(widget.focusNode).hasFocus;
-  }
-
-  @override
-  void dispose() {
-    widget.controller.removeListener(updateType);
-
-    super.dispose();
-  }
-
-  void updateType() {
-    ref.read(inputCompletionTypeProvider.notifier).state =
-        widget.controller.inputCompletionType;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final inputCompletionType = ref.watch(inputCompletionTypeProvider);
-    final focusNode = ref.watch(widget.focusNode);
+    final focusNode = ref.watch(this.focusNode);
 
-    ref.listen(widget.focusNode, (previous, next) async {
+    final isClose = useState(!ref.read(this.focusNode).hasFocus);
+
+    useEffect(
+      () {
+        InputCompletionType updateType() =>
+            ref.read(inputCompletionTypeProvider.notifier).state =
+                controller.inputCompletionType;
+        controller.addListener(updateType);
+
+        return () => controller.removeListener(updateType);
+      },
+      const [],
+    );
+
+    ref.listen(this.focusNode, (previous, next) async {
       if (!next.hasFocus) {
         await Future.delayed(
           Duration(milliseconds: ref.read(inputComplementDelayedProvider)),
         );
-        if (!mounted) return;
-        if (!ref.read(widget.focusNode).hasFocus) {
-          setState(() {
-            isClose = true;
-          });
-        }
+        if (!context.mounted) return;
+        if (ref.read(this.focusNode).hasFocus) return;
+        isClose.value = true;
       } else {
-        setState(() {
-          isClose = false;
-        });
+        isClose.value = false;
       }
     });
 
-    if (isClose) {
+    if (isClose.value) {
       return Container();
     }
 
@@ -98,21 +75,17 @@ class InputComplementState extends ConsumerState<InputComplement> {
                 constraints:
                     BoxConstraints(minWidth: MediaQuery.of(context).size.width),
                 child: switch (inputCompletionType) {
-                  Basic() => BasicKeyboard(
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
-                  Emoji() => EmojiKeyboard(
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
+                  Basic() =>
+                    BasicKeyboard(controller: controller, focusNode: focusNode),
+                  Emoji() =>
+                    EmojiKeyboard(controller: controller, focusNode: focusNode),
                   MfmFn() => MfmFnKeyboard(
-                      controller: widget.controller,
+                      controller: controller,
                       focusNode: focusNode,
                       parentContext: context,
                     ),
                   Hashtag() => HashtagKeyboard(
-                      controller: widget.controller,
+                      controller: controller,
                       focusNode: focusNode,
                     ),
                 },

@@ -49,7 +49,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   @override
   NoteModalSheetState build(Note note) {
     state = NoteModalSheetState(noteState: const AsyncLoading());
-    unawaited(_status());
+    if (ref.read(accountContextProvider).isSame) unawaited(_status());
     return state;
   }
 
@@ -338,34 +338,37 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             });
           },
         ),
-        switch (noteStatus) {
-          AsyncLoading() => const Center(child: CircularProgressIndicator()),
-          AsyncError() => Text(S.of(context).thrownError),
-          AsyncData(:final value) => ListTile(
-              leading: const Icon(Icons.star_rounded),
-              onTap: () async => ref.read(notifierProvider.notifier).favorite(),
-              title: Text(
-                value.isFavorited
-                    ? S.of(context).deleteFavorite
-                    : S.of(context).favorite,
-              ),
-            )
-        },
-        ListTile(
-          leading: const Icon(Icons.attach_file),
-          title: Text(S.of(context).clip),
-          onTap: () async {
-            Navigator.of(context).pop();
-
-            await showModalBottomSheet(
-              context: context,
-              builder: (context2) => ClipModalSheet(
-                account: accountContext.postAccount,
-                noteId: targetNote.id,
-              ),
-            );
+        if (accountContext.isSame)
+          switch (noteStatus) {
+            AsyncLoading() => const Center(child: CircularProgressIndicator()),
+            AsyncError() => Text(S.of(context).thrownError),
+            AsyncData(:final value) => ListTile(
+                leading: const Icon(Icons.star_rounded),
+                onTap: () async =>
+                    ref.read(notifierProvider.notifier).favorite(),
+                title: Text(
+                  value.isFavorited
+                      ? S.of(context).deleteFavorite
+                      : S.of(context).favorite,
+                ),
+              )
           },
-        ),
+        if (accountContext.isSame)
+          ListTile(
+            leading: const Icon(Icons.attach_file),
+            title: Text(S.of(context).clip),
+            onTap: () async {
+              Navigator.of(context).pop();
+
+              await showModalBottomSheet(
+                context: context,
+                builder: (context2) => ClipModalSheet(
+                  account: accountContext.postAccount,
+                  noteId: targetNote.id,
+                ),
+              );
+            },
+          ),
         ListTile(
           leading: const Icon(Icons.repeat_rounded),
           title: Text(S.of(context).notesAfterRenote),
@@ -376,7 +379,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             ),
           ),
         ),
-        if (baseNote.user.host == null &&
+        if (accountContext.isSame &&
+            baseNote.user.host == null &&
             baseNote.user.username == accountContext.postAccount.userId &&
             !(baseNote.text == null &&
                 baseNote.renote != null &&
@@ -409,7 +413,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                 ref.read(notifierProvider.notifier).deleteRecreate(),
           ),
         ],
-        if (baseNote.user.host == null &&
+        if (accountContext.isSame &&
+            baseNote.user.host == null &&
             baseNote.user.username == accountContext.postAccount.userId &&
             baseNote.renote != null &&
             baseNote.files.isEmpty &&
@@ -420,7 +425,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             onTap: () async => ref.read(notifierProvider.notifier).unRenote(),
           ),
         ],
-        if (baseNote.user.host != null ||
+        if (accountContext.isSame && baseNote.user.host != null ||
             (baseNote.user.host == null &&
                 baseNote.user.username != accountContext.postAccount.userId))
           ListTile(

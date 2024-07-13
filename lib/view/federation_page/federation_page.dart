@@ -87,11 +87,36 @@ class FederationPage extends ConsumerWidget implements AutoRouteWrapper {
                     FederationInfo(data: value),
                     if (isAnotherHost) FederationUsers(host: host),
                     if (adsAvailable) FederationAds(ads: [...value.ads]),
-                    if (isMisskey) FederationAnnouncements(host: host),
+                    if (isMisskey)
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: FederationAnnouncements(host: host),
+                      ),
                     if (isSupportedTimeline)
-                      FederationCustomEmojis(host: host, meta: value.meta!),
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: FederationCustomEmojis(
+                          host: host,
+                          meta: value.meta!,
+                        ),
+                      ),
                     if (isSupportedTimeline)
-                      FederationTimeline(host: host, meta: value.meta!),
+                      AccountContextScope(
+                        context: AccountContext(
+                          getAccount: Account.demoAccount(host, value.meta),
+                          postAccount: accountContext.postAccount,
+                        ),
+                        child: FederationTimeline(
+                          host: host,
+                          meta: value.meta!,
+                        ),
+                      ),
                     if (enableSearch)
                       AccountContextScope(
                         context: AccountContext(

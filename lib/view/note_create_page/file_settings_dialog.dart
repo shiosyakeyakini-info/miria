@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/image_file.dart";
 
@@ -15,36 +16,10 @@ class FileSettingsDialogResult {
   });
 }
 
-class FileSettingsDialog extends ConsumerStatefulWidget {
+class FileSettingsDialog extends HookConsumerWidget {
   final MisskeyPostFile file;
 
   const FileSettingsDialog({required this.file, super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      FileSettingsDialogState();
-}
-
-class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
-  late final TextEditingController fileNameController;
-  late final TextEditingController captionController;
-  bool isNsfw = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    fileNameController = TextEditingController(text: widget.file.fileName);
-    captionController = TextEditingController(text: widget.file.caption);
-    isNsfw = widget.file.isNsfw;
-  }
-
-  @override
-  void dispose() {
-    fileNameController.dispose();
-    captionController.dispose();
-    super.dispose();
-  }
 
   String generateRandomText() {
     final str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -54,7 +29,11 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fileNameController = useTextEditingController(text: file.fileName);
+    final captionController = useTextEditingController(text: file.caption);
+    final isNsfw = useState(file.isNsfw);
+
     return AlertDialog(
       contentPadding: const EdgeInsets.all(10),
       content: SizedBox(
@@ -87,10 +66,10 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               CheckboxListTile(
-                value: isNsfw,
+                value: isNsfw.value,
                 title: Text(S.of(context).markAsSensitive),
                 subtitle: Text(S.of(context).sensitiveSubTitle),
-                onChanged: (value) => setState(() => isNsfw = !isNsfw),
+                onChanged: (value) => isNsfw.value = !isNsfw.value,
                 controlAffinity: ListTileControlAffinity.leading,
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
@@ -113,7 +92,7 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
             Navigator.of(context).pop(
               FileSettingsDialogResult(
                 fileName: fileNameController.text,
-                isNsfw: isNsfw,
+                isNsfw: isNsfw.value,
                 caption: captionController.text,
               ),
             );

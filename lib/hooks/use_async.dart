@@ -20,6 +20,7 @@ AsyncOperation<T> useAsync<T>(Future<T> Function() future) {
   return AsyncOperation(
     value: result.value,
     execute: () async {
+      if (result.value is AsyncLoading) return;
       result.value = const AsyncLoading();
 
       try {

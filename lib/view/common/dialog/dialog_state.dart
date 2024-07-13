@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
@@ -75,6 +76,10 @@ class DialogStateNotifier extends _$DialogStateNotifier {
   Future<AsyncValue<T>> guard<T>(Future<T> Function() future) async {
     final result = await AsyncValue.guard(future);
     if (result is AsyncError) {
+      if (kDebugMode) {
+        print(result.error);
+        print(result.stackTrace);
+      }
       await showSimpleDialog(
         message: _handleError(result.error, result.stackTrace),
       );
