@@ -1,10 +1,10 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:miria/repository/socket_timeline_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:miria/repository/socket_timeline_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-class HomeTimeLineRepository extends SocketTimelineRepository {
-  HomeTimeLineRepository(
+class HomeTimelineRepository extends SocketTimelineRepository {
+  HomeTimelineRepository(
     super.misskey,
     super.account,
     super.noteRepository,
@@ -27,15 +27,16 @@ class HomeTimeLineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.homeTimelineStream(
-        parameter: HomeTimelineParameter(
-          withRenotes: tabSetting.renoteDisplay,
-          withFiles: tabSetting.isMediaOnly,
-        ),
-        onNoteReceived: onReceived,
-        onReacted: onReacted,
-        onUnreacted: onUnreacted,
-        onVoted: onVoted,
-        onUpdated: onUpdated);
+      parameter: HomeTimelineParameter(
+        withRenotes: tabSetting.renoteDisplay,
+        withFiles: tabSetting.isMediaOnly,
+      ),
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onUnreacted: onUnreacted,
+      onVoted: onVoted,
+      onUpdated: onUpdated,
+    );
   }
 
   @override

@@ -17,8 +17,8 @@
     "hide": "隠す",
     "note": "ノート",
     "mention": "メンション",
-    "renote": "Renote",
-    "quotedRenote": "引用Renote",
+    "renote": "リノート",
+    "quotedRenote": "引用",
     "notification": "通知",
     "list": "リスト",
     "explore": "みつける",
@@ -72,6 +72,7 @@
     "apiKey": "APIキー",
     "contentWarning": "注釈",
     "follower": "フォロワー",
+    "sending": "送信中",
 
     "antennaName": "アンテナの名前",
     "antennaSource": "アンテナのソース",
@@ -205,11 +206,12 @@
     "openBrowsers": "ブラウザで開く",
     "openBrowsersAsRemote": "ブラウザでリモート先を開く",
     "openInAnotherAccount": "別のアカウントで開く",
+    "changeFullScreen": "フルスクリーンに切り替え",
     "shareNotes": "ノートを共有",
     "deleteFavorite": "お気に入り解除",
     "notesAfterRenote": "リノート直後のノート",
     "deletedRecreate": "削除してなおす",
-    "confirmDeletedRecreate": "このノート消してなおす？ついたリアクション、Renote、返信は消えて戻らへんで？",
+    "confirmDeletedRecreate": "このノート消してなおす？ついたリアクション、リノート、返信は消えて戻らへんで？",
     "deleteRenote": "リノートを解除する",
     "confirmDelete": "ほんまに消してええな？",
     "doDeleting": "消す！",
@@ -253,7 +255,7 @@
         }
     },
     "renoted": "リノートしました。",
-    "renoteInSpecificChannel": "{channelName}内にRenote",
+    "renoteInSpecificChannel": "{channelName}内にリノート",
     "@renoteInSpecificChannel": {
         "placeholders": {
             "channelName": {
@@ -261,7 +263,7 @@
             }
         }
     },
-    "quotedRenoteInSpecificChannel": "{channelName}内に引用Renote",
+    "quotedRenoteInSpecificChannel": "{channelName}内に引用",
     "@quotedRenoteInSpecificChannel": {
         "placeholders": {
             "channelName": {
@@ -269,11 +271,11 @@
             }
         }
     },
-    "renoteInChannel": "チャンネルへRenote",
-    "renoteInOtherChannel": "よそのチャンネルへRenote",
-    "quotedRenoteInChannel": "チャンネルへ引用Renote",
-    "quotedRenoteInOtherChannel": "よそのチャンネルへRenote",
-    "renotedUsers": "Renoteしたユーザー",
+    "renoteInChannel": "チャンネルへリノート",
+    "renoteInOtherChannel": "よそのチャンネルへリノート",
+    "quotedRenoteInChannel": "チャンネルへ引用",
+    "quotedRenoteInOtherChannel": "よそのチャンネルへ引用",
+    "renotedUsers": "リノートしたユーザー",
     "otherComplementReactions": "他のん",
     "openAsOtherAccount": "開くアカウントを選んでや",
     "pickColor": "色を選んでや",
@@ -328,7 +330,7 @@
     "renotedUsersInNotification": "リノートしてくれはった人",
     "reactionUsersInNotification": "リアクションしてくれはった人",
     "finishedVotedNotification": "投票が終わったみたいや",
-    "renoteAndReactionsNotification": "{reactionUser}さんたちがリアクションしはって、{renotedUser}さんたちがRenoteしはったで",
+    "renoteAndReactionsNotification": "{reactionUser}さんたちがリアクションしはって、{renotedUser}さんたちがリノートしはったで",
     "@renoteAndReactionsNotification": {
         "placeholders": {
             "reactionUser": {
@@ -339,7 +341,7 @@
             }
         }
     },
-    "renoteNotification": "{renoteUser}さんたちがRenoteしはったで",
+    "renoteNotification": "{renoteUser}さんたちがリノートしはったで",
     "@renoteNotification": {
         "placeholders": {
             "renoteUser": {
@@ -739,6 +741,10 @@
     "cannotFederateReplyToLocalOnlyNote": "リプライの元ノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。",
     "cannotFederateRenoteToLocalOnlyNote": "リノートしようとしてるノートが連合なしに設定されとるから、このノートも連合なしにしかでけへんねん。",
 
+    "unexpectedSensitive": "上げようとしたファイルがサーバーから、センシティブと思われたんやけどどないする？",
+    "staySensitive": "センシティブのままにしとく",
+    "unsetSensitive": "センシティブやめる",
+
     "noteCreatedAt": "投稿時間: {createdAt}",
     "@noteCreatedAt": {
         "placeholders": {
@@ -772,7 +778,7 @@
     "enableAnimatedMfm": "動きのあるMFM",
     "enableAnimatedMfmDescription": "動きのあるMFMを有効にします。",
     "collapseNotes": "ノートの省略",
-    "collapseReactionedRenotes": "リアクション済みノートのRenoteを省略します。",
+    "collapseReactionedRenotes": "リアクション済みノートのリノートを省略します。",
     "collapseLongNotes": "長いノートを省略します。",
     "tabPosition": "タブの位置",
     "tabPositionDescription": "{tabPosition}に表示する",
@@ -808,13 +814,14 @@
     "systemFont": "システム標準",
 
     "selectFolder": "フォルダー選択",
-    "importSettings": "設定のインポート",
-    "importSettingsDescription": "設定ファイルをドライブから読み込みます。設定ファイルには保存されたときのすべてのアカウントの設定情報が記録されていますが、そのうちこの端末でログインしているアカウントの情報のみを読み込みます。",
+    "settingsFileManagement": "設定ファイルの管理",
+    "importAndExportSettingsDescription": "現在の設定から、アカウントのログイン情報を除くすべての設定を設定ファイルに出力して管理することができます。設定ファイルは、指定したアカウントの「ドライブ」内に保存されます。",
+    "importSettings": "インポート",
+    "importSettingsDescription": "全般設定と、この端末でログインしているアカウントに対応する設定が読み込まれます。",
     "pleaseSelectAccount": "アカウントを選んでや",
     "select": "選択",
-    "exportSettings": "設定のエクスポート",
-    "exportSettingsDescription1": "設定ファイルをドライブに保存します。設定ファイルにはこの端末でログインしているすべてのアカウントの、ログイン情報以外の情報が記録されます。",
-    "exportSettingsDescription2": "設定ファイルは1回のエクスポートにつき1つのアカウントに対して保存されます。",
+    "exportSettings": "エクスポート",
+    "exportSettingsDescription": "全般設定と、この端末でログインしているすべてのアカウントの設定を設定ファイルに保存します。",
     "pleaseSelectAccountToExportSettings": "設定ファイルを保存するアカウントを選んでや",
 
     "selectAntenna": "アンテナ選択",
@@ -855,7 +862,7 @@
     "emojiCache": "絵文字の情報",
     "serverCache": "サーバーの情報",
     "instanceMuteDescription1": "設定したサーバーのノートを隠します。",
-    "instanceMuteDescription2": "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとRenoteをミュートします。\n改行で区切って設定します。",
+    "instanceMuteDescription2": "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとリノートをミュートします。\n改行で区切って設定します。",
     "bulkAddReactions": "一括追加",
     "bulkAddReactionsDescription1": "お使いのブラウザでリアクションデッキをコピーしたいアカウントにログインしてください",
     "bulkAddReactionsDescription2": "同じブラウザで以下のURLにアクセスして「値 (JSON)」の内容をすべて選択してコピーしてください",
@@ -895,8 +902,8 @@
     "addToList": "リストに追加",
     "addToAntenna": "アンテナに追加",
     "searchNote": "ノートを検索",
-    "deleteRenoteMute": "Renoteのミュートを解除する",
-    "createRenoteMute": "Renoteをミュートする",
+    "deleteRenoteMute": "リノートのミュートを解除する",
+    "createRenoteMute": "リノートをミュートする",
     "deleteMute": "ミュートを解除する",
     "createMute": "ミュートする",
     "deleteBlock": "ブロックを解除する",
@@ -907,7 +914,7 @@
     "selectDuration": "期限を選択してください。",
     "confirmUnfollow": "フォロー解除してもええか？",
     "deleteFollow": "解除する",
-    "renoteMuting": "Renoteのミュート中",
+    "renoteMuting": "リノートのミュート中",
     "muting": "ミュート中",
     "blocking": "ブロック中",
     "followed": "フォローされています",
@@ -925,6 +932,7 @@
     "mediaOnlyShort": "ファイルつき",
     "displayRenotesShort": "リノートも",
     "showNotesBeforeThisDate": "この日までを表示",
+    "showNotesBeforeThisTime": "この時間までを表示",
     "userHighlightAvailability": "ハイライトはMisskey 2023.10.0以降の機能です。",
     "userInfomation": "アカウント情報",
     "userInfomationLocal": "アカウント情報（ローカル）",

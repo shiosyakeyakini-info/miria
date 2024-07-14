@@ -1,9 +1,9 @@
-import 'dart:math' as math;
+import "dart:math" as math;
 
-import 'package:flutter/gestures.dart' show DragStartBehavior;
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import "package:flutter/gestures.dart" show DragStartBehavior;
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter/widgets.dart";
 
 /// Infinite ListView
 ///
@@ -12,14 +12,14 @@ import 'package:flutter/widgets.dart';
 class TimelineListView extends StatefulWidget {
   /// See [ListView.builder]
   const TimelineListView.builder({
-    Key? key,
+    required this.itemBuilder,
+    super.key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
     this.physics,
     this.padding,
     this.itemExtent,
-    required this.itemBuilder,
     this.itemCount,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
@@ -30,19 +30,18 @@ class TimelineListView extends StatefulWidget {
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
-  })  : separatorBuilder = null,
-        super(key: key);
+  }) : separatorBuilder = null;
 
   /// See [ListView.separated]
   const TimelineListView.separated({
-    Key? key,
+    required this.itemBuilder,
+    required this.separatorBuilder,
+    super.key,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
     this.controller,
     this.physics,
     this.padding,
-    required this.itemBuilder,
-    required this.separatorBuilder,
     this.itemCount,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
@@ -53,8 +52,7 @@ class TimelineListView extends StatefulWidget {
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
-  })  : itemExtent = null,
-        super(key: key);
+  }) : itemExtent = null;
 
   /// See: [ScrollView.scrollDirection]
   final Axis scrollDirection;
@@ -122,16 +120,12 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   _InfiniteScrollPosition? _negativeOffset;
 
-  //FIXME static
-  static double minMaxExtent = 0.0;
-
   void timingCallback(_) {
-    final extent = _negativeOffset?.maxScrollExtent;
-    if (extent != null) {
-      minMaxExtent = -extent;
-    } else {
-      minMaxExtent = 0;
-    }
+    final negativeOffset = _negativeOffset;
+    if (negativeOffset == null) return;
+    final extent = negativeOffset.maxScrollExtent;
+    negativeOffset._minMaxExtent = -extent;
+    _effectiveController._offset = -extent;
   }
 
   @override
@@ -163,60 +157,65 @@ class _TimelineListViewState extends State<TimelineListView> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> slivers = _buildSlivers(context, negative: false);
-    final List<Widget> negativeSlivers = _buildSlivers(context, negative: true);
-    final AxisDirection axisDirection = _getDirection(context);
+    final slivers = _buildSlivers(context, negative: false);
+    final negativeSlivers = _buildSlivers(context, negative: true);
+    final axisDirection = _getDirection(context);
     final scrollPhysics =
         widget.physics ?? const AlwaysScrollableScrollPhysics();
     return Scrollable(
       axisDirection: axisDirection,
       controller: _effectiveController,
       physics: scrollPhysics,
-      viewportBuilder: (BuildContext context, ViewportOffset offset) {
-        return Builder(builder: (BuildContext context) {
-          /// Build negative [ScrollPosition] for the negative scrolling [Viewport].
-          final state = Scrollable.of(context);
-          final negativeOffset = _InfiniteScrollPosition(
-            physics: scrollPhysics,
-            context: state,
-            initialPixels: -offset.pixels,
-            keepScrollOffset: _effectiveController.keepScrollOffset,
-            negativeScroll: true,
-          );
-          _negativeOffset = negativeOffset;
+      viewportBuilder: (context, offset) {
+        return Builder(
+          builder: (context) {
+            /// Build negative [ScrollPosition] for the negative scrolling [Viewport].
+            final state = Scrollable.of(context);
+            final negativeOffset = _InfiniteScrollPosition(
+              physics: scrollPhysics,
+              context: state,
+              initialPixels: -offset.pixels,
+              keepScrollOffset: _effectiveController.keepScrollOffset,
+              negativeScroll: true,
+            );
+            _negativeOffset = negativeOffset;
 
-          /// Keep the negative scrolling [Viewport] positioned to the [ScrollPosition].
-          offset.addListener(() {
-            negativeOffset._forceNegativePixels(offset.pixels);
-          });
+            /// Keep the negative scrolling [Viewport] positioned to the [ScrollPosition].
+            offset.addListener(() {
+              negativeOffset._forceNegativePixels(offset.pixels);
+            });
 
-          /// Stack the two [Viewport]s on top of each other so they move in sync.
-          return Stack(
-            children: <Widget>[
-              Viewport(
-                axisDirection: flipAxisDirection(axisDirection),
-                anchor: 1.0 - widget.anchor,
-                offset: negativeOffset,
-                slivers: negativeSlivers,
-                cacheExtent: widget.cacheExtent,
-              ),
-              Viewport(
-                axisDirection: axisDirection,
-                anchor: widget.anchor,
-                offset: offset,
-                slivers: slivers,
-                cacheExtent: widget.cacheExtent,
-              ),
-            ],
-          );
-        });
+            /// Stack the two [Viewport]s on top of each other so they move in sync.
+            return Stack(
+              children: <Widget>[
+                Viewport(
+                  axisDirection: flipAxisDirection(axisDirection),
+                  anchor: 1.0 - widget.anchor,
+                  offset: negativeOffset,
+                  slivers: negativeSlivers,
+                  cacheExtent: widget.cacheExtent,
+                ),
+                Viewport(
+                  axisDirection: axisDirection,
+                  anchor: widget.anchor,
+                  offset: offset,
+                  slivers: slivers,
+                  cacheExtent: widget.cacheExtent,
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }
 
   AxisDirection _getDirection(BuildContext context) {
     return getAxisDirectionFromAxisReverseAndDirectionality(
-        context, widget.scrollDirection, widget.reverse);
+      context,
+      widget.scrollDirection,
+      widget.reverse,
+    );
   }
 
   List<Widget> _buildSlivers(BuildContext context, {bool negative = false}) {
@@ -236,22 +235,21 @@ class _TimelineListViewState extends State<TimelineListView> {
                     : positiveChildrenDelegate,
               ),
         padding: EdgeInsets.zero,
-      )
+      ),
     ];
   }
 
   SliverChildDelegate get negativeChildrenDelegate {
     return SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
+      (context, index) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          final extent = (_negativeOffset?.hasContentDimensions ?? false)
-              ? _negativeOffset?.maxScrollExtent
+          final negativeOffset = _negativeOffset;
+          if (negativeOffset == null) return;
+          final extent = negativeOffset.hasContentDimensions
+              ? negativeOffset.maxScrollExtent
               : null;
-          if (extent != null) {
-            minMaxExtent = -extent;
-          } else {
-            minMaxExtent = 0;
-          }
+          negativeOffset._minMaxExtent = -(extent ?? 0);
+          _controller?._offset = -(extent ?? 0);
         });
         final separatorBuilder = widget.separatorBuilder;
         if (separatorBuilder != null) {
@@ -274,7 +272,7 @@ class _TimelineListViewState extends State<TimelineListView> {
     final itemCount = widget.itemCount;
     return SliverChildBuilderDelegate(
       (separatorBuilder != null)
-          ? (BuildContext context, int index) {
+          ? (context, index) {
               final itemIndex = index ~/ 2;
               return index.isEven
                   ? widget.itemBuilder(context, itemIndex)
@@ -293,21 +291,44 @@ class _TimelineListViewState extends State<TimelineListView> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(EnumProperty<Axis>('scrollDirection', widget.scrollDirection));
-    properties.add(FlagProperty('reverse',
-        value: widget.reverse, ifTrue: 'reversed', showName: true));
-    properties.add(DiagnosticsProperty<ScrollController>(
-        'controller', widget.controller,
-        showName: false, defaultValue: null));
-    properties.add(DiagnosticsProperty<ScrollPhysics>('physics', widget.physics,
-        showName: false, defaultValue: null));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>(
-        'padding', widget.padding,
-        defaultValue: null));
-    properties.add(
-        DoubleProperty('itemExtent', widget.itemExtent, defaultValue: null));
-    properties.add(
-        DoubleProperty('cacheExtent', widget.cacheExtent, defaultValue: null));
+      ..add(EnumProperty<Axis>("scrollDirection", widget.scrollDirection))
+      ..add(
+        FlagProperty(
+          "reverse",
+          value: widget.reverse,
+          ifTrue: "reversed",
+          showName: true,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<ScrollController>(
+          "controller",
+          widget.controller,
+          showName: false,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<ScrollPhysics>(
+          "physics",
+          widget.physics,
+          showName: false,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        DiagnosticsProperty<EdgeInsetsGeometry>(
+          "padding",
+          widget.padding,
+          defaultValue: null,
+        ),
+      )
+      ..add(
+        DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null),
+      )
+      ..add(
+        DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null),
+      );
   }
 }
 
@@ -315,14 +336,10 @@ class _TimelineListViewState extends State<TimelineListView> {
 class TimelineScrollController extends ScrollController {
   /// Creates a new [TimelineScrollController]
   TimelineScrollController({
-    double initialScrollOffset = 0.0,
-    bool keepScrollOffset = true,
-    String? debugLabel,
-  }) : super(
-          initialScrollOffset: initialScrollOffset,
-          keepScrollOffset: keepScrollOffset,
-          debugLabel: debugLabel,
-        ) {
+    super.initialScrollOffset,
+    super.keepScrollOffset,
+    super.debugLabel,
+  }) {
     addListener(() {
       final currentPosition = position.pixels;
       _previousPosition = currentPosition;
@@ -331,8 +348,11 @@ class TimelineScrollController extends ScrollController {
   }
 
   @override
-  ScrollPosition createScrollPosition(ScrollPhysics physics,
-      ScrollContext context, ScrollPosition? oldPosition) {
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) {
     return _InfiniteScrollPosition(
       physics: physics,
       context: context,
@@ -340,13 +360,17 @@ class TimelineScrollController extends ScrollController {
       keepScrollOffset: keepScrollOffset,
       oldPosition: oldPosition,
       debugLabel: debugLabel,
+      negativePredicate: () => _offset,
     );
   }
+
+  double _offset = 0.0;
 
   double _previousPosition = 0.0;
   double _previousMaxExtent = 0.0;
 
   void forceScrollToTop() {
+    if (isDisposed) return;
     if (positions.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         forceScrollToTop();
@@ -356,10 +380,22 @@ class TimelineScrollController extends ScrollController {
     scrollToTop();
   }
 
+  bool isDisposed = false;
+
+  @override
+  void dispose() {
+    if (isDisposed) return;
+    isDisposed = true;
+    super.dispose();
+  }
+
   void scrollToTop() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (isDisposed) return;
+
       if (positions.isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if (isDisposed) return;
           scrollToTop();
         });
         return;
@@ -373,6 +409,8 @@ class TimelineScrollController extends ScrollController {
 
       if (_previousPosition == _previousMaxExtent) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          if (isDisposed) return;
+
           scrollToTop();
         });
       }
@@ -382,23 +420,18 @@ class TimelineScrollController extends ScrollController {
 
 class _InfiniteScrollPosition extends ScrollPositionWithSingleContext {
   _InfiniteScrollPosition({
-    required ScrollPhysics physics,
-    required ScrollContext context,
-    double? initialPixels = 0.0,
-    bool keepScrollOffset = true,
-    ScrollPosition? oldPosition,
-    String? debugLabel,
+    required super.physics,
+    required super.context,
+    super.initialPixels,
+    super.keepScrollOffset,
+    super.oldPosition,
+    super.debugLabel,
     this.negativeScroll = false,
-  }) : super(
-          physics: physics,
-          context: context,
-          initialPixels: initialPixels,
-          keepScrollOffset: keepScrollOffset,
-          oldPosition: oldPosition,
-          debugLabel: debugLabel,
-        );
+    this.negativePredicate,
+  });
 
   final bool negativeScroll;
+  final double Function()? negativePredicate;
 
   void _forceNegativePixels(double value) {
     super.forcePixels(-value);
@@ -419,5 +452,7 @@ class _InfiniteScrollPosition extends ScrollPositionWithSingleContext {
   }
 
   @override
-  double get minScrollExtent => _TimelineListViewState.minMaxExtent;
+  double get minScrollExtent => negativePredicate?.call() ?? _minMaxExtent;
+
+  double _minMaxExtent = 0;
 }

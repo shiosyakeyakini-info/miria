@@ -1,7 +1,7 @@
-import 'package:intl/intl.dart';
+import "package:intl/intl.dart";
 
 Pattern get availableServerVersion => RegExp(r"^(1[3-9]\.|20[2-9][0-9])");
-RegExp get htmlTagRemove => RegExp(r"""<("[^"]*"|'[^']*'|[^'">])*>""");
+RegExp get htmlTagRemove => RegExp("""<("[^"]*"|'[^']*'|[^'">])*>""");
 
 final intFormatter = NumberFormat("#,###");
 

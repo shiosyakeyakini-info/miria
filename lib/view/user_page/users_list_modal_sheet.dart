@@ -1,19 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/users_list_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/users_list_settings.dart";
+import "package:miria/state_notifier/user_list_page/users_lists_notifier.dart";
+import "package:miria/view/common/error_detail.dart";
+import "package:miria/view/users_list_page/users_list_settings_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
+@RoutePage()
 class UsersListModalSheet extends ConsumerWidget {
   const UsersListModalSheet({
-    super.key,
     required this.account,
     required this.user,
+    super.key,
   });
 
   final Account account;
@@ -21,8 +22,7 @@ class UsersListModalSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(account));
-    final lists = ref.watch(usersListsNotifierProvider(misskey));
+    final lists = ref.watch(usersListsNotifierProvider);
 
     return lists.when(
       data: (lists) {
@@ -39,14 +39,12 @@ class UsersListModalSheet extends ConsumerWidget {
                   }
                   if (value) {
                     await ref
-                        .read(usersListsNotifierProvider(misskey).notifier)
-                        .push(list.id, user)
-                        .expectFailure(context);
+                        .read(usersListsNotifierProvider.notifier)
+                        .push(list.id, user);
                   } else {
                     await ref
-                        .read(usersListsNotifierProvider(misskey).notifier)
-                        .pull(list.id, user)
-                        .expectFailure(context);
+                        .read(usersListsNotifierProvider.notifier)
+                        .pull(list.id, user);
                   }
                 },
                 title: Text(list.name ?? ""),
@@ -65,9 +63,8 @@ class UsersListModalSheet extends ConsumerWidget {
                   if (!context.mounted) return;
                   if (settings != null) {
                     await ref
-                        .read(usersListsNotifierProvider(misskey).notifier)
-                        .create(settings)
-                        .expectFailure(context);
+                        .read(usersListsNotifierProvider.notifier)
+                        .create(settings);
                   }
                 },
               );

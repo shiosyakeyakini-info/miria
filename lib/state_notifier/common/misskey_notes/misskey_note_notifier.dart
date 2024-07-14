@@ -1,164 +1,200 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class OpenLocalOnlyNoteFromRemoteException implements Exception {}
+part "misskey_note_notifier.g.dart";
 
-class MisskeyNoteNotifier extends FamilyNotifier<void, Account> {
+@Riverpod(dependencies: [accountContext, misskeyGetContext], keepAlive: true)
+class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
   @override
-  void build(Account arg) {
+  void build() {
     return;
   }
 
-  Account get _account => arg;
-
   /// 指定したアカウントから見たNoteを返す
-  Future<Note> lookupNote({
-    required Account account,
+  Future<Note?> lookupNote({
     required Note note,
+    required AccountContext accountContext,
   }) async {
-    if (account.host == _account.host) {
+    if (note.user.host == null &&
+        ref.read(accountContextProvider).getAccount.host ==
+            accountContext.getAccount.host) {
       return note;
     }
 
     if (note.localOnly) {
-      throw OpenLocalOnlyNoteFromRemoteException();
+      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+            message: (context) =>
+                S.of(context).cannotOpenLocalOnlyNoteFromRemote,
+          );
+      return null;
     }
 
-    final host = note.user.host ?? _account.host;
+    final host = note.url?.host ?? note.user.host;
 
     try {
       // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
-      final user = await ref.read(misskeyProvider(account)).users.showByName(
+      final user = await ref
+          .read(misskeyProvider(accountContext.getAccount))
+          .users
+          .showByName(
             UsersShowByUserNameRequest(
               userName: note.user.username,
               host: host,
             ),
           );
 
-      final userNotes = await ref.read(misskeyProvider(account)).users.notes(
+      final userNotes = await ref
+          .read(misskeyProvider(accountContext.getAccount))
+          .users
+          .notes(
             UsersNotesRequest(
               userId: user.id,
-              untilDate: note.createdAt.millisecondsSinceEpoch + 1,
+              untilDate: note.createdAt.add(const Duration(seconds: 1)),
             ),
           );
 
       return userNotes
-          .firstWhere((e) => e.uri?.pathSegments.lastOrNull == note.id);
-    } catch (e) {
+          .firstWhere((e) => e.id == note.uri?.pathSegments.lastOrNull);
+    } catch (e, s) {
+      if (kDebugMode) {
+        print(e);
+        print(s);
+      }
+
       // 最終手段として、連合で照会する
-      final response = await ref.read(misskeyProvider(account)).ap.show(
-            ApShowRequest(
-              uri: note.uri ??
-                  Uri(
-                    scheme: "https",
-                    host: host,
-                    pathSegments: ["notes", note.id],
-                  ),
-            ),
-          );
-      return Note.fromJson(response.object);
+      final response =
+          await ref.read(dialogStateNotifierProvider.notifier).guard(
+                () async => await ref
+                    .read(misskeyProvider(accountContext.getAccount))
+                    .ap
+                    .show(
+                      ApShowRequest(
+                        uri: note.uri ??
+                            Uri(
+                              scheme: "https",
+                              host: host,
+                              pathSegments: ["notes", note.id],
+                            ),
+                      ),
+                    ),
+              );
+      final result = response.valueOrNull?.object;
+      if (result == null) return null;
+      return Note.fromJson(result);
     }
   }
 
   /// 指定したアカウントから見たUserを返す
-  Future<User> lookupUser({
-    required Account account,
+  Future<User?> lookupUser({
     required User user,
+    required AccountContext accountContext,
   }) async {
-    if (account.host == _account.host) {
+    final accountContextHost = ref.read(accountContextProvider).getAccount.host;
+    if (user.host == null &&
+        accountContextHost == accountContext.getAccount.host) {
       return user;
     }
 
-    final host = user.host ?? _account.host;
+    final host = user.host ?? accountContext.getAccount.host;
 
-    try {
-      return ref.read(misskeyProvider(account)).users.showByName(
-            UsersShowByUserNameRequest(
-              userName: user.username,
-              host: host,
-            ),
-          );
-    } catch (e) {
-      // 最終手段として、連合で照会する
-      // `users/show` で自動的に照会されるから必要ない
-      final response = await ref.read(misskeyProvider(account)).ap.show(
-            ApShowRequest(
-              uri: Uri(
-                scheme: "https",
-                host: user.host,
-                pathSegments: ["@$host"],
+    final response = await ref.read(dialogStateNotifierProvider.notifier).guard(
+          () async => ref
+              .read(misskeyProvider(accountContext.getAccount))
+              .users
+              .showByName(
+                UsersShowByUserNameRequest(userName: user.username, host: host),
               ),
-            ),
-          );
-      return UserDetailed.fromJson(response.object);
-    }
+        );
+    return response.valueOrNull;
   }
 
   Future<void> navigateToNoteDetailPage(
-    BuildContext context,
-    Note note,
-    Account? loginAs,
-  ) async {
-    final foundNote = loginAs == null
-        ? note
-        : await lookupNote(
-            note: note,
-            account: loginAs,
-          );
-    if (!context.mounted) return;
-    context.pushRoute(
-      NoteDetailRoute(
-        note: foundNote,
-        account: loginAs ?? _account,
-      ),
-    );
+    Note note, {
+    Account? account,
+  }) async {
+    final router = ref.read(appRouterProvider);
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final accountContext = account != null
+          ? AccountContext(
+              getAccount: account,
+              postAccount: account.isDemoAccount
+                  ? ref.read(accountContextProvider).postAccount
+                  : account,
+            )
+          : ref.read(accountContextProvider);
+      final foundNote = note.user.host == null &&
+              note.uri?.host == accountContext.getAccount.host
+          ? note
+          : await lookupNote(
+              note: note,
+              accountContext: accountContext,
+            );
+      if (foundNote == null) return;
+      await router.push(
+        NoteDetailRoute(note: foundNote, accountContext: accountContext),
+      );
+    });
   }
 
   Future<void> navigateToUserPage(
-    BuildContext context,
-    User user,
-    Account? loginAs,
-  ) async {
-    final foundUser = loginAs == null
-        ? user
-        : await lookupUser(
-            account: loginAs,
-            user: user,
-          );
-    if (!context.mounted) return;
-    context.pushRoute(
-      UserRoute(
-        userId: foundUser.id,
-        account: loginAs ?? _account,
-      ),
-    );
+    User user, {
+    Account? account,
+  }) async {
+    final router = ref.read(appRouterProvider);
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final accountContext = account != null
+          ? AccountContext(
+              getAccount: account,
+              postAccount: account.isDemoAccount
+                  ? ref.read(accountContextProvider).postAccount
+                  : account,
+            )
+          : ref.read(accountContextProvider);
+      final foundUser = user.host == null &&
+              accountContext.getAccount ==
+                  ref.read(accountContextProvider).getAccount
+          ? user
+          : await lookupUser(user: user, accountContext: accountContext);
+      if (foundUser == null) return;
+      await router.push(
+        UserRoute(userId: foundUser.id, accountContext: accountContext),
+      );
+    });
   }
 
-  Future<void> openNoteInOtherAccount(BuildContext context, Note note) async {
-    final selectedAccount = await showDialog<Account?>(
-      context: context,
-      builder: (context) => AccountSelectDialog(
-        host: note.localOnly ? _account.host : null,
-      ),
-    );
+  Future<void> openNoteInOtherAccount(Note note) async {
+    final accountContext = ref.read(accountContextProvider);
+    final selectedAccount = await ref.read(appRouterProvider).push<Account>(
+          AccountSelectRoute(
+            host: note.localOnly ? accountContext.getAccount.host : null,
+            remoteHost: note.user.host != accountContext.getAccount.host &&
+                    note.user.host != null
+                ? note.user.host
+                : null,
+          ),
+        );
     if (selectedAccount == null) return;
-    if (!context.mounted) return;
-    await navigateToNoteDetailPage(context, note, selectedAccount);
+    await navigateToNoteDetailPage(note, account: selectedAccount);
   }
 
-  Future<void> openUserInOtherAccount(BuildContext context, User user) async {
-    final selectedAccount = await showDialog<Account?>(
-      context: context,
-      builder: (context) => const AccountSelectDialog(),
-    );
+  Future<void> openUserInOtherAccount(User user) async {
+    final accountContext = ref.read(accountContextProvider);
+    final selectedAccount = await ref.read(appRouterProvider).push<Account>(
+          AccountSelectRoute(
+            remoteHost:
+                user.host != accountContext.getAccount.host && user.host != null
+                    ? user.host
+                    : null,
+          ),
+        );
+
     if (selectedAccount == null) return;
-    if (!context.mounted) return;
-    await navigateToUserPage(context, user, selectedAccount);
+    await navigateToUserPage(user, account: selectedAccount);
   }
 }

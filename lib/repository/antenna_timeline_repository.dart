@@ -1,7 +1,7 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:miria/repository/socket_timeline_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:miria/repository/socket_timeline_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class AntennaTimelineRepository extends SocketTimelineRepository {
   AntennaTimelineRepository(
@@ -27,12 +27,13 @@ class AntennaTimelineRepository extends SocketTimelineRepository {
     required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
   }) {
     return misskey.antennaStream(
-        antennaId: tabSetting.antennaId!,
-        onNoteReceived: onReceived,
-        onReacted: onReacted,
-        onUnreacted: onUnreacted,
-        onVoted: onVoted,
-        onUpdated: onUpdated);
+      antennaId: tabSetting.antennaId!,
+      onNoteReceived: onReceived,
+      onReacted: onReacted,
+      onUnreacted: onUnreacted,
+      onVoted: onVoted,
+      onUpdated: onUpdated,
+    );
   }
 
   @override
