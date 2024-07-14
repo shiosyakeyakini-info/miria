@@ -3,6 +3,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/date_time_picker.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_info_notifier.dart";
@@ -101,7 +102,7 @@ class UserNotes extends HookConsumerWidget {
 
                   final result = await showDateTimePicker(
                     context: context,
-                    initialDate: untilDate ?? DateTime.now(),
+                    initialDate: untilDate.value ?? DateTime.now(),
                     firstDate: firstDate ?? DateTime.now(),
                     lastDate: DateTime.now(),
                     datePickerHelpText: S.of(context).showNotesBeforeThisDate,
