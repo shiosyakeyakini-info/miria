@@ -66,6 +66,7 @@ class DriveFileSelectDialog extends HookConsumerWidget
           child: Column(
             children: [
               PushableListView(
+                hideIsEmpty: true,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 showAd: false,

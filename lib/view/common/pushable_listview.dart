@@ -18,6 +18,7 @@ class PushableListView<T> extends HookConsumerWidget {
   final bool shrinkWrap;
   final ScrollPhysics? physics;
   final bool showAd;
+  final bool hideIsEmpty;
 
   const PushableListView({
     required this.initializeFuture,
@@ -29,6 +30,7 @@ class PushableListView<T> extends HookConsumerWidget {
     this.physics,
     this.additionalErrorInfo,
     this.showAd = true,
+    this.hideIsEmpty = false,
   });
 
   @override
@@ -98,6 +100,14 @@ class PushableListView<T> extends HookConsumerWidget {
           if (items.value.length == index) {
             if (isFinalPage.value) {
               return Container();
+            }
+            if (items.isEmpty && !widget.hideIsEmpty) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("なんもないで"),
+                ),
+              );
             }
 
             if (ref.read(

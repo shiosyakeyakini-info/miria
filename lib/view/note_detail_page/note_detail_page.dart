@@ -82,6 +82,7 @@ class NoteDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                     AsyncData(:final value) => ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
+                        hideIsEmpty: true,
                         itemCount: value.length,
                         itemBuilder: (context, index) {
                           return MisskeyNote(
