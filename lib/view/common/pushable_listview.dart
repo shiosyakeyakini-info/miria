@@ -101,7 +101,7 @@ class PushableListView<T> extends HookConsumerWidget {
             if (isFinalPage.value) {
               return Container();
             }
-            if (items.isEmpty && !widget.hideIsEmpty) {
+            if (items.value.isEmpty && !hideIsEmpty) {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(10),
