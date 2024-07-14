@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/clip_settings.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/clip_settings.dart";
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -42,6 +43,7 @@ class _ClipSettingsNotifier extends AutoDisposeNotifier<ClipSettings> {
   }
 }
 
+@RoutePage<ClipSettings>()
 class ClipSettingsDialog extends StatelessWidget {
   const ClipSettingsDialog({
     super.key,

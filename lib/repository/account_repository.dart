@@ -1,16 +1,22 @@
-import 'dart:convert';
+// ignore_for_file: avoid_dynamic_calls
 
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/model/acct.dart';
-import 'package:miria/providers.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:uuid/uuid.dart';
+import "dart:convert";
+
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/model/acct.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/shared_preference_controller.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:uuid/uuid.dart";
+
+part "account_repository.g.dart";
 
 sealed class ValidateMisskeyException implements Exception {}
 
@@ -45,7 +51,13 @@ class AlreadyLoggedInException implements ValidateMisskeyException {
   final String acct;
 }
 
-class AccountRepository extends Notifier<List<Account>> {
+@riverpod
+class AccountRepository extends _$AccountRepository {
+  late final SharedPreferenceController sharedPreferenceController =
+      ref.read(sharedPrefenceControllerProvider);
+
+  AccountRepository();
+
   final _validatedAccts = <Acct>{};
   final _validateMetaAccts = <Acct>{};
   String _sessionId = "";
@@ -56,22 +68,29 @@ class AccountRepository extends Notifier<List<Account>> {
   }
 
   Future<void> load() async {
-    const prefs = FlutterSecureStorage();
-    final storedData = await prefs.read(key: "accounts");
-    if (storedData == null) {
-      return;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await SharedPreferenceAppGroup.setAppGroup(
+        "group.info.shiosyakeyakini.miria",
+      );
     }
+
+    final storedData =
+        await sharedPreferenceController.getStringSecure("accounts");
+    if (storedData == null) return;
+
     try {
-      final list = (jsonDecode(storedData) as List);
+      final list = jsonDecode(storedData) as List;
       final resultList = List.of(list);
       for (final element in list) {
-        if (element["meta"] == null) {
+        if ((element as Map<String, dynamic>)["meta"] == null) {
           try {
             final meta = await ref
                 .read(misskeyWithoutAccountProvider(element["host"]))
                 .meta();
             element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
-          } catch (e) {}
+          } catch (e) {
+            logger.warning(e);
+          }
         }
       }
 
@@ -91,7 +110,7 @@ class AccountRepository extends Notifier<List<Account>> {
     _validatedAccts.add(account.acct);
 
     final i = await ref.read(misskeyProvider(account)).i.i();
-    ref
+    await ref
         .read(accountSettingsRepositoryProvider)
         .save(setting.copyWith(latestICached: DateTime.now()));
 
@@ -110,7 +129,7 @@ class AccountRepository extends Notifier<List<Account>> {
     _validateMetaAccts.add(account.acct);
 
     final meta = await ref.read(misskeyProvider(account)).meta();
-    ref
+    await ref
         .read(accountSettingsRepositoryProvider)
         .save(setting.copyWith(latestMetaCached: DateTime.now()));
 
@@ -127,33 +146,36 @@ class AccountRepository extends Notifier<List<Account>> {
 
     final account = state.firstWhere((element) => element.acct == acct);
 
-    switch (setting.iCacheStrategy) {
-      case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) updateI(account);
-        break;
-      case CacheStrategy.whenOneDay:
-        final latestUpdated = setting.latestICached;
-        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          updateI(account);
+    await Future.wait([
+      Future(() async {
+        switch (setting.iCacheStrategy) {
+          case CacheStrategy.whenLaunch:
+            if (!_validatedAccts.contains(acct)) await updateI(account);
+          case CacheStrategy.whenOneDay:
+            final latestUpdated = setting.latestICached;
+            if (latestUpdated == null ||
+                latestUpdated.day != DateTime.now().day) {
+              await updateI(account);
+            }
+          case CacheStrategy.whenTabChange:
+            await updateI(account);
         }
-      case CacheStrategy.whenTabChange:
-        updateI(account);
-        break;
-    }
-
-    switch (setting.metaChacheStrategy) {
-      case CacheStrategy.whenLaunch:
-        if (!_validatedAccts.contains(acct)) await updateMeta(account);
-        break;
-      case CacheStrategy.whenOneDay:
-        final latestUpdated = setting.latestMetaCached;
-        if (latestUpdated == null || latestUpdated.day != DateTime.now().day) {
-          await updateMeta(account);
+      }),
+      Future(() async {
+        switch (setting.metaChacheStrategy) {
+          case CacheStrategy.whenLaunch:
+            if (!_validateMetaAccts.contains(acct)) await updateMeta(account);
+          case CacheStrategy.whenOneDay:
+            final latestUpdated = setting.latestMetaCached;
+            if (latestUpdated == null ||
+                latestUpdated.day != DateTime.now().day) {
+              await updateMeta(account);
+            }
+          case CacheStrategy.whenTabChange:
+            await updateMeta(account);
         }
-      case CacheStrategy.whenTabChange:
-        await updateMeta(account);
-        break;
-    }
+      }),
+    ]);
 
     await _save();
   }
@@ -166,7 +188,7 @@ class AccountRepository extends Notifier<List<Account>> {
     final i = state[index].i.copyWith(
       unreadAnnouncements: [
         ...state[index].i.unreadAnnouncements,
-        announcement
+        announcement,
       ],
     );
 
@@ -219,9 +241,10 @@ class AccountRepository extends Notifier<List<Account>> {
     final Uri uri;
     try {
       uri = Uri(
-          scheme: "https",
-          host: server,
-          pathSegments: [".well-known", "nodeinfo"]);
+        scheme: "https",
+        host: server,
+        pathSegments: [".well-known", "nodeinfo"],
+      );
     } catch (e) {
       throw InvalidServerException(server);
     }
@@ -264,14 +287,17 @@ class AccountRepository extends Notifier<List<Account>> {
   }
 
   Future<void> loginAsPassword(
-      String server, String userId, String password) async {
+    String server,
+    String userId,
+    String password,
+  ) async {
     final token =
         await MisskeyServer().loginAsPassword(server, userId, password);
     final i = await Misskey(token: token, host: server).i.i();
     final meta = await Misskey(token: token, host: server).meta();
     final account =
         Account(host: server, token: token, userId: userId, i: i, meta: meta);
-    _addAccount(account);
+    await _addAccount(account);
   }
 
   Future<void> loginAsToken(String server, String token) async {
@@ -322,26 +348,22 @@ class AccountRepository extends Notifier<List<Account>> {
     await ref
         .read(tabSettingsRepositoryProvider)
         .initializeTabSettings(account);
-    ();
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
+    final actualIndex = oldIndex < newIndex ? -1 : newIndex;
     final newState = state.toList();
     final item = newState.removeAt(oldIndex);
-    newState.insert(newIndex, item);
+    newState.insert(actualIndex, item);
     state = newState;
 
     await _save();
   }
 
   Future<void> _save() async {
-    const prefs = FlutterSecureStorage();
-    await prefs.write(
-      key: "accounts",
-      value: jsonEncode(state.map((e) => e.toJson()).toList()),
+    await sharedPreferenceController.setStringSecure(
+      "accounts",
+      jsonEncode(state.map((e) => e.toJson()).toList()),
     );
   }
 }

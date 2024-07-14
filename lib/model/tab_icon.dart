@@ -1,7 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'tab_icon.freezed.dart';
-part 'tab_icon.g.dart';
+part "tab_icon.freezed.dart";
+part "tab_icon.g.dart";
 
 @freezed
 class TabIcon with _$TabIcon {
