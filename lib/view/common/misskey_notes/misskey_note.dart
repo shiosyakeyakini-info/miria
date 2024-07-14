@@ -443,63 +443,6 @@ class MisskeyNote extends HookConsumerWidget {
               alignment: Alignment.center,
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 800),
-                margin: EdgeInsets.only(
-                  left: displayNote.channel?.color != null ? 5.0 : 0.0,
-                ),
-                padding: EdgeInsets.only(
-                  top: MediaQuery.textScalerOf(context).scale(5),
-                  bottom: MediaQuery.textScalerOf(context).scale(5),
-                  left: displayNote.channel?.color != null ? 4.0 : 0.0,
-                ),
-                decoration: isDisplayBorder
-                    ? BoxDecoration(
-                        //TODO: 動いていないっぽい
-                        // color: widget.recursive == 1 &&
-                        //         ref.read(noteModalSheetSharingModeProviding)
-                        //     ? Theme.of(context).scaffoldBackgroundColor
-                        //     : null,
-                        border: Border(
-                          left: displayNote.channel?.color != null
-                              ? BorderSide(
-                                  color: Color(
-                                    0xFF000000 | displayNote.channel!.color!,
-                                  ),
-                                  width: 4,
-                                )
-                              : BorderSide.none,
-                          bottom: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                            width: 0.5,
-                          ),
-                        ),
-                      )
-                    : BoxDecoration(
-                        color: recursive == 1
-                            ? Theme.of(context).scaffoldBackgroundColor
-                            : null,
-                      ),
-                child: child,
-              ),
-            ),
-          ),
-        );
-      },
-      [recursive, globalKey.value, displayNote.channel?.color],
-    );
-    final buildParent = useCallback<Widget Function({required Widget child})>(
-      ({required child}) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: recursive > 1
-                ? TextScaler.linear(MediaQuery.textScalerOf(context).scale(0.7))
-                : null,
-          ),
-          child: RepaintBoundary(
-            key: globalKey.value,
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 800),
                 padding: EdgeInsets.only(
                   top: MediaQuery.textScalerOf(context).scale(5),
                   bottom: MediaQuery.textScalerOf(context).scale(5),
