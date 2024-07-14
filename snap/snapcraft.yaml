@@ -53,16 +53,39 @@ apps:
 parts:
   miria:
     source: .
-    plugin: flutter
+    #plugin: flutter
+    plugin: nil
+    build-environment:
+      - PATH: "$CRAFT_PART_BUILD/FlutterSDK/bin:$PATH"
     build-packages:
       - libmpv-dev
       - libsecret-1-dev
+      # flutterプラグインで使用されるパッケージ
+      - clang
+      - curl
+      - git
+      - cmake
+      - ninja-build
+      - unzip
+      - jq
     stage-packages:
       - libmpv1
       - libsecret-1-0
     override-pull: |
       craftctl default
       craftctl set version=$(cat pubspec.yaml | grep "version[:]" | cut -d " " -f 2)
+    override-build: |
+      # flutterプラグインの処理を代替
+      set +e
+      rm -rf $CRAFT_PART_BUILD/FlutterSDK
+      git clone --depth 1 -b $(jq -r .flutter .fvmrc) https://github.com/flutter/flutter.git $CRAFT_PART_BUILD/FlutterSDK
+      flutter precache --linux
+      flutter pub get
+      set -e
+      #flutter pub run build_runner build --delete-conflicting-outputs
+      flutter build linux --release --verbose --target lib/main.dart
+      cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/
+
   zenity:
     plugin: nil
     stage-packages:
