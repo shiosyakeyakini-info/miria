@@ -172,7 +172,7 @@ class PageContent extends ConsumerWidget {
           onTap: () async => showDialog(
             context: context,
             builder: (context) =>
-                ImageDialog(driveFiles: [url], initialPage: 0),
+                ImageDialog(driveFiles: [file], initialPage: 0),
           ),
           child: NetworkImageView(
             url: thumbnailUrl ?? url,

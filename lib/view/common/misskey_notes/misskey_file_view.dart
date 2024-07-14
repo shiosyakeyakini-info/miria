@@ -158,7 +158,7 @@ class MisskeyImage extends HookConsumerWidget {
                   await showDialog(
                     context: context,
                     builder: (context) => ImageDialog(
-                      imageUrlList: targetFiles,
+                      driveFiles: targetFiles,
                       initialPage: position,
                     ),
                   );

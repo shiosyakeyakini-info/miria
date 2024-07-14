@@ -1,13 +1,16 @@
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:miria/providers.dart';
-import 'package:misskey_dart/misskey_dart.dart' hide Permission;
-import 'package:permission_handler/permission_handler.dart';
+import "package:device_info_plus/device_info_plus.dart";
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:image_gallery_saver/image_gallery_saver.dart";
+import "package:miria/providers.dart";
+import "package:misskey_dart/misskey_dart.dart" hide Permission;
+import "package:permission_handler/permission_handler.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class DownloadFileNotifier extends Notifier<void> {
+part "download_file_notifier.g.dart";
+
+@Riverpod(keepAlive: true)
+class DownloadFileNotifier extends _$DownloadFileNotifier {
   @override
   void build() {
     return;
