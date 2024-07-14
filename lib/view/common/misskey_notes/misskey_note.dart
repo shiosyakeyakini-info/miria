@@ -486,7 +486,7 @@ class MisskeyNote extends HookConsumerWidget {
       },
       [recursive, globalKey.value, displayNote.channel?.color],
     );
-final buildParent = useCallback<Widget Function({required Widget child})>(
+    final buildParent = useCallback<Widget Function({required Widget child})>(
       ({required child}) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
@@ -650,7 +650,8 @@ final buildParent = useCallback<Widget Function({required Widget child})>(
                                   .enableAnimatedMFM,
                               onEmojiTap: (emojiData) async =>
                                   await reactionControl(
-                                      requestEmoji: emojiData),
+                                requestEmoji: emojiData,
+                              ),
                               suffixSpan: [
                                 if (!isEmptyRenote &&
                                     displayNote.renoteId != null &&
@@ -1013,7 +1014,6 @@ class ChannelColorBarBox extends StatelessWidget {
     );
   }
 }
-
 
 class NoteChannelView extends ConsumerWidget {
   final NoteChannelInfo channel;
