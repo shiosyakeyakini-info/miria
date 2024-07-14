@@ -1,113 +1,114 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:miria/const.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/themes/built_in_color_themes.dart';
+import "dart:async";
+
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/const.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/themes/built_in_color_themes.dart";
 
 @RoutePage()
-class GeneralSettingsPage extends ConsumerStatefulWidget {
+class GeneralSettingsPage extends HookConsumerWidget {
   const GeneralSettingsPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      GeneralSettingsPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(generalSettingsRepositoryProvider).settings;
 
-class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
-  String lightModeTheme = "";
-  String darkModeTheme = "";
-  ThemeColorSystem colorSystem = ThemeColorSystem.system;
-  NSFWInherit nsfwInherit = NSFWInherit.inherit;
-  AutomaticPush automaticPush = AutomaticPush.none;
-  bool enableDirectReaction = false;
-  bool enableAnimatedMFM = true;
-  bool enableLongTextElipsed = false;
-  bool enableFavoritedRenoteElipsed = true;
-  TabPosition tabPosition = TabPosition.top;
-  double textScaleFactor = 1.0;
-  EmojiType emojiType = EmojiType.twemoji;
-  String defaultFontName = "";
-  String serifFontName = "";
-  String monospaceFontName = "";
-  String cursiveFontName = "";
-  String fantasyFontName = "";
-  Languages language = Languages.jaJP;
+    final lightModeTheme = useState(settings.lightColorThemeId);
+    final darkModeTheme = useState(settings.darkColorThemeId);
+    final colorSystem = useState(settings.themeColorSystem);
+    final nsfwInherit = useState(settings.nsfwInherit);
+    final automaticPush = useState(settings.automaticPush);
+    final enableDirectReaction = useState(settings.enableDirectReaction);
+    final enableAnimatedMFM = useState(settings.enableAnimatedMFM);
+    final enableLongTextElipsed = useState(settings.enableLongTextElipsed);
+    final enableFavoritedRenoteElipsed =
+        useState(settings.enableFavoritedRenoteElipsed);
+    final tabPosition = useState(settings.tabPosition);
+    final textScaleFactor = useState(settings.textScaleFactor);
+    final emojiType = useState(settings.emojiType);
+    final defaultFontName = useState(settings.defaultFontName);
+    final serifFontName = useState(settings.serifFontName);
+    final monospaceFontName = useState(settings.monospaceFontName);
+    final cursiveFontName = useState(settings.cursiveFontName);
+    final fantasyFontName = useState(settings.fantasyFontName);
+    final language = useState(settings.languages);
+    final isDeckMode = useState(settings.isDeckMode);
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final settings = ref.read(generalSettingsRepositoryProvider).settings;
-    setState(() {
-      lightModeTheme = settings.lightColorThemeId;
-      if (lightModeTheme.isEmpty) {
-        lightModeTheme = builtInColorThemes
+    useMemoized(() {
+      if (lightModeTheme.value.isEmpty) {
+        lightModeTheme.value = builtInColorThemes
             .where((element) => !element.isDarkTheme)
             .first
             .id;
       }
-      darkModeTheme = settings.darkColorThemeId;
-      if (darkModeTheme.isEmpty ||
-          builtInColorThemes.every((element) =>
-              !element.isDarkTheme || element.id != darkModeTheme)) {
-        darkModeTheme =
+      if (darkModeTheme.value.isEmpty ||
+          builtInColorThemes.every(
+            (element) =>
+                !element.isDarkTheme || element.id != darkModeTheme.value,
+          )) {
+        darkModeTheme.value =
             builtInColorThemes.where((element) => element.isDarkTheme).first.id;
       }
-      colorSystem = settings.themeColorSystem;
-      nsfwInherit = settings.nsfwInherit;
-      enableDirectReaction = settings.enableDirectReaction;
-      automaticPush = settings.automaticPush;
-      enableAnimatedMFM = settings.enableAnimatedMFM;
-      enableLongTextElipsed = settings.enableLongTextElipsed;
-      enableFavoritedRenoteElipsed = settings.enableFavoritedRenoteElipsed;
-      tabPosition = settings.tabPosition;
-      textScaleFactor = settings.textScaleFactor;
-      emojiType = settings.emojiType;
-      defaultFontName = settings.defaultFontName;
-      serifFontName = settings.serifFontName;
-      monospaceFontName = settings.monospaceFontName;
-      cursiveFontName = settings.cursiveFontName;
-      fantasyFontName = settings.fantasyFontName;
-      language = settings.languages;
     });
-  }
+    final dependencies = [
+      lightModeTheme.value,
+      darkModeTheme.value,
+      colorSystem.value,
+      nsfwInherit.value,
+      enableDirectReaction.value,
+      automaticPush.value,
+      enableAnimatedMFM.value,
+      enableFavoritedRenoteElipsed.value,
+      enableLongTextElipsed.value,
+      tabPosition.value,
+      emojiType.value,
+      textScaleFactor.value,
+      defaultFontName.value,
+      serifFontName.value,
+      monospaceFontName.value,
+      cursiveFontName.value,
+      fantasyFontName.value,
+      language.value,
+      isDeckMode.value,
+    ];
+    final save = useCallback(
+      () async {
+        await ref.read(generalSettingsRepositoryProvider).update(
+              GeneralSettings(
+                lightColorThemeId: lightModeTheme.value,
+                darkColorThemeId: darkModeTheme.value,
+                themeColorSystem: colorSystem.value,
+                nsfwInherit: nsfwInherit.value,
+                enableDirectReaction: enableDirectReaction.value,
+                automaticPush: automaticPush.value,
+                enableAnimatedMFM: enableAnimatedMFM.value,
+                enableFavoritedRenoteElipsed:
+                    enableFavoritedRenoteElipsed.value,
+                enableLongTextElipsed: enableLongTextElipsed.value,
+                tabPosition: tabPosition.value,
+                emojiType: emojiType.value,
+                textScaleFactor: textScaleFactor.value,
+                defaultFontName: defaultFontName.value,
+                serifFontName: serifFontName.value,
+                monospaceFontName: monospaceFontName.value,
+                cursiveFontName: cursiveFontName.value,
+                fantasyFontName: fantasyFontName.value,
+                languages: language.value,
+                isDeckMode: isDeckMode.value,
+              ),
+            );
+      },
+      dependencies,
+    );
 
-  Future<void> save() async {
-    ref.read(generalSettingsRepositoryProvider).update(
-          GeneralSettings(
-              lightColorThemeId: lightModeTheme,
-              darkColorThemeId: darkModeTheme,
-              themeColorSystem: colorSystem,
-              nsfwInherit: nsfwInherit,
-              enableDirectReaction: enableDirectReaction,
-              automaticPush: automaticPush,
-              enableAnimatedMFM: enableAnimatedMFM,
-              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed,
-              enableLongTextElipsed: enableLongTextElipsed,
-              tabPosition: tabPosition,
-              emojiType: emojiType,
-              textScaleFactor: textScaleFactor,
-              defaultFontName: defaultFontName,
-              serifFontName: serifFontName,
-              monospaceFontName: monospaceFontName,
-              cursiveFontName: cursiveFontName,
-              fantasyFontName: fantasyFontName,
-              languages: language),
-        );
-  }
+    useMemoized(() => unawaited(save()), dependencies);
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).generalSettings)),
       body: SingleChildScrollView(
@@ -141,13 +142,11 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(element.displayName),
                             ),
                         ],
-                        value: language,
-                        onChanged: (value) => setState(
-                          () {
-                            language = value ?? Languages.jaJP;
-                            save();
-                          },
-                        ),
+                        value: language.value,
+                        onChanged: (value) async {
+                          language.value = value ?? Languages.jaJP;
+                          await save();
+                        },
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).displayOfSensitiveNotes),
@@ -160,13 +159,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(element.displayName(context)),
                             ),
                         ],
-                        value: nsfwInherit,
-                        onChanged: (value) => setState(
-                          () {
-                            nsfwInherit = value ?? NSFWInherit.inherit;
-                            save();
-                          },
-                        ),
+                        value: nsfwInherit.value,
+                        onChanged: (value) async =>
+                            nsfwInherit.value = value ?? NSFWInherit.inherit,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).infiniteScroll),
@@ -179,40 +174,36 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(element.displayName(context)),
                             ),
                         ],
-                        value: automaticPush,
-                        onChanged: (value) => setState(
-                          () {
-                            automaticPush = value ?? AutomaticPush.none;
-                            save();
-                          },
-                        ),
+                        value: automaticPush.value,
+                        onChanged: (value) async =>
+                            automaticPush.value = value ?? AutomaticPush.none,
+                      ),
+                      const Text("デッキモード"), //TODO: localize
+                      CheckboxListTile(
+                        title: const Text("デッキモードにします。"),
+                        value: isDeckMode.value,
+                        onChanged: (value) => isDeckMode.value = value ?? false,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).enableAnimatedMfm),
                       CheckboxListTile(
-                        value: enableAnimatedMFM,
-                        onChanged: (value) => setState(() {
-                          enableAnimatedMFM = value ?? true;
-                          save();
-                        }),
+                        value: enableAnimatedMFM.value,
+                        onChanged: (value) =>
+                            enableAnimatedMFM.value = value ?? true,
                         title: Text(S.of(context).enableAnimatedMfmDescription),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).collapseNotes),
                       CheckboxListTile(
-                        value: enableFavoritedRenoteElipsed,
-                        onChanged: (value) => setState(() {
-                          enableFavoritedRenoteElipsed = value ?? true;
-                          save();
-                        }),
+                        value: enableFavoritedRenoteElipsed.value,
+                        onChanged: (value) =>
+                            enableFavoritedRenoteElipsed.value = value ?? true,
                         title: Text(S.of(context).collapseReactionedRenotes),
                       ),
                       CheckboxListTile(
-                        value: enableLongTextElipsed,
-                        onChanged: (value) => setState(() {
-                          enableLongTextElipsed = value ?? true;
-                          save();
-                        }),
+                        value: enableLongTextElipsed.value,
+                        onChanged: (value) async =>
+                            enableLongTextElipsed.value = value ?? true,
                         title: Text(S.of(context).collapseLongNotes),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
@@ -230,13 +221,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               ),
                             ),
                         ],
-                        value: tabPosition,
-                        onChanged: (value) => setState(
-                          () {
-                            tabPosition = value ?? TabPosition.top;
-                            save();
-                          },
-                        ),
+                        value: tabPosition.value,
+                        onChanged: (value) async =>
+                            tabPosition.value = value ?? TabPosition.top,
                       ),
                     ],
                   ),
@@ -265,13 +252,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(S.of(context).themeIsh(element.name)),
                             ),
                         ],
-                        value: lightModeTheme,
-                        onChanged: (value) => setState(
-                          () {
-                            lightModeTheme = value ?? "";
-                            save();
-                          },
-                        ),
+                        value: lightModeTheme.value,
+                        onChanged: (value) async =>
+                            lightModeTheme.value = value ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).themeForDarkMode),
@@ -284,11 +267,8 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(S.of(context).themeIsh(element.name)),
                             ),
                         ],
-                        value: darkModeTheme,
-                        onChanged: (value) => setState(() {
-                          darkModeTheme = value ?? "";
-                          save();
-                        }),
+                        value: darkModeTheme.value,
+                        onChanged: (value) => darkModeTheme.value = value ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).selectLightOrDarkMode),
@@ -300,11 +280,9 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(colorSystem.displayName(context)),
                             ),
                         ],
-                        value: colorSystem,
-                        onChanged: (value) => setState(() {
-                          colorSystem = value ?? ThemeColorSystem.system;
-                          save();
-                        }),
+                        value: colorSystem.value,
+                        onChanged: (value) => colorSystem.value =
+                            value ?? ThemeColorSystem.system,
                       ),
                     ],
                   ),
@@ -323,16 +301,12 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       CheckboxListTile(
-                        value: enableDirectReaction,
+                        value: enableDirectReaction.value,
                         title: Text(S.of(context).emojiTapReaction),
                         subtitle:
                             Text(S.of(context).emojiTapReactionDescription),
-                        onChanged: (value) {
-                          setState(() {
-                            enableDirectReaction = !enableDirectReaction;
-                            save();
-                          });
-                        },
+                        onChanged: (value) =>
+                            enableDirectReaction.value = value ?? false,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).emojiStyle),
@@ -344,14 +318,10 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                               child: Text(type.displayName(context)),
                             ),
                         ],
-                        value: emojiType,
+                        value: emojiType.value,
                         isExpanded: true,
-                        onChanged: (value) {
-                          setState(() {
-                            emojiType = value ?? EmojiType.twemoji;
-                            save();
-                          });
-                        },
+                        onChanged: (value) =>
+                            emojiType.value = value ?? EmojiType.twemoji,
                       ),
                     ],
                   ),
@@ -370,17 +340,23 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       Slider(
-                        value: textScaleFactor,
+                        value: textScaleFactor.value,
                         min: 0.5,
                         max: 1.5,
                         divisions: 10,
-                        label: "${(textScaleFactor * 100).toInt()}%",
+                        label: "${(textScaleFactor.value * 100).toInt()}%",
                         onChanged: (value) {
-                          setState(() {
-                            textScaleFactor = value;
-                            save();
-                          });
+                          textScaleFactor.value = value;
                         },
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: (settings.textScaleFactor ==
+                                  textScaleFactor.value)
+                              ? null
+                              : save,
+                          child: const Text("変更"),
+                        ),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -396,19 +372,16 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 font.actualName.isEmpty
                                     ? S.of(context).systemFont
                                     : font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                    ?.call(),
                               ),
-                            )
+                            ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == defaultFontName) ??
+                              (e) => e.actualName == defaultFontName.value,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) => setState(() {
-                          defaultFontName = item?.actualName ?? "";
-                          save();
-                        }),
+                        onChanged: (item) =>
+                            defaultFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -424,20 +397,16 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 font.actualName.isEmpty
                                     ? S.of(context).systemFont
                                     : font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).serifStyle,
                               ),
                             ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == serifFontName) ??
+                              (e) => e.actualName == serifFontName.value,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) => setState(() {
-                          serifFontName = item?.actualName ?? "";
-                          save();
-                        }),
+                        onChanged: (item) =>
+                            serifFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -453,18 +422,16 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 font.actualName.isEmpty
                                     ? S.of(context).systemFont
                                     : font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).monospaceStyle,
                               ),
                             ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == monospaceFontName) ??
+                              (e) => e.actualName == monospaceFontName.value,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) => setState(
-                            () => monospaceFontName = item?.actualName ?? ""),
+                        onChanged: (item) =>
+                            monospaceFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -480,20 +447,16 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 font.actualName.isEmpty
                                     ? S.of(context).systemFont
                                     : font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).cursiveStyle,
                               ),
-                            )
+                            ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == cursiveFontName) ??
+                              (e) => e.actualName == cursiveFontName.value,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) => setState(() {
-                          cursiveFontName = item?.actualName ?? "";
-                          save();
-                        }),
+                        onChanged: (item) =>
+                            cursiveFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -509,20 +472,16 @@ class GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                                 font.actualName.isEmpty
                                     ? S.of(context).systemFont
                                     : font.displayName,
-                                style: GoogleFonts.asMap()[font.actualName]
-                                        ?.call() ??
-                                    AppTheme.of(context).fantasyStyle,
                               ),
-                            )
+                            ),
                         ],
                         value: choosableFonts.firstWhereOrNull(
-                                (e) => e.actualName == fantasyFontName) ??
+                              (e) => e.actualName == fantasyFontName.value,
+                            ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) => setState(() {
-                          fantasyFontName = item?.actualName ?? "";
-                          save();
-                        }),
+                        onChanged: (item) =>
+                            fantasyFontName.value = item?.actualName ?? "",
                       ),
                     ],
                   ),

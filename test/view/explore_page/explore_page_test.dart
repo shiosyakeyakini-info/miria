@@ -1,14 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:mockito/mockito.dart';
+import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:mockito/mockito.dart";
 
-import '../../test_util/default_root_widget.dart';
-import '../../test_util/mock.mocks.dart';
-import '../../test_util/test_datas.dart';
-import '../../test_util/widget_tester_extension.dart';
+import "../../test_util/default_root_widget.dart";
+import "../../test_util/mock.mocks.dart";
+import "../../test_util/test_datas.dart";
+import "../../test_util/widget_tester_extension.dart";
 
 void main() {
   group("みつける", () {
@@ -19,18 +19,30 @@ void main() {
         when(misskey.notes).thenReturn(notes);
         when(notes.featured(any)).thenAnswer((_) async => [TestData.note1]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute: ExploreRoute(
+                accountContext: TestData.accountContext,
+              ),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
 
         expect(find.text(TestData.note1.text!), findsOneWidget);
         verify(notes.featured(argThat(equals(const NotesFeaturedRequest()))));
         await tester.pageNation();
-        verify(notes.featured(argThat(equals(
-            NotesFeaturedRequest(untilId: TestData.note1.id, offset: 1)))));
+        verify(
+          notes.featured(
+            argThat(
+              equals(
+                NotesFeaturedRequest(untilId: TestData.note1.id, offset: 1),
+              ),
+            ),
+          ),
+        );
       });
 
       testWidgets("アンケートのノートを表示できること", (tester) async {
@@ -42,22 +54,32 @@ void main() {
         when(polls.recommendation(any))
             .thenAnswer((_) async => [TestData.note1]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("アンケート"));
         await tester.pumpAndSettle();
 
         expect(find.text(TestData.note1.text!), findsOneWidget);
-        verify(polls.recommendation(
-            argThat(equals(const NotesPollsRecommendationRequest()))));
+        verify(
+          polls.recommendation(
+            argThat(equals(const NotesPollsRecommendationRequest())),
+          ),
+        );
         await tester.pageNation();
 
-        verify(polls.recommendation(
-            argThat(equals(const NotesPollsRecommendationRequest(offset: 1)))));
+        verify(
+          polls.recommendation(
+            argThat(equals(const NotesPollsRecommendationRequest(offset: 1))),
+          ),
+        );
       });
     });
 
@@ -69,11 +91,15 @@ void main() {
         when(misskey.pinnedUsers())
             .thenAnswer((_) async => [TestData.detailedUser1]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ユーザー"));
         await tester.pumpAndSettle();
@@ -90,11 +116,15 @@ void main() {
         when(users.users(any))
             .thenAnswer((_) async => [TestData.detailedUser1]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ユーザー"));
         await tester.pumpAndSettle();
@@ -102,17 +132,34 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text(TestData.detailedUser1.name!), findsOneWidget);
-        verify(users.users(argThat(equals(const UsersUsersRequest(
-            state: UsersState.alive,
-            origin: Origin.local,
-            sort: UsersSortType.followerDescendant)))));
+        verify(
+          users.users(
+            argThat(
+              equals(
+                const UsersUsersRequest(
+                  state: UsersState.alive,
+                  origin: Origin.local,
+                  sort: UsersSortType.followerDescendant,
+                ),
+              ),
+            ),
+          ),
+        );
         await tester.pageNation();
-        verify(users.users(argThat(equals(const UsersUsersRequest(
-          state: UsersState.alive,
-          origin: Origin.local,
-          sort: UsersSortType.followerDescendant,
-          offset: 1,
-        )))));
+        verify(
+          users.users(
+            argThat(
+              equals(
+                const UsersUsersRequest(
+                  state: UsersState.alive,
+                  origin: Origin.local,
+                  sort: UsersSortType.followerDescendant,
+                  offset: 1,
+                ),
+              ),
+            ),
+          ),
+        );
       });
 
       testWidgets("リモートのユーザーを表示できること", (tester) async {
@@ -124,11 +171,15 @@ void main() {
         when(users.users(any))
             .thenAnswer((_) async => [TestData.detailedUser1]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ユーザー"));
         await tester.pumpAndSettle();
@@ -136,17 +187,34 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text(TestData.detailedUser1.name!), findsOneWidget);
-        verify(users.users(argThat(equals(const UsersUsersRequest(
-            state: UsersState.alive,
-            origin: Origin.remote,
-            sort: UsersSortType.followerDescendant)))));
+        verify(
+          users.users(
+            argThat(
+              equals(
+                const UsersUsersRequest(
+                  state: UsersState.alive,
+                  origin: Origin.remote,
+                  sort: UsersSortType.followerDescendant,
+                ),
+              ),
+            ),
+          ),
+        );
         await tester.pageNation();
-        verify(users.users(argThat(equals(const UsersUsersRequest(
-          state: UsersState.alive,
-          origin: Origin.remote,
-          sort: UsersSortType.followerDescendant,
-          offset: 1,
-        )))));
+        verify(
+          users.users(
+            argThat(
+              equals(
+                const UsersUsersRequest(
+                  state: UsersState.alive,
+                  origin: Origin.remote,
+                  sort: UsersSortType.followerDescendant,
+                  offset: 1,
+                ),
+              ),
+            ),
+          ),
+        );
       });
     });
 
@@ -159,17 +227,23 @@ void main() {
         when(roles.list())
             .thenAnswer((_) async => [TestData.role.copyWith(usersCount: 495)]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ロール"));
         await tester.pumpAndSettle();
 
-        expect(find.textContaining(TestData.role.name, findRichText: true),
-            findsOneWidget);
+        expect(
+          find.textContaining(TestData.role.name, findRichText: true),
+          findsOneWidget,
+        );
       });
     });
 
@@ -182,11 +256,15 @@ void main() {
         when(hashtags.trend())
             .thenAnswer((_) async => [TestData.hashtagTrends]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ハッシュタグ"));
         await tester.pumpAndSettle();
@@ -201,11 +279,15 @@ void main() {
         when(misskey.notes).thenReturn(MockMisskeyNotes());
         when(hashtags.list(any)).thenAnswer((_) async => [TestData.hashtag]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ハッシュタグ"));
         await tester.pumpAndSettle();
@@ -214,10 +296,18 @@ void main() {
 
         expect(find.textContaining(TestData.hashtag.tag), findsOneWidget);
 
-        verify(hashtags.list(argThat(predicate<HashtagsListRequest>((request) =>
-            request.attachedToLocalUserOnly == true &&
-            request.sort ==
-                HashtagsListSortType.attachedLocalUsersDescendant))));
+        verify(
+          hashtags.list(
+            argThat(
+              predicate<HashtagsListRequest>(
+                (request) =>
+                    request.attachedToLocalUserOnly == true &&
+                    request.sort ==
+                        HashtagsListSortType.attachedLocalUsersDescendant,
+              ),
+            ),
+          ),
+        );
       });
 
       testWidgets("リモートのハッシュタグを表示できること", (tester) async {
@@ -227,11 +317,15 @@ void main() {
         when(misskey.notes).thenReturn(MockMisskeyNotes());
         when(hashtags.list(any)).thenAnswer((_) async => [TestData.hashtag]);
 
-        await tester.pumpWidget(ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
             child: DefaultRootWidget(
-              initialRoute: ExploreRoute(account: TestData.account),
-            )));
+              initialRoute:
+                  ExploreRoute(accountContext: TestData.accountContext),
+            ),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("ハッシュタグ"));
         await tester.pumpAndSettle();
@@ -240,10 +334,18 @@ void main() {
 
         expect(find.textContaining(TestData.hashtag.tag), findsOneWidget);
 
-        verify(hashtags.list(argThat(predicate<HashtagsListRequest>((request) =>
-            request.attachedToRemoteUserOnly == true &&
-            request.sort ==
-                HashtagsListSortType.attachedRemoteUsersDescendant))));
+        verify(
+          hashtags.list(
+            argThat(
+              predicate<HashtagsListRequest>(
+                (request) =>
+                    request.attachedToRemoteUserOnly == true &&
+                    request.sort ==
+                        HashtagsListSortType.attachedRemoteUsersDescendant,
+              ),
+            ),
+          ),
+        );
       });
     });
 

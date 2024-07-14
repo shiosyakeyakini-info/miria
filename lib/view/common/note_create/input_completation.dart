@@ -1,96 +1,71 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/extensions/text_editing_controller_extension.dart';
-import 'package:miria/model/input_completion_type.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/note_create/basic_keyboard.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/note_create/emoji_keyboard.dart';
-import 'package:miria/view/common/note_create/hashtag_keyboard.dart';
-import 'package:miria/view/common/note_create/mfm_fn_keyboard.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/text_editing_controller_extension.dart";
+import "package:miria/model/input_completion_type.dart";
+import "package:miria/view/common/note_create/basic_keyboard.dart";
+import "package:miria/view/common/note_create/emoji_keyboard.dart";
+import "package:miria/view/common/note_create/hashtag_keyboard.dart";
+import "package:miria/view/common/note_create/mfm_fn_keyboard.dart";
 
 final inputCompletionTypeProvider =
     StateProvider.autoDispose<InputCompletionType>((ref) => Basic());
 
 final inputComplementDelayedProvider = Provider((ref) => 300);
 
-class InputComplement extends ConsumerStatefulWidget {
+class InputComplement extends HookConsumerWidget {
   final TextEditingController controller;
   final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
 
   const InputComplement({
-    super.key,
     required this.controller,
     required this.focusNode,
+    super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => InputComplementState();
-}
-
-class InputComplementState extends ConsumerState<InputComplement> {
-  bool isClose = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    widget.controller.addListener(updateType);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    isClose = !ref.read(widget.focusNode).hasFocus;
-  }
-
-  @override
-  void dispose() {
-    widget.controller.removeListener(updateType);
-
-    super.dispose();
-  }
-
-  void updateType() {
-    ref.read(inputCompletionTypeProvider.notifier).state =
-        widget.controller.inputCompletionType;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final inputCompletionType = ref.watch(inputCompletionTypeProvider);
-    final focusNode = ref.watch(widget.focusNode);
-    final account = AccountScope.of(context);
+    final focusNode = ref.watch(this.focusNode);
 
-    ref.listen(widget.focusNode, (previous, next) async {
+    final isClose = useState(!ref.read(this.focusNode).hasFocus);
+
+    useEffect(
+      () {
+        InputCompletionType updateType() =>
+            ref.read(inputCompletionTypeProvider.notifier).state =
+                controller.inputCompletionType;
+        controller.addListener(updateType);
+
+        return () => controller.removeListener(updateType);
+      },
+      const [],
+    );
+
+    ref.listen(this.focusNode, (previous, next) async {
       if (!next.hasFocus) {
         await Future.delayed(
           Duration(milliseconds: ref.read(inputComplementDelayedProvider)),
         );
-        if (!mounted) return;
-        if (!ref.read(widget.focusNode).hasFocus) {
-          setState(() {
-            isClose = true;
-          });
-        }
+        if (!context.mounted) return;
+        if (ref.read(this.focusNode).hasFocus) return;
+        isClose.value = true;
       } else {
-        setState(() {
-          isClose = false;
-        });
+        isClose.value = false;
       }
     });
 
-    if (isClose) {
+    if (isClose.value) {
       return Container();
     }
 
     return DecoratedBox(
       decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: Theme.of(context).primaryColor))),
+        border: Border(top: BorderSide(color: Theme.of(context).primaryColor)),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -100,23 +75,17 @@ class InputComplementState extends ConsumerState<InputComplement> {
                 constraints:
                     BoxConstraints(minWidth: MediaQuery.of(context).size.width),
                 child: switch (inputCompletionType) {
-                  Basic() => BasicKeyboard(
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
-                  Emoji() => EmojiKeyboard(
-                      account: account,
-                      controller: widget.controller,
-                      focusNode: focusNode,
-                    ),
+                  Basic() =>
+                    BasicKeyboard(controller: controller, focusNode: focusNode),
+                  Emoji() =>
+                    EmojiKeyboard(controller: controller, focusNode: focusNode),
                   MfmFn() => MfmFnKeyboard(
-                      controller: widget.controller,
+                      controller: controller,
                       focusNode: focusNode,
                       parentContext: context,
                     ),
                   Hashtag() => HashtagKeyboard(
-                      account: account,
-                      controller: widget.controller,
+                      controller: controller,
                       focusNode: focusNode,
                     ),
                 },
@@ -126,10 +95,11 @@ class InputComplementState extends ConsumerState<InputComplement> {
           if (defaultTargetPlatform == TargetPlatform.android ||
               defaultTargetPlatform == TargetPlatform.iOS)
             IconButton(
-                onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-                icon: const Icon(Icons.keyboard_arrow_down)),
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              icon: const Icon(Icons.keyboard_arrow_down),
+            ),
         ],
       ),
     );

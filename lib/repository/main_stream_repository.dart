@@ -1,8 +1,9 @@
-import 'package:flutter/widgets.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/widgets.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class MainStreamRepository extends ChangeNotifier {
   var hasUnreadNotification = false;
@@ -48,13 +49,12 @@ class MainStreamRepository extends ChangeNotifier {
         accountRepository.createUnreadAnnouncement(account, announcement);
       },
     );
-    await misskey.startStreaming();
-    confirmNotification();
+    await Future.wait([misskey.startStreaming(), confirmNotification()]);
   }
 
   Future<void> reconnect() async {
     if (isReconnecting) {
-      // 排他制御11
+      // 排他制御
       while (isReconnecting) {
         await Future.delayed(const Duration(milliseconds: 100));
       }
@@ -62,7 +62,9 @@ class MainStreamRepository extends ChangeNotifier {
     }
     isReconnecting = true;
     try {
-      print("main stream repository's socket controller will be disconnect");
+      logger.info(
+        "main stream repository's socket controller will be disconnect",
+      );
       socketController?.disconnect();
       socketController = null;
       await misskey.streamingService.restart();
