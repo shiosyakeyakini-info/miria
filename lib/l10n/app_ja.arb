@@ -932,6 +932,7 @@
     "mediaOnlyShort": "ファイルつき",
     "displayRenotesShort": "リノートも",
     "showNotesBeforeThisDate": "この日までを表示",
+    "showNotesBeforeThisTime": "この時間までを表示",
     "userHighlightAvailability": "ハイライトはMisskey 2023.10.0以降の機能です。",
     "userInfomation": "アカウント情報",
     "userInfomationLocal": "アカウント情報（ローカル）",

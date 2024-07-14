@@ -99,12 +99,13 @@ class UserNotes extends HookConsumerWidget {
                       ? userInfo.response.createdAt
                       : userInfo.remoteResponse?.createdAt;
 
-                  final result = await showDatePicker(
+                  final result = await showDateTimePicker(
                     context: context,
-                    initialDate: untilDate.value ?? DateTime.now(),
-                    helpText: S.of(context).showNotesBeforeThisDate,
+                    initialDate: untilDate ?? DateTime.now(),
                     firstDate: firstDate ?? DateTime.now(),
                     lastDate: DateTime.now(),
+                    datePickerHelpText: S.of(context).showNotesBeforeThisDate,
+                    timePickerHelpText: S.of(context).showNotesBeforeThisTime,
                   );
                   if (result != null) {
                     untilDate.value = DateTime(
