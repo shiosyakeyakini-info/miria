@@ -41,7 +41,7 @@ class MisskeyFileView extends HookConsumerWidget {
           child: MisskeyImage(
             isSensitive: targetFile.isSensitive,
             thumbnailUrl: targetFile.thumbnailUrl,
-            targetFiles: [targetFile.url.toString()],
+            targetFiles: [targetFile],
             fileType: targetFile.type,
             name: targetFile.name,
             position: 0,
@@ -70,7 +70,7 @@ class MisskeyFileView extends HookConsumerWidget {
                   child: MisskeyImage(
                     isSensitive: targetFile.element.isSensitive,
                     thumbnailUrl: targetFile.element.thumbnailUrl,
-                    targetFiles: targetFiles.map((e) => e.url).toList(),
+                    targetFiles: targetFiles,
                     fileType: targetFile.element.type,
                     name: targetFile.element.name,
                     position: targetFile.index,
@@ -92,7 +92,7 @@ class MisskeyFileView extends HookConsumerWidget {
 class MisskeyImage extends HookConsumerWidget {
   final bool isSensitive;
   final String? thumbnailUrl;
-  final List<String> targetFiles;
+  final List<DriveFile> targetFiles;
   final int position;
   final String fileType;
   final String name;
@@ -158,7 +158,7 @@ class MisskeyImage extends HookConsumerWidget {
                   await showDialog(
                     context: context,
                     builder: (context) => ImageDialog(
-                      imageUrlList: targetFiles,
+                      driveFiles: targetFiles,
                       initialPage: position,
                     ),
                   );
@@ -166,13 +166,13 @@ class MisskeyImage extends HookConsumerWidget {
                   await showDialog(
                     context: context,
                     builder: (context) => VideoDialog(
-                      url: targetFiles[position],
+                      url: targetFiles[position].url,
                       fileType: fileType,
                     ),
                   );
                 } else {
                   await launchUrl(
-                    Uri.parse(targetFiles[position]),
+                    Uri.parse(targetFiles[position].url),
                     mode: LaunchMode.externalApplication,
                   );
                 }
@@ -225,7 +225,7 @@ class MisskeyImage extends HookConsumerWidget {
                   return SizedBox(
                     height: 200,
                     child: NetworkImageView(
-                      url: thumbnailUrl ?? targetFiles[position],
+                      url: thumbnailUrl ?? targetFiles[position].url,
                       type: ImageType.imageThumbnail,
                       loadingBuilder: (context, widget, chunkEvent) => SizedBox(
                         width: double.infinity,
@@ -264,7 +264,7 @@ class MisskeyImage extends HookConsumerWidget {
                 } else {
                   return TextButton.icon(
                     onPressed: () async => launchUrl(
-                      Uri.parse(targetFiles[position]),
+                      Uri.parse(targetFiles[position].url),
                       mode: LaunchMode.externalApplication,
                     ),
                     icon: const Icon(Icons.file_download_outlined),

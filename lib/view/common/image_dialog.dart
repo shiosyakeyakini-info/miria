@@ -1,24 +1,21 @@
 import "dart:math";
 
-import "package:device_info_plus/device_info_plus.dart";
-import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:image_gallery_saver/image_gallery_saver.dart";
-import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/download_file_notifier.dart";
 import "package:miria/view/common/interactive_viewer.dart" as iv;
 import "package:miria/view/common/misskey_notes/network_image.dart";
-import "package:permission_handler/permission_handler.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class ImageDialog extends ConsumerStatefulWidget {
-  final List<String> imageUrlList;
+  final List<DriveFile> driveFiles;
   final int initialPage;
 
   const ImageDialog({
-    required this.imageUrlList,
+    required this.driveFiles,
     required this.initialPage,
     super.key,
   });
@@ -166,9 +163,9 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                               ? const ScrollPhysics()
                               : const NeverScrollableScrollPhysics(),
                           children: [
-                            for (final url in widget.imageUrlList)
+                            for (final file in widget.driveFiles)
                               ScaleNotifierInteractiveViewer(
-                                imageUrl: url,
+                                imageUrl: file.url,
                                 controller: _transformationController,
                                 onScaleChanged: (scaleUpdated) => setState(() {
                                   scale = scaleUpdated;
@@ -219,37 +216,13 @@ class ImageDialogState extends ConsumerState<ImageDialog> {
                       onPressed: () async {
                         final page = pageController.page?.toInt();
                         if (page == null) return;
-                        final response = await ref.read(dioProvider).get(
-                              widget.imageUrlList[page],
-                              options: Options(
-                                responseType: ResponseType.bytes,
-                              ),
-                            );
-
-                        if (defaultTargetPlatform == TargetPlatform.android) {
-                          final androidInfo =
-                              await DeviceInfoPlugin().androidInfo;
-                          if (androidInfo.version.sdkInt <= 32) {
-                            final permissionStatus =
-                                await Permission.storage.status;
-                            if (permissionStatus.isDenied) {
-                              await Permission.storage.request();
-                            }
-                          } else {
-                            final permissionStatus =
-                                await Permission.photos.status;
-                            if (permissionStatus.isDenied) {
-                              await Permission.photos.request();
-                            }
-                          }
-                        }
-
-                        await ImageGallerySaver.saveImage(response.data);
+                        final driveFile = widget.driveFiles[page];
+                        await ref
+                            .read(downloadFileNotifierProvider.notifier)
+                            .downloadFile(driveFile);
                         if (!mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(S.of(context).savedImage),
-                          ),
+                          SnackBar(content: Text(S.of(context).savedImage)),
                         );
                       },
                       constraints:
