@@ -1,24 +1,25 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:visibility_detector/visibility_detector.dart";
 
 class ReactionPickerContent extends ConsumerStatefulWidget {
   final FutureOr Function(MisskeyEmojiData emoji) onTap;
   final bool isAcceptSensitive;
 
   const ReactionPickerContent({
-    super.key,
     required this.onTap,
     required this.isAcceptSensitive,
+    super.key,
   });
 
   @override
@@ -27,25 +28,25 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
 }
 
 class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
-  final emojis = <MisskeyEmojiData>[];
   final categoryList = <String>[];
-  EmojiRepository get emojiRepository =>
-      ref.read(emojiRepositoryProvider(AccountScope.of(context)));
+  EmojiRepository get emojiRepository => ref.read(
+        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+      );
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    emojis.clear();
-    emojis.addAll(emojiRepository.defaultEmojis().toList());
 
     categoryList
       ..clear()
-      ..addAll(emojiRepository.emoji
-              ?.map((e) => e.category)
-              .toSet()
-              .toList()
-              .whereNotNull() ??
-          []);
+      ..addAll(
+        emojiRepository.emoji
+                ?.map((e) => e.category)
+                .toSet()
+                .toList()
+                .whereNotNull() ??
+            [],
+      );
   }
 
   @override
@@ -53,38 +54,9 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          TextField(
-            decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-            autofocus: true,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) {
-              Future(() async {
-                final result = await emojiRepository.searchEmojis(value);
-                if (!mounted) return;
-                setState(() {
-                  emojis.clear();
-                  emojis.addAll(result);
-                });
-              });
-            },
-          ),
-          const Padding(padding: EdgeInsets.only(top: 10)),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              crossAxisAlignment: WrapCrossAlignment.start,
-              children: [
-                for (final emoji in emojis)
-                  EmojiButton(
-                    emoji: emoji,
-                    onTap: widget.onTap,
-                    isForceVisible: true,
-                    isAcceptSensitive: widget.isAcceptSensitive,
-                  )
-              ],
-            ),
+          EmojiSearch(
+            onTap: widget.onTap,
+            isAcceptSensitive: widget.isAcceptSensitive,
           ),
           ListView.builder(
             shrinkWrap: true,
@@ -103,20 +75,20 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                       crossAxisAlignment: WrapCrossAlignment.start,
                       children: [
                         for (final emoji in (emojiRepository.emoji ?? []).where(
-                            (element) =>
-                                element.category == categoryList[index]))
+                          (element) => element.category == categoryList[index],
+                        ))
                           EmojiButton(
                             emoji: emoji.emoji,
                             onTap: widget.onTap,
                             isAcceptSensitive: widget.isAcceptSensitive,
-                          )
+                          ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -130,11 +102,11 @@ class EmojiButton extends ConsumerStatefulWidget {
   final bool isAcceptSensitive;
 
   const EmojiButton({
-    super.key,
     required this.emoji,
     required this.onTap,
-    this.isForceVisible = false,
     required this.isAcceptSensitive,
+    super.key,
+    this.isForceVisible = false,
   });
 
   @override
@@ -163,19 +135,22 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
             ? BoxDecoration(color: Theme.of(context).disabledColor)
             : const BoxDecoration(),
         child: ElevatedButton(
-          style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-            padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
-            elevation: MaterialStatePropertyAll(0),
-            minimumSize: MaterialStatePropertyAll(Size.zero),
+          style: ButtonStyle(
+            backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+            padding: const WidgetStatePropertyAll(EdgeInsets.all(5)),
+            elevation: const WidgetStatePropertyAll(0),
+            minimumSize: const WidgetStatePropertyAll(Size.zero),
+            overlayColor: WidgetStatePropertyAll(
+              AppTheme.of(context).colorTheme.accentedBackground,
+            ),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           onPressed: () async {
             if (!isVisibility) return;
             if (disabled) {
-              SimpleMessageDialog.show(
+              await SimpleMessageDialog.show(
                 context,
-                "ここでセンシティブなカスタム絵文字を使われへんねやわ",
+                S.of(context).disabledUsingSensitiveCustomEmoji,
               );
             } else {
               widget.onTap.call(widget.emoji);
@@ -192,6 +167,76 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
                 ),
         ),
       ),
+    );
+  }
+}
+
+class EmojiSearch extends ConsumerStatefulWidget {
+  final FutureOr Function(MisskeyEmojiData emoji) onTap;
+  final bool isAcceptSensitive;
+
+  const EmojiSearch({
+    required this.onTap,
+    required this.isAcceptSensitive,
+    super.key,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => EmojiSearchState();
+}
+
+class EmojiSearchState extends ConsumerState<EmojiSearch> {
+  final emojis = <MisskeyEmojiData>[];
+
+  EmojiRepository get emojiRepository => ref.read(
+        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+      );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    emojis
+      ..clear()
+      ..addAll(emojiRepository.defaultEmojis().toList());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+          autofocus: true,
+          onChanged: (value) {
+            Future(() async {
+              final result = await emojiRepository.searchEmojis(value);
+              if (!mounted) return;
+              setState(() {
+                emojis.clear();
+                emojis.addAll(result);
+              });
+            });
+          },
+        ),
+        const Padding(padding: EdgeInsets.only(top: 10)),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            children: [
+              for (final emoji in emojis)
+                EmojiButton(
+                  emoji: emoji,
+                  onTap: widget.onTap,
+                  isForceVisible: true,
+                  isAcceptSensitive: widget.isAcceptSensitive,
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

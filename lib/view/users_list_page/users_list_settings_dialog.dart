@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/users_list_settings.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/users_list_settings.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
+part "users_list_settings_dialog.g.dart";
 
-final _initialSettingsProvider = Provider.autoDispose<UsersListSettings>(
-  (ref) => throw UnimplementedError(),
-);
+@Riverpod(dependencies: [])
+UsersListSettings _initialSettings(_InitialSettingsRef ref) =>
+    throw UnimplementedError();
 
-final _usersListSettingsNotifierProvider =
-    NotifierProvider.autoDispose<_UsersListSettingsNotifier, UsersListSettings>(
-  _UsersListSettingsNotifier.new,
-  dependencies: [_initialSettingsProvider],
-);
-
-class _UsersListSettingsNotifier
-    extends AutoDisposeNotifier<UsersListSettings> {
+@Riverpod(dependencies: [_initialSettings])
+class _UsersListSettingsNotifier extends _$UsersListSettingsNotifier {
   @override
   UsersListSettings build() {
     return ref.watch(_initialSettingsProvider);
@@ -34,7 +32,9 @@ class _UsersListSettingsNotifier
   }
 }
 
-class UsersListSettingsDialog extends StatelessWidget {
+@RoutePage<UsersListSettings>()
+class UsersListSettingsDialog extends HookConsumerWidget
+    implements AutoRouteWrapper {
   const UsersListSettingsDialog({
     super.key,
     this.title,
@@ -45,72 +45,66 @@ class UsersListSettingsDialog extends StatelessWidget {
   final UsersListSettings initialSettings;
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: title,
-      content: ProviderScope(
+  Widget wrappedRoute(BuildContext context) => ProviderScope(
         overrides: [
           _initialSettingsProvider.overrideWithValue(initialSettings),
         ],
-        child: const UsersListSettingsForm(),
-      ),
-    );
-  }
-}
-
-class UsersListSettingsForm extends ConsumerWidget {
-  const UsersListSettingsForm({super.key});
+        child: this,
+      );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = ref.watch(_formKeyProvider);
+    final formKey = useState(GlobalKey<FormState>());
     final initialSettings = ref.watch(_initialSettingsProvider);
     final settings = ref.watch(_usersListSettingsNotifierProvider);
 
-    return Form(
-      key: formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(
-            initialValue: initialSettings.name,
-            maxLength: 100,
-            decoration: const InputDecoration(
-              labelText: "リスト名",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "入力してください";
-              }
-              return null;
-            },
-            onSaved: ref
-                .read(_usersListSettingsNotifierProvider.notifier)
-                .updateName,
-          ),
-          CheckboxListTile(
-            title: const Text("パブリック"),
-            value: settings.isPublic,
-            onChanged: ref
-                .read(_usersListSettingsNotifierProvider.notifier)
-                .updateIsPublic,
-          ),
-          ElevatedButton(
-            child: const Text("決定"),
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                formKey.currentState!.save();
-                final settings = ref.read(_usersListSettingsNotifierProvider);
-                if (settings == initialSettings) {
-                  Navigator.of(context).pop();
-                } else {
-                  Navigator.of(context).pop(settings);
+    return AlertDialog(
+      title: title,
+      content: Form(
+        key: formKey.value,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              initialValue: initialSettings.name,
+              maxLength: 100,
+              decoration: InputDecoration(
+                labelText: S.of(context).listName,
+                contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return S.of(context).pleaseInput;
                 }
-              }
-            },
-          ),
-        ],
+                return null;
+              },
+              onSaved: ref
+                  .read(_usersListSettingsNotifierProvider.notifier)
+                  .updateName,
+            ),
+            CheckboxListTile(
+              title: Text(S.of(context).public),
+              value: settings.isPublic,
+              onChanged: ref
+                  .read(_usersListSettingsNotifierProvider.notifier)
+                  .updateIsPublic,
+            ),
+            ElevatedButton(
+              child: Text(S.of(context).done),
+              onPressed: () {
+                if (formKey.value.currentState!.validate()) {
+                  formKey.value.currentState!.save();
+                  final settings = ref.read(_usersListSettingsNotifierProvider);
+                  if (settings == initialSettings) {
+                    Navigator.of(context).pop();
+                  } else {
+                    Navigator.of(context).pop(settings);
+                  }
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

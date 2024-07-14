@@ -1,36 +1,65 @@
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/constants.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:fl_chart/fl_chart.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/constants.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-class ServerDetailDialog extends ConsumerStatefulWidget {
-  //TODO: 本当はサーバー情報取るのにアカウントいらない...
-  final Account account;
+part "server_detail_dialog.g.dart";
+
+@Riverpod(dependencies: [misskeyGetContext])
+Future<int> _onlineCounts(_OnlineCountsRef ref) async {
+  final onlineUserCountsResponse =
+      await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
+  return onlineUserCountsResponse.count;
+}
+
+@Riverpod(dependencies: [misskeyGetContext])
+Future<int> _totalMemories(_TotalMemoriesRef ref) async {
+  final serverInfoResponse =
+      await ref.read(misskeyGetContextProvider).serverInfo();
+  return serverInfoResponse.mem.total;
+}
+
+@Riverpod(dependencies: [misskeyGetContext])
+Future<int> _ping(_PingRef ref) async {
+  final sendDate = DateTime.now();
+  final pingResponse = await ref.read(misskeyGetContextProvider).ping();
+
+  return pingResponse.pong - sendDate.millisecondsSinceEpoch;
+}
+
+@RoutePage()
+class ServerDetailDialog extends ConsumerStatefulWidget
+    implements AutoRouteWrapper {
+  final AccountContext accountContext;
 
   const ServerDetailDialog({
+    required this.accountContext,
     super.key,
-    required this.account,
   });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       ServerDetailDialogState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 }
 
 class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
   SocketController? controller;
   SocketController? queueController;
-  int? onlineUsers;
-  int? totalMemories;
-  int? ping;
 
   List<StatsLogResponse> logged = [];
   List<QueueStatsLogResponse> queueLogged = [];
@@ -44,7 +73,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 
   @override
   void didChangeDependencies() {
-    final misskey = ref.read(misskeyProvider(widget.account));
+    final misskey = ref.read(misskeyGetContextProvider);
     super.didChangeDependencies();
     controller?.disconnect();
     controller = misskey.serverStatsLogStream(
@@ -68,49 +97,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
         });
       },
     );
-    misskey.startStreaming();
-
-    Future(() async {
-      try {
-        final onlineUserCountsResponse = await ref
-            .read(misskeyProvider(widget.account))
-            .getOnlineUsersCount();
-
-        if (!mounted) return;
-        setState(() {
-          onlineUsers = onlineUserCountsResponse.count;
-        });
-      } catch (e) {
-        //TODO
-      }
-      try {
-        final serverInfoResponse =
-            await ref.read(misskeyProvider(widget.account)).serverInfo();
-        if (!mounted) return;
-        setState(() {
-          totalMemories = serverInfoResponse.mem.total;
-        });
-      } catch (e) {
-        //TODO
-      }
-
-      await refreshPing();
-    });
-  }
-
-  Future<void> refreshPing() async {
-    try {
-      final sendDate = DateTime.now();
-      final pingResponse =
-          await ref.read(misskeyProvider(widget.account)).ping();
-
-      if (!mounted) return;
-      setState(() {
-        ping = pingResponse.pong - sendDate.millisecondsSinceEpoch;
-      });
-    } catch (e) {
-      //TODO
-    }
+    unawaited(misskey.startStreaming());
   }
 
   String format(double value) {
@@ -119,19 +106,29 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final onlineUsers = ref.watch(_onlineCountsProvider).valueOrNull;
+    final totalMemories = ref.watch(_totalMemoriesProvider).valueOrNull;
+    final ping = ref.watch(_pingProvider).valueOrNull;
+
     final currentStat = logged.lastOrNull;
     final currentQueueStats = queueLogged.lastOrNull;
+
     return AlertDialog(
       title: Row(
         children: [
-          Expanded(child: Text(widget.account.host)),
+          Expanded(child: Text(widget.accountContext.getAccount.host)),
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.pushRoute(FederationRoute(
-                    account: widget.account, host: widget.account.host));
-              },
-              icon: const Icon(Icons.keyboard_arrow_right))
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await context.pushRoute(
+                FederationRoute(
+                  accountContext: ref.read(accountContextProvider),
+                  host: widget.accountContext.getAccount.host,
+                ),
+              );
+            },
+            icon: const Icon(Icons.keyboard_arrow_right),
+          ),
         ],
       ),
       content: SizedBox(
@@ -142,15 +139,22 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("サーバーオンライン人数"),
+              Text(S.of(context).onlineUsers),
               if (onlineUsers != null)
-                Text.rich(TextSpan(children: [
+                Text.rich(
                   TextSpan(
-                      text: onlineUsers.format(),
-                      style: Theme.of(context).textTheme.headlineSmall),
-                  TextSpan(
-                      text: " 人", style: Theme.of(context).textTheme.bodyMedium)
-                ])),
+                    children: [
+                      TextSpan(
+                        text: onlineUsers.format(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      TextSpan(
+                        text: " ${S.of(context).persons}",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 children: [
@@ -159,25 +163,35 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("CPU使用率"),
+                        Text(S.of(context).cpuUsageRate),
                         if (currentStat != null)
-                          Text.rich(TextSpan(children: [
+                          Text.rich(
                             TextSpan(
-                                text: ((currentStat.cpu * 10000).toInt() / 100)
-                                    .toString(),
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall),
-                            TextSpan(
-                                text: " %",
-                                style: Theme.of(context).textTheme.bodyMedium)
-                          ])),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      ((currentStat.cpu * 10000).toInt() / 100)
+                                          .toString(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                TextSpan(
+                                  text: " %",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ),
                         if (logged.isNotEmpty)
                           Chart(
-                              data: logged
-                                  .skip(max(0, logged.length - 41))
-                                  .mapIndexed((index, element) =>
-                                      FlSpot(index.toDouble(), element.cpu))
-                                  .toList())
+                            data: logged
+                                .skip(max(0, logged.length - 41))
+                                .mapIndexed(
+                                  (index, element) =>
+                                      FlSpot(index.toDouble(), element.cpu),
+                                )
+                                .toList(),
+                          ),
                       ],
                     ),
                   ),
@@ -187,78 +201,88 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("メモリ使用率"),
+                        Text(S.of(context).memoryUsageRate),
                         if (currentStat != null && totalMemories != null)
                           Text.rich(
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: format(
-                                        currentStat.mem.used / totalMemories!),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                  text: format(
+                                    currentStat.mem.used / totalMemories,
+                                  ),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 TextSpan(
-                                    text: " %",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium)
+                                  text: " %",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ],
                             ),
                           ),
                         if (totalMemories != null && logged.isNotEmpty)
                           Chart(
-                              data: logged
-                                  .skip(max(0, logged.length - 41))
-                                  .mapIndexed((index, element) => FlSpot(
-                                      index.toDouble(),
-                                      element.mem.used / totalMemories!))
-                                  .toList())
+                            data: logged
+                                .skip(max(0, logged.length - 41))
+                                .mapIndexed(
+                                  (index, element) => FlSpot(
+                                    index.toDouble(),
+                                    element.mem.used / totalMemories,
+                                  ),
+                                )
+                                .toList(),
+                          ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 children: [
                   Expanded(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        const Text("応答時間"),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(S.of(context).responseTime),
                         if (ping != null)
                           Text.rich(
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: ping.format(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                  text: ping.format(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 TextSpan(
-                                    text: " ミリ秒",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
+                                  text: " ${S.of(context).milliSeconds}",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                                 WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: IconButton(
-                                        onPressed: () => refreshPing(),
-                                        icon: const Icon(Icons.refresh)))
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: IconButton(
+                                    onPressed: () =>
+                                        ref.invalidate(_pingProvider),
+                                    icon: const Icon(Icons.refresh),
+                                  ),
+                                ),
                               ],
                             ),
-                          )
-                      ])),
+                          ),
+                      ],
+                    ),
+                  ),
                   Expanded(child: Container()),
                 ],
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
-              const Text("ジョブキュー (Inbox queue)"),
+              Text(S.of(context).inboxQueue),
               if (currentQueueStats != null) ...[
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Process")),
-                    Expanded(child: Text("Active")),
+                    Expanded(child: Text(S.of(context).inboxProcessQueue)),
+                    Expanded(child: Text(S.of(context).inboxActiveQueue)),
                   ],
                 ),
                 Row(
@@ -278,10 +302,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Delayed")),
-                    Expanded(child: Text("Waiting")),
+                    Expanded(child: Text(S.of(context).inboxDelayedQueue)),
+                    Expanded(child: Text(S.of(context).inboxWaitingQueue)),
                   ],
                 ),
                 Row(
@@ -300,15 +324,15 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
               const Padding(padding: EdgeInsets.only(top: 10)),
-              const Text("ジョブキュー(Deliver queue)"),
+              Text(S.of(context).deliverQueue),
               if (currentQueueStats != null) ...[
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Process")),
-                    Expanded(child: Text("Active")),
+                    Expanded(child: Text(S.of(context).deliverProcessQueue)),
+                    Expanded(child: Text(S.of(context).deliverActiveQueue)),
                   ],
                 ),
                 Row(
@@ -328,10 +352,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Text("Delayed")),
-                    Expanded(child: Text("Waiting")),
+                    Expanded(child: Text(S.of(context).deliverDelayedQueue)),
+                    Expanded(child: Text(S.of(context).deliverWaitingQueue)),
                   ],
                 ),
                 Row(
@@ -350,7 +374,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ],
           ),
@@ -363,7 +387,7 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
 class Chart extends StatelessWidget {
   final List<FlSpot> data;
 
-  const Chart({super.key, required this.data});
+  const Chart({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -371,13 +395,13 @@ class Chart extends StatelessWidget {
       height: 100,
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(
+          gridData: const FlGridData(
             drawHorizontalLine: false,
             drawVerticalLine: false,
           ),
-          titlesData: FlTitlesData(show: false),
+          titlesData: const FlTitlesData(show: false),
           borderData: FlBorderData(show: false),
-          lineTouchData: LineTouchData(enabled: false),
+          lineTouchData: const LineTouchData(enabled: false),
           minX: 0,
           maxX: 40,
           minY: 0,
@@ -390,10 +414,11 @@ class Chart extends StatelessWidget {
                   Theme.of(context).textTheme.bodyMedium?.color?.withAlpha(200),
               barWidth: 4,
               belowBarData: BarAreaData(
-                  show: true,
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
-              dotData: FlDotData(show: false),
-            )
+                show: true,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
+              dotData: const FlDotData(show: false),
+            ),
           ],
         ),
       ),

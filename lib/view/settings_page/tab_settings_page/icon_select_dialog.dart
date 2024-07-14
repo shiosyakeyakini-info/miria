@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_content.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_content.dart";
 
 class IconSelectDialog extends StatelessWidget {
   final icons = [
@@ -75,52 +76,62 @@ class IconSelectDialog extends StatelessWidget {
 
   final Account account;
 
-  IconSelectDialog({super.key, required this.account});
+  IconSelectDialog({required this.account, super.key});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: const Text("アイコンを選択"),
-        content: DefaultTabController(
-            length: 2,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
-                        child: const TabBar(
-                            tabs: [Tab(text: "標準"), Tab(text: "カスタム絵文字")])),
+      title: Text(S.of(context).selectIcon),
+      content: DefaultTabController(
+        length: 2,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.width * 0.8,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: DecoratedBox(
+                  decoration:
+                      BoxDecoration(color: Theme.of(context).primaryColor),
+                  child: TabBar(
+                    tabs: [
+                      Tab(text: S.of(context).standardIcon),
+                      Tab(text: S.of(context).emojiIcon),
+                    ],
                   ),
-                  Expanded(
-                    child: TabBarView(children: [
-                      SingleChildScrollView(
-                        child: Wrap(
-                          children: [
-                            for (final icon in icons)
-                              IconButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .pop(TabIcon(codePoint: icon.codePoint)),
-                                  icon: Icon(icon)),
-                          ],
-                        ),
-                      ),
-                      AccountScope(
-                        account: account,
-                        child: ReactionPickerContent(
-                          isAcceptSensitive: true,
-                          onTap: (emoji) => Navigator.of(context)
-                              .pop(TabIcon(customEmojiName: emoji.baseName)),
-                        ),
-                      )
-                    ]),
-                  )
-                ],
+                ),
               ),
-            )));
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    SingleChildScrollView(
+                      child: Wrap(
+                        children: [
+                          for (final icon in icons)
+                            IconButton(
+                              onPressed: () => Navigator.of(context)
+                                  .pop(TabIcon(codePoint: icon.codePoint)),
+                              icon: Icon(icon),
+                            ),
+                        ],
+                      ),
+                    ),
+                    AccountContextScope.as(
+                      account: account,
+                      child: ReactionPickerContent(
+                        isAcceptSensitive: true,
+                        onTap: (emoji) => Navigator.of(context)
+                            .pop(TabIcon(customEmojiName: emoji.baseName)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

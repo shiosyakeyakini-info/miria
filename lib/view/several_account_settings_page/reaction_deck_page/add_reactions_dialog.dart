@@ -1,14 +1,16 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:json5/json5.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:json5/json5.dart";
+import "package:miria/model/account.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:url_launcher/url_launcher.dart";
 
-class AddReactionsDialog extends StatefulWidget {
+class AddReactionsDialog extends HookConsumerWidget {
   const AddReactionsDialog({
-    super.key,
     required this.account,
+    super.key,
     this.domain = "system",
   });
 
@@ -16,88 +18,65 @@ class AddReactionsDialog extends StatefulWidget {
   final String domain;
 
   @override
-  State<AddReactionsDialog> createState() => _AddReactionsDialogState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useState(GlobalKey<FormState>());
 
-class _AddReactionsDialogState extends State<AddReactionsDialog> {
-  final controller = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final host = widget.account.host;
+    final host = account.host;
     final uri = Uri(
       scheme: "https",
       host: host,
       pathSegments: [
         "registry",
         "value",
-        widget.domain,
+        domain,
         "client",
         "base",
         "reactions",
       ],
     );
     return AlertDialog(
-      title: const Text("一括追加"),
+      title: Text(S.of(context).bulkAddReactions),
       scrollable: true,
       content: Form(
-        key: formKey,
+        key: formKey.value,
         child: Column(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ListTile(
-                  title: Text("1"),
-                  subtitle: Text(
-                    "お使いのブラウザでリアクションデッキをコピーしたい"
-                    "アカウントにログインしてください",
-                  ),
+                ListTile(
+                  title: const Text("1"),
+                  subtitle: Text(S.of(context).bulkAddReactionsDescription1),
                 ),
                 ListTile(
                   title: const Text("2"),
-                  subtitle: Text.rich(
-                    TextSpan(
-                      children: [
-                        const TextSpan(text: "同じブラウザで "),
-                        TextSpan(
-                          text: uri.toString(),
-                          style: AppTheme.of(context).linkStyle,
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => launchUrl(
-                                  uri,
-                                  mode: LaunchMode.externalApplication,
-                                ),
+                  subtitle: Column(
+                    children: [
+                      Text(S.of(context).bulkAddReactionsDescription2),
+                      TextButton(
+                        onPressed: () async => launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
                         ),
-                        const TextSpan(
-                          text: //
-                              " にアクセスして「値 (JSON)」の内容をすべて選択して"
-                              "コピーしてください",
-                        )
-                      ],
-                    ),
+                        child: Text(
+                          uri.toString(),
+                          style: AppTheme.of(context).linkStyle,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const ListTile(
-                  title: Text("3"),
-                  subtitle: Text(
-                    "コピーしたものを下のテキストボックスに貼り付けてください",
-                  ),
+                ListTile(
+                  title: const Text("3"),
+                  subtitle: Text(S.of(context).bulkAddReactionsDescription3),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             TextFormField(
-              decoration: const InputDecoration(
-                hintText: "ここに貼り付け",
-                contentPadding: EdgeInsets.all(10),
+              decoration: InputDecoration(
+                hintText: S.of(context).pasteHere,
+                contentPadding: const EdgeInsets.all(10),
                 isDense: true,
               ),
               keyboardType: TextInputType.multiline,
@@ -106,19 +85,18 @@ class _AddReactionsDialogState extends State<AddReactionsDialog> {
               textAlignVertical: TextAlignVertical.top,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "値が入力されていません";
+                  return S.of(context).pleaseInput;
                 }
                 try {
-                  final emojiNames = JSON5.parse(value) as List;
-                  emojiNames.map((name) => name as String);
+                  (JSON5.parse(value) as List).map((name) => name as String);
                 } catch (e) {
-                  return "入力が有効な値ではありません";
+                  return S.of(context).invalidInput;
                 }
                 return null;
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
               onSaved: (value) {
-                if (formKey.currentState!.validate()) {
+                if (formKey.value.currentState!.validate()) {
                   final emojiNames = JSON5.parse(value!) as List;
                   Navigator.of(context)
                       .pop(emojiNames.map((name) => name as String).toList());
@@ -126,8 +104,8 @@ class _AddReactionsDialogState extends State<AddReactionsDialog> {
               },
             ),
             ElevatedButton(
-              onPressed: () => formKey.currentState?.save.call(),
-              child: const Text("確定"),
+              onPressed: () => formKey.value.currentState?.save(),
+              child: Text(S.of(context).done),
             ),
           ],
         ),

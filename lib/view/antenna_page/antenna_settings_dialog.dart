@@ -1,37 +1,25 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/antenna_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
+part "antenna_settings_dialog.g.dart";
 
-final _initialSettingsProvider = Provider.autoDispose<AntennaSettings>(
-  (ref) => throw UnimplementedError(),
-);
+@Riverpod(dependencies: [])
+AntennaSettings _initialSettings(_InitialSettingsRef ref) =>
+    throw UnimplementedError();
 
-final _textControllerProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => TextEditingController(
-    text: ref.watch(
-      _initialSettingsProvider.select(
-        (settings) => settings.users.join("\n"),
-      ),
-    ),
-  ),
-  dependencies: [_initialSettingsProvider],
-);
-
-final _antennaSettingsNotifierProvider =
-    NotifierProvider.autoDispose<_AntennaSettingsNotifier, AntennaSettings>(
-  _AntennaSettingsNotifier.new,
-  dependencies: [_initialSettingsProvider],
-);
-
-class _AntennaSettingsNotifier extends AutoDisposeNotifier<AntennaSettings> {
+@Riverpod(dependencies: [_initialSettings])
+class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
   @override
   AntennaSettings build() {
     return ref.watch(_initialSettingsProvider);
@@ -106,19 +94,17 @@ class _AntennaSettingsNotifier extends AutoDisposeNotifier<AntennaSettings> {
   }
 }
 
-final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
-  (ref, misskey) async {
-    final response = await misskey.users.list.list();
-    return response.toList();
-  },
-);
+@Riverpod(dependencies: [misskeyGetContext])
+Future<List<UsersList>> _usersListList(_UsersListListRef ref) async =>
+    [...await ref.read(misskeyGetContextProvider).users.list.list()];
 
+@RoutePage<AntennaSettings>()
 class AntennaSettingsDialog extends StatelessWidget {
   const AntennaSettingsDialog({
+    required this.account,
     super.key,
     this.title,
     this.initialSettings = const AntennaSettings(),
-    required this.account,
   });
 
   final Widget? title;
@@ -145,25 +131,28 @@ class AntennaSettingsDialog extends StatelessWidget {
   }
 }
 
-class AntennaSettingsForm extends ConsumerWidget {
+class AntennaSettingsForm extends HookConsumerWidget {
   const AntennaSettingsForm({
-    super.key,
     required this.account,
+    super.key,
   });
 
   final Account account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = ref.watch(_formKeyProvider);
+    final formKey = useState(GlobalKey<FormState>());
     final initialSettings = ref.watch(_initialSettingsProvider);
     final settings = ref.watch(_antennaSettingsNotifierProvider);
-    final misskey = ref.watch(misskeyProvider(account));
-    final list = ref.watch(_usersListListProvider(misskey));
-    final controller = ref.watch(_textControllerProvider);
+    final list = ref.watch(_usersListListProvider);
+    final controller = useTextEditingController();
+    ref.listen(
+      _initialSettingsProvider.select((settings) => settings.users.join("\n")),
+      (_, next) => controller.text = next,
+    );
 
     return Form(
-      key: formKey,
+      key: formKey.value,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,13 +160,13 @@ class AntennaSettingsForm extends ConsumerWidget {
           TextFormField(
             initialValue: initialSettings.name,
             maxLength: 100,
-            decoration: const InputDecoration(
-              labelText: "アンテナ名",
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+            decoration: InputDecoration(
+              labelText: S.of(context).antennaName,
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "入力してください";
+                return S.of(context).pleaseInput;
               }
               return null;
             },
@@ -185,7 +174,7 @@ class AntennaSettingsForm extends ConsumerWidget {
                 ref.read(_antennaSettingsNotifierProvider.notifier).updateName,
           ),
           const SizedBox(height: 10),
-          const Text("アンテナのソース"),
+          Text(S.of(context).antennaSource),
           const SizedBox(height: 5),
           DropdownButtonFormField<AntennaSource>(
             items: AntennaSource.values
@@ -194,17 +183,18 @@ class AntennaSettingsForm extends ConsumerWidget {
                     value: e,
                     child: Text(
                       switch (e) {
-                        AntennaSource.home => "ホーム",
-                        AntennaSource.all => "全て",
-                        AntennaSource.users => "ユーザー",
-                        AntennaSource.list => "リスト",
+                        AntennaSource.home => S.of(context).antennaSourceHome,
+                        AntennaSource.all => S.of(context).antennaSourceAll,
+                        AntennaSource.users => S.of(context).antennaSourceUser,
+                        AntennaSource.usersBlackList => "指定したユーザー以外",
+                        AntennaSource.list => S.of(context).antennaSourceList,
                       },
                     ),
                   ),
                 )
                 .toList(),
             value: settings.src,
-            hint: const Text("ソースを選択"),
+            hint: Text(S.of(context).selectAntennaSource),
             onChanged:
                 ref.read(_antennaSettingsNotifierProvider.notifier).updateSrc,
           ),
@@ -221,26 +211,27 @@ class AntennaSettingsForm extends ConsumerWidget {
                   .toList(),
               validator: (value) {
                 if (value == null) {
-                  return "選択してください";
+                  return S.of(context).pleaseInput;
                 }
                 return null;
               },
               value: list.valueOrNull
                   ?.firstWhereOrNull((e) => e.id == settings.userListId),
-              hint: const Text("リストを選択"),
+              hint: Text(S.of(context).selectList),
               onChanged: ref
                   .read(_antennaSettingsNotifierProvider.notifier)
                   .updateUserList,
             ),
-          if (settings.src == AntennaSource.users) ...[
+          if (settings.src == AntennaSource.users ||
+              settings.src == AntennaSource.usersBlackList) ...[
             TextFormField(
               controller: controller,
               minLines: 2,
               maxLines: 20,
-              decoration: const InputDecoration(
-                labelText: "ユーザー",
-                hintText: "ユーザーネームを改行で区切って指定します",
-                contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+              decoration: InputDecoration(
+                labelText: S.of(context).user,
+                hintText: S.of(context).antennaSourceUserHintText,
+                contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
               ),
               onSaved: ref
                   .read(_antennaSettingsNotifierProvider.notifier)
@@ -248,13 +239,13 @@ class AntennaSettingsForm extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () async {
-                final user = await showDialog<User>(
-                  context: context,
-                  builder: (context) => UserSelectDialog(account: account),
+                final user = await context.pushRoute<User>(
+                  UserSelectRoute(
+                    accountContext: AccountContext.as(account),
+                  ),
                 );
-                if (user == null) {
-                  return;
-                }
+                if (user == null) return;
+
                 if (!context.mounted) return;
                 if (!controller.text.endsWith("\n") &&
                     controller.text.isNotEmpty) {
@@ -262,7 +253,7 @@ class AntennaSettingsForm extends ConsumerWidget {
                 }
                 controller.text += "${user.acct}\n";
               },
-              child: const Text("ユーザーを追加"),
+              child: Text(S.of(context).addUser),
             ),
           ],
           const SizedBox(height: 10),
@@ -271,11 +262,11 @@ class AntennaSettingsForm extends ConsumerWidget {
                 initialSettings.keywords.map((e) => e.join(" ")).join("\n"),
             minLines: 2,
             maxLines: 20,
-            decoration: const InputDecoration(
-              labelText: "キーワード",
-              helperText: "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
+            decoration: InputDecoration(
+              labelText: S.of(context).keywords,
+              helperText: S.of(context).antennaSourceKeywordsHintText,
               helperMaxLines: 5,
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             // Misskey 2023.9.0 で条件が変更されるためバリデーションを行わない
             // https://github.com/misskey-dev/misskey/pull/11469
@@ -290,11 +281,11 @@ class AntennaSettingsForm extends ConsumerWidget {
                 .join("\n"),
             minLines: 2,
             maxLines: 20,
-            decoration: const InputDecoration(
-              labelText: "除外キーワード",
-              helperText: "スペースで区切った単語はAND条件で、改行で区切った行はOR条件で扱います",
+            decoration: InputDecoration(
+              labelText: S.of(context).excludeKeywords,
+              helperText: S.of(context).antennaSourceExcludeKeywordsHintText,
               helperMaxLines: 5,
-              contentPadding: EdgeInsets.fromLTRB(12, 24, 12, 16),
+              contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
             onSaved: ref
                 .read(_antennaSettingsNotifierProvider.notifier)
@@ -302,29 +293,29 @@ class AntennaSettingsForm extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           CheckboxListTile(
-            title: const Text("大文字と小文字を区別する"),
+            title: Text(S.of(context).discriminateUpperLower),
             value: settings.caseSensitive,
             onChanged: ref
                 .read(_antennaSettingsNotifierProvider.notifier)
                 .updateCaseSensitive,
           ),
           CheckboxListTile(
-            title: const Text("リプライを受信する"),
+            title: Text(S.of(context).receiveReplies),
             value: settings.withReplies,
             onChanged: ref
                 .read(_antennaSettingsNotifierProvider.notifier)
                 .updateWithReplies,
           ),
           CheckboxListTile(
-            title: const Text("ファイル付きのノートのみ受信する"),
+            title: Text(S.of(context).receiveOnlyFiles),
             value: settings.withFile,
             onChanged: ref
                 .read(_antennaSettingsNotifierProvider.notifier)
                 .updateWithFile,
           ),
           CheckboxListTile(
-            title: const Text("ローカルのみ"),
-            subtitle: const Text("ローカルのみの指定はMisskey 2023.10.2以降で有効です。"),
+            title: Text(S.of(context).receiveLocal),
+            subtitle: Text(S.of(context).receiveLocalAvailability),
             value: settings.localOnly,
             onChanged: ref
                 .read(_antennaSettingsNotifierProvider.notifier)
@@ -334,10 +325,10 @@ class AntennaSettingsForm extends ConsumerWidget {
           // notifyは機能していない?
           Center(
             child: ElevatedButton(
-              child: const Text("決定"),
+              child: Text(S.of(context).done),
               onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
+                if (formKey.value.currentState!.validate()) {
+                  formKey.value.currentState!.save();
                   final settings = ref.read(_antennaSettingsNotifierProvider);
                   if (settings == initialSettings) {
                     Navigator.of(context).pop();

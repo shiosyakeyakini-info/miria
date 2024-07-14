@@ -1,19 +1,20 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/summaly_result.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/link_navigator.dart';
-import 'package:miria/view/common/misskey_notes/player_embed.dart';
-import 'package:miria/view/common/misskey_notes/twitter_embed.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/summaly_result.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/misskey_notes/link_navigator.dart";
+import "package:miria/view/common/misskey_notes/player_embed.dart";
+import "package:miria/view/common/misskey_notes/twitter_embed.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:webview_flutter/webview_flutter.dart";
 
 final _summalyProvider =
     AsyncNotifierProvider.family<_Summaly, SummalyResult, (String, String)>(
@@ -24,7 +25,7 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
   @override
   Future<SummalyResult> build((String, String) arg) async {
     final (host, link) = arg;
-    final dio = ref.watch(dioProvider);
+    final dio = ref.read(dioProvider);
     final url = Uri.parse(link);
     // https://github.com/misskey-dev/misskey/blob/2023.9.3/packages/frontend/src/components/MkUrlPreview.vue#L141-L145
     final replacedUrl = url
@@ -52,10 +53,10 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
 
 class LinkPreview extends ConsumerWidget {
   const LinkPreview({
-    super.key,
     required this.account,
     required this.link,
     required this.host,
+    super.key,
   });
 
   final Account account;
@@ -78,10 +79,10 @@ class LinkPreview extends ConsumerWidget {
 
 class LinkPreviewItem extends StatefulWidget {
   const LinkPreviewItem({
-    super.key,
     required this.link,
     required this.summalyResult,
     required this.host,
+    super.key,
   });
 
   final String link;
@@ -155,9 +156,13 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
                 isPlayerOpen = false;
               }),
               icon: const Icon(Icons.close),
-              label: Text(playerUrl != null ? "プレイヤーを閉じる" : "ツイートを閉じる"),
+              label: Text(
+                playerUrl != null
+                    ? S.of(context).closePlayer
+                    : S.of(context).closeTweet,
+              ),
             ),
-          ]
+          ],
       ],
     );
   }
@@ -165,9 +170,9 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
 
 class LinkPreviewTile extends ConsumerWidget {
   const LinkPreviewTile({
-    super.key,
     required this.link,
     required this.host,
+    super.key,
     this.summalyResult = const SummalyResult(player: Player()),
   });
 
@@ -189,10 +194,14 @@ class LinkPreviewTile extends ConsumerWidget {
         onTap: () async => await const LinkNavigator()
             .onTapLink(context, ref, link, host)
             .expectFailure(context),
-        onLongPress: () {
-          Clipboard.setData(ClipboardData(text: link));
+        onLongPress: () async {
+          await Clipboard.setData(ClipboardData(text: link));
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("コピーしました")),
+            SnackBar(
+              content: Text(S.of(context).doneCopy),
+              duration: const Duration(seconds: 1),
+            ),
           );
         },
         child: DecoratedBox(

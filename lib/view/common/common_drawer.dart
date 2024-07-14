@@ -1,17 +1,30 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/acct.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/avatar_icon.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/acct.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/avatar_icon.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
 class CommonDrawer extends ConsumerWidget {
   final Acct initialOpenAcct;
+  final bool allOpen;
 
-  const CommonDrawer({super.key, required this.initialOpenAcct});
+  const CommonDrawer({
+    required this.initialOpenAcct,
+    this.allOpen = false,
+    super.key,
+  });
+
+  void closeDrawer(BuildContext context) {
+    final state = Scaffold.of(context);
+    if (state.isDrawerOpen) {
+      state.closeDrawer();
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,11 +36,11 @@ class CommonDrawer extends ConsumerWidget {
         child: ListView(
           children: [
             for (final account in accounts) ...[
-              AccountScope(
+              AccountContextScope.as(
                 account: account,
                 child: ExpansionTile(
-                  leading: AvatarIcon.fromIResponse(account.i),
-                  initiallyExpanded: account.acct == initialOpenAcct,
+                  leading: AvatarIcon(user: account.i),
+                  initiallyExpanded: account.acct == initialOpenAcct || allOpen,
                   title: SimpleMfmText(
                     account.i.name ?? account.i.username,
                     style: Theme.of(context).textTheme.titleMedium,
@@ -39,75 +52,122 @@ class CommonDrawer extends ConsumerWidget {
                   children: [
                     ListTile(
                       leading: const Icon(Icons.notifications),
-                      title: const Text("通知"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(NotificationRoute(account: account));
+                      title: Text(S.of(context).notification),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          NotificationRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.star),
-                      title: const Text("お気に入り"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(FavoritedNoteRoute(account: account));
+                      title: Text(S.of(context).favorite),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          FavoritedNoteRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.list),
-                      title: const Text("リスト"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(UsersListRoute(account: account));
+                      title: Text(S.of(context).list),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          UsersListRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.settings_input_antenna),
-                      title: const Text("アンテナ"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(AntennaRoute(account: account));
+                      title: Text(S.of(context).antenna),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          AntennaRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.attach_file),
-                      title: const Text("クリップ"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(ClipListRoute(account: account));
+                      title: Text(S.of(context).clip),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          ClipListRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.tv),
-                      title: const Text("チャンネル"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(ChannelsRoute(account: account));
+                      title: Text(S.of(context).channel),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          ChannelsRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.search),
-                      title: const Text("検索"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(SearchRoute(account: account));
+                      title: Text(S.of(context).search),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          SearchRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.tag),
-                      title: const Text("みつける"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(ExploreRoute(account: account));
+                      title: Text(S.of(context).explore),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          ExploreRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.gamepad),
+                      title: Text(S.of(context).misskeyGames),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
+                          MisskeyGamesRoute(
+                            accountContext: AccountContext.as(account),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
                       leading: const Icon(Icons.settings),
-                      title:
-                          Text("${account.i.name ?? account.i.username} の設定"),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.pushRoute(
+                      title: Text(
+                        S.of(context).accountSetting(
+                              account.i.name ?? account.i.username,
+                            ),
+                      ),
+                      onTap: () async {
+                        closeDrawer(context);
+                        await context.pushRoute(
                           SeveralAccountSettingsRoute(account: account),
                         );
                       },
@@ -118,10 +178,10 @@ class CommonDrawer extends ConsumerWidget {
             ],
             ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text("設定"),
-              onTap: () {
-                Navigator.of(context).pop();
-                context.pushRoute(const SettingsRoute());
+              title: Text(S.of(context).settings),
+              onTap: () async {
+                closeDrawer(context);
+                await context.pushRoute(const SettingsRoute());
               },
             ),
           ],

@@ -1,12 +1,14 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/avatar_icon.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/avatar_icon.dart";
 
 @RoutePage()
 class AccountListPage extends ConsumerWidget {
@@ -17,13 +19,11 @@ class AccountListPage extends ConsumerWidget {
     final accounts = ref.watch(accountsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("アカウント設定"),
+        title: Text(S.of(context).accountSettings),
         leading: Container(),
         actions: [
           IconButton(
-            onPressed: () {
-              context.pushRoute(const LoginRoute());
-            },
+            onPressed: () async => await context.pushRoute(const LoginRoute()),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -59,12 +59,11 @@ class AccountListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () {
-                  context.router
-                    ..removeWhere((route) => true)
-                    ..push(const SplashRoute());
+                onPressed: () async {
+                  context.router.removeWhere((route) => true);
+                  await context.router.push(const SplashRoute());
                 },
-                child: const Text("アカウント設定をおわる"),
+                child: Text(S.of(context).quitAccountSettings),
               ),
             ),
           ),
@@ -82,7 +81,7 @@ class AccountListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      leading: AvatarIcon.fromIResponse(account.i),
+      leading: AvatarIcon(user: account.i),
       title: Text(
         account.i.name ?? account.i.username,
         style: Theme.of(context).textTheme.titleMedium,
@@ -95,18 +94,26 @@ class AccountListItem extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              context.pushRoute(
+                SeveralAccountGeneralSettingsRoute(account: account),
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  content: const Text("ほんまに削除してええな？"),
+                  content: Text(S.of(context).confirmDelete),
                   actions: [
                     OutlinedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text("やっぱりせえへん"),
+                      child: Text(S.of(context).cancel),
                     ),
                     ElevatedButton(
                       onPressed: () async {
@@ -118,7 +125,7 @@ class AccountListItem extends ConsumerWidget {
                         if (!context.mounted) return;
                         Navigator.of(context).pop();
                       },
-                      child: const Text("ええで"),
+                      child: Text(S.of(context).doDeleting),
                     ),
                   ],
                 ),

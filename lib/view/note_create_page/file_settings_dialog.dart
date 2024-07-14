@@ -1,58 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/image_file.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/image_file.dart";
 
 class FileSettingsDialogResult {
   final String fileName;
   final bool isNsfw;
   final String caption;
 
-  const FileSettingsDialogResult(
-      {required this.fileName, required this.isNsfw, required this.caption});
+  const FileSettingsDialogResult({
+    required this.fileName,
+    required this.isNsfw,
+    required this.caption,
+  });
 }
 
-class FileSettingsDialog extends ConsumerStatefulWidget {
+class FileSettingsDialog extends HookConsumerWidget {
   final MisskeyPostFile file;
 
-  const FileSettingsDialog({super.key, required this.file});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      FileSettingsDialogState();
-}
-
-class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
-  late final TextEditingController fileNameController;
-  late final TextEditingController captionController;
-  bool isNsfw = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    fileNameController = TextEditingController(text: widget.file.fileName);
-    captionController = TextEditingController(text: widget.file.caption);
-    isNsfw = widget.file.isNsfw;
-  }
-
-  @override
-  void dispose() {
-    fileNameController.dispose();
-    captionController.dispose();
-    super.dispose();
-  }
+  const FileSettingsDialog({required this.file, super.key});
 
   String generateRandomText() {
-    var str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        .split("");
-    str.shuffle();
+    final str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        .split("")
+      ..shuffle();
     return str.take(10).join("");
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fileNameController = useTextEditingController(text: file.fileName);
+    final captionController = useTextEditingController(text: file.caption);
+    final isNsfw = useState(file.isNsfw);
+
     return AlertDialog(
-      contentPadding: EdgeInsets.all(10),
+      contentPadding: const EdgeInsets.all(10),
       content: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -62,39 +45,42 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("ファイル名"),
+              Text(S.of(context).fileName),
               TextField(
                 controller: fileNameController,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.badge_outlined)),
+                  prefixIcon: Icon(Icons.badge_outlined),
+                ),
               ),
               TextButton(
-                  onPressed: () {
-                    final period = fileNameController.text.lastIndexOf(".");
-                    if (period == -1) {
-                      fileNameController.text = generateRandomText();
-                    } else {
-                      fileNameController.text = generateRandomText() +
-                          fileNameController.text.substring(period);
-                    }
-                  },
-                  child: const Text("ファイル名をランダムにする")),
+                onPressed: () {
+                  final period = fileNameController.text.lastIndexOf(".");
+                  if (period == -1) {
+                    fileNameController.text = generateRandomText();
+                  } else {
+                    fileNameController.text = generateRandomText() +
+                        fileNameController.text.substring(period);
+                  }
+                },
+                child: Text(S.of(context).randomizeFileName),
+              ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               CheckboxListTile(
-                value: isNsfw,
-                title: const Text("閲覧注意にする"),
-                subtitle: const Text("閲覧注意の設定を外した場合でも、自動で閲覧注意にマークされることがあります。"),
-                onChanged: (value) => setState(() => isNsfw = !isNsfw),
+                value: isNsfw.value,
+                title: Text(S.of(context).markAsSensitive),
+                subtitle: Text(S.of(context).sensitiveSubTitle),
+                onChanged: (value) => isNsfw.value = !isNsfw.value,
                 controlAffinity: ListTileControlAffinity.leading,
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
-              const Text("キャプション"),
+              Text(S.of(context).caption),
               TextField(
                 controller: captionController,
                 maxLines: null,
                 minLines: 5,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.subtitles_outlined)),
+                  prefixIcon: Icon(Icons.subtitles_outlined),
+                ),
               ),
             ],
           ),
@@ -102,14 +88,17 @@ class FileSettingsDialogState extends ConsumerState<FileSettingsDialog> {
       ),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop(FileSettingsDialogResult(
+          onPressed: () {
+            Navigator.of(context).pop(
+              FileSettingsDialogResult(
                 fileName: fileNameController.text,
-                isNsfw: isNsfw,
+                isNsfw: isNsfw.value,
                 caption: captionController.text,
-              ));
-            },
-            child: const Text("これでええわ")),
+              ),
+            );
+          },
+          child: Text(S.of(context).done),
+        ),
       ],
     );
   }

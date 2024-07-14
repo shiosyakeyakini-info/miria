@@ -1,29 +1,60 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_highlighting/flutter_highlighting.dart';
-import 'package:flutter_highlighting/themes/github-dark.dart';
-import 'package:flutter_highlighting/themes/github.dart';
-import 'package:highlighting/languages/all.dart';
-import 'package:mfm_parser/mfm_parser.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/link_navigator.dart';
-import 'package:miria/view/common/misskey_notes/network_image.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mfm/mfm.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:twemoji_v2/twemoji_v2.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter_highlighting/flutter_highlighting.dart";
+import "package:flutter_highlighting/themes/github-dark.dart";
+import "package:flutter_highlighting/themes/github.dart";
+import "package:highlighting/languages/all.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mfm/mfm.dart";
+import "package:mfm_parser/mfm_parser.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/link_navigator.dart";
+import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:twemoji_v2/twemoji_v2.dart";
+import "package:url_launcher/url_launcher.dart";
 
-class MfmText extends ConsumerStatefulWidget {
+InlineSpan _unicodeEmojiBuilder(
+  BuildContext builderContext,
+  String emoji,
+  TextStyle? style,
+  WidgetRef ref,
+  void Function() onTap,
+) {
+  if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
+      EmojiType.system) {
+    return TextSpan(
+      text: emoji,
+      style: style,
+      recognizer: MfmBlurScope.of(builderContext)
+          ? null
+          : (TapGestureRecognizer()..onTap = () => onTap),
+    );
+  } else {
+    return WidgetSpan(
+      child: GestureDetector(
+        onTap: MfmBlurScope.of(builderContext) ? null : () => onTap,
+        child: Twemoji(
+          emoji: emoji,
+          width: style?.fontSize ??
+              DefaultTextStyle.of(builderContext).style.fontSize,
+          height: style?.fontSize ??
+              DefaultTextStyle.of(builderContext).style.fontSize ??
+              22,
+        ),
+      ),
+    );
+  }
+}
+
+class MfmText extends ConsumerWidget {
   final String? mfmText;
   final List<MfmNode>? mfmNode;
   final String? host;
@@ -34,6 +65,7 @@ class MfmText extends ConsumerStatefulWidget {
   final List<InlineSpan> prefixSpan;
   final Function(MisskeyEmojiData)? onEmojiTap;
   final bool isEnableAnimatedMFM;
+  final int? maxLines;
 
   const MfmText({
     super.key,
@@ -47,44 +79,40 @@ class MfmText extends ConsumerStatefulWidget {
     this.prefixSpan = const [],
     this.onEmojiTap,
     this.isEnableAnimatedMFM = true,
+    this.maxLines,
   }) : assert(mfmText != null || mfmNode != null);
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => MfmTextState();
-}
-
-class MfmTextState extends ConsumerState<MfmText> {
   Future<void> onSearch(String query) async {
     final uri = Uri(
-        scheme: "https",
-        host: "google.com",
-        pathSegments: ["search"],
-        queryParameters: {"q": query});
-    launchUrl(uri);
-  }
-
-  void onHashtagTap(String hashtag) {
-    context.pushRoute(
-        HashtagRoute(account: AccountScope.of(context), hashtag: hashtag));
+      scheme: "https",
+      host: "google.com",
+      pathSegments: ["search"],
+      queryParameters: {"q": query},
+    );
+    await launchUrl(uri);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Mfm(
-      mfmText: widget.mfmText,
-      mfmNode: widget.mfmNode,
+      mfmText: mfmText,
+      mfmNode: mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
         final emojiData = MisskeyEmojiData.fromEmojiName(
-            emojiName: ":$emojiName:",
-            repository: ref
-                .read(emojiRepositoryProvider(AccountScope.of(builderContext))),
-            emojiInfo: widget.emoji);
+          emojiName: ":$emojiName:",
+          repository: ref.read(
+            emojiRepositoryProvider(
+              ref.read(accountContextProvider).getAccount,
+            ),
+          ),
+          emojiInfo: emoji,
+        );
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,
           child: GestureDetector(
             onTap: MfmBlurScope.of(builderContext)
                 ? null
-                : () => widget.onEmojiTap?.call(emojiData),
+                : () => onEmojiTap?.call(emojiData),
             child: EmojiInk(
               child: CustomEmoji(
                 emojiData: emojiData,
@@ -95,34 +123,13 @@ class MfmTextState extends ConsumerState<MfmText> {
           ),
         );
       },
-      unicodeEmojiBuilder:
-          (BuildContext builderContext, String emoji, TextStyle? style) {
-        if (ref.read(generalSettingsRepositoryProvider).settings.emojiType ==
-            EmojiType.system) {
-          return TextSpan(
-              text: emoji,
-              style: style,
-              recognizer: MfmBlurScope.of(builderContext)
-                  ? null
-                  : (TapGestureRecognizer()
-                    ..onTap = () => widget.onEmojiTap
-                        ?.call(UnicodeEmojiData(char: emoji))));
-        } else {
-          return WidgetSpan(
-            child: GestureDetector(
-              onTap: MfmBlurScope.of(builderContext)
-                  ? null
-                  : () =>
-                      widget.onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
-              child: Twemoji(
-                emoji: emoji,
-                width: style?.fontSize,
-                height: style?.fontSize,
-              ),
-            ),
-          );
-        }
-      },
+      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
+        context,
+        emoji,
+        style,
+        ref,
+        () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+      ),
       codeBlockBuilder: (context, code, lang) => CodeBlock(
         code: code,
         language: lang,
@@ -132,16 +139,18 @@ class MfmTextState extends ConsumerState<MfmText> {
           alignment: PlaceholderAlignment.middle,
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).dividerColor),
-                borderRadius: BorderRadius.circular(10)),
+              border: Border.all(color: Theme.of(context).dividerColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.only(left: 5, right: 5),
             margin: const EdgeInsets.only(left: 5, right: 5),
             child: Text.rich(
               textScaler: TextScaler.noScaling,
               TextSpan(
-                  style: style,
-                  text:
-                      "${unixtime?.formatUntilSeconds ?? "？？？"} (${unixtime?.differenceNowDetail ?? "？？？"})"),
+                style: style,
+                text:
+                    "${unixtime?.formatUntilSeconds(context) ?? "？？？"} (${unixtime?.differenceNowDetail(context) ?? "？？？"})",
+              ),
             ),
           ),
         );
@@ -150,22 +159,31 @@ class MfmTextState extends ConsumerState<MfmText> {
       monospaceStyle: AppTheme.of(context).monospaceStyle,
       cursiveStyle: AppTheme.of(context).cursiveStyle,
       fantasyStyle: AppTheme.of(context).fantasyStyle,
-      linkTap: (src) => const LinkNavigator()
-          .onTapLink(context, ref, src, widget.host)
-          .expectFailure(context),
+      linkTap: (src) async =>
+          const LinkNavigator().onTapLink(context, ref, src, host),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
-      mentionTap: (userName, host, acct) => const LinkNavigator()
-          .onMentionTap(
-              context, ref, AccountScope.of(context), acct, widget.host)
-          .expectFailure(context),
-      hashtagTap: onHashtagTap,
+      mentionTap: (userName, host, acct) async =>
+          const LinkNavigator().onMentionTap(
+        context,
+        ref,
+        acct,
+        host,
+      ),
+      hashtagTap: (hashtag) async => await context.pushRoute(
+        HashtagRoute(
+          accountContext: ref.read(accountContextProvider),
+          hashtag: hashtag,
+        ),
+      ),
       searchTap: onSearch,
-      style: widget.style,
-      isNyaize: widget.isNyaize,
-      suffixSpan: widget.suffixSpan,
-      prefixSpan: widget.prefixSpan,
-      isUseAnimation: widget.isEnableAnimatedMFM,
+      style: style,
+      isNyaize: isNyaize,
+      suffixSpan: suffixSpan,
+      prefixSpan: prefixSpan,
+      isUseAnimation: isEnableAnimatedMFM,
+      defaultBorderColor: Theme.of(context).primaryColor,
+      maxLines: maxLines,
     );
   }
 }
@@ -175,9 +193,9 @@ class CodeBlock extends StatelessWidget {
   final String code;
 
   const CodeBlock({
+    required this.code,
     super.key,
     this.language,
-    required this.code,
   });
 
   String resolveLanguage(String language) {
@@ -195,15 +213,16 @@ class CodeBlock extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: HighlightView(
-            code,
-            languageId: resolvedLanguage,
-            theme:
-                AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
-            padding: const EdgeInsets.all(10),
-            textStyle: AppTheme.of(context).monospaceStyle,
-          )),
+        scrollDirection: Axis.horizontal,
+        child: HighlightView(
+          code,
+          languageId: resolvedLanguage,
+          theme:
+              AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
+          padding: const EdgeInsets.all(10),
+          textStyle: AppTheme.of(context).monospaceStyle,
+        ),
+      ),
     );
   }
 }
@@ -211,12 +230,14 @@ class CodeBlock extends StatelessWidget {
 class EmojiInk extends ConsumerWidget {
   final Widget child;
 
-  const EmojiInk({super.key, required this.child});
+  const EmojiInk({required this.child, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isEnabled = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.enableDirectReaction));
+    final isEnabled = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.enableDirectReaction),
+    );
     if (isEnabled) {
       return InkWell(child: child);
     } else {
@@ -252,13 +273,23 @@ class SimpleMfmText extends ConsumerWidget {
         child: CustomEmoji(
           emojiData: MisskeyEmojiData.fromEmojiName(
             emojiName: ":$emojiName:",
-            repository:
-                ref.read(emojiRepositoryProvider(AccountScope.of(context))),
+            repository: ref.read(
+              emojiRepositoryProvider(
+                ref.read(accountContextProvider).getAccount,
+              ),
+            ),
             emojiInfo: emojis,
           ),
           fontSizeRatio: 1,
           style: style,
         ),
+      ),
+      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
+        context,
+        emoji,
+        style,
+        ref,
+        () => {},
       ),
       style: style,
       suffixSpan: suffixSpan,
@@ -268,38 +299,33 @@ class SimpleMfmText extends ConsumerWidget {
   }
 }
 
-class UserInformation extends ConsumerStatefulWidget {
+class UserInformation extends ConsumerWidget {
   final User user;
   const UserInformation({
-    super.key,
     required this.user,
+    super.key,
   });
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => UserInformationState();
-}
-
-class UserInformationState extends ConsumerState<UserInformation> {
-  String resolveIconUrl(Uri uri) {
+  String resolveIconUrl(Uri uri, WidgetRef ref) {
     final baseUrl = uri.toString();
     if (baseUrl.startsWith("/")) {
-      return "https://${widget.user.host ?? AccountScope.of(context).host}$baseUrl";
+      return "https://${user.host ?? ref.read(accountContextProvider).getAccount.host}$baseUrl";
     } else {
       return baseUrl;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfmText(
-      widget.user.name ?? widget.user.username,
+      user.name ?? user.username,
       style: Theme.of(context)
           .textTheme
           .bodyMedium
           ?.copyWith(fontWeight: FontWeight.bold),
-      emojis: widget.user.emojis,
+      emojis: user.emojis,
       suffixSpan: [
-        for (final badge in widget.user.badgeRoles)
+        for (final badge in user.badgeRoles)
           if (badge.iconUrl != null)
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -307,19 +333,19 @@ class UserInformationState extends ConsumerState<UserInformation> {
                 message: badge.name,
                 child: NetworkImageView(
                   type: ImageType.role,
-                  url: resolveIconUrl(badge.iconUrl!),
-                  height: (DefaultTextStyle.of(context).style.fontSize ?? 22),
+                  url: resolveIconUrl(badge.iconUrl!, ref),
+                  height: DefaultTextStyle.of(context).style.fontSize ?? 22,
                   loadingBuilder: (context, widget, event) => SizedBox(
-                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                      height:
-                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                  ),
                   errorBuilder: (context, e, s) => SizedBox(
-                      width: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                      height:
-                          DefaultTextStyle.of(context).style.fontSize ?? 22),
+                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                  ),
                 ),
               ),
-            )
+            ),
       ],
     );
   }

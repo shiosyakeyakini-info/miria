@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/input_completion_type.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/note_create/basic_keyboard.dart';
-import 'package:miria/view/common/note_create/input_completation.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_dialog.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/input_completion_type.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/note_create/basic_keyboard.dart";
+import "package:miria/view/common/note_create/input_completation.dart";
 
 final _filteredEmojisProvider = NotifierProvider.autoDispose
     .family<_FilteredEmojis, List<MisskeyEmojiData>, Account>(
@@ -18,13 +20,14 @@ class _FilteredEmojis
     extends AutoDisposeFamilyNotifier<List<MisskeyEmojiData>, Account> {
   @override
   List<MisskeyEmojiData> build(Account arg) {
-    ref.listen(inputCompletionTypeProvider, (_, type) {
-      _updateEmojis(type);
-    });
+    ref.listen(
+      inputCompletionTypeProvider,
+      (_, type) async => _updateEmojis(type),
+    );
     return ref.read(emojiRepositoryProvider(arg)).defaultEmojis();
   }
 
-  void _updateEmojis(InputCompletionType type) async {
+  Future<void> _updateEmojis(InputCompletionType type) async {
     if (type is Emoji) {
       state =
           await ref.read(emojiRepositoryProvider(arg)).searchEmojis(type.query);
@@ -34,13 +37,11 @@ class _FilteredEmojis
 
 class EmojiKeyboard extends ConsumerWidget {
   const EmojiKeyboard({
-    super.key,
-    required this.account,
     required this.controller,
     required this.focusNode,
+    super.key,
   });
 
-  final Account account;
   final TextEditingController controller;
   final FocusNode focusNode;
 
@@ -63,7 +64,6 @@ class EmojiKeyboard extends ConsumerWidget {
             offset: beforeSearchText.length + emoji.baseName.length + 2,
           ),
         );
-        break;
       case UnicodeEmojiData():
         controller.value = TextEditingValue(
           text: "$beforeSearchText${emoji.char}$after",
@@ -71,7 +71,6 @@ class EmojiKeyboard extends ConsumerWidget {
             offset: beforeSearchText.length + emoji.char.length,
           ),
         );
-        break;
       default:
         return;
     }
@@ -80,7 +79,9 @@ class EmojiKeyboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filteredEmojis = ref.watch(_filteredEmojisProvider(account));
+    final filteredEmojis = ref.watch(
+      _filteredEmojisProvider(ref.read(accountContextProvider).getAccount),
+    );
 
     if (filteredEmojis.isEmpty) {
       return BasicKeyboard(
@@ -107,19 +108,19 @@ class EmojiKeyboard extends ConsumerWidget {
           ),
         TextButton.icon(
           onPressed: () async {
-            final selected = await showDialog(
-              context: context,
-              builder: (context2) => ReactionPickerDialog(
-                account: account,
+            final selected = await context.pushRoute<MisskeyEmojiData>(
+              ReactionPickerRoute(
+                account: ref.read(accountContextProvider).getAccount,
                 isAcceptSensitive: true,
               ),
             );
+
             if (selected != null) {
               insertEmoji(selected, ref);
             }
           },
           icon: const Icon(Icons.add_reaction_outlined),
-          label: const Text("他のん"),
+          label: Text(S.of(context).otherComplementReactions),
         ),
       ],
     );
