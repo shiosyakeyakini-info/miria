@@ -17,7 +17,6 @@ import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/local_only_icon.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
-import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/note_create_page/mfm_preview.dart";
 import "package:miria/view/note_create_page/reply_to_area.dart";
 import "package:miria/view/note_create_page/vote_area.dart";
