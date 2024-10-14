@@ -125,9 +125,9 @@ class PageContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final content = this.content;
-    if (content is misskey.PageText) {
+    if (content case misskey.PageText(:final text?)) {
       final account = AccountScope.of(context);
-      final nodes = const MfmParser().parse(content.text);
+      final nodes = const MfmParser().parse(text);
       return Column(
         children: [
           MfmText(
@@ -143,12 +143,11 @@ class PageContent extends ConsumerWidget {
         ],
       );
     }
-    if (content is misskey.PageImage) {
-      final url = page.attachedFiles
-          .firstWhereOrNull((e) => e.id == content.fileId)
-          ?.url;
+    if (content case misskey.PageImage(:final fileId?)) {
+      final url =
+          page.attachedFiles.firstWhereOrNull((e) => e.id == fileId)?.url;
       final thumbnailUrl = page.attachedFiles
-          .firstWhereOrNull((e) => e.id == content.fileId)
+          .firstWhereOrNull((e) => e.id == fileId)
           ?.thumbnailUrl;
       if (url != null) {
         return GestureDetector(
@@ -162,14 +161,14 @@ class PageContent extends ConsumerWidget {
         return const SizedBox.shrink();
       }
     }
-    if (content is misskey.PageNote) {
+    if (content case misskey.PageNote(note: final noteId?)) {
       return FutureBuilder(
         future: (() async {
           final account = AccountScope.of(context);
           final note = await ref
               .read(misskeyProvider(account))
               .notes
-              .show(misskey.NotesShowRequest(noteId: content.note));
+              .show(misskey.NotesShowRequest(noteId: noteId));
           ref.read(notesProvider(account)).registerNote(note);
           return note;
         })(),
