@@ -1013,7 +1013,7 @@ packages:
     description:
       path: "."
       ref: "feature/refactor_streaming"
-      resolved-ref: fd5512f840f1b06f6c453171e17972f1f1cbec9d
+      resolved-ref: "90d0aa089ef55811627146e2069dd16173cb7b63"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

@@ -40,6 +40,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Map<String, dynamic> get parameters;
   String? id;
   Ref ref;
+  StreamSubscription<StreamingResponse>? subscription;
 
   SocketTimelineRepository(
     this.misskey,
@@ -98,15 +99,155 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       notifyListeners();
     }
 
-    streamingController =
-        await ref.read(misskeyStreamingProvider(misskey).future);
+    if (misskey.streamingService.isClosed) {
+      streamingController =
+          await ref.refresh(misskeyStreamingProvider(misskey).future);
+    } else {
+      streamingController =
+          await ref.read(misskeyStreamingProvider(misskey).future);
+    }
+    await _listenStreaming();
+    await Future.wait([
+      Future(() async {
+        if (olderNotes.isEmpty) {
+          try {
+            final resultNotes = await requestNotes();
+            olderNotes.addAll(resultNotes);
+            notifyListeners();
+          } catch (e, s) {
+            if (kDebugMode) {
+              print(e);
+              print(s);
+            }
+          }
+        } else {
+          reloadLatestNotes();
+        }
+      }),
+    ]);
+  }
+
+  @override
+  Future<void> disconnect() async {
+    final id = this.id;
+    if (id != null && streamingController != null) {
+      await streamingController?.removeChannel(id);
+      await subscription?.cancel();
+    }
+  }
+
+  @override
+  Future<void> reconnect() async {
+    isLoading = true;
+    try {
+      await subscription?.cancel();
+      await (
+        () async {
+          await misskey.streamingService.reconnect();
+          await _listenStreaming();
+        }(),
+        () async {
+          reloadLatestNotes();
+        }(),
+      ).wait;
+      error = null;
+      isLoading = false;
+      notifyListeners();
+    } catch (e, s) {
+      error = (e, s);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  @override
+  Future<int> previousLoad() async {
+    if (newerNotes.isEmpty && olderNotes.isEmpty) {
+      return -1;
+    }
+    final resultNotes = await requestNotes(
+      untilId: olderNotes.lastOrNull?.id ?? newerNotes.first.id,
+    );
+    olderNotes.addAll(resultNotes);
+    notifyListeners();
+    return resultNotes.length;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    unawaited(() async {
+      final id = this.id;
+      if (id != null) {
+        await streamingController?.removeChannel(id);
+      }
+    }());
+  }
+
+  @override
+  Future<void> subscribe(SubscribeItem item) async {
+    if (!tabSetting.isSubscribe) return;
+    final index =
+        subscribedList.indexWhere((element) => element.noteId == item.noteId);
+    final isSubscribed = subscribedList.indexWhere(
+      (element) =>
+          element.noteId == item.noteId ||
+          element.renoteId == item.noteId ||
+          element.replyId == item.noteId,
+    );
+
+    if (index == -1) {
+      subscribedList.add(item);
+      if (isSubscribed == -1) {
+        streamingController?.subNote(item.noteId);
+      }
+    } else {
+      subscribedList[index] = item;
+    }
+
+    final renoteId = item.renoteId;
+
+    if (renoteId != null) {
+      final isRenoteSubscribed = subscribedList.indexWhere(
+        (element) =>
+            element.noteId == renoteId ||
+            element.renoteId == renoteId ||
+            element.replyId == renoteId,
+      );
+      if (isRenoteSubscribed == -1) {
+        streamingController?.subNote(renoteId);
+      }
+    }
+
+    final replyId = item.replyId;
+    if (replyId != null) {
+      streamingController?.subNote(replyId);
+      final isRenoteSubscribed = subscribedList.indexWhere(
+        (element) =>
+            element.noteId == replyId ||
+            element.renoteId == replyId ||
+            element.replyId == replyId,
+      );
+      if (isRenoteSubscribed == -1) {
+        streamingController?.subNote(replyId);
+      }
+    }
+  }
+
+  @override
+  Future<void> describe(String id) async {
+    if (!tabSetting.isSubscribe) return;
+    streamingController?.unsubNote(id);
+  }
+
+  Future<void> _listenStreaming() async {
     final generatedId = const Uuid().v4();
     id = generatedId;
 
     final streaming =
         streamingController?.addChannel(channel, parameters, generatedId);
 
-    streaming?.listen((response) {
+    subscription = streaming?.listen((response) {
       switch (response) {
         case StreamingChannelResponse(:final body):
           switch (body) {
@@ -236,123 +377,5 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         // TODO: Handle this case.
       }
     });
-    await Future.wait([
-      Future(() async {
-        if (olderNotes.isEmpty) {
-          try {
-            final resultNotes = await requestNotes();
-            olderNotes.addAll(resultNotes);
-            notifyListeners();
-          } catch (e, s) {
-            if (kDebugMode) {
-              print(e);
-              print(s);
-            }
-          }
-        } else {
-          reloadLatestNotes();
-        }
-      }),
-    ]);
-  }
-
-  @override
-  Future<void> disconnect() async {
-    final id = this.id;
-    if (id != null && streamingController != null) {
-      await streamingController?.removeChannel(id);
-    }
-  }
-
-  @override
-  Future<void> reconnect() async {
-    final id = this.id!;
-    isLoading = true;
-    try {
-      await streamingController?.removeChannel(id);
-    } catch (e, s) {
-      error = (e, s);
-      isLoading = false;
-    }
-  }
-
-  @override
-  Future<int> previousLoad() async {
-    if (newerNotes.isEmpty && olderNotes.isEmpty) {
-      return -1;
-    }
-    final resultNotes = await requestNotes(
-      untilId: olderNotes.lastOrNull?.id ?? newerNotes.first.id,
-    );
-    olderNotes.addAll(resultNotes);
-    notifyListeners();
-    return resultNotes.length;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    unawaited(() async {
-      final id = this.id;
-      if (id != null) {
-        await streamingController?.removeChannel(id);
-      }
-    }());
-  }
-
-  @override
-  Future<void> subscribe(SubscribeItem item) async {
-    if (!tabSetting.isSubscribe) return;
-    final index =
-        subscribedList.indexWhere((element) => element.noteId == item.noteId);
-    final isSubscribed = subscribedList.indexWhere(
-      (element) =>
-          element.noteId == item.noteId ||
-          element.renoteId == item.noteId ||
-          element.replyId == item.noteId,
-    );
-
-    if (index == -1) {
-      subscribedList.add(item);
-      if (isSubscribed == -1) {
-        streamingController?.subNote(item.noteId);
-      }
-    } else {
-      subscribedList[index] = item;
-    }
-
-    final renoteId = item.renoteId;
-
-    if (renoteId != null) {
-      final isRenoteSubscribed = subscribedList.indexWhere(
-        (element) =>
-            element.noteId == renoteId ||
-            element.renoteId == renoteId ||
-            element.replyId == renoteId,
-      );
-      if (isRenoteSubscribed == -1) {
-        streamingController?.subNote(renoteId);
-      }
-    }
-
-    final replyId = item.replyId;
-    if (replyId != null) {
-      streamingController?.subNote(replyId);
-      final isRenoteSubscribed = subscribedList.indexWhere(
-        (element) =>
-            element.noteId == replyId ||
-            element.renoteId == replyId ||
-            element.replyId == replyId,
-      );
-      if (isRenoteSubscribed == -1) {
-        streamingController?.subNote(replyId);
-      }
-    }
-  }
-
-  @override
-  Future<void> describe(String id) async {
-    if (!tabSetting.isSubscribe) return;
-    streamingController?.unsubNote(id);
   }
 }
