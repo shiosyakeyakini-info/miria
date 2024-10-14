@@ -101,6 +101,15 @@ class PushableListView<T> extends HookConsumerWidget {
             if (isFinalPage.value) {
               return Container();
             }
+            if (isLoading.value) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              );
+            }
+
             if (items.value.isEmpty && !hideIsEmpty) {
               return const Center(
                 child: Padding(
@@ -134,18 +143,13 @@ class PushableListView<T> extends HookConsumerWidget {
                     ],
                   ),
                 Center(
-                  child: !isLoading.value
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: IconButton(
-                            onPressed: nextLoad,
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                          ),
-                        )
-                      : const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CircularProgressIndicator(),
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: IconButton(
+                      onPressed: nextLoad,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                    ),
+                  ),
                 ),
               ],
             );
