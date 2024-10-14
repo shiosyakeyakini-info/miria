@@ -93,7 +93,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     AntennaSelectRoute.name: (routeData) {
       final args = routeData.argsAs<AntennaSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<Antenna>(
         routeData: routeData,
         child: WrappedRoute(
             child: AntennaSelectDialog(
@@ -533,7 +533,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     RoleSelectRoute.name: (routeData) {
       final args = routeData.argsAs<RoleSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<RolesListResponse>(
         routeData: routeData,
         child: WrappedRoute(
             child: RoleSelectDialog(
@@ -693,7 +693,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     UserListSelectRoute.name: (routeData) {
       final args = routeData.argsAs<UserListSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<UsersList>(
         routeData: routeData,
         child: WrappedRoute(
             child: UserListSelectDialog(
