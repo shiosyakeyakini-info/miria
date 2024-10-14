@@ -38,9 +38,11 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   (Object?, StackTrace)? error;
   Channel get channel;
   Map<String, dynamic> get parameters;
-  String? id;
+  String? timelineId;
+  String? mainId;
   Ref ref;
-  StreamSubscription<StreamingResponse>? subscription;
+  StreamSubscription<StreamingResponse>? timelineSubscription;
+  StreamSubscription<StreamingResponse>? mainSubscription;
 
   SocketTimelineRepository(
     this.misskey,
@@ -129,10 +131,15 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   Future<void> disconnect() async {
-    final id = this.id;
+    final id = timelineId;
     if (id != null && streamingController != null) {
       await streamingController?.removeChannel(id);
-      await subscription?.cancel();
+      await timelineSubscription?.cancel();
+    }
+    final id2 = mainId;
+    if (id2 != null && streamingController != null) {
+      await streamingController?.removeChannel(id2);
+      await mainSubscription?.cancel();
     }
   }
 
@@ -140,7 +147,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Future<void> reconnect() async {
     isLoading = true;
     try {
-      await subscription?.cancel();
+      await timelineSubscription?.cancel();
       await (
         () async {
           await misskey.streamingService.reconnect();
@@ -177,9 +184,13 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   void dispose() {
     super.dispose();
     unawaited(() async {
-      final id = this.id;
+      final id = timelineId;
       if (id != null) {
         await streamingController?.removeChannel(id);
+      }
+      final id2 = mainId;
+      if (id2 != null) {
+        await streamingController?.removeChannel(id2);
       }
     }());
   }
@@ -242,140 +253,146 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   Future<void> _listenStreaming() async {
     final generatedId = const Uuid().v4();
-    id = generatedId;
+    timelineId = generatedId;
+    final generatedId2 = const Uuid().v4();
+    mainId = generatedId2;
 
-    final streaming =
-        streamingController?.addChannel(channel, parameters, generatedId);
+    timelineSubscription = streamingController
+        ?.addChannel(channel, parameters, generatedId)
+        .listen(listener);
+    mainSubscription = streamingController
+        ?.addChannel(Channel.main, {}, generatedId2)
+        .listen(listener);
+  }
 
-    subscription = streaming?.listen((response) {
-      switch (response) {
-        case StreamingChannelResponse(:final body):
-          switch (body) {
-            case NoteChannelEvent(:final body):
-              newerNotes.add(body);
-              notifyListeners();
-            case ReadAllNotificationsChannelEvent():
-              accountRepository.readAllNotification(account);
-            case UnreadNotificationChannelEvent():
-              accountRepository.addUnreadNotification(account);
-            case ReadAllAnnouncementsChannelEvent():
-              accountRepository.removeUnreadAnnouncement(account);
-            case AnnouncementCreatedChannelEvent(:final body):
-              accountRepository.createUnreadAnnouncement(
-                account,
-                body.announcement,
-              );
-            case StatsLogChannelEvent():
-            case StatsChannelEvent():
-            case UserAddedChannelEvent():
-            case UserRemovedChannelEvent():
-            case NotificationChannelEvent():
-            case MentionChannelEvent():
-            case ReplyChannelEvent():
-            case RenoteChannelEvent():
-            case FollowChannelEvent():
-            case FollowedChannelEvent():
-            case UnfollowChannelEvent():
-            case MeUpdatedChannelEvent():
-            case PageEventChannelEvent():
-            case UrlUploadFinishedChannelEvent():
-            case UnreadMentionChannelEvent():
-            case ReadAllUnreadMentionsChannelEvent():
-            case NotificationFlushedChannelEvent():
-            case UnreadSpecifiedNoteChannelEvent():
-            case ReadAllUnreadSpecifiedNotesChannelEvent():
-            case ReadAllAntennasChannelEvent():
-            case UnreadAntennaChannelEvent():
-            case MyTokenRegeneratedChannelEvent():
-            case SigninChannelEvent():
-            case RegistryUpdatedChannelEvent():
-            case DriveFileCreatedChannelEvent():
-            case ReadAntennaChannelEvent():
-            case ReceiveFollowRequestChannelEvent():
-            case FallbackChannelEvent():
-          }
-        case StreamingChannelNoteUpdatedResponse(:final body):
-          switch (body) {
-            case ReactedChannelEvent(:final id, :final body):
-              final registeredNote = noteRepository.notes[id];
-              if (registeredNote == null) return;
-              final reaction = Map.of(registeredNote.reactions);
-              reaction[body.reaction] = (reaction[body.reaction] ?? 0) + 1;
-              final emoji = body.emoji;
-              final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-              if (emoji != null && !body.reaction.endsWith("@.:")) {
-                reactionEmojis[emoji.name] = emoji.url;
-              }
-              noteRepository.registerNote(
-                registeredNote.copyWith(
-                  reactions: reaction,
-                  reactionEmojis: reactionEmojis,
-                  myReaction: body.userId == account.i.id
-                      ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-                      : registeredNote.myReaction,
-                ),
-              );
-            case UnreactedChannelEvent(:final body, :final id):
-              final registeredNote = noteRepository.notes[id];
-              if (registeredNote == null) return;
-              final reaction = Map.of(registeredNote.reactions);
-              reaction[body.reaction] =
-                  max((reaction[body.reaction] ?? 0) - 1, 0);
-              if (reaction[body.reaction] == 0) {
-                reaction.remove(body.reaction);
-              }
-              final emoji = body.emoji;
-              final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-              if (emoji != null && !body.reaction.endsWith("@.:")) {
-                reactionEmojis[emoji.name] = emoji.url;
-              }
-              noteRepository.registerNote(
-                registeredNote.copyWith(
-                  reactions: reaction,
-                  reactionEmojis: reactionEmojis,
-                  myReaction: body.userId == account.i.id
-                      ? ""
-                      : registeredNote.myReaction,
-                ),
-              );
-            case PollVotedChannelEvent(:final body, :final id):
-              final registeredNote = noteRepository.notes[id];
-              if (registeredNote == null) return;
+  Future<void> listener(StreamingResponse response) async {
+    switch (response) {
+      case StreamingChannelResponse(:final body):
+        switch (body) {
+          case NoteChannelEvent(:final body):
+            newerNotes.add(body);
+            notifyListeners();
+          case ReadAllNotificationsChannelEvent():
+            await accountRepository.readAllNotification(account);
+          case UnreadNotificationChannelEvent():
+            await accountRepository.addUnreadNotification(account);
+          case ReadAllAnnouncementsChannelEvent():
+            await accountRepository.removeUnreadAnnouncement(account);
+          case AnnouncementCreatedChannelEvent(:final body):
+            await accountRepository.createUnreadAnnouncement(
+              account,
+              body.announcement,
+            );
+          case StatsLogChannelEvent():
+          case StatsChannelEvent():
+          case UserAddedChannelEvent():
+          case UserRemovedChannelEvent():
+          case NotificationChannelEvent():
+          case MentionChannelEvent():
+          case ReplyChannelEvent():
+          case RenoteChannelEvent():
+          case FollowChannelEvent():
+          case FollowedChannelEvent():
+          case UnfollowChannelEvent():
+          case MeUpdatedChannelEvent():
+          case PageEventChannelEvent():
+          case UrlUploadFinishedChannelEvent():
+          case UnreadMentionChannelEvent():
+          case ReadAllUnreadMentionsChannelEvent():
+          case NotificationFlushedChannelEvent():
+          case UnreadSpecifiedNoteChannelEvent():
+          case ReadAllUnreadSpecifiedNotesChannelEvent():
+          case ReadAllAntennasChannelEvent():
+          case UnreadAntennaChannelEvent():
+          case MyTokenRegeneratedChannelEvent():
+          case SigninChannelEvent():
+          case RegistryUpdatedChannelEvent():
+          case DriveFileCreatedChannelEvent():
+          case ReadAntennaChannelEvent():
+          case ReceiveFollowRequestChannelEvent():
+          case FallbackChannelEvent():
+        }
+      case StreamingChannelNoteUpdatedResponse(:final body):
+        switch (body) {
+          case ReactedChannelEvent(:final id, :final body):
+            final registeredNote = noteRepository.notes[id];
+            if (registeredNote == null) return;
+            final reaction = Map.of(registeredNote.reactions);
+            reaction[body.reaction] = (reaction[body.reaction] ?? 0) + 1;
+            final emoji = body.emoji;
+            final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+            if (emoji != null && !body.reaction.endsWith("@.:")) {
+              reactionEmojis[emoji.name] = emoji.url;
+            }
+            noteRepository.registerNote(
+              registeredNote.copyWith(
+                reactions: reaction,
+                reactionEmojis: reactionEmojis,
+                myReaction: body.userId == account.i.id
+                    ? (emoji?.name != null ? ":${emoji?.name}:" : null)
+                    : registeredNote.myReaction,
+              ),
+            );
+          case UnreactedChannelEvent(:final body, :final id):
+            final registeredNote = noteRepository.notes[id];
+            if (registeredNote == null) return;
+            final reaction = Map.of(registeredNote.reactions);
+            reaction[body.reaction] =
+                max((reaction[body.reaction] ?? 0) - 1, 0);
+            if (reaction[body.reaction] == 0) {
+              reaction.remove(body.reaction);
+            }
+            final emoji = body.emoji;
+            final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+            if (emoji != null && !body.reaction.endsWith("@.:")) {
+              reactionEmojis[emoji.name] = emoji.url;
+            }
+            noteRepository.registerNote(
+              registeredNote.copyWith(
+                reactions: reaction,
+                reactionEmojis: reactionEmojis,
+                myReaction: body.userId == account.i.id
+                    ? ""
+                    : registeredNote.myReaction,
+              ),
+            );
+          case PollVotedChannelEvent(:final body, :final id):
+            final registeredNote = noteRepository.notes[id];
+            if (registeredNote == null) return;
 
-              final poll = registeredNote.poll;
-              if (poll == null) return;
+            final poll = registeredNote.poll;
+            if (poll == null) return;
 
-              final choices = poll.choices.toList();
-              choices[body.choice] = choices[body.choice]
-                  .copyWith(votes: choices[body.choice].votes + 1);
-              noteRepository.registerNote(
-                registeredNote.copyWith(poll: poll.copyWith(choices: choices)),
-              );
-            case UpdatedChannelEvent(:final body):
-              final note = noteRepository.notes[id];
-              if (note == null) return;
-              noteRepository.registerNote(
-                note.copyWith(
-                  text: body.text,
-                  cw: body.cw,
-                  updatedAt: DateTime.now(),
-                ),
-              );
-            case DeletedChannelEvent():
-          }
-        case StreamingChannelEmojiAddedResponse():
-        case StreamingChannelEmojiUpdatedResponse():
-        case StreamingChannelEmojiDeletedResponse():
-          emojiRepository.loadFromSource();
+            final choices = poll.choices.toList();
+            choices[body.choice] = choices[body.choice]
+                .copyWith(votes: choices[body.choice].votes + 1);
+            noteRepository.registerNote(
+              registeredNote.copyWith(poll: poll.copyWith(choices: choices)),
+            );
+          case UpdatedChannelEvent(:final body):
+            final note = noteRepository.notes[timelineId];
+            if (note == null) return;
+            noteRepository.registerNote(
+              note.copyWith(
+                text: body.text,
+                cw: body.cw,
+                updatedAt: DateTime.now(),
+              ),
+            );
+          case DeletedChannelEvent():
+        }
+      case StreamingChannelEmojiAddedResponse():
+      case StreamingChannelEmojiUpdatedResponse():
+      case StreamingChannelEmojiDeletedResponse():
+        await emojiRepository.loadFromSource();
 
-        case StreamingChannelAnnouncementCreatedResponse(:final body):
-          accountRepository.createUnreadAnnouncement(
-            account,
-            body.announcement,
-          );
-        case StreamingChannelUnknownResponse():
-        // TODO: Handle this case.
-      }
-    });
+      case StreamingChannelAnnouncementCreatedResponse(:final body):
+        await accountRepository.createUnreadAnnouncement(
+          account,
+          body.announcement,
+        );
+      case StreamingChannelUnknownResponse():
+      // TODO: Handle this case.
+    }
   }
 }
