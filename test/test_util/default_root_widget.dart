@@ -4,6 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:miria/main.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/dialog/dialog_scope.dart";
 import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
 import "package:miria/view/themes/app_theme_scope.dart";
@@ -46,7 +47,9 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
           child: SharingIntentListener(
             router: router,
             child: ErrorDialogListener(
-              child: widget ?? Container(),
+              child: DialogScope(
+                child: widget ?? Container(),
+              ),
             ),
           ),
         );

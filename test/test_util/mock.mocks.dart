@@ -6317,6 +6317,13 @@ class MockStreamingController extends _i1.Mock
 class MockWebSocketController extends _i1.Mock
     implements _i6.WebSocketController {
   @override
+  bool get isClosed => (super.noSuchMethod(
+        Invocation.getter(#isClosed),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
   _i15.Future<_i6.StreamingController> stream() => (super.noSuchMethod(
         Invocation.method(
           #stream,

@@ -16,8 +16,8 @@ class TimelinePageTest {
   final mockMisskey = MockMisskey();
   final mockMisskeyNotes = MockMisskeyNotes();
   final mockMisskeyI = MockMisskeyI();
-  final mockSocketController = MockSocketController();
-  final mockStreamingService = MockStreamingService();
+  final mockWebSocketController = MockWebSocketController();
+  final mockStreamingController = MockStreamingController();
   final mockAccountRepository = MockAccountRepository();
   final mockTabSettingsRepository = MockTabSettingsRepository();
   late final TabSetting tabSetting;
@@ -48,7 +48,10 @@ class TimelinePageTest {
       renoteDisplay: renoteDisplay,
     ).copyWith();
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
-    when(mockMisskey.streamingService).thenReturn(mockStreamingService);
+    when(mockMisskey.streamingService).thenReturn(mockWebSocketController);
+    when(mockWebSocketController.stream())
+        .thenAnswer((_) async => mockStreamingController);
+    when(mockWebSocketController.isClosed).thenReturn(false);
     when(mockMisskey.i).thenReturn(mockMisskeyI);
     // ignore: discarded_futures
     when(mockMisskey.meta()).thenAnswer((_) async => TestData.meta);
@@ -56,26 +59,20 @@ class TimelinePageTest {
     // ignore: discarded_futures
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
 
+    mockAccountRepository.state = [TestData.account];
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);
   }
 
   Widget buildWidget({
     List<Override> overrides = const [],
   }) {
-    final mockAccountRepository = AccountRepository();
-
     return ProviderScope(
       overrides: [
         misskeyProvider.overrideWith((ref) => mockMisskey),
         tabSettingsRepositoryProvider
             .overrideWith((ref) => mockTabSettingsRepository),
+        accountRepositoryProvider.overrideWith(() => mockAccountRepository),
         accountsProvider.overrideWith((ref) => [TestData.account]),
-        accountRepositoryProvider.overrideWith(() {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            mockAccountRepository.state = [TestData.account];
-          });
-          return mockAccountRepository;
-        }),
         emojiRepositoryProvider.overrideWith((ref) => MockEmojiRepository()),
       ],
       child: DefaultRootWidget(

@@ -293,6 +293,8 @@ System.out.println("@ai uneune");
           );
 
           await tester.pumpAndSettle();
+          await Future.delayed(const Duration(milliseconds: 200));
+          await tester.pumpAndSettle();
 
           expect(find.text("センシティブ"), findsOneWidget);
 

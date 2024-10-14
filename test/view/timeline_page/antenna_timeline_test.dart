@@ -11,17 +11,6 @@ void main() {
     testWidgets("アンテナタイムラインを表示できること", (tester) async {
       final timelineTester =
           TimelinePageTest(tabType: TabType.antenna, antennaId: "abcdefg");
-      when(
-        timelineTester.mockMisskey.antennaStream(
-          antennaId: anyNamed("antennaId"),
-          onNoteReceived: anyNamed("onNoteReceived"),
-          onReacted: anyNamed("onReacted"),
-          onUnreacted: anyNamed("onUnreacted"),
-          onDeleted: anyNamed("onDeleted"),
-          onVoted: anyNamed("onVoted"),
-          onUpdated: anyNamed("onUpdated"),
-        ),
-      ).thenReturn(timelineTester.mockSocketController);
       final mockMisskeyAntenna = MockMisskeyAntenna();
       when(mockMisskeyAntenna.notes(any))
           .thenAnswer((_) async => [TestData.note1]);

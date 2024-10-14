@@ -77,26 +77,30 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     final notifier = ref.read(noteCreateNotifierProvider.notifier);
     final controller = ref.watch(noteInputTextProvider);
 
-    useMemoized(() {
-      unawaited(() async {
-        await notifier.initialize(
-          channel,
-          initialText,
-          initialMediaFiles,
-          note,
-          renote,
-          reply,
-          noteCreationMode,
-        );
-      }());
+    useEffect(
+      () {
+        WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+          await notifier.initialize(
+            channel,
+            initialText,
+            initialMediaFiles,
+            note,
+            renote,
+            reply,
+            noteCreationMode,
+          );
+        });
 
-      controller.addListener(() {
-        notifier.setContentText(ref.read(noteInputTextProvider).text);
-      });
-      focusNode.addListener(() {
-        notifier.setContentTextFocused(focusNode.hasFocus);
-      });
-    });
+        controller.addListener(() {
+          notifier.setContentText(ref.read(noteInputTextProvider).text);
+        });
+        focusNode.addListener(() {
+          notifier.setContentTextFocused(focusNode.hasFocus);
+        });
+        return () => {};
+      },
+      const [],
+    );
 
     ref
       ..listen(

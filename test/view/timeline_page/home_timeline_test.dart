@@ -9,17 +9,6 @@ void main() {
   group("ホームタイムライン", () {
     testWidgets("ホームタイムラインを表示できること", (tester) async {
       final timelineTester = TimelinePageTest(tabType: TabType.homeTimeline);
-      when(
-        timelineTester.mockMisskey.homeTimelineStream(
-          parameter: anyNamed("parameter"),
-          onNoteReceived: anyNamed("onNoteReceived"),
-          onReacted: anyNamed("onReacted"),
-          onUnreacted: anyNamed("onUnreacted"),
-          onDeleted: anyNamed("onDeleted"),
-          onVoted: anyNamed("onVoted"),
-          onUpdated: anyNamed("onUpdated"),
-        ),
-      ).thenReturn(timelineTester.mockSocketController);
       when(timelineTester.mockMisskeyNotes.homeTimeline(any))
           .thenAnswer((_) async => [TestData.note1]);
 

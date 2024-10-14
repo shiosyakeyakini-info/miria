@@ -19,12 +19,8 @@ class NoteVisibilityDialog extends ConsumerWidget {
       children: [
         ListTile(
           onTap: () async {
-            if (await ref
-                .read(noteCreateNotifierProvider.notifier)
-                .validateNoteVisibility(NoteVisibility.public)) {
-              if (!context.mounted) return;
-              Navigator.of(context).pop(NoteVisibility.public);
-            }
+            if (!context.mounted) return;
+            Navigator.of(context).pop(NoteVisibility.public);
           },
           leading: const Icon(Icons.public),
           title: Text(S.of(context).public),
