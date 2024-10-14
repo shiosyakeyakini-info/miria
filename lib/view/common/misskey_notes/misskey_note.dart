@@ -138,9 +138,9 @@ class MisskeyNote extends HookConsumerWidget {
             .notes
             .reactions
             .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
-        if (account.host == "misskey.io") {
+        if (account.host == "misskey.io" || account.host == "nijimiss.moe") {
           await Future.delayed(
-            const Duration(milliseconds: misskeyIOReactionDelay),
+            const Duration(milliseconds: misskeyHQReactionDelay),
           );
         }
         await ref.read(notesProvider(account)).refresh(displayNote.id);
@@ -181,7 +181,7 @@ class MisskeyNote extends HookConsumerWidget {
     });
     if (account.host == "misskey.io") {
       await Future.delayed(
-        const Duration(milliseconds: misskeyIOReactionDelay),
+        const Duration(milliseconds: misskeyHQReactionDelay),
       );
     }
     await note.refresh(displayNote.id);
@@ -363,7 +363,7 @@ class MisskeyNote extends HookConsumerWidget {
             .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
         if (account.host == "misskey.io") {
           await Future.delayed(
-            const Duration(milliseconds: misskeyIOReactionDelay),
+            const Duration(milliseconds: misskeyHQReactionDelay),
           );
         }
         await ref.read(notesProvider(account)).refresh(displayNote.id);
@@ -398,7 +398,7 @@ class MisskeyNote extends HookConsumerWidget {
       );
       if (account.host == "misskey.io") {
         await Future.delayed(
-          const Duration(milliseconds: misskeyIOReactionDelay),
+          const Duration(milliseconds: misskeyHQReactionDelay),
         );
       }
       await note.refresh(displayNote.id);

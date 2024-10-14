@@ -45,7 +45,14 @@ class FederationState extends _$FederationState {
     if (host == ref.read(accountContextProvider).getAccount.host) {
       // 自分のサーバーの場合
       final metaResponse = await ref.read(misskeyGetContextProvider).meta();
-      final statsResponse = await ref.read(misskeyGetContextProvider).stats();
+
+      // api/statsはリアクション数が十分多いサーバーでエラーを吐くことがある
+      StatsResponse? statsResponse;
+      try {
+        statsResponse = await ref.read(misskeyGetContextProvider).stats();
+      } catch (e) {
+        logger.warning(e);
+      }
 
       unawaited(
         ref
@@ -63,12 +70,12 @@ class FederationState extends _$FederationState {
         repositoryUrl: metaResponse.repositoryUrl.toString(),
         name: metaResponse.name ?? "",
         description: metaResponse.description ?? "",
-        usersCount: statsResponse.originalUsersCount,
-        notesCount: statsResponse.originalNotesCount,
+        usersCount: statsResponse?.originalUsersCount,
+        notesCount: statsResponse?.originalNotesCount,
         maintainerName: metaResponse.maintainerName,
         maintainerEmail: metaResponse.maintainerEmail,
         serverRules: metaResponse.serverRules,
-        reactionCount: statsResponse.reactionsCount,
+        reactionCount: statsResponse?.reactionsCount,
         softwareName: "misskey",
         softwareVersion: metaResponse.version,
         languages: metaResponse.langs,
