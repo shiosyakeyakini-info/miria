@@ -80,22 +80,22 @@ class ServerDetailDialog extends HookConsumerWidget
       StreamingController? streaming;
       unawaited(() async {
         streaming = await ref.read(misskeyStreamingProvider(misskey).future);
-        jobQueue = streaming!
-            .addChannel(Channel.queueStats, {}, queueId)
-            .listen((response) {
+        jobQueue =
+            streaming!.queueStatsLogStream(id: queueId).listen((response) {
           final body = response.body;
-          if (body is StatsLogChannelEvent) {
-            logged.value = [...logged.value, ...body.body.cast()];
-          }
+          if (body is! StatsChannelEvent) return;
+          final innerBody = body.body;
+          if (innerBody is! JobQueueResponse) return;
+          queueLogged.value = [...queueLogged.value, innerBody];
         });
 
-        serverStats = streaming!
-            .addChannel(Channel.serverStats, {}, statsId)
-            .listen((response) {
+        serverStats =
+            streaming!.serverStatsLogStream(id: statsId).listen((response) {
           final body = response.body;
-          if (body is StatsLogChannelEvent) {
-            queueLogged.value = [...queueLogged.value, ...body.body.cast()];
-          }
+          if (body is! StatsChannelEvent) return;
+          final innerBody = body.body;
+          if (innerBody is! ServerMetricsResponse) return;
+          logged.value = [...logged.value, innerBody];
         });
       }());
 
