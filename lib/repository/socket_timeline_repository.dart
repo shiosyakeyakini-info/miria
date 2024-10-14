@@ -132,12 +132,12 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   Future<void> disconnect() async {
     final id = timelineId;
-    if (id != null && streamingController != null) {
+    if (id != null) {
       await streamingController?.removeChannel(id);
       await timelineSubscription?.cancel();
     }
     final id2 = mainId;
-    if (id2 != null && streamingController != null) {
+    if (id2 != null) {
       await streamingController?.removeChannel(id2);
       await mainSubscription?.cancel();
     }
@@ -145,9 +145,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   Future<void> reconnect() async {
-    isLoading = true;
+    isReconnecting = true;
     try {
       await timelineSubscription?.cancel();
+      await mainSubscription?.cancel();
       await (
         () async {
           await misskey.streamingService.reconnect();
@@ -158,11 +159,11 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         }(),
       ).wait;
       error = null;
-      isLoading = false;
+      isReconnecting = false;
       notifyListeners();
     } catch (e, s) {
       error = (e, s);
-      isLoading = false;
+      isReconnecting = false;
       notifyListeners();
     }
   }
@@ -259,19 +260,17 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
     timelineSubscription = streamingController
         ?.addChannel(channel, parameters, generatedId)
-        .listen(listener);
-    mainSubscription = streamingController
-        ?.addChannel(Channel.main, {}, generatedId2)
-        .listen(listener);
+        .listen(listenTimeline);
+    mainSubscription =
+        streamingController?.mainStream(id: generatedId2).listen(listenMain);
   }
 
-  Future<void> listener(StreamingResponse response) async {
+  Future<void> listenMain(StreamingResponse response) async {
     switch (response) {
-      case StreamingChannelResponse(:final body):
+      case StreamingChannelResponse():
+        return;
+      case StreamingChannelNoteUpdatedResponse(:final body):
         switch (body) {
-          case NoteChannelEvent(:final body):
-            newerNotes.add(body);
-            notifyListeners();
           case ReadAllNotificationsChannelEvent():
             await accountRepository.readAllNotification(account);
           case UnreadNotificationChannelEvent():
@@ -283,6 +282,67 @@ abstract class SocketTimelineRepository extends TimelineRepository {
               account,
               body.announcement,
             );
+          case NoteChannelEvent():
+          case StatsLogChannelEvent():
+          case StatsChannelEvent():
+          case UserAddedChannelEvent():
+          case UserRemovedChannelEvent():
+          case NotificationChannelEvent():
+          case MentionChannelEvent():
+          case ReplyChannelEvent():
+          case RenoteChannelEvent():
+          case FollowChannelEvent():
+          case FollowedChannelEvent():
+          case UnfollowChannelEvent():
+          case MeUpdatedChannelEvent():
+          case PageEventChannelEvent():
+          case UrlUploadFinishedChannelEvent():
+          case UnreadMentionChannelEvent():
+          case ReadAllUnreadMentionsChannelEvent():
+          case NotificationFlushedChannelEvent():
+          case UnreadSpecifiedNoteChannelEvent():
+          case ReadAllUnreadSpecifiedNotesChannelEvent():
+          case ReadAllAntennasChannelEvent():
+          case UnreadAntennaChannelEvent():
+          case MyTokenRegeneratedChannelEvent():
+          case SigninChannelEvent():
+          case RegistryUpdatedChannelEvent():
+          case DriveFileCreatedChannelEvent():
+          case ReadAntennaChannelEvent():
+          case ReceiveFollowRequestChannelEvent():
+          case FallbackChannelEvent():
+          case ReactedChannelEvent():
+          case UnreactedChannelEvent():
+          case DeletedChannelEvent():
+          case PollVotedChannelEvent():
+          case UpdatedChannelEvent():
+        }
+      case StreamingChannelEmojiAddedResponse():
+      case StreamingChannelEmojiUpdatedResponse():
+      case StreamingChannelEmojiDeletedResponse():
+        await emojiRepository.loadFromSource();
+
+      case StreamingChannelAnnouncementCreatedResponse(:final body):
+        await accountRepository.createUnreadAnnouncement(
+          account,
+          body.announcement,
+        );
+      case StreamingChannelUnknownResponse():
+      // TODO: Handle this case.
+    }
+  }
+
+  Future<void> listenTimeline(StreamingResponse response) async {
+    switch (response) {
+      case StreamingChannelResponse(:final body):
+        switch (body) {
+          case NoteChannelEvent(:final body):
+            newerNotes.add(body);
+            notifyListeners();
+          case ReadAllNotificationsChannelEvent():
+          case UnreadNotificationChannelEvent():
+          case ReadAllAnnouncementsChannelEvent():
+          case AnnouncementCreatedChannelEvent():
           case StatsLogChannelEvent():
           case StatsChannelEvent():
           case UserAddedChannelEvent():
