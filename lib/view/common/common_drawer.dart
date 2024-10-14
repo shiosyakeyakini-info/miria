@@ -8,6 +8,7 @@ import 'package:miria/view/common/avatar_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:miria/view/common/misskey_notes/mfm_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CommonDrawer extends ConsumerWidget {
   final Acct initialOpenAcct;
@@ -133,6 +134,15 @@ class CommonDrawer extends ConsumerWidget {
                 context.pushRoute(const SettingsRoute());
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: Text(S.of(context).help),
+              onTap: () {
+                Navigator.of(context).pop();
+                launchUrlString("https://github.com/shiosyakeyakini-info/miria/wiki/%E5%9F%BA%E6%9C%AC%E7%9A%84%E3%81%AA%E4%BD%BF%E3%81%84%E6%96%B9");
+              },
+              trailing: const Icon(Icons.open_in_new),
+            )
           ],
         ),
       ),
