@@ -1012,8 +1012,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "91d4c3f631c872678a87d85e463b84866ac9b7be"
+      ref: "feature/refactor_streaming"
+      resolved-ref: fd5512f840f1b06f6c453171e17972f1f1cbec9d
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

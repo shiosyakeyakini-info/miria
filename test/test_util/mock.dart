@@ -49,8 +49,8 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   // プラグインとか
   MockSpec<Dio>(),
   MockSpec<HttpClient>(),
-  MockSpec<SocketController>(),
-  MockSpec<StreamingService>(),
+  MockSpec<StreamingController>(),
+  MockSpec<WebSocketController>(),
   MockSpec<FakeFilePickerPlatform>(as: #MockFilePickerPlatform),
   MockSpec<$MockBaseCacheManager>(as: #MockBaseCacheManager),
   MockSpec<$MockUrlLauncherPlatform>(as: #MockUrlLauncherPlatform),

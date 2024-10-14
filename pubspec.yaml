@@ -15,7 +15,9 @@ dependencies:
     sdk: flutter
   flutter_html: ^3.0.0-beta.2
   misskey_dart:
-    git: https://github.com/shiosyakeyakini-info/misskey_dart.git
+    git: 
+      url: https://github.com/shiosyakeyakini-info/misskey_dart.git
+      ref: feature/refactor_streaming
   mfm: ^1.0.5
   tuple: ^2.0.1
   path_provider: ^2.0.14
