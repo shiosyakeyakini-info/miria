@@ -1,14 +1,15 @@
-import "package:auto_route/auto_route.dart";
+import 'package:auto_route/auto_route.dart';
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/providers.dart";
+import 'package:miria/providers.dart';
 import "package:miria/repository/account_repository.dart";
-import "package:miria/router/app_router.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
-import "package:miria/view/common/modal_indicator.dart";
-import "package:miria/view/login_page/centraing_widget.dart";
-import "package:miria/view/login_page/misskey_server_list_dialog.dart";
+import 'package:miria/router/app_router.dart';
+import 'package:miria/view/common/error_dialog_handler.dart';
+import 'package:miria/view/common/modal_indicator.dart';
+import 'package:miria/util/punycode.dart';
+import 'package:miria/view/login_page/centraing_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:miria/view/login_page/misskey_server_list_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ApiKeyLogin extends ConsumerStatefulWidget {
   const ApiKeyLogin({super.key});
@@ -33,7 +34,7 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
       IndicatorView.showIndicator(context);
       await ref
           .read(accountRepositoryProvider.notifier)
-          .loginAsToken(serverController.text, apiKeyController.text);
+          .loginAsToken(toAscii(serverController.text), apiKeyController.text);
 
       if (!mounted) return;
       await context.pushRoute(
