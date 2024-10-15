@@ -16,7 +16,7 @@ import "package:miria/view/announcements_page/announcements_page.dart";
 import "package:miria/view/antenna_page/antenna_notes_page.dart";
 import "package:miria/view/antenna_page/antenna_page.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
-import "package:miria/view/channel_dialog.dart";
+import "package:miria/view/channel_description_dialog.dart";
 import "package:miria/view/channels_page/channel_detail_page.dart";
 import "package:miria/view/channels_page/channels_page.dart";
 import "package:miria/view/clip_list_page/clip_detail_page.dart";
@@ -141,7 +141,7 @@ class AppRouter extends _$AppRouter {
     // ダイアログ
     AutoDialogRoute(page: AbuseRoute.page),
     AutoDialogRoute(page: RenoteUserRoute.page),
-    AutoDialogRoute(page: ChannelRoute.page),
+    AutoDialogRoute(page: ChannelDescriptionRoute.page),
     AutoDialogRoute(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
     AutoDialogRoute(page: LicenseConfirmRoute.page),

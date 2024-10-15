@@ -7,14 +7,15 @@ import "package:miria/view/channels_page/channel_detail_info.dart";
 import "package:miria/view/common/account_scope.dart";
 
 @RoutePage()
-class ChannelDialog extends ConsumerWidget implements AutoRouteWrapper {
+class ChannelDescriptionDialog extends ConsumerWidget
+    implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) =>
       AccountContextScope.as(account: account, child: this);
 
   final String channelId;
   final Account account;
-  const ChannelDialog({
+  const ChannelDescriptionDialog({
     required this.channelId,
     required this.account,
     super.key,

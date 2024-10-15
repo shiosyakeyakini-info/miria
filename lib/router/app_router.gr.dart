@@ -130,6 +130,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ChannelDescriptionRoute.name: (routeData) {
+      final args = routeData.argsAs<ChannelDescriptionRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ChannelDescriptionDialog(
+          channelId: args.channelId,
+          account: args.account,
+          key: args.key,
+        )),
+      );
+    },
     ChannelDetailRoute.name: (routeData) {
       final args = routeData.argsAs<ChannelDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -138,18 +150,6 @@ abstract class _$AppRouter extends RootStackRouter {
             child: ChannelDetailPage(
           accountContext: args.accountContext,
           channelId: args.channelId,
-          key: args.key,
-        )),
-      );
-    },
-    ChannelRoute.name: (routeData) {
-      final args = routeData.argsAs<ChannelRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ChannelDialog(
-          channelId: args.channelId,
-          account: args.account,
           key: args.key,
         )),
       );
@@ -1203,6 +1203,50 @@ class CacheManagementRouteArgs {
 }
 
 /// generated route for
+/// [ChannelDescriptionDialog]
+class ChannelDescriptionRoute
+    extends PageRouteInfo<ChannelDescriptionRouteArgs> {
+  ChannelDescriptionRoute({
+    required String channelId,
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChannelDescriptionRoute.name,
+          args: ChannelDescriptionRouteArgs(
+            channelId: channelId,
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChannelDescriptionRoute';
+
+  static const PageInfo<ChannelDescriptionRouteArgs> page =
+      PageInfo<ChannelDescriptionRouteArgs>(name);
+}
+
+class ChannelDescriptionRouteArgs {
+  const ChannelDescriptionRouteArgs({
+    required this.channelId,
+    required this.account,
+    this.key,
+  });
+
+  final String channelId;
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChannelDescriptionRouteArgs{channelId: $channelId, account: $account, key: $key}';
+  }
+}
+
+/// generated route for
 /// [ChannelDetailPage]
 class ChannelDetailRoute extends PageRouteInfo<ChannelDetailRouteArgs> {
   ChannelDetailRoute({
@@ -1242,49 +1286,6 @@ class ChannelDetailRouteArgs {
   @override
   String toString() {
     return 'ChannelDetailRouteArgs{accountContext: $accountContext, channelId: $channelId, key: $key}';
-  }
-}
-
-/// generated route for
-/// [ChannelDialog]
-class ChannelRoute extends PageRouteInfo<ChannelRouteArgs> {
-  ChannelRoute({
-    required String channelId,
-    required Account account,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ChannelRoute.name,
-          args: ChannelRouteArgs(
-            channelId: channelId,
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ChannelRoute';
-
-  static const PageInfo<ChannelRouteArgs> page =
-      PageInfo<ChannelRouteArgs>(name);
-}
-
-class ChannelRouteArgs {
-  const ChannelRouteArgs({
-    required this.channelId,
-    required this.account,
-    this.key,
-  });
-
-  final String channelId;
-
-  final Account account;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'ChannelRouteArgs{channelId: $channelId, account: $account, key: $key}';
   }
 }
 
