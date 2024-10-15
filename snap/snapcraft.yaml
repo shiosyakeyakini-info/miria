@@ -97,6 +97,16 @@ parts:
       - usr/share/zenity/*
       - usr/share/doc/*/copyright*
 
+  cleanup:
+    after: [miria, zenity]  # Make this part run last; list all your other parts here
+    plugin: nil
+    build-snaps: [gnome-42-2204, gtk-common-themes, core22]  # List all content-snaps you're using here
+    override-prime: |
+      set -eux
+      for snap in "gnome-42-2204" "gtk-common-themes" "core22"; do  # List all content-snaps you're using here
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" "$SNAPCRAFT_PRIME/usr/{}" \;
+      done
+
 layout:
   # Fix resource relocation problem of zenity part
   /usr/share/zenity:
