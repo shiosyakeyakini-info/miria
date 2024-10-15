@@ -138,6 +138,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
               accountContext: accountContext,
             );
       if (foundNote == null) return;
+      await ref
+          .read(emojiRepositoryProvider(accountContext.getAccount))
+          .loadFromSourceIfNeed();
       await router.push(
         NoteDetailRoute(note: foundNote, accountContext: accountContext),
       );
