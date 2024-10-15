@@ -167,6 +167,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
           ? user
           : await lookupUser(user: user, accountContext: accountContext);
       if (foundUser == null) return;
+      await ref
+          .read(emojiRepositoryProvider(accountContext.getAccount))
+          .loadFromSourceIfNeed();
       await router.push(
         UserRoute(userId: foundUser.id, accountContext: accountContext),
       );

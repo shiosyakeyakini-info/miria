@@ -204,13 +204,18 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
     final notifierProvider = noteModalSheetNotifierProvider(targetNote);
 
     ref.listen(notifierProvider.select((value) => value.user), (_, next) async {
-      if (next! is AsyncData) return;
-      await context.pushRoute(
-        UserControlRoute(
-          account: accountContext.postAccount,
-          response: next.value!,
-        ),
-      );
+      switch (next) {
+        case AsyncData<UserDetailed>(:final value):
+          await context.pushRoute(
+            UserControlRoute(
+              account: accountContext.postAccount,
+              response: value,
+            ),
+          );
+        case null:
+        case AsyncLoading<UserDetailed>():
+        case AsyncError<UserDetailed>():
+      }
     });
     final noteStatus =
         ref.watch(notifierProvider.select((value) => value.noteState));
