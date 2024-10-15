@@ -242,7 +242,7 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     DriveModalRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<DriveModalSheetReturnValue>(
         routeData: routeData,
         child: const DriveModalSheet(),
       );
@@ -339,10 +339,11 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<InstanceMuteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: InstanceMutePage(
+        child: WrappedRoute(
+            child: InstanceMutePage(
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     LicenseConfirmRoute.name: (routeData) {
@@ -788,11 +789,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<WordMuteRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WordMutePage(
+        child: WrappedRoute(
+            child: WordMutePage(
           account: args.account,
           muteType: args.muteType,
           key: args.key,
-        ),
+        )),
       );
     },
   };

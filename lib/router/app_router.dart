@@ -168,7 +168,7 @@ class AppRouter extends _$AppRouter {
     AutoModalRouteSheet(page: AntennaModalRoute.page),
     AutoModalRouteSheet(page: ClipModalRoute.page),
     AutoModalRouteSheet(page: UsersListModalRoute.page),
-    AutoModalRouteSheet(page: DriveModalRoute.page),
+    AutoModalRouteSheet<DriveModalSheetReturnValue>(page: DriveModalRoute.page),
   ];
 }
 
@@ -189,14 +189,14 @@ class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
 }
 
 /// モーダルボトムシート
-class AutoModalRouteSheet<T> extends CustomRoute {
+class AutoModalRouteSheet<ReturnT extends Object> extends CustomRoute {
   AutoModalRouteSheet({
-    required PageInfo<T> page,
+    required super.page,
   }) : super(
-          page: page,
           transitionsBuilder: TransitionsBuilders.slideBottom,
           durationInMilliseconds: 200,
-          customRouteBuilder: (context, widget, page) => ModalBottomSheetRoute(
+          customRouteBuilder: (context, widget, page) =>
+              ModalBottomSheetRoute<ReturnT>(
             builder: (context) => widget,
             isScrollControlled: false,
             settings: page,
