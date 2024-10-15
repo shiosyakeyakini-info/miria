@@ -35,7 +35,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
       return null;
     }
 
-    final host = note.url?.host ?? note.user.host;
+    final host = note.url?.host ??
+        note.user.host ??
+        ref.read(accountContextProvider).getAccount.host;
 
     try {
       // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
