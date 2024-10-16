@@ -6,6 +6,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/error_notification.dart";
 import "package:miria/view/common/misskey_ad.dart";
 
@@ -107,6 +108,13 @@ class PushableListView<T> extends HookConsumerWidget {
                   padding: EdgeInsets.all(20),
                   child: CircularProgressIndicator.adaptive(),
                 ),
+              );
+            }
+
+            if (error.value != null) {
+              return ErrorDetail(
+                error: error.value!.$1,
+                stackTrace: error.value!.$2,
               );
             }
 
