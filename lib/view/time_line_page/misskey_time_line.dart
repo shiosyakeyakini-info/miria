@@ -112,7 +112,7 @@ class MisskeyTimeline extends HookConsumerWidget {
                     0) {
               return const Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: CircularProgressIndicator.adaptive()),
               );
             }
 

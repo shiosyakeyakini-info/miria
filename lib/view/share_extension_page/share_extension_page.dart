@@ -101,7 +101,7 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
               child: SizedBox(
                 width: 100,
                 height: 100,
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator.adaptive(),
               ),
             ),
     );

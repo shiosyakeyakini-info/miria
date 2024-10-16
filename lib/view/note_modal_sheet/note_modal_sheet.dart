@@ -375,7 +375,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
         ),
         if (accountContext.isSame)
           switch (noteStatus) {
-            AsyncLoading() => const Center(child: CircularProgressIndicator()),
+            AsyncLoading() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
             AsyncError() => Text(S.of(context).thrownError),
             AsyncData(:final value) => ListTile(
                 leading: const Icon(Icons.star_rounded),

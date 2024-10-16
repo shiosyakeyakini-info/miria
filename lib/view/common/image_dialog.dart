@@ -291,7 +291,7 @@ class ScaleNotifierInteractiveViewerState
             return const SizedBox(
               height: 48.0,
               width: 48.0,
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(child: CircularProgressIndicator.adaptive()),
             );
           },
         ),

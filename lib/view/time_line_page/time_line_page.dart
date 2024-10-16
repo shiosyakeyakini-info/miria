@@ -311,7 +311,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         .reconnect(),
                     icon:
                         socketTimeline != null && socketTimeline.isReconnecting
-                            ? const CircularProgressIndicator()
+                            ? const CircularProgressIndicator.adaptive()
                             : const Icon(Icons.refresh),
                   ),
                 ],
@@ -320,7 +320,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
             if (socketTimeline?.isLoading == true)
               const Padding(
                 padding: EdgeInsets.only(top: 10),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: CircularProgressIndicator.adaptive()),
               ),
             if (socketTimeline?.error != null)
               ErrorDetail(

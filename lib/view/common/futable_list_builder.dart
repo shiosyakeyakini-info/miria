@@ -47,7 +47,7 @@ class FutureListView<T> extends StatelessWidget {
           }
           return Text("${S.of(context).thrownError}： ${snapshot.error}");
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
       },
     );

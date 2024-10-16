@@ -50,7 +50,9 @@ class AntennaList extends ConsumerWidget {
         ),
       AsyncError(error: final e, stackTrace: final st) =>
         Center(child: ErrorDetail(error: e, stackTrace: st)),
-      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncLoading() => const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
     };
   }
 }

@@ -38,7 +38,7 @@ class CommonFuture<T> extends StatelessWidget {
           return complete(context, snapshot.data as T);
         }
 
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator.adaptive());
       },
     );
   }

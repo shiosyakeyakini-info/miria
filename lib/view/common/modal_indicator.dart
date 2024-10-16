@@ -12,7 +12,7 @@ class IndicatorView {
       context,
       ModalOverlay(
         const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator.adaptive(),
         ),
         isAndroidBackEnable: false,
       ),

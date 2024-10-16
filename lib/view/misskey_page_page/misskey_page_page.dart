@@ -189,7 +189,7 @@ class PageContent extends ConsumerWidget {
         AsyncLoading() => const Center(
             child: SizedBox.square(
               dimension: 20,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             ),
           ),
         AsyncError() => Text(S.of(context).thrownError),

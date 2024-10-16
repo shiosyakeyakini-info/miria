@@ -43,7 +43,9 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
         ],
       ),
       body: switch (clips) {
-        AsyncLoading() => const Center(child: CircularProgressIndicator()),
+        AsyncLoading() => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
         AsyncError(:final error, :final stackTrace) =>
           Center(child: ErrorDetail(error: error, stackTrace: stackTrace)),
         AsyncData(:final value) => ListView.builder(

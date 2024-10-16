@@ -113,7 +113,9 @@ class ChannelDetailInfo extends ConsumerWidget {
     final data = ref.watch(channelDetailProvider(channelId));
 
     return switch (data) {
-      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncLoading() => const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
       AsyncError(:final error, :final stackTrace) =>
         ErrorDetail(error: error, stackTrace: stackTrace),
       AsyncData(:final value) => ChannelDetailArea(channel: value.channel),

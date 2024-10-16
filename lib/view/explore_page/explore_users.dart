@@ -112,7 +112,7 @@ class ExploreUsers extends HookConsumerWidget {
           if (exploreUserType.value == ExploreUserType.pinned)
             switch (pinnedUser) {
               AsyncLoading() =>
-                const Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator.adaptive()),
               AsyncError(:final error, :final stackTrace) =>
                 ErrorDetail(error: error, stackTrace: stackTrace),
               AsyncData(:final value) => Expanded(

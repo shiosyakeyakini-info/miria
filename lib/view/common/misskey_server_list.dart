@@ -124,7 +124,9 @@ class MisskeyServerList extends ConsumerWidget {
                 },
               ),
               error: (e, st) => ErrorDetail(error: e, stackTrace: st),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
             ),
           ),
         ],

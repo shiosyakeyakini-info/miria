@@ -67,7 +67,9 @@ class NoteDetailPage extends ConsumerWidget implements AutoRouteWrapper {
       body: Padding(
         padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
         child: switch (notesShow) {
-          AsyncLoading() => const Center(child: CircularProgressIndicator()),
+          AsyncLoading() => const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
           AsyncError(:final error, :final stackTrace) =>
             ErrorDetail(error: error, stackTrace: stackTrace),
           AsyncData(:final value) => SingleChildScrollView(
@@ -77,7 +79,7 @@ class NoteDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                   switch (conversation) {
                     AsyncLoading() => const SizedBox.square(
                         dimension: 100,
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator.adaptive(),
                       ),
                     AsyncError(:final error, :final stackTrace) =>
                       ErrorDetail(error: error, stackTrace: stackTrace),

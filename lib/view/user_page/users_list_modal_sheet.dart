@@ -73,7 +73,7 @@ class UsersListModalSheet extends ConsumerWidget {
         );
       },
       error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
     );
   }
 }

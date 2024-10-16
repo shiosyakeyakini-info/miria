@@ -69,7 +69,9 @@ class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
           },
           error: (e, st) =>
               Center(child: ErrorDetail(error: e, stackTrace: st)),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
         ),
       ),
     );

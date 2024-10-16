@@ -36,7 +36,9 @@ class UserListSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
         height: MediaQuery.of(context).size.height * 0.8,
         child: SingleChildScrollView(
           child: switch (usersList) {
-            AsyncLoading() => const Center(child: CircularProgressIndicator()),
+            AsyncLoading() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
             AsyncError(:final error, :final stackTrace) =>
               ErrorDetail(error: error, stackTrace: stackTrace),
             AsyncData(:final value) => Column(

@@ -44,7 +44,7 @@ class RoleSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
               ),
               switch (roles) {
                 AsyncLoading() =>
-                  const Center(child: CircularProgressIndicator()),
+                  const Center(child: CircularProgressIndicator.adaptive()),
                 AsyncError(:final error, :final stackTrace) =>
                   ErrorDetail(error: error, stackTrace: stackTrace),
                 AsyncData(:final value) => ListView.builder(

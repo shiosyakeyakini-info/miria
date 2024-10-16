@@ -38,7 +38,9 @@ class LicenseConfirmDialog extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final emojiResponse = ref.watch(_emojiProvider(emoji));
     return switch (emojiResponse) {
-      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncLoading() => const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
       AsyncError(:final error) => SimpleMessageDialog(
           message: "${S.of(context).thrownError}\n$error",
         ),

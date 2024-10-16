@@ -72,7 +72,9 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: switch (state) {
-            AsyncLoading() => const Center(child: CircularProgressIndicator()),
+            AsyncLoading() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
             AsyncError(:final error, :final stackTrace) =>
               ErrorDetail(error: error, stackTrace: stackTrace),
             AsyncValue() => Column(
