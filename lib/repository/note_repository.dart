@@ -43,11 +43,22 @@ class NoteRepository extends ChangeNotifier {
         softMuteWordContents.add(content);
       }
       if (regExp != null) {
-        try {
-          softMuteWordRegExps
-              .add(RegExp(regExp.substring(1, regExp.length - 1)));
-        } catch (e) {
-          logger.warning(e);
+        final regExpAndFlags = RegExp(r"^\/(.+)\/(.*)$").firstMatch(regExp);
+        if (regExpAndFlags != null) {
+          try {
+            final flags = regExpAndFlags[2] ?? "";
+            softMuteWordRegExps.add(
+              RegExp(
+                regExpAndFlags[1]!,
+                multiLine: flags.contains("m"),
+                caseSensitive: !flags.contains("i"),
+                unicode: flags.contains("u"),
+                dotAll: flags.contains("s"),
+              ),
+            );
+          } catch (e) {
+            logger.warning(e);
+          }
         }
       }
     }
@@ -62,9 +73,7 @@ class NoteRepository extends ChangeNotifier {
         try {
           hardMuteWordRegExps
               .add(RegExp(regExp.substring(1, regExp.length - 1)));
-        } catch (e) {
-          logger.warning(e);
-        }
+        } catch (e) {}
       }
     }
   }

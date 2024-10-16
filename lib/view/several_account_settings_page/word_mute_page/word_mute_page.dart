@@ -6,13 +6,14 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/futurable.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 enum MuteType { soft, hard }
 
 @RoutePage()
-class WordMutePage extends HookConsumerWidget {
+class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final MuteType muteType;
 
@@ -21,6 +22,10 @@ class WordMutePage extends HookConsumerWidget {
     required this.muteType,
     super.key,
   });
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   String muteValueString(List<MuteWord>? wordMutes) {
     if (wordMutes == null) return "";

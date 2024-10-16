@@ -9,17 +9,6 @@ void main() {
   group("ソーシャルタイムライン", () {
     testWidgets("ソーシャルタイムラインを表示できること", (tester) async {
       final timelineTester = TimelinePageTest(tabType: TabType.hybridTimeline);
-      when(
-        timelineTester.mockMisskey.hybridTimelineStream(
-          parameter: anyNamed("parameter"),
-          onNoteReceived: anyNamed("onNoteReceived"),
-          onReacted: anyNamed("onReacted"),
-          onUnreacted: anyNamed("onUnreacted"),
-          onDeleted: anyNamed("onDeleted"),
-          onVoted: anyNamed("onVoted"),
-          onUpdated: anyNamed("onUpdated"),
-        ),
-      ).thenReturn(timelineTester.mockSocketController);
       when(timelineTester.mockMisskeyNotes.hybridTimeline(any))
           .thenAnswer((_) async => [TestData.note1]);
 

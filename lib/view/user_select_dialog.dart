@@ -49,6 +49,7 @@ class UserSelectContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final queryController = useTextEditingController();
     final origin = useState(Origin.combined);
+    final searchQuery = useState("");
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,6 +60,7 @@ class UserSelectContent extends HookConsumerWidget {
           focusNode: focusNode,
           autofocus: true,
           decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+          onSubmitted: (value) => searchQuery.value = value,
         ),
         const Padding(padding: EdgeInsets.only(bottom: 10)),
         LayoutBuilder(
@@ -87,7 +89,7 @@ class UserSelectContent extends HookConsumerWidget {
           child: UsersSelectContentList(
             onSelected: onSelected,
             isDetail: isDetail,
-            query: queryController.text,
+            query: searchQuery.value,
             origin: origin.value,
           ),
         ),

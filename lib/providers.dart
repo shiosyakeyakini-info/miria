@@ -22,7 +22,6 @@ import "package:miria/repository/home_time_line_repository.dart";
 import "package:miria/repository/hybrid_timeline_repository.dart";
 import "package:miria/repository/import_export_repository.dart";
 import "package:miria/repository/local_time_line_repository.dart";
-import "package:miria/repository/main_stream_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/role_timeline_repository.dart";
 import "package:miria/repository/shared_preference_controller.dart";
@@ -62,16 +61,6 @@ Misskey misskeyWithoutAccount(MisskeyWithoutAccountRef ref, String host) =>
       token: null,
       socketConnectionTimeout: const Duration(seconds: 20),
     );
-
-final mainStreamRepositoryProvider =
-    ChangeNotifierProvider.family<MainStreamRepository, Account>(
-  (ref, account) => MainStreamRepository(
-    ref.read(misskeyProvider(account)),
-    ref.read(emojiRepositoryProvider(account)),
-    account,
-    ref.read(accountRepositoryProvider.notifier),
-  ),
-);
 
 final favoriteProvider =
     ChangeNotifierProvider.family<FavoriteRepository, Account>(
@@ -183,85 +172,65 @@ final timelineProvider =
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       ),
     TabType.homeTimeline => HomeTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       ),
     TabType.globalTimeline => GlobalTimelineRepository(
         ref.read(misskeyProvider(account)),
+        account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
+        ref,
       ),
     TabType.hybridTimeline => HybridTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       ),
     TabType.roleTimeline => RoleTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       ),
     TabType.channel => ChannelTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       ),
     TabType.userList => UserListTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       ),
     TabType.antenna => AntennaTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),
-        ref.read(mainStreamRepositoryProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
-        ref.read(mainStreamRepositoryProvider(account)),
-        ref.read(accountRepositoryProvider.notifier),
-        ref.read(emojiRepositoryProvider(account)),
+        ref,
       )
   };
 });

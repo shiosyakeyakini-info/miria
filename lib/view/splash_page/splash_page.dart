@@ -32,7 +32,6 @@ class SplashPageState extends ConsumerState<SplashPage> {
 
     for (final account in ref.read(accountsProvider)) {
       await ref.read(emojiRepositoryProvider(account)).loadFromLocalCache();
-      ref.read(mainStreamRepositoryProvider(account)).connect();
     }
 
     if (_isFirst) {

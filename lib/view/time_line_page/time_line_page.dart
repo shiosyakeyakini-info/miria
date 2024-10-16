@@ -8,8 +8,9 @@ import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
+import "package:miria/repository/time_line_repository.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/view/channel_dialog.dart";
+import "package:miria/view/channel_description_dialog.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/common_drawer.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -42,6 +43,8 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   late final List<TimelineScrollController> scrollControllers;
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
+  TimelineRepository? timelineRepository;
 
   @override
   void initState() {
@@ -103,6 +106,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   }
 
   void changeTab(int index) {
+    ref.read(timelineProvider(tabSettings[currentIndex])).disconnect();
     final tabSetting = tabSettings[index];
     if ([TabType.globalTimeline, TabType.homeTimeline, TabType.hybridTimeline]
         .contains(tabSetting.tabType)) {
@@ -208,9 +212,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     );
     if (deckMode) return const TimelineTablet();
 
-    final socketTimelineBase = ref.watch(timelineProvider(currentTabSetting));
-    final socketTimeline = socketTimelineBase is SocketTimelineRepository
-        ? socketTimelineBase
+    timelineRepository = ref.watch(timelineProvider(currentTabSetting));
+    final socketTimeline = timelineRepository is SocketTimelineRepository
+        ? timelineRepository as SocketTimelineRepository?
         : null;
     tabSettings = ref.watch(
       tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
@@ -259,11 +263,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   if (currentTabSetting.tabType == TabType.channel)
                     IconButton(
                       onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) => ChannelDialog(
-                            channelId: currentTabSetting.channelId ?? "",
+                        await context.pushRoute(
+                          ChannelDescriptionRoute(
                             account: account,
+                            channelId: currentTabSetting.channelId ?? "",
                           ),
                         );
                       },

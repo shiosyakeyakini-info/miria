@@ -70,9 +70,9 @@ class ReactionButton extends HookConsumerWidget {
               .notes
               .reactions
               .delete(NotesReactionsDeleteRequest(noteId: noteId));
-          if (account.host == "misskey.io") {
+          if (account.host == "misskey.io" || account.host == "nijimiss.moe") {
             await Future.delayed(
-              const Duration(milliseconds: misskeyIOReactionDelay),
+              const Duration(milliseconds: misskeyHQReactionDelay),
             );
           }
 
@@ -106,7 +106,7 @@ class ReactionButton extends HookConsumerWidget {
         // misskey.ioはただちにリアクションを反映してくれない
         if (account.host == "misskey.io") {
           await Future.delayed(
-            const Duration(milliseconds: misskeyIOReactionDelay),
+            const Duration(milliseconds: misskeyHQReactionDelay),
           );
         }
 

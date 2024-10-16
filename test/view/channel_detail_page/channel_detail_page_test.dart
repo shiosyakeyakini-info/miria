@@ -90,7 +90,7 @@ void main() {
 
       await tester.tap(find.text("お気に入りに入れるで"));
       await tester.pumpAndSettle();
-      expect(find.text("お気に入り"), findsOneWidget);
+      expect(find.text("お気に入り中"), findsOneWidget);
 
       verify(
         channel.favorite(
@@ -123,7 +123,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text("お気に入り"));
+      await tester.tap(find.text("お気に入り中"));
       await tester.pumpAndSettle();
       expect(find.text("お気に入りに入れるで"), findsOneWidget);
 

@@ -37,7 +37,9 @@ Future<List<Note>> _conversation(_ConversationRef ref, String noteId) async {
       .read(notesWithProvider)
       .registerAll(conversationResult.map((e) => e.reply).whereNotNull());
 
-  return conversationResult.toList();
+  return [
+    ...[...conversationResult].reversed,
+  ];
 }
 
 @RoutePage()

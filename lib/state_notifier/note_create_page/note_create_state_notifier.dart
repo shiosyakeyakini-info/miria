@@ -452,14 +452,13 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       // 連合オフなのに他のサーバーの人がメンションに含まれている
       if (state.localOnly &&
           userList.any(
-            (element) =>
-                element.host != null &&
-                element.host != _misskey.apiService.host,
+            (element) => element.host != null && element.host != _misskey.host,
           )) {
         await _dialogNotifier.showSimpleDialog(
           message: (context) =>
               S.of(context).cannotMentionToRemoteInLocalOnlyNote,
         );
+        return;
       }
 
       final mentionTargetUsers = [
@@ -756,6 +755,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
             message: (context) => S.of(context).cannotFederateNoteToChannel,
           );
+      return;
     }
     if (state.reply?.localOnly == true) {
       await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
@@ -816,10 +816,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   /// 投票の行を削除する
   void deleteVoteContent(int index) {
     if (state.voteContentCount == 2) return;
-    final list = state.voteContent.toList()..removeAt(index);
     state = state.copyWith(
       voteContentCount: state.voteContentCount - 1,
-      voteContent: list,
+      voteContent: [...state.voteContent]..removeAt(index),
     );
   }
 

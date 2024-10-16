@@ -81,6 +81,13 @@ class NoteCreateSettingTop extends ConsumerWidget {
                 ),
               );
               if (result != null) {
+                if (result == NoteVisibility.public &&
+                    !await ref
+                        .read(noteCreateNotifierProvider.notifier)
+                        .validateNoteVisibility(NoteVisibility.public)) {
+                  return;
+                }
+
                 notifier.setNoteVisibility(result);
               }
             },

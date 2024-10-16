@@ -17,7 +17,6 @@ import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/local_only_icon.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
-import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/note_create_page/mfm_preview.dart";
 import "package:miria/view/note_create_page/reply_to_area.dart";
 import "package:miria/view/note_create_page/vote_area.dart";
@@ -1600,9 +1599,10 @@ void main() {
         );
         await tester.pumpAndSettle();
         await tester.tap(find.byIcon(Icons.send));
-        await tester.pump();
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        debugDumpApp();
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
         expect(find.byType(TextField).hitTestable(), findsOneWidget);
       });
@@ -2184,12 +2184,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // エラーメッセージが表示されること
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton));
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
 
         // 入力可能な状態に戻っていること
-        await tester.tap(find.byIcon(Icons.home).hitTestable());
         await tester.pumpAndSettle();
         expect(find.byType(TextField).hitTestable(), findsOneWidget);
       });
@@ -2225,12 +2224,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // エラーメッセージが表示されること
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton));
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
 
         // 入力可能な状態に戻っていること
-        await tester.tap(find.byIcon(Icons.home).hitTestable());
         await tester.pumpAndSettle();
         expect(find.byType(TextField).hitTestable(), findsOneWidget);
       });
@@ -2419,9 +2417,9 @@ void main() {
 
         await tester.tap(find.byType(LocalOnlyIcon));
         await tester.pumpAndSettle();
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        expect(find.byType(Dialog), findsOneWidget);
 
-        await tester.tap(find.byType(ElevatedButton));
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
 
         expect(find.byType(LocalOnlyIcon), findsOneWidget);
@@ -2450,9 +2448,9 @@ void main() {
 
         await tester.tap(find.byType(LocalOnlyIcon));
         await tester.pumpAndSettle();
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        expect(find.byType(Dialog), findsOneWidget);
 
-        await tester.tap(find.byType(ElevatedButton));
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
 
         expect(find.byType(LocalOnlyIcon), findsOneWidget);
@@ -2481,9 +2479,9 @@ void main() {
 
         await tester.tap(find.byType(LocalOnlyIcon));
         await tester.pumpAndSettle();
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        expect(find.byType(Dialog), findsOneWidget);
 
-        await tester.tap(find.byType(ElevatedButton));
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
 
         expect(find.byType(LocalOnlyIcon), findsOneWidget);
@@ -2537,7 +2535,9 @@ void main() {
       testWidgets("メンション先がリモートユーザーを含む場合、連合オフで投稿できないこと", (tester) async {
         final mockMisskey = MockMisskey();
         final mockNote = MockMisskeyNotes();
+        final mockUser = MockMisskeyUsers();
         when(mockMisskey.notes).thenReturn(mockNote);
+        when(mockMisskey.users).thenReturn(mockUser);
 
         await tester.pumpWidget(
           ProviderScope(
@@ -2566,9 +2566,9 @@ void main() {
         await tester.tap(find.byIcon(Icons.send));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
+        expect(find.byType(Dialog), findsOneWidget);
 
-        await tester.tap(find.byType(ElevatedButton));
+        await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
 
         verifyNever(mockNote.notes(any));
@@ -2702,6 +2702,8 @@ void main() {
         await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
         await tester.testTextInput.receiveAction(TextInputAction.done);
         await tester.pumpAndSettle();
+
+        debugDumpApp();
 
         await tester
             .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
@@ -3308,16 +3310,16 @@ void main() {
         await tester.tap(find.byIcon(Icons.send));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton).hitTestable());
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton).hitTestable());
 
         // 1個だけではエラーになること
         await tester.enterText(find.byType(TextField).at(1), ":ai_yay:");
         await tester.tap(find.byIcon(Icons.send));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton).hitTestable());
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton).hitTestable());
 
         // 2個でエラーにならないこと
         await tester.enterText(
@@ -3518,8 +3520,8 @@ void main() {
         await tester.tap(find.byIcon(Icons.send));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton).hitTestable());
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton).hitTestable());
         await tester.pumpAndSettle();
 
         await tester.ensureVisible(find.byType(VoteUntilDate));
@@ -3854,8 +3856,8 @@ void main() {
         await tester.tap(find.byIcon(Icons.send));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SimpleMessageDialog), findsOneWidget);
-        await tester.tap(find.byType(ElevatedButton).hitTestable());
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.tap(find.byType(TextButton).hitTestable());
 
         await tester.enterText(find.byType(TextField).at(3), "100");
 

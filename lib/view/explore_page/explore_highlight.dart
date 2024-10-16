@@ -45,7 +45,7 @@ class ExploreHighlight extends HookConsumerWidget {
           ),
           Expanded(
             child: PushableListView(
-              listKey: isNote,
+              listKey: isNote.value,
               initializeFuture: () async {
                 final Iterable<Note> note;
                 if (isNote.value) {

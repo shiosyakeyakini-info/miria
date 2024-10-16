@@ -5,7 +5,6 @@ import "package:flutter/cupertino.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/repository/general_settings_repository.dart";
-import "package:miria/repository/main_stream_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
@@ -92,7 +91,6 @@ class SubscribeItem {
 
 abstract class TimelineRepository extends ChangeNotifier {
   final NoteRepository noteRepository;
-  final MainStreamRepository globalNotificationRepository;
   final GeneralSettingsRepository generalSettingsRepository;
   final TabSetting tabSetting;
 
@@ -101,7 +99,6 @@ abstract class TimelineRepository extends ChangeNotifier {
 
   TimelineRepository(
     this.noteRepository,
-    this.globalNotificationRepository,
     this.generalSettingsRepository,
     this.tabSetting,
   ) {
@@ -166,10 +163,6 @@ abstract class TimelineRepository extends ChangeNotifier {
     timer.cancel();
   }
 
-  Future<void> reconnect() async {
-    await globalNotificationRepository.reconnect();
-  }
-
   void updateNote(Note newNote) {
     var isChanged = false;
     newerNotes.forEachIndexed((index, element) {
@@ -229,4 +222,6 @@ abstract class TimelineRepository extends ChangeNotifier {
   }
 
   void describe(String id) {}
+
+  Future<void> reconnect() async {}
 }

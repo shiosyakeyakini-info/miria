@@ -6,7 +6,7 @@ part of 'federation_data.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$federationStateHash() => r'0f8190dc56160f83c7e339cef6b599acb6258539';
+String _$federationStateHash() => r'7b2650bf092ccdd713718e12f3f9bcdf846444f0';
 
 /// Copied from Dart SDK
 class _SystemHash {

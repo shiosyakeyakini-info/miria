@@ -6,13 +6,16 @@ import "package:collection/collection.dart";
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/socket_timeline_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:uuid/uuid.dart";
 
 part "server_detail_dialog.g.dart";
 
@@ -39,7 +42,7 @@ Future<int> _ping(_PingRef ref) async {
 }
 
 @RoutePage()
-class ServerDetailDialog extends ConsumerStatefulWidget
+class ServerDetailDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   final AccountContext accountContext;
 
@@ -49,81 +52,76 @@ class ServerDetailDialog extends ConsumerStatefulWidget
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      ServerDetailDialogState();
-
-  @override
   Widget wrappedRoute(BuildContext context) =>
       AccountContextScope(context: accountContext, child: this);
-}
-
-class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
-  SocketController? controller;
-  SocketController? queueController;
-
-  List<StatsLogResponse> logged = [];
-  List<QueueStatsLogResponse> queueLogged = [];
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller?.disconnect();
-    queueController?.disconnect();
-  }
-
-  @override
-  void didChangeDependencies() {
-    final misskey = ref.read(misskeyGetContextProvider);
-    super.didChangeDependencies();
-    controller?.disconnect();
-    controller = misskey.serverStatsLogStream(
-      (response) => setState(() {
-        logged.insertAll(0, response);
-      }),
-      (response) {
-        setState(() {
-          logged.add(response);
-        });
-      },
-    );
-    queueController?.disconnect();
-    queueController = misskey.queueStatsLogStream(
-      (response) => setState(() {
-        queueLogged.insertAll(0, response);
-      }),
-      (response) {
-        setState(() {
-          queueLogged.add(response);
-        });
-      },
-    );
-    unawaited(misskey.startStreaming());
-  }
 
   String format(double value) {
     return ((value * 10000).toInt() / 100).toString();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final onlineUsers = ref.watch(_onlineCountsProvider).valueOrNull;
     final totalMemories = ref.watch(_totalMemoriesProvider).valueOrNull;
     final ping = ref.watch(_pingProvider).valueOrNull;
 
-    final currentStat = logged.lastOrNull;
-    final currentQueueStats = queueLogged.lastOrNull;
+    final logged = useState(<ServerMetricsResponse>[]);
+    final queueLogged = useState(<JobQueueResponse>[]);
+
+    final currentStat = logged.value.lastOrNull;
+    final currentQueueStats = queueLogged.value.lastOrNull;
+    final queueId = useMemoized(() => const Uuid().v4());
+    final statsId = useMemoized(() => const Uuid().v4());
+
+    useEffect(() {
+      final misskey = ref.read(misskeyGetContextProvider);
+      StreamSubscription<StreamingResponse>? serverStats;
+      StreamSubscription<StreamingResponse>? jobQueue;
+      StreamingController? streaming;
+      unawaited(() async {
+        streaming = await ref.read(misskeyStreamingProvider(misskey).future);
+        jobQueue =
+            streaming!.queueStatsLogStream(id: queueId).listen((response) {
+          final body = response.body;
+          if (body is! StatsChannelEvent) return;
+          final innerBody = body.body;
+          if (innerBody is! JobQueueResponse) return;
+          queueLogged.value = [...queueLogged.value, innerBody];
+        });
+
+        serverStats =
+            streaming!.serverStatsLogStream(id: statsId).listen((response) {
+          final body = response.body;
+          if (body is! StatsChannelEvent) return;
+          final innerBody = body.body;
+          if (innerBody is! ServerMetricsResponse) return;
+          logged.value = [...logged.value, innerBody];
+        });
+      }());
+
+      return () {
+        unawaited(() async {
+          await (
+            streaming?.removeChannel(queueId) ?? Future.value(),
+            streaming?.removeChannel(statsId) ?? Future.value(),
+            jobQueue?.cancel() ?? Future.value(),
+            serverStats?.cancel() ?? Future.value(),
+          ).wait;
+        }());
+      };
+    });
 
     return AlertDialog(
       title: Row(
         children: [
-          Expanded(child: Text(widget.accountContext.getAccount.host)),
+          Expanded(child: Text(accountContext.getAccount.host)),
           IconButton(
             onPressed: () async {
               Navigator.of(context).pop();
               await context.pushRoute(
                 FederationRoute(
                   accountContext: ref.read(accountContextProvider),
-                  host: widget.accountContext.getAccount.host,
+                  host: accountContext.getAccount.host,
                 ),
               );
             },
@@ -182,10 +180,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                               ],
                             ),
                           ),
-                        if (logged.isNotEmpty)
+                        if (logged.value.isNotEmpty)
                           Chart(
-                            data: logged
-                                .skip(max(0, logged.length - 41))
+                            data: logged.value
+                                .skip(max(0, logged.value.length - 41))
                                 .mapIndexed(
                                   (index, element) =>
                                       FlSpot(index.toDouble(), element.cpu),
@@ -220,10 +218,10 @@ class ServerDetailDialogState extends ConsumerState<ServerDetailDialog> {
                               ],
                             ),
                           ),
-                        if (totalMemories != null && logged.isNotEmpty)
+                        if (totalMemories != null && logged.value.isNotEmpty)
                           Chart(
-                            data: logged
-                                .skip(max(0, logged.length - 41))
+                            data: logged.value
+                                .skip(max(0, logged.value.length - 41))
                                 .mapIndexed(
                                   (index, element) => FlSpot(
                                     index.toDouble(),

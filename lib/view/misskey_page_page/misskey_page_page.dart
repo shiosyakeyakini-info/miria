@@ -146,7 +146,7 @@ class PageContent extends ConsumerWidget {
     final content = this.content;
     if (content is misskey.PageText) {
       final account = ref.read(accountContextProvider).getAccount;
-      final nodes = const MfmParser().parse(content.text);
+      final nodes = const MfmParser().parse(content.text ?? "");
       return Column(
         children: [
           MfmText(
@@ -183,8 +183,8 @@ class PageContent extends ConsumerWidget {
         return const SizedBox.shrink();
       }
     }
-    if (content is misskey.PageNote) {
-      final note = ref.watch(fetchNoteProvider(content.note));
+    if (content is misskey.PageNote && content.note != null) {
+      final note = ref.watch(fetchNoteProvider(content.note!));
       return switch (note) {
         AsyncLoading() => const Center(
             child: SizedBox.square(

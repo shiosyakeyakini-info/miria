@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
-import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class NoteVisibilityDialog extends ConsumerWidget {
@@ -19,12 +18,8 @@ class NoteVisibilityDialog extends ConsumerWidget {
       children: [
         ListTile(
           onTap: () async {
-            if (await ref
-                .read(noteCreateNotifierProvider.notifier)
-                .validateNoteVisibility(NoteVisibility.public)) {
-              if (!context.mounted) return;
-              Navigator.of(context).pop(NoteVisibility.public);
-            }
+            if (!context.mounted) return;
+            Navigator.of(context).pop(NoteVisibility.public);
           },
           leading: const Icon(Icons.public),
           title: Text(S.of(context).public),

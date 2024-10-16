@@ -8,31 +8,10 @@ class RoleTimelineRepository extends SocketTimelineRepository {
     super.misskey,
     super.account,
     super.noteRepository,
-    super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
-    super.mainStreamRepository,
-    super.accountRepository,
-    super.emojiRepository,
+    super.ref,
   );
-
-  @override
-  SocketController createSocketController({
-    required void Function(Note note) onReceived,
-    required FutureOr<void> Function(String id, TimelineReacted reaction)
-        onReacted,
-    required FutureOr<void> Function(String id, TimelineReacted reaction)
-        onUnreacted,
-    required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
-    required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
-  }) {
-    return misskey.roleTimelineStream(
-      roleId: tabSetting.roleId!,
-      onNoteReceived: onReceived,
-      onReacted: onReacted,
-      onVoted: onVoted,
-    );
-  }
 
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
@@ -44,4 +23,10 @@ class RoleTimelineRepository extends SocketTimelineRepository {
       ),
     );
   }
+
+  @override
+  Channel get channel => Channel.roleTimeline;
+
+  @override
+  Map<String, dynamic> get parameters => {"roleId": tabSetting.roleId};
 }

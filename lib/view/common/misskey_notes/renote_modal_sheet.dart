@@ -129,16 +129,19 @@ class RenoteModalSheet extends HookConsumerWidget {
 
     final isLocalOnly = useState(false);
     final visibility = useState(NoteVisibility.public);
-    useEffect(() {
-      final accountSettings =
-          ref.read(accountSettingsRepositoryProvider).fromAccount(account);
-      isLocalOnly.value = accountSettings.defaultIsLocalOnly;
-      visibility.value =
-          accountSettings.defaultNoteVisibility == NoteVisibility.specified
-              ? NoteVisibility.followers
-              : accountSettings.defaultNoteVisibility;
-      return null;
-    });
+    useEffect(
+      () {
+        final accountSettings =
+            ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+        isLocalOnly.value = accountSettings.defaultIsLocalOnly;
+        visibility.value =
+            accountSettings.defaultNoteVisibility == NoteVisibility.specified
+                ? NoteVisibility.followers
+                : accountSettings.defaultNoteVisibility;
+        return null;
+      },
+      const [],
+    );
 
     if (renoteState is AsyncLoading ||
         renoteChannelState is AsyncLoading ||

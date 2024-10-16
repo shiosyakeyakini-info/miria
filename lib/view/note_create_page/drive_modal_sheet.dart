@@ -4,7 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 enum DriveModalSheetReturnValue { upload, drive }
 
-@RoutePage()
+@RoutePage<DriveModalSheetReturnValue>()
 class DriveModalSheet extends StatelessWidget {
   const DriveModalSheet({super.key});
 

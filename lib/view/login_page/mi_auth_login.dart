@@ -1,10 +1,12 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/util/punycode.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
@@ -32,7 +34,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
       IndicatorView.showIndicator(context);
       await ref
           .read(accountRepositoryProvider.notifier)
-          .validateMiAuth(serverController.text);
+          .validateMiAuth(toAscii(serverController.text));
       if (!mounted) return;
       await context.pushRoute(
         TimeLineRoute(
@@ -97,7 +99,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     onPressed: () async {
                       await ref
                           .read(accountRepositoryProvider.notifier)
-                          .openMiAuth(serverController.text)
+                          .openMiAuth(toAscii(serverController.text))
                           .expectFailure(context);
                       setState(() {
                         isAuthed = true;

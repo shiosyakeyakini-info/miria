@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_html/flutter_html.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/string_extensions.dart";
 import "package:miria/model/federation_data.dart";
@@ -7,15 +8,15 @@ import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:url_launcher/url_launcher.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 class FederationInfo extends ConsumerWidget {
   final FederationData data;
 
   const FederationInfo({required this.data, super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final description = data.description.replaceAll(htmlTagRemove, "");
+    final description = data.description;
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -50,7 +51,14 @@ class FederationInfo extends ConsumerWidget {
               ],
             ),
             const Padding(padding: EdgeInsets.only(top: 5)),
-            Text(description),
+            Html(
+                data: description,
+                style: {
+                  "a": Style(color: AppTheme.of(context).linkStyle.color),
+                },
+                onLinkTap: (url, _, __) async {
+                  await launchUrlString(url.toString());
+                },),
             const Padding(padding: EdgeInsets.only(top: 5)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -138,7 +146,16 @@ class FederationInfo extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           for (final rule in data.serverRules.indexed)
-                            Text("${rule.$1 + 1}. ${rule.$2}\n"),
+                            Html(
+                              data: "${rule.$1 + 1}. ${rule.$2}<br>",
+                              style: {
+                                "a": Style(
+                                    color: AppTheme.of(context).linkStyle.color,),
+                              },
+                              onLinkTap: (url, _, __) async {
+                                await launchUrlString(url.toString());
+                              },
+                            ),
                         ],
                       ),
                     ],

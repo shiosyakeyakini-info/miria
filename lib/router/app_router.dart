@@ -16,7 +16,7 @@ import "package:miria/view/announcements_page/announcements_page.dart";
 import "package:miria/view/antenna_page/antenna_notes_page.dart";
 import "package:miria/view/antenna_page/antenna_page.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
-import "package:miria/view/channel_dialog.dart";
+import "package:miria/view/channel_description_dialog.dart";
 import "package:miria/view/channels_page/channel_detail_page.dart";
 import "package:miria/view/channels_page/channels_page.dart";
 import "package:miria/view/clip_list_page/clip_detail_page.dart";
@@ -141,7 +141,7 @@ class AppRouter extends _$AppRouter {
     // ダイアログ
     AutoDialogRoute(page: AbuseRoute.page),
     AutoDialogRoute(page: RenoteUserRoute.page),
-    AutoDialogRoute(page: ChannelRoute.page),
+    AutoDialogRoute(page: ChannelDescriptionRoute.page),
     AutoDialogRoute(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
     AutoDialogRoute(page: LicenseConfirmRoute.page),
@@ -168,7 +168,7 @@ class AppRouter extends _$AppRouter {
     AutoModalRouteSheet(page: AntennaModalRoute.page),
     AutoModalRouteSheet(page: ClipModalRoute.page),
     AutoModalRouteSheet(page: UsersListModalRoute.page),
-    AutoModalRouteSheet(page: DriveModalRoute.page),
+    AutoModalRouteSheet<DriveModalSheetReturnValue>(page: DriveModalRoute.page),
   ];
 }
 
@@ -189,14 +189,14 @@ class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
 }
 
 /// モーダルボトムシート
-class AutoModalRouteSheet<T> extends CustomRoute {
+class AutoModalRouteSheet<ReturnT extends Object> extends CustomRoute {
   AutoModalRouteSheet({
-    required PageInfo<T> page,
+    required super.page,
   }) : super(
-          page: page,
           transitionsBuilder: TransitionsBuilders.slideBottom,
           durationInMilliseconds: 200,
-          customRouteBuilder: (context, widget, page) => ModalBottomSheetRoute(
+          customRouteBuilder: (context, widget, page) =>
+              ModalBottomSheetRoute<ReturnT>(
             builder: (context) => widget,
             isScrollControlled: false,
             settings: page,

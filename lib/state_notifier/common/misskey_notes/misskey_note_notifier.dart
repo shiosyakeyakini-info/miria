@@ -35,7 +35,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
       return null;
     }
 
-    final host = note.url?.host ?? note.user.host;
+    final host = note.url?.host ??
+        note.user.host ??
+        ref.read(accountContextProvider).getAccount.host;
 
     try {
       // まず、自分のサーバーの直近のノートに該当のノートが含まれているか見る
@@ -136,6 +138,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
               accountContext: accountContext,
             );
       if (foundNote == null) return;
+      await ref
+          .read(emojiRepositoryProvider(accountContext.getAccount))
+          .loadFromSourceIfNeed();
       await router.push(
         NoteDetailRoute(note: foundNote, accountContext: accountContext),
       );
@@ -162,6 +167,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
           ? user
           : await lookupUser(user: user, accountContext: accountContext);
       if (foundUser == null) return;
+      await ref
+          .read(emojiRepositoryProvider(accountContext.getAccount))
+          .loadFromSourceIfNeed();
       await router.push(
         UserRoute(userId: foundUser.id, accountContext: accountContext),
       );

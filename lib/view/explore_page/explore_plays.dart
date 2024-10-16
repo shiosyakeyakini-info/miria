@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/futable_list_builder.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class ExplorePlay extends ConsumerWidget {
@@ -13,11 +14,13 @@ class ExplorePlay extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView(
-        future: () async {
-          final result =
-              await ref.read(misskeyGetContextProvider).flash.featured();
+        future: Future(() async {
+          final result = await ref
+              .read(misskeyGetContextProvider)
+              .flash
+              .featured(const FlashFeaturedRequest());
           return result.toList();
-        }(),
+        }),
         builder: (context, item) {
           return ListTile(
             onTap: () async {
