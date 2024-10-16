@@ -7,7 +7,7 @@ part of 'note_modal_sheet.dart';
 // **************************************************************************
 
 String _$noteModalSheetNotifierHash() =>
-    r'd3003c82425757ee6e7a3c753c105b632eaa931c';
+    r'7c144a3f0e1a67e3e0a6872d8e342504a6c5f272';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -48,11 +48,12 @@ class NoteModalSheetNotifierFamily extends Family {
   /// See also [NoteModalSheetNotifier].
   const NoteModalSheetNotifierFamily();
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>{
     misskeyPostContextProvider,
     misskeyGetContextProvider,
-    accountContextProvider
-  ];
+    accountContextProvider,
+    notesWithProvider
+  };
 
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
@@ -61,7 +62,9 @@ class NoteModalSheetNotifierFamily extends Family {
     misskeyGetContextProvider,
     ...?misskeyGetContextProvider.allTransitiveDependencies,
     accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
+    ...?accountContextProvider.allTransitiveDependencies,
+    notesWithProvider,
+    ...?notesWithProvider.allTransitiveDependencies
   };
 
   @override

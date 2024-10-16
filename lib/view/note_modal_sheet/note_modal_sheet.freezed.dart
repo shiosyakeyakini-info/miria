@@ -159,14 +159,15 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$NoteModalSheetStateImpl implements _NoteModalSheetState {
+class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
   _$NoteModalSheetStateImpl(
       {required this.noteState,
       this.isSharingMode = false,
       this.user,
       this.delete,
       this.deleteRecreate,
-      this.favorite});
+      this.favorite})
+      : super._();
 
   @override
   final AsyncValue<NotesStateResponse> noteState;
@@ -216,7 +217,7 @@ class _$NoteModalSheetStateImpl implements _NoteModalSheetState {
           this, _$identity);
 }
 
-abstract class _NoteModalSheetState implements NoteModalSheetState {
+abstract class _NoteModalSheetState extends NoteModalSheetState {
   factory _NoteModalSheetState(
       {required final AsyncValue<NotesStateResponse> noteState,
       final bool isSharingMode,
@@ -224,6 +225,7 @@ abstract class _NoteModalSheetState implements NoteModalSheetState {
       final AsyncValue<void>? delete,
       final AsyncValue<void>? deleteRecreate,
       final AsyncValue<void>? favorite}) = _$NoteModalSheetStateImpl;
+  _NoteModalSheetState._() : super._();
 
   @override
   AsyncValue<NotesStateResponse> get noteState;

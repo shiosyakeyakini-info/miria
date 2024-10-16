@@ -39,11 +39,25 @@ class NoteModalSheetState with _$NoteModalSheetState {
     AsyncValue<void>? deleteRecreate,
     AsyncValue<void>? favorite,
   }) = _NoteModalSheetState;
+
+  const NoteModalSheetState._();
+
+  bool get isLoading =>
+      noteState is AsyncLoading ||
+      user is AsyncLoading ||
+      delete is AsyncLoading ||
+      deleteRecreate is AsyncLoading ||
+      favorite is AsyncLoading;
 }
 
 @Riverpod(
   keepAlive: false,
-  dependencies: [misskeyPostContext, misskeyGetContext, accountContext],
+  dependencies: [
+    misskeyPostContext,
+    misskeyGetContext,
+    accountContext,
+    notesWith,
+  ],
 )
 class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   @override
@@ -148,11 +162,14 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(delete: const AsyncLoading());
     state = state.copyWith(
       delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
-            () async => await ref
-                .read(misskeyPostContextProvider)
-                .notes
-                .delete(NotesDeleteRequest(noteId: note.id)),
-          ),
+        () async {
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .delete(NotesDeleteRequest(noteId: note.id));
+          ref.read(notesWithProvider).delete(note.id);
+        },
+      ),
     );
   }
 
@@ -170,11 +187,14 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     state = state.copyWith(
       deleteRecreate:
           await ref.read(dialogStateNotifierProvider.notifier).guard(
-                () async => await ref
-                    .read(misskeyPostContextProvider)
-                    .notes
-                    .delete(NotesDeleteRequest(noteId: note.id)),
-              ),
+        () async {
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .delete(NotesDeleteRequest(noteId: note.id));
+          ref.read(notesWithProvider).delete(note.id);
+        },
+      ),
     );
   }
 }
@@ -219,6 +239,16 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
     });
     final noteStatus =
         ref.watch(notifierProvider.select((value) => value.noteState));
+
+    if (ref.read(notifierProvider).isLoading) {
+      return const Center(
+        child: SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator.adaptive(),
+        ),
+      );
+    }
 
     return ListView(
       children: [
@@ -349,8 +379,11 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             AsyncError() => Text(S.of(context).thrownError),
             AsyncData(:final value) => ListTile(
                 leading: const Icon(Icons.star_rounded),
-                onTap: () async =>
-                    ref.read(notifierProvider.notifier).favorite(),
+                onTap: () async {
+                  await ref.read(notifierProvider.notifier).favorite();
+                  if (!context.mounted) return;
+                  Navigator.of(context).pop();
+                },
                 title: Text(
                   value.isFavorited
                       ? S.of(context).deleteFavorite
@@ -407,15 +440,28 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               },
             ),
           ListTile(
-            leading: const Icon(Icons.delete),
-            title: Text(S.of(context).delete),
-            onTap: () async => ref.read(notifierProvider.notifier).delete(),
-          ),
+              leading: const Icon(Icons.delete),
+              title: Text(S.of(context).delete),
+              onTap: () async {
+                await ref.read(notifierProvider.notifier).delete();
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
+              }),
           ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
-            onTap: () async =>
-                ref.read(notifierProvider.notifier).deleteRecreate(),
+            onTap: () async {
+              await ref.read(notifierProvider.notifier).deleteRecreate();
+              if (!context.mounted) return;
+              Navigator.of(context).pop();
+              await context.pushRoute(
+                NoteCreateRoute(
+                  initialAccount: accountContext.postAccount,
+                  noteCreationMode: NoteCreationMode.recreate,
+                  note: targetNote,
+                ),
+              );
+            },
           ),
         ],
         if (accountContext.isSame &&
