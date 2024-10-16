@@ -82,6 +82,8 @@ class NoteVote extends HookConsumerWidget {
 
     final isOpened = useState(useMemoized(() => !isAnyVotable(ref)));
 
+    ref.watch(noteVoteNotifierProvider(displayNote));
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
