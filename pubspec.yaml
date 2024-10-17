@@ -77,6 +77,7 @@ dependencies:
   hooks_riverpod: ^3.0.0-dev.3
   flutter_hooks: ^0.20.5
   punycode: ^1.0.0
+  screen_brightness: ^0.2.2
 
 dependency_overrides:
   image_editor:

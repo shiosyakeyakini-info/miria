@@ -1322,7 +1322,7 @@ packages:
     source: hosted
     version: "1.0.2"
   screen_brightness:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: screen_brightness
       sha256: ed8da4a4511e79422fc1aa88138e920e4008cd312b72cdaa15ccb426c0faaedd
