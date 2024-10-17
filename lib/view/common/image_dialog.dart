@@ -110,7 +110,7 @@ class ImageDialog extends HookConsumerWidget {
                           final v = transformationController.toScene(position);
 
                           transformationController.value = Matrix4.identity()
-                            ..scale(scale);
+                            ..scale(scale.value);
 
                           final v2 =
                               transformationController.toScene(position) - v;
