@@ -5,12 +5,13 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/state_notifier/user_list_page/users_lists_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/users_list_page/users_list_settings_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class UsersListModalSheet extends ConsumerWidget {
+class UsersListModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   const UsersListModalSheet({
     required this.account,
     required this.user,
@@ -19,6 +20,10 @@ class UsersListModalSheet extends ConsumerWidget {
 
   final Account account;
   final User user;
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

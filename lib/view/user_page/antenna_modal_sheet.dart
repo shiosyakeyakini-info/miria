@@ -7,11 +7,12 @@ import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class AntennaModalSheet extends ConsumerWidget {
+class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   const AntennaModalSheet({
     required this.account,
     required this.user,
@@ -20,6 +21,10 @@ class AntennaModalSheet extends ConsumerWidget {
 
   final Account account;
   final User user;
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
