@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   flutter_html: ^3.0.0-beta.2
   misskey_dart:
-    git: 
+    git:
       url: https://github.com/shiosyakeyakini-info/misskey_dart.git
       ref: feature/refactor_streaming
   mfm: ^1.0.5
@@ -46,7 +46,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   percent_indicator: ^4.2.3
   fl_chart: ^0.68.0
-  receive_sharing_intent: 1.4.5
+  receive_sharing_intent: 1.5.4
   share_plus: ^9.0.0
   mfm_parser: ^1.0.3
   flutter_svg: ^2.0.6
@@ -91,6 +91,10 @@ dependency_overrides:
     git:
       url: https://github.com/shiosyakeyakini-info/flutter_image_editor_fix_ios_color_option.git
       path: ./image_editor_platform_interface/
+  image_gallery_saver:
+    git:
+      url: https://github.com/knottx/image_gallery_saver.git
+      ref: knottx-latest
 
 dev_dependencies:
   flutter_test:
