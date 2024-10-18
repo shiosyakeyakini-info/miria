@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
 final miriaInheritedLicenses = <LicenseEntry>[
   const LicenseEntryWithLineBreaks(["Blob Emoji"], """

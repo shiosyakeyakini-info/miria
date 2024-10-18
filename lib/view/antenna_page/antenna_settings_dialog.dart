@@ -1,38 +1,25 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/extensions/user_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/antenna_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/user_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/user_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/antenna_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
+part "antenna_settings_dialog.g.dart";
 
-final _initialSettingsProvider = Provider.autoDispose<AntennaSettings>(
-  (ref) => throw UnimplementedError(),
-);
+@Riverpod(dependencies: [])
+AntennaSettings _initialSettings(_InitialSettingsRef ref) =>
+    throw UnimplementedError();
 
-final _textControllerProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => TextEditingController(
-    text: ref.watch(
-      _initialSettingsProvider.select(
-        (settings) => settings.users.join("\n"),
-      ),
-    ),
-  ),
-  dependencies: [_initialSettingsProvider],
-);
-
-final _antennaSettingsNotifierProvider =
-    NotifierProvider.autoDispose<_AntennaSettingsNotifier, AntennaSettings>(
-  _AntennaSettingsNotifier.new,
-  dependencies: [_initialSettingsProvider],
-);
-
-class _AntennaSettingsNotifier extends AutoDisposeNotifier<AntennaSettings> {
+@Riverpod(dependencies: [_initialSettings])
+class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
   @override
   AntennaSettings build() {
     return ref.watch(_initialSettingsProvider);
@@ -107,19 +94,17 @@ class _AntennaSettingsNotifier extends AutoDisposeNotifier<AntennaSettings> {
   }
 }
 
-final _usersListListProvider = FutureProvider.family<List<UsersList>, Misskey>(
-  (ref, misskey) async {
-    final response = await misskey.users.list.list();
-    return response.toList();
-  },
-);
+@Riverpod(dependencies: [misskeyGetContext])
+Future<List<UsersList>> _usersListList(_UsersListListRef ref) async =>
+    [...await ref.read(misskeyGetContextProvider).users.list.list()];
 
+@RoutePage<AntennaSettings>()
 class AntennaSettingsDialog extends StatelessWidget {
   const AntennaSettingsDialog({
+    required this.account,
     super.key,
     this.title,
     this.initialSettings = const AntennaSettings(),
-    required this.account,
   });
 
   final Widget? title;
@@ -146,25 +131,28 @@ class AntennaSettingsDialog extends StatelessWidget {
   }
 }
 
-class AntennaSettingsForm extends ConsumerWidget {
+class AntennaSettingsForm extends HookConsumerWidget {
   const AntennaSettingsForm({
-    super.key,
     required this.account,
+    super.key,
   });
 
   final Account account;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = ref.watch(_formKeyProvider);
+    final formKey = useState(GlobalKey<FormState>());
     final initialSettings = ref.watch(_initialSettingsProvider);
     final settings = ref.watch(_antennaSettingsNotifierProvider);
-    final misskey = ref.watch(misskeyProvider(account));
-    final list = ref.watch(_usersListListProvider(misskey));
-    final controller = ref.watch(_textControllerProvider);
+    final list = ref.watch(_usersListListProvider);
+    final controller = useTextEditingController();
+    ref.listen(
+      _initialSettingsProvider.select((settings) => settings.users.join("\n")),
+      (_, next) => controller.text = next,
+    );
 
     return Form(
-      key: formKey,
+      key: formKey.value,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,13 +239,13 @@ class AntennaSettingsForm extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () async {
-                final user = await showDialog<User>(
-                  context: context,
-                  builder: (context) => UserSelectDialog(account: account),
+                final user = await context.pushRoute<User>(
+                  UserSelectRoute(
+                    accountContext: AccountContext.as(account),
+                  ),
                 );
-                if (user == null) {
-                  return;
-                }
+                if (user == null) return;
+
                 if (!context.mounted) return;
                 if (!controller.text.endsWith("\n") &&
                     controller.text.isNotEmpty) {
@@ -339,8 +327,8 @@ class AntennaSettingsForm extends ConsumerWidget {
             child: ElevatedButton(
               child: Text(S.of(context).done),
               onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
+                if (formKey.value.currentState!.validate()) {
+                  formKey.value.currentState!.save();
                   final settings = ref.read(_antennaSettingsNotifierProvider);
                   if (settings == initialSettings) {
                     Navigator.of(context).pop();

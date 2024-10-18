@@ -38,6 +38,7 @@ _$GeneralSettingsImpl _$$GeneralSettingsImplFromJson(
       fantasyFontName: json['fantasyFontName'] as String? ?? "",
       languages: $enumDecodeNullable(_$LanguagesEnumMap, json['languages']) ??
           Languages.jaJP,
+      isDeckMode: json['isDeckMode'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$GeneralSettingsImplToJson(
@@ -61,6 +62,7 @@ Map<String, dynamic> _$$GeneralSettingsImplToJson(
       'cursiveFontName': instance.cursiveFontName,
       'fantasyFontName': instance.fantasyFontName,
       'languages': _$LanguagesEnumMap[instance.languages]!,
+      'isDeckMode': instance.isDeckMode,
     };
 
 const _$ThemeColorSystemEnumMap = {
@@ -94,4 +96,5 @@ const _$EmojiTypeEnumMap = {
 const _$LanguagesEnumMap = {
   Languages.jaJP: 'jaJP',
   Languages.jaOJ: 'jaOJ',
+  Languages.zhCN: 'zhCN',
 };

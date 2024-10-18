@@ -12,7 +12,7 @@ part of 'account.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Account _$AccountFromJson(Map<String, dynamic> json) {
   return _Account.fromJson(json);
@@ -22,12 +22,16 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
 mixin _$Account {
   String get host => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  String? get token => throw _privateConstructorUsedError;
   MeDetailed get i => throw _privateConstructorUsedError;
+  String? get token => throw _privateConstructorUsedError;
   MetaResponse? get meta => throw _privateConstructorUsedError;
 
+  /// Serializes this Account to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AccountCopyWith<Account> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -39,8 +43,8 @@ abstract class $AccountCopyWith<$Res> {
   $Res call(
       {String host,
       String userId,
-      String? token,
       MeDetailed i,
+      String? token,
       MetaResponse? meta});
 
   $MeDetailedCopyWith<$Res> get i;
@@ -57,13 +61,15 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? host = null,
     Object? userId = null,
-    Object? token = freezed,
     Object? i = null,
+    Object? token = freezed,
     Object? meta = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,14 +81,14 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
               as MeDetailed,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -90,6 +96,8 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     ) as $Val);
   }
 
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MeDetailedCopyWith<$Res> get i {
@@ -98,6 +106,8 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     });
   }
 
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MetaResponseCopyWith<$Res>? get meta {
@@ -121,8 +131,8 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
   $Res call(
       {String host,
       String userId,
-      String? token,
       MeDetailed i,
+      String? token,
       MetaResponse? meta});
 
   @override
@@ -139,13 +149,15 @@ class __$$AccountImplCopyWithImpl<$Res>
       _$AccountImpl _value, $Res Function(_$AccountImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? host = null,
     Object? userId = null,
-    Object? token = freezed,
     Object? i = null,
+    Object? token = freezed,
     Object? meta = freezed,
   }) {
     return _then(_$AccountImpl(
@@ -157,14 +169,14 @@ class __$$AccountImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
       i: null == i
           ? _value.i
           : i // ignore: cast_nullable_to_non_nullable
               as MeDetailed,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -179,8 +191,8 @@ class _$AccountImpl extends _Account {
   const _$AccountImpl(
       {required this.host,
       required this.userId,
-      this.token,
       required this.i,
+      this.token,
       this.meta})
       : super._();
 
@@ -192,18 +204,20 @@ class _$AccountImpl extends _Account {
   @override
   final String userId;
   @override
-  final String? token;
-  @override
   final MeDetailed i;
+  @override
+  final String? token;
   @override
   final MetaResponse? meta;
 
   @override
   String toString() {
-    return 'Account(host: $host, userId: $userId, token: $token, i: $i, meta: $meta)';
+    return 'Account(host: $host, userId: $userId, i: $i, token: $token, meta: $meta)';
   }
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>
@@ -221,8 +235,8 @@ abstract class _Account extends Account {
   const factory _Account(
       {required final String host,
       required final String userId,
-      final String? token,
       required final MeDetailed i,
+      final String? token,
       final MetaResponse? meta}) = _$AccountImpl;
   const _Account._() : super._();
 
@@ -233,13 +247,16 @@ abstract class _Account extends Account {
   @override
   String get userId;
   @override
-  String? get token;
-  @override
   MeDetailed get i;
   @override
-  MetaResponse? get meta;
+  String? get token;
   @override
-  @JsonKey(ignore: true)
+  MetaResponse? get meta;
+
+  /// Create a copy of Account
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

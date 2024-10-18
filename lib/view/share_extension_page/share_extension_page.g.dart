@@ -25,7 +25,7 @@ Map<String, dynamic> _$$ShareExtensionDataImplToJson(
 _$SharedFilesImpl _$$SharedFilesImplFromJson(Map<String, dynamic> json) =>
     _$SharedFilesImpl(
       path: json['path'] as String,
-      type: json['type'] as int,
+      type: (json['type'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$SharedFilesImplToJson(_$SharedFilesImpl instance) =>

@@ -1,10 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
+import "dart:convert";
+import "dart:io";
 
-import 'package:flutter/foundation.dart';
-import 'package:miria/model/desktop_settings.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import "package:flutter/foundation.dart";
+import "package:miria/model/desktop_settings.dart";
+import "package:path/path.dart";
+import "package:path_provider/path_provider.dart";
 
 class DesktopSettingsRepository extends ChangeNotifier {
   var _settings = const DesktopSettings();
@@ -33,6 +33,8 @@ class DesktopSettingsRepository extends ChangeNotifier {
 
   Future<String> getSettingPath() async {
     return join(
-        (await getApplicationSupportDirectory()).path, "desktopSettings.json");
+      (await getApplicationSupportDirectory()).path,
+      "desktopSettings.json",
+    );
   }
 }

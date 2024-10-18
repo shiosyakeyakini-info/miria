@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import "package:flutter/material.dart";
+import "package:url_launcher/url_launcher.dart";
+import "package:webview_flutter/webview_flutter.dart";
 
 class TwitterEmbed extends StatefulWidget {
   const TwitterEmbed({
-    super.key,
     required this.tweetId,
+    super.key,
     this.isDark = false,
 
     // https://developer.twitter.com/en/docs/twitter-for-websites/supported-languages
@@ -36,7 +36,7 @@ class _TwitterEmbedState extends State<TwitterEmbed> {
           onNavigationRequest: (request) async {
             final url = Uri.tryParse(request.url);
             if (url != null && await canLaunchUrl(url)) {
-              launchUrl(url, mode: LaunchMode.externalApplication);
+              await launchUrl(url, mode: LaunchMode.externalApplication);
             }
             return NavigationDecision.prevent;
           },

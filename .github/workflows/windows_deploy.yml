@@ -35,13 +35,20 @@ jobs:
         run: |
           flutter build windows --release
 
+      - name: Delete unnecessary DLL
+        run: |
+          rm build\windows\x64\runner\Release\api-ms-*.dll
+          rm build\windows\x64\runner\Release\concrt140.dll
+          rm build\windows\x64\runner\Release\msvcp*.dll
+          rm build\windows\x64\runner\Release\ucrtbas*.dll
+          rm build\windows\x64\runner\Release\vc*.dll
+
       - name: Get translation files for Inno Setup
         run: |
-          curl -o ${{ env.builddir }}\Korean.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Korean.isl
           curl -o ${{ env.builddir }}\ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl
 
       - name: Compile .ISS to .EXE Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
           path: windows/innosetup.iss
           options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}"

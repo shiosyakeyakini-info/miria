@@ -1,9 +1,9 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/model/acct.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/model/acct.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'account_settings.freezed.dart';
-part 'account_settings.g.dart';
+part "account_settings.freezed.dart";
+part "account_settings.g.dart";
 
 enum CacheStrategy {
   whenTabChange,

@@ -12,7 +12,7 @@ part of 'color_theme.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ColorTheme {
@@ -36,7 +36,9 @@ mixin _$ColorTheme {
   Color get panel => throw _privateConstructorUsedError;
   Color get panelBackground => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ColorTheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ColorThemeCopyWith<ColorTheme> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -79,6 +81,8 @@ class _$ColorThemeCopyWithImpl<$Res, $Val extends ColorTheme>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ColorTheme
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -221,6 +225,8 @@ class __$$ColorThemeImplCopyWithImpl<$Res>
       _$ColorThemeImpl _value, $Res Function(_$ColorThemeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ColorTheme
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -453,7 +459,9 @@ class _$ColorThemeImpl implements _ColorTheme {
         panelBackground
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ColorTheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ColorThemeImplCopyWith<_$ColorThemeImpl> get copyWith =>
@@ -520,8 +528,11 @@ abstract class _ColorTheme implements ColorTheme {
   Color get panel;
   @override
   Color get panelBackground;
+
+  /// Create a copy of ColorTheme
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ColorThemeImplCopyWith<_$ColorThemeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

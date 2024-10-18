@@ -1,28 +1,32 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/pushable_listview.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class NotesAfterRenotePage extends ConsumerStatefulWidget {
+class NotesAfterRenotePage extends ConsumerStatefulWidget
+    implements AutoRouteWrapper {
   final Note note;
-  final Account account;
+  final AccountContext accountContext;
 
   const NotesAfterRenotePage({
-    super.key,
     required this.note,
-    required this.account,
+    required this.accountContext,
+    super.key,
   });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _NotesAfterRenotePageState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 }
 
 class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
@@ -30,7 +34,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
 
   @override
   Widget build(BuildContext context) {
-    final misskey = ref.watch(misskeyProvider(widget.account));
+    final misskey = ref.watch(misskeyGetContextProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).notesAfterRenote)),
@@ -43,9 +47,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
               notesAfterRenote,
               lastRenoteId,
             ) = await getNotesAfterRenote(misskey);
-            ref
-                .read(notesProvider(widget.account))
-                .registerAll(notesAfterRenote);
+            ref.read(notesWithProvider).registerAll(notesAfterRenote);
             setState(() {
               untilId = lastRenoteId;
             });
@@ -59,19 +61,14 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
               misskey,
               untilId: untilId,
             );
-            ref
-                .read(notesProvider(widget.account))
-                .registerAll(notesAfterRenote);
+            ref.read(notesWithProvider).registerAll(notesAfterRenote);
             setState(() {
               untilId = lastRenoteId;
             });
             return notesAfterRenote;
           },
           itemBuilder: (context, item) {
-            return AccountScope(
-              account: widget.account,
-              child: MisskeyNote(note: item),
-            );
+            return MisskeyNote(note: item);
           },
         ),
       ),

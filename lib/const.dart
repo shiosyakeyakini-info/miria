@@ -1,4 +1,4 @@
-const misskeyIOReactionDelay = 1500;
+const misskeyHQReactionDelay = 1500;
 
 class Font {
   final String displayName;

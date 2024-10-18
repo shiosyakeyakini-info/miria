@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Name=Miria
+GenericName=Misskey Client App
+GenericName[ja]=Misskeyクライアントアプリ
+Type=Application
+Exec=miria
+Icon=${SNAP}/meta/gui/icon.png
+Comment=Misskey client app for mobile (Linux build)
+Comment[ja]=モバイル向けのMisskeyクライアントアプリ（Linux向けビルド）
+Keywords=Misskey;Miria;みりあ
+Terminal=false
+StartupNotify=false
+StartupWMClass=miria
+Categories=InstantMessaging;Network;GTK

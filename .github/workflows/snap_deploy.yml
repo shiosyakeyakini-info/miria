@@ -1,0 +1,54 @@
+
+name: デプロイ(snap)
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ビルド（Snap）
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [amd64, arm64]
+    outputs:
+      snap: ${{ steps.snapcraft.outputs.snap }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Build Snap
+        id: snapcraft
+        uses: diddlesnaps/snapcraft-multiarch-action@v1
+        with:
+          architecture: ${{ matrix.platform }}
+
+      - name: Get Build Version
+        run: |
+          echo "VERSION=$(yq -r '.version' pubspec.yaml)" >> $GITHUB_ENV
+      - name: Upload snap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v$VERSION ${{ steps.snapcraft.outputs.snap }}
+      # https://gihyo.jp/admin/serial/01/ubuntu-recipe/0660#sec3 : Snapパッケージアップロードまでの流れ
+      # https://github.com/snapcore/action-publish : Snap ActionのREADME.md
+      # Snap Storeでパッケージ名"miria"を予約（$ snapcraft register miria）後、"SNAPCRAFT_STORE_CREDENTIALS"を登録し、
+      # 以下をコメントアウトを解除することでSnap Storeへアップロードすることが可能です。
+      # 通常、SnapファイルをそのままStore外で公開することはありません。
+      #
+      #- name: Upload Snap Store
+      #  uses: snapcore/action-publish@v1
+      #  env:
+      #    SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+      #  with:
+      #    snap: ${{ steps.snapcraft.outputs.snap }}
+      #    release: stable
+

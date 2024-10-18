@@ -11,40 +11,36 @@ async function main() {
     const kuroshiro = new Kuroshiro.default();
     await kuroshiro.init(new KuromojiAnalyzer());
 
-    let body = fs.readFileSync("../misskey/packages/frontend/src/emojilist.json");
-    const emojiList = JSON.parse(body);
+    const categories = ['face', 'people', 'animals_and_nature', 'food_and_drink', 'activity', 'travel_and_places', 'objects', 'symbols', 'flags'];
 
-    let body2 = await requestPromise("https://raw.githubusercontent.com/yagays/emoji-ja/master/data/emoji_ja.json");
-    const jpEmojiList = JSON.parse(body2);
+    const body = fs.readFileSync("../misskey/packages/frontend-shared/js/emojilist.json");
+    const emojiList = JSON.parse(body);
+    const jpHiraBody = fs.readFileSync("../misskey/packages/frontend/src/unicode-emoji-indexes/ja-JP_hira.json")
+    const jpHiraBodyList = JSON.parse(jpHiraBody);
+    const jpBody = fs.readFileSync("../misskey/packages/frontend/src/unicode-emoji-indexes/ja-JP.json");
+    const jpBodyList = JSON.parse(jpBody);
+    const enBody = fs.readFileSync("../misskey/packages/frontend/src/unicode-emoji-indexes/en-US.json");
+    const enBodyList = JSON.parse(enBody);
+
+    // let body2 = await requestPromise("https://raw.githubusercontent.com/yagays/emoji-ja/master/data/emoji_ja.json");
+    // const jpEmojiList = JSON.parse(body2);
+
+    const emojis = [];
 
     for(var i=0;i<emojiList.length;i++) {
-        var findChar = emojiList[i].char;
-        if(jpEmojiList[findChar] === undefined) {
-            var isFound = false;
-            for(var j=findChar.length;j>0;j--) {
-
-                if(jpEmojiList[emojiList[i].char.substring(0, j)] !== undefined) {
-                    findChar = emojiList[i].char.substring(0, j);
-                    isFound = true;
-                    break;
-                }
-            }
-
-            if(!isFound) {
-                break;
-            }
-        }
-
-        var keywords = jpEmojiList[findChar].keywords;
-
-        for(var j=0;j<keywords.length;j++) {
-            keywords[j] = await kuroshiro.convert(keywords[j], {mode:"normal", to:"hiragana"});
-        }
-
-        emojiList[i].keywords = emojiList[i].keywords.concat(keywords);
+        emojis.push({
+            "category": categories[emojiList[i][2]],
+            "char": emojiList[i][0],
+            "name": emojiList[i][1],
+            "keywords": [
+                ...jpHiraBodyList[emojiList[i][0]],
+                ...jpBodyList[emojiList[i][0]],
+                ...enBodyList[emojiList[i][0]]
+            ]
+        });
     }
 
-    fs.writeFileSync( "../../assets/emoji_list.json", JSON.stringify(emojiList));
+    fs.writeFileSync( "../../assets/emoji_list.json", JSON.stringify(emojis));
 
 }
 

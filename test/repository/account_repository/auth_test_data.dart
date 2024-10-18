@@ -3,13 +3,13 @@ class AuthTestData {
     "links": [
       {
         "rel": "http://nodeinfo.diaspora.software/ns/schema/2.1",
-        "href": "https://calckey.jp/nodeinfo/2.1"
+        "href": "https://calckey.jp/nodeinfo/2.1",
       },
       {
         "rel": "http://nodeinfo.diaspora.software/ns/schema/2.0",
-        "href": "https://calckey.jp/nodeinfo/2.0"
+        "href": "https://calckey.jp/nodeinfo/2.0",
       }
-    ]
+    ],
   };
 
   static Map<String, dynamic> calckeyNodeInfo2 = {
@@ -17,18 +17,18 @@ class AuthTestData {
     "software": {
       "name": "calckey",
       "version": "14.0.0-rc2c-jp3",
-      "homepage": "https://calckey.org/"
+      "homepage": "https://calckey.org/",
     },
     "protocols": ["activitypub"],
     "services": {
       "inbound": [],
-      "outbound": ["atom1.0", "rss2.0"]
+      "outbound": ["atom1.0", "rss2.0"],
     },
     "openRegistrations": false,
     "usage": {
       "users": {"total": 447, "activeHalfyear": 445, "activeMonth": 237},
       "localPosts": 53977,
-      "localComments": 0
+      "localComments": 0,
     },
     "metadata": {
       "nodeName": "Calckey.jp",
@@ -54,17 +54,17 @@ class AuthTestData {
       "enableEmail": true,
       "enableServiceWorker": true,
       "proxyAccountName": "proxy",
-      "themeColor": "#31748f"
-    }
+      "themeColor": "#31748f",
+    },
   };
 
   static Map<String, dynamic> oldVerMisskeyNodeInfo = {
     "links": [
       {
         "rel": "http://nodeinfo.diaspora.software/ns/schema/2.0",
-        "href": "https://misskey.dev/nodeinfo/2.0"
+        "href": "https://misskey.dev/nodeinfo/2.0",
       }
-    ]
+    ],
   };
 
   static Map<String, dynamic> oldVerMisskeyNodeInfo2 = {
@@ -73,7 +73,7 @@ class AuthTestData {
     "protocols": ["activitypub"],
     "services": {
       "inbound": [],
-      "outbound": ["atom1.0", "rss2.0"]
+      "outbound": ["atom1.0", "rss2.0"],
     },
     "openRegistrations": true,
     "usage": {"users": {}},
@@ -91,25 +91,25 @@ class AuthTestData {
           "text":
               "✨ 最新のお知らせは ?[#misskeydevinfo](https://misskey.dev/tags/misskeydevinfo)をご確認ください :smiling_ai:\n**【必ずご確認ください】[サーバーの移行に伴う重要なお知らせ](https://misskey.dev/notes/9e6e8didf7)**\n\n詳しい情報は ?[info](https://misskey.dev/@cv_k/pages/info) ページをご確認ください\n運営費の寄付・支援は https://fantia.jp/takimura で受付しています。\n\nアイコンの変更方法は https://misskey.dev/notes/8w71u4lo9w をご覧ください。",
           "image": null,
-          "title": "Misskeyへようこそ"
+          "title": "Misskeyへようこそ",
         },
         {
           "text":
               "⭐Approved as a pinned account\n⭐More request to add custom icons<small>(free user:1icon per month)</small>\n⭐User name posted on ?[info](https://misskey.dev/@cv_k/pages/info)page\n<center>[***      Donate      ***](https://liberapay.com/misskey.dev)</center>\n⭐ピン留めアカウントとして公認\n⭐より多くのカスタム絵文字の追加リクエスト<small>(非会員は一ヶ月につき1個まで)</small>\n⭐?[info](https://misskey.dev/@cv_k/pages/info)ページにてユーザー名の掲載\n\n支払いにはクレジットカード及びコンビニ決済をご利用いただけます。\n**New** Premiumの特典がないお得な100円プラン始めました。✌✌✌\n\n<center>[***    詳細・登録はこちら    ***](https://fantia.jp/takimura)</center>\nFantia招待コード：9A848327\n\n以下からBraveを30日間ご利用いただくことでも支援していただけます！\nhttps://brave.com/mis911",
           "image": null,
-          "title": "misskey.dev Premium"
+          "title": "misskey.dev Premium",
         },
         {
           "text":
               "How to Use \nhttps://misskey.dev/notes/5c79e2a0fe0a36003970239f\nTerms of service\nhttps://misskey.dev/@cv_k/pages/tos\nInfo\nhttps://misskey.dev/@cv_k/pages/info\n<center>-----</center>使い方\nhttps://misskey.dev/notes/5c79e505c9c298003288f8c8\n利用規約\nhttps://misskey.dev/@cv_k/pages/tos\nInfoページ\nhttps://misskey.dev/@cv_k/pages/info",
           "image": null,
-          "title": "Misskey Information"
+          "title": "Misskey Information",
         },
         {
           "text":
               "カスタム絵文字の依頼について：128x128px以上のpngもしくはsvg画像を添付し、 @cv_k までReplyまたはDMしてください。追加の検討を致します。\n\nRegarding local accounts and remote accounts : Accounts that repeat posts that violate the laws of Japan are freezed.\n<center>-----</center>アカウント/リモートアカウントに関して : 日本国の法律に抵触する投稿を繰り返し行うアカウントは凍結されます。",
           "image": null,
-          "title": "Misskey Information 2"
+          "title": "Misskey Information 2",
         }
       ],
       "disableRegistration": false,
@@ -121,8 +121,8 @@ class AuthTestData {
       "enableGithubIntegration": true,
       "enableDiscordIntegration": true,
       "enableEmail": false,
-      "enableServiceWorker": true
-    }
+      "enableServiceWorker": true,
+    },
   };
 
   static String oldVerMisskeyMeta = r'''

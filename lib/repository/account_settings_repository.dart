@@ -1,12 +1,12 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/account_settings.dart';
-import 'package:miria/model/acct.dart';
-import 'package:shared_preference_app_group/shared_preference_app_group.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/account_settings.dart";
+import "package:miria/model/acct.dart";
+import "package:shared_preference_app_group/shared_preference_app_group.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class AccountSettingsRepository extends ChangeNotifier {
   List<AccountSettings> _accountSettings = [];
@@ -15,9 +15,8 @@ class AccountSettingsRepository extends ChangeNotifier {
   Future<void> load() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await SharedPreferenceAppGroup.setAppGroup(
-          "group.info.shiosyakeyakini.miria");
-      final key = await SharedPreferenceAppGroup.get("account_settings");
-      print(key);
+        "group.info.shiosyakeyakini.miria",
+      );
     }
 
     final prefs = await SharedPreferences.getInstance();
@@ -34,14 +33,19 @@ class AccountSettingsRepository extends ChangeNotifier {
       }
     } else {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
-        await SharedPreferenceAppGroup.setString("account_settings", storedData);
+        await SharedPreferenceAppGroup.setString(
+          "account_settings",
+          storedData,
+        );
       }
     }
     try {
       _accountSettings
         ..clear()
-        ..addAll((jsonDecode(storedData) as List)
-            .map((e) => AccountSettings.fromJson(e)));
+        ..addAll(
+          (jsonDecode(storedData) as List)
+              .map((e) => AccountSettings.fromJson(e)),
+        );
     } catch (e) {
       if (kDebugMode) print(e);
     }
@@ -61,7 +65,7 @@ class AccountSettingsRepository extends ChangeNotifier {
     await prefs.setString("account_settings", value);
     notifyListeners();
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      SharedPreferenceAppGroup.setString("account_settings", value);
+      await SharedPreferenceAppGroup.setString("account_settings", value);
     }
   }
 

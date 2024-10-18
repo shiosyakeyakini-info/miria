@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class SimpleMessageDialog extends StatelessWidget {
   final String message;
 
   static Future<void> show(BuildContext context, String message) async =>
       await showDialog(
-          context: context,
-          builder: (context) => SimpleMessageDialog(message: message));
+        context: context,
+        builder: (context) => SimpleMessageDialog(message: message),
+      );
 
   const SimpleMessageDialog({
-    super.key,
     required this.message,
+    super.key,
   });
 
   @override
@@ -20,10 +21,11 @@ class SimpleMessageDialog extends StatelessWidget {
       content: Text(message),
       actions: [
         ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(S.of(context).done))
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(S.of(context).done),
+        ),
       ],
     );
   }

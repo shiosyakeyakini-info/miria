@@ -1,26 +1,27 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/users_list_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/users_list_page/users_list_settings_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/users_list_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/user_list_page/users_lists_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/error_detail.dart";
 
 @RoutePage()
-class UsersListPage extends ConsumerWidget {
-  final Account account;
+class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
+  final AccountContext accountContext;
 
-  const UsersListPage(this.account, {super.key});
+  const UsersListPage(this.accountContext, {super.key});
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final misskey = ref.watch(misskeyProvider(account));
-    final list = ref.watch(usersListsNotifierProvider(misskey));
+    final list = ref.watch(usersListsNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,19 +30,13 @@ class UsersListPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
-              final settings = await showDialog<UsersListSettings>(
-                context: context,
-                builder: (context) => UsersListSettingsDialog(
-                  title: Text(S.of(context).create),
-                ),
+              final settings = await context.pushRoute<UsersListSettings>(
+                UsersListSettingsRoute(title: Text(S.of(context).create)),
               );
-              if (!context.mounted) return;
-              if (settings != null) {
-                ref
-                    .read(usersListsNotifierProvider(misskey).notifier)
-                    .create(settings)
-                    .expectFailure(context);
-              }
+              if (settings == null) return;
+              await ref
+                  .read(usersListsNotifierProvider.notifier)
+                  .create(settings);
             },
           ),
         ],
@@ -58,27 +53,13 @@ class UsersListPage extends ConsumerWidget {
                   title: Text(list.name ?? ""),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () async {
-                      final result = await SimpleConfirmDialog.show(
-                        context: context,
-                        message: S.of(context).confirmDeleteList,
-                        primary: S.of(context).doDeleting,
-                        secondary: S.of(context).cancel,
-                      );
-                      if (!context.mounted) return;
-                      if (result ?? false) {
-                        await ref
-                            .read(
-                              usersListsNotifierProvider(misskey).notifier,
-                            )
-                            .delete(list.id)
-                            .expectFailure(context);
-                      }
-                    },
+                    onPressed: () async => ref
+                        .read(usersListsNotifierProvider.notifier)
+                        .delete(list.id),
                   ),
-                  onTap: () => context.pushRoute(
+                  onTap: () async => context.pushRoute(
                     UsersListTimelineRoute(
-                      account: account,
+                      accountContext: ref.read(accountContextProvider),
                       list: list,
                     ),
                   ),
@@ -88,7 +69,9 @@ class UsersListPage extends ConsumerWidget {
           },
           error: (e, st) =>
               Center(child: ErrorDetail(error: e, stackTrace: st)),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
         ),
       ),
     );

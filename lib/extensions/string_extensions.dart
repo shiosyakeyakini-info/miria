@@ -1,9 +1,9 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
 extension StringExtensions on String {
   String get tight {
     return Characters(this)
-        .replaceAll(Characters(''), Characters('\u{200B}'))
+        .replaceAll(Characters(""), Characters("\u{200B}"))
         .toString();
   }
 

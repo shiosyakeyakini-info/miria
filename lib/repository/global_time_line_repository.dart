@@ -1,50 +1,31 @@
-import 'package:miria/repository/time_line_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "dart:async";
 
-class GlobalTimeLineRepository extends TimelineRepository {
-  SocketController? socketController;
+import "package:miria/repository/socket_timeline_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-  final Misskey misskey;
-
-  GlobalTimeLineRepository(
-    this.misskey,
+class GlobalTimelineRepository extends SocketTimelineRepository {
+  GlobalTimelineRepository(
+    super.misskey,
+    super.account,
     super.noteRepository,
-    super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
+    super.ref,
   );
 
   @override
-  void startTimeLine() {
-    socketController = misskey.globalTimelineStream(
-      parameter: GlobalTimelineParameter(
-        withRenotes: tabSetting.renoteDisplay,
-        withFiles: tabSetting.isMediaOnly,
+  Future<Iterable<Note>> requestNotes({String? untilId}) async {
+    return await misskey.notes.globalTimeline(
+      NotesGlobalTimelineRequest(
+        limit: 30,
+        untilId: untilId,
       ),
-      onNoteReceived: (note) {
-        newerNotes.add(note);
-
-        notifyListeners();
-      },
     );
-    misskey.startStreaming();
   }
 
   @override
-  void disconnect() {
-    socketController?.disconnect();
-  }
+  Channel get channel => Channel.globalTimeline;
 
   @override
-  Future<void> reconnect() async {
-    await super.reconnect();
-    socketController?.reconnect();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    socketController?.disconnect();
-    socketController = null;
-  }
+  Map<String, dynamic> get parameters => {"channelId": tabSetting.channelId};
 }

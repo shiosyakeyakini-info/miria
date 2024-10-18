@@ -1,13 +1,14 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/common/avatar_icon.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/common/avatar_icon.dart";
 
 @RoutePage()
 class AccountListPage extends ConsumerWidget {
@@ -22,9 +23,7 @@ class AccountListPage extends ConsumerWidget {
         leading: Container(),
         actions: [
           IconButton(
-            onPressed: () {
-              context.pushRoute(const LoginRoute());
-            },
+            onPressed: () async => await context.pushRoute(const LoginRoute()),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -60,10 +59,9 @@ class AccountListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () {
-                  context.router
-                    ..removeWhere((route) => true)
-                    ..push(const SplashRoute());
+                onPressed: () async {
+                  context.router.removeWhere((route) => true);
+                  await context.router.push(const SplashRoute());
                 },
                 child: Text(S.of(context).quitAccountSettings),
               ),
@@ -95,6 +93,14 @@ class AccountListItem extends ConsumerWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              context.pushRoute(
+                SeveralAccountGeneralSettingsRoute(account: account),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {

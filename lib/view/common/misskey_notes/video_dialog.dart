@@ -1,17 +1,17 @@
-import 'dart:async';
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:volume_controller/volume_controller.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
-import 'package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:media_kit/media_kit.dart";
+import "package:media_kit_video/media_kit_video.dart";
+import "package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart";
+import "package:url_launcher/url_launcher_string.dart";
+import "package:volume_controller/volume_controller.dart";
 
 class VideoDialog extends StatefulWidget {
-  const VideoDialog({super.key, required this.url, required this.fileType});
+  const VideoDialog({required this.url, required this.fileType, super.key});
 
   final String url;
   final String fileType;
@@ -77,44 +77,48 @@ class _VideoDialogState extends State<VideoDialog> {
   @override
   Widget build(BuildContext context) {
     final themeData = MaterialVideoControlsThemeData(
-        seekBarPositionColor: Theme.of(context).primaryColor,
-        seekBarThumbColor: Theme.of(context).primaryColor,
-        backdropColor: Colors.transparent,
-        volumeGesture: false,
-        brightnessGesture: false,
-        displaySeekBar: false,
-        automaticallyImplySkipNextButton: false,
-        automaticallyImplySkipPreviousButton: false,
-        primaryButtonBar: [],
-        bottomButtonBar: []);
+      seekBarPositionColor: Theme.of(context).primaryColor,
+      seekBarThumbColor: Theme.of(context).primaryColor,
+      backdropColor: Colors.transparent,
+      volumeGesture: false,
+      brightnessGesture: false,
+      displaySeekBar: false,
+      automaticallyImplySkipNextButton: false,
+      automaticallyImplySkipPreviousButton: false,
+      primaryButtonBar: [],
+      bottomButtonBar: [],
+    );
 
     final themeDataFull = MaterialVideoControlsThemeData(
-        seekBarPositionColor: Theme.of(context).primaryColor,
-        seekBarThumbColor: Theme.of(context).primaryColor,
-        volumeGesture: false,
-        brightnessGesture: false,
-        automaticallyImplySkipNextButton: false,
-        automaticallyImplySkipPreviousButton: false,
-        bottomButtonBarMargin:
-            const EdgeInsets.only(left: 16.0, right: 8.0, bottom: 16.0),
-        seekBarMargin: const EdgeInsets.only(bottom: 16.0));
+      seekBarPositionColor: Theme.of(context).primaryColor,
+      seekBarThumbColor: Theme.of(context).primaryColor,
+      volumeGesture: false,
+      brightnessGesture: false,
+      automaticallyImplySkipNextButton: false,
+      automaticallyImplySkipPreviousButton: false,
+      bottomButtonBarMargin:
+          const EdgeInsets.only(left: 16.0, right: 8.0, bottom: 16.0),
+      seekBarMargin: const EdgeInsets.only(bottom: 16.0),
+    );
 
     final themeDataDesktop = MaterialDesktopVideoControlsThemeData(
-        seekBarPositionColor: Theme.of(context).primaryColor,
-        seekBarThumbColor: Theme.of(context).primaryColor,
-        modifyVolumeOnScroll: false,
-        displaySeekBar: false,
-        automaticallyImplySkipNextButton: false,
-        automaticallyImplySkipPreviousButton: false,
-        primaryButtonBar: [],
-        bottomButtonBar: []);
+      seekBarPositionColor: Theme.of(context).primaryColor,
+      seekBarThumbColor: Theme.of(context).primaryColor,
+      modifyVolumeOnScroll: false,
+      displaySeekBar: false,
+      automaticallyImplySkipNextButton: false,
+      automaticallyImplySkipPreviousButton: false,
+      primaryButtonBar: [],
+      bottomButtonBar: [],
+    );
 
     final themeDataDesktopFull = MaterialDesktopVideoControlsThemeData(
-        seekBarPositionColor: Theme.of(context).primaryColor,
-        seekBarThumbColor: Theme.of(context).primaryColor,
-        modifyVolumeOnScroll: false,
-        automaticallyImplySkipNextButton: false,
-        automaticallyImplySkipPreviousButton: false);
+      seekBarPositionColor: Theme.of(context).primaryColor,
+      seekBarThumbColor: Theme.of(context).primaryColor,
+      modifyVolumeOnScroll: false,
+      automaticallyImplySkipNextButton: false,
+      automaticallyImplySkipPreviousButton: false,
+    );
 
     return AlertDialog(
       backgroundColor: Colors.transparent,
@@ -133,8 +137,8 @@ class _VideoDialogState extends State<VideoDialog> {
                 onPointerDown: (event) {
                   if (isAudioFile) return;
                   timer?.cancel();
-                  int now = DateTime.now().millisecondsSinceEpoch;
-                  int elap = now - lastTapTime;
+                  final now = DateTime.now().millisecondsSinceEpoch;
+                  final elap = now - lastTapTime;
                   lastTapTime = now;
                   setState(() {
                     if (!isVisibleControlBar) {
@@ -143,8 +147,10 @@ class _VideoDialogState extends State<VideoDialog> {
                     } else if (elap > 500 &&
                         (event.localPosition.dy + 100 <
                                 MediaQuery.of(context).size.height &&
-                            max(event.localPosition.dx,
-                                    event.localPosition.dy) >=
+                            max(
+                                  event.localPosition.dx,
+                                  event.localPosition.dy,
+                                ) >=
                                 45)) {
                       isVisibleControlBar = false;
                     }
@@ -169,33 +175,36 @@ class _VideoDialogState extends State<VideoDialog> {
                   child: Stack(
                     children: [
                       Align(
-                          child: AspectRatio(
-                              aspectRatio: aspectRatio,
-                              child: MaterialVideoControlsTheme(
-                                normal: themeData,
-                                fullscreen: themeDataFull,
-                                child: MaterialDesktopVideoControlsTheme(
-                                    normal: themeDataDesktop,
-                                    fullscreen: themeDataDesktopFull,
-                                    child: Video(
-                                      key: videoKey,
-                                      controller: controller,
-                                      controls: AdaptiveVideoControls,
-                                      fill: Colors.transparent,
-                                      onEnterFullscreen: () async {
-                                        isFullScreen = true;
-                                        await defaultEnterNativeFullscreen();
-                                        videoKey.currentState
-                                            ?.update(fill: Colors.black);
-                                      },
-                                      onExitFullscreen: () async {
-                                        await defaultExitNativeFullscreen();
-                                        isFullScreen = false;
-                                        videoKey.currentState
-                                            ?.update(fill: Colors.transparent);
-                                      },
-                                    )),
-                              ))),
+                        child: AspectRatio(
+                          aspectRatio: aspectRatio,
+                          child: MaterialVideoControlsTheme(
+                            normal: themeData,
+                            fullscreen: themeDataFull,
+                            child: MaterialDesktopVideoControlsTheme(
+                              normal: themeDataDesktop,
+                              fullscreen: themeDataDesktopFull,
+                              child: Video(
+                                key: videoKey,
+                                controller: controller,
+                                controls: AdaptiveVideoControls,
+                                fill: Colors.transparent,
+                                onEnterFullscreen: () async {
+                                  isFullScreen = true;
+                                  await defaultEnterNativeFullscreen();
+                                  videoKey.currentState
+                                      ?.update(fill: Colors.black);
+                                },
+                                onExitFullscreen: () async {
+                                  await defaultExitNativeFullscreen();
+                                  isFullScreen = false;
+                                  videoKey.currentState
+                                      ?.update(fill: Colors.transparent);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       AnimatedOpacity(
                         curve: Curves.easeInOut,
                         opacity: isVisibleControlBar ? 1.0 : 0.0,
@@ -218,45 +227,51 @@ class _VideoDialogState extends State<VideoDialog> {
                                 child: _VideoControls(
                                   controller: controller,
                                   isAudioFile: isAudioFile,
-                                  onMenuPressed: () => {
-                                    showModalBottomSheet(
+                                  onMenuPressed: () async {
+                                    await showModalBottomSheet(
                                       context: context,
                                       builder: (innerContext) {
                                         return ListView(
                                           children: [
                                             ListTile(
-                                                leading: const Icon(
-                                                    Icons.open_in_browser),
-                                                title: Text(
-                                                    S.of(context).openBrowsers),
-                                                onTap: () async {
-                                                  Navigator.of(innerContext)
-                                                      .pop();
-                                                  Navigator.of(context).pop();
-                                                  launchUrlString(
-                                                    widget.url,
-                                                    mode: LaunchMode
-                                                        .externalApplication,
-                                                  );
-                                                }),
+                                              leading: const Icon(
+                                                Icons.open_in_browser,
+                                              ),
+                                              title: Text(
+                                                S.of(context).openBrowsers,
+                                              ),
+                                              onTap: () async {
+                                                Navigator.of(innerContext)
+                                                    .pop();
+                                                Navigator.of(context).pop();
+                                                await launchUrlString(
+                                                  widget.url,
+                                                  mode: LaunchMode
+                                                      .externalApplication,
+                                                );
+                                              },
+                                            ),
                                             if (!isAudioFile)
                                               ListTile(
                                                 leading: const Icon(
-                                                    Icons.fullscreen),
-                                                title: Text(S
-                                                    .of(context)
-                                                    .changeFullScreen),
+                                                  Icons.fullscreen,
+                                                ),
+                                                title: Text(
+                                                  S
+                                                      .of(context)
+                                                      .changeFullScreen,
+                                                ),
                                                 onTap: () async {
                                                   Navigator.of(innerContext)
                                                       .pop();
                                                   videoKey.currentState
                                                       ?.enterFullscreen();
                                                 },
-                                              )
+                                              ),
                                           ],
                                         );
                                       },
-                                    )
+                                    );
                                   },
                                 ),
                               ),
@@ -268,7 +283,9 @@ class _VideoDialogState extends State<VideoDialog> {
                                     Navigator.of(context).pop();
                                   },
                                   constraints: const BoxConstraints(
-                                      minWidth: 0, minHeight: 0),
+                                    minWidth: 0,
+                                    minHeight: 0,
+                                  ),
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   padding: EdgeInsets.zero,
@@ -292,12 +309,12 @@ class _VideoDialogState extends State<VideoDialog> {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -311,10 +328,11 @@ class _VideoControls extends StatefulWidget {
   final VoidCallback? onMenuPressed;
   final bool isAudioFile;
 
-  const _VideoControls(
-      {required this.controller,
-      required this.isAudioFile,
-      this.onMenuPressed});
+  const _VideoControls({
+    required this.controller,
+    required this.isAudioFile,
+    this.onMenuPressed,
+  });
 
   @override
   State<_VideoControls> createState() => _VideoControlState();
@@ -351,7 +369,7 @@ class _VideoControlState extends State<_VideoControls> {
           setState(() {
             duration = event;
           });
-        })
+        }),
       ]);
     }
   }
@@ -371,102 +389,118 @@ class _VideoControlState extends State<_VideoControls> {
       width: MediaQuery.of(context).size.width,
       height: 100,
       decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          border: Border(
-              top: BorderSide(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        border: Border(
+          top: BorderSide(
             color: Theme.of(context).primaryColor,
-          ))),
-      child: Column(children: [
-        Padding(
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
             padding: const EdgeInsets.only(left: 0, right: 0, bottom: 10),
             child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(children: [
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           iconSize: widget.iconSize,
-                          onPressed: () =>
+                          onPressed: () async =>
                               widget.controller.player.playOrPause(),
                           icon: StreamBuilder(
-                              stream: widget.controller.player.stream.playing,
-                              builder: (context, playing) => Icon(
-                                    playing.data == true
-                                        ? Icons.pause
-                                        : Icons.play_arrow,
-                                  )),
+                            stream: widget.controller.player.stream.playing,
+                            builder: (context, playing) => Icon(
+                              playing.data == true
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                            ),
+                          ),
                         ),
                       ),
-                      Text(position.label(reference: duration),
-                          textAlign: TextAlign.center),
+                      Text(
+                        position.label(reference: duration),
+                        textAlign: TextAlign.center,
+                      ),
                       const Text(" / "),
-                      Text(duration.label(reference: duration),
-                          textAlign: TextAlign.center),
-                    ]),
+                      Text(
+                        duration.label(reference: duration),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 5),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(right: 5),
+                ),
+                IconButton(
+                  iconSize: widget.iconSize,
+                  onPressed: () async {
+                    await widget.controller.player.setVolume(isMute ? 100 : 0);
+                    isMute = !isMute;
+                  },
+                  icon: StreamBuilder(
+                    stream: widget.controller.player.stream.volume,
+                    builder: (context, playing) => Icon(
+                      playing.data == 0 ? Icons.volume_off : Icons.volume_up,
+                    ),
                   ),
-                  IconButton(
-                      iconSize: widget.iconSize,
-                      onPressed: () async {
-                        await widget.controller.player
-                            .setVolume(isMute ? 100 : 0);
-                        isMute = !isMute;
-                      },
-                      icon: StreamBuilder(
-                        stream: widget.controller.player.stream.volume,
-                        builder: (context, playing) => Icon(
-                          playing.data == 0
-                              ? Icons.volume_off
-                              : Icons.volume_up,
-                        ),
-                      )),
-                  IconButton(
-                    onPressed: widget.onMenuPressed,
-                    icon: const Icon(Icons.more_horiz),
-                    iconSize: widget.iconSize,
-                  )
-                ])),
-        Row(
+                ),
+                IconButton(
+                  onPressed: widget.onMenuPressed,
+                  icon: const Icon(Icons.more_horiz),
+                  iconSize: widget.iconSize,
+                ),
+              ],
+            ),
+          ),
+          Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                  child: SliderTheme(
-                      data: SliderThemeData(
-                          overlayShape: SliderComponentShape.noOverlay,
-                          trackHeight: 3.0,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 6.0)),
-                      child: Slider(
-                        thumbColor: Theme.of(context).primaryColor,
-                        activeColor: Theme.of(context).primaryColor,
-                        value: position.inMilliseconds.toDouble(),
-                        secondaryTrackValue:
-                            bufferPosition.inMilliseconds.toDouble(),
-                        min: 0,
-                        max: duration.inMilliseconds.toDouble(),
-                        onChangeStart: (double value) {
-                          isSeeking = true;
-                        },
-                        onChanged: (double value) {
-                          setState(() {
-                            position = Duration(milliseconds: value.toInt());
-                          });
-                        },
-                        onChangeEnd: (double value) {
-                          widget.controller.player.seek(position);
-                          isSeeking = false;
-                        },
-                      )))
-            ])
-      ]),
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    overlayShape: SliderComponentShape.noOverlay,
+                    trackHeight: 3.0,
+                    thumbShape: const RoundSliderThumbShape(
+                      enabledThumbRadius: 6.0,
+                    ),
+                  ),
+                  child: Slider(
+                    thumbColor: Theme.of(context).primaryColor,
+                    activeColor: Theme.of(context).primaryColor,
+                    value: position.inMilliseconds.toDouble(),
+                    secondaryTrackValue:
+                        bufferPosition.inMilliseconds.toDouble(),
+                    min: 0,
+                    max: duration.inMilliseconds.toDouble(),
+                    onChangeStart: (value) {
+                      isSeeking = true;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        position = Duration(milliseconds: value.toInt());
+                      });
+                    },
+                    onChangeEnd: (value) async {
+                      await widget.controller.player.seek(position);
+                      isSeeking = false;
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

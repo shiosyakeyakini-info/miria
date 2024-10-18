@@ -1,138 +1,142 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/misskey_emoji_data.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/notification_page/notification_page_data.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/error_dialog_handler.dart';
-import 'package:miria/view/common/misskey_notes/custom_emoji.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart'
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/view/common/misskey_notes/custom_emoji.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart"
     as misskey_note;
-import 'package:miria/view/common/pushable_listview.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/user_page/user_list_item.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:miria/view/common/pushable_listview.dart";
+import "package:miria/view/notification_page/notification_page_data.dart";
+import "package:miria/view/user_page/user_list_item.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+
+part "notification_page.g.dart";
 
 @RoutePage()
-class NotificationPage extends ConsumerStatefulWidget {
-  const NotificationPage({super.key, required this.account});
-  final Account account;
+class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
+  final AccountContext accountContext;
+
+  const NotificationPage({required this.accountContext, super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      NotificationPageState();
-}
-
-class NotificationPageState extends ConsumerState<NotificationPage> {
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
   @override
-  Widget build(BuildContext context) {
-    final misskey = ref.read(misskeyProvider(widget.account));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final misskey = ref.read(misskeyPostContextProvider);
     return DefaultTabController(
       length: 3,
-      child: AccountScope(
-        account: widget.account,
-        child: Scaffold(
-          appBar: AppBar(
-              title: Text(S.of(context).notification),
-              bottom: TabBar(tabs: [
-                Tab(text: S.of(context).notificationAll),
-                Tab(text: S.of(context).notificationForMe),
-                Tab(text: S.of(context).notificationDirect)
-              ])),
-          body: Padding(
-            padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-            child: TabBarView(
-              children: [
-                PushableListView<NotificationData>(
-                  initializeFuture: () async {
-                    final localize = S.of(context);
-                    final result = await misskey.i
-                        .notifications(const INotificationsRequest(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(S.of(context).notification),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: S.of(context).notificationAll),
+              Tab(text: S.of(context).notificationForMe),
+              Tab(text: S.of(context).notificationDirect),
+            ],
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+          child: TabBarView(
+            children: [
+              PushableListView<NotificationData>(
+                initializeFuture: () async {
+                  final localize = S.of(context);
+                  final result = await misskey.i.notifications(
+                    const INotificationsRequest(
                       limit: 50,
                       markAsRead: true,
-                    ));
-                    ref
-                        .read(notesProvider(widget.account))
-                        .registerAll(result.map((e) => e.note).whereNotNull());
-
-                    ref
-                        .read(accountRepositoryProvider.notifier)
-                        .readAllNotification(widget.account);
-                    return result.toNotificationData(localize);
-                  },
-                  nextFuture: (lastElement, _) async {
-                    final localize = S.of(context);
-                    final result = await misskey.i.notifications(
-                        INotificationsRequest(
-                            limit: 50, untilId: lastElement.id));
-                    ref
-                        .read(notesProvider(widget.account))
-                        .registerAll(result.map((e) => e.note).whereNotNull());
-                    return result.toNotificationData(localize);
-                  },
-                  itemBuilder: (context, notification) => Align(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      child: NotificationItem(
-                        notification: notification,
-                        account: widget.account,
-                      ),
                     ),
+                  );
+                  ref
+                      .read(notesWithProvider)
+                      .registerAll(result.map((e) => e.note).whereNotNull());
+
+                  await ref
+                      .read(accountRepositoryProvider.notifier)
+                      .readAllNotification(accountContext.postAccount);
+                  return result.toNotificationData(localize);
+                },
+                nextFuture: (lastElement, _) async {
+                  final localize = S.of(context);
+                  final result = await misskey.i.notifications(
+                    INotificationsRequest(
+                      limit: 50,
+                      untilId: lastElement.id,
+                    ),
+                  );
+                  ref
+                      .read(notesWithProvider)
+                      .registerAll(result.map((e) => e.note).whereNotNull());
+                  return result.toNotificationData(localize);
+                },
+                itemBuilder: (context, notification) => Align(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: NotificationItem(notification: notification),
                   ),
                 ),
-                PushableListView<Note>(
-                  initializeFuture: () async {
-                    final notes = await ref
-                        .read(misskeyProvider(widget.account))
-                        .notes
-                        .mentions(const NotesMentionsRequest());
-                    ref.read(notesProvider(widget.account)).registerAll(notes);
-                    return notes.toList();
-                  },
-                  nextFuture: (item, _) async {
-                    final notes = await ref
-                        .read(misskeyProvider(widget.account))
-                        .notes
-                        .mentions(NotesMentionsRequest(untilId: item.id));
-                    ref.read(notesProvider(widget.account)).registerAll(notes);
-                    return notes.toList();
-                  },
-                  itemBuilder: (context, note) {
-                    return misskey_note.MisskeyNote(note: note);
-                  },
-                ),
-                PushableListView<Note>(
-                  initializeFuture: () async {
-                    final notes = await ref
-                        .read(misskeyProvider(widget.account))
-                        .notes
-                        .mentions(const NotesMentionsRequest(
-                            visibility: NoteVisibility.specified));
-                    ref.read(notesProvider(widget.account)).registerAll(notes);
-                    return notes.toList();
-                  },
-                  nextFuture: (item, _) async {
-                    final notes = await ref
-                        .read(misskeyProvider(widget.account))
-                        .notes
-                        .mentions(NotesMentionsRequest(
-                            untilId: item.id,
-                            visibility: NoteVisibility.specified));
-                    ref.read(notesProvider(widget.account)).registerAll(notes);
-                    return notes.toList();
-                  },
-                  itemBuilder: (context, note) {
-                    return misskey_note.MisskeyNote(note: note);
-                  },
-                ),
-              ],
-            ),
+              ),
+              PushableListView<Note>(
+                initializeFuture: () async {
+                  final notes = await ref
+                      .read(misskeyPostContextProvider)
+                      .notes
+                      .mentions(const NotesMentionsRequest());
+                  ref.read(notesWithProvider).registerAll(notes);
+                  return notes.toList();
+                },
+                nextFuture: (item, _) async {
+                  final notes = await ref
+                      .read(misskeyPostContextProvider)
+                      .notes
+                      .mentions(NotesMentionsRequest(untilId: item.id));
+                  ref.read(notesWithProvider).registerAll(notes);
+                  return notes.toList();
+                },
+                itemBuilder: (context, note) {
+                  return misskey_note.MisskeyNote(note: note);
+                },
+              ),
+              PushableListView<Note>(
+                initializeFuture: () async {
+                  final notes =
+                      await ref.read(misskeyPostContextProvider).notes.mentions(
+                            const NotesMentionsRequest(
+                              visibility: NoteVisibility.specified,
+                            ),
+                          );
+                  ref.read(notesWithProvider).registerAll(notes);
+                  return notes.toList();
+                },
+                nextFuture: (item, _) async {
+                  final notes =
+                      await ref.read(misskeyPostContextProvider).notes.mentions(
+                            NotesMentionsRequest(
+                              untilId: item.id,
+                              visibility: NoteVisibility.specified,
+                            ),
+                          );
+                  ref.read(notesWithProvider).registerAll(notes);
+                  return notes.toList();
+                },
+                itemBuilder: (context, note) {
+                  return misskey_note.MisskeyNote(note: note);
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -143,31 +147,29 @@ class NotificationPageState extends ConsumerState<NotificationPage> {
 final showActionsProvider =
     StateProvider.autoDispose.family<bool, NotificationData>((ref, _) => true);
 
-final followRequestsProvider = FutureProvider.autoDispose
-    .family<List<FollowRequest>, Account>((ref, account) async {
+@Riverpod(dependencies: [misskeyPostContext])
+Future<List<FollowRequest>> followRequests(FollowRequestsRef ref) async {
   final response = await ref
-      .watch(misskeyProvider(account))
+      .watch(misskeyPostContextProvider)
       .following
       .requests
       .list(const FollowingRequestsListRequest());
   return response.toList();
-});
+}
 
 class NotificationItem extends ConsumerWidget {
   final NotificationData notification;
-  final Account account;
 
   const NotificationItem({
-    super.key,
     required this.notification,
-    required this.account,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notification = this.notification;
     final showActions = ref.watch(showActionsProvider(notification));
-    final followRequests = ref.watch(followRequestsProvider(account));
+    final followRequests = ref.watch(followRequestsProvider);
 
     switch (notification) {
       case RenoteReactionNotificationData():
@@ -187,25 +189,28 @@ class NotificationItem extends ConsumerWidget {
                     if (hasReaction && hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                            S.of(context).renoteAndReactionsNotification(
-                                  notification.reactionUsers.first.$2?.name ??
-                                      notification
-                                          .reactionUsers.first.$2?.username,
-                                  notification.renoteUsers.first?.name ??
-                                      notification.renoteUsers.first?.username,
-                                ),
-                            emojis: Map.of(
-                                notification.reactionUsers.first.$2?.emojis ??
-                                    {})
-                              ..addAll(notification.renoteUsers.first?.emojis ??
-                                  {})),
+                          S.of(context).renoteAndReactionsNotification(
+                                notification.reactionUsers.first.$2?.name ??
+                                    notification
+                                        .reactionUsers.first.$2?.username,
+                                notification.renoteUsers.first?.name ??
+                                    notification.renoteUsers.first?.username,
+                              ),
+                          emojis: Map.of(
+                            notification.reactionUsers.first.$2?.emojis ?? {},
+                          )..addAll(
+                              notification.renoteUsers.first?.emojis ?? {},
+                            ),
+                        ),
                       ),
                     if (hasReaction && !hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).reactionNotification(notification
-                                  .reactionUsers.first.$2?.name ??
-                              notification.reactionUsers.first.$2?.username),
+                          S.of(context).reactionNotification(
+                                notification.reactionUsers.first.$2?.name ??
+                                    notification
+                                        .reactionUsers.first.$2?.username,
+                              ),
                           emojis:
                               notification.reactionUsers.first.$2?.emojis ?? {},
                         ),
@@ -213,11 +218,12 @@ class NotificationItem extends ConsumerWidget {
                     if (hasRenote && !hasReaction)
                       Expanded(
                         child: SimpleMfmText(
-                            S.of(context).renoteNotification(
+                          S.of(context).renoteNotification(
                                 notification.renoteUsers.first?.name ??
-                                    notification.renoteUsers.first?.username),
-                            emojis:
-                                notification.renoteUsers.first?.emojis ?? {}),
+                                    notification.renoteUsers.first?.username,
+                              ),
+                          emojis: notification.renoteUsers.first?.emojis ?? {},
+                        ),
                       ),
                     Text(notification.createdAt.differenceNow(context)),
                   ],
@@ -236,8 +242,10 @@ class NotificationItem extends ConsumerWidget {
                     if (hasRenote)
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor)),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                         padding: const EdgeInsets.all(5),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -248,7 +256,7 @@ class NotificationItem extends ConsumerWidget {
                               children: [
                                 for (final user
                                     in notification.renoteUsers.whereNotNull())
-                                  UserListItem(user: user)
+                                  UserListItem(user: user),
                               ],
                             ),
                           ],
@@ -259,16 +267,19 @@ class NotificationItem extends ConsumerWidget {
                     if (hasReaction)
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor)),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                         padding: const EdgeInsets.all(5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(S.of(context).reactionUsersInNotification),
-                            for (final reaction in notification.reactionUsers
-                                .mapIndexed(
-                                    (index, element) => (index, element))) ...[
+                            for (final reaction
+                                in notification.reactionUsers.mapIndexed(
+                              (index, element) => (index, element),
+                            )) ...[
                               if (reaction.$2.$1 != null &&
                                       (reaction.$1 > 0 &&
                                           notification
@@ -281,8 +292,12 @@ class NotificationItem extends ConsumerWidget {
                                   emojiData: MisskeyEmojiData.fromEmojiName(
                                     emojiName: reaction.$2.$1!,
                                     repository: ref.read(
-                                        emojiRepositoryProvider(
-                                            AccountScope.of(context))),
+                                      emojiRepositoryProvider(
+                                        ref
+                                            .read(accountContextProvider)
+                                            .getAccount,
+                                      ),
+                                    ),
                                     emojiInfo:
                                         notification.note?.reactionEmojis,
                                   ),
@@ -290,15 +305,16 @@ class NotificationItem extends ConsumerWidget {
                                 ),
                               if (reaction.$2.$2 != null)
                                 Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: UserListItem(user: reaction.$2.$2!)),
-                            ]
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: UserListItem(user: reaction.$2.$2!),
+                                ),
+                            ],
                           ],
                         ),
-                      )
+                      ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -309,7 +325,7 @@ class NotificationItem extends ConsumerWidget {
           child: Column(
             children: [
               if (notification.note != null)
-                misskey_note.MisskeyNote(note: notification.note!)
+                misskey_note.MisskeyNote(note: notification.note!),
             ],
           ),
         );
@@ -351,12 +367,11 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: ElevatedButton(
-                                onPressed: () => handleFollowRequest(
+                                onPressed: () async => handleFollowRequest(
                                   ref,
-                                  account: account,
                                   accept: true,
                                   userId: user.id,
-                                ).expectFailure(context),
+                                ),
                                 child: Text(S.of(context).accept),
                               ),
                             ),
@@ -365,12 +380,11 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: OutlinedButton(
-                                onPressed: () => handleFollowRequest(
+                                onPressed: () async => handleFollowRequest(
                                   ref,
-                                  account: account,
                                   accept: false,
                                   userId: user.id,
-                                ).expectFailure(context),
+                                ),
                                 child: Text(S.of(context).reject),
                               ),
                             ),
@@ -407,7 +421,8 @@ class NotificationItem extends ConsumerWidget {
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text(S.of(context).finishedVotedNotification)),
+                      child: Text(S.of(context).finishedVotedNotification),
+                    ),
                     Text(notification.createdAt.differenceNow(context)),
                   ],
                 ),
@@ -445,9 +460,11 @@ class NotificationItem extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(
-                child: SimpleMfmText(S
-                    .of(context)
-                    .roleAssignedNotification(notification.role?.name ?? "")),
+                child: SimpleMfmText(
+                  S
+                      .of(context)
+                      .roleAssignedNotification(notification.role?.name ?? ""),
+                ),
               ),
             ],
           ),
@@ -457,21 +474,22 @@ class NotificationItem extends ConsumerWidget {
 
   Future<void> handleFollowRequest(
     WidgetRef ref, {
-    required Account account,
     required bool accept,
     required String userId,
   }) async {
-    final misskey = ref.watch(misskeyProvider(account));
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      final misskey = ref.watch(misskeyPostContextProvider);
 
-    if (accept) {
-      await misskey.following.requests
-          .accept(FollowingRequestsAcceptRequest(userId: userId));
-    } else {
-      await misskey.following.requests
-          .reject(FollowingRequestsRejectRequest(userId: userId));
-    }
+      if (accept) {
+        await misskey.following.requests
+            .accept(FollowingRequestsAcceptRequest(userId: userId));
+      } else {
+        await misskey.following.requests
+            .reject(FollowingRequestsRejectRequest(userId: userId));
+      }
 
-    ref.invalidate(followRequestsProvider(account));
-    ref.read(showActionsProvider(notification).notifier).state = false;
+      ref.invalidate(followRequestsProvider);
+      ref.read(showActionsProvider(notification).notifier).state = false;
+    });
   }
 }

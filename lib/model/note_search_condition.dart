@@ -1,7 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'note_search_condition.freezed.dart';
+part "note_search_condition.freezed.dart";
 
 @freezed
 class NoteSearchCondition with _$NoteSearchCondition {

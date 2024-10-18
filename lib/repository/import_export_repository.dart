@@ -1,22 +1,22 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/model/exported_setting.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:miria/view/dialogs/simple_confirm_dialog.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:miria/view/settings_page/import_export_page/folder_select_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
+import "package:dio/dio.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/exported_setting.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
+import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:miria/view/settings_page/import_export_page/folder_select_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:package_info_plus/package_info_plus.dart";
 
 class ImportExportRepository extends ChangeNotifier {
   final T Function<T>(ProviderListenable<T> provider) reader;
@@ -45,9 +45,8 @@ class ImportExportRepository extends ChangeNotifier {
   }
 
   Future<void> import(BuildContext context, Account account) async {
-    final result = await showDialog<FolderResult>(
-      context: context,
-      builder: (context2) => FolderSelectDialog(
+    final result = await context.pushRoute<FolderResult>(
+      FolderSelectRoute(
         account: account,
         fileShowTarget: const ["miria.json", "miria.json.unknown"],
         confirmationText: S.of(context).importFromThisFolder,
@@ -62,7 +61,9 @@ class ImportExportRepository extends ChangeNotifier {
     if (!context.mounted) return;
     if (alreadyExists.isEmpty) {
       await SimpleMessageDialog.show(
-          context, S.of(context).exportedFileNotFound);
+        context,
+        S.of(context).exportedFileNotFound,
+      );
       return;
     }
 
@@ -80,12 +81,12 @@ class ImportExportRepository extends ChangeNotifier {
     for (final accountSetting in importedSettings.accountSettings) {
       // この端末でログイン済みのアカウントであれば
       if (accounts.any((account) => account.acct == accountSetting.acct)) {
-        reader(accountSettingsRepositoryProvider).save(accountSetting);
+        await reader(accountSettingsRepositoryProvider).save(accountSetting);
       }
     }
 
     // 全般設定
-    reader(generalSettingsRepositoryProvider)
+    await reader(generalSettingsRepositoryProvider)
         .update(importedSettings.generalSettings);
 
     // タブ設定
@@ -101,21 +102,19 @@ class ImportExportRepository extends ChangeNotifier {
 
       tabSettings.add(tabSetting);
     }
-    reader(tabSettingsRepositoryProvider).save(tabSettings);
+    await reader(tabSettingsRepositoryProvider).save(tabSettings);
 
     if (!context.mounted) return;
     await SimpleMessageDialog.show(context, S.of(context).importCompleted);
 
     if (!context.mounted) return;
-    context.router
-      ..removeWhere((route) => true)
-      ..push(const SplashRoute());
+    context.router.removeWhere((route) => true);
+    await context.router.push(const SplashRoute());
   }
 
   Future<void> export(BuildContext context, Account account) async {
-    final result = await showDialog<FolderResult>(
-      context: context,
-      builder: (context2) => FolderSelectDialog(
+    final result = await context.pushRoute<FolderResult>(
+      FolderSelectRoute(
         account: account,
         fileShowTarget: const ["miria.json", "miria.json.unknown"],
         confirmationText: S.of(context).exportToThisFolder,

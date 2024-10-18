@@ -12,7 +12,7 @@ part of 'tab_setting.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TabSetting _$TabSettingFromJson(Map<String, dynamic> json) {
   return _TabSetting.fromJson(json);
@@ -25,6 +25,12 @@ mixin _$TabSetting {
 
   /// タブ種別
   TabType get tabType => throw _privateConstructorUsedError;
+
+  /// アカウント情報
+// https://github.com/rrousselGit/freezed/issues/488
+// ignore: invalid_annotation_target
+  @JsonKey(readValue: _readAcct)
+  Acct get acct => throw _privateConstructorUsedError;
 
   /// ロールタイムラインのノートの場合、ロールID
   String? get roleId => throw _privateConstructorUsedError;
@@ -50,17 +56,15 @@ mixin _$TabSetting {
   /// タブ名
   String? get name => throw _privateConstructorUsedError;
 
-  /// アカウント情報
-// https://github.com/rrousselGit/freezed/issues/488
-// ignore: invalid_annotation_target
-  @JsonKey(readValue: _readAcct)
-  Acct get acct => throw _privateConstructorUsedError;
-
   /// Renoteを表示するかどうか
   bool get renoteDisplay => throw _privateConstructorUsedError;
 
+  /// Serializes this TabSetting to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TabSettingCopyWith<TabSetting> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -74,6 +78,7 @@ abstract class $TabSettingCopyWith<$Res> {
   $Res call(
       {@IconDataConverter() TabIcon icon,
       TabType tabType,
+      @JsonKey(readValue: _readAcct) Acct acct,
       String? roleId,
       String? channelId,
       String? listId,
@@ -82,7 +87,6 @@ abstract class $TabSettingCopyWith<$Res> {
       bool isIncludeReplies,
       bool isMediaOnly,
       String? name,
-      @JsonKey(readValue: _readAcct) Acct acct,
       bool renoteDisplay});
 
   $TabIconCopyWith<$Res> get icon;
@@ -99,11 +103,14 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? icon = null,
     Object? tabType = null,
+    Object? acct = null,
     Object? roleId = freezed,
     Object? channelId = freezed,
     Object? listId = freezed,
@@ -112,7 +119,6 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
     Object? name = freezed,
-    Object? acct = null,
     Object? renoteDisplay = null,
   }) {
     return _then(_value.copyWith(
@@ -124,6 +130,10 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
               as TabType,
+      acct: null == acct
+          ? _value.acct
+          : acct // ignore: cast_nullable_to_non_nullable
+              as Acct,
       roleId: freezed == roleId
           ? _value.roleId
           : roleId // ignore: cast_nullable_to_non_nullable
@@ -156,10 +166,6 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      acct: null == acct
-          ? _value.acct
-          : acct // ignore: cast_nullable_to_non_nullable
-              as Acct,
       renoteDisplay: null == renoteDisplay
           ? _value.renoteDisplay
           : renoteDisplay // ignore: cast_nullable_to_non_nullable
@@ -167,6 +173,8 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     ) as $Val);
   }
 
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TabIconCopyWith<$Res> get icon {
@@ -175,6 +183,8 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     });
   }
 
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AcctCopyWith<$Res> get acct {
@@ -195,6 +205,7 @@ abstract class _$$TabSettingImplCopyWith<$Res>
   $Res call(
       {@IconDataConverter() TabIcon icon,
       TabType tabType,
+      @JsonKey(readValue: _readAcct) Acct acct,
       String? roleId,
       String? channelId,
       String? listId,
@@ -203,7 +214,6 @@ abstract class _$$TabSettingImplCopyWith<$Res>
       bool isIncludeReplies,
       bool isMediaOnly,
       String? name,
-      @JsonKey(readValue: _readAcct) Acct acct,
       bool renoteDisplay});
 
   @override
@@ -220,11 +230,14 @@ class __$$TabSettingImplCopyWithImpl<$Res>
       _$TabSettingImpl _value, $Res Function(_$TabSettingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? icon = null,
     Object? tabType = null,
+    Object? acct = null,
     Object? roleId = freezed,
     Object? channelId = freezed,
     Object? listId = freezed,
@@ -233,7 +246,6 @@ class __$$TabSettingImplCopyWithImpl<$Res>
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
     Object? name = freezed,
-    Object? acct = null,
     Object? renoteDisplay = null,
   }) {
     return _then(_$TabSettingImpl(
@@ -245,6 +257,10 @@ class __$$TabSettingImplCopyWithImpl<$Res>
           ? _value.tabType
           : tabType // ignore: cast_nullable_to_non_nullable
               as TabType,
+      acct: null == acct
+          ? _value.acct
+          : acct // ignore: cast_nullable_to_non_nullable
+              as Acct,
       roleId: freezed == roleId
           ? _value.roleId
           : roleId // ignore: cast_nullable_to_non_nullable
@@ -277,10 +293,6 @@ class __$$TabSettingImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      acct: null == acct
-          ? _value.acct
-          : acct // ignore: cast_nullable_to_non_nullable
-              as Acct,
       renoteDisplay: null == renoteDisplay
           ? _value.renoteDisplay
           : renoteDisplay // ignore: cast_nullable_to_non_nullable
@@ -295,6 +307,7 @@ class _$TabSettingImpl extends _TabSetting {
   const _$TabSettingImpl(
       {@IconDataConverter() required this.icon,
       required this.tabType,
+      @JsonKey(readValue: _readAcct) required this.acct,
       this.roleId,
       this.channelId,
       this.listId,
@@ -303,7 +316,6 @@ class _$TabSettingImpl extends _TabSetting {
       this.isIncludeReplies = true,
       this.isMediaOnly = false,
       this.name,
-      @JsonKey(readValue: _readAcct) required this.acct,
       this.renoteDisplay = true})
       : super._();
 
@@ -317,6 +329,13 @@ class _$TabSettingImpl extends _TabSetting {
   /// タブ種別
   @override
   final TabType tabType;
+
+  /// アカウント情報
+// https://github.com/rrousselGit/freezed/issues/488
+// ignore: invalid_annotation_target
+  @override
+  @JsonKey(readValue: _readAcct)
+  final Acct acct;
 
   /// ロールタイムラインのノートの場合、ロールID
   @override
@@ -353,13 +372,6 @@ class _$TabSettingImpl extends _TabSetting {
   @override
   final String? name;
 
-  /// アカウント情報
-// https://github.com/rrousselGit/freezed/issues/488
-// ignore: invalid_annotation_target
-  @override
-  @JsonKey(readValue: _readAcct)
-  final Acct acct;
-
   /// Renoteを表示するかどうか
   @override
   @JsonKey()
@@ -367,7 +379,7 @@ class _$TabSettingImpl extends _TabSetting {
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, isIncludeReplies: $isIncludeReplies, isMediaOnly: $isMediaOnly, name: $name, acct: $acct, renoteDisplay: $renoteDisplay)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, acct: $acct, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, isIncludeReplies: $isIncludeReplies, isMediaOnly: $isMediaOnly, name: $name, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -377,6 +389,7 @@ class _$TabSettingImpl extends _TabSetting {
             other is _$TabSettingImpl &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.tabType, tabType) || other.tabType == tabType) &&
+            (identical(other.acct, acct) || other.acct == acct) &&
             (identical(other.roleId, roleId) || other.roleId == roleId) &&
             (identical(other.channelId, channelId) ||
                 other.channelId == channelId) &&
@@ -390,17 +403,17 @@ class _$TabSettingImpl extends _TabSetting {
             (identical(other.isMediaOnly, isMediaOnly) ||
                 other.isMediaOnly == isMediaOnly) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.acct, acct) || other.acct == acct) &&
             (identical(other.renoteDisplay, renoteDisplay) ||
                 other.renoteDisplay == renoteDisplay));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
       icon,
       tabType,
+      acct,
       roleId,
       channelId,
       listId,
@@ -409,10 +422,11 @@ class _$TabSettingImpl extends _TabSetting {
       isIncludeReplies,
       isMediaOnly,
       name,
-      acct,
       renoteDisplay);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TabSettingImplCopyWith<_$TabSettingImpl> get copyWith =>
@@ -430,6 +444,7 @@ abstract class _TabSetting extends TabSetting {
   const factory _TabSetting(
       {@IconDataConverter() required final TabIcon icon,
       required final TabType tabType,
+      @JsonKey(readValue: _readAcct) required final Acct acct,
       final String? roleId,
       final String? channelId,
       final String? listId,
@@ -438,7 +453,6 @@ abstract class _TabSetting extends TabSetting {
       final bool isIncludeReplies,
       final bool isMediaOnly,
       final String? name,
-      @JsonKey(readValue: _readAcct) required final Acct acct,
       final bool renoteDisplay}) = _$TabSettingImpl;
   const _TabSetting._() : super._();
 
@@ -448,55 +462,58 @@ abstract class _TabSetting extends TabSetting {
   @override
   @IconDataConverter()
   TabIcon get icon;
-  @override
 
   /// タブ種別
+  @override
   TabType get tabType;
-  @override
-
-  /// ロールタイムラインのノートの場合、ロールID
-  String? get roleId;
-  @override
-
-  /// チャンネルのノートの場合、チャンネルID
-  String? get channelId;
-  @override
-
-  /// リストのノートの場合、リストID
-  String? get listId;
-  @override
-
-  /// アンテナのノートの場合、アンテナID
-  String? get antennaId;
-  @override
-
-  /// ノートの投稿のキャプチャをするかどうか
-  bool get isSubscribe;
-  @override
-
-  /// 返信を含むかどうか
-  bool get isIncludeReplies;
-  @override
-
-  /// ファイルのみにするかどうか
-  bool get isMediaOnly;
-  @override
-
-  /// タブ名
-  String? get name;
-  @override
 
   /// アカウント情報
 // https://github.com/rrousselGit/freezed/issues/488
 // ignore: invalid_annotation_target
+  @override
   @JsonKey(readValue: _readAcct)
   Acct get acct;
+
+  /// ロールタイムラインのノートの場合、ロールID
   @override
+  String? get roleId;
+
+  /// チャンネルのノートの場合、チャンネルID
+  @override
+  String? get channelId;
+
+  /// リストのノートの場合、リストID
+  @override
+  String? get listId;
+
+  /// アンテナのノートの場合、アンテナID
+  @override
+  String? get antennaId;
+
+  /// ノートの投稿のキャプチャをするかどうか
+  @override
+  bool get isSubscribe;
+
+  /// 返信を含むかどうか
+  @override
+  bool get isIncludeReplies;
+
+  /// ファイルのみにするかどうか
+  @override
+  bool get isMediaOnly;
+
+  /// タブ名
+  @override
+  String? get name;
 
   /// Renoteを表示するかどうか
-  bool get renoteDisplay;
   @override
-  @JsonKey(ignore: true)
+  bool get renoteDisplay;
+
+  /// Create a copy of TabSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TabSettingImplCopyWith<_$TabSettingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

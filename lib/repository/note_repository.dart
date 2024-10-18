@@ -1,10 +1,11 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:miria/extensions/note_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/foundation.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/extensions/note_extension.dart";
+import "package:miria/log.dart";
+import "package:miria/model/account.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
-part 'note_repository.freezed.dart';
+part "note_repository.freezed.dart";
 
 @freezed
 class NoteStatus with _$NoteStatus {
@@ -42,20 +43,22 @@ class NoteRepository extends ChangeNotifier {
         softMuteWordContents.add(content);
       }
       if (regExp != null) {
-        final regExpAndFlags = RegExp(r'^\/(.+)\/(.*)$').firstMatch(regExp);
+        final regExpAndFlags = RegExp(r"^\/(.+)\/(.*)$").firstMatch(regExp);
         if (regExpAndFlags != null) {
           try {
-            final flags = regExpAndFlags[2] ?? '';
+            final flags = regExpAndFlags[2] ?? "";
             softMuteWordRegExps.add(
               RegExp(
                 regExpAndFlags[1]!,
-                multiLine: flags.contains('m'),
-                caseSensitive: !flags.contains('i'),
-                unicode: flags.contains('u'),
-                dotAll: flags.contains('s'),
+                multiLine: flags.contains("m"),
+                caseSensitive: !flags.contains("i"),
+                unicode: flags.contains("u"),
+                dotAll: flags.contains("s"),
               ),
             );
-          } catch (_) {}
+          } catch (e) {
+            logger.warning(e);
+          }
         }
       }
     }
@@ -67,21 +70,10 @@ class NoteRepository extends ChangeNotifier {
         hardMuteWordContents.add(content);
       }
       if (regExp != null) {
-        final regExpAndFlags = RegExp(r'^\/(.+)\/(.*)$').firstMatch(regExp);
-        if (regExpAndFlags != null) {
-          try {
-            final flags = regExpAndFlags[2] ?? '';
-            hardMuteWordRegExps.add(
-              RegExp(
-                regExpAndFlags[1]!,
-                multiLine: flags.contains('m'),
-                caseSensitive: !flags.contains('i'),
-                unicode: flags.contains('u'),
-                dotAll: flags.contains('s'),
-              ),
-            );
-          } catch (_) {}
-        }
+        try {
+          hardMuteWordRegExps
+              .add(RegExp(regExp.substring(1, regExp.length - 1)));
+        } catch (e) {}
       }
     }
   }
@@ -91,8 +83,10 @@ class NoteRepository extends ChangeNotifier {
   Map<String, NoteStatus> get noteStatuses => _noteStatuses;
 
   void updateNoteStatus(
-      String id, NoteStatus Function(NoteStatus status) statusPredicate,
-      {bool isNotify = true}) {
+    String id,
+    NoteStatus Function(NoteStatus status) statusPredicate, {
+    bool isNotify = true,
+  }) {
     _noteStatuses[id] = statusPredicate.call(_noteStatuses[id]!);
     if (isNotify) notifyListeners();
   }
@@ -125,15 +119,16 @@ class NoteRepository extends ChangeNotifier {
               (note.reactions.isNotEmpty ? registeredNote?.myReaction : null)),
     );
     _noteStatuses[note.id] ??= NoteStatus(
-        isCwOpened: false,
-        isLongVisible: false,
-        isReactionedRenote: false,
-        isLongVisibleInitialized: false,
-        isIncludeMuteWord:
-            (note.user.host != null || note.user.id != account.i.id) &&
-                    softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
-                softMuteWordRegExps.any(isMuteTarget),
-        isMuteOpened: false);
+      isCwOpened: false,
+      isLongVisible: false,
+      isReactionedRenote: false,
+      isLongVisibleInitialized: false,
+      isIncludeMuteWord:
+          (note.user.host != null || note.user.id != account.i.id) &&
+                  softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
+              softMuteWordRegExps.any(isMuteTarget),
+      isMuteOpened: false,
+    );
     final renote = note.renote;
     final reply = note.reply;
     if (renote != null) {

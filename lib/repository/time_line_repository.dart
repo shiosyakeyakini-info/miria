@@ -1,13 +1,12 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/repository/general_settings_repository.dart';
-import 'package:miria/repository/main_stream_repository.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter/cupertino.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/repository/general_settings_repository.dart";
+import "package:miria/repository/note_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class NotifierQueueList extends QueueList<Note> {
   final NoteRepository noteRepository;
@@ -21,7 +20,7 @@ class NotifierQueueList extends QueueList<Note> {
   );
 
   bool filterAs(Note element) {
-    if (tabSetting.renoteDisplay == false &&
+    if (!tabSetting.renoteDisplay &&
         element.text == null &&
         element.cw == null &&
         element.renoteId != null) {
@@ -92,7 +91,6 @@ class SubscribeItem {
 
 abstract class TimelineRepository extends ChangeNotifier {
   final NoteRepository noteRepository;
-  final MainStreamRepository globalNotificationRepository;
   final GeneralSettingsRepository generalSettingsRepository;
   final TabSetting tabSetting;
 
@@ -101,7 +99,6 @@ abstract class TimelineRepository extends ChangeNotifier {
 
   TimelineRepository(
     this.noteRepository,
-    this.globalNotificationRepository,
     this.generalSettingsRepository,
     this.tabSetting,
   ) {
@@ -115,28 +112,33 @@ abstract class TimelineRepository extends ChangeNotifier {
       for (final item in subscribedList.where(condition)) {
         // 他に参照がなければ、購読を解除する
         if (subscribedList.every(
-            (e) => e.renoteId != item.noteId && e.replyId != item.noteId)) {
+          (e) => e.renoteId != item.noteId && e.replyId != item.noteId,
+        )) {
           describe(item.noteId);
         }
 
         final renoteId = item.renoteId;
         if (renoteId != null) {
-          if (subscribedList.every((e) =>
-              (e.noteId != item.renoteId &&
-                  e.replyId != item.renoteId &&
-                  (e.noteId != item.noteId && e.renoteId != item.renoteId)) ||
-              e.noteId == item.noteId)) {
+          if (subscribedList.every(
+            (e) =>
+                (e.noteId != item.renoteId &&
+                    e.replyId != item.renoteId &&
+                    (e.noteId != item.noteId && e.renoteId != item.renoteId)) ||
+                e.noteId == item.noteId,
+          )) {
             describe(renoteId);
           }
         }
 
         final replyId = item.replyId;
         if (replyId != null) {
-          if (subscribedList.every((e) =>
-              (e.noteId != item.replyId &&
-                  e.replyId != item.replyId &&
-                  (e.noteId != item.noteId && e.replyId != item.replyId)) ||
-              e.noteId == item.noteId)) {
+          if (subscribedList.every(
+            (e) =>
+                (e.noteId != item.replyId &&
+                    e.replyId != item.replyId &&
+                    (e.noteId != item.noteId && e.replyId != item.replyId)) ||
+                e.noteId == item.noteId,
+          )) {
             describe(replyId);
           }
         }
@@ -159,10 +161,6 @@ abstract class TimelineRepository extends ChangeNotifier {
   void dispose() {
     super.dispose();
     timer.cancel();
-  }
-
-  Future<void> reconnect() async {
-    await globalNotificationRepository.reconnect();
   }
 
   void updateNote(Note newNote) {
@@ -224,4 +222,6 @@ abstract class TimelineRepository extends ChangeNotifier {
   }
 
   void describe(String id) {}
+
+  Future<void> reconnect() async {}
 }

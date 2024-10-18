@@ -8,7 +8,7 @@ part of 'tab_icon.dart';
 
 _$TabIconImpl _$$TabIconImplFromJson(Map<String, dynamic> json) =>
     _$TabIconImpl(
-      codePoint: json['codePoint'] as int?,
+      codePoint: (json['codePoint'] as num?)?.toInt(),
       customEmojiName: json['customEmojiName'] as String?,
     );
 

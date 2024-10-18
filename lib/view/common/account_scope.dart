@@ -1,25 +1,31 @@
-import 'package:flutter/widgets.dart';
-import 'package:miria/model/account.dart';
+import "package:flutter/widgets.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
 
-class AccountScope extends InheritedWidget {
-  final Account account;
+class AccountContextScope extends ConsumerWidget {
+  final AccountContext context;
+  final Widget child;
 
-  const AccountScope({
+  const AccountContextScope({
+    required this.context,
+    required this.child,
     super.key,
-    required this.account,
-    required super.child,
   });
 
-  static Account of(BuildContext context) {
-    final account = context.dependOnInheritedWidgetOfExactType<AccountScope>();
-    if (account == null) {
-      throw Exception("has not ancestor");
-    }
-
-    return account.account;
-  }
+  factory AccountContextScope.as({
+    required Account account,
+    required Widget child,
+  }) =>
+      AccountContextScope(context: AccountContext.as(account), child: child);
 
   @override
-  bool updateShouldNotify(covariant AccountScope oldWidget) =>
-      account != oldWidget.account;
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ProviderScope(
+      overrides: [
+        accountContextProvider.overrideWithValue(this.context),
+      ],
+      child: child,
+    );
+  }
 }

@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:miria/view/common/error_detail.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/view/common/error_detail.dart";
 
 class ErrorNotification extends StatelessWidget {
   final Object? error;
   final StackTrace? stackTrace;
 
   const ErrorNotification({
-    super.key,
     required this.error,
     required this.stackTrace,
+    super.key,
   });
 
   @override
@@ -20,7 +20,8 @@ class ErrorNotification extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).dividerColor)),
+            border: Border.all(color: Theme.of(context).dividerColor),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -33,7 +34,7 @@ class ErrorNotification extends StatelessWidget {
               ErrorDetail(
                 error: error,
                 stackTrace: stackTrace,
-              )
+              ),
             ],
           ),
         ),

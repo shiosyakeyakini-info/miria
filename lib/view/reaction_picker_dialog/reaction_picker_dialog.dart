@@ -1,43 +1,37 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/view/reaction_picker_dialog/reaction_picker_content.dart';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/model/misskey_emoji_data.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/reaction_picker_dialog/reaction_picker_content.dart";
 
-class ReactionPickerDialog extends ConsumerStatefulWidget {
+@RoutePage<MisskeyEmojiData>()
+class ReactionPickerDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final bool isAcceptSensitive;
 
   const ReactionPickerDialog({
-    super.key,
     required this.account,
     required this.isAcceptSensitive,
+    super.key,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ReactionPickerDialogState();
-}
-
-class _ReactionPickerDialogState extends ConsumerState<ReactionPickerDialog> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(5),
-      content: AccountScope(
-        account: widget.account,
-        child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: ReactionPickerContent(
-              isAcceptSensitive: widget.isAcceptSensitive,
-              onTap: (emoji) => Navigator.of(context).pop(emoji),
-            )),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: ReactionPickerContent(
+          isAcceptSensitive: isAcceptSensitive,
+          onTap: (emoji) async => context.maybePop(emoji),
+        ),
       ),
     );
   }
