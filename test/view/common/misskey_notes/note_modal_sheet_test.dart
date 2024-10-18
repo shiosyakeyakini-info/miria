@@ -2,8 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/dialogs/simple_message_dialog.dart";
-import "package:miria/view/note_modal_sheet/note_modal_sheet.dart";
+import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
 
@@ -20,27 +19,25 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
+      when(misskeyNotes.featured(any))
+          .thenAnswer((e) async => [TestData.note1]);
       final misskeyFavorites = MockMisskeyNotesFavorites();
       when(misskeyNotes.favorites).thenAnswer((e) => misskeyFavorites);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note1,
-                targetNote: TestData.note1,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
       await tester.pumpAndSettle();
-
-      await tester.tap(find.text("お気に入り"));
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text("お気に入り", skipOffstage: false));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("お気に入り", skipOffstage: false));
 
       verify(
         misskeyFavorites.create(
@@ -61,24 +58,22 @@ void main() {
       final misskeyFavorites = MockMisskeyNotesFavorites();
       when(misskeyNotes.favorites).thenAnswer((e) => misskeyFavorites);
       when(misskey.notes).thenReturn(misskeyNotes);
+      when(misskeyNotes.featured(any))
+          .thenAnswer((_) async => [TestData.note1]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note1,
-                targetNote: TestData.note1,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
       await tester.pumpAndSettle();
-
-      await tester.tap(find.text("お気に入り解除"));
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text("お気に入り解除", skipOffstage: false));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("お気に入り解除", skipOffstage: false));
 
       verify(
         misskeyFavorites.delete(
@@ -98,22 +93,19 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
+      when(misskeyNotes.featured(any))
+          .thenAnswer((e) async => [TestData.note1]);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note1,
-                targetNote: TestData.note1,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text("削除", skipOffstage: false));
@@ -121,7 +113,7 @@ void main() {
       await tester.tap(find.text("削除"));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ElevatedButton).hitTestable());
+      await tester.tap(find.byType(TextButton).hitTestable().at(0));
       await tester.pumpAndSettle();
 
       verify(
@@ -138,23 +130,25 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [
+            TestData.note1.copyWith(
+              text: null,
+              cw: null,
+              poll: null,
+              renote: TestData.note1,
+            ),
+          ],);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote:
-                    TestData.note1.copyWith(text: null, renote: TestData.note2),
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsNothing);
@@ -168,23 +162,19 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
+      when(misskeyNotes.featured(any))
+          .thenAnswer((e) async => [TestData.note3AsAnotherUser]);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note3AsAnotherUser
-                    .copyWith(text: null, renote: TestData.note1),
-                targetNote: TestData.note1,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsNothing);
@@ -204,21 +194,17 @@ void main() {
         fileIds: [TestData.drive1.id],
         files: [TestData.drive1],
       );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [testNote]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: testNote,
-                targetNote: testNote,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsOneWidget);
@@ -247,21 +233,17 @@ void main() {
           expiresAt: DateTime.now(),
         ),
       );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [testNote]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: testNote,
-                targetNote: testNote,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsOneWidget);
@@ -275,22 +257,23 @@ void main() {
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
       when(misskey.notes).thenReturn(misskeyNotes);
+      when(misskeyNotes.featured(any)).thenAnswer(
+        (e) async =>
+            [TestData.note1.copyWith(text: "やっほー", renote: TestData.note2)],
+      );
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note1
-                    .copyWith(text: "やっほー", renote: TestData.note2),
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.text("削除", skipOffstage: false));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsOneWidget);
@@ -311,21 +294,20 @@ void main() {
         fileIds: [TestData.drive1.id],
         files: [TestData.drive1],
       );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [note]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: note,
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.text("削除", skipOffstage: false));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsOneWidget);
@@ -356,21 +338,20 @@ void main() {
           expiresAt: DateTime.now(),
         ),
       );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [note]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: note,
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.text("削除", skipOffstage: false));
       await tester.pumpAndSettle();
 
       expect(find.text("削除", skipOffstage: false), findsOneWidget);
@@ -387,22 +368,18 @@ void main() {
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
       when(misskey.notes).thenReturn(misskeyNotes);
+      when(misskeyNotes.featured(any)).thenAnswer((e) async =>
+          [TestData.note1.copyWith(text: null, renote: TestData.note2)],);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote:
-                    TestData.note1.copyWith(text: null, renote: TestData.note2),
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text("リノートを解除する", skipOffstage: false));
@@ -425,25 +402,23 @@ void main() {
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
       when(misskey.notes).thenReturn(misskeyNotes);
+      when(misskeyNotes.featured(any)).thenAnswer(
+        (e) async =>
+            [TestData.note1.copyWith(text: "やっほー", renote: TestData.note2)],
+      );
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note1
-                    .copyWith(text: "やっほー", renote: TestData.note2),
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
       await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
 
-      expect(find.text("リノートを解除する", skipOffstage: false), findsOneWidget);
+      expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
     });
 
     testWidgets("自分がしたメディアつきテキストなしの引用Renoteをリノート解除できないこと", (tester) async {
@@ -460,21 +435,19 @@ void main() {
         fileIds: [TestData.drive1.id],
         files: [TestData.drive1],
       );
+      when(misskeyNotes.featured(any)).thenAnswer(
+        (e) async => [note],
+      );
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: note,
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
@@ -504,21 +477,17 @@ void main() {
           expiresAt: DateTime.now(),
         ),
       );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [note]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: note,
-                targetNote: TestData.note2,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
@@ -534,21 +503,19 @@ void main() {
       when(misskey.notes).thenReturn(misskeyNotes);
       final note = TestData.note3AsAnotherUser
           .copyWith(text: null, renote: TestData.note1);
+      when(misskey.notes).thenReturn(misskeyNotes);
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [note]);
+
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: note,
-                targetNote: TestData.note1,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("リノートを解除する", skipOffstage: false), findsNothing);
@@ -563,24 +530,21 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
+      when(misskeyNotes.featured(any))
+          .thenAnswer((e) async => [TestData.note3AsAnotherUser]);
       final misskeyUsers = MockMisskeyUsers();
       when(misskey.notes).thenReturn(misskeyNotes);
       when(misskey.users).thenReturn(misskeyUsers);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note3AsAnotherUser,
-                targetNote: TestData.note3AsAnotherUser,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       await tester.ensureVisible(find.text("通報する", skipOffstage: false));
@@ -589,11 +553,12 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), "このひとわるものです！");
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ElevatedButton).hitTestable());
+      await tester.pump();
 
-      expect(find.byType(SimpleMessageDialog), findsOneWidget);
-      await tester.tap(find.byType(ElevatedButton));
+      expect(find.byType(Dialog), findsNWidgets(2));
+      await tester.tap(find.byType(TextButton).hitTestable());
+      await tester.pumpAndSettle();
 
       verify(
         misskeyUsers.reportAbuse(
@@ -616,22 +581,19 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
+      when(misskeyNotes.featured(any))
+          .thenAnswer((e) async => [TestData.note1]);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],
-          child: DefaultRootNoRouterWidget(
-            child: Scaffold(
-              body: NoteModalSheet(
-                baseNote: TestData.note1,
-                targetNote: TestData.note1,
-                accountContext: TestData.accountContext,
-                noteBoundaryKey: GlobalKey(),
-              ),
-            ),
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
         ),
       );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
       await tester.pumpAndSettle();
 
       expect(find.text("通報する", skipOffstage: false), findsNothing);

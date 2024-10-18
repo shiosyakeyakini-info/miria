@@ -18,7 +18,7 @@ class TimelinePageTest {
   final mockMisskeyI = MockMisskeyI();
   final mockWebSocketController = MockWebSocketController();
   final mockStreamingController = MockStreamingController();
-  final mockAccountRepository = MockAccountRepository();
+  final accountRepository = MockAccountRepository();
   final mockTabSettingsRepository = MockTabSettingsRepository();
   late final TabSetting tabSetting;
 
@@ -58,8 +58,6 @@ class TimelinePageTest {
 
     // ignore: discarded_futures
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
-
-    mockAccountRepository.state = [TestData.account];
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);
   }
 
@@ -71,7 +69,7 @@ class TimelinePageTest {
         misskeyProvider.overrideWith((ref) => mockMisskey),
         tabSettingsRepositoryProvider
             .overrideWith((ref) => mockTabSettingsRepository),
-        accountRepositoryProvider.overrideWith(() => mockAccountRepository),
+        accountRepositoryProvider.overrideWith(() => accountRepository),
         accountsProvider.overrideWith((ref) => [TestData.account]),
         emojiRepositoryProvider.overrideWith((ref) => MockEmojiRepository()),
       ],

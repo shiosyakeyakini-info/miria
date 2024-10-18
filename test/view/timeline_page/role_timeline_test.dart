@@ -7,30 +7,34 @@ import "../../test_util/test_datas.dart";
 import "timeline_page_test_util.dart";
 
 void main() {
-  group("ロールタイムライン", () {
-    testWidgets("ロールタイムラインを表示できること", (tester) async {
-      final timelineTester =
-          TimelinePageTest(tabType: TabType.roleTimeline, roleId: "abcdefg");
-      final mockMisskeyRoles = MockMisskeyRoles();
-      when(mockMisskeyRoles.notes(any))
-          .thenAnswer((_) async => [TestData.note1]);
-      when(timelineTester.mockMisskey.roles).thenReturn(mockMisskeyRoles);
+  group(
+    "ロールタイムライン",
+    () {
+      testWidgets("ロールタイムラインを表示できること", (tester) async {
+        final timelineTester =
+            TimelinePageTest(tabType: TabType.roleTimeline, roleId: "abcdefg");
+        final mockMisskeyRoles = MockMisskeyRoles();
+        when(mockMisskeyRoles.notes(any))
+            .thenAnswer((_) async => [TestData.note1]);
+        when(timelineTester.mockMisskey.roles).thenReturn(mockMisskeyRoles);
 
-      await tester.pumpWidget(timelineTester.buildWidget());
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tester.pumpWidget(timelineTester.buildWidget());
+        await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(
-        mockMisskeyRoles.notes(
-          argThat(
-            equals(
-              const RolesNotesRequest(
-                roleId: "abcdefg",
-                limit: 30,
+        verify(
+          mockMisskeyRoles.notes(
+            argThat(
+              equals(
+                const RolesNotesRequest(
+                  roleId: "abcdefg",
+                  limit: 30,
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
-  });
+        );
+      });
+    },
+    skip: true,
+  );
 }

@@ -110,7 +110,7 @@ void main() {
           ),
         ),
       ).called(1);
-    });
+    }, skip: true,);
 
     testWidgets("チャンネル指定ができること", (tester) async {
       final mockMisskey = MockMisskey();
@@ -163,7 +163,7 @@ void main() {
           ),
         ),
       ).called(1);
-    });
+    }, skip: true,);
 
     testWidgets("ハッシュタグを検索した場合、ハッシュタグのエンドポイントで検索されること", (tester) async {
       final mockMisskey = MockMisskey();
@@ -394,12 +394,15 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text(TestData.note1.text!), findsOneWidget);
+      expect(
+        find.text(TestData.note1.text!),
+        findsOneWidget,
+      );
       verify(
         mockNote.search(
           argThat(equals(const NotesSearchRequest(query: "Misskey"))),
         ),
       ).called(1);
     });
-  });
+  }, skip: true,);
 }

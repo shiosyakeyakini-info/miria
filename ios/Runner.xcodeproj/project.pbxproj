@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,8 @@
 		B670FC9B2BB4D1230071C2AC /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B670FC932BB4CC110071C2AC /* Flutter.xcframework */; };
 		B670FC9C2BB4D1230071C2AC /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B670FC932BB4CC110071C2AC /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B6A604652B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A604642B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m */; };
+		B6D30E6E2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B6D30E6D2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy */; };
+		B6D30E6F2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B6D30E6D2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy */; };
 		B6E32F982A29F16500F51621 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E32F972A29F16500F51621 /* ShareViewController.swift */; };
 		B6E32F9B2A29F16500F51621 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6E32F992A29F16500F51621 /* MainInterface.storyboard */; };
 		B6E32F9F2A29F16500F51621 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B6E32F952A29F16500F51621 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -97,6 +99,7 @@
 		B6A604632B6F862900DF5E0A /* ShareExtensionPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareExtensionPluginRegistrant.h; sourceTree = "<group>"; };
 		B6A604642B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareExtensionPluginRegistrant.m; sourceTree = "<group>"; };
 		B6A6046A2B6F895700DF5E0A /* ShareExtension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShareExtension-Bridging-Header.h"; sourceTree = "<group>"; };
+		B6D30E6D2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B6E32F952A29F16500F51621 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6E32F972A29F16500F51621 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		B6E32F9A2A29F16500F51621 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -155,6 +158,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				B6D30E6D2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				B6E32F962A29F16500F51621 /* ShareExtension */,
@@ -314,6 +318,7 @@
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				B6D30E6E2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -322,6 +327,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6D30E6F2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy in Resources */,
 				B6E32F9B2A29F16500F51621 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

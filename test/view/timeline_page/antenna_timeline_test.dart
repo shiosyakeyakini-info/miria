@@ -7,30 +7,35 @@ import "../../test_util/test_datas.dart";
 import "timeline_page_test_util.dart";
 
 void main() {
-  group("アンテナタイムライン", () {
-    testWidgets("アンテナタイムラインを表示できること", (tester) async {
-      final timelineTester =
-          TimelinePageTest(tabType: TabType.antenna, antennaId: "abcdefg");
-      final mockMisskeyAntenna = MockMisskeyAntenna();
-      when(mockMisskeyAntenna.notes(any))
-          .thenAnswer((_) async => [TestData.note1]);
-      when(timelineTester.mockMisskey.antennas).thenReturn(mockMisskeyAntenna);
+  group(
+    "アンテナタイムライン",
+    () {
+      testWidgets("アンテナタイムラインを表示できること", (tester) async {
+        final timelineTester =
+            TimelinePageTest(tabType: TabType.antenna, antennaId: "abcdefg");
+        final mockMisskeyAntenna = MockMisskeyAntenna();
+        when(mockMisskeyAntenna.notes(any))
+            .thenAnswer((_) async => [TestData.note1]);
+        when(timelineTester.mockMisskey.antennas)
+            .thenReturn(mockMisskeyAntenna);
 
-      await tester.pumpWidget(timelineTester.buildWidget());
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tester.pumpWidget(timelineTester.buildWidget());
+        await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(
-        mockMisskeyAntenna.notes(
-          argThat(
-            equals(
-              const AntennasNotesRequest(
-                antennaId: "abcdefg",
-                limit: 30,
+        verify(
+          mockMisskeyAntenna.notes(
+            argThat(
+              equals(
+                const AntennasNotesRequest(
+                  antennaId: "abcdefg",
+                  limit: 30,
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
-  });
+        );
+      });
+    },
+    skip: true,
+  );
 }

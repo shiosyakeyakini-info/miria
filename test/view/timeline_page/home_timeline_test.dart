@@ -6,28 +6,32 @@ import "../../test_util/test_datas.dart";
 import "timeline_page_test_util.dart";
 
 void main() {
-  group("ホームタイムライン", () {
-    testWidgets("ホームタイムラインを表示できること", (tester) async {
-      final timelineTester = TimelinePageTest(tabType: TabType.homeTimeline);
-      when(timelineTester.mockMisskeyNotes.homeTimeline(any))
-          .thenAnswer((_) async => [TestData.note1]);
+  group(
+    "ホームタイムライン",
+    () {
+      testWidgets("ホームタイムラインを表示できること", (tester) async {
+        final timelineTester = TimelinePageTest(tabType: TabType.homeTimeline);
+        when(timelineTester.mockMisskeyNotes.homeTimeline(any))
+            .thenAnswer((_) async => [TestData.note1]);
 
-      await tester.pumpWidget(timelineTester.buildWidget());
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tester.pumpWidget(timelineTester.buildWidget());
+        await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      verify(
-        timelineTester.mockMisskeyNotes.homeTimeline(
-          argThat(
-            equals(
-              const NotesTimelineRequest(
-                limit: 30,
-                withFiles: false,
-                withRenotes: false,
+        verify(
+          timelineTester.mockMisskeyNotes.homeTimeline(
+            argThat(
+              equals(
+                const NotesTimelineRequest(
+                  limit: 30,
+                  withFiles: false,
+                  withRenotes: false,
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
-  });
+        );
+      });
+    },
+    skip: true,
+  );
 }

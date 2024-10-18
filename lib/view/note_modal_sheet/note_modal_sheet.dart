@@ -406,7 +406,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               Navigator.of(context).pop();
               await context.pushRoute(
                 ClipModalRoute(
-                    account: accountContext.postAccount, noteId: targetNote.id),
+                    account: accountContext.postAccount, noteId: targetNote.id,),
               );
             },
           ),
@@ -424,6 +424,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             baseNote.user.host == null &&
             baseNote.user.username == accountContext.postAccount.userId &&
             !(baseNote.text == null &&
+                baseNote.cw == null &&
                 baseNote.renote != null &&
                 baseNote.poll == null &&
                 baseNote.files.isEmpty)) ...[
@@ -443,13 +444,14 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               },
             ),
           ListTile(
-              leading: const Icon(Icons.delete),
-              title: Text(S.of(context).delete),
-              onTap: () async {
-                await ref.read(notifierProvider.notifier).delete();
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-              }),
+            leading: const Icon(Icons.delete),
+            title: Text(S.of(context).delete),
+            onTap: () async {
+              await ref.read(notifierProvider.notifier).delete();
+              if (!context.mounted) return;
+              Navigator.of(context).pop();
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
@@ -472,6 +474,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             baseNote.user.host == null &&
             baseNote.user.username == accountContext.postAccount.userId &&
             baseNote.renote != null &&
+            baseNote.text == null &&
+            baseNote.cw == null &&
             baseNote.files.isEmpty &&
             baseNote.poll == null) ...[
           ListTile(

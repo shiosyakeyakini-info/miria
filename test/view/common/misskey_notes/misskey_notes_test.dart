@@ -5,6 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
@@ -329,6 +330,8 @@ System.out.println("@ai uneune");
       final mockMisskeyNotes = MockMisskeyNotes();
       final mockMisskeyNotesReactions = MockMisskeyNotesReactions();
       when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
+      when(mockMisskeyNotes.featured(any))
+          .thenAnswer((_) async => [TestData.note1]);
       when(mockMisskeyNotes.reactions).thenReturn(mockMisskeyNotesReactions);
       when(mockMisskeyNotesReactions.reactions(any)).thenAnswer(
         (_) async => [
@@ -341,9 +344,11 @@ System.out.println("@ai uneune");
         ],
       );
       await tester.pumpWidget(
-        buildTestWidget(
+        ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
-          note: TestData.note1,
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -369,10 +374,14 @@ System.out.println("@ai uneune");
       when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
       when(mockMisskeyNotes.renotes(any))
           .thenAnswer((_) async => [TestData.note6AsRenote]);
+      when(mockMisskeyNotes.featured(any))
+          .thenAnswer((_) async => [TestData.note1]);
       await tester.pumpWidget(
-        buildTestWidget(
+        ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
-          note: TestData.note1,
+          child: DefaultRootWidget(
+            initialRoute: ExploreRoute(accountContext: TestData.accountContext),
+          ),
         ),
       );
       await tester.pumpAndSettle();
