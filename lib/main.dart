@@ -16,6 +16,7 @@ import "package:miria/view/common/error_dialog_listener.dart";
 import "package:miria/view/common/sharing_intent_listener.dart";
 import "package:miria/view/themes/app_theme_scope.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:screen_brightness/screen_brightness.dart";
 import "package:stack_trace/stack_trace.dart" as stack_trace;
 import "package:window_manager/window_manager.dart";
 
@@ -26,6 +27,9 @@ Future<void> main() async {
   MediaKit.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
     await windowManager.ensureInitialized();
+  }
+  if (Platform.isIOS) {
+    await ScreenBrightness().setAutoReset(false);
   }
   FlutterError.demangleStackTrace = (stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
