@@ -73,21 +73,21 @@ jobs:
               mkdir ./private_keys
               echo -n "$APPLE_API_AUTHKEY_P8_BASE64" | base64 --decode --output ./private_keys/AuthKey_$APPLE_API_KEY_ID.p8
 
-        - name: Create archive file
-          run: flutter build ipa --no-tree-shake-icons  --release --no-codesign
+        # - name: Create archive file
+        #   run: flutter build ipa --no-tree-shake-icons  --release --no-codesign
 
-        - name: Release by fastlane
-          env:
-            APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-            APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
-            MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            MATCH_REPOSITORY_ACCESS_TOKEN: ${{ secrets.MATCH_REPOSITORY_ACCESS_TOKEN }}
-            MATCH_REPOSITORY_USERNAME: ${{ secrets.MATCH_REPOSITORY_USERNAME }}
-          run: |
-            cd ios
-            bundle install
-            fastlane release
+        # - name: Release by fastlane
+        #   env:
+        #     APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+        #     APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+        #     MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #     MATCH_REPOSITORY_ACCESS_TOKEN: ${{ secrets.MATCH_REPOSITORY_ACCESS_TOKEN }}
+        #     MATCH_REPOSITORY_USERNAME: ${{ secrets.MATCH_REPOSITORY_USERNAME }}
+        #   run: |
+        #     cd ios
+        #     bundle install
+        #     fastlane release
 
         - name: Create apk file
           run: |
