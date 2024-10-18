@@ -171,13 +171,13 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(" $unixtime");
       }
     } else if (mfmFnName == "fg" || mfmFnName == "bg") {
-      final result = await showDialog<Color?>(
+      final result = await showDialog<ValueNotifier<Color>>(
         context: parentContext,
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
         controller.insert(
-          ".color=${result.red.toRadixString(16).padLeft(2, "0")}${result.green.toRadixString(16).padLeft(2, "0")}${result.blue.toRadixString(16).padLeft(2, "0")} ",
+          ".color=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
         );
       } else {
         controller.insert(" ");
