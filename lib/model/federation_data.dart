@@ -156,7 +156,7 @@ class FederationState extends _$FederationState {
       impressumUrl: misskeyMeta?.impressumUrl?.toString(),
       repositoryUrl: misskeyMeta?.repositoryUrl?.toString(),
       name: misskeyMeta?.name ?? federation.name,
-      description: misskeyMeta?.description ?? federation.description,
+      description: misskeyMeta?.description ?? federation.description ?? "",
       maintainerName: misskeyMeta?.maintainerName,
       maintainerEmail: misskeyMeta?.maintainerEmail,
       softwareVersion: misskeyMeta?.version ?? federation.softwareVersion ?? "",

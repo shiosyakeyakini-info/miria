@@ -1041,11 +1041,9 @@ packages:
   misskey_dart:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feature/refactor_streaming"
-      resolved-ref: "353fa089ce860d95a303bd4ef66d810320dfd84e"
-      url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
-    source: git
+      path: "../misskey_dart"
+      relative: true
+    source: path
     version: "1.0.0"
   mockito:
     dependency: "direct dev"
