@@ -144,9 +144,9 @@ class PageContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final content = this.content;
-    if (content is misskey.PageText) {
+    if (content case misskey.PageText(:final text?)) {
       final account = ref.read(accountContextProvider).getAccount;
-      final nodes = const MfmParser().parse(content.text ?? "");
+      final nodes = const MfmParser().parse(text);
       return Column(
         children: [
           MfmText(
@@ -162,12 +162,14 @@ class PageContent extends ConsumerWidget {
         ],
       );
     }
-    if (content is misskey.PageImage) {
-      final file =
-          page.attachedFiles.firstWhereOrNull((e) => e.id == content.fileId);
+    if (content case misskey.PageImage(:final fileId?)) {
+      final file = page.attachedFiles.firstWhereOrNull((e) => e.id == fileId);
       if (file != null) {
         final url = file.url;
-        final thumbnailUrl = file.thumbnailUrl;
+
+        final thumbnailUrl = page.attachedFiles
+            .firstWhereOrNull((e) => e.id == content.fileId)
+            ?.thumbnailUrl;
         return GestureDetector(
           onTap: () async => showDialog(
             context: context,
@@ -183,8 +185,8 @@ class PageContent extends ConsumerWidget {
         return const SizedBox.shrink();
       }
     }
-    if (content is misskey.PageNote && content.note != null) {
-      final note = ref.watch(fetchNoteProvider(content.note!));
+    if (content case misskey.PageNote(note: final noteId?)) {
+      final note = ref.watch(fetchNoteProvider(noteId));
       return switch (note) {
         AsyncLoading() => const Center(
             child: SizedBox.square(
