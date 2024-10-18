@@ -5,13 +5,14 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
-import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 @RoutePage()
-class AntennaModalSheet extends ConsumerWidget {
+class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   const AntennaModalSheet({
     required this.account,
     required this.user,
@@ -20,6 +21,10 @@ class AntennaModalSheet extends ConsumerWidget {
 
   final Account account;
   final User user;
+
+  @override
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,9 +75,8 @@ class AntennaModalSheet extends ConsumerWidget {
                 leading: const Icon(Icons.add),
                 title: Text(S.of(context).createAntenna),
                 onTap: () async {
-                  final settings = await showDialog<AntennaSettings>(
-                    context: context,
-                    builder: (context) => AntennaSettingsDialog(
+                  final settings = await context.pushRoute<AntennaSettings>(
+                    AntennaSettingsRoute(
                       title: Text(S.of(context).create),
                       initialSettings: const AntennaSettings(
                         src: AntennaSource.users,
@@ -81,11 +85,10 @@ class AntennaModalSheet extends ConsumerWidget {
                     ),
                   );
                   if (!context.mounted) return;
-                  if (settings != null) {
-                    await ref
-                        .read(antennasNotifierProvider.notifier)
-                        .create(settings);
-                  }
+                  if (settings == null) return;
+                  await ref
+                      .read(antennasNotifierProvider.notifier)
+                      .create(settings);
                 },
               );
             }

@@ -273,7 +273,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       onPressed: () async {
                         await context.pushRoute(
                           UsersListDetailRoute(
-                            accountContext: ref.read(accountContextProvider),
+                            accountContext: AccountContext.as(account),
                             listId: currentTabSetting.listId!,
                           ),
                         );
