@@ -173,7 +173,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
     );
   }
 
-  Future<void> deleteRecreate() async {
+  Future<bool> deleteRecreate() async {
     final confirm =
         await ref.read(dialogStateNotifierProvider.notifier).showDialog(
               message: (context) => S.of(context).confirmDeletedRecreate,
@@ -182,7 +182,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
                 S.of(context).cancel,
               ],
             );
-    if (confirm != 0) return;
+    if (confirm != 0) return false;
     state = state.copyWith(deleteRecreate: const AsyncLoading());
     state = state.copyWith(
       deleteRecreate:
@@ -196,6 +196,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
         },
       ),
     );
+    return true;
   }
 }
 
@@ -449,8 +450,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
             onTap: () async {
-              await ref.read(notifierProvider.notifier).deleteRecreate();
-              if (!context.mounted) return;
+              final result =
+                  await ref.read(notifierProvider.notifier).deleteRecreate();
+              if (!result || !context.mounted) return;
               Navigator.of(context).pop();
               await context.pushRoute(
                 NoteCreateRoute(
