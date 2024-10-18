@@ -43,6 +43,9 @@ jobs:
             restore-keys: |
               build-pubspec-
 
+        - name: Create symbolic link
+          run: ln -s ${{ env.FLUTTER_ROOT }} $HOME/work/flutter
+
         - name: Flutter pub get
           run: flutter pub get
 
