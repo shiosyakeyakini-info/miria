@@ -107,12 +107,6 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   }
 
   void changeTab(int index) {
-    ref.read(timelineProvider(tabSettings[currentIndex])).disconnect();
-    final tabSetting = tabSettings[index];
-    if ([TabType.globalTimeline, TabType.homeTimeline, TabType.hybridTimeline]
-        .contains(tabSetting.tabType)) {
-      unawaited(ref.read(timelineProvider(tabSetting)).reconnect());
-    }
     setState(() {
       currentIndex = index;
     });
