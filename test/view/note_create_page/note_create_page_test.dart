@@ -2673,427 +2673,458 @@ void main() {
       });
     });
 
-    group("返信先", () {
-      testWidgets("返信先の追加できること", (tester) async {
-        final misskey = MockMisskey();
-        final note = MockMisskeyNotes();
-        final users = MockMisskeyUsers();
-        when(misskey.notes).thenReturn(note);
-        when(misskey.users).thenReturn(users);
+    group(
+      "返信先",
+      () {
+        testWidgets(
+          "返信先の追加できること",
+          (tester) async {
+            final misskey = MockMisskey();
+            final note = MockMisskeyNotes();
+            final users = MockMisskeyUsers();
+            when(misskey.notes).thenReturn(note);
+            when(misskey.users).thenReturn(users);
 
-        when(users.search(any))
-            .thenAnswer((_) async => [TestData.detailedUser1]);
+            when(users.search(any))
+                .thenAnswer((_) async => [TestData.detailedUser1]);
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => misskey),
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            await tester.pumpWidget(
+              ProviderScope(
+                overrides: [
+                  misskeyProvider.overrideWith((ref) => misskey),
+                  inputComplementDelayedProvider.overrideWithValue(1),
+                ],
+                child: DefaultRootWidget(
+                  initialRoute:
+                      NoteCreateRoute(initialAccount: TestData.account),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+
+            await tester.tap(find.byIcon(Icons.mail_outline));
+            await tester.pumpAndSettle();
+
+            await tester.enterText(
+                find.byType(TextField).hitTestable(), "おいしいbot");
+            await tester.testTextInput.receiveAction(TextInputAction.done);
+            await tester.pumpAndSettle();
+
+            debugDumpApp();
+
+            await tester.tap(
+                find.text(TestData.detailedUser1.name!, findRichText: true));
+            await tester.pumpAndSettle();
+
+            await tester.enterText(
+              find.byType(TextField).hitTestable(),
+              ":ai_yay:",
+            );
+            await tester.tap(find.byIcon(Icons.send));
+
+            verify(
+              note.create(
+                argThat(
+                  equals(
+                    predicate<NotesCreateRequest>(
+                      (arg) =>
+                          arg.text ==
+                          "@${TestData.detailedUser1.username} :ai_yay:",
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          skip: true,
+        );
+
+        testWidgets(
+          "複数の返信先を追加できること",
+          (tester) async {
+            final misskey = MockMisskey();
+            final note = MockMisskeyNotes();
+            final users = MockMisskeyUsers();
+            when(misskey.notes).thenReturn(note);
+            when(misskey.users).thenReturn(users);
+
+            var count = 0;
+            when(users.search(any)).thenAnswer((_) async {
+              count++;
+              if (count == 1) return [TestData.detailedUser1];
+              return [TestData.detailedUser2];
+            });
+
+            await tester.pumpWidget(
+              ProviderScope(
+                overrides: [
+                  misskeyProvider.overrideWith((ref) => misskey),
+                  inputComplementDelayedProvider.overrideWithValue(1),
+                ],
+                child: DefaultRootWidget(
+                  initialRoute:
+                      NoteCreateRoute(initialAccount: TestData.account),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+
+            await tester.tap(find.byIcon(Icons.mail_outline));
+            await tester.pumpAndSettle();
+
+            // 1人目
+            await tester.enterText(
+                find.byType(TextField).hitTestable(), "おいしいbot");
+            await tester.testTextInput.receiveAction(TextInputAction.done);
+            await tester.pumpAndSettle();
+
+            await tester.tap(
+                find.text(TestData.detailedUser1.name!, findRichText: true));
+            await tester.pumpAndSettle();
+
+            // 2人目
+            await tester.tap(find.byIcon(Icons.mail_outline));
+            await tester.pumpAndSettle();
+
+            await tester.enterText(find.byType(TextField).hitTestable(), "藍");
+            await tester.testTextInput.receiveAction(TextInputAction.done);
+            await tester.pumpAndSettle();
+
+            await tester.tap(
+                find.text(TestData.detailedUser2.name!, findRichText: true));
+            await tester.pumpAndSettle();
+
+            await tester.enterText(
+              find.byType(TextField).hitTestable(),
+              ":ai_yay:",
+            );
+            await tester.tap(find.byIcon(Icons.send));
+
+            verify(
+              note.create(
+                argThat(
+                  equals(
+                    predicate<NotesCreateRequest>(
+                      (arg) =>
+                          arg.text ==
+                          "@${TestData.detailedUser1.username} @${TestData.detailedUser2.username}@${TestData.detailedUser2.host} :ai_yay:",
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          skip: true,
+        );
+
+        testWidgets("追加した返信先を削除できること", (tester) async {
+          final misskey = MockMisskey();
+          final note = MockMisskeyNotes();
+          final users = MockMisskeyUsers();
+          when(misskey.notes).thenReturn(note);
+          when(misskey.users).thenReturn(users);
+
+          when(users.search(any))
+              .thenAnswer((_) async => [TestData.detailedUser1]);
+
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref) => misskey),
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
             ),
-          ),
-        );
-        await tester.pumpAndSettle();
+          );
+          await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.mail_outline));
-        await tester.pumpAndSettle();
+          await tester.tap(find.byIcon(Icons.mail_outline));
+          await tester.pumpAndSettle();
 
-        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
-        await tester.testTextInput.receiveAction(TextInputAction.done);
-        await tester.pumpAndSettle();
+          await tester.enterText(
+              find.byType(TextField).hitTestable(), "おいしいbot");
+          await tester.testTextInput.receiveAction(TextInputAction.done);
+          await tester.pumpAndSettle();
 
-        debugDumpApp();
+          await tester
+              .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
+          await tester.pumpAndSettle();
 
-        await tester
-            .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
-        await tester.pumpAndSettle();
+          await tester.tap(find.byIcon(Icons.remove));
+          await tester.pumpAndSettle();
 
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
+          await tester.enterText(
+            find.byType(TextField).hitTestable(),
+            ":ai_yay:",
+          );
+          await tester.tap(find.byIcon(Icons.send));
 
-        verify(
-          note.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>(
-                  (arg) =>
-                      arg.text ==
-                      "@${TestData.detailedUser1.username} :ai_yay:",
+          verify(
+            note.create(
+              argThat(
+                equals(
+                  predicate<NotesCreateRequest>(
+                      (arg) => arg.text == ":ai_yay:"),
                 ),
               ),
             ),
-          ),
-        );
-      }, skip: true,);
-
-      testWidgets("複数の返信先を追加できること", (tester) async {
-        final misskey = MockMisskey();
-        final note = MockMisskeyNotes();
-        final users = MockMisskeyUsers();
-        when(misskey.notes).thenReturn(note);
-        when(misskey.users).thenReturn(users);
-
-        var count = 0;
-        when(users.search(any)).thenAnswer((_) async {
-          count++;
-          if (count == 1) return [TestData.detailedUser1];
-          return [TestData.detailedUser2];
+          );
         });
+      },
+      skip: true,
+    );
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => misskey),
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
-            ),
-          ),
-        );
-        await tester.pumpAndSettle();
+    group(
+      "メディア",
+      () {
+        testWidgets(
+          "ドライブからメディアを投稿できること",
+          (tester) async {
+            final mockMisskey = MockMisskey();
+            final mockNote = MockMisskeyNotes();
+            final mockDrive = MockMisskeyDrive();
+            final mockDriveFolders = MockMisskeyDriveFolders();
+            final mockDriveFiles = MockMisskeyDriveFiles();
+            when(mockMisskey.notes).thenReturn(mockNote);
+            when(mockMisskey.drive).thenReturn(mockDrive);
+            when(mockDrive.folders).thenReturn(mockDriveFolders);
+            when(mockDrive.files).thenReturn(mockDriveFiles);
 
-        await tester.tap(find.byIcon(Icons.mail_outline));
-        await tester.pumpAndSettle();
+            when(mockDriveFolders.folders(any)).thenAnswer((_) async => []);
+            when(mockDriveFiles.files(any))
+                .thenAnswer((_) async => [TestData.drive1]);
 
-        // 1人目
-        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
-        await tester.testTextInput.receiveAction(TextInputAction.done);
-        await tester.pumpAndSettle();
+            final mockDio = MockDio();
+            when(mockDio.get(any, options: anyNamed("options")))
+                .thenAnswer((_) async => await TestData.binaryImageResponse);
 
-        await tester
-            .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
-        await tester.pumpAndSettle();
-
-        // 2人目
-        await tester.tap(find.byIcon(Icons.mail_outline));
-        await tester.pumpAndSettle();
-
-        await tester.enterText(find.byType(TextField).hitTestable(), "藍");
-        await tester.testTextInput.receiveAction(TextInputAction.done);
-        await tester.pumpAndSettle();
-
-        await tester
-            .tap(find.text(TestData.detailedUser2.name!, findRichText: true));
-        await tester.pumpAndSettle();
-
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
-
-        verify(
-          note.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>(
-                  (arg) =>
-                      arg.text ==
-                      "@${TestData.detailedUser1.username} @${TestData.detailedUser2.username}@${TestData.detailedUser2.host} :ai_yay:",
+            await tester.pumpWidget(
+              ProviderScope(
+                overrides: [
+                  misskeyProvider.overrideWith((ref) => mockMisskey),
+                  inputComplementDelayedProvider.overrideWithValue(1),
+                  dioProvider.overrideWith((ref) => mockDio),
+                ],
+                child: DefaultRootWidget(
+                  initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account,
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      }, skip: true,);
+            );
+            await tester.pumpAndSettle();
 
-      testWidgets("追加した返信先を削除できること", (tester) async {
-        final misskey = MockMisskey();
-        final note = MockMisskeyNotes();
-        final users = MockMisskeyUsers();
-        when(misskey.notes).thenReturn(note);
-        when(misskey.users).thenReturn(users);
+            await tester.tap(find.byIcon(Icons.image));
+            await tester.pumpAndSettle();
 
-        when(users.search(any))
-            .thenAnswer((_) async => [TestData.detailedUser1]);
+            await tester.tap(find.text("ドライブから"));
+            await tester.pumpAndSettle();
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => misskey),
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
-            ),
-          ),
-        );
-        await tester.pumpAndSettle();
+            await tester.tap(find.text(TestData.drive1.name),
+                warnIfMissed: false);
+            await tester.pumpAndSettle();
+            await tester.tap(find.byIcon(Icons.check));
+            await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.mail_outline));
-        await tester.pumpAndSettle();
+            await tester.enterText(
+              find.byType(TextField).hitTestable(),
+              ":ai_yay:",
+            );
+            await tester.tap(find.byIcon(Icons.send));
+            await tester.pumpAndSettle();
 
-        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
-        await tester.testTextInput.receiveAction(TextInputAction.done);
-        await tester.pumpAndSettle();
-
-        await tester
-            .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byIcon(Icons.remove));
-        await tester.pumpAndSettle();
-
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
-
-        verify(
-          note.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>((arg) => arg.text == ":ai_yay:"),
-              ),
-            ),
-          ),
-        );
-      });
-    }, skip: true,);
-
-    group("メディア", () {
-      testWidgets("ドライブからメディアを投稿できること", (tester) async {
-        final mockMisskey = MockMisskey();
-        final mockNote = MockMisskeyNotes();
-        final mockDrive = MockMisskeyDrive();
-        final mockDriveFolders = MockMisskeyDriveFolders();
-        final mockDriveFiles = MockMisskeyDriveFiles();
-        when(mockMisskey.notes).thenReturn(mockNote);
-        when(mockMisskey.drive).thenReturn(mockDrive);
-        when(mockDrive.folders).thenReturn(mockDriveFolders);
-        when(mockDrive.files).thenReturn(mockDriveFiles);
-
-        when(mockDriveFolders.folders(any)).thenAnswer((_) async => []);
-        when(mockDriveFiles.files(any))
-            .thenAnswer((_) async => [TestData.drive1]);
-
-        final mockDio = MockDio();
-        when(mockDio.get(any, options: anyNamed("options")))
-            .thenAnswer((_) async => await TestData.binaryImageResponse);
-
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
-              inputComplementDelayedProvider.overrideWithValue(1),
-              dioProvider.overrideWith((ref) => mockDio),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
-            ),
-          ),
-        );
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byIcon(Icons.image));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text("ドライブから"));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text(TestData.drive1.name), warnIfMissed: false);
-        await tester.pumpAndSettle();
-        await tester.tap(find.byIcon(Icons.check));
-        await tester.pumpAndSettle();
-
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
-        await tester.pumpAndSettle();
-
-        verify(
-          mockNote.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>(
-                  (arg) => const DeepCollectionEquality()
-                      .equals([TestData.drive1.id], arg.fileIds),
+            verify(
+              mockNote.create(
+                argThat(
+                  equals(
+                    predicate<NotesCreateRequest>(
+                      (arg) => const DeepCollectionEquality()
+                          .equals([TestData.drive1.id], arg.fileIds),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      }, skip: true,);
-
-      testWidgets("単一の画像のアップロードができること", (tester) async {
-        final mockMisskey = MockMisskey();
-        final mockNote = MockMisskeyNotes();
-        final mockDrive = MockMisskeyDrive();
-        final mockDriveFiles = MockMisskeyDriveFiles();
-        when(mockMisskey.notes).thenReturn(mockNote);
-        when(mockMisskey.drive).thenReturn(mockDrive);
-        when(mockDrive.files).thenReturn(mockDriveFiles);
-
-        when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
-          (_) async => TestData.drive1.copyWith(name: "test.png"),
+            );
+          },
+          skip: true,
         );
 
-        final binaryImage = await TestData.binaryImage;
-        final filePicker = MockFilePickerPlatform();
-        FilePicker.platform = filePicker;
-        when(
-          filePicker.pickFiles(
-            dialogTitle: anyNamed("dialogTitle"),
-            initialDirectory: anyNamed("initialDirectory"),
-            type: anyNamed("type"),
-            allowedExtensions: anyNamed("allowedExtensions"),
-            onFileLoading: anyNamed("onFileLoading"),
-            allowCompression: anyNamed("allowCompression"),
-            allowMultiple: anyNamed("allowMultiple"),
-            withData: anyNamed("withData"),
-            withReadStream: anyNamed("withReadStream"),
-            lockParentWindow: anyNamed("lockParentWindow"),
-          ),
-        ).thenAnswer(
-          (_) async => FilePickerResult([
-            PlatformFile(
-              path: "/test.png",
-              name: "test.png",
-              size: binaryImage.length,
-              bytes: binaryImage,
-            ),
-          ]),
-        );
-        final fileSystem = MemoryFileSystem();
-        await fileSystem.file("/test.png").writeAsBytes(binaryImage);
+        testWidgets(
+          "単一の画像のアップロードができること",
+          (tester) async {
+            final mockMisskey = MockMisskey();
+            final mockNote = MockMisskeyNotes();
+            final mockDrive = MockMisskeyDrive();
+            final mockDriveFiles = MockMisskeyDriveFiles();
+            when(mockMisskey.notes).thenReturn(mockNote);
+            when(mockMisskey.drive).thenReturn(mockDrive);
+            when(mockDrive.files).thenReturn(mockDriveFiles);
 
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
-              fileSystemProvider.overrideWith((ref) => fileSystem),
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
+            when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
+              (_) async => TestData.drive1.copyWith(name: "test.png"),
+            );
+
+            final binaryImage = await TestData.binaryImage;
+            final filePicker = MockFilePickerPlatform();
+            FilePicker.platform = filePicker;
+            when(
+              filePicker.pickFiles(
+                dialogTitle: anyNamed("dialogTitle"),
+                initialDirectory: anyNamed("initialDirectory"),
+                type: anyNamed("type"),
+                allowedExtensions: anyNamed("allowedExtensions"),
+                onFileLoading: anyNamed("onFileLoading"),
+                allowCompression: anyNamed("allowCompression"),
+                allowMultiple: anyNamed("allowMultiple"),
+                withData: anyNamed("withData"),
+                withReadStream: anyNamed("withReadStream"),
+                lockParentWindow: anyNamed("lockParentWindow"),
               ),
-            ),
-          ),
-        );
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byIcon(Icons.image));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text("アップロード"));
-        await tester.pumpAndSettle();
-
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
-        await tester.pumpAndSettle();
-
-        verify(
-          mockNote.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>(
-                  (arg) => const DeepCollectionEquality()
-                      .equals([TestData.drive1.id], arg.fileIds),
-                ),
-              ),
-            ),
-          ),
-        );
-
-        verify(
-          mockDriveFiles.createAsBinary(
-            argThat(
-              equals(
-                const DriveFilesCreateRequest(
+            ).thenAnswer(
+              (_) async => FilePickerResult([
+                PlatformFile(
+                  path: "/test.png",
                   name: "test.png",
-                  force: true,
-                  isSensitive: false,
+                  size: binaryImage.length,
+                  bytes: binaryImage,
+                ),
+              ]),
+            );
+            final fileSystem = MemoryFileSystem();
+            await fileSystem.file("/test.png").writeAsBytes(binaryImage);
+
+            await tester.pumpWidget(
+              ProviderScope(
+                overrides: [
+                  misskeyProvider.overrideWith((ref) => mockMisskey),
+                  fileSystemProvider.overrideWith((ref) => fileSystem),
+                  inputComplementDelayedProvider.overrideWithValue(1),
+                ],
+                child: DefaultRootWidget(
+                  initialRoute: NoteCreateRoute(
+                    initialAccount: TestData.account,
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+
+            await tester.tap(find.byIcon(Icons.image));
+            await tester.pumpAndSettle();
+
+            await tester.tap(find.text("アップロード"));
+            await tester.pumpAndSettle();
+
+            await tester.enterText(
+              find.byType(TextField).hitTestable(),
+              ":ai_yay:",
+            );
+            await tester.tap(find.byIcon(Icons.send));
+            await tester.pumpAndSettle();
+
+            verify(
+              mockNote.create(
+                argThat(
+                  equals(
+                    predicate<NotesCreateRequest>(
+                      (arg) => const DeepCollectionEquality()
+                          .equals([TestData.drive1.id], arg.fileIds),
+                    ),
+                  ),
+                ),
+              ),
+            );
+
+            verify(
+              mockDriveFiles.createAsBinary(
+                argThat(
+                  equals(
+                    const DriveFilesCreateRequest(
+                      name: "test.png",
+                      force: true,
+                      isSensitive: false,
+                    ),
+                  ),
+                ),
+                argThat(
+                  equals(
+                    predicate<Uint8List>(
+                      (value) => const DeepCollectionEquality()
+                          .equals(value, binaryImage),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          skip: true,
+        );
+
+        testWidgets("画像を何も選択しなかった場合、何もアップロードされないこと", (tester) async {
+          final mockMisskey = MockMisskey();
+          final mockNote = MockMisskeyNotes();
+          when(mockMisskey.notes).thenReturn(mockNote);
+
+          final filePicker = MockFilePickerPlatform();
+          FilePicker.platform = filePicker;
+          when(
+            filePicker.pickFiles(
+              dialogTitle: anyNamed("dialogTitle"),
+              initialDirectory: anyNamed("initialDirectory"),
+              type: anyNamed("type"),
+              allowedExtensions: anyNamed("allowedExtensions"),
+              onFileLoading: anyNamed("onFileLoading"),
+              allowCompression: anyNamed("allowCompression"),
+              allowMultiple: anyNamed("allowMultiple"),
+              withData: anyNamed("withData"),
+              withReadStream: anyNamed("withReadStream"),
+              lockParentWindow: anyNamed("lockParentWindow"),
+            ),
+          ).thenAnswer((_) async => null);
+
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref) => mockMisskey),
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account,
                 ),
               ),
             ),
-            argThat(
-              equals(
-                predicate<Uint8List>(
-                  (value) =>
-                      const DeepCollectionEquality().equals(value, binaryImage),
+          );
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byIcon(Icons.image));
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.text("アップロード"));
+          await tester.pumpAndSettle();
+
+          await tester.enterText(
+            find.byType(TextField).hitTestable(),
+            ":ai_yay:",
+          );
+          await tester.tap(find.byIcon(Icons.send));
+          await tester.pumpAndSettle();
+
+          verify(
+            mockNote.create(
+              argThat(
+                equals(
+                  predicate<NotesCreateRequest>((arg) => arg.fileIds == null),
                 ),
               ),
             ),
-          ),
-        );
-      }, skip: true,);
-
-      testWidgets("画像を何も選択しなかった場合、何もアップロードされないこと", (tester) async {
-        final mockMisskey = MockMisskey();
-        final mockNote = MockMisskeyNotes();
-        when(mockMisskey.notes).thenReturn(mockNote);
-
-        final filePicker = MockFilePickerPlatform();
-        FilePicker.platform = filePicker;
-        when(
-          filePicker.pickFiles(
-            dialogTitle: anyNamed("dialogTitle"),
-            initialDirectory: anyNamed("initialDirectory"),
-            type: anyNamed("type"),
-            allowedExtensions: anyNamed("allowedExtensions"),
-            onFileLoading: anyNamed("onFileLoading"),
-            allowCompression: anyNamed("allowCompression"),
-            allowMultiple: anyNamed("allowMultiple"),
-            withData: anyNamed("withData"),
-            withReadStream: anyNamed("withReadStream"),
-            lockParentWindow: anyNamed("lockParentWindow"),
-          ),
-        ).thenAnswer((_) async => null);
-
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
-            ),
-          ),
-        );
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byIcon(Icons.image));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text("アップロード"));
-        await tester.pumpAndSettle();
-
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
-        await tester.pumpAndSettle();
-
-        verify(
-          mockNote.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>((arg) => arg.fileIds == null),
-              ),
-            ),
-          ),
-        );
-      });
-    }, skip: true,);
+          );
+        });
+      },
+      skip: true,
+    );
 
     group("投票", () {
       testWidgets("投票つきノートを投稿できること", (tester) async {

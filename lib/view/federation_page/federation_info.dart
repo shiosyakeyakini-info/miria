@@ -52,13 +52,14 @@ class FederationInfo extends ConsumerWidget {
             ),
             const Padding(padding: EdgeInsets.only(top: 5)),
             Html(
-                data: description,
-                style: {
-                  "a": Style(color: AppTheme.of(context).linkStyle.color),
-                },
-                onLinkTap: (url, _, __) async {
-                  await launchUrlString(url.toString());
-                },),
+              data: description,
+              style: {
+                "a": Style(color: AppTheme.of(context).linkStyle.color),
+              },
+              onLinkTap: (url, _, __) async {
+                await launchUrlString(url.toString());
+              },
+            ),
             const Padding(padding: EdgeInsets.only(top: 5)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -150,7 +151,8 @@ class FederationInfo extends ConsumerWidget {
                               data: "${rule.$1 + 1}. ${rule.$2}<br>",
                               style: {
                                 "a": Style(
-                                    color: AppTheme.of(context).linkStyle.color,),
+                                  color: AppTheme.of(context).linkStyle.color,
+                                ),
                               },
                               onLinkTap: (url, _, __) async {
                                 await launchUrlString(url.toString());

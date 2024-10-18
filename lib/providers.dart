@@ -2,7 +2,8 @@ import "package:dio/dio.dart";
 import "package:file/file.dart";
 import "package:file/local.dart";
 import "package:flutter/widgets.dart";
-import "package:flutter_cache_manager/flutter_cache_manager.dart" hide FileSystem;
+import "package:flutter_cache_manager/flutter_cache_manager.dart"
+    hide FileSystem;
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";

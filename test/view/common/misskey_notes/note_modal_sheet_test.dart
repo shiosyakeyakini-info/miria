@@ -130,14 +130,16 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
-      when(misskeyNotes.featured(any)).thenAnswer((e) async => [
-            TestData.note1.copyWith(
-              text: null,
-              cw: null,
-              poll: null,
-              renote: TestData.note1,
-            ),
-          ],);
+      when(misskeyNotes.featured(any)).thenAnswer(
+        (e) async => [
+          TestData.note1.copyWith(
+            text: null,
+            cw: null,
+            poll: null,
+            renote: TestData.note1,
+          ),
+        ],
+      );
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
@@ -368,8 +370,10 @@ void main() {
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
       when(misskey.notes).thenReturn(misskeyNotes);
-      when(misskeyNotes.featured(any)).thenAnswer((e) async =>
-          [TestData.note1.copyWith(text: null, renote: TestData.note2)],);
+      when(misskeyNotes.featured(any)).thenAnswer(
+        (e) async =>
+            [TestData.note1.copyWith(text: null, renote: TestData.note2)],
+      );
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref) => misskey)],

@@ -406,7 +406,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               Navigator.of(context).pop();
               await context.pushRoute(
                 ClipModalRoute(
-                    account: accountContext.postAccount, noteId: targetNote.id,),
+                  account: accountContext.postAccount,
+                  noteId: targetNote.id,
+                ),
               );
             },
           ),
