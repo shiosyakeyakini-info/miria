@@ -1043,7 +1043,7 @@ packages:
     description:
       path: "."
       ref: "feature/refactor_streaming"
-      resolved-ref: "90d0aa089ef55811627146e2069dd16173cb7b63"
+      resolved-ref: "353fa089ce860d95a303bd4ef66d810320dfd84e"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
@@ -1832,10 +1832,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc
+      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.4"
+    version: "14.2.5"
   volume_controller:
     dependency: "direct main"
     description:

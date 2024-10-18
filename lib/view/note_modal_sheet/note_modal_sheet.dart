@@ -399,13 +399,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             title: Text(S.of(context).clip),
             onTap: () async {
               Navigator.of(context).pop();
-
-              await showModalBottomSheet(
-                context: context,
-                builder: (context2) => ClipModalSheet(
-                  account: accountContext.postAccount,
-                  noteId: targetNote.id,
-                ),
+              await context.pushRoute(
+                ClipModalRoute(
+                    account: accountContext.postAccount, noteId: targetNote.id),
               );
             },
           ),
