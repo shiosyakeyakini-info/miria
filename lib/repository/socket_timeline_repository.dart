@@ -199,6 +199,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   Future<void> subscribe(SubscribeItem item) async {
     if (!tabSetting.isSubscribe) return;
+    await ref.read(misskeyStreamingProvider(misskey).future);
     final index =
         subscribedList.indexWhere((element) => element.noteId == item.noteId);
     final isSubscribed = subscribedList.indexWhere(
@@ -249,6 +250,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   Future<void> describe(String id) async {
     if (!tabSetting.isSubscribe) return;
+    await ref.read(misskeyStreamingProvider(misskey).future);
     streamingController?.unsubNote(id);
   }
 
