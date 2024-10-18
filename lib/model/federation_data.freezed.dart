@@ -39,7 +39,9 @@ mixin _$FederationData {
   List<MetaAd> get ads => throw _privateConstructorUsedError;
   MetaResponse? get meta => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FederationDataCopyWith<FederationData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -87,6 +89,8 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -205,6 +209,8 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
     ) as $Val);
   }
 
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MetaResponseCopyWith<$Res>? get meta {
@@ -262,6 +268,8 @@ class __$$FederationDataImplCopyWithImpl<$Res>
       _$FederationDataImpl _value, $Res Function(_$FederationDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -562,7 +570,9 @@ class _$FederationDataImpl implements _FederationData {
         meta
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FederationDataImplCopyWith<_$FederationDataImpl> get copyWith =>
@@ -639,8 +649,11 @@ abstract class _FederationData implements FederationData {
   List<MetaAd> get ads;
   @override
   MetaResponse? get meta;
+
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FederationDataImplCopyWith<_$FederationDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

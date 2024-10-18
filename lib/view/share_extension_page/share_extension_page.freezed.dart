@@ -23,8 +23,12 @@ mixin _$ShareExtensionData {
   List<String> get text => throw _privateConstructorUsedError;
   List<SharedFiles> get files => throw _privateConstructorUsedError;
 
+  /// Serializes this ShareExtensionData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ShareExtensionData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ShareExtensionDataCopyWith<ShareExtensionData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$ShareExtensionDataCopyWithImpl<$Res, $Val extends ShareExtensionData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ShareExtensionData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$ShareExtensionDataImplCopyWithImpl<$Res>
       $Res Function(_$ShareExtensionDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ShareExtensionData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -147,14 +155,16 @@ class _$ShareExtensionDataImpl implements _ShareExtensionData {
             const DeepCollectionEquality().equals(other._files, _files));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_text),
       const DeepCollectionEquality().hash(_files));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ShareExtensionData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ShareExtensionDataImplCopyWith<_$ShareExtensionDataImpl> get copyWith =>
@@ -181,8 +191,11 @@ abstract class _ShareExtensionData implements ShareExtensionData {
   List<String> get text;
   @override
   List<SharedFiles> get files;
+
+  /// Create a copy of ShareExtensionData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ShareExtensionDataImplCopyWith<_$ShareExtensionDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -196,8 +209,12 @@ mixin _$SharedFiles {
   String get path => throw _privateConstructorUsedError;
   int get type => throw _privateConstructorUsedError;
 
+  /// Serializes this SharedFiles to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SharedFiles
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SharedFilesCopyWith<SharedFiles> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -221,6 +238,8 @@ class _$SharedFilesCopyWithImpl<$Res, $Val extends SharedFiles>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SharedFiles
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -259,6 +278,8 @@ class __$$SharedFilesImplCopyWithImpl<$Res>
       _$SharedFilesImpl _value, $Res Function(_$SharedFilesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SharedFiles
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -305,11 +326,13 @@ class _$SharedFilesImpl implements _SharedFiles {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, path, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SharedFiles
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SharedFilesImplCopyWith<_$SharedFilesImpl> get copyWith =>
@@ -334,8 +357,11 @@ abstract class _SharedFiles implements SharedFiles {
   String get path;
   @override
   int get type;
+
+  /// Create a copy of SharedFiles
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SharedFilesImplCopyWith<_$SharedFilesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -36,8 +36,12 @@ mixin _$AccountSettings {
   DateTime? get latestMetaCached => throw _privateConstructorUsedError;
   bool get forceShowAd => throw _privateConstructorUsedError;
 
+  /// Serializes this AccountSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AccountSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AccountSettingsCopyWith<AccountSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -74,6 +78,8 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AccountSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -180,6 +186,8 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
       _$AccountSettingsImpl _value, $Res Function(_$AccountSettingsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AccountSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -355,7 +363,7 @@ class _$AccountSettingsImpl extends _AccountSettings {
                 other.forceShowAd == forceShowAd));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -373,7 +381,9 @@ class _$AccountSettingsImpl extends _AccountSettings {
       latestMetaCached,
       forceShowAd);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AccountSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AccountSettingsImplCopyWith<_$AccountSettingsImpl> get copyWith =>
@@ -434,8 +444,11 @@ abstract class _AccountSettings extends AccountSettings {
   DateTime? get latestMetaCached;
   @override
   bool get forceShowAd;
+
+  /// Create a copy of AccountSettings
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AccountSettingsImplCopyWith<_$AccountSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

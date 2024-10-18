@@ -19,7 +19,9 @@ mixin _$MisskeyPageNotifierState {
   Page get page => throw _privateConstructorUsedError;
   AsyncValue<void>? get likeOr => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MisskeyPageNotifierState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MisskeyPageNotifierStateCopyWith<MisskeyPageNotifierState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +48,8 @@ class _$MisskeyPageNotifierStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MisskeyPageNotifierState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -64,6 +68,8 @@ class _$MisskeyPageNotifierStateCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of MisskeyPageNotifierState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PageCopyWith<$Res> get page {
@@ -98,6 +104,8 @@ class __$$MisskeyPageNotifierStateImplCopyWithImpl<$Res>
       $Res Function(_$MisskeyPageNotifierStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MisskeyPageNotifierState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -144,7 +152,9 @@ class _$MisskeyPageNotifierStateImpl implements _MisskeyPageNotifierState {
   @override
   int get hashCode => Object.hash(runtimeType, page, likeOr);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MisskeyPageNotifierState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MisskeyPageNotifierStateImplCopyWith<_$MisskeyPageNotifierStateImpl>
@@ -161,8 +171,11 @@ abstract class _MisskeyPageNotifierState implements MisskeyPageNotifierState {
   Page get page;
   @override
   AsyncValue<void>? get likeOr;
+
+  /// Create a copy of MisskeyPageNotifierState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MisskeyPageNotifierStateImplCopyWith<_$MisskeyPageNotifierStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

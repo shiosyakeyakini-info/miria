@@ -28,7 +28,9 @@ mixin _$AntennaSettings {
   bool get notify => throw _privateConstructorUsedError;
   bool get localOnly => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AntennaSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AntennaSettingsCopyWith<AntennaSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -63,6 +65,8 @@ class _$AntennaSettingsCopyWithImpl<$Res, $Val extends AntennaSettings>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AntennaSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,6 +161,8 @@ class __$$AntennaSettingsImplCopyWithImpl<$Res>
       _$AntennaSettingsImpl _value, $Res Function(_$AntennaSettingsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AntennaSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -336,7 +342,9 @@ class _$AntennaSettingsImpl extends _AntennaSettings {
       notify,
       localOnly);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AntennaSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AntennaSettingsImplCopyWith<_$AntennaSettingsImpl> get copyWith =>
@@ -381,8 +389,11 @@ abstract class _AntennaSettings extends AntennaSettings {
   bool get notify;
   @override
   bool get localOnly;
+
+  /// Create a copy of AntennaSettings
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AntennaSettingsImplCopyWith<_$AntennaSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

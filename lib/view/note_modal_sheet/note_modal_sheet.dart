@@ -13,7 +13,6 @@ import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
-import "package:miria/view/clip_modal_sheet/clip_modal_sheet.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/copy_modal_sheet/copy_note_modal_sheet.dart";
@@ -32,7 +31,7 @@ part "note_modal_sheet.g.dart";
 @freezed
 class NoteModalSheetState with _$NoteModalSheetState {
   factory NoteModalSheetState({
-    required AsyncValue<NotesStateResponse> noteState,
+    AsyncValue<NotesStateResponse>? noteState,
     @Default(false) bool isSharingMode,
     AsyncValue<UserDetailed>? user,
     AsyncValue<void>? delete,
@@ -62,9 +61,13 @@ class NoteModalSheetState with _$NoteModalSheetState {
 class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   @override
   NoteModalSheetState build(Note note) {
-    state = NoteModalSheetState(noteState: const AsyncLoading());
-    if (ref.read(accountContextProvider).isSame) unawaited(_status());
-    return state;
+    if (ref.read(accountContextProvider).isSame) {
+      state = NoteModalSheetState(noteState: const AsyncLoading());
+      unawaited(_status());
+      return state;
+    } else {
+      return NoteModalSheetState();
+    }
   }
 
   Future<void> _status() async {
@@ -90,7 +93,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   }
 
   Future<void> favorite() async {
-    final isFavorited = state.noteState.valueOrNull?.isFavorited;
+    final isFavorited = state.noteState?.valueOrNull?.isFavorited;
     if (isFavorited == null) return;
     state = state.copyWith(favorite: const AsyncLoading());
     state = state.copyWith(
@@ -376,6 +379,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
         ),
         if (accountContext.isSame)
           switch (noteStatus) {
+            null => const SizedBox.shrink(),
             AsyncLoading() => const Center(
                 child: CircularProgressIndicator.adaptive(),
               ),

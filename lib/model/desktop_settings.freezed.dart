@@ -22,8 +22,12 @@ DesktopSettings _$DesktopSettingsFromJson(Map<String, dynamic> json) {
 mixin _$DesktopSettings {
   DesktopWindowSettings get window => throw _privateConstructorUsedError;
 
+  /// Serializes this DesktopSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DesktopSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DesktopSettingsCopyWith<DesktopSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$DesktopSettingsCopyWithImpl<$Res, $Val extends DesktopSettings>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DesktopSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -62,6 +68,8 @@ class _$DesktopSettingsCopyWithImpl<$Res, $Val extends DesktopSettings>
     ) as $Val);
   }
 
+  /// Create a copy of DesktopSettings
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DesktopWindowSettingsCopyWith<$Res> get window {
@@ -93,6 +101,8 @@ class __$$DesktopSettingsImplCopyWithImpl<$Res>
       _$DesktopSettingsImpl _value, $Res Function(_$DesktopSettingsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DesktopSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,11 +142,13 @@ class _$DesktopSettingsImpl implements _DesktopSettings {
             (identical(other.window, window) || other.window == window));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, window);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DesktopSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DesktopSettingsImplCopyWith<_$DesktopSettingsImpl> get copyWith =>
@@ -160,8 +172,11 @@ abstract class _DesktopSettings implements DesktopSettings {
 
   @override
   DesktopWindowSettings get window;
+
+  /// Create a copy of DesktopSettings
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DesktopSettingsImplCopyWith<_$DesktopSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -178,8 +193,12 @@ mixin _$DesktopWindowSettings {
   double get w => throw _privateConstructorUsedError;
   double get h => throw _privateConstructorUsedError;
 
+  /// Serializes this DesktopWindowSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DesktopWindowSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DesktopWindowSettingsCopyWith<DesktopWindowSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -204,6 +223,8 @@ class _$DesktopWindowSettingsCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DesktopWindowSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -254,6 +275,8 @@ class __$$DesktopWindowSettingsImplCopyWithImpl<$Res>
       $Res Function(_$DesktopWindowSettingsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DesktopWindowSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -321,11 +344,13 @@ class _$DesktopWindowSettingsImpl implements _DesktopWindowSettings {
             (identical(other.h, h) || other.h == h));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, x, y, w, h);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DesktopWindowSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DesktopWindowSettingsImplCopyWith<_$DesktopWindowSettingsImpl>
@@ -358,8 +383,11 @@ abstract class _DesktopWindowSettings implements DesktopWindowSettings {
   double get w;
   @override
   double get h;
+
+  /// Create a copy of DesktopWindowSettings
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DesktopWindowSettingsImplCopyWith<_$DesktopWindowSettingsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -25,8 +25,12 @@ mixin _$ExportedSetting {
       throw _privateConstructorUsedError;
   List<TabSetting> get tabSettings => throw _privateConstructorUsedError;
 
+  /// Serializes this ExportedSetting to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ExportedSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ExportedSettingCopyWith<ExportedSetting> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$ExportedSettingCopyWithImpl<$Res, $Val extends ExportedSetting>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ExportedSetting
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -78,6 +84,8 @@ class _$ExportedSettingCopyWithImpl<$Res, $Val extends ExportedSetting>
     ) as $Val);
   }
 
+  /// Create a copy of ExportedSetting
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $GeneralSettingsCopyWith<$Res> get generalSettings {
@@ -112,6 +120,8 @@ class __$$ExportedSettingImplCopyWithImpl<$Res>
       _$ExportedSettingImpl _value, $Res Function(_$ExportedSettingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ExportedSetting
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -187,7 +197,7 @@ class _$ExportedSettingImpl implements _ExportedSetting {
                 .equals(other._tabSettings, _tabSettings));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -195,7 +205,9 @@ class _$ExportedSettingImpl implements _ExportedSetting {
       const DeepCollectionEquality().hash(_accountSettings),
       const DeepCollectionEquality().hash(_tabSettings));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ExportedSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ExportedSettingImplCopyWith<_$ExportedSettingImpl> get copyWith =>
@@ -225,8 +237,11 @@ abstract class _ExportedSetting implements ExportedSetting {
   List<AccountSettings> get accountSettings;
   @override
   List<TabSetting> get tabSettings;
+
+  /// Create a copy of ExportedSetting
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ExportedSettingImplCopyWith<_$ExportedSettingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

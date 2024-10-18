@@ -22,7 +22,9 @@ mixin _$UserInfo {
   UserDetailed? get remoteResponse => throw _privateConstructorUsedError;
   MetaResponse? get metaResponse => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserInfoCopyWith<UserInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +54,8 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,6 +89,8 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     ) as $Val);
   }
 
+  /// Create a copy of UserInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MetaResponseCopyWith<$Res>? get metaResponse {
@@ -125,6 +131,8 @@ class __$$UserInfoImplCopyWithImpl<$Res>
       _$UserInfoImpl _value, $Res Function(_$UserInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -206,7 +214,9 @@ class _$UserInfoImpl extends _UserInfo {
   int get hashCode => Object.hash(runtimeType, userId, response, remoteUserId,
       remoteResponse, metaResponse);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
@@ -232,8 +242,11 @@ abstract class _UserInfo extends UserInfo {
   UserDetailed? get remoteResponse;
   @override
   MetaResponse? get metaResponse;
+
+  /// Create a copy of UserInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

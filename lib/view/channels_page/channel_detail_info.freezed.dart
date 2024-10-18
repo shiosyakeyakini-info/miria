@@ -20,7 +20,9 @@ mixin _$ChannelDetailState {
   AsyncValue<void>? get follow => throw _privateConstructorUsedError;
   AsyncValue<void>? get favorite => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChannelDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChannelDetailStateCopyWith<ChannelDetailState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +51,8 @@ class _$ChannelDetailStateCopyWithImpl<$Res, $Val extends ChannelDetailState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChannelDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -72,6 +76,8 @@ class _$ChannelDetailStateCopyWithImpl<$Res, $Val extends ChannelDetailState>
     ) as $Val);
   }
 
+  /// Create a copy of ChannelDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CommunityChannelCopyWith<$Res> get channel {
@@ -106,6 +112,8 @@ class __$$ChannelDetailStateImplCopyWithImpl<$Res>
       $Res Function(_$ChannelDetailStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChannelDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -161,7 +169,9 @@ class _$ChannelDetailStateImpl implements _ChannelDetailState {
   @override
   int get hashCode => Object.hash(runtimeType, channel, follow, favorite);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChannelDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChannelDetailStateImplCopyWith<_$ChannelDetailStateImpl> get copyWith =>
@@ -181,8 +191,11 @@ abstract class _ChannelDetailState implements ChannelDetailState {
   AsyncValue<void>? get follow;
   @override
   AsyncValue<void>? get favorite;
+
+  /// Create a copy of ChannelDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChannelDetailStateImplCopyWith<_$ChannelDetailStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

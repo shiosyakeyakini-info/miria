@@ -72,8 +72,12 @@ mixin _$GeneralSettings {
   /// デッキモード
   bool get isDeckMode => throw _privateConstructorUsedError;
 
+  /// Serializes this GeneralSettings to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GeneralSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GeneralSettingsCopyWith<GeneralSettings> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -116,6 +120,8 @@ class _$GeneralSettingsCopyWithImpl<$Res, $Val extends GeneralSettings>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GeneralSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -258,6 +264,8 @@ class __$$GeneralSettingsImplCopyWithImpl<$Res>
       _$GeneralSettingsImpl _value, $Res Function(_$GeneralSettingsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GeneralSettings
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -531,7 +539,7 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
                 other.isDeckMode == isDeckMode));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -556,7 +564,9 @@ class _$GeneralSettingsImpl implements _GeneralSettings {
         isDeckMode
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GeneralSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>
@@ -602,72 +612,75 @@ abstract class _GeneralSettings implements GeneralSettings {
   String get darkColorThemeId;
   @override
   ThemeColorSystem get themeColorSystem;
-  @override
 
   /// NSFW設定を継承する
-  NSFWInherit get nsfwInherit;
   @override
+  NSFWInherit get nsfwInherit;
 
   /// ノートのカスタム絵文字直接タップでのリアクションを有効にする
-  bool get enableDirectReaction;
   @override
+  bool get enableDirectReaction;
 
   /// TLの自動更新を有効にする
-  AutomaticPush get automaticPush;
   @override
+  AutomaticPush get automaticPush;
 
   /// 動きのあるMFMを有効にする
-  bool get enableAnimatedMFM;
   @override
+  bool get enableAnimatedMFM;
 
   /// 長いノートを省略する
-  bool get enableLongTextElipsed;
   @override
+  bool get enableLongTextElipsed;
 
   /// リアクション済みノートを短くする
-  bool get enableFavoritedRenoteElipsed;
   @override
+  bool get enableFavoritedRenoteElipsed;
 
   /// タブの位置
-  TabPosition get tabPosition;
   @override
+  TabPosition get tabPosition;
 
   /// 文字の大きさの倍率
-  double get textScaleFactor;
   @override
+  double get textScaleFactor;
 
   /// 使用するUnicodeの絵文字種別
-  EmojiType get emojiType;
   @override
+  EmojiType get emojiType;
 
   /// デフォルトのフォント名
-  String get defaultFontName;
   @override
+  String get defaultFontName;
 
   /// `$[font.serif のフォント名
-  String get serifFontName;
   @override
+  String get serifFontName;
 
   /// `$[font.monospace およびコードブロックのフォント名
-  String get monospaceFontName;
   @override
+  String get monospaceFontName;
 
   /// `$[font.cursive のフォント名
-  String get cursiveFontName;
   @override
+  String get cursiveFontName;
 
   /// `$[font.fantasy のフォント名
-  String get fantasyFontName;
   @override
+  String get fantasyFontName;
 
   /// 言語設定
-  Languages get languages;
   @override
+  Languages get languages;
 
   /// デッキモード
-  bool get isDeckMode;
   @override
-  @JsonKey(ignore: true)
+  bool get isDeckMode;
+
+  /// Create a copy of GeneralSettings
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GeneralSettingsImplCopyWith<_$GeneralSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

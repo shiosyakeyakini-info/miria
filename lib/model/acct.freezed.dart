@@ -23,8 +23,12 @@ mixin _$Acct {
   String get host => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
 
+  /// Serializes this Acct to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Acct
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AcctCopyWith<Acct> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -46,6 +50,8 @@ class _$AcctCopyWithImpl<$Res, $Val extends Acct>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Acct
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -82,6 +88,8 @@ class __$$AcctImplCopyWithImpl<$Res>
   __$$AcctImplCopyWithImpl(_$AcctImpl _value, $Res Function(_$AcctImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Acct
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -124,11 +132,13 @@ class _$AcctImpl extends _Acct {
                 other.username == username));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, host, username);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Acct
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AcctImplCopyWith<_$AcctImpl> get copyWith =>
@@ -154,8 +164,11 @@ abstract class _Acct extends Acct {
   String get host;
   @override
   String get username;
+
+  /// Create a copy of Acct
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AcctImplCopyWith<_$AcctImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

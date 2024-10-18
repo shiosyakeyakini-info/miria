@@ -42,7 +42,9 @@ mixin _$NoteCreate {
   NoteCreationMode? get noteCreationMode => throw _privateConstructorUsedError;
   String? get noteId => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NoteCreateCopyWith<NoteCreate> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -93,6 +95,8 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -216,6 +220,8 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     ) as $Val);
   }
 
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $NoteCreateChannelCopyWith<$Res>? get channel {
@@ -228,6 +234,8 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     });
   }
 
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $NoteCopyWith<$Res>? get reply {
@@ -240,6 +248,8 @@ class _$NoteCreateCopyWithImpl<$Res, $Val extends NoteCreate>
     });
   }
 
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $NoteCopyWith<$Res>? get renote {
@@ -302,6 +312,8 @@ class __$$NoteCreateImplCopyWithImpl<$Res>
       _$NoteCreateImpl _value, $Res Function(_$NoteCreateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -610,7 +622,9 @@ class _$NoteCreateImpl implements _NoteCreate {
         noteId
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NoteCreateImplCopyWith<_$NoteCreateImpl> get copyWith =>
@@ -689,8 +703,11 @@ abstract class _NoteCreate implements NoteCreate {
   NoteCreationMode? get noteCreationMode;
   @override
   String? get noteId;
+
+  /// Create a copy of NoteCreate
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NoteCreateImplCopyWith<_$NoteCreateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -700,7 +717,9 @@ mixin _$NoteCreateChannel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteCreateChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NoteCreateChannelCopyWith<NoteCreateChannel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -724,6 +743,8 @@ class _$NoteCreateChannelCopyWithImpl<$Res, $Val extends NoteCreateChannel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NoteCreateChannel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -762,6 +783,8 @@ class __$$NoteCreateChannelImplCopyWithImpl<$Res>
       $Res Function(_$NoteCreateChannelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NoteCreateChannel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -808,7 +831,9 @@ class _$NoteCreateChannelImpl implements _NoteCreateChannel {
   @override
   int get hashCode => Object.hash(runtimeType, id, name);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteCreateChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NoteCreateChannelImplCopyWith<_$NoteCreateChannelImpl> get copyWith =>
@@ -825,8 +850,11 @@ abstract class _NoteCreateChannel implements NoteCreateChannel {
   String get id;
   @override
   String get name;
+
+  /// Create a copy of NoteCreateChannel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NoteCreateChannelImplCopyWith<_$NoteCreateChannelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

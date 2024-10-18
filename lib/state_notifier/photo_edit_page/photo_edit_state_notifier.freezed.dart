@@ -32,7 +32,9 @@ mixin _$PhotoEdit {
   List<EditedEmojiData> get emojis => throw _privateConstructorUsedError;
   int? get selectedEmojiIndex => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PhotoEdit
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PhotoEditCopyWith<PhotoEdit> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -69,6 +71,8 @@ class _$PhotoEditCopyWithImpl<$Res, $Val extends PhotoEdit>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PhotoEdit
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -181,6 +185,8 @@ class __$$PhotoEditImplCopyWithImpl<$Res>
       _$PhotoEditImpl _value, $Res Function(_$PhotoEditImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PhotoEdit
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -397,7 +403,9 @@ class _$PhotoEditImpl implements _PhotoEdit {
       const DeepCollectionEquality().hash(_emojis),
       selectedEmojiIndex);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PhotoEdit
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PhotoEditImplCopyWith<_$PhotoEditImpl> get copyWith =>
@@ -449,8 +457,11 @@ abstract class _PhotoEdit implements PhotoEdit {
   List<EditedEmojiData> get emojis;
   @override
   int? get selectedEmojiIndex;
+
+  /// Create a copy of PhotoEdit
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PhotoEditImplCopyWith<_$PhotoEditImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -460,7 +471,9 @@ mixin _$ColorFilterPreview {
   String get name => throw _privateConstructorUsedError;
   Uint8List? get image => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ColorFilterPreview
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ColorFilterPreviewCopyWith<ColorFilterPreview> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -484,6 +497,8 @@ class _$ColorFilterPreviewCopyWithImpl<$Res, $Val extends ColorFilterPreview>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ColorFilterPreview
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -522,6 +537,8 @@ class __$$ColorFilterPreviewImplCopyWithImpl<$Res>
       $Res Function(_$ColorFilterPreviewImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ColorFilterPreview
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -569,7 +586,9 @@ class _$ColorFilterPreviewImpl implements _ColorFilterPreview {
   int get hashCode => Object.hash(
       runtimeType, name, const DeepCollectionEquality().hash(image));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ColorFilterPreview
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ColorFilterPreviewImplCopyWith<_$ColorFilterPreviewImpl> get copyWith =>
@@ -586,8 +605,11 @@ abstract class _ColorFilterPreview implements ColorFilterPreview {
   String get name;
   @override
   Uint8List? get image;
+
+  /// Create a copy of ColorFilterPreview
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ColorFilterPreviewImplCopyWith<_$ColorFilterPreviewImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -599,7 +621,9 @@ mixin _$EditedEmojiData {
   Offset get position => throw _privateConstructorUsedError;
   double get angle => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EditedEmojiData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EditedEmojiDataCopyWith<EditedEmojiData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -624,6 +648,8 @@ class _$EditedEmojiDataCopyWithImpl<$Res, $Val extends EditedEmojiData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EditedEmojiData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -673,6 +699,8 @@ class __$$EditedEmojiDataImplCopyWithImpl<$Res>
       _$EditedEmojiDataImpl _value, $Res Function(_$EditedEmojiDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EditedEmojiData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -740,7 +768,9 @@ class _$EditedEmojiDataImpl implements _EditedEmojiData {
   @override
   int get hashCode => Object.hash(runtimeType, emoji, scale, position, angle);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EditedEmojiData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EditedEmojiDataImplCopyWith<_$EditedEmojiDataImpl> get copyWith =>
@@ -763,8 +793,11 @@ abstract class _EditedEmojiData implements EditedEmojiData {
   Offset get position;
   @override
   double get angle;
+
+  /// Create a copy of EditedEmojiData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EditedEmojiDataImplCopyWith<_$EditedEmojiDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

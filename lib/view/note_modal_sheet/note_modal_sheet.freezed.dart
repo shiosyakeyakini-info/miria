@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$NoteModalSheetState {
-  AsyncValue<NotesStateResponse> get noteState =>
+  AsyncValue<NotesStateResponse>? get noteState =>
       throw _privateConstructorUsedError;
   bool get isSharingMode => throw _privateConstructorUsedError;
   AsyncValue<UserDetailed>? get user => throw _privateConstructorUsedError;
@@ -24,7 +24,9 @@ mixin _$NoteModalSheetState {
   AsyncValue<void>? get deleteRecreate => throw _privateConstructorUsedError;
   AsyncValue<void>? get favorite => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteModalSheetState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NoteModalSheetStateCopyWith<NoteModalSheetState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -36,7 +38,7 @@ abstract class $NoteModalSheetStateCopyWith<$Res> {
       _$NoteModalSheetStateCopyWithImpl<$Res, NoteModalSheetState>;
   @useResult
   $Res call(
-      {AsyncValue<NotesStateResponse> noteState,
+      {AsyncValue<NotesStateResponse>? noteState,
       bool isSharingMode,
       AsyncValue<UserDetailed>? user,
       AsyncValue<void>? delete,
@@ -54,10 +56,12 @@ class _$NoteModalSheetStateCopyWithImpl<$Res, $Val extends NoteModalSheetState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NoteModalSheetState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? noteState = null,
+    Object? noteState = freezed,
     Object? isSharingMode = null,
     Object? user = freezed,
     Object? delete = freezed,
@@ -65,10 +69,10 @@ class _$NoteModalSheetStateCopyWithImpl<$Res, $Val extends NoteModalSheetState>
     Object? favorite = freezed,
   }) {
     return _then(_value.copyWith(
-      noteState: null == noteState
+      noteState: freezed == noteState
           ? _value.noteState
           : noteState // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<NotesStateResponse>,
+              as AsyncValue<NotesStateResponse>?,
       isSharingMode: null == isSharingMode
           ? _value.isSharingMode
           : isSharingMode // ignore: cast_nullable_to_non_nullable
@@ -102,7 +106,7 @@ abstract class _$$NoteModalSheetStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AsyncValue<NotesStateResponse> noteState,
+      {AsyncValue<NotesStateResponse>? noteState,
       bool isSharingMode,
       AsyncValue<UserDetailed>? user,
       AsyncValue<void>? delete,
@@ -118,10 +122,12 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
       $Res Function(_$NoteModalSheetStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NoteModalSheetState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? noteState = null,
+    Object? noteState = freezed,
     Object? isSharingMode = null,
     Object? user = freezed,
     Object? delete = freezed,
@@ -129,10 +135,10 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
     Object? favorite = freezed,
   }) {
     return _then(_$NoteModalSheetStateImpl(
-      noteState: null == noteState
+      noteState: freezed == noteState
           ? _value.noteState
           : noteState // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<NotesStateResponse>,
+              as AsyncValue<NotesStateResponse>?,
       isSharingMode: null == isSharingMode
           ? _value.isSharingMode
           : isSharingMode // ignore: cast_nullable_to_non_nullable
@@ -161,7 +167,7 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
 
 class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
   _$NoteModalSheetStateImpl(
-      {required this.noteState,
+      {this.noteState,
       this.isSharingMode = false,
       this.user,
       this.delete,
@@ -170,7 +176,7 @@ class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
       : super._();
 
   @override
-  final AsyncValue<NotesStateResponse> noteState;
+  final AsyncValue<NotesStateResponse>? noteState;
   @override
   @JsonKey()
   final bool isSharingMode;
@@ -209,7 +215,9 @@ class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
   int get hashCode => Object.hash(runtimeType, noteState, isSharingMode, user,
       delete, deleteRecreate, favorite);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteModalSheetState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NoteModalSheetStateImplCopyWith<_$NoteModalSheetStateImpl> get copyWith =>
@@ -219,7 +227,7 @@ class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
 
 abstract class _NoteModalSheetState extends NoteModalSheetState {
   factory _NoteModalSheetState(
-      {required final AsyncValue<NotesStateResponse> noteState,
+      {final AsyncValue<NotesStateResponse>? noteState,
       final bool isSharingMode,
       final AsyncValue<UserDetailed>? user,
       final AsyncValue<void>? delete,
@@ -228,7 +236,7 @@ abstract class _NoteModalSheetState extends NoteModalSheetState {
   _NoteModalSheetState._() : super._();
 
   @override
-  AsyncValue<NotesStateResponse> get noteState;
+  AsyncValue<NotesStateResponse>? get noteState;
   @override
   bool get isSharingMode;
   @override
@@ -239,8 +247,11 @@ abstract class _NoteModalSheetState extends NoteModalSheetState {
   AsyncValue<void>? get deleteRecreate;
   @override
   AsyncValue<void>? get favorite;
+
+  /// Create a copy of NoteModalSheetState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NoteModalSheetStateImplCopyWith<_$NoteModalSheetStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -23,7 +23,9 @@ mixin _$NoteStatus {
   bool get isIncludeMuteWord => throw _privateConstructorUsedError;
   bool get isMuteOpened => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NoteStatusCopyWith<NoteStatus> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,6 +55,8 @@ class _$NoteStatusCopyWithImpl<$Res, $Val extends NoteStatus>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NoteStatus
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -117,6 +121,8 @@ class __$$NoteStatusImplCopyWithImpl<$Res>
       _$NoteStatusImpl _value, $Res Function(_$NoteStatusImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NoteStatus
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -229,7 +235,9 @@ class _$NoteStatusImpl with DiagnosticableTreeMixin implements _NoteStatus {
       isIncludeMuteWord,
       isMuteOpened);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NoteStatusImplCopyWith<_$NoteStatusImpl> get copyWith =>
@@ -257,8 +265,11 @@ abstract class _NoteStatus implements NoteStatus {
   bool get isIncludeMuteWord;
   @override
   bool get isMuteOpened;
+
+  /// Create a copy of NoteStatus
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NoteStatusImplCopyWith<_$NoteStatusImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

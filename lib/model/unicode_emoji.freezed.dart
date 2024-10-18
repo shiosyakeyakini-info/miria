@@ -25,8 +25,12 @@ mixin _$UnicodeEmoji {
   String get name => throw _privateConstructorUsedError;
   List<String> get keywords => throw _privateConstructorUsedError;
 
+  /// Serializes this UnicodeEmoji to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UnicodeEmoji
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UnicodeEmojiCopyWith<UnicodeEmoji> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$UnicodeEmojiCopyWithImpl<$Res, $Val extends UnicodeEmoji>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UnicodeEmoji
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,6 +104,8 @@ class __$$UnicodeEmojiImplCopyWithImpl<$Res>
       _$UnicodeEmojiImpl _value, $Res Function(_$UnicodeEmojiImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UnicodeEmoji
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -171,12 +179,14 @@ class _$UnicodeEmojiImpl implements _UnicodeEmoji {
             const DeepCollectionEquality().equals(other._keywords, _keywords));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, category, char, name,
       const DeepCollectionEquality().hash(_keywords));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UnicodeEmoji
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UnicodeEmojiImplCopyWith<_$UnicodeEmojiImpl> get copyWith =>
@@ -208,8 +218,11 @@ abstract class _UnicodeEmoji implements UnicodeEmoji {
   String get name;
   @override
   List<String> get keywords;
+
+  /// Create a copy of UnicodeEmoji
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UnicodeEmojiImplCopyWith<_$UnicodeEmojiImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

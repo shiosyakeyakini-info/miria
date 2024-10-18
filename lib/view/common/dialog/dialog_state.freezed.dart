@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DialogsState {
   List<DialogData> get dialogs => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DialogsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DialogsStateCopyWith<DialogsState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$DialogsStateCopyWithImpl<$Res, $Val extends DialogsState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DialogsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -75,6 +79,8 @@ class __$$DialogsStateImplCopyWithImpl<$Res>
       _$DialogsStateImpl _value, $Res Function(_$DialogsStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DialogsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -129,7 +135,9 @@ class _$DialogsStateImpl with DiagnosticableTreeMixin implements _DialogsState {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_dialogs));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DialogsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DialogsStateImplCopyWith<_$DialogsStateImpl> get copyWith =>
@@ -141,8 +149,11 @@ abstract class _DialogsState implements DialogsState {
 
   @override
   List<DialogData> get dialogs;
+
+  /// Create a copy of DialogsState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DialogsStateImplCopyWith<_$DialogsStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -159,7 +170,9 @@ mixin _$DialogData {
   AccountContext? get accountContext => throw _privateConstructorUsedError;
   bool get isMFM => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DialogData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DialogDataCopyWith<DialogData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -192,6 +205,8 @@ class _$DialogDataCopyWithImpl<$Res, $Val extends DialogData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DialogData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -225,6 +240,8 @@ class _$DialogDataCopyWithImpl<$Res, $Val extends DialogData>
     ) as $Val);
   }
 
+  /// Create a copy of DialogData
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AccountContextCopyWith<$Res>? get accountContext {
@@ -267,6 +284,8 @@ class __$$DialogDataImplCopyWithImpl<$Res>
       _$DialogDataImpl _value, $Res Function(_$DialogDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DialogData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -362,7 +381,9 @@ class _$DialogDataImpl with DiagnosticableTreeMixin implements _DialogData {
   int get hashCode => Object.hash(
       runtimeType, message, actions, completer, accountContext, isMFM);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DialogData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DialogDataImplCopyWith<_$DialogDataImpl> get copyWith =>
@@ -391,8 +412,11 @@ abstract class _DialogData implements DialogData {
   AccountContext? get accountContext;
   @override
   bool get isMFM;
+
+  /// Create a copy of DialogData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DialogDataImplCopyWith<_$DialogDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

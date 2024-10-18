@@ -21,7 +21,9 @@ mixin _$NoteSearchCondition {
   CommunityChannel? get channel => throw _privateConstructorUsedError;
   bool get localOnly => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteSearchCondition
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NoteSearchConditionCopyWith<NoteSearchCondition> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +50,8 @@ class _$NoteSearchConditionCopyWithImpl<$Res, $Val extends NoteSearchCondition>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NoteSearchCondition
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -76,6 +80,8 @@ class _$NoteSearchConditionCopyWithImpl<$Res, $Val extends NoteSearchCondition>
     ) as $Val);
   }
 
+  /// Create a copy of NoteSearchCondition
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CommunityChannelCopyWith<$Res>? get channel {
@@ -112,6 +118,8 @@ class __$$NoteSearchConditionImplCopyWithImpl<$Res>
       $Res Function(_$NoteSearchConditionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NoteSearchCondition
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -178,7 +186,9 @@ class _$NoteSearchConditionImpl extends _NoteSearchCondition {
   @override
   int get hashCode => Object.hash(runtimeType, query, user, channel, localOnly);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NoteSearchCondition
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NoteSearchConditionImplCopyWith<_$NoteSearchConditionImpl> get copyWith =>
@@ -202,8 +212,11 @@ abstract class _NoteSearchCondition extends NoteSearchCondition {
   CommunityChannel? get channel;
   @override
   bool get localOnly;
+
+  /// Create a copy of NoteSearchCondition
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NoteSearchConditionImplCopyWith<_$NoteSearchConditionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

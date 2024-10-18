@@ -20,7 +20,9 @@ mixin _$AccountContext {
   Account get getAccount => throw _privateConstructorUsedError;
   Account get postAccount => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AccountContextCopyWith<AccountContext> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +49,8 @@ class _$AccountContextCopyWithImpl<$Res, $Val extends AccountContext>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -65,6 +69,8 @@ class _$AccountContextCopyWithImpl<$Res, $Val extends AccountContext>
     ) as $Val);
   }
 
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AccountCopyWith<$Res> get getAccount {
@@ -73,6 +79,8 @@ class _$AccountContextCopyWithImpl<$Res, $Val extends AccountContext>
     });
   }
 
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AccountCopyWith<$Res> get postAccount {
@@ -106,6 +114,8 @@ class __$$AccountContextImplCopyWithImpl<$Res>
       _$AccountContextImpl _value, $Res Function(_$AccountContextImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,7 +167,9 @@ class _$AccountContextImpl extends _AccountContext {
   @override
   int get hashCode => Object.hash(runtimeType, getAccount, postAccount);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AccountContextImplCopyWith<_$AccountContextImpl> get copyWith =>
@@ -171,14 +183,16 @@ abstract class _AccountContext extends AccountContext {
       required final Account postAccount}) = _$AccountContextImpl;
   const _AccountContext._() : super._();
 
-  @override
-
   /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
+  @override
   Account get getAccount;
   @override
   Account get postAccount;
+
+  /// Create a copy of AccountContext
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AccountContextImplCopyWith<_$AccountContextImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

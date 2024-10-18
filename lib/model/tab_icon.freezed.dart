@@ -23,8 +23,12 @@ mixin _$TabIcon {
   int? get codePoint => throw _privateConstructorUsedError;
   String? get customEmojiName => throw _privateConstructorUsedError;
 
+  /// Serializes this TabIcon to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TabIcon
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TabIconCopyWith<TabIcon> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -46,6 +50,8 @@ class _$TabIconCopyWithImpl<$Res, $Val extends TabIcon>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TabIcon
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -83,6 +89,8 @@ class __$$TabIconImplCopyWithImpl<$Res>
       _$TabIconImpl _value, $Res Function(_$TabIconImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TabIcon
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,11 +139,13 @@ class _$TabIconImpl implements _TabIcon {
                 other.customEmojiName == customEmojiName));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, codePoint, customEmojiName);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TabIcon
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TabIconImplCopyWith<_$TabIconImpl> get copyWith =>
@@ -159,8 +169,11 @@ abstract class _TabIcon implements TabIcon {
   int? get codePoint;
   @override
   String? get customEmojiName;
+
+  /// Create a copy of TabIcon
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TabIconImplCopyWith<_$TabIconImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
