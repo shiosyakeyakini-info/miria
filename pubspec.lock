@@ -1041,9 +1041,11 @@ packages:
   misskey_dart:
     dependency: "direct main"
     description:
-      path: "../misskey_dart"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: e31e54cf6744c7b9c9c83ae3fcbbab97c2a83ac2
+      url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
+    source: git
     version: "1.0.0"
   mockito:
     dependency: "direct dev"
