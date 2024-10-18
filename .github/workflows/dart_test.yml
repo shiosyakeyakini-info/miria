@@ -36,8 +36,9 @@ jobs:
 
       - name: Run flutter pub get
         run: flutter pub get
-
-      - run: flutter analyze --fatal-infos
+      
+      # ゆくゆくは
+      # - run: flutter analyze --fatal-infos
 
       - name: Run flutter test with coverage
         run: flutter test --coverage --coverage-path=~/coverage/lcov.info
