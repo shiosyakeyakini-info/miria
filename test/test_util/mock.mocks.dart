@@ -10,7 +10,7 @@ import 'dart:ui' as _i16;
 
 import 'package:dio/dio.dart' as _i9;
 import 'package:file/file.dart' as _i11;
-import 'package:file_picker/file_picker.dart' as _i28;
+import 'package:file_picker/file_picker.dart' as _i27;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' as _i12;
 import 'package:miria/model/account.dart' as _i7;
 import 'package:miria/model/account_settings.dart' as _i2;
@@ -26,15 +26,14 @@ import 'package:miria/repository/note_repository.dart' as _i23;
 import 'package:miria/repository/shared_preference_controller.dart' as _i4;
 import 'package:miria/repository/tab_settings_repository.dart' as _i13;
 import 'package:misskey_dart/misskey_dart.dart' as _i6;
-import 'package:misskey_dart/src/data/streaming/streaming_request.dart' as _i26;
 import 'package:misskey_dart/src/services/api_service.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i24;
 import 'package:riverpod_annotation/riverpod_annotation.dart' as _i5;
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart'
-    as _i29;
+    as _i28;
 
-import 'mock.dart' as _i27;
+import 'mock.dart' as _i26;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -6160,7 +6159,7 @@ class MockStreamingController extends _i1.Mock
   @override
   void sendRequest(
     _i6.StreamingRequestType? type,
-    _i26.StreamingRequestBody? body,
+    dynamic body,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -6470,14 +6469,14 @@ class MockWebSocketController extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFilePickerPlatform extends _i1.Mock
-    implements _i27.FakeFilePickerPlatform {
+    implements _i26.FakeFilePickerPlatform {
   @override
-  _i15.Future<_i28.FilePickerResult?> pickFiles({
+  _i15.Future<_i27.FilePickerResult?> pickFiles({
     String? dialogTitle,
     String? initialDirectory,
-    _i28.FileType? type = _i28.FileType.any,
+    _i27.FileType? type = _i27.FileType.any,
     List<String>? allowedExtensions,
-    dynamic Function(_i28.FilePickerStatus)? onFileLoading,
+    dynamic Function(_i27.FilePickerStatus)? onFileLoading,
     bool? allowCompression = true,
     int? compressionQuality = 30,
     bool? allowMultiple = false,
@@ -6505,9 +6504,9 @@ class MockFilePickerPlatform extends _i1.Mock
             #readSequential: readSequential,
           },
         ),
-        returnValue: _i15.Future<_i28.FilePickerResult?>.value(),
-        returnValueForMissingStub: _i15.Future<_i28.FilePickerResult?>.value(),
-      ) as _i15.Future<_i28.FilePickerResult?>);
+        returnValue: _i15.Future<_i27.FilePickerResult?>.value(),
+        returnValueForMissingStub: _i15.Future<_i27.FilePickerResult?>.value(),
+      ) as _i15.Future<_i27.FilePickerResult?>);
 
   @override
   _i15.Future<bool?> clearTemporaryFiles() => (super.noSuchMethod(
@@ -6544,7 +6543,7 @@ class MockFilePickerPlatform extends _i1.Mock
     String? dialogTitle,
     String? fileName,
     String? initialDirectory,
-    _i28.FileType? type = _i28.FileType.any,
+    _i27.FileType? type = _i27.FileType.any,
     List<String>? allowedExtensions,
     _i25.Uint8List? bytes,
     bool? lockParentWindow = false,
@@ -6572,7 +6571,7 @@ class MockFilePickerPlatform extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockBaseCacheManager extends _i1.Mock
-    implements _i27.$MockBaseCacheManager {
+    implements _i26.$MockBaseCacheManager {
   @override
   _i15.Future<_i11.File> getSingleFile(
     String? url, {
@@ -6871,7 +6870,7 @@ class MockBaseCacheManager extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUrlLauncherPlatform extends _i1.Mock
-    implements _i27.$MockUrlLauncherPlatform {
+    implements _i26.$MockUrlLauncherPlatform {
   @override
   _i15.Future<bool> canLaunch(String? url) => (super.noSuchMethod(
         Invocation.method(
@@ -6914,7 +6913,7 @@ class MockUrlLauncherPlatform extends _i1.Mock
   @override
   _i15.Future<bool> launchUrl(
     String? url,
-    _i29.LaunchOptions? options,
+    _i28.LaunchOptions? options,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -6939,7 +6938,7 @@ class MockUrlLauncherPlatform extends _i1.Mock
       ) as _i15.Future<void>);
 
   @override
-  _i15.Future<bool> supportsMode(_i29.PreferredLaunchMode? mode) =>
+  _i15.Future<bool> supportsMode(_i28.PreferredLaunchMode? mode) =>
       (super.noSuchMethod(
         Invocation.method(
           #supportsMode,
@@ -6950,7 +6949,7 @@ class MockUrlLauncherPlatform extends _i1.Mock
       ) as _i15.Future<bool>);
 
   @override
-  _i15.Future<bool> supportsCloseForMode(_i29.PreferredLaunchMode? mode) =>
+  _i15.Future<bool> supportsCloseForMode(_i28.PreferredLaunchMode? mode) =>
       (super.noSuchMethod(
         Invocation.method(
           #supportsCloseForMode,

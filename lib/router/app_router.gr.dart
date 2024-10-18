@@ -301,7 +301,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     FolderSelectRoute.name: (routeData) {
       final args = routeData.argsAs<FolderSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<FolderResult>(
         routeData: routeData,
         child: FolderSelectDialog(
           account: args.account,

@@ -14,7 +14,7 @@ class FolderResult {
   final DriveFolder? folder;
 }
 
-@RoutePage()
+@RoutePage<FolderResult>()
 class FolderSelectDialog extends ConsumerStatefulWidget {
   final Account account;
   final List<String>? fileShowTarget;

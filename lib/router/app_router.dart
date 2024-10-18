@@ -160,6 +160,7 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute<UsersList>(page: UserListSelectRoute.page),
     AutoDialogRoute<UsersListSettings>(page: UsersListSettingsRoute.page),
     AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
+    AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),
