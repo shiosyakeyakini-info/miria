@@ -62,9 +62,9 @@ dependencies:
   webview_flutter: ^4.3.0
   webview_flutter_android: ^3.12.0
   webview_flutter_wkwebview: ^3.9.0
-  media_kit: ^1.1.8+2
-  media_kit_video: ^1.2.1
-  media_kit_libs_video: ^1.0.3
+  media_kit: ^1.1.11
+  media_kit_video: ^1.2.5
+  media_kit_libs_video: ^1.0.5
   flutter_colorpicker: ^1.1.0
   volume_controller: ^2.0.7
   window_manager: ^0.3.8
