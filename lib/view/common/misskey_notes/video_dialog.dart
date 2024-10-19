@@ -110,6 +110,7 @@ class _VideoDialogState extends State<VideoDialog> {
       automaticallyImplySkipPreviousButton: false,
       primaryButtonBar: [],
       bottomButtonBar: [],
+      playAndPauseOnTap: false,
     );
 
     final themeDataDesktopFull = MaterialDesktopVideoControlsThemeData(
@@ -118,6 +119,7 @@ class _VideoDialogState extends State<VideoDialog> {
       modifyVolumeOnScroll: false,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
+      playAndPauseOnTap: false,
     );
 
     return AlertDialog(
