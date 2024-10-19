@@ -83,6 +83,7 @@ class _VideoDialogState extends State<VideoDialog> {
       volumeGesture: false,
       brightnessGesture: false,
       displaySeekBar: false,
+      seekOnDoubleTap: false,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
       primaryButtonBar: [],
@@ -94,6 +95,8 @@ class _VideoDialogState extends State<VideoDialog> {
       seekBarThumbColor: Theme.of(context).primaryColor,
       volumeGesture: false,
       brightnessGesture: false,
+      displaySeekBar: true,
+      seekOnDoubleTap: true,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
       bottomButtonBarMargin:
