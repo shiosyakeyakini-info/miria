@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:io";
 import "dart:math";
 
 import "package:flutter/material.dart";
@@ -33,6 +34,9 @@ class _VideoDialogState extends State<VideoDialog> {
   bool isEnabledButton = false;
   bool isFullScreen = false;
   Timer? timer;
+
+  bool get isDesktop =>
+    Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
   @override
   void initState() {
@@ -208,6 +212,13 @@ class _VideoDialogState extends State<VideoDialog> {
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                      if (!isDesktop) SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Container(
+                          color: Colors.transparent,
                         ),
                       ),
                       AnimatedOpacity(
