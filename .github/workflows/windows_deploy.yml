@@ -51,7 +51,7 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
           path: windows/innosetup.iss
-          options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}"
+          options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}" /Qp
 
       - name: Rename .EXE Installer
         run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe
