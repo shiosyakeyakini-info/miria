@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -66,14 +66,7 @@
 		B670FC972BB4CEA30071C2AC /* Flutter.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = "../../../flutter/bin/cache/artifacts/engine/ios-profile/extension_safe/Flutter.xcframework"; sourceTree = "<group>"; };
 		B6A6044E2B6F3F4C00DF5E0A /* shared_preference_app_group.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = shared_preference_app_group.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A604592B6F41A100DF5E0A /* shared_preference_app_group.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = shared_preference_app_group.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B6A604632B6F862900DF5E0A /* ShareExtensionPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareExtensionPluginRegistrant.h; sourceTree = "<group>"; };
-		B6A604642B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareExtensionPluginRegistrant.m; sourceTree = "<group>"; };
-		B6A6046A2B6F895700DF5E0A /* ShareExtension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShareExtension-Bridging-Header.h"; sourceTree = "<group>"; };
 		B6D30E6D2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		B6E32F972A29F16500F51621 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		B6E32F9A2A29F16500F51621 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		B6E32F9C2A29F16500F51621 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B6E32FA52A29F2B300F51621 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		B6E32FA62A29F2F600F51621 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		E27F6288EB71147A028B4862 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE563C168BB69E3C02B5F2FF /* Pods-ShareExtension.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.profile.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.profile.xcconfig"; sourceTree = "<group>"; };
@@ -121,7 +114,6 @@
 				B6D30E6D2CC2F993002CCBB1 /* PrivacyInfo.xcprivacy */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				B6E32F962A29F16500F51621 /* ShareExtension */,
 				97C146EF1CF9000F007C117D /* Products */,
 				1E6AA870CBAB1C7364D7828A /* Pods */,
 				A4C9FFCDD3C0E6ACDCD23018 /* Frameworks */,
@@ -165,20 +157,6 @@
 				7F0DC075AE7FA24708EE4D06 /* Pods_ShareExtension.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B6E32F962A29F16500F51621 /* ShareExtension */ = {
-			isa = PBXGroup;
-			children = (
-				B6E32FA52A29F2B300F51621 /* ShareExtension.entitlements */,
-				B6E32F972A29F16500F51621 /* ShareViewController.swift */,
-				B6E32F992A29F16500F51621 /* MainInterface.storyboard */,
-				B6E32F9C2A29F16500F51621 /* Info.plist */,
-				B6A604632B6F862900DF5E0A /* ShareExtensionPluginRegistrant.h */,
-				B6A604642B6F867200DF5E0A /* ShareExtensionPluginRegistrant.m */,
-				B6A6046A2B6F895700DF5E0A /* ShareExtension-Bridging-Header.h */,
-			);
-			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -375,14 +353,6 @@
 				97C147001CF9000F007C117D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		B6E32F992A29F16500F51621 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B6E32F9A2A29F16500F51621 /* Base */,
-			);
-			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

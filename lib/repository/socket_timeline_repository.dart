@@ -145,10 +145,19 @@ abstract class SocketTimelineRepository extends TimelineRepository {
 
   @override
   Future<void> reconnect() async {
+    if (isReconnecting) return;
     isReconnecting = true;
     try {
-      await timelineSubscription?.cancel();
-      await mainSubscription?.cancel();
+      await (
+        disconnect(),
+        timelineSubscription?.cancel() ?? Future.value(),
+        mainSubscription?.cancel() ?? Future.value()
+      ).wait;
+    } catch (e) {
+      print(e);
+    }
+
+    try {
       await (
         () async {
           await misskey.streamingService.reconnect();
