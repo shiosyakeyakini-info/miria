@@ -61,11 +61,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<AntennaModalRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: AntennaModalSheet(
+        child: WrappedRoute(
+            child: AntennaModalSheet(
           account: args.account,
           user: args.user,
           key: args.key,
-        ),
+        )),
       );
     },
     AntennaNotesRoute.name: (routeData) {
@@ -231,7 +232,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     DriveFileSelectRoute.name: (routeData) {
       final args = routeData.argsAs<DriveFileSelectRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<List<DriveFile>>(
         routeData: routeData,
         child: WrappedRoute(
             child: DriveFileSelectDialog(
@@ -742,11 +743,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<UsersListModalRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UsersListModalSheet(
+        child: WrappedRoute(
+            child: UsersListModalSheet(
           account: args.account,
           user: args.user,
           key: args.key,
-        ),
+        )),
       );
     },
     UsersListRoute.name: (routeData) {

@@ -548,7 +548,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         .push<DriveModalSheetReturnValue>(const DriveModalRoute());
 
     if (result == DriveModalSheetReturnValue.drive) {
-      final result = await ref.read(appRouterProvider).push<List<DriveFile>?>(
+      final result = await ref.read(appRouterProvider).push<List<DriveFile>>(
             DriveFileSelectRoute(
               account: ref.read(accountContextProvider).postAccount,
               allowMultiple: true,

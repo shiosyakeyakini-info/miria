@@ -11,7 +11,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage()
+@RoutePage<List<DriveFile>>()
 class DriveFileSelectDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   final Account account;
@@ -35,7 +35,7 @@ class DriveFileSelectDialog extends HookConsumerWidget
     return AlertDialog(
       title: AppBar(
         leading: IconButton(
-          onPressed: path.value.isEmpty ? null : () => path.value.removeLast(),
+          onPressed: path.value.isEmpty ? null : () => path.value = [...path.value..removeLast()],
           icon: const Icon(Icons.arrow_back),
         ),
         title: path.value.isEmpty
@@ -53,7 +53,7 @@ class DriveFileSelectDialog extends HookConsumerWidget
             IconButton(
               onPressed: files.value.isEmpty
                   ? null
-                  : () => Navigator.of(context).pop(files),
+                  : () => Navigator.of(context).pop(files.value),
               icon: const Icon(Icons.check),
             ),
         ],
@@ -94,7 +94,7 @@ class DriveFileSelectDialog extends HookConsumerWidget
                   return ListTile(
                     leading: const Icon(Icons.folder),
                     title: Text(item.name),
-                    onTap: () => path.value.add(item),
+                    onTap: () => path.value = [...path.value, item],
                   );
                 },
               ),
@@ -134,13 +134,13 @@ class DriveFileSelectDialog extends HookConsumerWidget
                       onTap: () {
                         if (allowMultiple) {
                           if (isSelected) {
-                            files.value
-                                .removeWhere((file) => file.id == item.id);
+                            files.value = files.value
+                                .where((file) => file.id != item.id).toList();
                           } else {
-                            files.value.add(item);
+                            files.value = [...files.value, item];
                           }
                         } else {
-                          Navigator.of(context).pop(item);
+                          Navigator.of(context).pop([item]);
                         }
                       },
                       child: Container(

@@ -84,7 +84,7 @@ class CreateFileView extends ConsumerWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () => detailTap(context, ref),
+                      onPressed: () async => detailTap(context, ref),
                       icon: const Icon(Icons.more_vert),
                     ),
                     IconButton(
@@ -98,30 +98,44 @@ class CreateFileView extends ConsumerWidget {
           ),
         );
       case ImageFileAlreadyPostedFile():
-        return Column(
-          children: [
-            SizedBox(
-              height: 200,
-              child: GestureDetector(
-                onTap: () async => await onTap(context, ref),
-                child: Image.memory(data.data),
-              ),
-            ),
-            Row(
+        return Card.outlined(
+          child: SizedBox(
+            width: 210,
+            child: Column(
               children: [
-                if (data.isNsfw) const Icon(Icons.details_rounded),
-                Text(data.fileName),
-                IconButton(
-                  onPressed: () async => detailTap(context, ref),
-                  icon: const Icon(Icons.more_vert),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  child: SizedBox(
+                    height: 200,
+                    child: GestureDetector(
+                      onTap: () async => await onTap(context, ref),
+                      child: Image.memory(data.data),
+                    ),
+                  ),
                 ),
-                IconButton(
-                  onPressed: () => delete(context, ref),
-                  icon: const Icon(Icons.delete),
+                Row(
+                  children: [
+                    if (data.isNsfw) const Icon(Icons.details_rounded),
+                    if (!data.isNsfw) const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        data.fileName,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async => detailTap(context, ref),
+                      icon: const Icon(Icons.more_vert),
+                    ),
+                    IconButton(
+                      onPressed: () => delete(context, ref),
+                      icon: const Icon(Icons.delete),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         );
       case UnknownFile():
         return Text(data.fileName);
