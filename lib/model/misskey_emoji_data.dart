@@ -44,11 +44,10 @@ sealed class MisskeyEmojiData {
     // 自分のサーバー :ai@.:
     if (customEmojiRegExp.hasMatch(emojiName)) {
       assert(repository != null);
-      final found = repository!.emoji?.firstWhereOrNull(
-        (e) =>
-            e.emoji.baseName ==
-            (customEmojiRegExp.firstMatch(emojiName)?.group(1) ?? emojiName),
-      );
+      final name =
+          customEmojiRegExp.firstMatch(emojiName)?.group(1) ?? emojiName;
+      final found = repository!.emojiMap?[name];
+
       if (found != null) {
         return found.emoji;
       } else {
@@ -60,12 +59,9 @@ sealed class MisskeyEmojiData {
     final customEmojiRegExp2 = RegExp(r"^:(.+?):$");
     if (customEmojiRegExp2.hasMatch(emojiName)) {
       assert(repository != null);
-      final found = repository!.emoji?.firstWhereOrNull(
-        (e) =>
-            e.emoji.baseName ==
-            (customEmojiRegExp2.firstMatch(emojiName)?.group(1) ?? emojiName),
-      );
-
+      final name =
+          customEmojiRegExp2.firstMatch(emojiName)?.group(1) ?? emojiName;
+      final found = repository!.emojiMap?[name];
       if (found != null) {
         return found.emoji;
       } else {

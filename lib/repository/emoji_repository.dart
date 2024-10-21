@@ -1,3 +1,4 @@
+import "dart:collection";
 import "dart:convert";
 
 import "package:collection/collection.dart";
@@ -13,6 +14,7 @@ import "package:misskey_dart/misskey_dart.dart";
 
 abstract class EmojiRepository {
   List<EmojiRepositoryData>? emoji;
+  Map<String, EmojiRepositoryData>? emojiMap;
   Future<void> loadFromSourceIfNeed();
   Future<void> loadFromSource();
 
@@ -150,6 +152,12 @@ class EmojiRepositoryImpl extends EmojiRepository {
         )
         .toList();
     emoji!.addAll(unicodeEmojis);
+
+    emojiMap = HashMap<String, EmojiRepositoryData>.fromIterable(
+      emoji!,
+      key: (e) => (e as EmojiRepositoryData).emoji.baseName,
+      value: (e) => e,
+    );
   }
 
   bool emojiSearchCondition(
@@ -216,10 +224,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
       return [];
     } else {
       return reactionDeck
-          .map(
-            (e) => emoji
-                ?.firstWhereOrNull((element) => element.emoji.baseName == e),
-          )
+          .map((e) => emojiMap?[e])
           .whereNotNull()
           .map((e) => e.emoji)
           .toList();
