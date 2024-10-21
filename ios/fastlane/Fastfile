@@ -28,12 +28,6 @@ platform :ios do
       scheme: "Runner",
       export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
-    build_app(
-      skip_build_archive: true,
-      archive_path: "../build/ios/archive/Runner.xcarchive",
-      scheme: "ShareExtension",
-      export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
-    )    
     upload_to_testflight(
       api_key: api_key,
       skip_waiting_for_build_processing: true,
