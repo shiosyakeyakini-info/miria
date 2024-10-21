@@ -27,6 +27,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     required String monospaceFontName,
     required String cursiveFontName,
     required String fantasyFontName,
+    required Languages languages,
   }) {
     return AppThemeData(
       colorTheme: theme,
@@ -43,8 +44,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       linkStyle: TextStyle(color: theme.link),
       hashtagStyle: TextStyle(color: theme.hashtag),
       mentionStyle: TextStyle(color: theme.mention),
-      serifStyle: resolveFontFamilySerif(serifFontName),
-      monospaceStyle: resolveFontFamilyMonospace(monospaceFontName),
+      serifStyle: resolveFontFamilySerif(serifFontName, languages),
+      monospaceStyle: resolveFontFamilyMonospace(monospaceFontName, languages),
       cursiveStyle: cursiveFontName.isNotEmpty
           ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
           : const TextStyle(),
@@ -62,76 +63,126 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       currentDisplayTabColor:
           theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
       unicodeEmojiStyle: resolveUnicodeEmojiStyle(),
+      languages: languages,
     );
   }
 
-  String resolveFontFamilyName(String defaultFontName) {
+  dynamic resolveFontFamilyName(String defaultFontName, Languages languages) {
     if (defaultFontName.isNotEmpty) {
       return defaultFontName;
     }
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return "SF Pro Text";
+    } else if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.windows) {
+      if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+        return "Noto Sans JP";
+      } else  if (languages == Languages.zhCN) {
+        return "Noto Sans SC";
+      } else {
+        return "Noto Sans";
+      }
+    } else {
+      if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+        return "Noto Sans CJK JP";
+      } else if (languages == Languages.zhCN) {
+        return "Noto Sans CJK SC";
+      } else {
+        return "Noto Sans";
+      }
     }
-    if (defaultTargetPlatform == TargetPlatform.linux) {
-      return "Noto Sans CJK JP";
-    }
-
-    return "KosugiMaru";
   }
 
-  List<String> resolveFontFamilyFallback(String defaultFontName) {
-    if (defaultTargetPlatform == TargetPlatform.windows ||
-        defaultTargetPlatform == TargetPlatform.linux) {
-      return [
-        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
-        "Noto Sans CJK JP",
-        "KosugiMaru",
-        "BIZ UDPGothic",
-      ];
-    }
+  List<String> resolveFontFamilyFallback(String defaultFontName, Languages languages) {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return [
-        if (defaultFontName.isNotEmpty) resolveFontFamilyName(""),
+        if (defaultFontName.isNotEmpty) resolveFontFamilyName("", languages),
         "Hiragino Maru Gothic ProN",
         "Apple Color Emoji",
       ];
-    }
-    return [];
-  }
-
-  TextStyle resolveFontFamilySerif(String defaultFontName) {
-    final fallback = <String>[];
-
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      fallback.addAll(["Hiragino Mincho ProN", "Apple Color Emoji"]);
     } else {
-      fallback.addAll(["Noto Serif CJK JP", "Noto Serif", "Droid Serif"]);
+      return [
+        if (defaultFontName.isNotEmpty) resolveFontFamilyName("", languages),
+        "Noto Color Emoji",
+      ];
     }
-    return (defaultFontName.isEmpty
-            ? const TextStyle()
-            : (fromGoogleFont(defaultFontName) ?? const TextStyle()))
-        .copyWith(fontFamilyFallback: fallback);
   }
 
-  TextStyle resolveFontFamilyMonospace(String monospaceFontName) {
+  TextStyle resolveFontFamilySerif(String serifFontName, Languages languages) {
     final String? fontName;
     final fallback = <String>[];
 
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
-      fontName = "Monaco";
-      fallback.addAll(const ["Apple Color Emoji", "Hiragino Maru Gothic ProN"]);
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      fontName = "Consolas";
-      fallback.addAll(const ["Segoe UI Emoji", "Noto Color Emoji", "Meiryo"]);
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      fontName = "Droid Sans Mono";
-      fallback.addAll(const ["Noto Color Emoji", "Noto Sans JP"]);
+      fontName = "Hiragino Mincho ProN";
+      fallback.addAll(const [
+        "Apple Color Emoji",
+      ]);
     } else {
-      fontName = null;
+      if (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.windows) {
+        if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+          fontName = "Noto Serif JP";
+        } else if (languages == Languages.zhCN) {
+          fontName = "Noto Serif SC";
+        } else {
+          fontName = "Noto Serif";
+        }
+      } else {
+        if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+          fontName = "Noto Serif CJK JP";
+        } else if (languages == Languages.zhCN) {
+          fontName = "Noto Serif CJK SC";
+        } else {
+          fontName = "Noto Serif";
+        }
+      }
+      fallback.addAll(const [
+        "Noto Color Emoji",
+      ]);
+    }
+    return (serifFontName.isNotEmpty
+            ? (fromGoogleFont(serifFontName) ??
+                TextStyle(fontFamily: fontName))
+            : TextStyle(fontFamily: fontName))
+        .copyWith(fontFamilyFallback: fallback);
+  }
+
+  TextStyle resolveFontFamilyMonospace(String monospaceFontName, Languages languages) {
+    final String? fontName;
+    final fallback = <String>[];
+
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+        if (defaultTargetPlatform == TargetPlatform.iOS) {
+          fontName = "Menlo";
+        } else {
+          fontName = "Monaco";
+        }
+      fallback.addAll(const [
+        "Apple Color Emoji",
+        "Hiragino Maru Gothic ProN",
+      ]);
+    } else {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        fontName = "Droid Sans Mono";
+      } else if (defaultTargetPlatform == TargetPlatform.windows) {
+        fontName = "Consolas";
+      } else {
+        if (languages == Languages.jaJP || languages == Languages.jaOJ) {
+          fontName = "Noto Sans Mono CJK JP";
+        } else if (languages == Languages.zhCN) {
+          fontName = "Noto Sans Mono CJK SC";
+        } else {
+          fontName = "Noto Sans";
+        }
+      }
+      fallback.addAll(const [
+        "Noto Color Emoji",
+        "Noto Mono",
+      ]);
     }
     return (monospaceFontName.isNotEmpty
             ? (fromGoogleFont(monospaceFontName) ??
@@ -144,27 +195,19 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return const TextStyle(
-        fontFamily: "Apple Color Emoji",
+          fontFamily: "Apple Color Emoji",
+          fontFamilyFallback: [
+            "Hiragino Maru Gothic ProN",
+          ],
+        );
+    } else {
+      return const TextStyle(
+        fontFamily: "Noto Color Emoji",
         fontFamilyFallback: [
-          "Apple Color Emoji",
-          "Hiragino Maru Gothic ProN",
+          "Noto Sans",
         ],
       );
     }
-    if (defaultTargetPlatform == TargetPlatform.windows) {
-      return const TextStyle(
-        fontFamily: "Segoe UI Emoji",
-        fontFamilyFallback: ["Segoe UI Emoji", "Noto Color Emoji", "Meiryo"],
-      );
-    }
-    if (defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.linux) {
-      return const TextStyle(
-        fontFamily: "Noto Color Emoji",
-        fontFamilyFallback: ["Noto Color Emoji", "Noto Sans JP"],
-      );
-    }
-    return const TextStyle();
   }
 
   TextTheme applyGoogleFont(TextTheme textTheme, String? fontName) {
@@ -185,15 +228,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     required BuildContext context,
     required ColorTheme theme,
     required String defaultFontName,
+    required Languages languages,
   }) {
     final textThemePre = applyGoogleFont(
       Theme.of(context).textTheme.merge(
             (theme.isDarkTheme ? ThemeData.dark() : ThemeData.light())
                 .textTheme
                 .apply(
-                  fontFamily: resolveFontFamilyName(defaultFontName),
+                  fontFamily: resolveFontFamilyName(defaultFontName, languages),
                   fontFamilyFallback:
-                      resolveFontFamilyFallback(defaultFontName),
+                      resolveFontFamilyFallback(defaultFontName, languages),
                   bodyColor: theme.foreground,
                 ),
           ),
@@ -390,6 +434,10 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       generalSettingsRepositoryProvider
           .select((value) => value.settings.fantasyFontName),
     );
+    final languages = ref.watch(
+      generalSettingsRepositoryProvider
+        .select((value) => value.settings.languages),
+    );
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -414,6 +462,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         context: context,
         theme: foundColorTheme,
         defaultFontName: defaultFontName,
+        languages: languages,
       ),
       child: AppTheme(
         themeData: buildDarkAppThemeData(
@@ -423,6 +472,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           monospaceFontName: monospaceFontName,
           cursiveFontName: cursiveFontName,
           fantasyFontName: fantasyFontName,
+          languages: languages,
         ),
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
