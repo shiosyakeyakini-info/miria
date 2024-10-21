@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 
 class ChannelArea extends ConsumerWidget {
   const ChannelArea({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final channel = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.channel));
+    final channel = ref.watch(
+      noteCreateNotifierProvider.select((value) => value.channel),
+    );
     if (channel == null) return Container();
 
     return Align(

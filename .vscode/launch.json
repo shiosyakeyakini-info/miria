@@ -21,6 +21,13 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "debug current file",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "${file}"
         }
     ]
 }

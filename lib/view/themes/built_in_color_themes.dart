@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/color_theme.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/color_theme.dart";
 
 const builtInColorThemes = [
   ColorTheme(
@@ -400,5 +400,5 @@ const builtInColorThemes = [
     buttonGradateB: Color(0xff007aa4),
     panel: Color(0xff1d2d30),
     panelBackground: Color(0xff23363a),
-  )
+  ),
 ];

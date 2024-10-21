@@ -1,39 +1,17 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:miria/repository/socket_timeline_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:miria/repository/socket_timeline_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class UserListTimelineRepository extends SocketTimelineRepository {
   UserListTimelineRepository(
     super.misskey,
     super.account,
     super.noteRepository,
-    super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
-    super.mainStreamRepository,
-    super.accountRepository,
-    super.emojiRepository,
+    super.ref,
   );
-
-  @override
-  SocketController createSocketController({
-    required void Function(Note note) onReceived,
-    required FutureOr<void> Function(String id, TimelineReacted reaction)
-        onReacted,
-    required FutureOr<void> Function(String id, TimelineReacted reaction)
-        onUnreacted,
-    required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
-    required FutureOr<void> Function(String id, NoteEdited note) onUpdated,
-  }) {
-    return misskey.userListStream(
-      listId: tabSetting.listId!,
-      onNoteReceived: onReceived,
-      onReacted: onReacted,
-      onVoted: onVoted,
-      onUpdated: onUpdated,
-    );
-  }
 
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
@@ -46,4 +24,12 @@ class UserListTimelineRepository extends SocketTimelineRepository {
       ),
     );
   }
+
+  @override
+  // TODO: implement channel
+  Channel get channel => Channel.userList;
+
+  @override
+  // TODO: implement parameters
+  Map<String, dynamic> get parameters => {"listId": tabSetting.listId};
 }

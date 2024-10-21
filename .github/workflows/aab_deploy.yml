@@ -23,15 +23,15 @@ jobs:
             channel: 'stable'
             cache: true
 
-        - uses: actions/setup-java@v3
+        - uses: actions/setup-java@v4
           with:
             distribution: 'zulu'
-            java-version: '11'
+            java-version: '17'
             cache: 'gradle'
-      
+
 
         - name: Cache pubspec dependencies
-          uses: actions/cache@v3
+          uses: actions/cache@v4
           with:
             path: |
               ${{ env.FLUTTER_HOME }}/.pub-cache
@@ -53,17 +53,16 @@ jobs:
 
         - name: Run flutter test with coverage
           run: flutter test --coverage --coverage-path=~/coverage/lcov.info
-          
 
         - name: Create aab file
           run: |
             echo -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > ./android/release.keystore
             export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
             export ANDROID_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
-            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"            
+            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
             flutter build appbundle --no-tree-shake-icons --release
         - name: Upload artifact
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: app-release.aab
             # 保存するファイル

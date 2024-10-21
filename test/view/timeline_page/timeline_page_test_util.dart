@@ -1,24 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/router/app_router.dart';
-import 'package:mockito/mockito.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
+import "package:mockito/mockito.dart";
 
-import '../../test_util/default_root_widget.dart';
-import '../../test_util/mock.mocks.dart';
-import '../../test_util/test_datas.dart';
+import "../../test_util/default_root_widget.dart";
+import "../../test_util/mock.mocks.dart";
+import "../../test_util/test_datas.dart";
 
 class TimelinePageTest {
   final mockMisskey = MockMisskey();
   final mockMisskeyNotes = MockMisskeyNotes();
   final mockMisskeyI = MockMisskeyI();
-  final mockSocketController = MockSocketController();
-  final mockStreamingService = MockStreamingService();
-  final mockAccountRepository = MockAccountRepository();
+  final mockWebSocketController = MockWebSocketController();
+  final mockStreamingController = MockStreamingController();
+  final accountRepository = MockAccountRepository();
   final mockTabSettingsRepository = MockTabSettingsRepository();
   late final TabSetting tabSetting;
 
@@ -48,34 +48,30 @@ class TimelinePageTest {
       renoteDisplay: renoteDisplay,
     ).copyWith();
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
-    when(mockMisskey.streamingService).thenReturn(mockStreamingService);
+    when(mockMisskey.streamingService).thenReturn(mockWebSocketController);
+    when(mockWebSocketController.stream())
+        .thenAnswer((_) async => mockStreamingController);
+    when(mockWebSocketController.isClosed).thenReturn(false);
     when(mockMisskey.i).thenReturn(mockMisskeyI);
+    // ignore: discarded_futures
     when(mockMisskey.meta()).thenAnswer((_) async => TestData.meta);
 
+    // ignore: discarded_futures
     when(mockMisskeyI.i()).thenAnswer((_) async => TestData.account.i);
-
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);
   }
 
   Widget buildWidget({
     List<Override> overrides = const [],
   }) {
-    final mockAccountRepository = AccountRepository();
-
     return ProviderScope(
       overrides: [
-        misskeyProvider.overrideWith((ref, arg) => mockMisskey),
+        misskeyProvider.overrideWith((ref) => mockMisskey),
         tabSettingsRepositoryProvider
             .overrideWith((ref) => mockTabSettingsRepository),
+        accountRepositoryProvider.overrideWith(() => accountRepository),
         accountsProvider.overrideWith((ref) => [TestData.account]),
-        accountRepositoryProvider.overrideWith(() {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            mockAccountRepository.state = [TestData.account];
-          });
-          return mockAccountRepository;
-        }),
-        emojiRepositoryProvider
-            .overrideWith((ref, arg) => MockEmojiRepository())
+        emojiRepositoryProvider.overrideWith((ref) => MockEmojiRepository()),
       ],
       child: DefaultRootWidget(
         initialRoute: TimeLineRoute(initialTabSetting: tabSetting),

@@ -1,19 +1,19 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:miria/extensions/color_extension.dart';
-import 'package:miria/model/color_theme.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/themes/app_theme.dart';
-import 'package:miria/view/themes/built_in_color_themes.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/color_extension.dart";
+import "package:miria/model/color_theme.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/themes/app_theme.dart";
+import "package:miria/view/themes/built_in_color_themes.dart";
 
 class AppThemeScope extends ConsumerStatefulWidget {
   final Widget child;
 
-  const AppThemeScope({super.key, required this.child});
+  const AppThemeScope({required this.child, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => AppThemeScopeState();
@@ -34,13 +34,13 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       isDarkMode: theme.isDarkTheme,
       noteTextStyle: const InputDecoration(),
       reactionButtonStyle: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(5),
-          elevation: 0,
-          minimumSize: const Size(0, 0),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+        padding: const EdgeInsets.all(5),
+        elevation: 0,
+        minimumSize: const Size(0, 0),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      ),
       linkStyle: TextStyle(color: theme.link),
       hashtagStyle: TextStyle(color: theme.hashtag),
       mentionStyle: TextStyle(color: theme.mention),
@@ -67,7 +67,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     );
   }
 
-  resolveFontFamilyName(String defaultFontName, Languages languages) {
+  dynamic resolveFontFamilyName(String defaultFontName, Languages languages) {
     if (defaultFontName.isNotEmpty) {
       return defaultFontName;
     }
@@ -118,7 +118,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         defaultTargetPlatform == TargetPlatform.macOS) {
       fontName = "Hiragino Mincho ProN";
       fallback.addAll(const [
-        "Apple Color Emoji"
+        "Apple Color Emoji",
       ]);
     } else {
       if (defaultTargetPlatform == TargetPlatform.android ||
@@ -140,7 +140,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         }
       }
       fallback.addAll(const [
-        "Noto Color Emoji"
+        "Noto Color Emoji",
       ]);
     }
     return (serifFontName.isNotEmpty
@@ -163,7 +163,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         }
       fallback.addAll(const [
         "Apple Color Emoji",
-        "Hiragino Maru Gothic ProN"
+        "Hiragino Maru Gothic ProN",
       ]);
     } else {
       if (defaultTargetPlatform == TargetPlatform.android) {
@@ -181,7 +181,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       }
       fallback.addAll(const [
         "Noto Color Emoji",
-        "Noto Mono"
+        "Noto Mono",
       ]);
     }
     return (monospaceFontName.isNotEmpty
@@ -197,14 +197,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       return const TextStyle(
           fontFamily: "Apple Color Emoji",
           fontFamilyFallback: [
-            "Hiragino Maru Gothic ProN"
-          ]);
+            "Hiragino Maru Gothic ProN",
+          ],
+        );
     } else {
       return const TextStyle(
         fontFamily: "Noto Color Emoji",
         fontFamilyFallback: [
-          "Noto Sans"
-        ]);
+          "Noto Sans",
+        ],
+      );
     }
   }
 
@@ -216,7 +218,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
 
   TextStyle? fromGoogleFont(String? fontName) {
     return fontName != null &&
-            fontName.isNotEmpty == true &&
+            fontName.isNotEmpty &&
             GoogleFonts.asMap().containsKey(fontName)
         ? GoogleFonts.getFont(fontName)
         : null;
@@ -229,20 +231,25 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     required Languages languages,
   }) {
     final textThemePre = applyGoogleFont(
-        Theme.of(context).textTheme.merge((theme.isDarkTheme
-                ? ThemeData.dark()
-                : ThemeData.light())
-            .textTheme
-            .apply(
-                fontFamily: resolveFontFamilyName(defaultFontName, languages),
-                fontFamilyFallback: resolveFontFamilyFallback(defaultFontName, languages),
-                bodyColor: theme.foreground)),
-        defaultFontName);
+      Theme.of(context).textTheme.merge(
+            (theme.isDarkTheme ? ThemeData.dark() : ThemeData.light())
+                .textTheme
+                .apply(
+                  fontFamily: resolveFontFamilyName(defaultFontName, languages),
+                  fontFamilyFallback:
+                      resolveFontFamilyFallback(defaultFontName, languages),
+                  bodyColor: theme.foreground,
+                ),
+          ),
+      defaultFontName,
+    );
     final textTheme = textThemePre.copyWith(
-        bodySmall: textThemePre.bodySmall?.copyWith(
-            color: theme.isDarkTheme
-                ? theme.foreground.darken(0.1)
-                : theme.foreground.lighten(0.1)));
+      bodySmall: textThemePre.bodySmall?.copyWith(
+        color: theme.isDarkTheme
+            ? theme.foreground.darken(0.1)
+            : theme.foreground.lighten(0.1),
+      ),
+    );
 
     final themeData = ThemeData(
       colorScheme: ColorScheme.fromSeed(
@@ -269,7 +276,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       listTileTheme: ListTileThemeData(iconColor: theme.foreground),
       scaffoldBackgroundColor: theme.panel,
       tabBarTheme: TabBarTheme(
-        overlayColor: MaterialStatePropertyAll(theme.primary),
+        overlayColor: WidgetStatePropertyAll(theme.primary),
         labelColor: Colors.white,
         labelStyle: textTheme.titleSmall,
         unselectedLabelStyle:
@@ -281,27 +288,24 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       textTheme: textTheme,
       iconTheme: IconThemeData(color: theme.foreground),
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
-            textTheme.bodyMedium?.copyWith(
-              inherit: false,
-              color: Colors.white,
-            ),
+        style: ElevatedButton.styleFrom(
+          textStyle: textTheme.bodyMedium?.copyWith(
+            inherit: false,
+            color: Colors.white,
           ),
-          backgroundColor: MaterialStatePropertyAll(theme.primary),
-          foregroundColor: const MaterialStatePropertyAll(Colors.white),
-          elevation: const MaterialStatePropertyAll(0),
-          shape: MaterialStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-          ),
+          backgroundColor: theme.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           tapTargetSize: MaterialTapTargetSize.padded,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: MaterialStatePropertyAll(theme.primary),
-          shape: MaterialStatePropertyAll(
+          foregroundColor: WidgetStatePropertyAll(theme.primary),
+          shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           ),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
@@ -310,8 +314,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          iconColor: MaterialStatePropertyAll(theme.primary),
-          foregroundColor: MaterialStatePropertyAll(theme.primary),
+          iconColor: WidgetStatePropertyAll(theme.primary),
+          foregroundColor: WidgetStatePropertyAll(theme.primary),
         ),
       ),
       dividerTheme: DividerThemeData(color: theme.divider),
@@ -346,12 +350,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         isDense: true,
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith(
+        fillColor: WidgetStateProperty.resolveWith(
           (states) {
-            if (states.contains(MaterialState.disabled)) {
+            if (states.contains(WidgetState.disabled)) {
               return null;
             }
-            if (states.contains(MaterialState.selected)) {
+            if (states.contains(WidgetState.selected)) {
               return theme.primary;
             }
             return null;
@@ -382,6 +386,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         valueIndicatorColor: theme.panel,
         valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
       ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: theme.primary,
+        selectionColor: theme.accentedBackground,
+        selectionHandleColor: theme.primary,
+      ),
     );
 
     return themeData;
@@ -389,28 +398,46 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
 
   @override
   Widget build(BuildContext context) {
-    final colorSystem = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.themeColorSystem));
-    final lightTheme = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.lightColorThemeId));
-    final darkTheme = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.darkColorThemeId));
+    final colorSystem = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.themeColorSystem),
+    );
+    final lightTheme = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.lightColorThemeId),
+    );
+    final darkTheme = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.darkColorThemeId),
+    );
     final textScaleFactor = ref.watch(
       generalSettingsRepositoryProvider
           .select((value) => value.settings.textScaleFactor),
     );
-    final defaultFontName = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.defaultFontName));
-    final serifFontName = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.serifFontName));
-    final monospaceFontName = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.monospaceFontName));
-    final cursiveFontName = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.cursiveFontName));
-    final fantasyFontName = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.fantasyFontName));
-    final languages = ref.watch(generalSettingsRepositoryProvider
-        .select((value) => value.settings.languages));
+    final defaultFontName = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.defaultFontName),
+    );
+    final serifFontName = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.serifFontName),
+    );
+    final monospaceFontName = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.monospaceFontName),
+    );
+    final cursiveFontName = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.cursiveFontName),
+    );
+    final fantasyFontName = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.fantasyFontName),
+    );
+    final languages = ref.watch(
+      generalSettingsRepositoryProvider
+        .select((value) => value.settings.languages),
+    );
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
@@ -422,9 +449,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       isDark = false;
     }
 
-    final foundColorTheme = builtInColorThemes.firstWhereOrNull((e) =>
-            e.isDarkTheme == isDark &&
-            e.id == (isDark ? darkTheme : lightTheme)) ??
+    final foundColorTheme = builtInColorThemes.firstWhereOrNull(
+          (e) =>
+              e.isDarkTheme == isDark &&
+              e.id == (isDark ? darkTheme : lightTheme),
+        ) ??
         builtInColorThemes
             .firstWhere((element) => element.isDarkTheme == isDark);
 
@@ -437,13 +466,14 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       ),
       child: AppTheme(
         themeData: buildDarkAppThemeData(
-            context: context,
-            theme: foundColorTheme,
-            serifFontName: serifFontName,
-            monospaceFontName: monospaceFontName,
-            cursiveFontName: cursiveFontName,
-            fantasyFontName: fantasyFontName,
-            languages: languages),
+          context: context,
+          theme: foundColorTheme,
+          serifFontName: serifFontName,
+          monospaceFontName: monospaceFontName,
+          cursiveFontName: cursiveFontName,
+          fantasyFontName: fantasyFontName,
+          languages: languages,
+        ),
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: true,
