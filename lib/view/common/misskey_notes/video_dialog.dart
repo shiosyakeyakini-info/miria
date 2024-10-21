@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:io";
 import "dart:math";
 
 import "package:flutter/material.dart";
@@ -33,6 +34,9 @@ class _VideoDialogState extends State<VideoDialog> {
   bool isEnabledButton = false;
   bool isFullScreen = false;
   Timer? timer;
+
+  bool get isDesktop =>
+    Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
   @override
   void initState() {
@@ -83,6 +87,7 @@ class _VideoDialogState extends State<VideoDialog> {
       volumeGesture: false,
       brightnessGesture: false,
       displaySeekBar: false,
+      seekOnDoubleTap: false,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
       primaryButtonBar: [],
@@ -94,6 +99,8 @@ class _VideoDialogState extends State<VideoDialog> {
       seekBarThumbColor: Theme.of(context).primaryColor,
       volumeGesture: false,
       brightnessGesture: false,
+      displaySeekBar: true,
+      seekOnDoubleTap: true,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
       bottomButtonBarMargin:
@@ -110,6 +117,7 @@ class _VideoDialogState extends State<VideoDialog> {
       automaticallyImplySkipPreviousButton: false,
       primaryButtonBar: [],
       bottomButtonBar: [],
+      playAndPauseOnTap: false,
     );
 
     final themeDataDesktopFull = MaterialDesktopVideoControlsThemeData(
@@ -118,6 +126,7 @@ class _VideoDialogState extends State<VideoDialog> {
       modifyVolumeOnScroll: false,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
+      playAndPauseOnTap: false,
     );
 
     return AlertDialog(
@@ -203,6 +212,13 @@ class _VideoDialogState extends State<VideoDialog> {
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                      if (!isDesktop) SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Container(
+                          color: Colors.transparent,
                         ),
                       ),
                       AnimatedOpacity(
@@ -469,9 +485,9 @@ class _VideoControlState extends State<_VideoControls> {
                 child: SliderTheme(
                   data: SliderThemeData(
                     overlayShape: SliderComponentShape.noOverlay,
-                    trackHeight: 3.0,
+                    trackHeight: 5.0,
                     thumbShape: const RoundSliderThumbShape(
-                      enabledThumbRadius: 6.0,
+                      enabledThumbRadius: 10.0,
                     ),
                   ),
                   child: Slider(
