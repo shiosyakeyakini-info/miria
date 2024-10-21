@@ -31,7 +31,10 @@ class AcceptanceIcon extends StatelessWidget {
     return switch (acceptance) {
       null => SvgPicture.asset(
           "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
-          color: Theme.of(context).textTheme.bodyMedium!.color,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).textTheme.bodyMedium!.color ?? const Color(0xff5f6368),
+            BlendMode.srcIn,
+          ),
           width: 28,
           height: 28,
         ),

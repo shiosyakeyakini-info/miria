@@ -1,6 +1,5 @@
-import "dart:math";
-
 import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
 
 class LocalOnlyIcon extends StatelessWidget {
   final double? size;
@@ -10,25 +9,14 @@ class LocalOnlyIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Icon(Icons.rocket, size: size, color: color),
-        Transform.translate(
-          offset: Offset(3, (size ?? 22) / 2 - 1),
-          child: Transform.rotate(
-            angle: 45 * pi / 180,
-            child: Container(
-              width: size,
-              height: size,
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: color ?? Colors.grey, width: 2),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return SvgPicture.asset(
+      "assets/images/unfederate.svg",
+      colorFilter: ColorFilter.mode(
+        color ?? const Color(0xff5f6368),
+        BlendMode.srcIn,
+      ) ,
+      height: size,
+      width: size,
     );
   }
 }
