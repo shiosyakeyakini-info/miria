@@ -14,7 +14,7 @@ class LocalOnlyIcon extends StatelessWidget {
       colorFilter: ColorFilter.mode(
         color ?? const Color(0xff5f6368),
         BlendMode.srcIn,
-      ) ,
+      ),
       height: size,
       width: size,
     );

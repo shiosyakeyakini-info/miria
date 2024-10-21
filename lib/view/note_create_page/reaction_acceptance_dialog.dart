@@ -15,7 +15,8 @@ class ReactionAcceptanceDialog extends StatelessWidget {
           leading: SvgPicture.asset(
             "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
             colorFilter: ColorFilter.mode(
-              Theme.of(context).textTheme.bodyMedium!.color ?? const Color(0xff5f6368),
+              Theme.of(context).textTheme.bodyMedium!.color ??
+                  const Color(0xff5f6368),
               BlendMode.srcIn,
             ),
             width: 28,

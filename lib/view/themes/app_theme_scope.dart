@@ -78,7 +78,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         defaultTargetPlatform == TargetPlatform.windows) {
       if (languages == Languages.jaJP || languages == Languages.jaOJ) {
         return "Noto Sans JP";
-      } else  if (languages == Languages.zhCN) {
+      } else if (languages == Languages.zhCN) {
         return "Noto Sans SC";
       } else {
         return "Noto Sans";
@@ -94,7 +94,8 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     }
   }
 
-  List<String> resolveFontFamilyFallback(String defaultFontName, Languages languages) {
+  List<String> resolveFontFamilyFallback(
+      String defaultFontName, Languages languages) {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return [
@@ -144,23 +145,23 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       ]);
     }
     return (serifFontName.isNotEmpty
-            ? (fromGoogleFont(serifFontName) ??
-                TextStyle(fontFamily: fontName))
+            ? (fromGoogleFont(serifFontName) ?? TextStyle(fontFamily: fontName))
             : TextStyle(fontFamily: fontName))
         .copyWith(fontFamilyFallback: fallback);
   }
 
-  TextStyle resolveFontFamilyMonospace(String monospaceFontName, Languages languages) {
+  TextStyle resolveFontFamilyMonospace(
+      String monospaceFontName, Languages languages) {
     final String? fontName;
     final fallback = <String>[];
 
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
-        if (defaultTargetPlatform == TargetPlatform.iOS) {
-          fontName = "Menlo";
-        } else {
-          fontName = "Monaco";
-        }
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        fontName = "Menlo";
+      } else {
+        fontName = "Monaco";
+      }
       fallback.addAll(const [
         "Apple Color Emoji",
         "Hiragino Maru Gothic ProN",
@@ -195,11 +196,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return const TextStyle(
-          fontFamily: "Apple Color Emoji",
-          fontFamilyFallback: [
-            "Hiragino Maru Gothic ProN",
-          ],
-        );
+        fontFamily: "Apple Color Emoji",
+        fontFamilyFallback: [
+          "Hiragino Maru Gothic ProN",
+        ],
+      );
     } else {
       return const TextStyle(
         fontFamily: "Noto Color Emoji",
@@ -436,7 +437,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     );
     final languages = ref.watch(
       generalSettingsRepositoryProvider
-        .select((value) => value.settings.languages),
+          .select((value) => value.settings.languages),
     );
 
     final bool isDark;

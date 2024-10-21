@@ -35,7 +35,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
     return AlertDialog(
       title: AppBar(
         leading: IconButton(
-          onPressed: path.value.isEmpty ? null : () => path.value = [...path.value..removeLast()],
+          onPressed: path.value.isEmpty
+              ? null
+              : () => path.value = [...path.value..removeLast()],
           icon: const Icon(Icons.arrow_back),
         ),
         title: path.value.isEmpty
@@ -135,7 +137,8 @@ class DriveFileSelectDialog extends HookConsumerWidget
                         if (allowMultiple) {
                           if (isSelected) {
                             files.value = files.value
-                                .where((file) => file.id != item.id).toList();
+                                .where((file) => file.id != item.id)
+                                .toList();
                           } else {
                             files.value = [...files.value, item];
                           }

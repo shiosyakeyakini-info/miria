@@ -36,7 +36,7 @@ class _VideoDialogState extends State<VideoDialog> {
   Timer? timer;
 
   bool get isDesktop =>
-    Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+      Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
   @override
   void initState() {
@@ -214,13 +214,14 @@ class _VideoDialogState extends State<VideoDialog> {
                           ),
                         ),
                       ),
-                      if (!isDesktop) SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Container(
-                          color: Colors.transparent,
+                      if (!isDesktop)
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Container(
+                            color: Colors.transparent,
+                          ),
                         ),
-                      ),
                       AnimatedOpacity(
                         curve: Curves.easeInOut,
                         opacity: isVisibleControlBar ? 1.0 : 0.0,
