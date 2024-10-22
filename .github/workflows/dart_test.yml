@@ -25,10 +25,13 @@ jobs:
 
       - run: dart format --output=none --set-exit-if-changed .
 
+      - name: Get Flutter version from .fvmrc
+        run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_FVM_VERSION }}
           cache: true
 
       - name: Run flutter version
