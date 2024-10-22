@@ -322,7 +322,6 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
         }
-      case StreamingChannelNoteUpdatedResponse():
       case StreamingChannelEmojiAddedResponse():
       case StreamingChannelEmojiUpdatedResponse():
       case StreamingChannelEmojiDeletedResponse():
@@ -333,6 +332,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           account,
           body.announcement,
         );
+      case StreamingChannelNoteUpdatedResponse():
       case StreamingChannelUnknownResponse():
       // TODO: Handle this case.
     }
