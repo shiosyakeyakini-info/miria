@@ -151,6 +151,7 @@ class FederationState extends _$FederationState {
 
     return FederationData(
       bannerUrl: misskeyMeta?.bannerUrl?.toString(),
+      faviconUrl: misskeyMeta?.iconUrl?.toString(),
       tosUrl: misskeyMeta?.tosUrl?.toString(),
       privacyPolicyUrl: misskeyMeta?.privacyPolicyUrl?.toString(),
       impressumUrl: misskeyMeta?.impressumUrl?.toString(),
