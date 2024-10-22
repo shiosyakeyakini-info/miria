@@ -267,7 +267,7 @@ enum Expire {
   }
 }
 
-@RoutePage()
+@RoutePage<Expire>()
 class ExpireSelectDialog extends HookWidget {
   const ExpireSelectDialog({super.key});
 
@@ -291,7 +291,7 @@ class ExpireSelectDialog extends HookWidget {
       actions: [
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop(selectedExpire);
+            Navigator.of(context).pop(selectedExpire.value);
           },
           child: Text(S.of(context).done),
         ),

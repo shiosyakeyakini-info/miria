@@ -249,7 +249,7 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     ExpireSelectRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<Expire>(
         routeData: routeData,
         child: const ExpireSelectDialog(),
       );
