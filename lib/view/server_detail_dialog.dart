@@ -73,43 +73,46 @@ class ServerDetailDialog extends HookConsumerWidget
     final queueId = useMemoized(() => const Uuid().v4());
     final statsId = useMemoized(() => const Uuid().v4());
 
-    useEffect(() {
-      final misskey = ref.read(misskeyGetContextProvider);
-      StreamSubscription<StreamingResponse>? serverStats;
-      StreamSubscription<StreamingResponse>? jobQueue;
-      StreamingController? streaming;
-      unawaited(() async {
-        streaming = await ref.read(misskeyStreamingProvider(misskey).future);
-        jobQueue =
-            streaming!.queueStatsLogStream(id: queueId).listen((response) {
-          final body = response.body;
-          if (body is! StatsChannelEvent) return;
-          final innerBody = body.body;
-          if (innerBody is! JobQueueResponse) return;
-          queueLogged.value = [...queueLogged.value, innerBody];
-        });
-
-        serverStats =
-            streaming!.serverStatsLogStream(id: statsId).listen((response) {
-          final body = response.body;
-          if (body is! StatsChannelEvent) return;
-          final innerBody = body.body;
-          if (innerBody is! ServerMetricsResponse) return;
-          logged.value = [...logged.value, innerBody];
-        });
-      }());
-
-      return () {
+    useEffect(
+      () {
+        final misskey = ref.read(misskeyGetContextProvider);
+        StreamSubscription<StreamingResponse>? serverStats;
+        StreamSubscription<StreamingResponse>? jobQueue;
+        StreamingController? streaming;
         unawaited(() async {
-          await (
-            streaming?.removeChannel(queueId) ?? Future.value(),
-            streaming?.removeChannel(statsId) ?? Future.value(),
-            jobQueue?.cancel() ?? Future.value(),
-            serverStats?.cancel() ?? Future.value(),
-          ).wait;
+          streaming = await ref.read(misskeyStreamingProvider(misskey).future);
+          jobQueue =
+              streaming!.queueStatsLogStream(id: queueId).listen((response) {
+            final body = response.body;
+            if (body is! StatsChannelEvent) return;
+            final innerBody = body.body;
+            if (innerBody is! JobQueueResponse) return;
+            queueLogged.value = [...queueLogged.value, innerBody];
+          });
+
+          serverStats =
+              streaming!.serverStatsLogStream(id: statsId).listen((response) {
+            final body = response.body;
+            if (body is! StatsChannelEvent) return;
+            final innerBody = body.body;
+            if (innerBody is! ServerMetricsResponse) return;
+            logged.value = [...logged.value, innerBody];
+          });
         }());
-      };
-    });
+
+        return () {
+          unawaited(() async {
+            await (
+              streaming?.removeChannel(queueId) ?? Future.value(),
+              streaming?.removeChannel(statsId) ?? Future.value(),
+              jobQueue?.cancel() ?? Future.value(),
+              serverStats?.cancel() ?? Future.value(),
+            ).wait;
+          }());
+        };
+      },
+      const [],
+    );
 
     return AlertDialog(
       title: Row(
