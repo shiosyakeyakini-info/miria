@@ -303,9 +303,43 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               id: element.id,
             ),
           );
+        case NotificationType.app:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.appNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
 
-        default:
+        case NotificationType.groupInvited:
+        case NotificationType.reactionGrouped:
+        case NotificationType.renoteGrouped:
           break;
+        case NotificationType.exportCompleted:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.exportCompleted,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.login:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.someoneLogined,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.unknown:
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.unknownNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
       }
     }
 

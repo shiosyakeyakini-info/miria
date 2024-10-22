@@ -72,6 +72,9 @@
     "reactionNotification": "{reactionUser}らがリアクションされましてよ",
     "notedNotification": "{notedUser}らがノートいたしましてよ",
     "roleAssignedNotification": "ロール「{role}」に入れられましてよ",
+    "appNotification": "なにかしらのアプリからの通知のようでして",
+    "someoneLogined": "ログインされたようですわ",
+    "unknownNotification": "存じ上げない種類の通知ですの",
 
     "cancelEmojiChoosing": "やめておきますわ",
     "doneEmojiChoosing": "使いますわ",

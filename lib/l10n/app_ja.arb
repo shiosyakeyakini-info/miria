@@ -373,6 +373,9 @@
             }
         }
     },
+    "appNotification": "なんかのアプリからの通知らしいわ",
+    "someoneLogined": "自分のアカウントにログインがあったらしいで",
+    "unknownNotification": "知らんタイプの通知やわ",
     "notificationAll": "みんな",
     "notificationForMe": "自分宛て",
     "notificationDirect": "ダイレクト",
