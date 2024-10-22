@@ -42,7 +42,6 @@ class NoteModalSheetState with _$NoteModalSheetState {
   const NoteModalSheetState._();
 
   bool get isLoading =>
-      noteState is AsyncLoading ||
       user is AsyncLoading ||
       delete is AsyncLoading ||
       deleteRecreate is AsyncLoading ||
