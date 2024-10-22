@@ -331,6 +331,7 @@ class NotificationItem extends ConsumerWidget {
         );
       case FollowNotificationData():
         final user = notification.user;
+        final type = notification.type;
 
         return Padding(
           padding:
@@ -397,6 +398,10 @@ class NotificationItem extends ConsumerWidget {
                     },
                     orElse: () => Container(),
                   ),
+              if (type is FollowRequestAccepted && type.message != null)
+                SimpleMfmText(
+                  S.of(context).messageForFollower(type.message ?? ""),
+                )
             ],
           ),
         );

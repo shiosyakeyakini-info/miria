@@ -376,6 +376,15 @@
     "appNotification": "なんかのアプリからの通知らしいわ",
     "someoneLogined": "自分のアカウントにログインがあったらしいで",
     "unknownNotification": "知らんタイプの通知やわ",
+    "messageForFollower": "フォロワーへ 「{message}」",
+    "@messageForFollower": {
+        "placeholders": {
+            "message": {
+                "type": "String"
+            }
+        }
+    },
+    
     "notificationAll": "みんな",
     "notificationForMe": "自分宛て",
     "notificationDirect": "ダイレクト",

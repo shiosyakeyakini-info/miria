@@ -226,6 +226,16 @@ class UserDetail extends ConsumerWidget {
                   for (final role in response.roles ?? []) RoleChip(role: role),
                 ],
               ),
+              if (response is UserDetailedNotMeWithRelations &&
+                  response.followedMessage != null &&
+                  response.isFollowing)
+                Card(
+                  child: SimpleMfmText(
+                    S
+                        .of(context)
+                        .messageForFollower(response.followedMessage ?? ""),
+                  ),
+                ),
               const Padding(padding: EdgeInsets.only(top: 5)),
               if (response.host != null)
                 Card(
