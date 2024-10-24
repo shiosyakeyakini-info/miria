@@ -320,89 +320,123 @@ class MisskeyNote extends HookConsumerWidget {
     );
 
     final reactionControl =
-        useCallback<Future<void> Function({MisskeyEmojiData? requestEmoji})>(({
-      requestEmoji,
-    }) async {
-      // 他のサーバーからログインしている場合は不可
-      if (!ref.read(accountContextProvider).isSame) return;
+        useCallback<Future<void> Function({MisskeyEmojiData? requestEmoji})>(
+      ({
+        requestEmoji,
+      }) async {
+        // 他のサーバーからログインしている場合は不可
+        if (!ref.read(accountContextProvider).isSame) return;
 
-      final account = ref.read(accountContextProvider).postAccount;
-      final isLikeOnly =
-          displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
-              (displayNote.reactionAcceptance ==
-                      ReactionAcceptance.likeOnlyForRemote &&
-                  displayNote.user.host != null);
-      // すでにリアクション済み
-      if (displayNote.myReaction != null && requestEmoji != null) return;
+        final account = ref.read(accountContextProvider).postAccount;
+        final isLikeOnly =
+            displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
+                (displayNote.reactionAcceptance ==
+                        ReactionAcceptance.likeOnlyForRemote &&
+                    displayNote.user.host != null);
+        // すでにリアクション済み
+        if (displayNote.myReaction != null && requestEmoji != null) return;
 
-      // カスタム絵文字押下でのリアクション無効
-      if (requestEmoji != null &&
-          !ref
-              .read(generalSettingsRepositoryProvider)
-              .settings
-              .enableDirectReaction) {
-        return;
-      }
-      // いいねのみでカスタム絵文字押下
-      if (requestEmoji != null && isLikeOnly) return;
-      if (displayNote.myReaction != null && requestEmoji == null) {
-        if (await SimpleConfirmDialog.show(
-              context: context,
-              message: S.of(context).confirmDeleteReaction,
-              primary: S.of(context).cancelReaction,
-              secondary: S.of(context).cancel,
-            ) !=
-            true) {
+        // すでにリアクション済みで、リアクション取り消し
+        if (displayNote.myReaction != null) {
+          final dialogValue =
+              await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+                    message: (context) => S.of(context).confirmDeleteReaction,
+                    actions: (context) => [
+                      S.of(context).cancelReaction,
+                      S.of(context).cancel,
+                    ],
+                  );
+          if (dialogValue != 0) return;
+
+          await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+            await ref
+                .read(misskeyPostContextProvider)
+                .notes
+                .reactions
+                .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
+            if (account.host == "misskey.io" ||
+                account.host == "nijimiss.moe") {
+              await Future.delayed(
+                const Duration(milliseconds: misskeyHQReactionDelay),
+              );
+            }
+
+            await ref.read(notesWithProvider).refresh(displayNote.id);
+          });
+
           return;
         }
 
-        await ref
-            .read(misskeyPostContextProvider)
-            .notes
-            .reactions
-            .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
+        // カスタム絵文字押下でのリアクション無効
+        if (requestEmoji != null &&
+            !ref
+                .read(generalSettingsRepositoryProvider)
+                .settings
+                .enableDirectReaction) {
+          return;
+        }
+        // いいねのみでカスタム絵文字押下
+        if (requestEmoji != null && isLikeOnly) return;
+        if (displayNote.myReaction != null && requestEmoji == null) {
+          if (await SimpleConfirmDialog.show(
+                context: context,
+                message: S.of(context).confirmDeleteReaction,
+                primary: S.of(context).cancelReaction,
+                secondary: S.of(context).cancel,
+              ) !=
+              true) {
+            return;
+          }
+
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .reactions
+              .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
+          if (account.host == "misskey.io") {
+            await Future.delayed(
+              const Duration(milliseconds: misskeyHQReactionDelay),
+            );
+          }
+          await ref.read(notesProvider(account)).refresh(displayNote.id);
+          return;
+        }
+        final misskey = ref.read(misskeyPostContextProvider);
+        final note = ref.read(notesProvider(account));
+        final MisskeyEmojiData? selectedEmoji;
+        if (isLikeOnly) {
+          selectedEmoji = const UnicodeEmojiData(char: "❤️");
+        } else if (requestEmoji == null) {
+          selectedEmoji = await ref.read(appRouterProvider).push(
+                ReactionPickerRoute(
+                  account: account,
+                  isAcceptSensitive: displayNote.reactionAcceptance !=
+                          ReactionAcceptance.nonSensitiveOnly &&
+                      displayNote.reactionAcceptance !=
+                          ReactionAcceptance
+                              .nonSensitiveOnlyForLocalLikeOnlyForRemote,
+                ),
+              );
+        } else {
+          selectedEmoji = requestEmoji;
+        }
+
+        if (selectedEmoji == null) return;
+        await misskey.notes.reactions.create(
+          NotesReactionsCreateRequest(
+            noteId: displayNote.id,
+            reaction: ":${selectedEmoji.baseName}:",
+          ),
+        );
         if (account.host == "misskey.io") {
           await Future.delayed(
             const Duration(milliseconds: misskeyHQReactionDelay),
           );
         }
-        await ref.read(notesProvider(account)).refresh(displayNote.id);
-        return;
-      }
-      final misskey = ref.read(misskeyPostContextProvider);
-      final note = ref.read(notesProvider(account));
-      final MisskeyEmojiData? selectedEmoji;
-      if (isLikeOnly) {
-        selectedEmoji = const UnicodeEmojiData(char: "❤️");
-      } else if (requestEmoji == null) {
-        selectedEmoji = await ref.read(appRouterProvider).push(
-              ReactionPickerRoute(
-                account: account,
-                isAcceptSensitive: displayNote.reactionAcceptance !=
-                        ReactionAcceptance.nonSensitiveOnly &&
-                    displayNote.reactionAcceptance !=
-                        ReactionAcceptance
-                            .nonSensitiveOnlyForLocalLikeOnlyForRemote,
-              ),
-            );
-      } else {
-        selectedEmoji = requestEmoji;
-      }
-
-      if (selectedEmoji == null) return;
-      await misskey.notes.reactions.create(
-        NotesReactionsCreateRequest(
-          noteId: displayNote.id,
-          reaction: ":${selectedEmoji.baseName}:",
-        ),
-      );
-      if (account.host == "misskey.io") {
-        await Future.delayed(
-          const Duration(milliseconds: misskeyHQReactionDelay),
-        );
-      }
-      await note.refresh(displayNote.id);
-    });
+        await note.refresh(displayNote.id);
+      },
+      [displayNote],
+    );
 
     final toggleReactionedRenote = useCallback(() {
       ref.read(notesProvider(account)).updateNoteStatus(
