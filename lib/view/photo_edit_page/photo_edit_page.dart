@@ -72,11 +72,10 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                 final result = await photoEdit.createSaveData(renderingAreaKey);
                 if (result == null) return;
                 if (!mounted) return;
-                if (!mounted) return;
                 if (confirm == true) {
                   widget.onSubmit(result);
                   if (!context.mounted) return;
-                  context.back();
+                  Navigator.of(context).pop();
                 }
               },
               icon: const Icon(Icons.save),

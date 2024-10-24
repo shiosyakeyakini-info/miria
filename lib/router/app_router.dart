@@ -144,7 +144,7 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute(page: ChannelDescriptionRoute.page),
     AutoDialogRoute<Expire>(page: ExpireSelectRoute.page),
     AutoDialogRoute(page: UpdateMemoRoute.page),
-    AutoDialogRoute(page: LicenseConfirmRoute.page),
+    AutoDialogRoute<bool>(page: LicenseConfirmRoute.page),
     AutoDialogRoute(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
     AutoDialogRoute(page: ChannelDetailRoute.page),

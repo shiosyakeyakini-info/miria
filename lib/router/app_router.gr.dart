@@ -349,7 +349,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     LicenseConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<LicenseConfirmRouteArgs>();
-      return AutoRoutePage<dynamic>(
+      return AutoRoutePage<bool>(
         routeData: routeData,
         child: WrappedRoute(
             child: LicenseConfirmDialog(

@@ -19,7 +19,7 @@ Future<EmojiResponse> _emoji(_EmojiRef ref, String emoji) async {
       .emoji(EmojiRequest(name: emoji));
 }
 
-@RoutePage()
+@RoutePage<bool>()
 class LicenseConfirmDialog extends ConsumerWidget implements AutoRouteWrapper {
   final String emoji;
   final Account account;
