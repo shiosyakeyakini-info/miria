@@ -12,7 +12,7 @@ part of 'misskey_theme.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 MisskeyTheme _$MisskeyThemeFromJson(Map<String, dynamic> json) {
   return _MisskeyTheme.fromJson(json);
@@ -22,13 +22,17 @@ MisskeyTheme _$MisskeyThemeFromJson(Map<String, dynamic> json) {
 mixin _$MisskeyTheme {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  Map<String, String> get props => throw _privateConstructorUsedError;
   String? get author => throw _privateConstructorUsedError;
   String? get desc => throw _privateConstructorUsedError;
   String? get base => throw _privateConstructorUsedError;
-  Map<String, String> get props => throw _privateConstructorUsedError;
 
+  /// Serializes this MisskeyTheme to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MisskeyTheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MisskeyThemeCopyWith<MisskeyTheme> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,10 +46,10 @@ abstract class $MisskeyThemeCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
+      Map<String, String> props,
       String? author,
       String? desc,
-      String? base,
-      Map<String, String> props});
+      String? base});
 }
 
 /// @nodoc
@@ -58,15 +62,17 @@ class _$MisskeyThemeCopyWithImpl<$Res, $Val extends MisskeyTheme>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MisskeyTheme
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? props = null,
     Object? author = freezed,
     Object? desc = freezed,
     Object? base = freezed,
-    Object? props = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -77,6 +83,10 @@ class _$MisskeyThemeCopyWithImpl<$Res, $Val extends MisskeyTheme>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      props: null == props
+          ? _value.props
+          : props // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
       author: freezed == author
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
@@ -89,10 +99,6 @@ class _$MisskeyThemeCopyWithImpl<$Res, $Val extends MisskeyTheme>
           ? _value.base
           : base // ignore: cast_nullable_to_non_nullable
               as String?,
-      props: null == props
-          ? _value.props
-          : props // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
     ) as $Val);
   }
 }
@@ -108,10 +114,10 @@ abstract class _$$MisskeyThemeImplCopyWith<$Res>
   $Res call(
       {String id,
       String name,
+      Map<String, String> props,
       String? author,
       String? desc,
-      String? base,
-      Map<String, String> props});
+      String? base});
 }
 
 /// @nodoc
@@ -122,15 +128,17 @@ class __$$MisskeyThemeImplCopyWithImpl<$Res>
       _$MisskeyThemeImpl _value, $Res Function(_$MisskeyThemeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MisskeyTheme
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? props = null,
     Object? author = freezed,
     Object? desc = freezed,
     Object? base = freezed,
-    Object? props = null,
   }) {
     return _then(_$MisskeyThemeImpl(
       id: null == id
@@ -141,6 +149,10 @@ class __$$MisskeyThemeImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      props: null == props
+          ? _value._props
+          : props // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
       author: freezed == author
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
@@ -153,10 +165,6 @@ class __$$MisskeyThemeImplCopyWithImpl<$Res>
           ? _value.base
           : base // ignore: cast_nullable_to_non_nullable
               as String?,
-      props: null == props
-          ? _value._props
-          : props // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
     ));
   }
 }
@@ -167,10 +175,10 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
   const _$MisskeyThemeImpl(
       {required this.id,
       required this.name,
+      required final Map<String, String> props,
       this.author,
       this.desc,
-      this.base,
-      required final Map<String, String> props})
+      this.base})
       : _props = props;
 
   factory _$MisskeyThemeImpl.fromJson(Map<String, dynamic> json) =>
@@ -180,12 +188,6 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
   final String id;
   @override
   final String name;
-  @override
-  final String? author;
-  @override
-  final String? desc;
-  @override
-  final String? base;
   final Map<String, String> _props;
   @override
   Map<String, String> get props {
@@ -195,8 +197,15 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
   }
 
   @override
+  final String? author;
+  @override
+  final String? desc;
+  @override
+  final String? base;
+
+  @override
   String toString() {
-    return 'MisskeyTheme(id: $id, name: $name, author: $author, desc: $desc, base: $base, props: $props)';
+    return 'MisskeyTheme(id: $id, name: $name, props: $props, author: $author, desc: $desc, base: $base)';
   }
 
   @override
@@ -206,18 +215,20 @@ class _$MisskeyThemeImpl implements _MisskeyTheme {
             other is _$MisskeyThemeImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
+            const DeepCollectionEquality().equals(other._props, _props) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.desc, desc) || other.desc == desc) &&
-            (identical(other.base, base) || other.base == base) &&
-            const DeepCollectionEquality().equals(other._props, _props));
+            (identical(other.base, base) || other.base == base));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, author, desc, base,
-      const DeepCollectionEquality().hash(_props));
+  int get hashCode => Object.hash(runtimeType, id, name,
+      const DeepCollectionEquality().hash(_props), author, desc, base);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MisskeyTheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MisskeyThemeImplCopyWith<_$MisskeyThemeImpl> get copyWith =>
@@ -235,10 +246,10 @@ abstract class _MisskeyTheme implements MisskeyTheme {
   const factory _MisskeyTheme(
       {required final String id,
       required final String name,
+      required final Map<String, String> props,
       final String? author,
       final String? desc,
-      final String? base,
-      required final Map<String, String> props}) = _$MisskeyThemeImpl;
+      final String? base}) = _$MisskeyThemeImpl;
 
   factory _MisskeyTheme.fromJson(Map<String, dynamic> json) =
       _$MisskeyThemeImpl.fromJson;
@@ -248,15 +259,18 @@ abstract class _MisskeyTheme implements MisskeyTheme {
   @override
   String get name;
   @override
+  Map<String, String> get props;
+  @override
   String? get author;
   @override
   String? get desc;
   @override
   String? get base;
+
+  /// Create a copy of MisskeyTheme
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  Map<String, String> get props;
-  @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MisskeyThemeImplCopyWith<_$MisskeyThemeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

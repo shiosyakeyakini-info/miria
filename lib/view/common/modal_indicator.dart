@@ -1,7 +1,7 @@
 /*
  * 汎用くるくるインジケータ
  */
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class IndicatorView {
   /*
@@ -12,7 +12,7 @@ class IndicatorView {
       context,
       ModalOverlay(
         const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator.adaptive(),
         ),
         isAndroidBackEnable: false,
       ),
@@ -67,8 +67,12 @@ class ModalOverlay extends ModalRoute<void> {
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return FadeTransition(
       opacity: animation,
       child: ScaleTransition(

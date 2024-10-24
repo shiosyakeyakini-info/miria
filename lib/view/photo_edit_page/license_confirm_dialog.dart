@@ -1,93 +1,74 @@
-import 'dart:math';
+import "package:auto_route/auto_route.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/misskey_notes/mfm_text.dart";
+import "package:miria/view/dialogs/simple_message_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/mfm_text.dart';
-import 'package:miria/view/dialogs/simple_message_dialog.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+part "license_confirm_dialog.g.dart";
 
-class LicenseConfirmDialog extends ConsumerStatefulWidget {
+@Riverpod(dependencies: [misskeyPostContext])
+Future<EmojiResponse> _emoji(_EmojiRef ref, String emoji) async {
+  return await ref
+      .read(misskeyPostContextProvider)
+      .emoji(EmojiRequest(name: emoji));
+}
+
+@RoutePage<bool>()
+class LicenseConfirmDialog extends ConsumerWidget implements AutoRouteWrapper {
   final String emoji;
   final Account account;
 
-  const LicenseConfirmDialog(
-      {super.key, required this.emoji, required this.account});
+  const LicenseConfirmDialog({
+    required this.emoji,
+    required this.account,
+    super.key,
+  });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      LicenseConfirmDialogState();
-}
-
-class LicenseConfirmDialogState extends ConsumerState<LicenseConfirmDialog> {
-  var isLoading = true;
-  Object? error;
-
-  EmojiResponse? data;
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    Future(() async {
-      try {
-        final response = await ref
-            .read(misskeyProvider(widget.account))
-            .emoji(EmojiRequest(name: widget.emoji));
-        if (!mounted) return;
-        setState(() {
-          isLoading = false;
-          data = response;
-        });
-      } catch (e) {
-        if (!mounted) return;
-        setState(() {
-          error = e;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (error != null) {
-      return SimpleMessageDialog(
-          message: "${S.of(context).thrownError}\n$error");
-    }
-    final data = this.data;
-    if (isLoading || data == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return AccountScope(
-      account: widget.account,
-      child: AlertDialog(
-        content: SizedBox(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                  S.of(context).customEmojiLicensedBy,
-                ),
-                MfmText(
-                    mfmText:
-                        data.license ?? S.of(context).customEmojiLicensedByNone)
-              ],
+  Widget build(BuildContext context, WidgetRef ref) {
+    final emojiResponse = ref.watch(_emojiProvider(emoji));
+    return switch (emojiResponse) {
+      AsyncLoading() => const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
+      AsyncError(:final error) => SimpleMessageDialog(
+          message: "${S.of(context).thrownError}\n$error",
+        ),
+      AsyncData(:final value) => AlertDialog(
+          content: SizedBox(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(S.of(context).customEmojiLicensedBy),
+                  MfmText(
+                    mfmText: value.license ??
+                        S.of(context).customEmojiLicensedByNone,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        actions: [
-          OutlinedButton(
+          actions: [
+            OutlinedButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text(S.of(context).cancelEmojiChoosing)),
-          ElevatedButton(
+              child: Text(S.of(context).cancelEmojiChoosing),
+            ),
+            ElevatedButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text(S.of(context).doneEmojiChoosing))
-        ],
-      ),
-    );
+              child: Text(S.of(context).doneEmojiChoosing),
+            ),
+          ],
+        ),
+    };
   }
 }

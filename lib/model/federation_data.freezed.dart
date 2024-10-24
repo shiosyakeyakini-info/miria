@@ -12,10 +12,13 @@ part of 'federation_data.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$FederationData {
+  bool get isSupportedEmoji => throw _privateConstructorUsedError;
+  bool get isSupportedAnnouncement => throw _privateConstructorUsedError;
+  bool get isSupportedLocalTimeline => throw _privateConstructorUsedError;
   String? get bannerUrl => throw _privateConstructorUsedError;
   String? get faviconUrl => throw _privateConstructorUsedError;
   String? get tosUrl => throw _privateConstructorUsedError;
@@ -34,12 +37,11 @@ mixin _$FederationData {
   String get softwareVersion => throw _privateConstructorUsedError;
   List<String> get languages => throw _privateConstructorUsedError;
   List<MetaAd> get ads => throw _privateConstructorUsedError;
-  bool get isSupportedEmoji => throw _privateConstructorUsedError;
-  bool get isSupportedAnnouncement => throw _privateConstructorUsedError;
-  bool get isSupportedLocalTimeline => throw _privateConstructorUsedError;
   MetaResponse? get meta => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FederationDataCopyWith<FederationData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,7 +53,10 @@ abstract class $FederationDataCopyWith<$Res> {
       _$FederationDataCopyWithImpl<$Res, FederationData>;
   @useResult
   $Res call(
-      {String? bannerUrl,
+      {bool isSupportedEmoji,
+      bool isSupportedAnnouncement,
+      bool isSupportedLocalTimeline,
+      String? bannerUrl,
       String? faviconUrl,
       String? tosUrl,
       String? privacyPolicyUrl,
@@ -69,9 +74,6 @@ abstract class $FederationDataCopyWith<$Res> {
       String softwareVersion,
       List<String> languages,
       List<MetaAd> ads,
-      bool isSupportedEmoji,
-      bool isSupportedAnnouncement,
-      bool isSupportedLocalTimeline,
       MetaResponse? meta});
 
   $MetaResponseCopyWith<$Res>? get meta;
@@ -87,9 +89,14 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isSupportedEmoji = null,
+    Object? isSupportedAnnouncement = null,
+    Object? isSupportedLocalTimeline = null,
     Object? bannerUrl = freezed,
     Object? faviconUrl = freezed,
     Object? tosUrl = freezed,
@@ -108,12 +115,21 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
     Object? softwareVersion = null,
     Object? languages = null,
     Object? ads = null,
-    Object? isSupportedEmoji = null,
-    Object? isSupportedAnnouncement = null,
-    Object? isSupportedLocalTimeline = null,
     Object? meta = freezed,
   }) {
     return _then(_value.copyWith(
+      isSupportedEmoji: null == isSupportedEmoji
+          ? _value.isSupportedEmoji
+          : isSupportedEmoji // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedAnnouncement: null == isSupportedAnnouncement
+          ? _value.isSupportedAnnouncement
+          : isSupportedAnnouncement // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedLocalTimeline: null == isSupportedLocalTimeline
+          ? _value.isSupportedLocalTimeline
+          : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
+              as bool,
       bannerUrl: freezed == bannerUrl
           ? _value.bannerUrl
           : bannerUrl // ignore: cast_nullable_to_non_nullable
@@ -186,18 +202,6 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
           ? _value.ads
           : ads // ignore: cast_nullable_to_non_nullable
               as List<MetaAd>,
-      isSupportedEmoji: null == isSupportedEmoji
-          ? _value.isSupportedEmoji
-          : isSupportedEmoji // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSupportedAnnouncement: null == isSupportedAnnouncement
-          ? _value.isSupportedAnnouncement
-          : isSupportedAnnouncement // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSupportedLocalTimeline: null == isSupportedLocalTimeline
-          ? _value.isSupportedLocalTimeline
-          : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
-              as bool,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -205,6 +209,8 @@ class _$FederationDataCopyWithImpl<$Res, $Val extends FederationData>
     ) as $Val);
   }
 
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MetaResponseCopyWith<$Res>? get meta {
@@ -227,7 +233,10 @@ abstract class _$$FederationDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? bannerUrl,
+      {bool isSupportedEmoji,
+      bool isSupportedAnnouncement,
+      bool isSupportedLocalTimeline,
+      String? bannerUrl,
       String? faviconUrl,
       String? tosUrl,
       String? privacyPolicyUrl,
@@ -245,9 +254,6 @@ abstract class _$$FederationDataImplCopyWith<$Res>
       String softwareVersion,
       List<String> languages,
       List<MetaAd> ads,
-      bool isSupportedEmoji,
-      bool isSupportedAnnouncement,
-      bool isSupportedLocalTimeline,
       MetaResponse? meta});
 
   @override
@@ -262,9 +268,14 @@ class __$$FederationDataImplCopyWithImpl<$Res>
       _$FederationDataImpl _value, $Res Function(_$FederationDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isSupportedEmoji = null,
+    Object? isSupportedAnnouncement = null,
+    Object? isSupportedLocalTimeline = null,
     Object? bannerUrl = freezed,
     Object? faviconUrl = freezed,
     Object? tosUrl = freezed,
@@ -283,12 +294,21 @@ class __$$FederationDataImplCopyWithImpl<$Res>
     Object? softwareVersion = null,
     Object? languages = null,
     Object? ads = null,
-    Object? isSupportedEmoji = null,
-    Object? isSupportedAnnouncement = null,
-    Object? isSupportedLocalTimeline = null,
     Object? meta = freezed,
   }) {
     return _then(_$FederationDataImpl(
+      isSupportedEmoji: null == isSupportedEmoji
+          ? _value.isSupportedEmoji
+          : isSupportedEmoji // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedAnnouncement: null == isSupportedAnnouncement
+          ? _value.isSupportedAnnouncement
+          : isSupportedAnnouncement // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSupportedLocalTimeline: null == isSupportedLocalTimeline
+          ? _value.isSupportedLocalTimeline
+          : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
+              as bool,
       bannerUrl: freezed == bannerUrl
           ? _value.bannerUrl
           : bannerUrl // ignore: cast_nullable_to_non_nullable
@@ -361,18 +381,6 @@ class __$$FederationDataImplCopyWithImpl<$Res>
           ? _value._ads
           : ads // ignore: cast_nullable_to_non_nullable
               as List<MetaAd>,
-      isSupportedEmoji: null == isSupportedEmoji
-          ? _value.isSupportedEmoji
-          : isSupportedEmoji // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSupportedAnnouncement: null == isSupportedAnnouncement
-          ? _value.isSupportedAnnouncement
-          : isSupportedAnnouncement // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSupportedLocalTimeline: null == isSupportedLocalTimeline
-          ? _value.isSupportedLocalTimeline
-          : isSupportedLocalTimeline // ignore: cast_nullable_to_non_nullable
-              as bool,
       meta: freezed == meta
           ? _value.meta
           : meta // ignore: cast_nullable_to_non_nullable
@@ -385,7 +393,10 @@ class __$$FederationDataImplCopyWithImpl<$Res>
 
 class _$FederationDataImpl implements _FederationData {
   const _$FederationDataImpl(
-      {this.bannerUrl,
+      {required this.isSupportedEmoji,
+      required this.isSupportedAnnouncement,
+      required this.isSupportedLocalTimeline,
+      this.bannerUrl,
       this.faviconUrl,
       this.tosUrl,
       this.privacyPolicyUrl,
@@ -403,14 +414,17 @@ class _$FederationDataImpl implements _FederationData {
       this.softwareVersion = "",
       final List<String> languages = const [],
       final List<MetaAd> ads = const [],
-      required this.isSupportedEmoji,
-      required this.isSupportedAnnouncement,
-      required this.isSupportedLocalTimeline,
       this.meta})
       : _serverRules = serverRules,
         _languages = languages,
         _ads = ads;
 
+  @override
+  final bool isSupportedEmoji;
+  @override
+  final bool isSupportedAnnouncement;
+  @override
+  final bool isSupportedLocalTimeline;
   @override
   final String? bannerUrl;
   @override
@@ -473,17 +487,11 @@ class _$FederationDataImpl implements _FederationData {
   }
 
   @override
-  final bool isSupportedEmoji;
-  @override
-  final bool isSupportedAnnouncement;
-  @override
-  final bool isSupportedLocalTimeline;
-  @override
   final MetaResponse? meta;
 
   @override
   String toString() {
-    return 'FederationData(bannerUrl: $bannerUrl, faviconUrl: $faviconUrl, tosUrl: $tosUrl, privacyPolicyUrl: $privacyPolicyUrl, impressumUrl: $impressumUrl, repositoryUrl: $repositoryUrl, serverRules: $serverRules, name: $name, description: $description, maintainerName: $maintainerName, maintainerEmail: $maintainerEmail, usersCount: $usersCount, notesCount: $notesCount, reactionCount: $reactionCount, softwareName: $softwareName, softwareVersion: $softwareVersion, languages: $languages, ads: $ads, isSupportedEmoji: $isSupportedEmoji, isSupportedAnnouncement: $isSupportedAnnouncement, isSupportedLocalTimeline: $isSupportedLocalTimeline, meta: $meta)';
+    return 'FederationData(isSupportedEmoji: $isSupportedEmoji, isSupportedAnnouncement: $isSupportedAnnouncement, isSupportedLocalTimeline: $isSupportedLocalTimeline, bannerUrl: $bannerUrl, faviconUrl: $faviconUrl, tosUrl: $tosUrl, privacyPolicyUrl: $privacyPolicyUrl, impressumUrl: $impressumUrl, repositoryUrl: $repositoryUrl, serverRules: $serverRules, name: $name, description: $description, maintainerName: $maintainerName, maintainerEmail: $maintainerEmail, usersCount: $usersCount, notesCount: $notesCount, reactionCount: $reactionCount, softwareName: $softwareName, softwareVersion: $softwareVersion, languages: $languages, ads: $ads, meta: $meta)';
   }
 
   @override
@@ -491,6 +499,14 @@ class _$FederationDataImpl implements _FederationData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FederationDataImpl &&
+            (identical(other.isSupportedEmoji, isSupportedEmoji) ||
+                other.isSupportedEmoji == isSupportedEmoji) &&
+            (identical(
+                    other.isSupportedAnnouncement, isSupportedAnnouncement) ||
+                other.isSupportedAnnouncement == isSupportedAnnouncement) &&
+            (identical(
+                    other.isSupportedLocalTimeline, isSupportedLocalTimeline) ||
+                other.isSupportedLocalTimeline == isSupportedLocalTimeline) &&
             (identical(other.bannerUrl, bannerUrl) ||
                 other.bannerUrl == bannerUrl) &&
             (identical(other.faviconUrl, faviconUrl) ||
@@ -524,20 +540,15 @@ class _$FederationDataImpl implements _FederationData {
             const DeepCollectionEquality()
                 .equals(other._languages, _languages) &&
             const DeepCollectionEquality().equals(other._ads, _ads) &&
-            (identical(other.isSupportedEmoji, isSupportedEmoji) ||
-                other.isSupportedEmoji == isSupportedEmoji) &&
-            (identical(
-                    other.isSupportedAnnouncement, isSupportedAnnouncement) ||
-                other.isSupportedAnnouncement == isSupportedAnnouncement) &&
-            (identical(
-                    other.isSupportedLocalTimeline, isSupportedLocalTimeline) ||
-                other.isSupportedLocalTimeline == isSupportedLocalTimeline) &&
             (identical(other.meta, meta) || other.meta == meta));
   }
 
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
+        isSupportedEmoji,
+        isSupportedAnnouncement,
+        isSupportedLocalTimeline,
         bannerUrl,
         faviconUrl,
         tosUrl,
@@ -556,13 +567,12 @@ class _$FederationDataImpl implements _FederationData {
         softwareVersion,
         const DeepCollectionEquality().hash(_languages),
         const DeepCollectionEquality().hash(_ads),
-        isSupportedEmoji,
-        isSupportedAnnouncement,
-        isSupportedLocalTimeline,
         meta
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FederationDataImplCopyWith<_$FederationDataImpl> get copyWith =>
@@ -572,7 +582,10 @@ class _$FederationDataImpl implements _FederationData {
 
 abstract class _FederationData implements FederationData {
   const factory _FederationData(
-      {final String? bannerUrl,
+      {required final bool isSupportedEmoji,
+      required final bool isSupportedAnnouncement,
+      required final bool isSupportedLocalTimeline,
+      final String? bannerUrl,
       final String? faviconUrl,
       final String? tosUrl,
       final String? privacyPolicyUrl,
@@ -590,11 +603,14 @@ abstract class _FederationData implements FederationData {
       final String softwareVersion,
       final List<String> languages,
       final List<MetaAd> ads,
-      required final bool isSupportedEmoji,
-      required final bool isSupportedAnnouncement,
-      required final bool isSupportedLocalTimeline,
       final MetaResponse? meta}) = _$FederationDataImpl;
 
+  @override
+  bool get isSupportedEmoji;
+  @override
+  bool get isSupportedAnnouncement;
+  @override
+  bool get isSupportedLocalTimeline;
   @override
   String? get bannerUrl;
   @override
@@ -632,15 +648,12 @@ abstract class _FederationData implements FederationData {
   @override
   List<MetaAd> get ads;
   @override
-  bool get isSupportedEmoji;
-  @override
-  bool get isSupportedAnnouncement;
-  @override
-  bool get isSupportedLocalTimeline;
-  @override
   MetaResponse? get meta;
+
+  /// Create a copy of FederationData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FederationDataImplCopyWith<_$FederationDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

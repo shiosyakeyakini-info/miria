@@ -17,8 +17,8 @@ AppPublisher=Sorairo
 AppPublisherURL=https://shiosyakeyakini.info/miria_web
 AppSupportURL=https://github.com/shiosyakeyakini-info/miria/wiki/%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F
 AppUpdatesURL=https://github.com/shiosyakeyakini-info/miria/releases/latest
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
 CloseApplications=yes
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
@@ -36,7 +36,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Languages]
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
-Name: "korean"; MessagesFile: "{#MyWorkDir}\Korean.isl"
+Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
 Name: "chinesesimplified"; MessagesFile: "{#MyWorkDir}\ChineseSimplified.isl"
 
 [Tasks]
@@ -56,3 +56,10 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [UninstallDelete]
 Type: files; Name: {userappdata}\info.shiosyakeyakini\miria\*
+
+[InstallDelete]
+Type: files; Name: {app}/api-ms-*.dll
+Type: files; Name: {app}/concrt140.dll
+Type: files; Name: {app}/msvcp*.dll
+Type: files; Name: {app}/ucrtbas*.dll
+Type: files; Name: {app}/vc*.dll

@@ -12,7 +12,7 @@ part of 'image_meta_dialog.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ImageMeta {
@@ -20,7 +20,9 @@ mixin _$ImageMeta {
   bool get isNsfw => throw _privateConstructorUsedError;
   String get caption => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ImageMeta
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ImageMetaCopyWith<ImageMeta> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$ImageMetaCopyWithImpl<$Res, $Val extends ImageMeta>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ImageMeta
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +90,8 @@ class __$$ImageMetaImplCopyWithImpl<$Res>
       _$ImageMetaImpl _value, $Res Function(_$ImageMetaImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ImageMeta
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,7 +148,9 @@ class _$ImageMetaImpl implements _ImageMeta {
   @override
   int get hashCode => Object.hash(runtimeType, fileName, isNsfw, caption);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ImageMeta
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ImageMetaImplCopyWith<_$ImageMetaImpl> get copyWith =>
@@ -161,8 +169,11 @@ abstract class _ImageMeta implements ImageMeta {
   bool get isNsfw;
   @override
   String get caption;
+
+  /// Create a copy of ImageMeta
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ImageMetaImplCopyWith<_$ImageMetaImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,7 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'unicode_emoji.freezed.dart';
-part 'unicode_emoji.g.dart';
+part "unicode_emoji.freezed.dart";
+part "unicode_emoji.g.dart";
 
 @freezed
 class UnicodeEmoji with _$UnicodeEmoji {

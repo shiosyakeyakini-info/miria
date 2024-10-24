@@ -17,16 +17,19 @@ jobs:
     steps:
         - uses: actions/checkout@v4
 
+        - name: Get Flutter version from .fvmrc
+          run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
+
         - name: Install flutter
           uses: subosito/flutter-action@v2
           with:
-            channel: 'stable'
+            flutter-version: ${{ env.FLUTTER_FVM_VERSION }}
             cache: true
 
         - uses: actions/setup-java@v4
           with:
             distribution: 'zulu'
-            java-version: '11'
+            java-version: '17'
             cache: 'gradle'
       
 
@@ -42,6 +45,9 @@ jobs:
             key: build-pubspec-${{ hashFiles('**/pubspec.lock') }}
             restore-keys: |
               build-pubspec-
+
+        - name: Create symbolic link
+          run: ln -s ${{ env.FLUTTER_ROOT }} $HOME/work/flutter
 
         - name: Flutter pub get
           run: flutter pub get

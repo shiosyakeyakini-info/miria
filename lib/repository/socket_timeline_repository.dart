@@ -1,55 +1,63 @@
-import 'dart:async';
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:miria/extensions/date_time_extension.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:miria/repository/main_stream_repository.dart';
-import 'package:miria/repository/time_line_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
+import "package:miria/repository/time_line_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:uuid/uuid.dart";
+
+part "socket_timeline_repository.g.dart";
+
+@Riverpod(keepAlive: true)
+Future<StreamingController> misskeyStreaming(
+  MisskeyStreamingRef ref,
+  Misskey misskey,
+) async {
+  return await misskey.streamingService.stream();
+}
 
 abstract class SocketTimelineRepository extends TimelineRepository {
-  SocketController? socketController;
   final Misskey misskey;
   final Account account;
-  final MainStreamRepository mainStreamRepository;
-  final AccountRepository accountRepository;
-  final EmojiRepository emojiRepository;
+  late final EmojiRepository emojiRepository =
+      ref.read(emojiRepositoryProvider(account));
   bool isReconnecting = false;
+  late final AccountRepository accountRepository =
+      ref.read(accountRepositoryProvider.notifier);
 
+  StreamingController? streamingController;
   bool isLoading = true;
   (Object?, StackTrace)? error;
+  Channel get channel;
+  Map<String, dynamic> get parameters;
+  String? timelineId;
+  String? mainId;
+  Ref ref;
+  StreamSubscription<StreamingResponse>? timelineSubscription;
+  StreamSubscription<StreamingResponse>? mainSubscription;
 
   SocketTimelineRepository(
     this.misskey,
     this.account,
     super.noteRepository,
-    super.globalNotificationRepository,
     super.generalSettingsRepository,
     super.tabSetting,
-    this.mainStreamRepository,
-    this.accountRepository,
-    this.emojiRepository,
+    this.ref,
   );
 
   Future<Iterable<Note>> requestNotes({String? untilId});
-
-  SocketController createSocketController({
-    required void Function(Note note) onReceived,
-    required FutureOr<void> Function(String id, TimelineReacted reaction)
-        onReacted,
-    required FutureOr<void> Function(String id, TimelineReacted reaction)
-        onUnreacted,
-    required FutureOr<void> Function(String id, TimelineVoted vote) onVoted,
-    required FutureOr<void> Function(String id, NoteEdited vote) onUpdated,
-  });
-
   void reloadLatestNotes() {
     moveToOlder();
-    requestNotes().then((resultNotes) {
+    unawaited(() async {
+      final resultNotes = await requestNotes();
       if (olderNotes.isEmpty) {
         olderNotes.addAll(resultNotes);
         notifyListeners();
@@ -75,7 +83,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         noteRepository.registerNote(note);
       }
       notifyListeners();
-    });
+    }());
   }
 
   @override
@@ -83,10 +91,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     try {
       await emojiRepository.loadFromSourceIfNeed();
       // api/iおよびapi/metaはawaitしない
-      unawaited(Future(() async {
-        await accountRepository.loadFromSourceIfNeed(tabSetting.acct);
-      }));
-      await mainStreamRepository.reconnect();
+      unawaited(accountRepository.loadFromSourceIfNeed(tabSetting.acct));
       isLoading = false;
       error = null;
       notifyListeners();
@@ -96,74 +101,15 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       notifyListeners();
     }
 
-    if (socketController != null) {
-      socketController?.disconnect();
+    if (misskey.streamingService.isClosed) {
+      streamingController =
+          await ref.refresh(misskeyStreamingProvider(misskey).future);
+    } else {
+      streamingController =
+          await ref.read(misskeyStreamingProvider(misskey).future);
     }
-
-    socketController = createSocketController(
-      onReceived: (note) {
-        newerNotes.add(note);
-
-        notifyListeners();
-      },
-      onReacted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-        final reaction = Map.of(registeredNote.reactions);
-        reaction[value.reaction] = (reaction[value.reaction] ?? 0) + 1;
-        final emoji = value.emoji;
-        final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-        if (emoji != null && !value.reaction.endsWith("@.:")) {
-          reactionEmojis[emoji.name] = emoji.url;
-        }
-        noteRepository.registerNote(registeredNote.copyWith(
-            reactions: reaction,
-            reactionEmojis: reactionEmojis,
-            myReaction: value.userId == account.i.id
-                ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-                : registeredNote.myReaction));
-      },
-      onUnreacted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-        final reaction = Map.of(registeredNote.reactions);
-        reaction[value.reaction] = max((reaction[value.reaction] ?? 0) - 1, 0);
-        if (reaction[value.reaction] == 0) {
-          reaction.remove(value.reaction);
-        }
-        final emoji = value.emoji;
-        final reactionEmojis = Map.of(registeredNote.reactionEmojis);
-        if (emoji != null && !value.reaction.endsWith("@.:")) {
-          reactionEmojis[emoji.name] = emoji.url;
-        }
-        noteRepository.registerNote(registeredNote.copyWith(
-            reactions: reaction,
-            reactionEmojis: reactionEmojis,
-            myReaction:
-                value.userId == account.i.id ? "" : registeredNote.myReaction));
-      },
-      onVoted: (id, value) {
-        final registeredNote = noteRepository.notes[id];
-        if (registeredNote == null) return;
-
-        final poll = registeredNote.poll;
-        if (poll == null) return;
-
-        final choices = poll.choices.toList();
-        choices[value.choice] = choices[value.choice]
-            .copyWith(votes: choices[value.choice].votes + 1);
-        noteRepository.registerNote(
-            registeredNote.copyWith(poll: poll.copyWith(choices: choices)));
-      },
-      onUpdated: (id, value) {
-        final note = noteRepository.notes[id];
-        if (note == null) return;
-        noteRepository.registerNote(note.copyWith(
-            text: value.text, cw: value.cw, updatedAt: DateTime.now()));
-      },
-    );
-    Future.wait([
-      Future(() async => await misskey.startStreaming()),
+    await _listenStreaming();
+    await Future.wait([
       Future(() async {
         if (olderNotes.isEmpty) {
           try {
@@ -179,26 +125,53 @@ abstract class SocketTimelineRepository extends TimelineRepository {
         } else {
           reloadLatestNotes();
         }
-      })
+      }),
     ]);
   }
 
   @override
-  void disconnect() {
-    socketController?.disconnect();
+  Future<void> disconnect() async {
+    final id = timelineId;
+    if (id != null) {
+      await streamingController?.removeChannel(id);
+      await timelineSubscription?.cancel();
+    }
+    final id2 = mainId;
+    if (id2 != null) {
+      await streamingController?.removeChannel(id2);
+      await mainSubscription?.cancel();
+    }
   }
 
   @override
   Future<void> reconnect() async {
     if (isReconnecting) return;
     isReconnecting = true;
-    notifyListeners();
     try {
-      await super.reconnect();
-      socketController = null;
-      await startTimeLine();
+      await (
+        disconnect(),
+        timelineSubscription?.cancel() ?? Future.value(),
+        mainSubscription?.cancel() ?? Future.value()
+      ).wait;
+    } catch (e) {
+      print(e);
+    }
+
+    try {
+      await (
+        () async {
+          await misskey.streamingService.reconnect();
+          await _listenStreaming();
+        }(),
+        () async {
+          reloadLatestNotes();
+        }(),
+      ).wait;
       error = null;
-    } finally {
+      isReconnecting = false;
+      notifyListeners();
+    } catch (e, s) {
+      error = (e, s);
       isReconnecting = false;
       notifyListeners();
     }
@@ -220,24 +193,35 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   @override
   void dispose() {
     super.dispose();
-    socketController?.disconnect();
-    socketController = null;
+    unawaited(() async {
+      final id = timelineId;
+      if (id != null) {
+        await streamingController?.removeChannel(id);
+      }
+      final id2 = mainId;
+      if (id2 != null) {
+        await streamingController?.removeChannel(id2);
+      }
+    }());
   }
 
   @override
-  void subscribe(SubscribeItem item) {
+  Future<void> subscribe(SubscribeItem item) async {
     if (!tabSetting.isSubscribe) return;
+    await ref.read(misskeyStreamingProvider(misskey).future);
     final index =
         subscribedList.indexWhere((element) => element.noteId == item.noteId);
-    final isSubscribed = subscribedList.indexWhere((element) =>
-        element.noteId == item.noteId ||
-        element.renoteId == item.noteId ||
-        element.replyId == item.noteId);
+    final isSubscribed = subscribedList.indexWhere(
+      (element) =>
+          element.noteId == item.noteId ||
+          element.renoteId == item.noteId ||
+          element.replyId == item.noteId,
+    );
 
     if (index == -1) {
       subscribedList.add(item);
       if (isSubscribed == -1) {
-        socketController?.subNote(item.noteId);
+        streamingController?.subNote(item.noteId);
       }
     } else {
       subscribedList[index] = item;
@@ -246,31 +230,229 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     final renoteId = item.renoteId;
 
     if (renoteId != null) {
-      final isRenoteSubscribed = subscribedList.indexWhere((element) =>
-          element.noteId == renoteId ||
-          element.renoteId == renoteId ||
-          element.replyId == renoteId);
+      final isRenoteSubscribed = subscribedList.indexWhere(
+        (element) =>
+            element.noteId == renoteId ||
+            element.renoteId == renoteId ||
+            element.replyId == renoteId,
+      );
       if (isRenoteSubscribed == -1) {
-        socketController?.subNote(renoteId);
+        streamingController?.subNote(renoteId);
       }
     }
 
     final replyId = item.replyId;
     if (replyId != null) {
-      socketController?.subNote(replyId);
-      final isRenoteSubscribed = subscribedList.indexWhere((element) =>
-          element.noteId == replyId ||
-          element.renoteId == replyId ||
-          element.replyId == replyId);
+      streamingController?.subNote(replyId);
+      final isRenoteSubscribed = subscribedList.indexWhere(
+        (element) =>
+            element.noteId == replyId ||
+            element.renoteId == replyId ||
+            element.replyId == replyId,
+      );
       if (isRenoteSubscribed == -1) {
-        socketController?.subNote(replyId);
+        streamingController?.subNote(replyId);
       }
     }
   }
 
   @override
-  void describe(String id) {
+  Future<void> describe(String id) async {
     if (!tabSetting.isSubscribe) return;
-    socketController?.unsubNote(id);
+    await ref.read(misskeyStreamingProvider(misskey).future);
+    streamingController?.unsubNote(id);
+  }
+
+  Future<void> _listenStreaming() async {
+    final generatedId = const Uuid().v4();
+    timelineId = generatedId;
+    final generatedId2 = const Uuid().v4();
+    mainId = generatedId2;
+
+    timelineSubscription = streamingController
+        ?.addChannel(channel, parameters, generatedId)
+        .listen(listenTimeline);
+    mainSubscription =
+        streamingController?.mainStream(id: generatedId2).listen(listenMain);
+  }
+
+  Future<void> listenMain(StreamingResponse response) async {
+    switch (response) {
+      case StreamingChannelResponse(:final body):
+        switch (body) {
+          case ReadAllNotificationsChannelEvent():
+            await accountRepository.readAllNotification(account);
+          case UnreadNotificationChannelEvent():
+            await accountRepository.addUnreadNotification(account);
+          case ReadAllAnnouncementsChannelEvent():
+            await accountRepository.removeUnreadAnnouncement(account);
+          case AnnouncementCreatedChannelEvent():
+          case NoteChannelEvent():
+          case StatsLogChannelEvent():
+          case StatsChannelEvent():
+          case UserAddedChannelEvent():
+          case UserRemovedChannelEvent():
+          case NotificationChannelEvent():
+          case MentionChannelEvent():
+          case ReplyChannelEvent():
+          case RenoteChannelEvent():
+          case FollowChannelEvent():
+          case FollowedChannelEvent():
+          case UnfollowChannelEvent():
+          case MeUpdatedChannelEvent():
+          case PageEventChannelEvent():
+          case UrlUploadFinishedChannelEvent():
+          case UnreadMentionChannelEvent():
+          case ReadAllUnreadMentionsChannelEvent():
+          case NotificationFlushedChannelEvent():
+          case UnreadSpecifiedNoteChannelEvent():
+          case ReadAllUnreadSpecifiedNotesChannelEvent():
+          case ReadAllAntennasChannelEvent():
+          case UnreadAntennaChannelEvent():
+          case MyTokenRegeneratedChannelEvent():
+          case SigninChannelEvent():
+          case RegistryUpdatedChannelEvent():
+          case DriveFileCreatedChannelEvent():
+          case ReadAntennaChannelEvent():
+          case ReceiveFollowRequestChannelEvent():
+          case FallbackChannelEvent():
+          case ReactedChannelEvent():
+          case UnreactedChannelEvent():
+          case DeletedChannelEvent():
+          case PollVotedChannelEvent():
+          case UpdatedChannelEvent():
+        }
+      case StreamingChannelEmojiAddedResponse():
+      case StreamingChannelEmojiUpdatedResponse():
+      case StreamingChannelEmojiDeletedResponse():
+        await emojiRepository.loadFromSource();
+
+      case StreamingChannelAnnouncementCreatedResponse(:final body):
+        await accountRepository.createUnreadAnnouncement(
+          account,
+          body.announcement,
+        );
+      case StreamingChannelNoteUpdatedResponse():
+      case StreamingChannelUnknownResponse():
+      // TODO: Handle this case.
+    }
+  }
+
+  Future<void> listenTimeline(StreamingResponse response) async {
+    switch (response) {
+      case StreamingChannelResponse(:final body):
+        switch (body) {
+          case NoteChannelEvent(:final body):
+            newerNotes.add(body);
+            notifyListeners();
+          case ReadAllNotificationsChannelEvent():
+          case UnreadNotificationChannelEvent():
+          case ReadAllAnnouncementsChannelEvent():
+          case AnnouncementCreatedChannelEvent():
+          case StatsLogChannelEvent():
+          case StatsChannelEvent():
+          case UserAddedChannelEvent():
+          case UserRemovedChannelEvent():
+          case NotificationChannelEvent():
+          case MentionChannelEvent():
+          case ReplyChannelEvent():
+          case RenoteChannelEvent():
+          case FollowChannelEvent():
+          case FollowedChannelEvent():
+          case UnfollowChannelEvent():
+          case MeUpdatedChannelEvent():
+          case PageEventChannelEvent():
+          case UrlUploadFinishedChannelEvent():
+          case UnreadMentionChannelEvent():
+          case ReadAllUnreadMentionsChannelEvent():
+          case NotificationFlushedChannelEvent():
+          case UnreadSpecifiedNoteChannelEvent():
+          case ReadAllUnreadSpecifiedNotesChannelEvent():
+          case ReadAllAntennasChannelEvent():
+          case UnreadAntennaChannelEvent():
+          case MyTokenRegeneratedChannelEvent():
+          case SigninChannelEvent():
+          case RegistryUpdatedChannelEvent():
+          case DriveFileCreatedChannelEvent():
+          case ReadAntennaChannelEvent():
+          case ReceiveFollowRequestChannelEvent():
+          case FallbackChannelEvent():
+        }
+      case StreamingChannelNoteUpdatedResponse(:final body):
+        switch (body) {
+          case ReactedChannelEvent(:final id, :final body):
+            final registeredNote = noteRepository.notes[id];
+            if (registeredNote == null) return;
+            final reaction = Map.of(registeredNote.reactions);
+            reaction[body.reaction] = (reaction[body.reaction] ?? 0) + 1;
+            final emoji = body.emoji;
+            final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+            if (emoji != null && !body.reaction.endsWith("@.:")) {
+              reactionEmojis[emoji.name] = emoji.url;
+            }
+            noteRepository.registerNote(
+              registeredNote.copyWith(
+                reactions: reaction,
+                reactionEmojis: reactionEmojis,
+                myReaction: body.userId == account.i.id
+                    ? (emoji?.name != null ? ":${emoji?.name}:" : null)
+                    : registeredNote.myReaction,
+              ),
+            );
+          case UnreactedChannelEvent(:final body, :final id):
+            final registeredNote = noteRepository.notes[id];
+            if (registeredNote == null) return;
+            final reaction = Map.of(registeredNote.reactions);
+            reaction[body.reaction] =
+                max((reaction[body.reaction] ?? 0) - 1, 0);
+            if (reaction[body.reaction] == 0) {
+              reaction.remove(body.reaction);
+            }
+            final emoji = body.emoji;
+            final reactionEmojis = Map.of(registeredNote.reactionEmojis);
+            if (emoji != null && !body.reaction.endsWith("@.:")) {
+              reactionEmojis[emoji.name] = emoji.url;
+            }
+            noteRepository.registerNote(
+              registeredNote.copyWith(
+                reactions: reaction,
+                reactionEmojis: reactionEmojis,
+                myReaction: body.userId == account.i.id
+                    ? ""
+                    : registeredNote.myReaction,
+              ),
+            );
+          case PollVotedChannelEvent(:final body, :final id):
+            final registeredNote = noteRepository.notes[id];
+            if (registeredNote == null) return;
+
+            final poll = registeredNote.poll;
+            if (poll == null) return;
+
+            final choices = poll.choices.toList();
+            choices[body.choice] = choices[body.choice]
+                .copyWith(votes: choices[body.choice].votes + 1);
+            noteRepository.registerNote(
+              registeredNote.copyWith(poll: poll.copyWith(choices: choices)),
+            );
+          case UpdatedChannelEvent(:final body):
+            final note = noteRepository.notes[timelineId];
+            if (note == null) return;
+            noteRepository.registerNote(
+              note.copyWith(
+                text: body.text,
+                cw: body.cw,
+                updatedAt: DateTime.now(),
+              ),
+            );
+          case DeletedChannelEvent():
+        }
+      case StreamingChannelEmojiAddedResponse():
+      case StreamingChannelEmojiUpdatedResponse():
+      case StreamingChannelEmojiDeletedResponse():
+        await emojiRepository.loadFromSource();
+      case StreamingChannelUnknownResponse():
+      case StreamingChannelAnnouncementCreatedResponse():
+    }
   }
 }

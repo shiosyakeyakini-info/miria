@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/account_scope.dart';
-import 'package:miria/view/common/misskey_notes/misskey_note.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
+import "package:miria/view/common/misskey_notes/misskey_note.dart";
 
 class RenoteArea extends ConsumerWidget {
   const RenoteArea({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final renote = ref.watch(noteCreateProvider(AccountScope.of(context))
-        .select((value) => value.renote));
+    final renote = ref.watch(
+      noteCreateNotifierProvider.select((value) => value.renote),
+    );
 
     if (renote != null) {
       return Column(

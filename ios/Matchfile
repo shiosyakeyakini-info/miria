@@ -4,7 +4,7 @@ storage_mode("git")
 
 type("development") # The default type, can be: appstore, adhoc, enterprise or development
 
-app_identifier(["info.shiosyakeyakini.miria", "info.shiosyakeyakini.miria.ShareExtension"])
+app_identifier(["info.shiosyakeyakini.miria"])
 username("site_register@shiosyakeyakini.info") # Your Apple Developer Portal username
 
 # For all available options run `fastlane match --help`

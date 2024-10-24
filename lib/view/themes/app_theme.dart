@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:miria/model/color_theme.dart';
+import "package:flutter/material.dart";
+import "package:miria/model/color_theme.dart";
+import "package:miria/model/general_settings.dart";
 
 class AppTheme extends InheritedWidget {
   final AppThemeData themeData;
 
   const AppTheme({
-    super.key,
     required super.child,
     required this.themeData,
+    super.key,
   });
 
   @override
@@ -46,6 +47,7 @@ class AppThemeData {
   final List<double> renoteDashPattern;
   final Color currentDisplayTabColor;
   final Color buttonBackground;
+  final Languages languages;
 
   const AppThemeData({
     required this.colorTheme,
@@ -69,5 +71,6 @@ class AppThemeData {
     required this.renoteDashPattern,
     required this.currentDisplayTabColor,
     required this.buttonBackground,
+    required this.languages,
   });
 }

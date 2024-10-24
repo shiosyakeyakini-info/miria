@@ -25,6 +25,7 @@ platform :ios do
     build_app(
       skip_build_archive: true,
       archive_path: "../build/ios/archive/Runner.xcarchive",
+      scheme: "Runner",
       export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
     upload_to_testflight(
