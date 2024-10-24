@@ -128,7 +128,9 @@ class ExploreUsers extends HookConsumerWidget {
           else
             Expanded(
               child: PushableListView(
-                listKey: Object.hashAll([sortType, exploreUserType]),
+                listKey: Object.hashAll(
+                  [sortType.value, exploreUserType.value],
+                ),
                 initializeFuture: () async {
                   final response =
                       await ref.read(misskeyGetContextProvider).users.users(
