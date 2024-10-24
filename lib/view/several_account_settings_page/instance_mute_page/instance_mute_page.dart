@@ -34,11 +34,14 @@ class InstanceMutePageNotifier extends _$InstanceMutePageNotifier {
       (
         beforeState.$1,
         await ref.read(dialogStateNotifierProvider.notifier).guard(
-              () async => await ref
-                  .read(misskeyPostContextProvider)
-                  .i
-                  .update(IUpdateRequest(mutedInstances: mutedInstances)),
-            )
+          () async {
+            await ref
+                .read(misskeyPostContextProvider)
+                .i
+                .update(IUpdateRequest(mutedInstances: mutedInstances));
+            await ref.read(appRouterProvider).maybePop();
+          },
+        )
       ),
     );
   }
