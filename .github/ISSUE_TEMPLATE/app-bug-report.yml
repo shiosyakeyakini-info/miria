@@ -1,0 +1,85 @@
+name: App Bug Report/アプリの不具合報告
+description: Miriaアプリの動作の不具合について報告する
+labels:
+  - bug
+
+body:
+  - type: textarea
+    attributes:
+      label: Summary/概略
+      description: 不具合の内容について記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior/期待される動作
+      description: アプリが本来実行するべき動作について記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Actual Behavior/実際の動作
+      description: アプリが実際に実行している動作について記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce/再現の手順
+      description: 不具合の再現手順について、1から順に記述してください
+      placeholder: |
+        1,
+        2,
+        3,
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Misskey Server Address/Misskeyサーバーのアドレス
+      description: 不具合を確認したMisskeyサーバーのアドレスを入力してください(例：misskey.cloud, misskey.flowers)
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: Model Name & OS Version/機種名とOSバージョン
+      description: 不具合を確認したデバイスの機種名とOSバージョンを入力してください(例：motorola moto g7 Android 13)
+    id: model-name-and-os-version
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: App Version/アプリのバージョン
+      description: Miriaのアプリバージョンを入力してください（"最新版"とは入力しないように）
+    id: miria-version
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: App Installation/アプリのインストール方法
+      description: Miriaをどの方法でインストールした/するところだったのか選択してください
+      multiple: true
+      options: 
+        - App Store
+        - Play Store
+        - Snap Store
+        - Windows EXE Installer
+        - TestFlight
+        - APK directly
+        - Windows ZIP File directly
+        - Build your-self
+        - Others
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional Infomations/その他の情報
+      description: 問題の解決方法や過去のIssueとの関連のある情報などがある場合は記述してください
+    validations:
+      required: false
