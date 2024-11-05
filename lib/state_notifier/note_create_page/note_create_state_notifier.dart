@@ -1,3 +1,4 @@
+import "dart:io";
 import "dart:typed_data";
 
 import "package:dio/dio.dart";
@@ -592,8 +593,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
         allowMultiple: true,
-        allowCompression: false,
-        compressionQuality: 0,
+        allowCompression: Platform.isIOS, // iOSの場合のみ圧縮する(HEICのことがあるため)
+        compressionQuality: (Platform.isIOS) ? 90 : 0,
       );
       if (result == null || result.files.isEmpty) return;
 
