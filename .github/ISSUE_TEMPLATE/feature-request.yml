@@ -1,0 +1,24 @@
+name: Feature Request/新機能等の要望
+description: Miriaアプリの新機能の要望や改善点を説明する
+labels:
+  - enhancement
+
+body:
+  - type: textarea
+    attributes:
+      label: Summary/概略
+      description: 新機能の要望や改善点について記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Purpose/目的・理由
+      description: 新機能の要望や改善点を取り込むことでどのような結果が得られるのかについて記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Infomations/その他の情報
+      description: 新機能や改善点に関連する補足情報などがあれば記述してください
