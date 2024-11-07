@@ -55,7 +55,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange (MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: files; Name: {userappdata}\info.shiosyakeyakini\miria\*
+Type: filesandordirs; Name: {userappdata}\info.shiosyakeyakini\miria
 
 [InstallDelete]
 Type: files; Name: {app}/api-ms-*.dll
@@ -63,3 +63,4 @@ Type: files; Name: {app}/concrt140.dll
 Type: files; Name: {app}/msvcp*.dll
 Type: files; Name: {app}/ucrtbas*.dll
 Type: files; Name: {app}/vc*.dll
+Type: filesandordirs; Name: {app}/data/flutter_assets/packages/twemoji_v2
