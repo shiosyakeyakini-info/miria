@@ -24,8 +24,9 @@ DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile={#MyWorkDir}\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
+UsePreviousPrivileges=yes
 OutputDir={#MyWorkDir}
 OutputBaseFilename=miria-installer
 SetupIconFile={#MyWorkDir}\windows\runner\resources\app_icon.ico
