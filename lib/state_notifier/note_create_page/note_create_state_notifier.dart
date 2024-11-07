@@ -1,3 +1,4 @@
+import "dart:io";
 import "dart:typed_data";
 
 import "package:dio/dio.dart";
@@ -6,7 +7,9 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:image/image.dart";
 import "package:mfm_parser/mfm_parser.dart";
+import "package:mime/mime.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/log.dart";
 import "package:miria/model/image_file.dart";
@@ -158,17 +161,16 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         files: await Future.wait(
           initialMediaFiles.map((media) async {
             final file = _fileSystem.file(media);
-            final contents = await file.readAsBytes();
             final fileName = file.basename;
             final extension = fileName.split(".").last.toLowerCase();
             if (["jpg", "png", "gif", "webp"].contains(extension)) {
               return ImageFile(
-                data: contents,
+                data: await loadImage(file),
                 fileName: fileName,
               );
             } else {
               return UnknownFile(
-                data: contents,
+                data: await file.readAsBytes(),
                 fileName: fileName,
               );
             }
@@ -607,7 +609,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final files = await Future.wait(
         fsFiles.map(
           (file) async => ImageFile(
-            data: await file.readAsBytes(),
+            data: await loadImage(file),
             fileName: file.basename,
           ),
         ),
@@ -615,6 +617,30 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
       state = state.copyWith(files: [...state.files, ...files]);
     }
+  }
+
+  Future<Uint8List> loadImage(File file) async {
+    final imageBytes = await file.readAsBytes();
+    final mime = lookupMimeType(file.path, headerBytes: imageBytes);
+    if (mime == "image/jpeg") {
+      final origExif = decodeJpgExif(imageBytes);
+      final exif = ExifData();
+
+      if (origExif != null) {
+        final orientation = origExif.imageIfd["Orientation"];
+        if (orientation != null) {
+          exif.imageIfd["Orientation"] = orientation;
+        }
+      }
+
+      final img = injectJpgExif(imageBytes, exif);
+      if (img == null) {
+        return Uint8List(0);
+      }
+
+      return img;
+    }
+    return imageBytes;
   }
 
   /// メディアの内容を変更する
