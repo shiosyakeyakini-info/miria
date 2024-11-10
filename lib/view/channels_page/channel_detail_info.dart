@@ -180,7 +180,15 @@ class ChannelDetailArea extends ConsumerWidget {
               ),
             ),
           ),
-        const Padding(padding: EdgeInsets.only(top: 10)),
+        const Padding(padding: EdgeInsets.only(top: 5)),
+        if (channel.isArchived)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(S.of(context).thisChannelIsArchived),
+            ),
+          ),
+        const Padding(padding: EdgeInsets.only(top: 5)),
         Align(
           alignment: Alignment.centerRight,
           child: Wrap(
