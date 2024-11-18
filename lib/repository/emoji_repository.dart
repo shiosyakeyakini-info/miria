@@ -53,6 +53,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   bool thisLaunchLoaded = false;
 
+  final romajiPattern = RegExp(r"^[A-Za-z0-9_+-]+$");
+  final splitPattern = RegExp("[_+-]");
+
   String format(String emojiName) {
     return emojiName
         .replaceAll("_", "")
@@ -109,7 +112,13 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   String toHiraganaSafe(String text) {
     try {
-      return const KanaKit().toHiragana(text);
+      if (romajiPattern.hasMatch(text)) {
+        return text
+            .split(splitPattern)
+            .map((e) => const KanaKit().toHiragana(e))
+            .join();
+      }
+      return const KanaKit().toHiragana(format(text));
     } catch (e) {
       return text;
     }
@@ -118,21 +127,18 @@ class EmojiRepositoryImpl extends EmojiRepository {
   Future<void> _setEmojiData(EmojisResponse response) async {
     final toH = toHiraganaSafe;
 
-    final unicodeEmojis =
-        (jsonDecode(await rootBundle.loadString("assets/emoji_list.json"))
-                as List)
-            .map((e) => UnicodeEmoji.fromJson(e))
-            .map(
-              (e) => EmojiRepositoryData(
-                emoji: UnicodeEmojiData(char: e.char),
-                kanaName: toH(format(e.char)),
-                kanaAliases: [e.name, ...e.keywords]
-                    .map((e2) => toH(format(e2)))
-                    .toList(),
-                aliases: [e.name, ...e.keywords],
-                category: e.category,
-              ),
-            );
+    final unicodeEmojis = (jsonDecode(
+            await rootBundle.loadString("assets/emoji_list.json")) as List)
+        .map((e) => UnicodeEmoji.fromJson(e))
+        .map(
+          (e) => EmojiRepositoryData(
+            emoji: UnicodeEmojiData(char: e.char),
+            kanaName: toH(e.char),
+            kanaAliases: [e.name, ...e.keywords].map((e2) => toH(e2)).toList(),
+            aliases: [e.name, ...e.keywords],
+            category: e.category,
+          ),
+        );
 
     emoji = response.emojis
         .map(
@@ -145,9 +151,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
               isSensitive: e.isSensitive,
             ),
             category: e.category ?? "",
-            kanaName: toH(format(e.name)),
+            kanaName: toH(e.name),
             aliases: e.aliases,
-            kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList(),
+            kanaAliases: e.aliases.map((e2) => toH(e2)).toList(),
           ),
         )
         .toList();
