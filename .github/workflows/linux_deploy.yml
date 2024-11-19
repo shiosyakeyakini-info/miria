@@ -1,0 +1,140 @@
+
+name: デプロイ(linux)
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+env:
+  APP_NAME: 'miria'
+  MAINTAINER: 'sorairo <sorairo@shiosyakeyakini.info>'
+
+permissions:
+  contents: write
+
+jobs:
+  build-snap:
+    name: ビルド（Snap）
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [amd64, arm64]
+    outputs:
+      snap: ${{ steps.snapcraft.outputs.snap }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Build Snap
+        id: snapcraft
+        uses: diddlesnaps/snapcraft-multiarch-action@v1
+        with:
+          architecture: ${{ matrix.platform }}
+
+      - name: Get Build Version
+        run: |
+          echo "VERSION=$(yq -r '.version' pubspec.yaml)" >> $GITHUB_ENV
+      - name: Upload snap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v$VERSION ${{ steps.snapcraft.outputs.snap }}
+      # https://gihyo.jp/admin/serial/01/ubuntu-recipe/0660#sec3 : Snapパッケージアップロードまでの流れ
+      # https://github.com/snapcore/action-publish : Snap ActionのREADME.md
+      # Snap Storeでパッケージ名"miria"を予約（$ snapcraft register miria）後、"SNAPCRAFT_STORE_CREDENTIALS"を登録し、
+      # 以下をコメントアウトを解除することでSnap Storeへアップロードすることが可能です。
+      # 通常、SnapファイルをそのままStore外で公開することはありません。
+      #
+      #- name: Upload Snap Store
+      #  uses: snapcore/action-publish@v1
+      #  env:
+      #    SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+      #  with:
+      #    snap: ${{ steps.snapcraft.outputs.snap }}
+      #    release: stable
+
+
+  build-debs:
+    name: ビルド（Deb）
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [amd64]
+    steps:
+        - name: Clone repository
+          uses: actions/checkout@v4
+
+        - name: Get Flutter version from .fvmrc
+          run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
+
+        - name: Install Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            flutter-version: ${{ env.FLUTTER_FVM_VERSION }}
+            cache: true
+
+        - name: Patch for linux build
+          run: |
+            sudo apt-get update -y
+            sudo apt-get install -y ninja-build libgtk-3-dev libsecret-1-dev libstdc++-12-dev nasm
+            sudo pip3 install meson
+
+        - name: Build libmpv
+          run: |
+            git clone https://github.com/mpv-player/mpv-build.git
+            cd mpv-build
+            sed -i 's|checkout_ffmpeg=master|checkout_ffmpeg=@dcdfd7fb62464beeeb03c24f21713bf3914b9ea4|g' update
+            sed -i 's|checkout_libplacebo=master|checkout_libplacebo=@ed29e541a55acf28022738440b2a925386292551|g' update
+            sed -i 's|checkout_mpv=master|checkout_mpv=@140ec21c89d671d392877a7f3b91d67e7d7b9239|g' update
+            sed -i 's|OPTIONS="--enable-static --disable-shared"|OPTIONS="--enable-shared"|g' scripts/libass-config
+            sed -i 's|--prefix="$BUILD/build_libs" --libdir="$BUILD/build_libs/lib"||g' scripts/libass-config
+            sed -i 's|^meson setup build.*||g' scripts/mpv-config
+            echo -e "\npython3 ./bootstrap.py\n./waf configure --disable-alsa --enable-libmpv-shared\n./waf build" >> scripts/mpv-config
+            ./update
+            ./scripts/libplacebo-config
+            ./scripts/libplacebo-build -j$(nproc)
+            ./scripts/libass-config
+            sudo make -C libass install -j$(nproc)
+            ./scripts/ffmpeg-config
+            ./scripts/ffmpeg-build -j$(nproc)
+            ./scripts/mpv-config
+            cd mpv
+            sudo ./waf install
+
+        - run: flutter pub get
+#        - run: flutter test
+        - run: flutter build linux
+        - name: Get Build Version
+          run: |
+            echo "VERSION=$(yq -r '.version' pubspec.yaml)" >> $GITHUB_ENV
+
+        - name: Prepare to build DEB
+          run: |
+            echo "DESC=$(awk -F '=' '/^Comment=/{print $2}' ./snap/gui/miria.desktop)" >> $GITHUB_ENV
+            sed -i -E 's|^Version=.*|Version=${{ env.VERSION }}|g' ./snap/gui/miria.desktop
+            sed -i -E 's|^Icon=.*|Icon=/usr/share/pixmaps/miria.png|g' ./snap/gui/miria.desktop
+            sed -i -E 's|^Exec=.*|Exec=/opt/miria/miria|g' ./snap/gui/miria.desktop
+            mkdir -p .debpkg/opt/miria .debpkg/usr/share/applications .debpkg/usr/share/pixmaps
+            cp -rp ./build/linux/x64/release/bundle/* .debpkg/opt/miria/
+            cp ./snap/gui/miria.desktop .debpkg/usr/share/applications/
+            cp ./assets/images/icon.png .debpkg/usr/share/pixmaps/miria.png
+
+        - name: Build DEB
+          uses: jiro4989/build-deb-action@v3
+          with:
+            desc: '${{ env.DESC }}'
+            package: ${{ env.APP_NAME }}
+            maintainer: ${{ env.MAINTAINER }}
+            version: ${{ env.VERSION }}
+            arch: "amd64"
+            package_root: ".debpkg"
+            depends: "libgtk-3-0, libstdc++6, libx11-6, libmpv2, libsecret-1-0"
+
+        - name: Upload DEB
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            gh release upload v$VERSION ./miria_${{ env.VERSION }}_amd64.deb

@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
@@ -106,7 +107,10 @@ class PushableListView<T> extends HookConsumerWidget {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(20),
-                  child: CircularProgressIndicator.adaptive(),
+                  child: SizedBox.square(
+                    dimension: 100,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
                 ),
               );
             }
@@ -119,10 +123,10 @@ class PushableListView<T> extends HookConsumerWidget {
             }
 
             if (items.value.isEmpty && !hideIsEmpty) {
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text("なんもないで"),
+                  padding: const EdgeInsets.all(10),
+                  child: Text(S.of(context).nothingHere),
                 ),
               );
             }
@@ -150,13 +154,12 @@ class PushableListView<T> extends HookConsumerWidget {
                           const SizedBox.shrink(),
                     ],
                   ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: IconButton(
-                      onPressed: nextLoad,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                    ),
+                InkWell(
+                  onTap: nextLoad,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 60,
+                    child: const Icon(Icons.keyboard_arrow_down),
                   ),
                 ),
               ],

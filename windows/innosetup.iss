@@ -59,7 +59,3 @@ Type: files; Name: {userappdata}\info.shiosyakeyakini\miria\*
 
 [InstallDelete]
 Type: files; Name: {app}/api-ms-*.dll
-Type: files; Name: {app}/concrt140.dll
-Type: files; Name: {app}/msvcp*.dll
-Type: files; Name: {app}/ucrtbas*.dll
-Type: files; Name: {app}/vc*.dll

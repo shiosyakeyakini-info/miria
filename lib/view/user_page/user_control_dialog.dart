@@ -96,7 +96,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
       Navigator.of(context).pop();
     });
     final openBrowserAsRemote = useAsync(() async {
-      final uri = response.uri ?? response.url;
+      final uri = response.url ?? response.uri;
       if (uri == null) return;
       await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!context.mounted) return;

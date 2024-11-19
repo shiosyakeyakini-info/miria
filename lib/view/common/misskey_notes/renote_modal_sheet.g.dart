@@ -429,5 +429,232 @@ class _RenoteChannelNotifierProviderElement
   @override
   Account get account => (origin as RenoteChannelNotifierProvider).account;
 }
+
+String _$renoteOtherAccountNotifierHash() =>
+    r'6ce80b97d6f49aa3302dfd27b2b1b8242dc559cb';
+
+abstract class _$RenoteOtherAccountNotifier
+    extends BuildlessAutoDisposeNotifier<AsyncValue<(Account, Note)>?> {
+  late final Account account;
+  late final Note note;
+
+  AsyncValue<(Account, Note)>? build(
+    Account account,
+    Note note,
+  );
+}
+
+/// See also [RenoteOtherAccountNotifier].
+@ProviderFor(RenoteOtherAccountNotifier)
+const renoteOtherAccountNotifierProvider = RenoteOtherAccountNotifierFamily();
+
+/// See also [RenoteOtherAccountNotifier].
+class RenoteOtherAccountNotifierFamily extends Family {
+  /// See also [RenoteOtherAccountNotifier].
+  const RenoteOtherAccountNotifierFamily();
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    accountContextProvider
+  ];
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    accountContextProvider,
+    ...?accountContextProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'renoteOtherAccountNotifierProvider';
+
+  /// See also [RenoteOtherAccountNotifier].
+  RenoteOtherAccountNotifierProvider call(
+    Account account,
+    Note note,
+  ) {
+    return RenoteOtherAccountNotifierProvider(
+      account,
+      note,
+    );
+  }
+
+  @visibleForOverriding
+  @override
+  RenoteOtherAccountNotifierProvider getProviderOverride(
+    covariant RenoteOtherAccountNotifierProvider provider,
+  ) {
+    return call(
+      provider.account,
+      provider.note,
+    );
+  }
+
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(RenoteOtherAccountNotifier Function() create) {
+    return _$RenoteOtherAccountNotifierFamilyOverride(this, create);
+  }
+}
+
+class _$RenoteOtherAccountNotifierFamilyOverride implements FamilyOverride {
+  _$RenoteOtherAccountNotifierFamilyOverride(
+      this.overriddenFamily, this.create);
+
+  final RenoteOtherAccountNotifier Function() create;
+
+  @override
+  final RenoteOtherAccountNotifierFamily overriddenFamily;
+
+  @override
+  RenoteOtherAccountNotifierProvider getProviderOverride(
+    covariant RenoteOtherAccountNotifierProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
+}
+
+/// See also [RenoteOtherAccountNotifier].
+class RenoteOtherAccountNotifierProvider
+    extends AutoDisposeNotifierProviderImpl<RenoteOtherAccountNotifier,
+        AsyncValue<(Account, Note)>?> {
+  /// See also [RenoteOtherAccountNotifier].
+  RenoteOtherAccountNotifierProvider(
+    Account account,
+    Note note,
+  ) : this._internal(
+          () => RenoteOtherAccountNotifier()
+            ..account = account
+            ..note = note,
+          from: renoteOtherAccountNotifierProvider,
+          name: r'renoteOtherAccountNotifierProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$renoteOtherAccountNotifierHash,
+          dependencies: RenoteOtherAccountNotifierFamily._dependencies,
+          allTransitiveDependencies:
+              RenoteOtherAccountNotifierFamily._allTransitiveDependencies,
+          account: account,
+          note: note,
+        );
+
+  RenoteOtherAccountNotifierProvider._internal(
+    super.create, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.account,
+    required this.note,
+  }) : super.internal();
+
+  final Account account;
+  final Note note;
+
+  @override
+  AsyncValue<(Account, Note)>? runNotifierBuild(
+    covariant RenoteOtherAccountNotifier notifier,
+  ) {
+    return notifier.build(
+      account,
+      note,
+    );
+  }
+
+  @override
+  Override overrideWith(RenoteOtherAccountNotifier Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: RenoteOtherAccountNotifierProvider._internal(
+        () => create()
+          ..account = account
+          ..note = note,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        account: account,
+        note: note,
+      ),
+    );
+  }
+
+  @override
+  (
+    Account,
+    Note,
+  ) get argument {
+    return (
+      account,
+      note,
+    );
+  }
+
+  @override
+  AutoDisposeNotifierProviderElement<RenoteOtherAccountNotifier,
+      AsyncValue<(Account, Note)>?> createElement() {
+    return _RenoteOtherAccountNotifierProviderElement(this);
+  }
+
+  RenoteOtherAccountNotifierProvider _copyWith(
+    RenoteOtherAccountNotifier Function() create,
+  ) {
+    return RenoteOtherAccountNotifierProvider._internal(
+      () => create()
+        ..account = account
+        ..note = note,
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      account: account,
+      note: note,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RenoteOtherAccountNotifierProvider &&
+        other.account == account &&
+        other.note == note;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, account.hashCode);
+    hash = _SystemHash.combine(hash, note.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin RenoteOtherAccountNotifierRef
+    on AutoDisposeNotifierProviderRef<AsyncValue<(Account, Note)>?> {
+  /// The parameter `account` of this provider.
+  Account get account;
+
+  /// The parameter `note` of this provider.
+  Note get note;
+}
+
+class _RenoteOtherAccountNotifierProviderElement
+    extends AutoDisposeNotifierProviderElement<RenoteOtherAccountNotifier,
+        AsyncValue<(Account, Note)>?> with RenoteOtherAccountNotifierRef {
+  _RenoteOtherAccountNotifierProviderElement(super.provider);
+
+  @override
+  Account get account => (origin as RenoteOtherAccountNotifierProvider).account;
+  @override
+  Note get note => (origin as RenoteOtherAccountNotifierProvider).note;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

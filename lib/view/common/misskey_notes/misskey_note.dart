@@ -133,6 +133,7 @@ class MisskeyNote extends HookConsumerWidget {
       }
 
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        final notesRepository = ref.read(notesProvider(account));
         await ref
             .read(misskeyPostContextProvider)
             .notes
@@ -143,7 +144,7 @@ class MisskeyNote extends HookConsumerWidget {
             const Duration(milliseconds: misskeyHQReactionDelay),
           );
         }
-        await ref.read(notesProvider(account)).refresh(displayNote.id);
+        await notesRepository.refresh(displayNote.id);
         return;
       });
     }
@@ -349,6 +350,7 @@ class MisskeyNote extends HookConsumerWidget {
           if (dialogValue != 0) return;
 
           await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+            final notesRepository = ref.read(notesWithProvider);
             await ref
                 .read(misskeyPostContextProvider)
                 .notes
@@ -361,7 +363,7 @@ class MisskeyNote extends HookConsumerWidget {
               );
             }
 
-            await ref.read(notesWithProvider).refresh(displayNote.id);
+            await notesRepository.refresh(displayNote.id);
           });
 
           return;
@@ -387,6 +389,7 @@ class MisskeyNote extends HookConsumerWidget {
               true) {
             return;
           }
+          final notesRepository = ref.read(notesProvider(account));
 
           await ref
               .read(misskeyPostContextProvider)
@@ -398,7 +401,7 @@ class MisskeyNote extends HookConsumerWidget {
               const Duration(milliseconds: misskeyHQReactionDelay),
             );
           }
-          await ref.read(notesProvider(account)).refresh(displayNote.id);
+          await notesRepository.refresh(displayNote.id);
           return;
         }
         final misskey = ref.read(misskeyPostContextProvider);

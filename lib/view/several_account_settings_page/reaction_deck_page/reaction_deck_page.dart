@@ -57,31 +57,6 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).reactionDeck),
-        actions: [
-          PopupMenuButton(
-            onSelected: (type) => switch (type) {
-              ReactionDeckPageMenuType.addMany =>
-                showAddReactionsDialog(context: context),
-              ReactionDeckPageMenuType.copy => copyReactions(context: context),
-              ReactionDeckPageMenuType.clear =>
-                clearReactions(context: context),
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: ReactionDeckPageMenuType.addMany,
-                child: Text(S.of(context).bulkAddReactions),
-              ),
-              PopupMenuItem(
-                value: ReactionDeckPageMenuType.clear,
-                child: Text(S.of(context).clear),
-              ),
-              PopupMenuItem(
-                value: ReactionDeckPageMenuType.copy,
-                child: Text(S.of(context).copy),
-              ),
-            ],
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -149,6 +124,34 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                   ),
                   Expanded(
                     child: Text(S.of(context).editReactionDeckDescription),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
+              Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      await showAddReactionsDialog(context: context);
+                    },
+                    icon: const Icon(Icons.file_download_outlined),
+                    label: Text(S.of(context).bulkAddReactions),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      await copyReactions(context: context);
+                    },
+                    icon: const Icon(Icons.copy_all),
+                    label: Text(S.of(context).copy),
+                  ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      await clearReactions(context: context);
+                    },
+                    child: const Icon(Icons.clear),
                   ),
                 ],
               ),

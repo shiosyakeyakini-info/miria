@@ -125,9 +125,14 @@ class MisskeyTimeline extends HookConsumerWidget {
             }
 
             return Center(
-              child: IconButton(
-                onPressed: downDirectionLoad,
-                icon: const Icon(Icons.keyboard_arrow_down),
+              child: InkWell(
+                onTap: downDirectionLoad,
+                child: Container(
+                  alignment: Alignment.center,
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  height: 60,
+                  child: const Icon(Icons.keyboard_arrow_down),
+                ),
               ),
             );
           }

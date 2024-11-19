@@ -514,11 +514,12 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<RenoteModalRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RenoteModalSheet(
+        child: WrappedRoute(
+            child: RenoteModalSheet(
           note: args.note,
           account: args.account,
           key: args.key,
-        ),
+        )),
       );
     },
     RenoteUserRoute.name: (routeData) {

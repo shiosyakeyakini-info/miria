@@ -371,8 +371,13 @@ void main() {
       );
       when(misskey.notes).thenReturn(misskeyNotes);
       when(misskeyNotes.featured(any)).thenAnswer(
-        (e) async =>
-            [TestData.note1.copyWith(text: null, renote: TestData.note2)],
+        (e) async => [
+          TestData.note1.copyWith(
+            text: null,
+            renoteId: TestData.note2.id,
+            renote: TestData.note2,
+          )
+        ],
       );
       await tester.pumpWidget(
         ProviderScope(

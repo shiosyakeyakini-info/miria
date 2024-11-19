@@ -56,6 +56,7 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
   }
 
   Future<void> _initWindow(WidgetRef ref) async {
+    if (!isDesktop) return;
     await windowManager.setPreventClose(true);
     final config = ref.read(desktopSettingsRepositoryProvider).settings;
 
@@ -187,7 +188,8 @@ class MiriaWindowListener with WindowListener {
     } catch (e) {
       if (kDebugMode) print(e);
     } finally {
-      await windowManager.destroy();
+      await windowManager.setPreventClose(false);
+      await windowManager.close();
     }
   }
 }

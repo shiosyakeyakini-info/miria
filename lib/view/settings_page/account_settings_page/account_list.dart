@@ -59,14 +59,10 @@ class AccountListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () async {
-                  final newState = ref.refresh(accountsProvider);
-                  print(newState);
-                  final router = context.router..removeWhere((route) => true);
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    await router.push(const SplashRoute());
-                  });
-                },
+                onPressed: () async => await context.router.pushAndPopUntil(
+                  const SplashRoute(),
+                  predicate: (_) => false,
+                ),
                 child: Text(S.of(context).quitAccountSettings),
               ),
             ),

@@ -234,6 +234,7 @@ class UserDetail extends ConsumerWidget {
                     S
                         .of(context)
                         .messageForFollower(response.followedMessage ?? ""),
+                    emojis: response.emojis,
                   ),
                 ),
               const Padding(padding: EdgeInsets.only(top: 5)),

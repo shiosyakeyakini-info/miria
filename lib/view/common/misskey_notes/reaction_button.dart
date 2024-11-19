@@ -65,6 +65,7 @@ class ReactionButton extends HookConsumerWidget {
         if (dialogValue != 0) return;
 
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+          final notesRepository = ref.read(notesWithProvider);
           await ref
               .read(misskeyPostContextProvider)
               .notes
@@ -76,7 +77,7 @@ class ReactionButton extends HookConsumerWidget {
             );
           }
 
-          await ref.read(notesWithProvider).refresh(noteId);
+          await notesRepository.refresh(noteId);
         });
 
         return;
@@ -96,6 +97,7 @@ class ReactionButton extends HookConsumerWidget {
           return;
       }
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        final notesRepository = ref.read(notesWithProvider);
         await ref.read(misskeyPostContextProvider).notes.reactions.create(
               NotesReactionsCreateRequest(
                 noteId: noteId,
@@ -110,7 +112,7 @@ class ReactionButton extends HookConsumerWidget {
           );
         }
 
-        await ref.read(notesWithProvider).refresh(noteId);
+        await notesRepository.refresh(noteId);
       });
     });
 

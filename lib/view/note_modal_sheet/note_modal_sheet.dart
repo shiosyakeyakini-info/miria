@@ -140,14 +140,18 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   }
 
   Future<void> unRenote() async {
+    if (note.renoteId == null) return;
     state = state.copyWith(delete: const AsyncLoading());
     state = state.copyWith(
       delete: await ref.read(dialogStateNotifierProvider.notifier).guard(
-            () async => await ref
-                .read(misskeyPostContextProvider)
-                .notes
-                .delete(NotesDeleteRequest(noteId: note.id)),
-          ),
+        () async {
+          await ref
+              .read(misskeyPostContextProvider)
+              .notes
+              .delete(NotesDeleteRequest(noteId: note.id));
+          ref.read(notesWithProvider).delete(note.id);
+        },
+      ),
     );
   }
 
@@ -224,9 +228,12 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accounts = ref.watch(accountRepositoryProvider);
-    final notifierProvider = noteModalSheetNotifierProvider(targetNote);
+    final targetNoteNotifierProvider =
+        noteModalSheetNotifierProvider(targetNote);
+    final baseNoteNotiferProvider = noteModalSheetNotifierProvider(baseNote);
 
-    ref.listen(notifierProvider.select((value) => value.user), (_, next) async {
+    ref.listen(targetNoteNotifierProvider.select((value) => value.user),
+        (_, next) async {
       switch (next) {
         case AsyncData<UserDetailed>(:final value):
           await context.pushRoute(
@@ -240,10 +247,11 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
         case AsyncError<UserDetailed>():
       }
     });
-    final noteStatus =
-        ref.watch(notifierProvider.select((value) => value.noteState));
+    final noteStatus = ref
+        .watch(targetNoteNotifierProvider.select((value) => value.noteState));
 
-    if (ref.read(notifierProvider).isLoading) {
+    if (ref.watch(targetNoteNotifierProvider).isLoading ||
+        ref.watch(baseNoteNotiferProvider).isLoading) {
       return const Center(
         child: SizedBox(
           width: 100,
@@ -317,7 +325,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           leading: const Icon(Icons.person),
           title: Text(S.of(context).user),
           trailing: const Icon(Icons.keyboard_arrow_right),
-          onTap: () async => ref.read(notifierProvider.notifier).user(),
+          onTap: () async =>
+              ref.read(targetNoteNotifierProvider.notifier).user(),
         ),
         ListTile(
           leading: const Icon(Icons.open_in_browser),
@@ -339,7 +348,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             onTap: () async {
               final uri = targetNote.url ?? targetNote.uri;
               if (uri == null) return;
-              launchUrl(uri, mode: LaunchMode.externalApplication);
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
               if (!context.mounted) return;
               Navigator.of(context).pop();
             },
@@ -363,11 +372,12 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           onTap: () {
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               Future(() async {
+                if (!context.mounted) return;
                 final box = context.findRenderObject() as RenderBox?;
                 if (box == null) return;
                 final boundary = noteBoundaryKey.currentContext!
                     .findRenderObject()! as RenderRepaintBoundary;
-                await ref.read(notifierProvider.notifier).copyAsImage(
+                await ref.read(targetNoteNotifierProvider.notifier).copyAsImage(
                       box,
                       boundary,
                       View.of(context).devicePixelRatio,
@@ -386,7 +396,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             AsyncData(:final value) => ListTile(
                 leading: const Icon(Icons.star_rounded),
                 onTap: () async {
-                  await ref.read(notifierProvider.notifier).favorite();
+                  await ref
+                      .read(targetNoteNotifierProvider.notifier)
+                      .favorite();
                   if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
@@ -448,7 +460,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             leading: const Icon(Icons.delete),
             title: Text(S.of(context).delete),
             onTap: () async {
-              await ref.read(notifierProvider.notifier).delete();
+              await ref.read(targetNoteNotifierProvider.notifier).delete();
               if (!context.mounted) return;
               Navigator.of(context).pop();
             },
@@ -457,8 +469,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
             onTap: () async {
-              final result =
-                  await ref.read(notifierProvider.notifier).deleteRecreate();
+              final result = await ref
+                  .read(targetNoteNotifierProvider.notifier)
+                  .deleteRecreate();
               if (!result || !context.mounted) return;
               Navigator.of(context).pop();
               await context.pushRoute(
@@ -482,7 +495,11 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           ListTile(
             leading: const Icon(Icons.delete),
             title: Text(S.of(context).deleteRenote),
-            onTap: () async => ref.read(notifierProvider.notifier).unRenote(),
+            onTap: () async {
+              await ref.read(baseNoteNotiferProvider.notifier).unRenote();
+              if (!context.mounted) return;
+              Navigator.of(context).pop();
+            },
           ),
         ],
         if (accountContext.isSame && baseNote.user.host != null ||
