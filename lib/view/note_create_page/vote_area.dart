@@ -66,31 +66,34 @@ class VoteContentListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final onVoteContentChange = ref.watch(
+      noteCreateNotifierProvider
+          .select((notifier) => notifier.voteContentCount),
+    );
+
     final initial = useMemoized(
       () => ref.read(noteCreateNotifierProvider).voteContent[index],
+      [onVoteContentChange],
     );
     final controller = useTextEditingController(text: initial);
-    ref.listen(
-        noteCreateNotifierProvider.select(
-          (value) =>
-              value.voteContent.length <= index ? "" : value.voteContent[index],
-        ), (_, next) {
-      controller.text = next;
-    });
     useEffect(
       () {
-        controller.addListener(() {
-          if (ref.read(noteCreateNotifierProvider).voteContent.length <=
-              index) {
-            return;
-          }
-          ref
-              .read(noteCreateNotifierProvider.notifier)
-              .setVoteContent(index, controller.text);
-        });
+        controller
+          ..text = initial
+          ..addListener(() {
+            final voteContent =
+                ref.read(noteCreateNotifierProvider).voteContent;
+            if (voteContent.length <= index ||
+                voteContent[index] == controller.text) {
+              return;
+            }
+            ref
+                .read(noteCreateNotifierProvider.notifier)
+                .setVoteContent(index, controller.text);
+          });
         return null;
       },
-      [index],
+      [index, onVoteContentChange],
     );
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),

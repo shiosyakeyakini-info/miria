@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -181,21 +182,37 @@ class ChannelDetailArea extends ConsumerWidget {
             ),
           ),
         const Padding(padding: EdgeInsets.only(top: 10)),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Wrap(
-            children: [
-              ChannelFavoriteButton(
-                channelId: channel.id,
-                isFavorite: channel.isFavorited,
-              ),
-              const Padding(padding: EdgeInsets.only(left: 10)),
-              ChannelFollowingButton(
-                isFollowing: channel.isFollowing,
-                channelId: channel.id,
-              ),
-            ],
-          ),
+        Wrap(
+          spacing: 5,
+          alignment: WrapAlignment.end,
+          children: [
+            ChannelFavoriteButton(
+              channelId: channel.id,
+              isFavorite: channel.isFavorited,
+            ),
+            ChannelFollowingButton(
+              isFollowing: channel.isFollowing,
+              channelId: channel.id,
+            ),
+            OutlinedButton(
+              onPressed: () async {
+                await Clipboard.setData(
+                  ClipboardData(
+                    text:
+                        "https://${ref.read(accountContextProvider).getAccount.host}/channels/${channel.id}",
+                  ),
+                );
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(S.of(context).doneCopy),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: const Icon(Icons.copy),
+            ),
+          ],
         ),
         MfmText(mfmText: channel.description ?? ""),
         for (final pinnedNote in channel.pinnedNotes ?? [])

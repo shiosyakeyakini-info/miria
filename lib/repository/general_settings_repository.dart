@@ -25,8 +25,8 @@ class GeneralSettingsRepository extends ChangeNotifier {
 
   Future<void> update(GeneralSettings settings) async {
     _settings = settings;
-    notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("general_settings", jsonEncode(settings.toJson()));
+    notifyListeners();
   }
 }

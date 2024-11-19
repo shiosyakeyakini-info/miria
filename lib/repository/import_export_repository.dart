@@ -108,8 +108,10 @@ class ImportExportRepository extends ChangeNotifier {
     await SimpleMessageDialog.show(context, S.of(context).importCompleted);
 
     if (!context.mounted) return;
-    context.router.removeWhere((route) => true);
-    await context.router.push(const SplashRoute());
+    await context.router.pushAndPopUntil(
+      const SplashRoute(),
+      predicate: (_) => false,
+    );
   }
 
   Future<void> export(BuildContext context, Account account) async {

@@ -202,7 +202,10 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     final expires = await ref.read(appRouterProvider).push<Expire?>(
           const ExpireSelectRoute(),
         );
-    if (expires == null) return null;
+    if (expires == null) {
+      await ref.read(appRouterProvider).maybePop();
+      return null;
+    }
     final expiresDate = expires == Expire.indefinite
         ? null
         : DateTime.now().add(expires.expires!);
@@ -292,7 +295,10 @@ class UserInfoNotifier extends _$UserInfoNotifier {
         S.of(context).cancel,
       ],
     );
-    if (confirm == 1) return null;
+    if (confirm == 1) {
+      await ref.read(appRouterProvider).maybePop();
+      return null;
+    }
 
     return await _dialog.guard(() async {
       await _postMisskey.blocking.create(BlockCreateRequest(userId: userId));

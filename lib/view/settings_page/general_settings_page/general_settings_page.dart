@@ -68,7 +68,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
       enableLongTextElipsed.value,
       tabPosition.value,
       emojiType.value,
-      textScaleFactor.value,
+      // 変更ボタンを押すまで反映しない
+      // textScaleFactor.value,
       defaultFontName.value,
       serifFontName.value,
       monospaceFontName.value,
@@ -178,9 +179,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         onChanged: (value) async =>
                             automaticPush.value = value ?? AutomaticPush.none,
                       ),
-                      const Text("デッキモード"), //TODO: localize
+                      Text(S.of(context).deckMode),
                       CheckboxListTile(
-                        title: const Text("デッキモードにします。"),
+                        title: Text(S.of(context).enableDeckMode),
                         value: isDeckMode.value,
                         onChanged: (value) => isDeckMode.value = value ?? false,
                       ),

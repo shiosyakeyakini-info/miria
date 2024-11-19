@@ -36,11 +36,12 @@ class MediaViewer extends HookConsumerWidget {
         fit: StackFit.passthrough,
         alignment: Alignment.center,
         children: [
-          NetworkImageView(
-            url: file.thumbnailUrl.toString(),
-            type: ImageType.imageThumbnail,
-            fit: BoxFit.contain,
-          ),
+          if (!file.type.startsWith("audio"))
+            NetworkImageView(
+              url: file.thumbnailUrl.toString(),
+              type: ImageType.imageThumbnail,
+              fit: BoxFit.contain,
+            ),
           Icon(
             Icons.play_circle,
             size: 100,

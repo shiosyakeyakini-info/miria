@@ -48,7 +48,7 @@ class AccountSelectDialog extends HookConsumerWidget {
                   ),
                 _ => ListTile(
                     leading: const Icon(Icons.language),
-                    title: const Text("相手先のサーバー（ログインなし）"),
+                    title: Text(S.of(context).remoteServerWithoutLogin),
                     onTap: navigateAsRemote.executeOrNull,
                   ),
               },

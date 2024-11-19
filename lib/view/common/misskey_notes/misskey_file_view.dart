@@ -70,7 +70,9 @@ class MisskeyFileView extends HookConsumerWidget {
                   width: double.infinity,
                   child: MisskeyImage(
                     isSensitive: targetFile.element.isSensitive,
-                    thumbnailUrl: targetFile.element.thumbnailUrl,
+                    thumbnailUrl: (targetFile.element.type.startsWith("audio"))
+                        ? null
+                        : targetFile.element.thumbnailUrl,
                     targetFiles: targetFiles,
                     fileType: targetFile.element.type,
                     name: targetFile.element.name,

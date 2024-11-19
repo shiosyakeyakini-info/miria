@@ -8,7 +8,6 @@
     "noneAction": "なにもいたしませんわ",
     "pleaseInput": "お入れなさって",
     "pleaseSelect": "お選びになさって",
-    "clipDescription": "説明（なくてもよろしくてよ）",
 
     "serverRules": "サーバーの定め",
     "antennaSourceUserHintText": "ユーザーネームを改行で区切って指定いたしますわ",
@@ -21,9 +20,6 @@
     "receiveLocalAvailability": "ローカルのみの指定はMisskey 2023.10.2以降で有効ですこと",
     "confirmDeletingAntenna": "アンテナを削除いたしますこと？",
     "channelJoinningCounts": "{usersCount}人が参加なされてますわ",
-
-    "willFavorite": "お気に入りに入れますわ",
-    "willFollow": "フォローいたしますわ",
 
     "confirmDeleteClip": "クリップを削除いたしますこと？",
     "clipDescription": "説明（省略されてもよろしくてよ）",
@@ -58,6 +54,8 @@
     "openAsOtherAccount": "開くアカウントを選びなさって",
     "pickColor": "色を選びなさって",
     "decideColor": "これにいたしますわ",
+    "replyNotePlaceholder": "何と送りますの？",
+    "defaultNotePlaceholder": "ごきげんよう",
 
     "followedNotification": "{userName}からフォローされましてよ",
     "followRequestAcceptedNotification": "{userName}がフォローしてもよくってよとお聞きいたしましたわ",
@@ -106,10 +104,14 @@
     "cannotMentionToRemoteInLocalOnlyNote": "連合切られているのに他のサーバーの人がメンションに含まれているようですわ",
     "cannotPublicReplyToPrivateNote": "リプライが{visibility}のようでして……パブリックにはできませんこと",
 
+    "memoDescription": "メモしたいことをお書きくださいまし",
+    "confirmCreateBlock": "ブロックなさりますの？",
+
     "unsupportedFile": "対応してないファイルのようですわ",
-    "failedFileSave": "ファイルの保存に失敗したようですわね…"
+    "unsupportedFileWithFilename": "{filename}は対応してないファイルのようですわ",
+    "failedFileSave": "ファイルの保存に失敗したようですわね…",
 
-
+    "nothingHere": "ここには何もありませんわ"
 
 
 

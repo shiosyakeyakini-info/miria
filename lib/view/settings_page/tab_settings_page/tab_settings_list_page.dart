@@ -78,10 +78,10 @@ class TabSettingsListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () async {
-                  context.router.removeWhere((route) => true);
-                  await context.router.push(const SplashRoute());
-                },
+                onPressed: () async => await context.router.pushAndPopUntil(
+                  const SplashRoute(),
+                  predicate: (_) => false,
+                ),
                 child: Text(S.of(context).apply),
               ),
             ),
