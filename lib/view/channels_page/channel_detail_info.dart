@@ -225,6 +225,7 @@ class ChannelDetailArea extends ConsumerWidget {
         MfmText(mfmText: channel.description ?? ""),
         for (final pinnedNote in channel.pinnedNotes ?? [])
           MisskeyNote(note: pinnedNote),
+        const Padding(padding: EdgeInsets.only(bottom: 80)),
       ],
     );
   }
