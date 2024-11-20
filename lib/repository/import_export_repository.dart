@@ -12,6 +12,7 @@ import "package:miria/model/exported_setting.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/settings_page/import_export_page/folder_select_dialog.dart";
@@ -68,41 +69,50 @@ class ImportExportRepository extends ChangeNotifier {
     }
 
     final importFile = alreadyExists.sortedBy((file) => file.createdAt).last;
+    try {
+      IndicatorView.showIndicator(context);
 
-    final response = await reader(dioProvider)
-        .get(importFile.url, options: Options(responseType: ResponseType.json));
+      final response = await reader(dioProvider).get(importFile.url,
+          options: Options(responseType: ResponseType.json));
 
-    final json = jsonDecode(response.data);
+      final json = jsonDecode(response.data);
 
-    final importedSettings = ExportedSetting.fromJson(json);
+      final importedSettings = ExportedSetting.fromJson(json);
 
-    // アカウント設定よみこみ
-    final accounts = reader(accountsProvider);
-    for (final accountSetting in importedSettings.accountSettings) {
-      // この端末でログイン済みのアカウントであれば
-      if (accounts.any((account) => account.acct == accountSetting.acct)) {
-        await reader(accountSettingsRepositoryProvider).save(accountSetting);
-      }
-    }
-
-    // 全般設定
-    await reader(generalSettingsRepositoryProvider)
-        .update(importedSettings.generalSettings);
-
-    // タブ設定
-    final tabSettings = <TabSetting>[];
-
-    for (final tabSetting in importedSettings.tabSettings) {
-      final account = accounts
-          .firstWhereOrNull((account) => tabSetting.acct == account.acct);
-
-      if (account == null) {
-        continue;
+      // アカウント設定よみこみ
+      final accounts = reader(accountsProvider);
+      for (final accountSetting in importedSettings.accountSettings) {
+        // この端末でログイン済みのアカウントであれば
+        if (accounts.any((account) => account.acct == accountSetting.acct)) {
+          await reader(accountSettingsRepositoryProvider).save(accountSetting);
+        }
       }
 
-      tabSettings.add(tabSetting);
+      // 全般設定
+      await reader(generalSettingsRepositoryProvider)
+          .update(importedSettings.generalSettings);
+
+      // タブ設定
+      final tabSettings = <TabSetting>[];
+
+      for (final tabSetting in importedSettings.tabSettings) {
+        final account = accounts
+            .firstWhereOrNull((account) => tabSetting.acct == account.acct);
+
+        if (account == null) {
+          continue;
+        }
+
+        tabSettings.add(tabSetting);
+      }
+      await reader(tabSettingsRepositoryProvider).save(tabSettings);
+    } catch (e) {
+      rethrow;
+    } finally {
+      if (context.mounted) {
+        IndicatorView.hideIndicator(context);
+      }
     }
-    await reader(tabSettingsRepositoryProvider).save(tabSettings);
 
     if (!context.mounted) return;
     await SimpleMessageDialog.show(context, S.of(context).importCompleted);
@@ -163,16 +173,24 @@ class ImportExportRepository extends ChangeNotifier {
     };
 
     if (!context.mounted) return;
-    await reader(misskeyProvider(account)).drive.files.createAsBinary(
-          DriveFilesCreateRequest(
-            folderId: folder?.id,
-            name: "miria.json",
-            comment: S.of(context).exportedFileComment,
-            force: true,
-          ),
-          Uint8List.fromList(utf8.encode(jsonEncode(data))),
-        );
-
+    try {
+      IndicatorView.showIndicator(context);
+      await reader(misskeyProvider(account)).drive.files.createAsBinary(
+            DriveFilesCreateRequest(
+              folderId: folder?.id,
+              name: "miria.json",
+              comment: S.of(context).exportedFileComment,
+              force: true,
+            ),
+            Uint8List.fromList(utf8.encode(jsonEncode(data))),
+          );
+    } catch (e) {
+      rethrow;
+    } finally {
+      if (context.mounted) {
+        IndicatorView.hideIndicator(context);
+      }
+    }
     if (!context.mounted) return;
     await SimpleMessageDialog.show(context, S.of(context).exportCompleted);
   }
