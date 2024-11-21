@@ -43,6 +43,7 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           host: args.host,
           remoteHost: args.remoteHost,
+          showWithoutLogin: args.showWithoutLogin,
         ),
       );
     },
@@ -872,6 +873,7 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
     Key? key,
     String? host,
     String? remoteHost,
+    bool showWithoutLogin = true,
     List<PageRouteInfo>? children,
   }) : super(
           AccountSelectRoute.name,
@@ -879,6 +881,7 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
             key: key,
             host: host,
             remoteHost: remoteHost,
+            showWithoutLogin: showWithoutLogin,
           ),
           initialChildren: children,
         );
@@ -894,6 +897,7 @@ class AccountSelectRouteArgs {
     this.key,
     this.host,
     this.remoteHost,
+    this.showWithoutLogin = true,
   });
 
   final Key? key;
@@ -902,9 +906,11 @@ class AccountSelectRouteArgs {
 
   final String? remoteHost;
 
+  final bool showWithoutLogin;
+
   @override
   String toString() {
-    return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost}';
+    return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost, showWithoutLogin: $showWithoutLogin}';
   }
 }
 

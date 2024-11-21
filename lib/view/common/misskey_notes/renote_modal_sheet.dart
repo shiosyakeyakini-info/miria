@@ -101,6 +101,7 @@ class RenoteOtherAccountNotifier extends _$RenoteOtherAccountNotifier {
                 note.user.host != this.account.host && note.user.host != null
                     ? note.user.host
                     : null,
+            showWithoutLogin: false,
           ),
         );
     if (selectedAccount == null) return;
