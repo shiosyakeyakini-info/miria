@@ -64,8 +64,11 @@ class MentionQuoteNotificationData extends NotificationData {
 sealed class FollowNotificationDataType {
   String Function(BuildContext, String) get name;
   static final follow = _Follow();
-  factory FollowNotificationDataType.followRequestAccepted(String? message) =>
-      FollowRequestAccepted(message);
+  factory FollowNotificationDataType.followRequestAccepted(
+    String? message,
+    User? user,
+  ) =>
+      FollowRequestAccepted(message, user);
   static final receiveFollowRequest = _ReceiveFollowRequest();
 }
 
@@ -77,7 +80,8 @@ class _Follow implements FollowNotificationDataType {
 
 class FollowRequestAccepted implements FollowNotificationDataType {
   final String? message;
-  FollowRequestAccepted(this.message);
+  final User? user;
+  FollowRequestAccepted(this.message, this.user);
   @override
   String Function(BuildContext context, String userName) get name =>
       (context, userName) =>
@@ -241,7 +245,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted(
-                  element.message),
+                element.message,
+                element.user,
+              ),
               id: element.id,
             ),
           );

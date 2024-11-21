@@ -401,6 +401,7 @@ class NotificationItem extends ConsumerWidget {
               if (type is FollowRequestAccepted && type.message != null)
                 SimpleMfmText(
                   S.of(context).messageForFollower(type.message ?? ""),
+                  emojis: type.user?.emojis ?? {},
                 )
             ],
           ),
