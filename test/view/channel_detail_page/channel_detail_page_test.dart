@@ -259,5 +259,59 @@ void main() {
         ),
       );
     });
+
+    testWidgets("チャンネル内のハイライトノートが表示されること", (tester) async {
+      final notes = MockMisskeyNotes();
+      final channel = MockMisskeyChannels();
+      final misskey = MockMisskey();
+      when(misskey.channels).thenReturn(channel);
+      when(channel.show(any)).thenAnswer(
+        (_) async =>
+            TestData.channel1.copyWith(bannerUrl: null, isFollowing: false),
+      );
+
+      when(misskey.notes).thenReturn(notes);
+      when(notes.featured(any)).thenAnswer((_) async => [TestData.note1]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ChannelDetailRoute(
+              accountContext: TestData.accountContext,
+              channelId: TestData.channel1.id,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text("ハイライト"));
+      await tester.pumpAndSettle();
+
+      expect(find.text(TestData.note1.text!), findsOneWidget);
+
+      verify(
+        notes.featured(
+          argThat(
+            equals(NotesFeaturedRequest(channelId: TestData.channel1.id)),
+          ),
+        ),
+      );
+      await tester.pageNation();
+      verify(
+        notes.featured(
+          argThat(
+            equals(
+              NotesFeaturedRequest(
+                untilId: TestData.note1.id,
+                offset: 1,
+                channelId: TestData.channel1.id,
+              ),
+            ),
+          ),
+        ),
+      );
+    });
   });
 }
