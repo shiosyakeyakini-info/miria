@@ -99,7 +99,9 @@ class ImageViewer extends HookConsumerWidget {
               },
               onDoubleTap: () {
                 if (provider.scale != 1.0) {
-                  resetScale();
+                  if (provider.scale == provider.lastScale) {
+                    resetScale();
+                  }
                 } else {
                   final position = ref
                       .read(imageViewerInfoNotifierProvider)
