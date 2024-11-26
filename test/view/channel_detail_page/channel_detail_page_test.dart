@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
@@ -312,6 +313,53 @@ void main() {
           ),
         ),
       );
+    });
+
+    testWidgets("チャンネル内の検索でノートが表示されること", (tester) async {
+      final notes = MockMisskeyNotes();
+      final channel = MockMisskeyChannels();
+      final misskey = MockMisskey();
+      when(misskey.channels).thenReturn(channel);
+      when(channel.show(any)).thenAnswer(
+        (_) async =>
+            TestData.channel1.copyWith(bannerUrl: null, isFollowing: false),
+      );
+      when(misskey.notes).thenReturn(notes);
+      when(notes.search(any)).thenAnswer((_) async => [TestData.note1]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ChannelDetailRoute(
+              accountContext: TestData.accountContext,
+              channelId: TestData.channel1.id,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text("検索"));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), "Misskey");
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      verify(
+        notes.search(
+          argThat(
+            equals(
+              NotesSearchRequest(
+                query: "Misskey",
+                channelId: TestData.channel1.id,
+              ),
+            ),
+          ),
+        ),
+      ).called(1);
+      expect(find.text(TestData.note1.text!), findsOneWidget);
     });
   });
 }

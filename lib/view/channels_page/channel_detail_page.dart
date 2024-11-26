@@ -6,6 +6,7 @@ import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/channels_page/channel_detail_info.dart";
 import "package:miria/view/channels_page/channel_note_highlight.dart";
+import "package:miria/view/channels_page/channel_note_search.dart";
 import "package:miria/view/channels_page/channel_timeline.dart";
 import "package:miria/view/common/account_scope.dart";
 
@@ -27,7 +28,7 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).channel),
@@ -36,7 +37,10 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
               Tab(child: Text(S.of(context).channelInformation)),
               Tab(child: Text(S.of(context).timeline)),
               Tab(child: Text(S.of(context).highlight)),
+              Tab(child: Text(S.of(context).search)),
             ],
+            isScrollable: true,
+            tabAlignment: TabAlignment.center,
           ),
         ),
         body: TabBarView(
@@ -54,6 +58,10 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: ChannelNoteHighlight(channelId: channelId),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: ChannelNoteSearch(channelId: channelId),
             ),
           ],
         ),
