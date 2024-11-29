@@ -1,6 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart" hide MfmText;
@@ -8,11 +9,11 @@ import "package:miria/extensions/list_mfm_node_extension.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
-import "package:miria/view/common/note_file_dialog/note_file_dialog.dart";
 import "package:miria/view/common/misskey_notes/link_preview.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/note_file_dialog/note_file_dialog.dart";
 import "package:miria/view/misskey_page_page/misskey_page_notifier.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/user_page/user_list_item.dart";
@@ -40,7 +41,29 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.of(context).page)),
+      appBar: AppBar(
+        title: Text(S.of(context).page),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () async {
+              await Clipboard.setData(
+                ClipboardData(
+                  text:
+                      "https://${ref.read(accountContextProvider).getAccount.host}/@${page.user.username}/pages/${page.name}",
+                ),
+              );
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(S.of(context).doneCopy),
+                  duration: const Duration(seconds: 1),
+                ),
+              );
+            },
+            icon: const Icon(Icons.link),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
         child: Align(
