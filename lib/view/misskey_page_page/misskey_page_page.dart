@@ -40,30 +40,9 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final accountHost = ref.read(accountContextProvider).getAccount.host;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).page),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () async {
-              await Clipboard.setData(
-                ClipboardData(
-                  text:
-                      "https://${ref.read(accountContextProvider).getAccount.host}/@${page.user.username}/pages/${page.name}",
-                ),
-              );
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(S.of(context).doneCopy),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-            },
-            icon: const Icon(Icons.link),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(S.of(context).page)),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
         child: Align(
@@ -84,6 +63,50 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                     mfmText: page.summary ?? "",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Wrap(
+                      spacing: 5,
+                      alignment: WrapAlignment.end,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () async => launchUrl(
+                            Uri(
+                              scheme: "https",
+                              host: accountHost,
+                              pathSegments: [
+                                "@${page.user.username}",
+                                "pages",
+                                page.name,
+                              ],
+                            ),
+                          ),
+                          child: Text(
+                            S.of(context).openBrowsers,
+                            style: AppTheme.of(context).linkStyle,
+                          ),
+                        ),
+                        OutlinedButton(
+                          onPressed: () async {
+                            await Clipboard.setData(
+                              ClipboardData(
+                                text:
+                                    "https://$accountHost/@${page.user.username}/pages/${page.name}",
+                              ),
+                            );
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(S.of(context).doneCopy),
+                                duration: const Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                          child: const Icon(Icons.link),
+                        ),
+                      ],
+                    ),
+                  ),
                   const Divider(),
                   if (page.eyeCatchingImage != null)
                     NetworkImageView(
@@ -95,7 +118,8 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                   const Divider(),
                   Text(S.of(context).pageWrittenBy),
                   UserListItem(user: page.user),
-                  Row(
+                  Wrap(
+                    spacing: 5,
                     children: [
                       PageLikeButton(
                         initialLiked: page.isLiked ?? false,
@@ -103,12 +127,11 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                         pageId: page.id,
                         userId: page.userId,
                       ),
-                      const Padding(padding: EdgeInsets.only(left: 10)),
-                      GestureDetector(
-                        onTap: () async => launchUrl(
+                      OutlinedButton(
+                        onPressed: () async => launchUrl(
                           Uri(
                             scheme: "https",
-                            host: accountContext.getAccount.host,
+                            host: accountHost,
                             pathSegments: [
                               "@${page.user.username}",
                               "pages",
@@ -120,6 +143,24 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                           S.of(context).openBrowsers,
                           style: AppTheme.of(context).linkStyle,
                         ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () async {
+                          await Clipboard.setData(
+                            ClipboardData(
+                              text:
+                                  "https://$accountHost/@${page.user.username}/pages/${page.name}",
+                            ),
+                          );
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(S.of(context).doneCopy),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.link),
                       ),
                     ],
                   ),
