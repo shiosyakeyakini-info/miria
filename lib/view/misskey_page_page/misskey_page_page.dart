@@ -59,7 +59,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                     mfmText: page.title,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  if(page.summary!=null)
+                  if (page.summary != null)
                     MfmText(
                       mfmText: page.summary,
                       style: Theme.of(context).textTheme.bodySmall,
