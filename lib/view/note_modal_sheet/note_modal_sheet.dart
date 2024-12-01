@@ -293,7 +293,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               await showModalBottomSheet(
                 context: context,
                 builder: (context) => CopyNoteModalSheet(
-                  note: targetNote.text ?? "",
+                  text: targetNote.text ?? "",
+                  cw: targetNote.cw,
                 ),
               );
             },
