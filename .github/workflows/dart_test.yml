@@ -16,32 +16,76 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  get-flutter-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get Flutter version from .fvmrc
+        id: get-flutter-version
+        run: echo "version=$(jq -r .flutter .fvmrc)" >> $GITHUB_OUTPUT
+
+  format:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
 
-      - name: Get Flutter version from .fvmrc
-        run:  echo "FLUTTER_FVM_VERSION=$(jq -r .flutter .fvmrc)" >> $GITHUB_ENV
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+  analyze:
+    if: false
+
+    runs-on: ubuntu-latest
+
+    needs: get-flutter-version
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_FVM_VERSION }}
+          channel: 'stable'
+          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
           cache: true
-
-      - run: dart format --output=none --set-exit-if-changed .
 
       - name: Run flutter version
         run: flutter --version
 
       - name: Run flutter pub get
         run: flutter pub get
-      
-      # ゆくゆくは
-      # - run: flutter analyze --fatal-infos
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+  test:
+    runs-on: ubuntu-latest
+
+    needs: get-flutter-version
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          cache: true
+
+      - name: Run flutter version
+        run: flutter --version
+
+      - name: Run flutter pub get
+        run: flutter pub get
 
       - name: Run flutter test with coverage
         run: flutter test --coverage --coverage-path=~/coverage/lcov.info
