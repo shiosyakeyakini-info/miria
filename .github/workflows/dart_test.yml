@@ -94,3 +94,24 @@ jobs:
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           files: ~/coverage/lcov.info
+
+  check-build-diff:
+    runs-on: ubuntu-latest
+
+    needs: get-flutter-version
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          cache: true
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Check diff
+        run: git diff --exit-code
