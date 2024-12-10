@@ -8,8 +8,18 @@ name: Flutter Testを実行する
 on:
   push:
     branches: [ "master", "develop" ]
+    paths:
+      - '**.arb'
+      - '**.dart'
+      - '.fvmrc'
+      - 'pubspec.lock'
   pull_request:
     branches: [ "master", "develop" ]
+    paths:
+      - '**.arb'
+      - '**.dart'
+      - '.fvmrc'
+      - 'pubspec.lock'
 
 permissions:
   contents: read
