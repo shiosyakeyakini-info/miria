@@ -668,6 +668,7 @@ abstract class _$AppRouter extends RootStackRouter {
             child: UserControlDialog(
           account: args.account,
           response: args.response,
+          host: args.host,
           key: args.key,
         )),
       );
@@ -3044,6 +3045,7 @@ class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
   UserControlRoute({
     required Account account,
     required UserDetailed response,
+    String? host,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -3051,6 +3053,7 @@ class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
           args: UserControlRouteArgs(
             account: account,
             response: response,
+            host: host,
             key: key,
           ),
           initialChildren: children,
@@ -3066,6 +3069,7 @@ class UserControlRouteArgs {
   const UserControlRouteArgs({
     required this.account,
     required this.response,
+    this.host,
     this.key,
   });
 
@@ -3073,11 +3077,13 @@ class UserControlRouteArgs {
 
   final UserDetailed response;
 
+  final String? host;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'UserControlRouteArgs{account: $account, response: $response, key: $key}';
+    return 'UserControlRouteArgs{account: $account, response: $response, host: $host, key: $key}';
   }
 }
 

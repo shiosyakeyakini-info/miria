@@ -241,6 +241,7 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             UserControlRoute(
               account: accountContext.postAccount,
               response: value,
+              host: ref.read(misskeyGetContextProvider).host,
             ),
           );
         case null:

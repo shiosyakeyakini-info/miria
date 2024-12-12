@@ -191,7 +191,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     await navigateToNoteDetailPage(note, account: selectedAccount);
   }
 
-  Future<void> openUserInOtherAccount(User user) async {
+  Future<void> openUserInOtherAccount(User user, String? host) async {
     final accountContext = ref.read(accountContextProvider);
     final selectedAccount = await ref.read(appRouterProvider).push<Account>(
           AccountSelectRoute(
@@ -206,16 +206,16 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
     if (user.host == null) {
       switch (user) {
         case UserLite():
-          user = user.copyWith(host: accountContext.getAccount.host);
+          user = user.copyWith(host: host ?? accountContext.getAccount.host);
 
         case UserDetailedNotMe():
-          user = user.copyWith(host: accountContext.getAccount.host);
+          user = user.copyWith(host: host ?? accountContext.getAccount.host);
 
         case UserDetailedNotMeWithRelations():
-          user = user.copyWith(host: accountContext.getAccount.host);
+          user = user.copyWith(host: host ?? accountContext.getAccount.host);
 
         case MeDetailed():
-          user = user.copyWith(host: accountContext.getAccount.host);
+          user = user.copyWith(host: host ?? accountContext.getAccount.host);
       }
     }
     await navigateToUserPage(user, account: selectedAccount);

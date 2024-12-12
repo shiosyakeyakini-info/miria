@@ -7,7 +7,7 @@ part of 'misskey_note_notifier.dart';
 // **************************************************************************
 
 String _$misskeyNoteNotifierHash() =>
-    r'5edd4690a767107f9c8a30e6b480a74de4e83d74';
+    r'e4ba06422429aea1857ed3758ee47b762ee064a8';
 
 /// See also [MisskeyNoteNotifier].
 @ProviderFor(MisskeyNoteNotifier)

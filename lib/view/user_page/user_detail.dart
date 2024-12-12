@@ -142,6 +142,7 @@ class UserDetail extends ConsumerWidget {
                       UserControlRoute(
                         account: ref.read(accountContextProvider).postAccount,
                         response: response,
+                        host: ref.read(misskeyGetContextProvider).host,
                       ),
                     ),
                     icon: const Icon(Icons.more_vert),
