@@ -64,6 +64,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'info.shiosyakeyakini.miria'
 
 }
 
