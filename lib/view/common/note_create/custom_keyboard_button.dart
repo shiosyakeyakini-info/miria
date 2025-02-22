@@ -36,7 +36,7 @@ class CustomKeyboardButton extends StatelessWidget {
             maxHeight: MediaQuery.textScalerOf(context).scale(32),
           ),
           child: Text(
-            keyboard,
+            displayText,
             textAlign: TextAlign.center,
           ),
         ),
