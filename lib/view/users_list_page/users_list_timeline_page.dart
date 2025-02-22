@@ -1,5 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -24,6 +26,26 @@ class UsersListTimelinePage extends ConsumerWidget implements AutoRouteWrapper {
       appBar: AppBar(
         title: Text(list.name ?? ""),
         actions: [
+          if (list.isPublic!) ...[
+            IconButton(
+              icon: const Icon(Icons.link),
+              onPressed: () async {
+                await Clipboard.setData(
+                  ClipboardData(
+                    text:
+                        "https://${ref.read(accountContextProvider).getAccount.host}/list/${list.id}",
+                  ),
+                );
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(S.of(context).doneCopy),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+            ),
+          ],
           IconButton(
             icon: const Icon(Icons.info_outline),
             onPressed: () async => context.pushRoute(
