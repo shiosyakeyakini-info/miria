@@ -33,158 +33,165 @@ class ImageViewer extends HookConsumerWidget {
       },
       [transformationController, 1.0],
     );
-    return Stack(children: [
-      Positioned.fill(
-        child: Listener(
-          onPointerDown: (event) {
-            ref.read(imageViewerInfoNotifierProvider.notifier).addPointer();
-          },
-          onPointerUp: (event) {
-            if (provider.scale == 1.0 && provider.lastScale != 1.0) {
-              resetScale();
-            }
-            ref.read(imageViewerInfoNotifierProvider.notifier).removePointer();
-          },
-          onPointerMove: (event) {
-            final prov = ref.read(imageViewerInfoNotifierProvider);
-            if (prov.isDoubleTap && prov.pointersCount == 1) {
-              final position = prov.lastTapLocalPosition;
-              final delta = event.localPosition - position!;
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Listener(
+            onPointerDown: (event) {
+              ref.read(imageViewerInfoNotifierProvider.notifier).addPointer();
+            },
+            onPointerUp: (event) {
+              if (provider.scale == 1.0 && provider.lastScale != 1.0) {
+                resetScale();
+              }
+              ref
+                  .read(imageViewerInfoNotifierProvider.notifier)
+                  .removePointer();
+            },
+            onPointerMove: (event) {
+              final prov = ref.read(imageViewerInfoNotifierProvider);
+              if (prov.isDoubleTap && prov.pointersCount == 1) {
+                final position = prov.lastTapLocalPosition;
+                final delta = event.localPosition - position!;
 
-              final s = max(
-                min(
-                  prov.lastScale + (delta.dy / 75.0),
-                  maxScale,
-                ),
-                1.0,
-              );
-              ref.read(imageViewerInfoNotifierProvider.notifier).updateScale(s);
-              final v = transformationController.toScene(position);
+                final s = max(
+                  min(
+                    prov.lastScale + (delta.dy / 75.0),
+                    maxScale,
+                  ),
+                  1.0,
+                );
+                ref
+                    .read(imageViewerInfoNotifierProvider.notifier)
+                    .updateScale(s);
+                final v = transformationController.toScene(position);
 
-              transformationController.value = Matrix4.identity()
-                ..scale(provider.scale);
+                transformationController.value = Matrix4.identity()
+                  ..scale(provider.scale);
 
-              final v2 = transformationController.toScene(position) - v;
+                final v2 = transformationController.toScene(position) - v;
 
-              transformationController.value = transformationController.value
-                  .clone()
-                ..translate(v2.dx, v2.dy);
-            }
+                transformationController.value = transformationController.value
+                    .clone()
+                  ..translate(v2.dx, v2.dy);
+              }
               if (commentVisibility.value == VisibilityStatus.visible) {
                 commentVisibility.value = VisibilityStatus.hiding;
               }
-          },
-          child: GestureDetector(
-            onDoubleTapDown: (details) {
-              ref.read(imageViewerInfoNotifierProvider.notifier).update(
-                    ref.read(imageViewerInfoNotifierProvider).copyWith(
-                          lastScale: provider.scale,
-                          isDoubleTap: true,
-                          lastTapLocalPosition: details.localPosition,
-                        ),
-                  );
             },
-            onTap: () {
-              if (provider.scale == 1.0 && provider.lastScale == 1.0) {
-                commentVisibility.value =
-                    (commentVisibility.value == VisibilityStatus.visible)
-                        ? VisibilityStatus.hiding
-                        : VisibilityStatus.visible;
-              }
-            },
-            onDoubleTap: () {
-              if (provider.scale != 1.0) {
-                resetScale();
-              } else {
-                final position = ref
-                    .read(imageViewerInfoNotifierProvider)
-                    .lastTapLocalPosition;
-                if (position == null) return;
-                transformationController.value = Matrix4.identity()
-                  ..translate(
-                    -position.dx * 2,
-                    -position.dy * 2,
-                  )
-                  ..scale(3.0);
+            child: GestureDetector(
+              onDoubleTapDown: (details) {
                 ref.read(imageViewerInfoNotifierProvider.notifier).update(
                       ref.read(imageViewerInfoNotifierProvider).copyWith(
-                            scale: 3.0,
-                            isDoubleTap: false,
-                            lastTapLocalPosition: null,
+                            lastScale: provider.scale,
+                            isDoubleTap: true,
+                            lastTapLocalPosition: details.localPosition,
                           ),
                     );
+              },
+              onTap: () {
+                if (provider.scale == 1.0 && provider.lastScale == 1.0) {
+                  commentVisibility.value =
+                      (commentVisibility.value == VisibilityStatus.visible)
+                          ? VisibilityStatus.hiding
+                          : VisibilityStatus.visible;
+                }
+              },
+              onDoubleTap: () {
+                if (provider.scale != 1.0) {
+                  resetScale();
+                } else {
+                  final position = ref
+                      .read(imageViewerInfoNotifierProvider)
+                      .lastTapLocalPosition;
+                  if (position == null) return;
+                  transformationController.value = Matrix4.identity()
+                    ..translate(
+                      -position.dx * 2,
+                      -position.dy * 2,
+                    )
+                    ..scale(3.0);
+                  ref.read(imageViewerInfoNotifierProvider.notifier).update(
+                        ref.read(imageViewerInfoNotifierProvider).copyWith(
+                              scale: 3.0,
+                              isDoubleTap: false,
+                              lastTapLocalPosition: null,
+                            ),
+                      );
                   if (commentVisibility.value == VisibilityStatus.visible) {
                     commentVisibility.value = VisibilityStatus.hiding;
                   }
-              }
-            },
-            child: ScaleNotifierInteractiveViewer(
-              imageUrl: file.url,
-              controller: transformationController,
-              onScaleChanged: (scaleUpdated) {
-                ref
-                    .read(imageViewerInfoNotifierProvider.notifier)
-                    .updateScale(scaleUpdated);
+                }
               },
-              maxScale: maxScale,
-              canChangeScale: !provider.isDoubleTap,
+              child: ScaleNotifierInteractiveViewer(
+                imageUrl: file.url,
+                controller: transformationController,
+                onScaleChanged: (scaleUpdated) {
+                  ref
+                      .read(imageViewerInfoNotifierProvider.notifier)
+                      .updateScale(scaleUpdated);
+                },
+                maxScale: maxScale,
+                canChangeScale: !provider.isDoubleTap,
+              ),
             ),
           ),
         ),
-      ),
-      AnimatedOpacity(
-        curve: Curves.easeInOut,
-        opacity: (commentVisibility.value == VisibilityStatus.visible) ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 500),
-        onEnd: () => {
-          if (commentVisibility.value == VisibilityStatus.hiding)
-            {
-              commentVisibility.value = VisibilityStatus.hidden,
-            },
-        },
-        child: Visibility(
-          maintainState: true,
-          maintainAnimation: true,
-          visible: commentVisibility.value != VisibilityStatus.hidden,
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-                  width: MediaQuery.of(context).size.width,
-                  constraints: const BoxConstraints(
-                    maxHeight: 150,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    border: Border(
-                      top: BorderSide(
-                        color: Theme.of(context).primaryColor,
+        AnimatedOpacity(
+          curve: Curves.easeInOut,
+          opacity:
+              (commentVisibility.value == VisibilityStatus.visible) ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 500),
+          onEnd: () => {
+            if (commentVisibility.value == VisibilityStatus.hiding)
+              {
+                commentVisibility.value = VisibilityStatus.hidden,
+              },
+          },
+          child: Visibility(
+            maintainState: true,
+            maintainAnimation: true,
+            visible: commentVisibility.value != VisibilityStatus.hidden,
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                    width: MediaQuery.of(context).size.width,
+                    constraints: const BoxConstraints(
+                      maxHeight: 150,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      border: Border(
+                        top: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              file.comment != null && file.comment!.isNotEmpty
+                                  ? file.comment!
+                                  : file.name,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            file.comment != null && file.comment!.isNotEmpty
-                                ? file.comment!
-                                : file.name,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    ],);
+      ],
+    );
   }
 }
