@@ -7,6 +7,8 @@ import "package:miria/state_notifier/note_file_dialog/image_viewer_info_notifier
 import "package:miria/view/common/note_file_dialog/scale_notifier_interactive_viewer.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
+enum VisibilityStatus { visible, hiding, hidden }
+
 class ImageViewer extends HookConsumerWidget {
   final DriveFile file;
   final double maxScale;
@@ -22,7 +24,7 @@ class ImageViewer extends HookConsumerWidget {
 
     final transformationController = useTransformationController();
 
-    final isVisibleFilename = useState(true);
+    final commentVisibility = useState(VisibilityStatus.visible);
 
     final resetScale = useCallback(
       () {
@@ -68,7 +70,9 @@ class ImageViewer extends HookConsumerWidget {
                   .clone()
                 ..translate(v2.dx, v2.dy);
             }
-            isVisibleFilename.value = false;
+              if (commentVisibility.value == VisibilityStatus.visible) {
+                commentVisibility.value = VisibilityStatus.hiding;
+              }
           },
           child: GestureDetector(
             onDoubleTapDown: (details) {
@@ -82,7 +86,10 @@ class ImageViewer extends HookConsumerWidget {
             },
             onTap: () {
               if (provider.scale == 1.0 && provider.lastScale == 1.0) {
-                isVisibleFilename.value = !isVisibleFilename.value;
+                commentVisibility.value =
+                    (commentVisibility.value == VisibilityStatus.visible)
+                        ? VisibilityStatus.hiding
+                        : VisibilityStatus.visible;
               }
             },
             onDoubleTap: () {
@@ -106,7 +113,9 @@ class ImageViewer extends HookConsumerWidget {
                             lastTapLocalPosition: null,
                           ),
                     );
-                isVisibleFilename.value = false;
+                  if (commentVisibility.value == VisibilityStatus.visible) {
+                    commentVisibility.value = VisibilityStatus.hiding;
+                  }
               }
             },
             child: ScaleNotifierInteractiveViewer(
@@ -123,11 +132,20 @@ class ImageViewer extends HookConsumerWidget {
           ),
         ),
       ),
-      IgnorePointer(
-        child: AnimatedOpacity(
-          curve: Curves.easeInOut,
-          opacity: isVisibleFilename.value ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
+      AnimatedOpacity(
+        curve: Curves.easeInOut,
+        opacity: (commentVisibility.value == VisibilityStatus.visible) ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 500),
+        onEnd: () => {
+          if (commentVisibility.value == VisibilityStatus.hiding)
+            {
+              commentVisibility.value = VisibilityStatus.hidden,
+            },
+        },
+        child: Visibility(
+          maintainState: true,
+          maintainAnimation: true,
+          visible: commentVisibility.value != VisibilityStatus.hidden,
           child: Stack(
             children: [
               Positioned(
@@ -146,14 +164,20 @@ class ImageViewer extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(file.name),
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            file.comment != null && file.comment!.isNotEmpty
+                                ? file.comment!
+                                : file.name,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
