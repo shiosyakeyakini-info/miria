@@ -22,6 +22,8 @@ class ImageViewer extends HookConsumerWidget {
 
     final transformationController = useTransformationController();
 
+    final isVisibleFilename = useState(true);
+
     final resetScale = useCallback(
       () {
         transformationController.value = Matrix4.identity();
@@ -66,6 +68,7 @@ class ImageViewer extends HookConsumerWidget {
                   .clone()
                 ..translate(v2.dx, v2.dy);
             }
+            isVisibleFilename.value = false;
           },
           child: GestureDetector(
             onDoubleTapDown: (details) {
@@ -76,6 +79,11 @@ class ImageViewer extends HookConsumerWidget {
                           lastTapLocalPosition: details.localPosition,
                         ),
                   );
+            },
+            onTap: () {
+              if (provider.scale == 1.0 && provider.lastScale == 1.0) {
+                isVisibleFilename.value = !isVisibleFilename.value;
+              }
             },
             onDoubleTap: () {
               if (provider.scale != 1.0) {
@@ -98,6 +106,7 @@ class ImageViewer extends HookConsumerWidget {
                             lastTapLocalPosition: null,
                           ),
                     );
+                isVisibleFilename.value = false;
               }
             },
             child: ScaleNotifierInteractiveViewer(
@@ -114,6 +123,44 @@ class ImageViewer extends HookConsumerWidget {
           ),
         ),
       ),
-    ]);
+      IgnorePointer(
+        child: AnimatedOpacity(
+          curve: Curves.easeInOut,
+          opacity: isVisibleFilename.value ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 500),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                  width: MediaQuery.of(context).size.width,
+                  constraints: const BoxConstraints(
+                    maxHeight: 150,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    border: Border(
+                      top: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(file.name),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],);
   }
 }
