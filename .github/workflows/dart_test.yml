@@ -32,11 +32,23 @@ jobs:
   format:
     runs-on: ubuntu-latest
 
+    needs: get-flutter-version
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Dart
-        uses: dart-lang/setup-dart@v1
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ needs.get-flutter-version.outputs.flutter-version }}
+          cache: true
+
+      - name: Run flutter version
+        run: flutter --version
+
+      - name: Run flutter pub get
+        run: flutter pub get
 
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
