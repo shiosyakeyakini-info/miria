@@ -7,6 +7,7 @@ import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
+import "package:miria/view/chat_page/chat_home_page.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
@@ -34,7 +35,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.read(misskeyPostContextProvider);
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).notification),
@@ -42,6 +43,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
             tabs: [
               Tab(text: S.of(context).notificationAll),
               Tab(text: S.of(context).notificationForMe),
+              Tab(text: "チャット"),
               Tab(text: S.of(context).notificationDirect),
             ],
           ),
@@ -110,6 +112,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   return misskey_note.MisskeyNote(note: note);
                 },
               ),
+              const ChatHome(),
               PushableListView<Note>(
                 initializeFuture: () async {
                   final notes =

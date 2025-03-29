@@ -319,7 +319,9 @@ class AccountRepository extends _$AccountRepository {
         server,
         _sessionId,
         name: "Miria",
-        permission: Permission.values,
+        permission: [
+          ...Permission.values.where((e) => !e.value.contains("admin"))
+        ],
       ),
       mode: LaunchMode.externalApplication,
     );
@@ -336,8 +338,9 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> _addAccount(Account account) async {
-    if (state.map((e) => e.acct).contains(account.acct)) {
-      throw AlreadyLoggedInException(account.acct.toString());
+    final alreadyCreated = state.map((e) => e.acct).contains(account.acct);
+    if (alreadyCreated) {
+      state.removeWhere((e) => e.acct == account.acct);
     }
 
     state = [...state, account];
@@ -345,9 +348,11 @@ class AccountRepository extends _$AccountRepository {
     await ref.read(emojiRepositoryProvider(account)).loadFromSourceIfNeed();
 
     await _save();
-    await ref
-        .read(tabSettingsRepositoryProvider)
-        .initializeTabSettings(account);
+    if (!alreadyCreated) {
+      await ref
+          .read(tabSettingsRepositoryProvider)
+          .initializeTabSettings(account);
+    }
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {

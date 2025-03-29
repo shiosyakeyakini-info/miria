@@ -19,6 +19,7 @@ import "package:miria/view/antenna_page/antenna_settings_dialog.dart";
 import "package:miria/view/channel_description_dialog.dart";
 import "package:miria/view/channels_page/channel_detail_page.dart";
 import "package:miria/view/channels_page/channels_page.dart";
+import "package:miria/view/chat_page/chat_home_page.dart";
 import "package:miria/view/clip_list_page/clip_detail_page.dart";
 import "package:miria/view/clip_list_page/clip_list_page.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";

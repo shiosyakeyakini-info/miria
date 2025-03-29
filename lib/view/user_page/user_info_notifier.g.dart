@@ -384,7 +384,7 @@ class _UserInfoProxyProviderElement
   String get userId => (origin as UserInfoProxyProvider).userId;
 }
 
-String _$userInfoNotifierHash() => r'cd97bc5433d147b8881446c0431fa623f0d2319e';
+String _$userInfoNotifierHash() => r'b4b78145b2cb531abe6da2fb840c4b01bb12f4dd';
 
 abstract class _$UserInfoNotifier
     extends BuildlessAutoDisposeAsyncNotifier<UserInfo> {

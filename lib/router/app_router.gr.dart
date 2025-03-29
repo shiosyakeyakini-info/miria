@@ -107,12 +107,13 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<AntennaSettingsRouteArgs>();
       return AutoRoutePage<AntennaSettings>(
         routeData: routeData,
-        child: AntennaSettingsDialog(
+        child: WrappedRoute(
+            child: AntennaSettingsDialog(
           account: args.account,
           key: args.key,
           title: args.title,
           initialSettings: args.initialSettings,
-        ),
+        )),
       );
     },
     AppInfoRoute.name: (routeData) {
@@ -173,6 +174,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: ChannelsPage(
           accountContext: args.accountContext,
+          key: args.key,
+        )),
+      );
+    },
+    ChatHomeRoute.name: (routeData) {
+      final args = routeData.argsAs<ChatHomeRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ChatHomePage(
+          accountContext: args.accountContext,
+          channelId: args.channelId,
           key: args.key,
         )),
       );
@@ -1367,6 +1380,49 @@ class ChannelsRouteArgs {
   @override
   String toString() {
     return 'ChannelsRouteArgs{accountContext: $accountContext, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ChatHomePage]
+class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
+  ChatHomeRoute({
+    required AccountContext accountContext,
+    required String channelId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChatHomeRoute.name,
+          args: ChatHomeRouteArgs(
+            accountContext: accountContext,
+            channelId: channelId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatHomeRoute';
+
+  static const PageInfo<ChatHomeRouteArgs> page =
+      PageInfo<ChatHomeRouteArgs>(name);
+}
+
+class ChatHomeRouteArgs {
+  const ChatHomeRouteArgs({
+    required this.accountContext,
+    required this.channelId,
+    this.key,
+  });
+
+  final AccountContext accountContext;
+
+  final String channelId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ChatHomeRouteArgs{accountContext: $accountContext, channelId: $channelId, key: $key}';
   }
 }
 
