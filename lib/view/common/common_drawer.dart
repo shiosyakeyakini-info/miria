@@ -123,6 +123,17 @@ class CommonDrawer extends ConsumerWidget {
                       },
                     ),
                     ListTile(
+                        leading: const Icon(Icons.chat),
+                        title: Text("チャット"),
+                        onTap: () async {
+                          closeDrawer(context);
+                          await context.pushRoute(
+                            ChatHomeRoute(
+                              accountContext: AccountContext.as(account),
+                            ),
+                          );
+                        }),
+                    ListTile(
                       leading: const Icon(Icons.search),
                       title: Text(S.of(context).search),
                       onTap: () async {

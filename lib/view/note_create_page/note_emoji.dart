@@ -14,7 +14,7 @@ class NoteEmoji extends ConsumerWidget {
       height: baseHeight + 40,
       child: InputComplement(
         controller: ref.read(noteInputTextProvider),
-        focusNode: noteFocusProvider,
+        focusNode: ref.read(noteFocusProvider),
       ),
     );
   }

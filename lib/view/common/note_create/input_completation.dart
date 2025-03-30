@@ -18,7 +18,7 @@ final inputComplementDelayedProvider = Provider((ref) => 300);
 
 class InputComplement extends HookConsumerWidget {
   final TextEditingController controller;
-  final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
+  final FocusNode focusNode;
 
   const InputComplement({
     required this.controller,
@@ -29,9 +29,9 @@ class InputComplement extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final inputCompletionType = ref.watch(inputCompletionTypeProvider);
-    final focusNode = ref.watch(this.focusNode);
+    final focusNode = this.focusNode;
 
-    final isClose = useState(!ref.read(this.focusNode).hasFocus);
+    final isClose = useState(!this.focusNode.hasFocus);
 
     useEffect(
       () {
@@ -45,18 +45,27 @@ class InputComplement extends HookConsumerWidget {
       const [],
     );
 
-    ref.listen(this.focusNode, (previous, next) async {
-      if (!next.hasFocus) {
-        await Future.delayed(
-          Duration(milliseconds: ref.read(inputComplementDelayedProvider)),
-        );
-        if (!context.mounted) return;
-        if (ref.read(this.focusNode).hasFocus) return;
-        isClose.value = true;
-      } else {
-        isClose.value = false;
-      }
-    });
+    useEffect(
+      () {
+        Future<void> handleFocusChange() async {
+          if (!focusNode.hasFocus) {
+            await Future.delayed(
+              Duration(milliseconds: ref.read(inputComplementDelayedProvider)),
+            );
+            if (!context.mounted) return;
+            if (focusNode.hasFocus) return;
+            isClose.value = true;
+          } else {
+            isClose.value = false;
+          }
+        }
+
+        focusNode.addListener(handleFocusChange);
+
+        return () => focusNode.removeListener(handleFocusChange);
+      },
+      [focusNode],
+    );
 
     if (isClose.value) {
       return Container();

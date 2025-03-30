@@ -1069,7 +1069,7 @@ packages:
     description:
       path: "."
       ref: "feature/chat"
-      resolved-ref: "894adba65197168f485b5316cb1eec4cf5050f73"
+      resolved-ref: "3f20b1522e8ff617a5f2cf63f04cfa926d803c53"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

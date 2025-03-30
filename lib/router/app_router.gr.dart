@@ -183,11 +183,7 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: WrappedRoute(
-            child: ChatHomePage(
-          accountContext: args.accountContext,
-          channelId: args.channelId,
-          key: args.key,
-        )),
+            child: ChatHomePage(accountContext: args.accountContext)),
       );
     },
     ClipDetailRoute.name: (routeData) {
@@ -554,6 +550,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: RoleSelectDialog(
           account: args.account,
+          key: args.key,
+        )),
+      );
+    },
+    RoomChatRoute.name: (routeData) {
+      final args = routeData.argsAs<RoomChatRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: RoomChatPage(
+          room: args.room,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -1388,16 +1396,10 @@ class ChannelsRouteArgs {
 class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
   ChatHomeRoute({
     required AccountContext accountContext,
-    required String channelId,
-    Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ChatHomeRoute.name,
-          args: ChatHomeRouteArgs(
-            accountContext: accountContext,
-            channelId: channelId,
-            key: key,
-          ),
+          args: ChatHomeRouteArgs(accountContext: accountContext),
           initialChildren: children,
         );
 
@@ -1408,21 +1410,13 @@ class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
 }
 
 class ChatHomeRouteArgs {
-  const ChatHomeRouteArgs({
-    required this.accountContext,
-    required this.channelId,
-    this.key,
-  });
+  const ChatHomeRouteArgs({required this.accountContext});
 
   final AccountContext accountContext;
 
-  final String channelId;
-
-  final Key? key;
-
   @override
   String toString() {
-    return 'ChatHomeRouteArgs{accountContext: $accountContext, channelId: $channelId, key: $key}';
+    return 'ChatHomeRouteArgs{accountContext: $accountContext}';
   }
 }
 
@@ -2702,6 +2696,49 @@ class RoleSelectRouteArgs {
   @override
   String toString() {
     return 'RoleSelectRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [RoomChatPage]
+class RoomChatRoute extends PageRouteInfo<RoomChatRouteArgs> {
+  RoomChatRoute({
+    required ChatRoom room,
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RoomChatRoute.name,
+          args: RoomChatRouteArgs(
+            room: room,
+            accountContext: accountContext,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RoomChatRoute';
+
+  static const PageInfo<RoomChatRouteArgs> page =
+      PageInfo<RoomChatRouteArgs>(name);
+}
+
+class RoomChatRouteArgs {
+  const RoomChatRouteArgs({
+    required this.room,
+    required this.accountContext,
+    this.key,
+  });
+
+  final ChatRoom room;
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'RoomChatRouteArgs{room: $room, accountContext: $accountContext, key: $key}';
   }
 }
 

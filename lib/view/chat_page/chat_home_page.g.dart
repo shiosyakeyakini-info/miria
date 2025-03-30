@@ -6,7 +6,7 @@ part of 'chat_home_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$historyHash() => r'68b15909ddae74795f50c3321d43b4e9185958c2';
+String _$historyHash() => r'34cb5d8b89849e3b3b9d054cd152ab8cb1d5b7a2';
 
 /// See also [history].
 @ProviderFor(history)

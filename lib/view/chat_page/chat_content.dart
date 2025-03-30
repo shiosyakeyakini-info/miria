@@ -39,7 +39,7 @@ class ChatContent extends ConsumerWidget {
                   Text(message.createdAt.differenceNow(context)),
                 ],
               ),
-              SimpleMfmText(message.text),
+              SimpleMfmText(message.text ?? ""),
             ],
           ),
         ),

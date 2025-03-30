@@ -321,6 +321,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DeletedChannelEvent():
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
+          case ChatMessageChannelEvent():
         }
       case StreamingChannelEmojiAddedResponse():
       case StreamingChannelEmojiUpdatedResponse():
@@ -377,6 +378,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case ReadAntennaChannelEvent():
           case ReceiveFollowRequestChannelEvent():
           case FallbackChannelEvent():
+          case ChatMessageChannelEvent():
         }
       case StreamingChannelNoteUpdatedResponse(:final body):
         switch (body) {

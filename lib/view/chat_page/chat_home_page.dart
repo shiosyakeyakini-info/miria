@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm/mfm.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/chat_page/chat_content.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -11,16 +12,14 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'chat_home_page.g.dart';
+part "chat_home_page.g.dart";
 
 @RoutePage()
 class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
-  final String channelId;
 
   const ChatHomePage({
     required this.accountContext,
-    required this.channelId,
     super.key,
   });
 
@@ -31,7 +30,7 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(
@@ -85,11 +84,29 @@ class ChatHome extends ConsumerWidget {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
       AsyncError(:final error, :final stackTrace) =>
         ErrorDetail(error: error, stackTrace: stackTrace),
-      AsyncData(:final value) => Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) => ChatContent(message: value[index]),
+      AsyncData(:final value) => RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(historyProvider);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 4.0),
+            child: ListView.builder(
+              itemCount: value.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () async {
+                  final room = value[index].toRoom;
+                  if (room != null) {
+                    await context.router.push(
+                      RoomChatRoute(
+                        room: room,
+                        accountContext: ref.read(accountContextProvider),
+                      ),
+                    );
+                  }
+                },
+                child: ChatContent(message: value[index]),
+              ),
+            ),
           ),
         ),
     };
