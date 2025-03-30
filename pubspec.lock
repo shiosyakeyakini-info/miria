@@ -102,6 +102,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  bubble:
+    dependency: "direct main"
+    description:
+      name: bubble
+      sha256: "65b992b8f8ba2e7e2871190cbdfaa0818b6de2f340bef37cb5ee1b61debe0226"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   build:
     dependency: transitive
     description:
@@ -1069,7 +1077,7 @@ packages:
     description:
       path: "."
       ref: "feature/chat"
-      resolved-ref: "3f20b1522e8ff617a5f2cf63f04cfa926d803c53"
+      resolved-ref: "4af78b7a3d2af124550e6fe714ebeaaeb1dbf070"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

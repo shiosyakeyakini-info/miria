@@ -183,7 +183,10 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: WrappedRoute(
-            child: ChatHomePage(accountContext: args.accountContext)),
+            child: ChatHomePage(
+          accountContext: args.accountContext,
+          key: args.key,
+        )),
       );
     },
     ClipDetailRoute.name: (routeData) {
@@ -675,6 +678,18 @@ abstract class _$AppRouter extends RootStackRouter {
           accountContext: args.accountContext,
           initialMemo: args.initialMemo,
           userId: args.userId,
+          key: args.key,
+        )),
+      );
+    },
+    UserChatRoute.name: (routeData) {
+      final args = routeData.argsAs<UserChatRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: UserChatPage(
+          user: args.user,
+          accountContext: args.accountContext,
           key: args.key,
         )),
       );
@@ -1396,10 +1411,14 @@ class ChannelsRouteArgs {
 class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
   ChatHomeRoute({
     required AccountContext accountContext,
+    Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ChatHomeRoute.name,
-          args: ChatHomeRouteArgs(accountContext: accountContext),
+          args: ChatHomeRouteArgs(
+            accountContext: accountContext,
+            key: key,
+          ),
           initialChildren: children,
         );
 
@@ -1410,13 +1429,18 @@ class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
 }
 
 class ChatHomeRouteArgs {
-  const ChatHomeRouteArgs({required this.accountContext});
+  const ChatHomeRouteArgs({
+    required this.accountContext,
+    this.key,
+  });
 
   final AccountContext accountContext;
 
+  final Key? key;
+
   @override
   String toString() {
-    return 'ChatHomeRouteArgs{accountContext: $accountContext}';
+    return 'ChatHomeRouteArgs{accountContext: $accountContext, key: $key}';
   }
 }
 
@@ -3121,6 +3145,49 @@ class UpdateMemoRouteArgs {
   @override
   String toString() {
     return 'UpdateMemoRouteArgs{accountContext: $accountContext, initialMemo: $initialMemo, userId: $userId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [UserChatPage]
+class UserChatRoute extends PageRouteInfo<UserChatRouteArgs> {
+  UserChatRoute({
+    required User user,
+    required AccountContext accountContext,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserChatRoute.name,
+          args: UserChatRouteArgs(
+            user: user,
+            accountContext: accountContext,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserChatRoute';
+
+  static const PageInfo<UserChatRouteArgs> page =
+      PageInfo<UserChatRouteArgs>(name);
+}
+
+class UserChatRouteArgs {
+  const UserChatRouteArgs({
+    required this.user,
+    required this.accountContext,
+    this.key,
+  });
+
+  final User user;
+
+  final AccountContext accountContext;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UserChatRouteArgs{user: $user, accountContext: $accountContext, key: $key}';
   }
 }
 

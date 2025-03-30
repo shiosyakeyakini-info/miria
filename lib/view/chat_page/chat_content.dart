@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -17,7 +19,11 @@ class ChatContent extends ConsumerWidget {
     final room = message.toRoom;
     return Row(
       children: [
-        AvatarIcon(user: message.toUser ?? message.fromUser),
+        AvatarIcon(
+          user: message.toUser ??
+              message.fromUser ??
+              ref.read(accountContextProvider).getAccount.i,
+        ),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -32,8 +38,18 @@ class ChatContent extends ConsumerWidget {
                       child: SimpleMfmText(
                         message.toUser?.name ??
                             message.toUser?.username ??
-                            message.fromUser.name ??
-                            message.fromUser.username,
+                            message.fromUser?.name ??
+                            message.fromUser?.username ??
+                            ref
+                                .read(accountContextProvider)
+                                .getAccount
+                                .i
+                                .name ??
+                            ref
+                                .read(accountContextProvider)
+                                .getAccount
+                                .i
+                                .username,
                       ),
                     ),
                   Text(message.createdAt.differenceNow(context)),

@@ -21,18 +21,16 @@ import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:uuid/uuid.dart";
 
-part "room_chat.g.dart";
+part "user_chat.g.dart";
 
 @Riverpod(keepAlive: true, dependencies: [misskeyGetContext])
-class RoomChat extends _$RoomChat {
+class UserChat extends _$UserChat {
   @override
-  Future<List<ChatMessage>> build(String roomId) async {
+  Future<List<ChatMessage>> build(String userId) async {
     return [
-      ...await ref
-          .read(misskeyGetContextProvider)
-          .chat
-          .messages
-          .roomTimeline(ChatMessagesRoomTimelineRequest(roomId: roomId)),
+      ...await ref.read(misskeyGetContextProvider).chat.messages.userTimeline(
+            ChatMessagesUserTimelineRequest(userId: userId),
+          ),
     ];
   }
 
@@ -43,12 +41,12 @@ class RoomChat extends _$RoomChat {
 }
 
 @RoutePage()
-class RoomChatPage extends ConsumerWidget implements AutoRouteWrapper {
-  final ChatRoom room;
+class UserChatPage extends ConsumerWidget implements AutoRouteWrapper {
+  final User user;
   final AccountContext accountContext;
 
-  const RoomChatPage({
-    required this.room,
+  const UserChatPage({
+    required this.user,
     required this.accountContext,
     super.key,
   });
@@ -61,25 +59,25 @@ class RoomChatPage extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(room.name),
+        title: SimpleMfmText("${user.name ?? user.username}とのチャット"),
       ),
       body: Center(
-        child: ChatTimeline(roomId: room.id),
+        child: UserChatTimeline(user: user),
       ),
     );
   }
 }
 
-class ChatTimeline extends HookConsumerWidget {
-  final String roomId;
-  const ChatTimeline({
-    required this.roomId,
+class UserChatTimeline extends HookConsumerWidget {
+  final User user;
+  const UserChatTimeline({
+    required this.user,
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roomChat = ref.watch(roomChatProvider(roomId));
+    final userChat = ref.watch(userChatProvider(user.id));
     final streamingId = useMemoized(() => const Uuid().v4());
 
     useEffect(
@@ -90,15 +88,15 @@ class ChatTimeline extends HookConsumerWidget {
         unawaited(() async {
           streaming = await ref.read(misskeyStreamingProvider(misskey).future);
           chatStream = streaming!
-              .chatRoomStream(
+              .chatUserStream(
             id: streamingId,
-            parameter: ChatRoomParameter(roomId: roomId),
+            parameter: ChatUserParameter(otherId: user.id),
           )
               .listen((response) {
             final body = response.body;
             if (body is! ChatMessageChannelEvent) return;
             final innerBody = body.body;
-            ref.read(roomChatProvider(roomId).notifier).addChat(innerBody);
+            ref.read(userChatProvider(user.id).notifier).addChat(innerBody);
           });
         }());
 
@@ -113,7 +111,7 @@ class ChatTimeline extends HookConsumerWidget {
       },
       const [],
     );
-    return switch (roomChat) {
+    return switch (userChat) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
       AsyncError(:final error, :final stackTrace) =>
         ErrorDetail(error: error, stackTrace: stackTrace),
@@ -152,11 +150,7 @@ class ChatTimeline extends HookConsumerWidget {
 
                   return Row(
                     children: [
-                      AvatarIcon(
-                        user: message.toUser ??
-                            message.fromUser ??
-                            ref.read(accountContextProvider).getAccount.i,
-                      ),
+                      AvatarIcon(user: user),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Column(
@@ -180,17 +174,17 @@ class ChatTimeline extends HookConsumerWidget {
                 },
               ),
             ),
-            RoomChatTextField(roomId: roomId),
+            UserChatTextField(userId: user.id),
           ],
         ),
     };
   }
 }
 
-class RoomChatTextField extends HookConsumerWidget {
-  final String roomId;
-  const RoomChatTextField({
-    required this.roomId,
+class UserChatTextField extends HookConsumerWidget {
+  final String userId;
+  const UserChatTextField({
+    required this.userId,
     super.key,
   });
 
@@ -210,9 +204,9 @@ class RoomChatTextField extends HookConsumerWidget {
                   .read(misskeyPostContextProvider)
                   .chat
                   .messages
-                  .createToRoom(
-                    ChatMessagesCreateToRoomRequest(
-                      toRoomId: roomId,
+                  .createToUser(
+                    ChatMessagesCreateToUserRequest(
+                      toUserId: userId,
                       text: text,
                     ),
                   );

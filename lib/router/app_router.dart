@@ -21,6 +21,7 @@ import "package:miria/view/channels_page/channel_detail_page.dart";
 import "package:miria/view/channels_page/channels_page.dart";
 import "package:miria/view/chat_page/chat_home_page.dart";
 import "package:miria/view/chat_page/room_chat.dart";
+import "package:miria/view/chat_page/user_chat.dart";
 import "package:miria/view/clip_list_page/clip_detail_page.dart";
 import "package:miria/view/clip_list_page/clip_list_page.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
@@ -139,6 +140,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: MisskeyRouteRoute.page),
     AutoRoute(page: ChatHomeRoute.page),
     AutoRoute(page: RoomChatRoute.page),
+    AutoRoute(page: UserChatRoute.page),
 
     AutoRoute(path: "/share-extension", page: ShareExtensionRoute.page),
 

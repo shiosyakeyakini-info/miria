@@ -80,6 +80,7 @@ dependencies:
   punycode: ^1.0.0
   image: ^4.3.0
   mime: ^1.0.6
+  bubble: ^1.2.1
 
 dependency_overrides:
   image_editor:

@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'room_chat.dart';
+part of 'user_chat.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roomChatHash() => r'3a603e4b12b40b19a4f149aa976510000be74b1f';
+String _$userChatHash() => r'faa7f533ac3f473e26f6c590cdae7897c1e43483';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-abstract class _$RoomChat extends BuildlessAsyncNotifier<List<ChatMessage>> {
-  late final String roomId;
+abstract class _$UserChat extends BuildlessAsyncNotifier<List<ChatMessage>> {
+  late final String userId;
 
   FutureOr<List<ChatMessage>> build(
-    String roomId,
+    String userId,
   );
 }
 
-/// See also [RoomChat].
-@ProviderFor(RoomChat)
-const roomChatProvider = RoomChatFamily();
+/// See also [UserChat].
+@ProviderFor(UserChat)
+const userChatProvider = UserChatFamily();
 
-/// See also [RoomChat].
-class RoomChatFamily extends Family {
-  /// See also [RoomChat].
-  const RoomChatFamily();
+/// See also [UserChat].
+class UserChatFamily extends Family {
+  /// See also [UserChat].
+  const UserChatFamily();
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
     misskeyGetContextProvider
@@ -64,155 +64,155 @@ class RoomChatFamily extends Family {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'roomChatProvider';
+  String? get name => r'userChatProvider';
 
-  /// See also [RoomChat].
-  RoomChatProvider call(
-    String roomId,
+  /// See also [UserChat].
+  UserChatProvider call(
+    String userId,
   ) {
-    return RoomChatProvider(
-      roomId,
+    return UserChatProvider(
+      userId,
     );
   }
 
   @visibleForOverriding
   @override
-  RoomChatProvider getProviderOverride(
-    covariant RoomChatProvider provider,
+  UserChatProvider getProviderOverride(
+    covariant UserChatProvider provider,
   ) {
     return call(
-      provider.roomId,
+      provider.userId,
     );
   }
 
   /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(RoomChat Function() create) {
-    return _$RoomChatFamilyOverride(this, create);
+  Override overrideWith(UserChat Function() create) {
+    return _$UserChatFamilyOverride(this, create);
   }
 }
 
-class _$RoomChatFamilyOverride implements FamilyOverride {
-  _$RoomChatFamilyOverride(this.overriddenFamily, this.create);
+class _$UserChatFamilyOverride implements FamilyOverride {
+  _$UserChatFamilyOverride(this.overriddenFamily, this.create);
 
-  final RoomChat Function() create;
-
-  @override
-  final RoomChatFamily overriddenFamily;
+  final UserChat Function() create;
 
   @override
-  RoomChatProvider getProviderOverride(
-    covariant RoomChatProvider provider,
+  final UserChatFamily overriddenFamily;
+
+  @override
+  UserChatProvider getProviderOverride(
+    covariant UserChatProvider provider,
   ) {
     return provider._copyWith(create);
   }
 }
 
-/// See also [RoomChat].
-class RoomChatProvider
-    extends AsyncNotifierProviderImpl<RoomChat, List<ChatMessage>> {
-  /// See also [RoomChat].
-  RoomChatProvider(
-    String roomId,
+/// See also [UserChat].
+class UserChatProvider
+    extends AsyncNotifierProviderImpl<UserChat, List<ChatMessage>> {
+  /// See also [UserChat].
+  UserChatProvider(
+    String userId,
   ) : this._internal(
-          () => RoomChat()..roomId = roomId,
-          from: roomChatProvider,
-          name: r'roomChatProvider',
+          () => UserChat()..userId = userId,
+          from: userChatProvider,
+          name: r'userChatProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$roomChatHash,
-          dependencies: RoomChatFamily._dependencies,
-          allTransitiveDependencies: RoomChatFamily._allTransitiveDependencies,
-          roomId: roomId,
+                  : _$userChatHash,
+          dependencies: UserChatFamily._dependencies,
+          allTransitiveDependencies: UserChatFamily._allTransitiveDependencies,
+          userId: userId,
         );
 
-  RoomChatProvider._internal(
+  UserChatProvider._internal(
     super.create, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.roomId,
+    required this.userId,
   }) : super.internal();
 
-  final String roomId;
+  final String userId;
 
   @override
   FutureOr<List<ChatMessage>> runNotifierBuild(
-    covariant RoomChat notifier,
+    covariant UserChat notifier,
   ) {
     return notifier.build(
-      roomId,
+      userId,
     );
   }
 
   @override
-  Override overrideWith(RoomChat Function() create) {
+  Override overrideWith(UserChat Function() create) {
     return ProviderOverride(
       origin: this,
-      override: RoomChatProvider._internal(
-        () => create()..roomId = roomId,
+      override: UserChatProvider._internal(
+        () => create()..userId = userId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        roomId: roomId,
+        userId: userId,
       ),
     );
   }
 
   @override
   (String,) get argument {
-    return (roomId,);
+    return (userId,);
   }
 
   @override
-  AsyncNotifierProviderElement<RoomChat, List<ChatMessage>> createElement() {
-    return _RoomChatProviderElement(this);
+  AsyncNotifierProviderElement<UserChat, List<ChatMessage>> createElement() {
+    return _UserChatProviderElement(this);
   }
 
-  RoomChatProvider _copyWith(
-    RoomChat Function() create,
+  UserChatProvider _copyWith(
+    UserChat Function() create,
   ) {
-    return RoomChatProvider._internal(
-      () => create()..roomId = roomId,
+    return UserChatProvider._internal(
+      () => create()..userId = userId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      roomId: roomId,
+      userId: userId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is RoomChatProvider && other.roomId == roomId;
+    return other is UserChatProvider && other.userId == userId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, roomId.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin RoomChatRef on AsyncNotifierProviderRef<List<ChatMessage>> {
-  /// The parameter `roomId` of this provider.
-  String get roomId;
+mixin UserChatRef on AsyncNotifierProviderRef<List<ChatMessage>> {
+  /// The parameter `userId` of this provider.
+  String get userId;
 }
 
-class _RoomChatProviderElement
-    extends AsyncNotifierProviderElement<RoomChat, List<ChatMessage>>
-    with RoomChatRef {
-  _RoomChatProviderElement(super.provider);
+class _UserChatProviderElement
+    extends AsyncNotifierProviderElement<UserChat, List<ChatMessage>>
+    with UserChatRef {
+  _UserChatProviderElement(super.provider);
 
   @override
-  String get roomId => (origin as RoomChatProvider).roomId;
+  String get userId => (origin as UserChatProvider).userId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

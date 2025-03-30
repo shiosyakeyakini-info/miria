@@ -6605,6 +6605,42 @@ class MockStreamingController extends _i1.Mock
         returnValue: _i16.Stream<_i6.StreamingResponse>.empty(),
         returnValueForMissingStub: _i16.Stream<_i6.StreamingResponse>.empty(),
       ) as _i16.Stream<_i6.StreamingResponse>);
+
+  @override
+  _i16.Stream<_i6.StreamingResponse> chatUserStream({
+    required _i6.ChatUserParameter? parameter,
+    required String? id,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #chatUserStream,
+          [],
+          {
+            #parameter: parameter,
+            #id: id,
+          },
+        ),
+        returnValue: _i16.Stream<_i6.StreamingResponse>.empty(),
+        returnValueForMissingStub: _i16.Stream<_i6.StreamingResponse>.empty(),
+      ) as _i16.Stream<_i6.StreamingResponse>);
+
+  @override
+  _i16.Stream<_i6.StreamingResponse> chatRoomStream({
+    required _i6.ChatRoomParameter? parameter,
+    required String? id,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #chatRoomStream,
+          [],
+          {
+            #parameter: parameter,
+            #id: id,
+          },
+        ),
+        returnValue: _i16.Stream<_i6.StreamingResponse>.empty(),
+        returnValueForMissingStub: _i16.Stream<_i6.StreamingResponse>.empty(),
+      ) as _i16.Stream<_i6.StreamingResponse>);
 }
 
 /// A class which mocks [WebSocketController].
