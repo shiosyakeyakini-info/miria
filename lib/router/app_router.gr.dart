@@ -760,6 +760,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: UserSelectDialog(
           accountContext: args.accountContext,
+          isLocalOnly: args.isLocalOnly,
           key: args.key,
         )),
       );
@@ -3405,12 +3406,14 @@ class UserRouteArgs {
 class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
   UserSelectRoute({
     required AccountContext accountContext,
+    bool isLocalOnly = false,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UserSelectRoute.name,
           args: UserSelectRouteArgs(
             accountContext: accountContext,
+            isLocalOnly: isLocalOnly,
             key: key,
           ),
           initialChildren: children,
@@ -3425,16 +3428,19 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
 class UserSelectRouteArgs {
   const UserSelectRouteArgs({
     required this.accountContext,
+    this.isLocalOnly = false,
     this.key,
   });
 
   final AccountContext accountContext;
 
+  final bool isLocalOnly;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'UserSelectRouteArgs{accountContext: $accountContext, key: $key}';
+    return 'UserSelectRouteArgs{accountContext: $accountContext, isLocalOnly: $isLocalOnly, key: $key}';
   }
 }
 

@@ -10,6 +10,8 @@ import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
+import "package:miria/view/chat_page/chat_home_page.dart";
+import "package:miria/view/chat_page/room_info.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -66,6 +68,7 @@ class RoomChatPage extends ConsumerWidget implements AutoRouteWrapper {
       body: Center(
         child: ChatTimeline(roomId: room.id),
       ),
+      endDrawer: ChatRoomInfo(room: room),
     );
   }
 }

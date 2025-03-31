@@ -12,8 +12,13 @@ import "package:misskey_dart/misskey_dart.dart";
 @RoutePage<User>()
 class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
+  final bool isLocalOnly;
 
-  const UserSelectDialog({required this.accountContext, super.key});
+  const UserSelectDialog({
+    required this.accountContext,
+    this.isLocalOnly = false,
+    super.key,
+  });
 
   @override
   Widget wrappedRoute(BuildContext context) =>
@@ -26,6 +31,7 @@ class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.8,
         child: UserSelectContent(
+          isLocalOnly: isLocalOnly,
           onSelected: (item) async => context.maybePop(item),
         ),
       ),
@@ -37,12 +43,14 @@ class UserSelectContent extends HookConsumerWidget {
   final void Function(User) onSelected;
   final FocusNode? focusNode;
   final bool isDetail;
+  final bool isLocalOnly;
 
   const UserSelectContent({
     required this.onSelected,
     super.key,
     this.focusNode,
     this.isDetail = false,
+    this.isLocalOnly = false,
   });
 
   @override
@@ -63,34 +71,38 @@ class UserSelectContent extends HookConsumerWidget {
           onSubmitted: (value) => searchQuery.value = value,
         ),
         const Padding(padding: EdgeInsets.only(bottom: 10)),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return ToggleButtons(
-              isSelected: [
-                for (final element in Origin.values) element == origin.value,
-              ],
-              constraints: BoxConstraints.expand(
-                width: constraints.maxWidth / Origin.values.length -
-                    Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
-                        Origin.values.length,
-              ),
-              onPressed: (index) => origin.value = Origin.values[index],
-              children: [
-                for (final element in Origin.values)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Text(element.displayName(context)),
-                  ),
-              ],
-            );
-          },
-        ),
+        if (!isLocalOnly)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return ToggleButtons(
+                isSelected: [
+                  for (final element in Origin.values) element == origin.value,
+                ],
+                constraints: BoxConstraints.expand(
+                  width: constraints.maxWidth / Origin.values.length -
+                      Theme.of(context)
+                              .toggleButtonsTheme
+                              .borderWidth!
+                              .toInt() *
+                          Origin.values.length,
+                ),
+                onPressed: (index) => origin.value = Origin.values[index],
+                children: [
+                  for (final element in Origin.values)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Text(element.displayName(context)),
+                    ),
+                ],
+              );
+            },
+          ),
         Expanded(
           child: UsersSelectContentList(
             onSelected: onSelected,
             isDetail: isDetail,
             query: searchQuery.value,
-            origin: origin.value,
+            origin: isLocalOnly ? Origin.local : origin.value,
           ),
         ),
       ],
@@ -125,7 +137,11 @@ class UsersSelectContentList extends ConsumerWidget {
                   userId: ref.read(accountContextProvider).getAccount.i.id,
                 ),
               );
-          return response.map((e) => e.user).toList();
+          return [
+            ...response
+                .map((e) => e.user)
+                .where((e) => origin != Origin.local || e.host == null)
+          ];
         }
 
         final response = await ref
