@@ -109,15 +109,16 @@ class ChatRoomInfo extends HookConsumerWidget {
                 decoration: InputDecoration(labelText: "説明"),
                 maxLines: 5,
               ),
-              Row(
-                children: [
-                  Switch(
-                    value: isMuted.value,
-                    onChanged: (value) async => mute.executeOrNull?.call(),
-                  ),
-                  Expanded(child: Text("ミュート")),
-                ],
-              ),
+              if (!isOwned)
+                Row(
+                  children: [
+                    Switch(
+                      value: isMuted.value,
+                      onChanged: (value) async => mute.executeOrNull?.call(),
+                    ),
+                    Expanded(child: Text("ミュート")),
+                  ],
+                ),
               if (isOwned)
                 ElevatedButton(
                   onPressed: update.executeOrNull,

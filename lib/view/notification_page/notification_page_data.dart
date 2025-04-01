@@ -336,6 +336,23 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               id: element.id,
             ),
           );
+        case NotificationType.createToken:
+          resultList.add(
+            SimpleNotificationData(
+              text: "トークンが作成されたで",
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+        case NotificationType.chatRoomInvitationReceived:
+          resultList.add(
+            SimpleNotificationData(
+              text: "チャットに招待されたで【${element.invitation?.room?.name ?? "？？？"}】",
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
+
         case NotificationType.unknown:
           resultList.add(
             SimpleNotificationData(

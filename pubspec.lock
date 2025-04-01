@@ -1077,7 +1077,7 @@ packages:
     description:
       path: "."
       ref: "feature/chat"
-      resolved-ref: "4af78b7a3d2af124550e6fe714ebeaaeb1dbf070"
+      resolved-ref: "0c1f6146dda8ed654b985b3e57d135867d932b1f"
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"
@@ -1946,10 +1946,10 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter_wkwebview
-      sha256: c49a98510080378b1525132f407a92c3dcd3b7145bef04fb8137724aadcf1cf0
+      sha256: c14455137ce60a68e1ccaf4e8f2dae8cebcb3465ddaa2fcfb57584fb7c5afe4d
       url: "https://pub.dev"
     source: hosted
-    version: "3.18.4"
+    version: "3.18.5"
   win32:
     dependency: transitive
     description:
