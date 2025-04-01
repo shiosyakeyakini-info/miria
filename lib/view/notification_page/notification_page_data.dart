@@ -140,6 +140,15 @@ class RoleNotification extends NotificationData {
   });
 }
 
+class InvitedChatRoomNotification extends NotificationData {
+  final ChatJoining invitation;
+  InvitedChatRoomNotification({
+    required this.invitation,
+    required super.createdAt,
+    required super.id,
+  });
+}
+
 extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
   List<NotificationData> toNotificationData(S localize) {
     final resultList = <NotificationData>[];
@@ -345,13 +354,23 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
             ),
           );
         case NotificationType.chatRoomInvitationReceived:
-          resultList.add(
-            SimpleNotificationData(
-              text: "チャットに招待されたで【${element.invitation?.room?.name ?? "？？？"}】",
-              createdAt: element.createdAt,
-              id: element.id,
-            ),
-          );
+          if (element.invitation != null) {
+            resultList.add(
+              InvitedChatRoomNotification(
+                invitation: element.invitation!,
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          } else {
+            resultList.add(
+              SimpleNotificationData(
+                text: "チャットルームに招待されたで",
+                createdAt: element.createdAt,
+                id: element.id,
+              ),
+            );
+          }
 
         case NotificationType.unknown:
           resultList.add(

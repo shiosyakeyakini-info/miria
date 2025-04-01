@@ -22,9 +22,11 @@ part 'chat_home_page.g.dart';
 @RoutePage()
 class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
+  final int initialTab;
 
   const ChatHomePage({
     required this.accountContext,
+    this.initialTab = 0,
     super.key,
   });
 
@@ -36,6 +38,7 @@ class ChatHomePage extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 4,
+      initialIndex: initialTab,
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(

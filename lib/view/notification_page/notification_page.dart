@@ -7,6 +7,7 @@ import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/chat_page/chat_home_page.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -475,6 +476,31 @@ class NotificationItem extends ConsumerWidget {
                 ),
               ),
             ],
+          ),
+        );
+      case InvitedChatRoomNotification():
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.only(
+                top: 10, bottom: 10, right: 10, left: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SimpleMfmText(
+                  "チャットルームに招待されたで【${notification.invitation.room?.name ?? "???"}】",
+                ),
+                ElevatedButton(
+                  onPressed: () async => context.pushRoute(
+                    ChatHomeRoute(
+                      accountContext: ref.read(accountContextProvider),
+                      initialTab: 1,
+                    ),
+                  ),
+                  child: Text("みにいく"),
+                )
+              ],
+            ),
           ),
         );
     }

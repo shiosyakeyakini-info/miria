@@ -185,6 +185,7 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(
             child: ChatHomePage(
           accountContext: args.accountContext,
+          initialTab: args.initialTab,
           key: args.key,
         )),
       );
@@ -1412,12 +1413,14 @@ class ChannelsRouteArgs {
 class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
   ChatHomeRoute({
     required AccountContext accountContext,
+    int initialTab = 0,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           ChatHomeRoute.name,
           args: ChatHomeRouteArgs(
             accountContext: accountContext,
+            initialTab: initialTab,
             key: key,
           ),
           initialChildren: children,
@@ -1432,16 +1435,19 @@ class ChatHomeRoute extends PageRouteInfo<ChatHomeRouteArgs> {
 class ChatHomeRouteArgs {
   const ChatHomeRouteArgs({
     required this.accountContext,
+    this.initialTab = 0,
     this.key,
   });
 
   final AccountContext accountContext;
 
+  final int initialTab;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'ChatHomeRouteArgs{accountContext: $accountContext, key: $key}';
+    return 'ChatHomeRouteArgs{accountContext: $accountContext, initialTab: $initialTab, key: $key}';
   }
 }
 
