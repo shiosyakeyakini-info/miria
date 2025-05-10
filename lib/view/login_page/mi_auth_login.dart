@@ -8,7 +8,7 @@ import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/util/punycode.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
@@ -76,12 +76,17 @@ class MiAuthLogin extends HookConsumerWidget {
                   Container(),
                   ElevatedButton(
                     onPressed: () async {
+                      IndicatorView.showIndicator(context);
                       await ref
-                          .read(accountRepositoryProvider.notifier)
-                          .openMiAuth(toAscii(serverController.text))
-                          .expectFailure(context);
-                        isAuthed.value = true;
-                      
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(
+                            () async => await ref
+                                .read(accountRepositoryProvider.notifier)
+                                .openMiAuth(toAscii(serverController.text)),
+                          );
+                      if (!context.mounted) return;
+                      IndicatorView.hideIndicator(context);
+                      isAuthed.value = true;
                     },
                     child: Text(
                       isAuthed.value
@@ -103,8 +108,10 @@ class MiAuthLogin extends HookConsumerWidget {
                     Container(),
                     ElevatedButton(
                       onPressed: () async {
-                        try {
-                          IndicatorView.showIndicator(context);
+                        IndicatorView.showIndicator(context);
+                        await ref
+                            .read(dialogStateNotifierProvider.notifier)
+                            .guard(() async {
                           await ref
                               .read(accountRepositoryProvider.notifier)
                               .validateMiAuth(toAscii(serverController.text));
@@ -117,12 +124,10 @@ class MiAuthLogin extends HookConsumerWidget {
                                   .first,
                             ),
                           );
-                        } catch (e) {
-                          rethrow;
-                        } finally {
-                          IndicatorView.hideIndicator(context);
-                        }
-                      }.expectFailure(context),
+                        });
+                        if (!context.mounted) return;
+                        IndicatorView.hideIndicator(context);
+                      },
                       child: Text(S.of(context).didAuthorize),
                     ),
                   ],
