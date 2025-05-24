@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
@@ -94,8 +94,9 @@ class UsersListSettingsForm extends ConsumerWidget {
               }
               return null;
             },
-            onSaved:
-                ref.read(_clipSettingsNotifierProvider.notifier).updateName,
+            onSaved: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateName,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -106,16 +107,16 @@ class UsersListSettingsForm extends ConsumerWidget {
               labelText: S.of(context).clipDescription,
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
-            onSaved:
-                ref
-                    .read(_clipSettingsNotifierProvider.notifier)
-                    .updateDescription,
+            onSaved: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateDescription,
           ),
           CheckboxListTile(
             title: Text(S.of(context).public),
             value: settings.isPublic,
-            onChanged:
-                ref.read(_clipSettingsNotifierProvider.notifier).updateIsPublic,
+            onChanged: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateIsPublic,
           ),
           ElevatedButton(
             child: Text(S.of(context).done),

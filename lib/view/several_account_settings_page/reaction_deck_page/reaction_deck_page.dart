@@ -2,9 +2,9 @@ import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:json5/json5.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/log.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
@@ -179,16 +179,17 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
 
       logger.info(reactions);
     } catch (e) {
-      final endpoints =
-          await ref.read(misskeyProvider(widget.account)).endpoints();
-      final domain =
-          endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
+      final endpoints = await ref
+          .read(misskeyProvider(widget.account))
+          .endpoints();
+      final domain = endpoints.contains("i/registry/scopes-with-domain")
+          ? "@"
+          : "system";
       if (!context.mounted) return;
       final emojiNames = await showDialog<List<String>>(
         context: context,
-        builder:
-            (context) =>
-                AddReactionsDialog(account: widget.account, domain: domain),
+        builder: (context) =>
+            AddReactionsDialog(account: widget.account, domain: domain),
       );
       if (emojiNames == null) {
         return;

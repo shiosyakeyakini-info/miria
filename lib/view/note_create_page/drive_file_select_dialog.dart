@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -35,16 +35,14 @@ class DriveFileSelectDialog extends HookConsumerWidget
     return AlertDialog(
       title: AppBar(
         leading: IconButton(
-          onPressed:
-              path.value.isEmpty
-                  ? null
-                  : () => path.value = [...path.value..removeLast()],
+          onPressed: path.value.isEmpty
+              ? null
+              : () => path.value = [...path.value..removeLast()],
           icon: const Icon(Icons.arrow_back),
         ),
-        title:
-            path.value.isEmpty
-                ? Text(S.of(context).chooseFile)
-                : Text(path.value.map((e) => e.name).join("/")),
+        title: path.value.isEmpty
+            ? Text(S.of(context).chooseFile)
+            : Text(path.value.map((e) => e.name).join("/")),
         actions: [
           if (files.value.isNotEmpty)
             Center(
@@ -55,10 +53,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
             ),
           if (allowMultiple)
             IconButton(
-              onPressed:
-                  files.value.isEmpty
-                      ? null
-                      : () => Navigator.of(context).pop(files.value),
+              onPressed: files.value.isEmpty
+                  ? null
+                  : () => Navigator.of(context).pop(files.value),
               icon: const Icon(Icons.check),
             ),
         ],
@@ -140,10 +137,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
                       onTap: () {
                         if (allowMultiple) {
                           if (isSelected) {
-                            files.value =
-                                files.value
-                                    .where((file) => file.id != item.id)
-                                    .toList();
+                            files.value = files.value
+                                .where((file) => file.id != item.id)
+                                .toList();
                           } else {
                             files.value = [...files.value, item];
                           }
@@ -153,32 +149,30 @@ class DriveFileSelectDialog extends HookConsumerWidget
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration:
-                            (allowMultiple && isSelected)
-                                ? BoxDecoration(
-                                  color: AppTheme.of(
-                                    context,
-                                  ).currentDisplayTabColor.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(5),
-                                )
-                                : null,
+                        decoration: (allowMultiple && isSelected)
+                            ? BoxDecoration(
+                                color: AppTheme.of(
+                                  context,
+                                ).currentDisplayTabColor.withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(5),
+                              )
+                            : null,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
                               width: double.infinity,
                               height: 200,
-                              child:
-                                  item.thumbnailUrl == null
-                                      ? const SizedBox.shrink()
-                                      : ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: NetworkImageView(
-                                          fit: BoxFit.cover,
-                                          url: item.thumbnailUrl!,
-                                          type: ImageType.imageThumbnail,
-                                        ),
+                              child: item.thumbnailUrl == null
+                                  ? const SizedBox.shrink()
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(5),
+                                      child: NetworkImageView(
+                                        fit: BoxFit.cover,
+                                        url: item.thumbnailUrl!,
+                                        type: ImageType.imageThumbnail,
                                       ),
+                                    ),
                             ),
                             Text(item.name),
                           ],

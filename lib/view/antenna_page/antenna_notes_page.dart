@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -47,21 +47,20 @@ class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed:
-                updateAntenna is PendingMutation
-                    ? null
-                    : () async {
-                      final settings = await context.pushRoute<AntennaSettings>(
-                        AntennaSettingsRoute(
-                          title: Text(S.of(context).edit),
-                          initialSettings: AntennaSettings.fromAntenna(antenna),
-                          account: accountContext.postAccount,
-                        ),
-                      );
-                      if (!context.mounted) return;
-                      if (settings == null) return;
-                      await updateAntenna.call(antenna.id, settings);
-                    },
+            onPressed: updateAntenna is PendingMutation
+                ? null
+                : () async {
+                    final settings = await context.pushRoute<AntennaSettings>(
+                      AntennaSettingsRoute(
+                        title: Text(S.of(context).edit),
+                        initialSettings: AntennaSettings.fromAntenna(antenna),
+                        account: accountContext.postAccount,
+                      ),
+                    );
+                    if (!context.mounted) return;
+                    if (settings == null) return;
+                    await updateAntenna.call(antenna.id, settings);
+                  },
           ),
         ],
       ),

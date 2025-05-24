@@ -1,10 +1,10 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
@@ -85,14 +85,13 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                       .registerAll(result.map((e) => e.note).whereNotNull());
                   return result.toNotificationData(localize);
                 },
-                itemBuilder:
-                    (context, notification) => Align(
-                      alignment: Alignment.center,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 800),
-                        child: NotificationItem(notification: notification),
-                      ),
-                    ),
+                itemBuilder: (context, notification) => Align(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: NotificationItem(notification: notification),
+                  ),
+                ),
               ),
               PushableListView<Note>(
                 initializeFuture: () async {
@@ -214,11 +213,13 @@ class NotificationItem extends ConsumerWidget {
                                 notification.renoteUsers.first?.name ??
                                     notification.renoteUsers.first?.username,
                               ),
-                          emojis: Map.of(
-                            notification.reactionUsers.first.$2?.emojis ?? {},
-                          )..addAll(
-                            notification.renoteUsers.first?.emojis ?? {},
-                          ),
+                          emojis:
+                              Map.of(
+                                notification.reactionUsers.first.$2?.emojis ??
+                                    {},
+                              )..addAll(
+                                notification.renoteUsers.first?.emojis ?? {},
+                              ),
                         ),
                       ),
                     if (hasReaction && !hasRenote)
@@ -301,8 +302,8 @@ class NotificationItem extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(S.of(context).reactionUsersInNotification),
-                            for (final reaction in notification.reactionUsers
-                                .mapIndexed(
+                            for (final reaction
+                                in notification.reactionUsers.mapIndexed(
                                   (index, element) => (index, element),
                                 )) ...[
                               if (reaction.$2.$1 != null &&
@@ -400,12 +401,11 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: ElevatedButton(
-                                onPressed:
-                                    () async => handleFollowRequest(
-                                      ref,
-                                      accept: true,
-                                      userId: user.id,
-                                    ),
+                                onPressed: () async => handleFollowRequest(
+                                  ref,
+                                  accept: true,
+                                  userId: user.id,
+                                ),
                                 child: Text(S.of(context).accept),
                               ),
                             ),
@@ -414,12 +414,11 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: OutlinedButton(
-                                onPressed:
-                                    () async => handleFollowRequest(
-                                      ref,
-                                      accept: false,
-                                      userId: user.id,
-                                    ),
+                                onPressed: () async => handleFollowRequest(
+                                  ref,
+                                  accept: false,
+                                  userId: user.id,
+                                ),
                                 child: Text(S.of(context).reject),
                               ),
                             ),

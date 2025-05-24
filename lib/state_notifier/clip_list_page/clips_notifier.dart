@@ -1,4 +1,4 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -36,8 +36,10 @@ class ClipsNotifier extends _$ClipsNotifier {
         .read(dialogStateNotifierProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDeleteClip,
-          actions:
-              (context) => [S.of(context).willDelete, S.of(context).cancel],
+          actions: (context) => [
+            S.of(context).willDelete,
+            S.of(context).cancel,
+          ],
         );
     if (result != 0) return;
 

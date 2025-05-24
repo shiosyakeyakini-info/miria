@@ -1,10 +1,10 @@
 import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -25,8 +25,8 @@ class NoteVoteNotifier extends _$NoteVoteNotifier {
     final dialogValue = await ref
         .read(dialogStateNotifierProvider.notifier)
         .showDialog(
-          message:
-              (context) => S.of(context).confirmPoll(poll.choices[index].text),
+          message: (context) =>
+              S.of(context).confirmPoll(poll.choices[index].text),
           actions: (context) => [S.of(context).doVoting, S.of(context).cancel],
         );
 
@@ -71,10 +71,9 @@ class NoteVote extends HookConsumerWidget {
     final totalVotes = poll.choices.map((e) => e.votes).sum;
     final expiresAt = poll.expiresAt;
     final isExpired = expiresAt != null && expiresAt < DateTime.now();
-    final differ =
-        isExpired
-            ? null
-            : poll.expiresAt?.difference(DateTime.now()).format(context);
+    final differ = isExpired
+        ? null
+        : poll.expiresAt?.difference(DateTime.now()).format(context);
     final colorTheme = AppTheme.of(context).colorTheme;
 
     final isOpened = useState(useMemoized(() => !isAnyVotable(ref)));
@@ -96,21 +95,20 @@ class NoteVote extends HookConsumerWidget {
                 border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(5),
                 color: isOpened.value ? null : colorTheme.accentedBackground,
-                gradient:
-                    isOpened.value
-                        ? LinearGradient(
-                          colors: [
-                            colorTheme.buttonGradateA,
-                            colorTheme.buttonGradateB,
-                            colorTheme.accentedBackground,
-                          ],
-                          stops: [
-                            0,
-                            choice.element.votes / totalVotes,
-                            choice.element.votes / totalVotes,
-                          ],
-                        )
-                        : null,
+                gradient: isOpened.value
+                    ? LinearGradient(
+                        colors: [
+                          colorTheme.buttonGradateA,
+                          colorTheme.buttonGradateB,
+                          colorTheme.accentedBackground,
+                        ],
+                        stops: [
+                          0,
+                          choice.element.votes / totalVotes,
+                          choice.element.votes / totalVotes,
+                        ],
+                      )
+                    : null,
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -157,10 +155,9 @@ class NoteVote extends HookConsumerWidget {
                                       ).textTheme.bodyMedium?.fontSize ??
                                       22,
                                 ),
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium?.color,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.color,
                               ),
                             ),
                         ],
@@ -190,17 +187,15 @@ class NoteVote extends HookConsumerWidget {
             children: [
               TextSpan(text: S.of(context).totalVotesCount(totalVotes)),
               TextSpan(
-                text:
-                    isExpired
-                        ? S.of(context).finished
-                        : !isOpened.value
-                        ? S.of(context).openResult
-                        : isAnyVotable(ref)
-                        ? S.of(context).doVoting
-                        : S.of(context).alreadyVoted,
-                recognizer:
-                    TapGestureRecognizer()
-                      ..onTap = () => isOpened.value = !isOpened.value,
+                text: isExpired
+                    ? S.of(context).finished
+                    : !isOpened.value
+                    ? S.of(context).openResult
+                    : isAnyVotable(ref)
+                    ? S.of(context).doVoting
+                    : S.of(context).alreadyVoted,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => isOpened.value = !isOpened.value,
               ),
               const WidgetSpan(
                 child: Padding(padding: EdgeInsets.only(left: 10)),

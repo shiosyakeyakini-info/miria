@@ -53,11 +53,10 @@ class AccountSettingsRepository extends ChangeNotifier {
   }
 
   Future<void> save(AccountSettings settings) async {
-    _accountSettings =
-        _accountSettings
-          ..removeWhere((oldSettings) => oldSettings.acct == settings.acct)
-          ..add(settings)
-          ..toList();
+    _accountSettings = _accountSettings
+      ..removeWhere((oldSettings) => oldSettings.acct == settings.acct)
+      ..add(settings)
+      ..toList();
     await _saveAsList(_accountSettings);
   }
 

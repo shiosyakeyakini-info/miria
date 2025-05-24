@@ -1,9 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
-import "package:miria/hooks/use_mutation.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
@@ -84,10 +83,9 @@ class _AntennaModalSheetBody extends ConsumerWidget {
                     .updateAntenna(
                       antenna.id,
                       AntennaSettings.fromAntenna(antenna).copyWith(
-                        users:
-                            antenna.users
-                                .where((acct) => acct != user.acct)
-                                .toList(),
+                        users: antenna.users
+                            .where((acct) => acct != user.acct)
+                            .toList(),
                       ),
                     );
               }
@@ -103,7 +101,7 @@ class _AntennaModalSheetBody extends ConsumerWidget {
 }
 
 class _CreateAntennaTile extends ConsumerWidget {
-  const _CreateAntennaTile({super.key});
+  const _CreateAntennaTile();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -112,23 +110,22 @@ class _CreateAntennaTile extends ConsumerWidget {
     return ListTile(
       leading: const Icon(Icons.add),
       title: Text(S.of(context).createAntenna),
-      onTap:
-          create is PendingMutation
-              ? null
-              : () async {
-                final settings = await context.pushRoute<AntennaSettings>(
-                  AntennaSettingsRoute(
-                    title: Text(S.of(context).create),
-                    initialSettings: const AntennaSettings(
-                      src: AntennaSource.users,
-                    ),
-                    account: ref.read(accountContextProvider).postAccount,
+      onTap: create is PendingMutation
+          ? null
+          : () async {
+              final settings = await context.pushRoute<AntennaSettings>(
+                AntennaSettingsRoute(
+                  title: Text(S.of(context).create),
+                  initialSettings: const AntennaSettings(
+                    src: AntennaSource.users,
                   ),
-                );
-                if (!context.mounted) return;
-                if (settings == null) return;
-                await create.call(settings);
-              },
+                  account: ref.read(accountContextProvider).postAccount,
+                ),
+              );
+              if (!context.mounted) return;
+              if (settings == null) return;
+              await create.call(settings);
+            },
     );
   }
 }

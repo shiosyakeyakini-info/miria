@@ -33,10 +33,9 @@ InlineSpan _unicodeEmojiBuilder(
     return TextSpan(
       text: emoji,
       style: style,
-      recognizer:
-          MfmBlurScope.of(builderContext)
-              ? null
-              : (TapGestureRecognizer()..onTap = () => onTap),
+      recognizer: MfmBlurScope.of(builderContext)
+          ? null
+          : (TapGestureRecognizer()..onTap = () => onTap),
     );
   } else {
     return WidgetSpan(
@@ -113,10 +112,9 @@ class MfmText extends ConsumerWidget {
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,
           child: GestureDetector(
-            onTap:
-                MfmBlurScope.of(builderContext)
-                    ? null
-                    : () => onEmojiTap?.call(emojiData),
+            onTap: MfmBlurScope.of(builderContext)
+                ? null
+                : () => onEmojiTap?.call(emojiData),
             child: EmojiInk(
               child: CustomEmoji(
                 emojiData: emojiData,
@@ -127,16 +125,15 @@ class MfmText extends ConsumerWidget {
           ),
         );
       },
-      unicodeEmojiBuilder:
-          (context, emoji, style) => _unicodeEmojiBuilder(
-            context,
-            emoji,
-            style,
-            ref,
-            () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
-          ),
-      codeBlockBuilder:
-          (context, code, lang) => CodeBlock(code: code, language: lang),
+      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
+        context,
+        emoji,
+        style,
+        ref,
+        () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+      ),
+      codeBlockBuilder: (context, code, lang) =>
+          CodeBlock(code: code, language: lang),
       unixTimeBuilder: (context, unixtime, style) {
         return WidgetSpan(
           alignment: PlaceholderAlignment.middle,
@@ -162,21 +159,18 @@ class MfmText extends ConsumerWidget {
       monospaceStyle: AppTheme.of(context).monospaceStyle,
       cursiveStyle: AppTheme.of(context).cursiveStyle,
       fantasyStyle: AppTheme.of(context).fantasyStyle,
-      linkTap:
-          (src) async =>
-              const LinkNavigator().onTapLink(context, ref, src, host),
+      linkTap: (src) async =>
+          const LinkNavigator().onTapLink(context, ref, src, host),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
-      mentionTap:
-          (userName, host, acct) async =>
-              const LinkNavigator().onMentionTap(context, ref, acct, host),
-      hashtagTap:
-          (hashtag) async => await context.pushRoute(
-            HashtagRoute(
-              accountContext: ref.read(accountContextProvider),
-              hashtag: hashtag,
-            ),
-          ),
+      mentionTap: (userName, host, acct) async =>
+          const LinkNavigator().onMentionTap(context, ref, acct, host),
+      hashtagTap: (hashtag) async => await context.pushRoute(
+        HashtagRoute(
+          accountContext: ref.read(accountContextProvider),
+          hashtag: hashtag,
+        ),
+      ),
       searchTap: onSearch,
       style: style,
       isNyaize: isNyaize,
@@ -213,8 +207,9 @@ class CodeBlock extends StatelessWidget {
         child: HighlightView(
           code,
           languageId: resolvedLanguage,
-          theme:
-              AppTheme.of(context).isDarkMode ? githubDarkTheme : githubTheme,
+          theme: AppTheme.of(context).isDarkMode
+              ? githubDarkTheme
+              : githubTheme,
           padding: const EdgeInsets.all(10),
           textStyle: AppTheme.of(context).monospaceStyle,
         ),
@@ -265,26 +260,24 @@ class SimpleMfmText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfm(
       text,
-      emojiBuilder:
-          (context, emojiName, style) => DefaultTextStyle.merge(
-            style: style ?? DefaultTextStyle.of(context).style,
-            child: CustomEmoji(
-              emojiData: MisskeyEmojiData.fromEmojiName(
-                emojiName: ":$emojiName:",
-                repository: ref.read(
-                  emojiRepositoryProvider(
-                    ref.read(accountContextProvider).getAccount,
-                  ),
-                ),
-                emojiInfo: emojis,
+      emojiBuilder: (context, emojiName, style) => DefaultTextStyle.merge(
+        style: style ?? DefaultTextStyle.of(context).style,
+        child: CustomEmoji(
+          emojiData: MisskeyEmojiData.fromEmojiName(
+            emojiName: ":$emojiName:",
+            repository: ref.read(
+              emojiRepositoryProvider(
+                ref.read(accountContextProvider).getAccount,
               ),
-              fontSizeRatio: 1,
-              style: style,
             ),
+            emojiInfo: emojis,
           ),
-      unicodeEmojiBuilder:
-          (context, emoji, style) =>
-              _unicodeEmojiBuilder(context, emoji, style, ref, () => {}),
+          fontSizeRatio: 1,
+          style: style,
+        ),
+      ),
+      unicodeEmojiBuilder: (context, emoji, style) =>
+          _unicodeEmojiBuilder(context, emoji, style, ref, () => {}),
       style: style,
       suffixSpan: suffixSpan,
       prefixSpan: prefixSpan,
@@ -325,20 +318,14 @@ class UserInformation extends ConsumerWidget {
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!, ref),
                   height: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                  loadingBuilder:
-                      (context, widget, event) => SizedBox(
-                        width:
-                            DefaultTextStyle.of(context).style.fontSize ?? 22,
-                        height:
-                            DefaultTextStyle.of(context).style.fontSize ?? 22,
-                      ),
-                  errorBuilder:
-                      (context, e, s) => SizedBox(
-                        width:
-                            DefaultTextStyle.of(context).style.fontSize ?? 22,
-                        height:
-                            DefaultTextStyle.of(context).style.fontSize ?? 22,
-                      ),
+                  loadingBuilder: (context, widget, event) => SizedBox(
+                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                  ),
+                  errorBuilder: (context, e, s) => SizedBox(
+                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
+                  ),
                 ),
               ),
             ),

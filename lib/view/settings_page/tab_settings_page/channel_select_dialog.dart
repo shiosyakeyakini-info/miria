@@ -1,6 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/view/channels_page/channel_favorited.dart";
 import "package:miria/view/channels_page/channel_followed.dart";
@@ -57,29 +57,29 @@ class ChannelSelectDialog extends StatelessWidget implements AutoRouteWrapper {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ChannelSearch(
-                        onChannelSelected:
-                            (channel) async => context.maybePop(channel),
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ChannelTrend(
-                        onChannelSelected:
-                            (channel) async => context.maybePop(channel),
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ChannelFavorited(
-                        onChannelSelected:
-                            (channel) async => context.maybePop(channel),
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ChannelFollowed(
-                        onChannelSelected:
-                            (channel) async => context.maybePop(channel),
+                        onChannelSelected: (channel) async =>
+                            context.maybePop(channel),
                       ),
                     ),
                   ],

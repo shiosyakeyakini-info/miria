@@ -3,11 +3,11 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
@@ -134,10 +134,9 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
       );
 
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
-      hintText:
-          (renote != null || reply != null)
-              ? S.of(context).replyNotePlaceholder
-              : S.of(context).defaultNotePlaceholder,
+      hintText: (renote != null || reply != null)
+          ? S.of(context).replyNotePlaceholder
+          : S.of(context).defaultNotePlaceholder,
       contentPadding: const EdgeInsets.all(5),
     );
 
@@ -220,10 +219,9 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
                             final selectedEmoji = await context
                                 .pushRoute<MisskeyEmojiData>(
                                   ReactionPickerRoute(
-                                    account:
-                                        ref
-                                            .read(accountContextProvider)
-                                            .postAccount,
+                                    account: ref
+                                        .read(accountContextProvider)
+                                        .postAccount,
                                     isAcceptSensitive: true,
                                   ),
                                 );

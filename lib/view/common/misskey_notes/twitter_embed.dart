@@ -28,32 +28,31 @@ class _TwitterEmbedState extends State<TwitterEmbed> {
   void initState() {
     super.initState();
 
-    controller =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setBackgroundColor(Colors.transparent)
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onNavigationRequest: (request) async {
-                final url = Uri.tryParse(request.url);
-                if (url != null && await canLaunchUrl(url)) {
-                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                }
-                return NavigationDecision.prevent;
-              },
-            ),
-          )
-          ..addJavaScriptChannel(
-            "Twitter",
-            onMessageReceived: (message) {
-              setState(() {
-                // そのままだと下が見切れる
-                height = double.parse(message.message) + 10;
-              });
-            },
-          )
-          // https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-javascript-factory-function
-          ..loadHtmlString("""
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) async {
+            final url = Uri.tryParse(request.url);
+            if (url != null && await canLaunchUrl(url)) {
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+            }
+            return NavigationDecision.prevent;
+          },
+        ),
+      )
+      ..addJavaScriptChannel(
+        "Twitter",
+        onMessageReceived: (message) {
+          setState(() {
+            // そのままだと下が見切れる
+            height = double.parse(message.message) + 10;
+          });
+        },
+      )
+      // https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-javascript-factory-function
+      ..loadHtmlString("""
 <html>
 
   <head>

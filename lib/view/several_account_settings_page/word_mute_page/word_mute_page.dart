@@ -1,9 +1,9 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -43,14 +43,17 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
   }
 
   Future<void> save(String text, BuildContext context, WidgetRef ref) async {
-    final wordMutes =
-        text.split("\n").whereNot((element) => element.trim().isEmpty).map((e) {
+    final wordMutes = text
+        .split("\n")
+        .whereNot((element) => element.trim().isEmpty)
+        .map((e) {
           if (e.startsWith("/")) {
             return MuteWord(regExp: e);
           } else {
             return MuteWord(content: e.split(" "));
           }
-        }).toList();
+        })
+        .toList();
 
     await ref
         .read(misskeyGetContextProvider)

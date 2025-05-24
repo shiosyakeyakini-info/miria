@@ -132,10 +132,9 @@ class SectionHeader extends ConsumerWidget {
       ).select((value) => value.meta?.iconUrl),
     );
     final socketTimelineBase = ref.watch(timelineProvider(tabSetting));
-    final socketTimeline =
-        socketTimelineBase is SocketTimelineRepository
-            ? socketTimelineBase
-            : null;
+    final socketTimeline = socketTimelineBase is SocketTimelineRepository
+        ? socketTimelineBase
+        : null;
 
     return Row(
       children: [
@@ -205,10 +204,9 @@ class TabTextField extends HookConsumerWidget {
               onPressed: () async {
                 final result = await showModalBottomSheet<NoteVisibility?>(
                   context: context,
-                  builder:
-                      (context) => NoteVisibilityDialog(
-                        account: ref.read(accountContextProvider).postAccount,
-                      ),
+                  builder: (context) => NoteVisibilityDialog(
+                    account: ref.read(accountContextProvider).postAccount,
+                  ),
                 );
                 if (result != null) visibility.value = result;
               },
@@ -216,10 +214,9 @@ class TabTextField extends HookConsumerWidget {
             ),
             IconButton(
               onPressed: () => localOnly.value = !localOnly.value,
-              icon:
-                  localOnly.value
-                      ? const LocalOnlyIcon()
-                      : const Icon(Icons.rocket),
+              icon: localOnly.value
+                  ? const LocalOnlyIcon()
+                  : const Icon(Icons.rocket),
             ),
             IconButton(
               onPressed: () async {
@@ -319,29 +316,28 @@ class EmojiInputComplement extends HookWidget {
       final cursorOffset = getCursorOffset();
 
       return OverlayEntry(
-        builder:
-            (context) => Positioned(
-              width: size.width,
-              child: CompositedTransformFollower(
-                link: layerLink,
-                showWhenUnlinked: false,
-                offset: cursorOffset,
-                child: Material(
-                  elevation: 4.0,
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    children: [
-                      for (final option in options)
-                        ListTile(
-                          title: Text(option),
-                          onTap: () => selectOption(option),
-                        ),
-                    ],
-                  ),
-                ),
+        builder: (context) => Positioned(
+          width: size.width,
+          child: CompositedTransformFollower(
+            link: layerLink,
+            showWhenUnlinked: false,
+            offset: cursorOffset,
+            child: Material(
+              elevation: 4.0,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                children: [
+                  for (final option in options)
+                    ListTile(
+                      title: Text(option),
+                      onTap: () => selectOption(option),
+                    ),
+                ],
               ),
             ),
+          ),
+        ),
       );
     }, [context, layerLink, options, getCursorOffset, selectOption]);
 

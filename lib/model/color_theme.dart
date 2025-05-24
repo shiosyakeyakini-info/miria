@@ -65,12 +65,11 @@ abstract class ColorTheme with _$ColorTheme {
       final input = val.trim();
 
       if (input.startsWith("rgb(") && input.endsWith(")")) {
-        final rgb =
-            input
-                .substring(4, input.length - 1)
-                .split(RegExp("[, ]+"))
-                .map(int.parse)
-                .toList();
+        final rgb = input
+            .substring(4, input.length - 1)
+            .split(RegExp("[, ]+"))
+            .map(int.parse)
+            .toList();
         return Color.fromRGBO(rgb[0], rgb[1], rgb[2], 1);
       }
 

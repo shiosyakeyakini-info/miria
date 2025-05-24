@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
@@ -88,10 +88,9 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     final notesAfterRenote = await Future.wait(
       renotes.map((renote) => getNoteAfterNote(misskey, renote)),
     );
-    final notes =
-        notesAfterRenote.nonNulls
-            .where((note) => note.renoteId == null && note.replyId == null)
-            .toList();
+    final notes = notesAfterRenote.nonNulls
+        .where((note) => note.renoteId == null && note.replyId == null)
+        .toList();
     if (notes.isEmpty) {
       // リノートがまだあるときに空のリストを返すと次が呼ばれなくなるため
       return getNotesAfterRenote(misskey, untilId: lastRenoteId);

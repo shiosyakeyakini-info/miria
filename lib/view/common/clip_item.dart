@@ -15,13 +15,12 @@ class ClipItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      onTap:
-          () async => context.pushRoute(
-            ClipDetailRoute(
-              accountContext: ref.read(accountContextProvider),
-              id: clip.id,
-            ),
-          ),
+      onTap: () async => context.pushRoute(
+        ClipDetailRoute(
+          accountContext: ref.read(accountContextProvider),
+          id: clip.id,
+        ),
+      ),
       title: Text(clip.name ?? ""),
       subtitle: SimpleMfmText(clip.description ?? ""),
       trailing: trailing,

@@ -3,9 +3,9 @@ import "dart:io";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/state_notifier/common/download_file_notifier.dart";
 import "package:miria/state_notifier/note_file_dialog/image_viewer_info_notifier.dart";
 import "package:miria/view/common/note_file_dialog/image_viewer.dart";
@@ -87,10 +87,10 @@ class NoteFileDialog extends HookConsumerWidget {
                 behavior: HitTestBehavior.translucent,
                 direction:
                     (!imageViewInfo.isDoubleTap &&
-                            imageViewInfo.scale == 1.0 &&
-                            imageViewInfo.pointersCount <= 1)
-                        ? DismissDirection.vertical
-                        : DismissDirection.none,
+                        imageViewInfo.scale == 1.0 &&
+                        imageViewInfo.pointersCount <= 1)
+                    ? DismissDirection.vertical
+                    : DismissDirection.none,
                 resizeDuration: null,
                 onDismissed: (_) => {Navigator.of(context).pop()},
                 child: Stack(
@@ -99,10 +99,10 @@ class NoteFileDialog extends HookConsumerWidget {
                       controller: pageController,
                       physics:
                           (!imageViewInfo.isDoubleTap &&
-                                  imageViewInfo.scale == 1.0 &&
-                                  imageViewInfo.pointersCount <= 1)
-                              ? const ScrollPhysics()
-                              : const NeverScrollableScrollPhysics(),
+                              imageViewInfo.scale == 1.0 &&
+                              imageViewInfo.pointersCount <= 1)
+                          ? const ScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
                       children: [
                         for (final file in driveFiles)
                           if (file.type.startsWith("image"))
@@ -167,11 +167,10 @@ class NoteFileDialog extends HookConsumerWidget {
                             if (f != DownloadFileResult.succeeded) {
                               await showDialog(
                                 context: context,
-                                builder:
-                                    (context) => SimpleMessageDialog(
-                                      message:
-                                          "${S.of(context).failedFileSave}\n[$f]",
-                                    ),
+                                builder: (context) => SimpleMessageDialog(
+                                  message:
+                                      "${S.of(context).failedFileSave}\n[$f]",
+                                ),
                               );
                               return;
                             }

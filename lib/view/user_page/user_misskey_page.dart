@@ -38,13 +38,12 @@ class UserMisskeyPage extends ConsumerWidget {
             ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           subtitle: MfmText(mfmText: page.summary ?? ""),
-          onTap:
-              () async => context.pushRoute(
-                MisskeyRouteRoute(
-                  accountContext: ref.read(accountContextProvider),
-                  page: page,
-                ),
-              ),
+          onTap: () async => context.pushRoute(
+            MisskeyRouteRoute(
+              accountContext: ref.read(accountContextProvider),
+              page: page,
+            ),
+          ),
         );
       },
     );

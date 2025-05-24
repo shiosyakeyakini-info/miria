@@ -86,10 +86,9 @@ class AccountRepository extends _$AccountRepository {
       for (final element in list) {
         if ((element as Map<String, dynamic>)["meta"] == null) {
           try {
-            final meta =
-                await ref
-                    .read(misskeyWithoutAccountProvider(element["host"]))
-                    .meta();
+            final meta = await ref
+                .read(misskeyWithoutAccountProvider(element["host"]))
+                .meta();
             element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
           } catch (e) {
             logger.warning(e);
@@ -272,10 +271,9 @@ class AccountRepository extends _$AccountRepository {
     try {
       final meta = await ref.read(misskeyWithoutAccountProvider(server)).meta();
 
-      final endpoints =
-          await ref
-              .read(misskeyProvider(Account.demoAccount(server, meta)))
-              .endpoints();
+      final endpoints = await ref
+          .read(misskeyProvider(Account.demoAccount(server, meta)))
+          .endpoints();
       if (!endpoints.contains("emojis")) {
         throw SoftwareNotCompatibleException(
           software.toString(),

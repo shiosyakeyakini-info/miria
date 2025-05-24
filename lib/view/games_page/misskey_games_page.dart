@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -28,28 +28,25 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
         children: [
           ListTile(
             title: Text(S.of(context).cookieCliker),
-            onTap:
-                () async => launchUrlString(
-                  "https://${accountContext.postAccount.host}/clicker",
-                  mode: LaunchMode.externalApplication,
-                ),
+            onTap: () async => launchUrlString(
+              "https://${accountContext.postAccount.host}/clicker",
+              mode: LaunchMode.externalApplication,
+            ),
           ),
           ListTile(
             title: Text(S.of(context).bubbleGame),
-            onTap:
-                () async => launchUrlString(
-                  "https://${accountContext.postAccount.host}/bubble-game",
-                  mode: LaunchMode.externalApplication,
-                ),
+            onTap: () async => launchUrlString(
+              "https://${accountContext.postAccount.host}/bubble-game",
+              mode: LaunchMode.externalApplication,
+            ),
           ),
           ListTile(
             title: Text(S.of(context).reversi),
             subtitle: const ReversiInvite(),
-            onTap:
-                () async => launchUrlString(
-                  "https://${accountContext.postAccount.host}/reversi",
-                  mode: LaunchMode.externalApplication,
-                ),
+            onTap: () async => launchUrlString(
+              "https://${accountContext.postAccount.host}/reversi",
+              mode: LaunchMode.externalApplication,
+            ),
           ),
         ],
       ),
@@ -75,12 +72,12 @@ class ReversiInvite extends ConsumerWidget {
         value.isEmpty
             ? Text(S.of(context).nonInvitedReversi)
             : Text(
-              S
-                  .of(context)
-                  .invitedReversi(
-                    value.map((e) => e.name ?? e.username).join(", "),
-                  ),
-            ),
+                S
+                    .of(context)
+                    .invitedReversi(
+                      value.map((e) => e.name ?? e.username).join(", "),
+                    ),
+              ),
       AsyncError() => const SizedBox.shrink(),
     };
   }

@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/string_extensions.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/federation_data.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
@@ -173,9 +173,8 @@ class FederationInfo extends ConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
-                        onTap:
-                            () async =>
-                                launchUrl(Uri.parse(data.privacyPolicyUrl!)),
+                        onTap: () async =>
+                            launchUrl(Uri.parse(data.privacyPolicyUrl!)),
                         child: Text(
                           data.privacyPolicyUrl!.toString().tight,
                           style: AppTheme.of(context).linkStyle,
@@ -191,9 +190,8 @@ class FederationInfo extends ConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
-                        onTap:
-                            () async =>
-                                launchUrl(Uri.parse(data.impressumUrl!)),
+                        onTap: () async =>
+                            launchUrl(Uri.parse(data.impressumUrl!)),
                         child: Text(
                           data.impressumUrl!.toString().tight,
                           style: AppTheme.of(context).linkStyle,

@@ -3668,12 +3668,14 @@ class MockMisskeyUsers extends _i1.Mock implements _i5.MisskeyUsers {
   ) =>
       (super.noSuchMethod(
             Invocation.method(#getFrequentlyRepliedUsers, [request]),
-            returnValue: _i15.Future<
-              Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>
-            >.value(<_i5.UsersGetFrequentlyRepliedUsersResponse>[]),
-            returnValueForMissingStub: _i15.Future<
-              Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>
-            >.value(<_i5.UsersGetFrequentlyRepliedUsersResponse>[]),
+            returnValue:
+                _i15.Future<
+                  Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>
+                >.value(<_i5.UsersGetFrequentlyRepliedUsersResponse>[]),
+            returnValueForMissingStub:
+                _i15.Future<
+                  Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>
+                >.value(<_i5.UsersGetFrequentlyRepliedUsersResponse>[]),
           )
           as _i15.Future<Iterable<_i5.UsersGetFrequentlyRepliedUsersResponse>>);
 

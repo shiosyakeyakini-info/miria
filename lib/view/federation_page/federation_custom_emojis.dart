@@ -1,7 +1,7 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -97,8 +97,9 @@ class FederationCustomEmojis extends ConsumerWidget {
                                   ),
                                   TextSpan(
                                     text: ":${element.name}:",
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
                                   ),
                                   if (element.isSensitive)
                                     WidgetSpan(

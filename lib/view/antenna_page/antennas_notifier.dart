@@ -1,10 +1,10 @@
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/experimental/mutation.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 part "antennas_notifier.g.dart";
 
@@ -84,17 +84,17 @@ class AntennasNotifier extends _$AntennasNotifier {
       for (final antenna in [...?state.value])
         antenna.id == antennaId
             ? antenna.copyWith(
-              name: settings.name,
-              src: settings.src,
-              keywords: settings.keywords,
-              excludeKeywords: settings.excludeKeywords,
-              users: settings.users,
-              caseSensitive: settings.caseSensitive,
-              withReplies: settings.withReplies,
-              withFile: settings.withFile,
-              notify: settings.notify,
-              localOnly: settings.localOnly,
-            )
+                name: settings.name,
+                src: settings.src,
+                keywords: settings.keywords,
+                excludeKeywords: settings.excludeKeywords,
+                users: settings.users,
+                caseSensitive: settings.caseSensitive,
+                withReplies: settings.withReplies,
+                withFile: settings.withFile,
+                notify: settings.notify,
+                localOnly: settings.localOnly,
+              )
             : antenna,
     ]);
   }

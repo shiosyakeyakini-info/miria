@@ -19,12 +19,9 @@ class NotificationIcon extends ConsumerWidget {
 
     if (hasUnread) {
       return IconButton(
-        onPressed:
-            () async => context.pushRoute(
-              NotificationRoute(
-                accountContext: ref.read(accountContextProvider),
-              ),
-            ),
+        onPressed: () async => context.pushRoute(
+          NotificationRoute(accountContext: ref.read(accountContextProvider)),
+        ),
         icon: Stack(
           children: [
             const Icon(Icons.notifications),
@@ -47,12 +44,9 @@ class NotificationIcon extends ConsumerWidget {
       );
     } else {
       return IconButton(
-        onPressed:
-            () async => context.pushRoute(
-              NotificationRoute(
-                accountContext: ref.read(accountContextProvider),
-              ),
-            ),
+        onPressed: () async => context.pushRoute(
+          NotificationRoute(accountContext: ref.read(accountContextProvider)),
+        ),
         icon: const Icon(Icons.notifications),
       );
     }

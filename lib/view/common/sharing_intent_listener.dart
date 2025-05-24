@@ -34,9 +34,10 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
     super.initState();
     if (defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS) {
-      intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
+      intentDataStreamSubscription = ReceiveSharingIntent.instance
+          .getMediaStream()
           .listen((event) {
-            final items = event.map((e) => e.path).toList();
+            final items = [...event.map((e) => e.path)];
             if (account.length == 1) {
               widget.router.push(
                 NoteCreateRoute(
@@ -46,19 +47,6 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
               );
             } else {
               widget.router.push(SharingAccountSelectRoute(filePath: items));
-            }
-          });
-      intentDataTextStreamSubscription = ReceiveSharingIntent.getTextStream()
-          .listen((event) {
-            if (account.length == 1) {
-              widget.router.push(
-                NoteCreateRoute(
-                  initialText: event,
-                  initialAccount: account.first,
-                ),
-              );
-            } else {
-              widget.router.push(SharingAccountSelectRoute(sharingText: event));
             }
           });
     }

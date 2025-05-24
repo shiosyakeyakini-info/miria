@@ -2,11 +2,11 @@ import "dart:async";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/tab_icon.dart";
 import "package:miria/model/tab_setting.dart";
@@ -27,13 +27,12 @@ class TabSettingsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final initialTabSetting =
-        tabIndex != null
-            ? ref
-                .read(tabSettingsRepositoryProvider)
-                .tabSettings
-                .toList()[tabIndex!]
-            : null;
+    final initialTabSetting = tabIndex != null
+        ? ref
+              .read(tabSettingsRepositoryProvider)
+              .tabSettings
+              .toList()[tabIndex!]
+        : null;
 
     final selectedAccount = useState<Account?>(
       initialTabSetting != null
@@ -64,11 +63,10 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedAntenna = useState<Antenna?>(null);
 
     final nameController = useTextEditingController(
-      text:
-          initialTabSetting != null
-              ? initialTabSetting.name ??
-                  initialTabSetting.tabType.displayName(context)
-              : "",
+      text: initialTabSetting != null
+          ? initialTabSetting.name ??
+                initialTabSetting.tabType.displayName(context)
+          : "",
     );
 
     final availableIncludeReply =
@@ -106,10 +104,11 @@ class TabSettingsPage extends HookConsumerWidget {
       if (listId != null) {
         selectedUserList.value =
             (await ref
-                .read(misskeyProvider(selectedAccount.value!))
-                .users
-                .list
-                .show(UsersListsShowRequest(listId: listId))).toUsersList();
+                    .read(misskeyProvider(selectedAccount.value!))
+                    .users
+                    .list
+                    .show(UsersListsShowRequest(listId: listId)))
+                .toUsersList();
       }
       if (antennaId != null) {
         selectedAntenna.value = await ref
@@ -168,8 +167,8 @@ class TabSettingsPage extends HookConsumerWidget {
                   selectedAccount.value = value;
                   selectedTabType.value =
                       tabType != null && isTabTypeAvailable(tabType)
-                          ? tabType
-                          : null;
+                      ? tabType
+                      : null;
                   selectedAntenna.value = null;
                   selectedUserList.value = null;
                   selectedChannel.value = null;
@@ -307,29 +306,26 @@ class TabSettingsPage extends HookConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child:
-                        selectedAccount.value == null
-                            ? Container()
-                            : AccountContextScope.as(
-                              account: selectedAccount.value!,
-                              child: SizedBox(
-                                height: 32,
-                                child: TabIconView(
-                                  icon: selectedIcon.value,
-                                  size: IconTheme.of(context).size,
-                                ),
+                    child: selectedAccount.value == null
+                        ? Container()
+                        : AccountContextScope.as(
+                            account: selectedAccount.value!,
+                            child: SizedBox(
+                              height: 32,
+                              child: TabIconView(
+                                icon: selectedIcon.value,
+                                size: IconTheme.of(context).size,
                               ),
                             ),
+                          ),
                   ),
                   IconButton(
                     onPressed: () async {
                       if (selectedAccount.value == null) return;
                       selectedIcon.value = await showDialog<TabIcon>(
                         context: context,
-                        builder:
-                            (context) => IconSelectDialog(
-                              account: selectedAccount.value!,
-                            ),
+                        builder: (context) =>
+                            IconSelectDialog(account: selectedAccount.value!),
                       );
                     },
                     icon: const Icon(Icons.navigate_next),
@@ -339,8 +335,8 @@ class TabSettingsPage extends HookConsumerWidget {
               CheckboxListTile(
                 title: Text(S.of(context).displayRenotes),
                 value: renoteDisplay.value,
-                onChanged:
-                    (value) => renoteDisplay.value = !renoteDisplay.value,
+                onChanged: (value) =>
+                    renoteDisplay.value = !renoteDisplay.value,
               ),
               if (availableIncludeReply)
                 CheckboxListTile(
@@ -437,11 +433,10 @@ class TabSettingsPage extends HookConsumerWidget {
                       return;
                     }
 
-                    final list =
-                        ref
-                            .read(tabSettingsRepositoryProvider)
-                            .tabSettings
-                            .toList();
+                    final list = ref
+                        .read(tabSettingsRepositoryProvider)
+                        .tabSettings
+                        .toList();
                     final newTabSetting = TabSetting(
                       icon: icon,
                       tabType: tabType,

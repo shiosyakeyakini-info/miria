@@ -1,5 +1,5 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/note_repository.dart";
@@ -78,8 +78,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     }
 
     try {
-      final meta =
-          await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
+      final meta = await ref
+          .read(misskeyWithoutAccountProvider(remoteHost))
+          .meta();
       final remoteResponse = await ref
           .read(misskeyWithoutAccountProvider(remoteHost))
           .users
@@ -206,10 +207,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
       await ref.read(appRouterProvider).maybePop();
       return null;
     }
-    final expiresDate =
-        expires == Expire.indefinite
-            ? null
-            : DateTime.now().add(expires.expires!);
+    final expiresDate = expires == Expire.indefinite
+        ? null
+        : DateTime.now().add(expires.expires!);
 
     return await _dialog.guard(() async {
       await _postMisskey.mute.create(

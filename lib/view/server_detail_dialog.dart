@@ -5,9 +5,9 @@ import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/socket_timeline_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -22,15 +22,17 @@ part "server_detail_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
 Future<int> _onlineCounts(Ref ref) async {
-  final onlineUserCountsResponse =
-      await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
+  final onlineUserCountsResponse = await ref
+      .read(misskeyGetContextProvider)
+      .getOnlineUsersCount();
   return onlineUserCountsResponse.count;
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
 Future<int> _totalMemories(Ref ref) async {
-  final serverInfoResponse =
-      await ref.read(misskeyGetContextProvider).serverInfo();
+  final serverInfoResponse = await ref
+      .read(misskeyGetContextProvider)
+      .serverInfo();
   return serverInfoResponse.mem.total;
 }
 
@@ -177,8 +179,9 @@ class ServerDetailDialog extends HookConsumerWidget
                                   text:
                                       ((currentStat.cpu * 10000).toInt() / 100)
                                           .toString(),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
                                 ),
                                 TextSpan(
                                   text: " %",
@@ -189,14 +192,13 @@ class ServerDetailDialog extends HookConsumerWidget
                           ),
                         if (logged.value.isNotEmpty)
                           Chart(
-                            data:
-                                logged.value
-                                    .skip(max(0, logged.value.length - 41))
-                                    .mapIndexed(
-                                      (index, element) =>
-                                          FlSpot(index.toDouble(), element.cpu),
-                                    )
-                                    .toList(),
+                            data: logged.value
+                                .skip(max(0, logged.value.length - 41))
+                                .mapIndexed(
+                                  (index, element) =>
+                                      FlSpot(index.toDouble(), element.cpu),
+                                )
+                                .toList(),
                           ),
                       ],
                     ),
@@ -216,8 +218,9 @@ class ServerDetailDialog extends HookConsumerWidget
                                   text: format(
                                     currentStat.mem.used / totalMemories,
                                   ),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
                                 ),
                                 TextSpan(
                                   text: " %",
@@ -228,16 +231,15 @@ class ServerDetailDialog extends HookConsumerWidget
                           ),
                         if (totalMemories != null && logged.value.isNotEmpty)
                           Chart(
-                            data:
-                                logged.value
-                                    .skip(max(0, logged.value.length - 41))
-                                    .mapIndexed(
-                                      (index, element) => FlSpot(
-                                        index.toDouble(),
-                                        element.mem.used / totalMemories,
-                                      ),
-                                    )
-                                    .toList(),
+                            data: logged.value
+                                .skip(max(0, logged.value.length - 41))
+                                .mapIndexed(
+                                  (index, element) => FlSpot(
+                                    index.toDouble(),
+                                    element.mem.used / totalMemories,
+                                  ),
+                                )
+                                .toList(),
                           ),
                       ],
                     ),
@@ -259,8 +261,9 @@ class ServerDetailDialog extends HookConsumerWidget
                               children: [
                                 TextSpan(
                                   text: ping.format(),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
                                 ),
                                 TextSpan(
                                   text: " ${S.of(context).milliSeconds}",
@@ -269,8 +272,8 @@ class ServerDetailDialog extends HookConsumerWidget
                                 WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
                                   child: IconButton(
-                                    onPressed:
-                                        () => ref.invalidate(_pingProvider),
+                                    onPressed: () =>
+                                        ref.invalidate(_pingProvider),
                                     icon: const Icon(Icons.refresh),
                                   ),
                                 ),

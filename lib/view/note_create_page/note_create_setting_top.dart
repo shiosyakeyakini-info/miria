@@ -77,47 +77,43 @@ class NoteCreateSettingTop extends ConsumerWidget {
         ),
         Expanded(child: Container()),
         Builder(
-          builder:
-              (context2) => IconButton(
-                onPressed: () async {
-                  final result = await showModalBottomSheet<NoteVisibility?>(
-                    context: context2,
-                    builder:
-                        (context3) => NoteVisibilityDialog(
-                          account: ref.read(accountContextProvider).postAccount,
-                        ),
-                  );
-                  if (result != null) {
-                    if (result == NoteVisibility.public &&
-                        !await ref
-                            .read(noteCreateNotifierProvider.notifier)
-                            .validateNoteVisibility(NoteVisibility.public)) {
-                      return;
-                    }
+          builder: (context2) => IconButton(
+            onPressed: () async {
+              final result = await showModalBottomSheet<NoteVisibility?>(
+                context: context2,
+                builder: (context3) => NoteVisibilityDialog(
+                  account: ref.read(accountContextProvider).postAccount,
+                ),
+              );
+              if (result != null) {
+                if (result == NoteVisibility.public &&
+                    !await ref
+                        .read(noteCreateNotifierProvider.notifier)
+                        .validateNoteVisibility(NoteVisibility.public)) {
+                  return;
+                }
 
-                    notifier.setNoteVisibility(result);
-                  }
-                },
-                icon: Icon(resolveVisibilityIcon(noteVisibility)),
-              ),
+                notifier.setNoteVisibility(result);
+              }
+            },
+            icon: Icon(resolveVisibilityIcon(noteVisibility)),
+          ),
         ),
         IconButton(
           onPressed: () async => notifier.toggleLocalOnly(),
           icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket),
         ),
         Builder(
-          builder:
-              (context2) => IconButton(
-                onPressed: () async {
-                  final result =
-                      await showModalBottomSheet<ReactionAcceptance?>(
-                        context: context2,
-                        builder: (context) => const ReactionAcceptanceDialog(),
-                      );
-                  notifier.setReactionAcceptance(result);
-                },
-                icon: AcceptanceIcon(acceptance: reactionAcceptance),
-              ),
+          builder: (context2) => IconButton(
+            onPressed: () async {
+              final result = await showModalBottomSheet<ReactionAcceptance?>(
+                context: context2,
+                builder: (context) => const ReactionAcceptanceDialog(),
+              );
+              notifier.setReactionAcceptance(result);
+            },
+            icon: AcceptanceIcon(acceptance: reactionAcceptance),
+          ),
         ),
       ],
     );

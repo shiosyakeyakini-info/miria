@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -78,8 +78,8 @@ class FederationAnnouncements extends HookConsumerWidget {
                   .announcements(request);
               return response.toList();
             },
-            itemBuilder:
-                (context, data) => Announcement(initialData: data, host: host),
+            itemBuilder: (context, data) =>
+                Announcement(initialData: data, host: host),
           ),
         ),
       ],
@@ -108,14 +108,12 @@ class Announcement extends HookConsumerWidget {
         final isConfirmed = await ref
             .read(dialogStateNotifierProvider.notifier)
             .showDialog(
-              message:
-                  (context) =>
-                      S.of(context).confirmAnnouncementsRead(data.value.title),
-              actions:
-                  (context) => [
-                    S.of(context).readAnnouncement,
-                    S.of(context).didNotReadAnnouncement,
-                  ],
+              message: (context) =>
+                  S.of(context).confirmAnnouncementsRead(data.value.title),
+              actions: (context) => [
+                S.of(context).readAnnouncement,
+                S.of(context).didNotReadAnnouncement,
+              ],
             );
         if (isConfirmed != 0) return;
       }
@@ -207,8 +205,6 @@ class AnnouncementIcon extends StatelessWidget {
         return const Icon(Icons.error, color: Colors.red);
       case AnnouncementIconType.success:
         return const Icon(Icons.check, color: Colors.blue);
-      default:
-        return const SizedBox.shrink();
     }
   }
 }

@@ -1,9 +1,8 @@
 import "package:auto_route/auto_route.dart";
-import "package:dio/dio.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
@@ -47,11 +46,10 @@ class _NotesClipsNotifier extends _$NotesClipsNotifier {
 class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   @override
   Future<List<(Clip, bool)>> build(String noteId) async {
-    final (userClips, noteClips) =
-        await (
-          ref.watch(clipsNotifierProvider.future),
-          ref.watch(_notesClipsNotifierProvider(noteId).future),
-        ).wait;
+    final (userClips, noteClips) = await (
+      ref.watch(clipsNotifierProvider.future),
+      ref.watch(_notesClipsNotifierProvider(noteId).future),
+    ).wait;
 
     return [
       for (final userClip in userClips)
@@ -74,11 +72,10 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
               .read(dialogStateNotifierProvider.notifier)
               .showDialog(
                 message: (context) => S.of(context).alreadyAddedClip,
-                actions:
-                    (context) => [
-                      S.of(context).deleteClip,
-                      S.of(context).noneAction,
-                    ],
+                actions: (context) => [
+                  S.of(context).deleteClip,
+                  S.of(context).noneAction,
+                ],
               );
           if (confirm == 0) {
             await removeFromClip(clip);
@@ -139,10 +136,9 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           if (index < value.length) {
             final (clip, isClipped) = value[index];
             return ListTile(
-              leading:
-                  isClipped
-                      ? const Icon(Icons.check)
-                      : SizedBox(width: Theme.of(context).iconTheme.size),
+              leading: isClipped
+                  ? const Icon(Icons.check)
+                  : SizedBox(width: Theme.of(context).iconTheme.size),
               onTap: () async {
                 if (isClipped) {
                   await ref.read(notifier).removeFromClip(clip);

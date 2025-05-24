@@ -30,24 +30,21 @@ _AccountSettings _$AccountSettingsFromJson(
   iCacheStrategy:
       $enumDecodeNullable(_$CacheStrategyEnumMap, json['iCacheStrategy']) ??
       CacheStrategy.whenTabChange,
-  latestICached:
-      json['latestICached'] == null
-          ? null
-          : DateTime.parse(json['latestICached'] as String),
+  latestICached: json['latestICached'] == null
+      ? null
+      : DateTime.parse(json['latestICached'] as String),
   emojiCacheStrategy:
       $enumDecodeNullable(_$CacheStrategyEnumMap, json['emojiCacheStrategy']) ??
       CacheStrategy.whenLaunch,
-  latestEmojiCached:
-      json['latestEmojiCached'] == null
-          ? null
-          : DateTime.parse(json['latestEmojiCached'] as String),
+  latestEmojiCached: json['latestEmojiCached'] == null
+      ? null
+      : DateTime.parse(json['latestEmojiCached'] as String),
   metaChacheStrategy:
       $enumDecodeNullable(_$CacheStrategyEnumMap, json['metaChacheStrategy']) ??
       CacheStrategy.whenOneDay,
-  latestMetaCached:
-      json['latestMetaCached'] == null
-          ? null
-          : DateTime.parse(json['latestMetaCached'] as String),
+  latestMetaCached: json['latestMetaCached'] == null
+      ? null
+      : DateTime.parse(json['latestMetaCached'] as String),
   forceShowAd: json['forceShowAd'] as bool? ?? false,
 );
 

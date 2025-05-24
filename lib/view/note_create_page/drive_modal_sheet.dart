@@ -1,6 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 enum DriveModalSheetReturnValue { upload, drive }
 
@@ -15,8 +15,8 @@ class DriveModalSheet extends StatelessWidget {
         ListTile(
           title: Text(S.of(context).uploadFile),
           leading: const Icon(Icons.upload),
-          onTap:
-              () async => context.maybePop(DriveModalSheetReturnValue.upload),
+          onTap: () async =>
+              context.maybePop(DriveModalSheetReturnValue.upload),
         ),
         ListTile(
           title: Text(S.of(context).fromDrive),

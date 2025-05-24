@@ -92,16 +92,15 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          error != null
-              ? Text(error.toString())
-              : const Center(
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator.adaptive(),
-                ),
+      body: error != null
+          ? Text(error.toString())
+          : const Center(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator.adaptive(),
               ),
+            ),
     );
   }
 }

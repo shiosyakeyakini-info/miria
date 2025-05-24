@@ -148,17 +148,15 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
     final removedPaddingImage = await ImageEditor.editImage(
       image: resultImage,
-      imageEditorOption:
-          ImageEditorOption()..addOptions([
-            ClipOption(
-              x: padding + (state.defaultSize.width - state.cropSize.width) / 2,
-              y:
-                  padding +
-                  (state.defaultSize.height - state.cropSize.height) / 2,
-              width: state.cropSize.width,
-              height: state.cropSize.height,
-            ),
-          ]),
+      imageEditorOption: ImageEditorOption()
+        ..addOptions([
+          ClipOption(
+            x: padding + (state.defaultSize.width - state.cropSize.width) / 2,
+            y: padding + (state.defaultSize.height - state.cropSize.height) / 2,
+            width: state.cropSize.width,
+            height: state.cropSize.height,
+          ),
+        ]),
     );
     return removedPaddingImage;
   }
@@ -311,23 +309,20 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
     if (editedImage == null) return;
     final previewImage = await ImageEditor.editImage(
       image: editedImage,
-      imageEditorOption:
-          ImageEditorOption()
-            ..addOption(const ScaleOption(300, 300, keepRatio: true)),
+      imageEditorOption: ImageEditorOption()
+        ..addOption(const ScaleOption(300, 300, keepRatio: true)),
     );
     if (previewImage == null) return;
-    final result =
-        [
-          for (final preset in ColorFilterPresets().presets)
-            ColorFilterPreview(
-              name: preset.name,
-              image: await ImageEditor.editImage(
-                image: previewImage,
-                imageEditorOption:
-                    ImageEditorOption()..addOptions(preset.option),
-              ),
-            ),
-        ].whereNotNull();
+    final result = [
+      for (final preset in ColorFilterPresets().presets)
+        ColorFilterPreview(
+          name: preset.name,
+          image: await ImageEditor.editImage(
+            image: previewImage,
+            imageEditorOption: ImageEditorOption()..addOptions(preset.option),
+          ),
+        ),
+    ].whereNotNull();
 
     state = state.copyWith(colorFilterPreviewImages: result.toList());
   }
@@ -335,9 +330,8 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
   /// 画像の色調補正を設定する
   Future<void> selectColorFilter(String name) async {
     if (state.adaptivePresets.any((element) => element == name)) {
-      final list =
-          state.adaptivePresets.toList()
-            ..removeWhere((element) => element == name);
+      final list = state.adaptivePresets.toList()
+        ..removeWhere((element) => element == name);
       await draw(state.copyWith(adaptivePresets: list));
     } else {
       await draw(

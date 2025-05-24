@@ -6,9 +6,9 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -170,8 +170,10 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
         .read(dialogStateNotifierProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDelete,
-          actions:
-              (context) => [S.of(context).doDeleting, S.of(context).cancel],
+          actions: (context) => [
+            S.of(context).doDeleting,
+            S.of(context).cancel,
+          ],
         );
     if (confirm != 0) return;
     state = state.copyWith(delete: const AsyncLoading());
@@ -193,8 +195,10 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
         .read(dialogStateNotifierProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDeletedRecreate,
-          actions:
-              (context) => [S.of(context).doDeleting, S.of(context).cancel],
+          actions: (context) => [
+            S.of(context).doDeleting,
+            S.of(context).cancel,
+          ],
         );
     if (confirm != 0) return false;
     state = state.copyWith(deleteRecreate: const AsyncLoading());
@@ -277,13 +281,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: Text(S.of(context).detail),
-          onTap:
-              () async => context.pushRoute(
-                NoteDetailRoute(
-                  note: targetNote,
-                  accountContext: accountContext,
-                ),
-              ),
+          onTap: () async => context.pushRoute(
+            NoteDetailRoute(note: targetNote, accountContext: accountContext),
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.copy),
@@ -304,9 +304,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               Navigator.of(context).pop();
               await showModalBottomSheet(
                 context: context,
-                builder:
-                    (context) =>
-                        CopyNoteModalSheet(note: targetNote.text ?? ""),
+                builder: (context) =>
+                    CopyNoteModalSheet(note: targetNote.text ?? ""),
               );
             },
             icon: const Icon(Icons.edit_note),
@@ -337,8 +336,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           leading: const Icon(Icons.person),
           title: Text(S.of(context).user),
           trailing: const Icon(Icons.keyboard_arrow_right),
-          onTap:
-              () async => ref.read(targetNoteNotifierProvider.notifier).user(),
+          onTap: () async =>
+              ref.read(targetNoteNotifierProvider.notifier).user(),
         ),
         ListTile(
           leading: const Icon(Icons.open_in_browser),
@@ -374,10 +373,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           ListTile(
             leading: const Icon(Icons.open_in_new),
             title: Text(S.of(context).openInAnotherAccount),
-            onTap:
-                () async => ref
-                    .read(misskeyNoteNotifierProvider.notifier)
-                    .openNoteInOtherAccount(targetNote),
+            onTap: () async => ref
+                .read(misskeyNoteNotifierProvider.notifier)
+                .openNoteInOtherAccount(targetNote),
           ),
         ListTile(
           leading: const Icon(Icons.share),
@@ -440,13 +438,12 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
         ListTile(
           leading: const Icon(Icons.repeat_rounded),
           title: Text(S.of(context).notesAfterRenote),
-          onTap:
-              () async => context.pushRoute(
-                NotesAfterRenoteRoute(
-                  note: targetNote,
-                  accountContext: accountContext,
-                ),
-              ),
+          onTap: () async => context.pushRoute(
+            NotesAfterRenoteRoute(
+              note: targetNote,
+              accountContext: accountContext,
+            ),
+          ),
         ),
         if (accountContext.isSame &&
             baseNote.user.host == null &&
@@ -484,10 +481,9 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
             leading: const Icon(Icons.edit_outlined),
             title: Text(S.of(context).deletedRecreate),
             onTap: () async {
-              final result =
-                  await ref
-                      .read(targetNoteNotifierProvider.notifier)
-                      .deleteRecreate();
+              final result = await ref
+                  .read(targetNoteNotifierProvider.notifier)
+                  .deleteRecreate();
               if (!result || !context.mounted) return;
               Navigator.of(context).pop();
               await context.pushRoute(

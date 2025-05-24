@@ -70,10 +70,9 @@ class ChannelSearchList extends ConsumerWidget {
       itemBuilder: (context, item) {
         return CommunityChannelView(
           channel: item,
-          onTap:
-              onChannelSelected != null
-                  ? () => onChannelSelected?.call(item)
-                  : null,
+          onTap: onChannelSelected != null
+              ? () => onChannelSelected?.call(item)
+              : null,
         );
       },
     );

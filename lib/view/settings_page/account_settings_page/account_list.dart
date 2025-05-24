@@ -2,8 +2,8 @@ import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
@@ -59,11 +59,10 @@ class AccountListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed:
-                    () async => await context.router.pushAndPopUntil(
-                      const SplashRoute(),
-                      predicate: (_) => false,
-                    ),
+                onPressed: () async => await context.router.pushAndPopUntil(
+                  const SplashRoute(),
+                  predicate: (_) => false,
+                ),
                 child: Text(S.of(context).quitAccountSettings),
               ),
             ),
@@ -107,28 +106,27 @@ class AccountListItem extends ConsumerWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder:
-                    (context) => AlertDialog(
-                      content: Text(S.of(context).confirmDelete),
-                      actions: [
-                        OutlinedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(S.of(context).cancel),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await ref
-                                .read(accountRepositoryProvider.notifier)
-                                .remove(account);
-                            if (!context.mounted) return;
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(S.of(context).doDeleting),
-                        ),
-                      ],
+                builder: (context) => AlertDialog(
+                  content: Text(S.of(context).confirmDelete),
+                  actions: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(S.of(context).cancel),
                     ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await ref
+                            .read(accountRepositoryProvider.notifier)
+                            .remove(account);
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(S.of(context).doDeleting),
+                    ),
+                  ],
+                ),
               );
             },
           ),

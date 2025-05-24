@@ -4,8 +4,8 @@ import "package:cached_network_image/cached_network_image.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/summaly_result.dart";
 import "package:miria/providers.dart";
@@ -28,19 +28,15 @@ class _Summaly extends FamilyAsyncNotifier<SummalyResult, (String, String)> {
     final dio = ref.read(dioProvider);
     final url = Uri.parse(link);
     // https://github.com/misskey-dev/misskey/blob/2023.9.3/packages/frontend/src/components/MkUrlPreview.vue#L141-L145
-    final replacedUrl =
-        url
-            .replace(
-              host:
-                  url.host == "music.youtube.com" &&
-                          [
-                            "watch",
-                            "channel",
-                          ].contains(url.pathSegments.firstOrNull)
-                      ? "www.youtube.com"
-                      : null,
-            )
-            .removeFragment();
+    final replacedUrl = url
+        .replace(
+          host:
+              url.host == "music.youtube.com" &&
+                  ["watch", "channel"].contains(url.pathSegments.firstOrNull)
+              ? "www.youtube.com"
+              : null,
+        )
+        .removeFragment();
     final response = await dio.getUri<Map<String, dynamic>>(
       Uri.https(host, "url", {
         "url": replacedUrl.toString(),
@@ -68,12 +64,8 @@ class LinkPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final summalyResult = ref.watch(_summalyProvider((account.host, link)));
     return summalyResult.maybeWhen(
-      data:
-          (summalyResult) => LinkPreviewItem(
-            link: link,
-            host: host,
-            summalyResult: summalyResult,
-          ),
+      data: (summalyResult) =>
+          LinkPreviewItem(link: link, host: host, summalyResult: summalyResult),
       orElse: () => LinkPreviewTile(link: link, host: host),
     );
   }
@@ -158,10 +150,9 @@ class _LinkPreviewItemState extends State<LinkPreviewItem> {
                 lang: "ja",
               ),
             OutlinedButton.icon(
-              onPressed:
-                  () => setState(() {
-                    isPlayerOpen = false;
-                  }),
+              onPressed: () => setState(() {
+                isPlayerOpen = false;
+              }),
               icon: const Icon(Icons.close),
               label: Text(
                 playerUrl != null
@@ -200,10 +191,9 @@ class LinkPreviewTile extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
-        onTap:
-            () async => await const LinkNavigator()
-                .onTapLink(context, ref, link, host)
-                .expectFailure(context),
+        onTap: () async => await const LinkNavigator()
+            .onTapLink(context, ref, link, host)
+            .expectFailure(context),
         onLongPress: () async {
           await Clipboard.setData(ClipboardData(text: link));
           if (!context.mounted) return;

@@ -4,7 +4,6 @@ import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:dotted_border/dotted_border.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart" as parser;
@@ -14,6 +13,7 @@ import "package:miria/extensions/list_mfm_node_extension.dart";
 import "package:miria/extensions/note_extension.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/extensions/user_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
@@ -212,12 +212,11 @@ class MisskeyNote extends HookConsumerWidget {
     final renoteId = note.renote?.id;
 
     final isEmptyRenote = latestActualNote?.isEmptyRenote == true;
-    final renoteNote =
-        isEmptyRenote
-            ? ref.watch(
-              notesProvider(account).select((value) => value.notes[renoteId]),
-            )
-            : null;
+    final renoteNote = isEmptyRenote
+        ? ref.watch(
+            notesProvider(account).select((value) => value.notes[renoteId]),
+          )
+        : null;
 
     final displayNote = renoteNote ?? latestActualNote;
 
@@ -233,22 +232,20 @@ class MisskeyNote extends HookConsumerWidget {
       [displayNote.updatedAt, displayNote.text],
     );
 
-    final noteStatus =
-        ref.watch(
-          notesProvider(account).select((value) => value.noteStatuses[note.id]),
-        )!;
+    final noteStatus = ref.watch(
+      notesProvider(account).select((value) => value.noteStatuses[note.id]),
+    )!;
 
     if (noteStatus.isIncludeMuteWord && !noteStatus.isMuteOpened) {
       return SizedBox(
         width: double.infinity,
         child: GestureDetector(
-          onTap:
-              () => ref
-                  .read(notesProvider(account))
-                  .updateNoteStatus(
-                    note.id,
-                    (status) => status.copyWith(isMuteOpened: true),
-                  ),
+          onTap: () => ref
+              .read(notesProvider(account))
+              .updateNoteStatus(
+                note.id,
+                (status) => status.copyWith(isMuteOpened: true),
+              ),
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0),
             child: Text(
@@ -338,126 +335,131 @@ class MisskeyNote extends HookConsumerWidget {
           .take(isAllReactionVisible.value ? displayNote.reactions.length : 16);
     }, [displayNote.reactions, isAllReactionVisible.value]);
 
-    final reactionControl = useCallback<
-      Future<void> Function({MisskeyEmojiData? requestEmoji})
-    >(({requestEmoji}) async {
-      // 他のサーバーからログインしている場合は不可
-      if (!ref.read(accountContextProvider).isSame) return;
+    final reactionControl =
+        useCallback<Future<void> Function({MisskeyEmojiData? requestEmoji})>(({
+          requestEmoji,
+        }) async {
+          // 他のサーバーからログインしている場合は不可
+          if (!ref.read(accountContextProvider).isSame) return;
 
-      final account = ref.read(accountContextProvider).postAccount;
-      final isLikeOnly =
-          displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
-          (displayNote.reactionAcceptance ==
-                  ReactionAcceptance.likeOnlyForRemote &&
-              displayNote.user.host != null);
-      // すでにリアクション済み
-      if (displayNote.myReaction != null && requestEmoji != null) return;
+          final account = ref.read(accountContextProvider).postAccount;
+          final isLikeOnly =
+              displayNote.reactionAcceptance == ReactionAcceptance.likeOnly ||
+              (displayNote.reactionAcceptance ==
+                      ReactionAcceptance.likeOnlyForRemote &&
+                  displayNote.user.host != null);
+          // すでにリアクション済み
+          if (displayNote.myReaction != null && requestEmoji != null) return;
 
-      // すでにリアクション済みで、リアクション取り消し
-      if (displayNote.myReaction != null) {
-        final dialogValue = await ref
-            .read(dialogStateNotifierProvider.notifier)
-            .showDialog(
-              message: (context) => S.of(context).confirmDeleteReaction,
-              actions:
-                  (context) => [
+          // すでにリアクション済みで、リアクション取り消し
+          if (displayNote.myReaction != null) {
+            final dialogValue = await ref
+                .read(dialogStateNotifierProvider.notifier)
+                .showDialog(
+                  message: (context) => S.of(context).confirmDeleteReaction,
+                  actions: (context) => [
                     S.of(context).cancelReaction,
                     S.of(context).cancel,
                   ],
-            );
-        if (dialogValue != 0) return;
+                );
+            if (dialogValue != 0) return;
 
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-          final notesRepository = ref.read(notesWithProvider);
-          await ref
-              .read(misskeyPostContextProvider)
-              .notes
-              .reactions
-              .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
-          if (account.host == "misskey.io" || account.host == "nijimiss.moe") {
+            await ref.read(dialogStateNotifierProvider.notifier).guard(
+              () async {
+                final notesRepository = ref.read(notesWithProvider);
+                await ref
+                    .read(misskeyPostContextProvider)
+                    .notes
+                    .reactions
+                    .delete(
+                      NotesReactionsDeleteRequest(noteId: displayNote.id),
+                    );
+                if (account.host == "misskey.io" ||
+                    account.host == "nijimiss.moe") {
+                  await Future.delayed(
+                    const Duration(milliseconds: misskeyHQReactionDelay),
+                  );
+                }
+
+                await notesRepository.refresh(displayNote.id);
+              },
+            );
+
+            return;
+          }
+
+          // カスタム絵文字押下でのリアクション無効
+          if (requestEmoji != null &&
+              !ref
+                  .read(generalSettingsRepositoryProvider)
+                  .settings
+                  .enableDirectReaction) {
+            return;
+          }
+          // いいねのみでカスタム絵文字押下
+          if (requestEmoji != null && isLikeOnly) return;
+          if (displayNote.myReaction != null && requestEmoji == null) {
+            if (await SimpleConfirmDialog.show(
+                  context: context,
+                  message: S.of(context).confirmDeleteReaction,
+                  primary: S.of(context).cancelReaction,
+                  secondary: S.of(context).cancel,
+                ) !=
+                true) {
+              return;
+            }
+            final notesRepository = ref.read(notesProvider(account));
+
+            await ref
+                .read(misskeyPostContextProvider)
+                .notes
+                .reactions
+                .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
+            if (account.host == "misskey.io") {
+              await Future.delayed(
+                const Duration(milliseconds: misskeyHQReactionDelay),
+              );
+            }
+            await notesRepository.refresh(displayNote.id);
+            return;
+          }
+          final misskey = ref.read(misskeyPostContextProvider);
+          final note = ref.read(notesProvider(account));
+          final MisskeyEmojiData? selectedEmoji;
+          if (isLikeOnly) {
+            selectedEmoji = const UnicodeEmojiData(char: "❤️");
+          } else if (requestEmoji == null) {
+            selectedEmoji = await ref
+                .read(appRouterProvider)
+                .push(
+                  ReactionPickerRoute(
+                    account: account,
+                    isAcceptSensitive:
+                        displayNote.reactionAcceptance !=
+                            ReactionAcceptance.nonSensitiveOnly &&
+                        displayNote.reactionAcceptance !=
+                            ReactionAcceptance
+                                .nonSensitiveOnlyForLocalLikeOnlyForRemote,
+                  ),
+                );
+          } else {
+            selectedEmoji = requestEmoji;
+          }
+
+          if (selectedEmoji == null) return;
+          await misskey.notes.reactions.create(
+            NotesReactionsCreateRequest(
+              noteId: displayNote.id,
+              reaction: ":${selectedEmoji.baseName}:",
+            ),
+          );
+          if (account.host == "misskey.io") {
             await Future.delayed(
               const Duration(milliseconds: misskeyHQReactionDelay),
             );
           }
-
-          await notesRepository.refresh(displayNote.id);
-        });
-
-        return;
-      }
-
-      // カスタム絵文字押下でのリアクション無効
-      if (requestEmoji != null &&
-          !ref
-              .read(generalSettingsRepositoryProvider)
-              .settings
-              .enableDirectReaction) {
-        return;
-      }
-      // いいねのみでカスタム絵文字押下
-      if (requestEmoji != null && isLikeOnly) return;
-      if (displayNote.myReaction != null && requestEmoji == null) {
-        if (await SimpleConfirmDialog.show(
-              context: context,
-              message: S.of(context).confirmDeleteReaction,
-              primary: S.of(context).cancelReaction,
-              secondary: S.of(context).cancel,
-            ) !=
-            true) {
-          return;
-        }
-        final notesRepository = ref.read(notesProvider(account));
-
-        await ref
-            .read(misskeyPostContextProvider)
-            .notes
-            .reactions
-            .delete(NotesReactionsDeleteRequest(noteId: displayNote.id));
-        if (account.host == "misskey.io") {
-          await Future.delayed(
-            const Duration(milliseconds: misskeyHQReactionDelay),
-          );
-        }
-        await notesRepository.refresh(displayNote.id);
-        return;
-      }
-      final misskey = ref.read(misskeyPostContextProvider);
-      final note = ref.read(notesProvider(account));
-      final MisskeyEmojiData? selectedEmoji;
-      if (isLikeOnly) {
-        selectedEmoji = const UnicodeEmojiData(char: "❤️");
-      } else if (requestEmoji == null) {
-        selectedEmoji = await ref
-            .read(appRouterProvider)
-            .push(
-              ReactionPickerRoute(
-                account: account,
-                isAcceptSensitive:
-                    displayNote.reactionAcceptance !=
-                        ReactionAcceptance.nonSensitiveOnly &&
-                    displayNote.reactionAcceptance !=
-                        ReactionAcceptance
-                            .nonSensitiveOnlyForLocalLikeOnlyForRemote,
-              ),
-            );
-      } else {
-        selectedEmoji = requestEmoji;
-      }
-
-      if (selectedEmoji == null) return;
-      await misskey.notes.reactions.create(
-        NotesReactionsCreateRequest(
-          noteId: displayNote.id,
-          reaction: ":${selectedEmoji.baseName}:",
-        ),
-      );
-      if (account.host == "misskey.io") {
-        await Future.delayed(
-          const Duration(milliseconds: misskeyHQReactionDelay),
-        );
-      }
-      await note.refresh(displayNote.id);
-    }, [displayNote]);
+          await note.refresh(displayNote.id);
+        }, [displayNote]);
 
     final toggleReactionedRenote = useCallback(() {
       ref
@@ -490,12 +492,9 @@ class MisskeyNote extends HookConsumerWidget {
     }) {
       return MediaQuery(
         data: MediaQuery.of(context).copyWith(
-          textScaler:
-              recursive > 1
-                  ? TextScaler.linear(
-                    MediaQuery.textScalerOf(context).scale(0.7),
-                  )
-                  : null,
+          textScaler: recursive > 1
+              ? TextScaler.linear(MediaQuery.textScalerOf(context).scale(0.7))
+              : null,
         ),
         child: RepaintBoundary(
           key: globalKey.value,
@@ -507,27 +506,25 @@ class MisskeyNote extends HookConsumerWidget {
                 top: MediaQuery.textScalerOf(context).scale(5),
                 bottom: MediaQuery.textScalerOf(context).scale(5),
               ),
-              decoration:
-                  isDisplayBorder
-                      ? BoxDecoration(
-                        //TODO: 動いていないっぽい
-                        // color: widget.recursive == 1 &&
-                        //         ref.read(noteModalSheetSharingModeProviding)
-                        //     ? Theme.of(context).scaffoldBackgroundColor
-                        //     : null,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                            width: 0.5,
-                          ),
+              decoration: isDisplayBorder
+                  ? BoxDecoration(
+                      //TODO: 動いていないっぽい
+                      // color: widget.recursive == 1 &&
+                      //         ref.read(noteModalSheetSharingModeProviding)
+                      //     ? Theme.of(context).scaffoldBackgroundColor
+                      //     : null,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 0.5,
                         ),
-                      )
-                      : BoxDecoration(
-                        color:
-                            recursive == 1
-                                ? Theme.of(context).scaffoldBackgroundColor
-                                : null,
                       ),
+                    )
+                  : BoxDecoration(
+                      color: recursive == 1
+                          ? Theme.of(context).scaffoldBackgroundColor
+                          : null,
+                    ),
               child: child,
             ),
           ),
@@ -565,10 +562,9 @@ class MisskeyNote extends HookConsumerWidget {
               children: [
                 AvatarIcon(
                   user: displayNote.user,
-                  onTap:
-                      () async => ref
-                          .read(misskeyNoteNotifierProvider.notifier)
-                          .navigateToUserPage(displayNote.user),
+                  onTap: () async => ref
+                      .read(misskeyNoteNotifierProvider.notifier)
+                      .navigateToUserPage(displayNote.user),
                 ),
                 const Padding(padding: EdgeInsets.only(left: 10)),
                 Expanded(
@@ -589,15 +585,14 @@ class MisskeyNote extends HookConsumerWidget {
                           ),
                           if (displayNote.user.instance != null)
                             GestureDetector(
-                              onTap:
-                                  () async => context.pushRoute(
-                                    FederationRoute(
-                                      accountContext: ref.read(
-                                        accountContextProvider,
-                                      ),
-                                      host: displayNote.user.host!,
-                                    ),
+                              onTap: () async => context.pushRoute(
+                                FederationRoute(
+                                  accountContext: ref.read(
+                                    accountContextProvider,
                                   ),
+                                  host: displayNote.user.host!,
+                                ),
+                              ),
                               child: InkResponse(
                                 child: Text(
                                   displayNote.user.instance?.name ?? "",
@@ -612,11 +607,10 @@ class MisskeyNote extends HookConsumerWidget {
                           mfmText: displayNote.cw ?? "",
                           host: displayNote.user.host,
                           emoji: displayNote.emojis,
-                          isEnableAnimatedMFM:
-                              ref
-                                  .read(generalSettingsRepositoryProvider)
-                                  .settings
-                                  .enableAnimatedMFM,
+                          isEnableAnimatedMFM: ref
+                              .read(generalSettingsRepositoryProvider)
+                              .settings
+                              .enableAnimatedMFM,
                         ),
                         InNoteButton(
                           onPressed: toggleCwOpen,
@@ -651,13 +645,12 @@ class MisskeyNote extends HookConsumerWidget {
                               host: displayNote.user.host,
                               emoji: displayNote.emojis,
                               isNyaize: displayNote.user.isCat,
-                              isEnableAnimatedMFM:
-                                  ref
-                                      .read(generalSettingsRepositoryProvider)
-                                      .settings
-                                      .enableAnimatedMFM,
-                              onEmojiTap:
-                                  (emojiData) async => await reactionControl(
+                              isEnableAnimatedMFM: ref
+                                  .read(generalSettingsRepositoryProvider)
+                                  .settings
+                                  .enableAnimatedMFM,
+                              onEmojiTap: (emojiData) async =>
+                                  await reactionControl(
                                     requestEmoji: emojiData,
                                   ),
                               suffixSpan: [
@@ -714,10 +707,12 @@ class MisskeyNote extends HookConsumerWidget {
                               child: DottedBorder(
                                 options: RectDottedBorderOptions(
                                   color: AppTheme.of(context).renoteBorderColor,
-                                  strokeWidth:
-                                      AppTheme.of(context).renoteStrokeWidth,
-                                  dashPattern:
-                                      AppTheme.of(context).renoteDashPattern,
+                                  strokeWidth: AppTheme.of(
+                                    context,
+                                  ).renoteStrokeWidth,
+                                  dashPattern: AppTheme.of(
+                                    context,
+                                  ).renoteDashPattern,
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
@@ -756,8 +751,8 @@ class MisskeyNote extends HookConsumerWidget {
                                 displayNote.reactions.length > 16)
                               OutlinedButton(
                                 style: AppTheme.of(context).reactionButtonStyle,
-                                onPressed:
-                                    () => isAllReactionVisible.value = true,
+                                onPressed: () =>
+                                    isAllReactionVisible.value = true,
                                 child: Text(
                                   S
                                       .of(context)
@@ -772,21 +767,19 @@ class MisskeyNote extends HookConsumerWidget {
                         NoteChannelView(channel: displayNote.channel!),
                       if (!isReactionedRenote)
                         Row(
-                          mainAxisAlignment:
-                              !isPostAccountContext
-                                  ? MainAxisAlignment.end
-                                  : MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: !isPostAccountContext
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.spaceAround,
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             if (isPostAccountContext) ...[
                               TextButton.icon(
-                                onPressed:
-                                    () async => context.pushRoute(
-                                      NoteCreateRoute(
-                                        reply: displayNote,
-                                        initialAccount: account,
-                                      ),
-                                    ),
+                                onPressed: () async => context.pushRoute(
+                                  NoteCreateRoute(
+                                    reply: displayNote,
+                                    initialAccount: account,
+                                  ),
+                                ),
                                 style: const ButtonStyle(
                                   padding: WidgetStatePropertyAll(
                                     EdgeInsets.zero,
@@ -807,10 +800,9 @@ class MisskeyNote extends HookConsumerWidget {
                                   size: MediaQuery.textScalerOf(
                                     context,
                                   ).scale(16),
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).textTheme.bodySmall?.color,
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.color,
                                 ),
                               ),
                               RenoteButton(displayNote: displayNote),
@@ -820,17 +812,16 @@ class MisskeyNote extends HookConsumerWidget {
                               ),
                             ],
                             IconButton(
-                              onPressed:
-                                  () async => context.pushRoute(
-                                    NoteModalRoute(
-                                      baseNote: note,
-                                      targetNote: displayNote,
-                                      accountContext: ref.read(
-                                        accountContextProvider,
-                                      ),
-                                      noteBoundaryKey: globalKey.value,
-                                    ),
+                              onPressed: () async => context.pushRoute(
+                                NoteModalRoute(
+                                  baseNote: note,
+                                  targetNote: displayNote,
+                                  accountContext: ref.read(
+                                    accountContextProvider,
                                   ),
+                                  noteBoundaryKey: globalKey.value,
+                                ),
+                              ),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               style: const ButtonStyle(
@@ -845,10 +836,9 @@ class MisskeyNote extends HookConsumerWidget {
                                 size: MediaQuery.textScalerOf(
                                   context,
                                 ).scale(16),
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodySmall?.color,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall?.color,
                               ),
                             ),
                           ],
@@ -890,10 +880,9 @@ class NoteHeader1 extends ConsumerWidget {
             ),
           ),
         GestureDetector(
-          onTap:
-              () async => ref
-                  .read(misskeyNoteNotifierProvider.notifier)
-                  .navigateToNoteDetailPage(displayNote),
+          onTap: () async => ref
+              .read(misskeyNoteNotifierProvider.notifier)
+              .navigateToNoteDetailPage(displayNote),
           child: Text(
             displayNote.createdAt.differenceNow(context),
             textAlign: TextAlign.right,
@@ -939,20 +928,18 @@ class RenoteHeader extends ConsumerWidget {
         const Padding(padding: EdgeInsets.only(left: 10)),
         Expanded(
           child: GestureDetector(
-            onTap:
-                () async => ref
-                    .read(misskeyNoteNotifierProvider.notifier)
-                    .navigateToUserPage(note.user),
+            onTap: () async => ref
+                .read(misskeyNoteNotifierProvider.notifier)
+                .navigateToUserPage(note.user),
             child: SimpleMfmText(
               note.user.name ?? note.user.username,
               style: renoteTextStyle?.copyWith(fontWeight: FontWeight.bold),
               emojis: note.user.emojis,
               suffixSpan: [
                 TextSpan(
-                  text:
-                      note.user.acct == note.renote?.user.acct
-                          ? S.of(context).selfRenotedBy
-                          : S.of(context).renotedBy,
+                  text: note.user.acct == note.renote?.user.acct
+                      ? S.of(context).selfRenotedBy
+                      : S.of(context).renotedBy,
                   style: renoteTextStyle,
                 ),
               ],
@@ -1015,13 +1002,9 @@ class ChannelColorBarBox extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border(
-            left:
-                !hideColorBar && channelColor != null
-                    ? BorderSide(
-                      color: Color(0xFF000000 | channelColor),
-                      width: 4,
-                    )
-                    : BorderSide.none,
+            left: !hideColorBar && channelColor != null
+                ? BorderSide(color: Color(0xFF000000 | channelColor), width: 4)
+                : BorderSide.none,
           ),
         ),
         child: child,
@@ -1038,22 +1021,20 @@ class NoteChannelView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap:
-          () async => context.pushRoute(
-            ChannelDetailRoute(
-              accountContext: ref.read(accountContextProvider),
-              channelId: channel.id,
-            ),
-          ),
+      onTap: () async => context.pushRoute(
+        ChannelDetailRoute(
+          accountContext: ref.read(accountContextProvider),
+          channelId: channel.id,
+        ),
+      ),
       child: Row(
         children: [
           Icon(
             Icons.tv,
             size: Theme.of(context).textTheme.bodySmall?.fontSize,
-            color:
-                channel.color != null
-                    ? Color(0xFF000000 | channel.color!)
-                    : Theme.of(context).textTheme.bodySmall?.color,
+            color: channel.color != null
+                ? Color(0xFF000000 | channel.color!)
+                : Theme.of(context).textTheme.bodySmall?.color,
           ),
           const Padding(padding: EdgeInsets.only(left: 5)),
           Text(channel.name, style: Theme.of(context).textTheme.bodySmall),
@@ -1084,14 +1065,12 @@ class RenoteButton extends ConsumerWidget {
     }
 
     return TextButton.icon(
-      onPressed:
-          () async => context.pushRoute(
-            RenoteModalRoute(note: displayNote, account: account),
-          ),
-      onLongPress:
-          () async => context.pushRoute(
-            RenoteUserRoute(account: account, noteId: displayNote.id),
-          ),
+      onPressed: () async => context.pushRoute(
+        RenoteModalRoute(note: displayNote, account: account),
+      ),
+      onLongPress: () async => context.pushRoute(
+        RenoteUserRoute(account: account, noteId: displayNote.id),
+      ),
       icon: Icon(
         Icons.repeat_rounded,
         size: MediaQuery.textScalerOf(context).scale(16),

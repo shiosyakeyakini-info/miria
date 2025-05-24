@@ -27,25 +27,22 @@ class DialogScope extends ConsumerWidget {
           ),
         for (final dialog in dialogs)
           PopScope(
-            onPopInvoked:
-                (didPop) async => ref
-                    .read(dialogStateNotifierProvider.notifier)
-                    .completeDialog(dialog, null),
+            onPopInvoked: (didPop) async => ref
+                .read(dialogStateNotifierProvider.notifier)
+                .completeDialog(dialog, null),
             child: AlertDialog.adaptive(
-              content:
-                  dialog.isMFM
-                      ? AccountContextScope(
-                        context: dialog.accountContext!,
-                        child: Mfm(mfmText: dialog.message(context)),
-                      )
-                      : Text(dialog.message(context)),
+              content: dialog.isMFM
+                  ? AccountContextScope(
+                      context: dialog.accountContext!,
+                      child: Mfm(mfmText: dialog.message(context)),
+                    )
+                  : Text(dialog.message(context)),
               actions: [
                 for (final action in dialog.actions(context).indexed)
                   TextButton(
-                    onPressed:
-                        () => ref
-                            .read(dialogStateNotifierProvider.notifier)
-                            .completeDialog(dialog, action.$1),
+                    onPressed: () => ref
+                        .read(dialogStateNotifierProvider.notifier)
+                        .completeDialog(dialog, action.$1),
                     child: Text(action.$2),
                   ),
               ],

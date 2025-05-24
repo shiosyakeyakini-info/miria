@@ -15,14 +15,12 @@ class ChannelTrend extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureListView(
       future: ref.read(misskeyGetContextProvider).channels.featured(),
-      builder:
-          (context, item) => CommunityChannelView(
-            channel: item,
-            onTap:
-                onChannelSelected != null
-                    ? () => onChannelSelected?.call(item)
-                    : null,
-          ),
+      builder: (context, item) => CommunityChannelView(
+        channel: item,
+        onTap: onChannelSelected != null
+            ? () => onChannelSelected?.call(item)
+            : null,
+      ),
     );
   }
 }

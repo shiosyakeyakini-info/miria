@@ -19,14 +19,13 @@ class SimpleConfirmDialog extends StatelessWidget {
     Account? account,
   }) async => await showDialog(
     context: context,
-    builder:
-        (context) => SimpleConfirmDialog(
-          message: message,
-          primary: primary,
-          secondary: secondary,
-          isMfm: isMfm,
-          account: account,
-        ),
+    builder: (context) => SimpleConfirmDialog(
+      message: message,
+      primary: primary,
+      secondary: secondary,
+      isMfm: isMfm,
+      account: account,
+    ),
   );
 
   const SimpleConfirmDialog({

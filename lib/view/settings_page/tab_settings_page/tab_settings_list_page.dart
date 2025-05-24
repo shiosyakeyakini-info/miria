@@ -2,8 +2,8 @@ import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -16,14 +16,13 @@ class TabSettingsListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabSettings =
-        ref
-            .watch(
-              tabSettingsRepositoryProvider.select(
-                (repository) => repository.tabSettings,
-              ),
-            )
-            .toList();
+    final tabSettings = ref
+        .watch(
+          tabSettingsRepositoryProvider.select(
+            (repository) => repository.tabSettings,
+          ),
+        )
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -80,11 +79,10 @@ class TabSettingsListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed:
-                    () async => await context.router.pushAndPopUntil(
-                      const SplashRoute(),
-                      predicate: (_) => false,
-                    ),
+                onPressed: () async => await context.router.pushAndPopUntil(
+                  const SplashRoute(),
+                  predicate: (_) => false,
+                ),
                 child: Text(S.of(context).apply),
               ),
             ),

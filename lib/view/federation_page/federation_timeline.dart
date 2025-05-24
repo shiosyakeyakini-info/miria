@@ -41,11 +41,10 @@ class FederationTimeline extends ConsumerWidget {
           ref.read(notesWithProvider).registerAll(result);
           return result.toList();
         },
-        itemBuilder:
-            (context2, item) => Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: MisskeyNote(note: item),
-            ),
+        itemBuilder: (context2, item) => Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: MisskeyNote(note: item),
+        ),
       ),
     );
   }

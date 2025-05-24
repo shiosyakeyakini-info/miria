@@ -184,8 +184,10 @@ class MfmFnKeyboard extends ConsumerWidget {
     if (firstPeriodIndex < 0) {
       controller.insert(".${arg.name}");
     } else {
-      final lastArg =
-          textBeforeSelection.substring(firstPeriodIndex + 1).split(",").last;
+      final lastArg = textBeforeSelection
+          .substring(firstPeriodIndex + 1)
+          .split(",")
+          .last;
       final lastArgName = lastArg.split("=").first;
       if (mfmFn[mfmFnName]?.any((arg) => arg.name == lastArgName) ?? false) {
         controller.insert(",${arg.name}");
@@ -222,31 +224,29 @@ class MfmFnKeyboard extends ConsumerWidget {
 
     if (filteredArgs.isNotEmpty) {
       return Row(
-        children:
-            filteredArgs
-                .map(
-                  (arg) => CustomKeyboardButton(
-                    keyboard: arg.name,
-                    controller: controller,
-                    focusNode: focusNode,
-                    onTap: () async => insertMfmFnArg(arg),
-                  ),
-                )
-                .toList(),
+        children: filteredArgs
+            .map(
+              (arg) => CustomKeyboardButton(
+                keyboard: arg.name,
+                controller: controller,
+                focusNode: focusNode,
+                onTap: () async => insertMfmFnArg(arg),
+              ),
+            )
+            .toList(),
       );
     } else if (filteredNames.isNotEmpty) {
       return Row(
-        children:
-            filteredNames
-                .map(
-                  (name) => CustomKeyboardButton(
-                    keyboard: name,
-                    controller: controller,
-                    focusNode: focusNode,
-                    onTap: () async => insertMfmFnName(name),
-                  ),
-                )
-                .toList(),
+        children: filteredNames
+            .map(
+              (name) => CustomKeyboardButton(
+                keyboard: name,
+                controller: controller,
+                focusNode: focusNode,
+                onTap: () async => insertMfmFnName(name),
+              ),
+            )
+            .toList(),
       );
     } else {
       return BasicKeyboard(controller: controller, focusNode: focusNode);

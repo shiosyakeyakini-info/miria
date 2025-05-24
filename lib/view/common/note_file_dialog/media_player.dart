@@ -3,10 +3,10 @@ import "dart:io";
 import "dart:math";
 
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:media_kit/media_kit.dart";
 import "package:media_kit_video/media_kit_video.dart";
 import "package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:url_launcher/url_launcher_string.dart";
 import "package:volume_controller/volume_controller.dart";
 
@@ -309,12 +309,11 @@ class MediaPlayerState extends State<MediaPlayer> {
                                         icon: StreamBuilder(
                                           stream:
                                               controller.player.stream.playing,
-                                          builder:
-                                              (context, playing) => Icon(
-                                                playing.data == true
-                                                    ? Icons.pause
-                                                    : Icons.play_arrow,
-                                              ),
+                                          builder: (context, playing) => Icon(
+                                            playing.data == true
+                                                ? Icons.pause
+                                                : Icons.play_arrow,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -338,12 +337,11 @@ class MediaPlayerState extends State<MediaPlayer> {
                                 },
                                 icon: StreamBuilder(
                                   stream: controller.player.stream.volume,
-                                  builder:
-                                      (context, playing) => Icon(
-                                        playing.data == 0
-                                            ? Icons.volume_off
-                                            : Icons.volume_up,
-                                      ),
+                                  builder: (context, playing) => Icon(
+                                    playing.data == 0
+                                        ? Icons.volume_off
+                                        : Icons.volume_up,
+                                  ),
                                 ),
                               ),
                               IconButton(
@@ -375,13 +373,13 @@ class MediaPlayerState extends State<MediaPlayer> {
                                 child: Slider(
                                   thumbColor: Theme.of(context).primaryColor,
                                   activeColor: Theme.of(context).primaryColor,
-                                  value:
-                                      min(
-                                        position.inMilliseconds,
-                                        duration.inMilliseconds,
-                                      ).toDouble(),
-                                  secondaryTrackValue:
-                                      bufferPosition.inMilliseconds.toDouble(),
+                                  value: min(
+                                    position.inMilliseconds,
+                                    duration.inMilliseconds,
+                                  ).toDouble(),
+                                  secondaryTrackValue: bufferPosition
+                                      .inMilliseconds
+                                      .toDouble(),
                                   min: 0,
                                   max: duration.inMilliseconds.toDouble(),
                                   onChangeStart: (value) {

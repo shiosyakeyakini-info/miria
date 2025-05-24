@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/image_file.dart";
 
 class FileSettingsDialogResult {
@@ -22,8 +22,10 @@ class FileSettingsDialog extends HookConsumerWidget {
   const FileSettingsDialog({required this.file, super.key});
 
   String generateRandomText() {
-    final str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-      .split("")..shuffle();
+    final str =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split(
+          "",
+        )..shuffle();
     return str.take(10).join("");
   }
 

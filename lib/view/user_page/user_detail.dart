@@ -1,11 +1,11 @@
 import "package:auto_route/auto_route.dart";
 import "package:confetti/confetti.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/extensions/string_extensions.dart";
 import "package:miria/extensions/user_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/avatar_icon.dart";
@@ -133,14 +133,12 @@ class UserDetail extends ConsumerWidget {
                 Align(
                   alignment: Alignment.center,
                   child: IconButton(
-                    onPressed:
-                        () async => await context.pushRoute(
-                          UserControlRoute(
-                            account:
-                                ref.read(accountContextProvider).postAccount,
-                            response: response,
-                          ),
-                        ),
+                    onPressed: () async => await context.pushRoute(
+                      UserControlRoute(
+                        account: ref.read(accountContextProvider).postAccount,
+                        response: response,
+                      ),
+                    ),
                     icon: const Icon(Icons.more_vert),
                   ),
                 ),
@@ -191,25 +189,21 @@ class UserDetail extends ConsumerWidget {
                             memo.isNotEmpty
                                 ? memo
                                 : S.of(context).memoDescription,
-                            style:
-                                memo.isNotEmpty
-                                    ? null
-                                    : Theme.of(
-                                      context,
-                                    ).inputDecorationTheme.hintStyle,
+                            style: memo.isNotEmpty
+                                ? null
+                                : Theme.of(
+                                    context,
+                                  ).inputDecorationTheme.hintStyle,
                           ),
                         ),
                         IconButton(
-                          onPressed:
-                              () async => await context.pushRoute(
-                                UpdateMemoRoute(
-                                  accountContext: ref.read(
-                                    accountContextProvider,
-                                  ),
-                                  initialMemo: memo,
-                                  userId: response.id,
-                                ),
-                              ),
+                          onPressed: () async => await context.pushRoute(
+                            UpdateMemoRoute(
+                              accountContext: ref.read(accountContextProvider),
+                              initialMemo: memo,
+                              userId: response.id,
+                            ),
+                          ),
                           icon: const Icon(Icons.edit),
                         ),
                       ],
@@ -252,15 +246,12 @@ class UserDetail extends ConsumerWidget {
                           ],
                         ),
                         GestureDetector(
-                          onTap:
-                              () async => context.pushRoute(
-                                FederationRoute(
-                                  accountContext: ref.read(
-                                    accountContextProvider,
-                                  ),
-                                  host: response.host!,
-                                ),
-                              ),
+                          onTap: () async => context.pushRoute(
+                            FederationRoute(
+                              accountContext: ref.read(accountContextProvider),
+                              host: response.host!,
+                            ),
+                          ),
                           child: Text(
                             S.of(context).showServerInformation,
                             style: AppTheme.of(context).linkStyle,
@@ -369,13 +360,12 @@ class UserDetail extends ConsumerWidget {
                   ),
                   if (response.isFollowingVisibleForMe)
                     InkWell(
-                      onTap:
-                          () async => context.pushRoute(
-                            UserFolloweeRoute(
-                              userId: response.id,
-                              accountContext: ref.read(accountContextProvider),
-                            ),
-                          ),
+                      onTap: () async => context.pushRoute(
+                        UserFolloweeRoute(
+                          userId: response.id,
+                          accountContext: ref.read(accountContextProvider),
+                        ),
+                      ),
                       child: Column(
                         children: [
                           Text(
@@ -391,13 +381,12 @@ class UserDetail extends ConsumerWidget {
                     ),
                   if (response.isFollowersVisibleForMe)
                     InkWell(
-                      onTap:
-                          () async => context.pushRoute(
-                            UserFollowerRoute(
-                              userId: response.id,
-                              accountContext: ref.read(accountContextProvider),
-                            ),
-                          ),
+                      onTap: () async => context.pushRoute(
+                        UserFollowerRoute(
+                          userId: response.id,
+                          accountContext: ref.read(accountContextProvider),
+                        ),
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -449,9 +438,8 @@ class UserDetail extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 10),
             sliver: SliverList.builder(
               itemCount: response.pinnedNotes!.length,
-              itemBuilder:
-                  (context, index) =>
-                      MisskeyNote(note: response.pinnedNotes![index]),
+              itemBuilder: (context, index) =>
+                  MisskeyNote(note: response.pinnedNotes![index]),
             ),
           ),
       ],

@@ -29,7 +29,7 @@ final class _UsersListNotifierProvider
   String toString() {
     return r'_usersListNotifierProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -38,9 +38,18 @@ final class _UsersListNotifierProvider
 
   @$internal
   @override
-  $AsyncNotifierProviderElement<_UsersListNotifier, UsersList> $createElement(
-    $ProviderPointer pointer,
-  ) => $AsyncNotifierProviderElement(pointer);
+  _$UsersListNotifierElement $createElement($ProviderPointer pointer) =>
+      _$UsersListNotifierElement(pointer);
+
+  ProviderListenable<_UsersListNotifier$UpdateList> get updateList =>
+      $LazyProxyListenable<
+        _UsersListNotifier$UpdateList,
+        AsyncValue<UsersList>
+      >(this, (element) {
+        element as _$UsersListNotifierElement;
+
+        return element._$updateList;
+      });
 
   @override
   bool operator ==(Object other) {
@@ -53,7 +62,7 @@ final class _UsersListNotifierProvider
   }
 }
 
-String _$usersListNotifierHash() => r'0e4dc8a0b45ed3330d072d3131094be80a0578fa';
+String _$usersListNotifierHash() => r'e8067b9153fabe40c2e9fb3068b338c77244085c';
 
 final class _UsersListNotifierFamily extends $Family
     with
@@ -73,8 +82,8 @@ final class _UsersListNotifierFamily extends $Family
         isAutoDispose: true,
       );
 
-  _UsersListNotifierProvider call((Misskey, String) arg) =>
-      _UsersListNotifierProvider._(argument: arg, from: this);
+  _UsersListNotifierProvider call(Misskey misskey, String listId) =>
+      _UsersListNotifierProvider._(argument: (misskey, listId), from: this);
 
   @override
   String toString() => r'_usersListNotifierProvider';
@@ -82,13 +91,14 @@ final class _UsersListNotifierFamily extends $Family
 
 abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
   late final _$args = ref.$arg as (Misskey, String);
-  (Misskey, String) get arg => _$args;
+  Misskey get misskey => _$args.$1;
+  String get listId => _$args.$2;
 
-  FutureOr<UsersList> build((Misskey, String) arg);
+  FutureOr<UsersList> build(Misskey misskey, String listId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
+    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<UsersList>>;
     final element =
         ref.element
@@ -100,6 +110,78 @@ abstract class _$UsersListNotifier extends $AsyncNotifier<UsersList> {
             >;
     element.handleValue(ref, created);
   }
+}
+
+class _$UsersListNotifierElement
+    extends $AsyncNotifierProviderElement<_UsersListNotifier, UsersList> {
+  _$UsersListNotifierElement(super.pointer) {
+    _$updateList.result = $Result.data(_$_UsersListNotifier$UpdateList(this));
+  }
+  final _$updateList = $ElementLense<_$_UsersListNotifier$UpdateList>();
+  @override
+  void mount() {
+    super.mount();
+    _$updateList.result!.value!.reset();
+  }
+
+  @override
+  void visitListenables(
+    void Function($ElementLense element) listenableVisitor,
+  ) {
+    super.visitListenables(listenableVisitor);
+
+    listenableVisitor(_$updateList);
+  }
+}
+
+sealed class _UsersListNotifier$UpdateList extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [_UsersListNotifier.updateList] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call(UsersListSettings settings);
+}
+
+final class _$_UsersListNotifier$UpdateList
+    extends
+        $AsyncMutationBase<
+          void,
+          _$_UsersListNotifier$UpdateList,
+          _UsersListNotifier
+        >
+    implements _UsersListNotifier$UpdateList {
+  _$_UsersListNotifier$UpdateList(this.element, {super.state, super.key});
+
+  @override
+  final _$UsersListNotifierElement element;
+
+  @override
+  $ElementLense<_$_UsersListNotifier$UpdateList> get listenable =>
+      element._$updateList;
+
+  @override
+  Future<void> call(UsersListSettings settings) {
+    return mutate(
+      Invocation.method(#updateList, [settings]),
+      ($notifier) => $notifier.updateList(settings),
+    );
+  }
+
+  @override
+  _$_UsersListNotifier$UpdateList copyWith(
+    MutationState<void> state, {
+    Object? key,
+  }) => _$_UsersListNotifier$UpdateList(element, state: state, key: key);
 }
 
 @ProviderFor(_UsersListUsers)
@@ -125,7 +207,7 @@ final class _UsersListUsersProvider
   String toString() {
     return r'_usersListUsersProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -149,7 +231,7 @@ final class _UsersListUsersProvider
   }
 }
 
-String _$usersListUsersHash() => r'2745a71f00d11cb3bc8a411a20df9b8e4757eb49';
+String _$usersListUsersHash() => r'e5720c38fe76ff4425e4a4f684d99aa2e0db7783';
 
 final class _UsersListUsersFamily extends $Family
     with
@@ -169,8 +251,8 @@ final class _UsersListUsersFamily extends $Family
         isAutoDispose: true,
       );
 
-  _UsersListUsersProvider call((Misskey, String) arg) =>
-      _UsersListUsersProvider._(argument: arg, from: this);
+  _UsersListUsersProvider call(Misskey misskey, String listId) =>
+      _UsersListUsersProvider._(argument: (misskey, listId), from: this);
 
   @override
   String toString() => r'_usersListUsersProvider';
@@ -178,13 +260,14 @@ final class _UsersListUsersFamily extends $Family
 
 abstract class _$UsersListUsers extends $AsyncNotifier<List<User>> {
   late final _$args = ref.$arg as (Misskey, String);
-  (Misskey, String) get arg => _$args;
+  Misskey get misskey => _$args.$1;
+  String get listId => _$args.$2;
 
-  FutureOr<List<User>> build((Misskey, String) arg);
+  FutureOr<List<User>> build(Misskey misskey, String listId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
+    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<List<User>>>;
     final element =
         ref.element

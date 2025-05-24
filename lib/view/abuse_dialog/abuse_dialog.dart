@@ -1,15 +1,13 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
-import "package:miria/view/common/sending_elevated_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/experimental/mutation.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -90,13 +88,10 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
       ),
       actions: [
         ElevatedButton(
-          onPressed:
-              abuse.state is PendingMutation
-                  ? null
-                  : () async => abuse.call(
-                    userId: targetUser.id,
-                    comment: controller.text,
-                  ),
+          onPressed: abuse.state is PendingMutation
+              ? null
+              : () async =>
+                    abuse.call(userId: targetUser.id, comment: controller.text),
           child: Text(S.of(context).reportAbuse),
         ),
       ],

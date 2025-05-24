@@ -52,8 +52,8 @@ class ImageViewer extends HookConsumerWidget {
                     .updateScale(s);
                 final v = transformationController.toScene(position);
 
-                transformationController.value =
-                    Matrix4.identity()..scale(provider.scale);
+                transformationController.value = Matrix4.identity()
+                  ..scale(provider.scale);
 
                 final v2 = transformationController.toScene(position) - v;
 
@@ -80,15 +80,13 @@ class ImageViewer extends HookConsumerWidget {
                 if (provider.scale != 1.0) {
                   resetScale();
                 } else {
-                  final position =
-                      ref
-                          .read(imageViewerInfoNotifierProvider)
-                          .lastTapLocalPosition;
+                  final position = ref
+                      .read(imageViewerInfoNotifierProvider)
+                      .lastTapLocalPosition;
                   if (position == null) return;
-                  transformationController.value =
-                      Matrix4.identity()
-                        ..translate(-position.dx * 2, -position.dy * 2)
-                        ..scale(3.0);
+                  transformationController.value = Matrix4.identity()
+                    ..translate(-position.dx * 2, -position.dy * 2)
+                    ..scale(3.0);
                   ref
                       .read(imageViewerInfoNotifierProvider.notifier)
                       .update(

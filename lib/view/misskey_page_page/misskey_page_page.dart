@@ -1,10 +1,10 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart" hide MfmText;
 import "package:miria/extensions/list_mfm_node_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -92,18 +92,17 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                       ),
                       const Padding(padding: EdgeInsets.only(left: 10)),
                       GestureDetector(
-                        onTap:
-                            () async => launchUrl(
-                              Uri(
-                                scheme: "https",
-                                host: accountContext.getAccount.host,
-                                pathSegments: [
-                                  "@${page.user.username}",
-                                  "pages",
-                                  page.name,
-                                ],
-                              ),
-                            ),
+                        onTap: () async => launchUrl(
+                          Uri(
+                            scheme: "https",
+                            host: accountContext.getAccount.host,
+                            pathSegments: [
+                              "@${page.user.username}",
+                              "pages",
+                              page.name,
+                            ],
+                          ),
+                        ),
                         child: Text(
                           S.of(context).openBrowsers,
                           style: AppTheme.of(context).linkStyle,
@@ -176,18 +175,15 @@ class PageContent extends ConsumerWidget {
       if (file != null) {
         final url = file.url;
 
-        final thumbnailUrl =
-            page.attachedFiles
-                .firstWhereOrNull((e) => e.id == content.fileId)
-                ?.thumbnailUrl;
+        final thumbnailUrl = page.attachedFiles
+            .firstWhereOrNull((e) => e.id == content.fileId)
+            ?.thumbnailUrl;
         return GestureDetector(
-          onTap:
-              () async => showDialog(
-                context: context,
-                builder:
-                    (context) =>
-                        NoteFileDialog(driveFiles: [file], initialPage: 0),
-              ),
+          onTap: () async => showDialog(
+            context: context,
+            builder: (context) =>
+                NoteFileDialog(driveFiles: [file], initialPage: 0),
+          ),
           child: NetworkImageView(
             url: thumbnailUrl ?? url,
             type: ImageType.image,
@@ -273,8 +269,9 @@ class PageLikeButton extends ConsumerWidget {
 
     if (liked) {
       return ElevatedButton.icon(
-        onPressed:
-            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
+        onPressed: isLoading
+            ? null
+            : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
           size: MediaQuery.textScalerOf(
@@ -285,8 +282,9 @@ class PageLikeButton extends ConsumerWidget {
       );
     } else {
       return OutlinedButton.icon(
-        onPressed:
-            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
+        onPressed: isLoading
+            ? null
+            : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
           size: MediaQuery.textScalerOf(

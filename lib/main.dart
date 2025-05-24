@@ -4,11 +4,11 @@ import "dart:io";
 import "package:flutter/foundation.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/desktop_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
@@ -60,15 +60,13 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
     await windowManager.setPreventClose(true);
     final config = ref.read(desktopSettingsRepositoryProvider).settings;
 
-    final size =
-        (config.window.w > 0 && config.window.h > 0)
-            ? Size(config.window.w, config.window.h)
-            : const Size(400, 700);
+    final size = (config.window.w > 0 && config.window.h > 0)
+        ? Size(config.window.w, config.window.h)
+        : const Size(400, 700);
 
-    final position =
-        (config.window.x != null && config.window.y != null)
-            ? Offset(config.window.x!, config.window.y!)
-            : null;
+    final position = (config.window.x != null && config.window.y != null)
+        ? Offset(config.window.x!, config.window.y!)
+        : null;
 
     final opt = WindowOptions(
       size: size,

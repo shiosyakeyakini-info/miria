@@ -34,10 +34,12 @@ class LinkNavigator {
                 pathSegments: [".well-known", "nodeinfo"],
               ),
             );
-        final meta =
-            await ref.read(misskeyWithoutAccountProvider(uri.host)).meta();
-        final endpoints =
-            await ref.read(misskeyWithoutAccountProvider(uri.host)).endpoints();
+        final meta = await ref
+            .read(misskeyWithoutAccountProvider(uri.host))
+            .meta();
+        final endpoints = await ref
+            .read(misskeyWithoutAccountProvider(uri.host))
+            .endpoints();
         if (!endpoints.contains("emojis")) {
           throw Exception("Is not misskey");
         }

@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 
 class VoteArea extends ConsumerWidget {

@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/router/app_router.dart";
@@ -73,7 +73,9 @@ class UsersListModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           },
         );
       },
-      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
+      error: (e, st) => Center(
+        child: ErrorDetail(error: e, stackTrace: st),
+      ),
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
     );
   }

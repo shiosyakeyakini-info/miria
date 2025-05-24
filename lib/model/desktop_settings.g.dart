@@ -8,12 +8,11 @@ part of 'desktop_settings.dart';
 
 _DesktopSettings _$DesktopSettingsFromJson(Map<String, dynamic> json) =>
     _DesktopSettings(
-      window:
-          json['window'] == null
-              ? const DesktopWindowSettings()
-              : DesktopWindowSettings.fromJson(
-                json['window'] as Map<String, dynamic>,
-              ),
+      window: json['window'] == null
+          ? const DesktopWindowSettings()
+          : DesktopWindowSettings.fromJson(
+              json['window'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$DesktopSettingsToJson(_DesktopSettings instance) =>

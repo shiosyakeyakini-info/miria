@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
@@ -29,23 +29,22 @@ class ExploreHighlight extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10),
             child: LayoutBuilder(
-              builder:
-                  (context, constraints) => ToggleButtons(
-                    constraints: BoxConstraints.expand(
-                      width:
-                          constraints.maxWidth / 2 -
-                          Theme.of(
-                                context,
-                              ).toggleButtonsTheme.borderWidth!.toInt() *
-                              2,
-                    ),
-                    onPressed: (index) => isNote.value = index == 0,
-                    isSelected: [isNote.value, !isNote.value],
-                    children: [
-                      Text(S.of(context).note),
-                      Text(S.of(context).searchVoteTab),
-                    ],
-                  ),
+              builder: (context, constraints) => ToggleButtons(
+                constraints: BoxConstraints.expand(
+                  width:
+                      constraints.maxWidth / 2 -
+                      Theme.of(
+                            context,
+                          ).toggleButtonsTheme.borderWidth!.toInt() *
+                          2,
+                ),
+                onPressed: (index) => isNote.value = index == 0,
+                isSelected: [isNote.value, !isNote.value],
+                children: [
+                  Text(S.of(context).note),
+                  Text(S.of(context).searchVoteTab),
+                ],
+              ),
             ),
           ),
           Expanded(

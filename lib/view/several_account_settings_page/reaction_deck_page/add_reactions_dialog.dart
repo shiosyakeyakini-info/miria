@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:json5/json5.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -54,11 +54,10 @@ class AddReactionsDialog extends HookConsumerWidget {
                     children: [
                       Text(S.of(context).bulkAddReactionsDescription2),
                       TextButton(
-                        onPressed:
-                            () async => launchUrl(
-                              uri,
-                              mode: LaunchMode.externalApplication,
-                            ),
+                        onPressed: () async => launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        ),
                         child: Text(
                           uri.toString(),
                           style: AppTheme.of(context).linkStyle,

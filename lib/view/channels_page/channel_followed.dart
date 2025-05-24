@@ -27,14 +27,12 @@ class ChannelFollowed extends ConsumerWidget {
             .followed(ChannelsFollowedRequest(untilId: lastItem.id));
         return response.toList();
       },
-      itemBuilder:
-          (context, item) => CommunityChannelView(
-            channel: item,
-            onTap:
-                onChannelSelected != null
-                    ? () => onChannelSelected?.call(item)
-                    : null,
-          ),
+      itemBuilder: (context, item) => CommunityChannelView(
+        channel: item,
+        onTap: onChannelSelected != null
+            ? () => onChannelSelected?.call(item)
+            : null,
+      ),
     );
   }
 }

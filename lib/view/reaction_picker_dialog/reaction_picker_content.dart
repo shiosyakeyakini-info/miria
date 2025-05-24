@@ -2,8 +2,8 @@ import "dart:async";
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/emoji_repository.dart";
@@ -62,35 +62,32 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: categoryList.length,
-            itemBuilder:
-                (context, index) => ExpansionTile(
-                  title: Text(categoryList[index]),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Wrap(
-                          spacing: 5,
-                          runSpacing: 5,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          children: [
-                            for (final emoji in (emojiRepository.emoji ?? [])
-                                .where(
-                                  (element) =>
-                                      element.category == categoryList[index],
-                                ))
-                              EmojiButton(
-                                emoji: emoji.emoji,
-                                onTap: widget.onTap,
-                                isAcceptSensitive: widget.isAcceptSensitive,
-                              ),
-                          ],
-                        ),
-                      ),
+            itemBuilder: (context, index) => ExpansionTile(
+              title: Text(categoryList[index]),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Wrap(
+                      spacing: 5,
+                      runSpacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      children: [
+                        for (final emoji in (emojiRepository.emoji ?? []).where(
+                          (element) => element.category == categoryList[index],
+                        ))
+                          EmojiButton(
+                            emoji: emoji.emoji,
+                            onTap: widget.onTap,
+                            isAcceptSensitive: widget.isAcceptSensitive,
+                          ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
           ),
         ],
       ),
@@ -134,10 +131,9 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
         }
       },
       child: DecoratedBox(
-        decoration:
-            disabled && isVisibility
-                ? BoxDecoration(color: Theme.of(context).disabledColor)
-                : const BoxDecoration(),
+        decoration: disabled && isVisibility
+            ? BoxDecoration(color: Theme.of(context).disabledColor)
+            : const BoxDecoration(),
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
@@ -160,16 +156,15 @@ class EmojiButtonState extends ConsumerState<EmojiButton> {
               widget.onTap.call(widget.emoji);
             }
           },
-          child:
-              isVisibility
-                  ? SizedBox(
-                    height: MediaQuery.textScalerOf(context).scale(32),
-                    child: CustomEmoji(emojiData: widget.emoji),
-                  )
-                  : SizedBox(
-                    width: MediaQuery.textScalerOf(context).scale(32),
-                    height: MediaQuery.textScalerOf(context).scale(32),
-                  ),
+          child: isVisibility
+              ? SizedBox(
+                  height: MediaQuery.textScalerOf(context).scale(32),
+                  child: CustomEmoji(emojiData: widget.emoji),
+                )
+              : SizedBox(
+                  width: MediaQuery.textScalerOf(context).scale(32),
+                  height: MediaQuery.textScalerOf(context).scale(32),
+                ),
         ),
       ),
     );

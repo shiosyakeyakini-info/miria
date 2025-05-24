@@ -1,5 +1,5 @@
 import "package:flutter/foundation.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -31,8 +31,8 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
       await ref
           .read(dialogStateNotifierProvider.notifier)
           .showSimpleDialog(
-            message:
-                (context) => S.of(context).cannotOpenLocalOnlyNoteFromRemote,
+            message: (context) =>
+                S.of(context).cannotOpenLocalOnlyNoteFromRemote,
           );
       return null;
     }
@@ -127,21 +127,19 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
   Future<void> navigateToNoteDetailPage(Note note, {Account? account}) async {
     final router = ref.read(appRouterProvider);
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      final accountContext =
-          account != null
-              ? AccountContext(
-                getAccount: account,
-                postAccount:
-                    account.isDemoAccount
-                        ? ref.read(accountContextProvider).postAccount
-                        : account,
-              )
-              : ref.read(accountContextProvider);
+      final accountContext = account != null
+          ? AccountContext(
+              getAccount: account,
+              postAccount: account.isDemoAccount
+                  ? ref.read(accountContextProvider).postAccount
+                  : account,
+            )
+          : ref.read(accountContextProvider);
       final foundNote =
           note.user.host == null &&
-                  note.uri?.host == accountContext.getAccount.host
-              ? note
-              : await lookupNote(note: note, accountContext: accountContext);
+              note.uri?.host == accountContext.getAccount.host
+          ? note
+          : await lookupNote(note: note, accountContext: accountContext);
       if (foundNote == null) return;
       await ref
           .read(emojiRepositoryProvider(accountContext.getAccount))
@@ -155,22 +153,20 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
   Future<void> navigateToUserPage(User user, {Account? account}) async {
     final router = ref.read(appRouterProvider);
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      final accountContext =
-          account != null
-              ? AccountContext(
-                getAccount: account,
-                postAccount:
-                    account.isDemoAccount
-                        ? ref.read(accountContextProvider).postAccount
-                        : account,
-              )
-              : ref.read(accountContextProvider);
+      final accountContext = account != null
+          ? AccountContext(
+              getAccount: account,
+              postAccount: account.isDemoAccount
+                  ? ref.read(accountContextProvider).postAccount
+                  : account,
+            )
+          : ref.read(accountContextProvider);
       final foundUser =
           user.host == null &&
-                  accountContext.getAccount ==
-                      ref.read(accountContextProvider).getAccount
-              ? user
-              : await lookupUser(user: user, accountContext: accountContext);
+              accountContext.getAccount ==
+                  ref.read(accountContextProvider).getAccount
+          ? user
+          : await lookupUser(user: user, accountContext: accountContext);
       if (foundUser == null) return;
       await ref
           .read(emojiRepositoryProvider(accountContext.getAccount))
@@ -190,9 +186,9 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
             host: note.localOnly ? accountContext.getAccount.host : null,
             remoteHost:
                 note.user.host != accountContext.getAccount.host &&
-                        note.user.host != null
-                    ? note.user.host
-                    : null,
+                    note.user.host != null
+                ? note.user.host
+                : null,
           ),
         );
     if (selectedAccount == null) return;
@@ -207,8 +203,8 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
           AccountSelectRoute(
             remoteHost:
                 user.host != accountContext.getAccount.host && user.host != null
-                    ? user.host
-                    : null,
+                ? user.host
+                : null,
           ),
         );
 

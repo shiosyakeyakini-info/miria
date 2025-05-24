@@ -13,8 +13,9 @@ final _queryProvider = StateProvider.autoDispose((ref) {
 class _InstanceInfos extends _$InstanceInfos {
   @override
   Future<List<JoinMisskeyInstanceInfo>> build() async {
-    final response =
-        await JoinMisskey(host: "instanceapp.misskey.page").instances();
+    final response = await JoinMisskey(
+      host: "instanceapp.misskey.page",
+    ).instances();
     return response.instancesInfos
         .sortedByCompare(
           (info) => info.nodeInfo?.usage?.users?.total ?? 0,

@@ -3,10 +3,10 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
@@ -43,19 +43,20 @@ class GeneralSettingsPage extends HookConsumerWidget {
 
     useMemoized(() {
       if (lightModeTheme.value.isEmpty) {
-        lightModeTheme.value =
-            builtInColorThemes
-                .where((element) => !element.isDarkTheme)
-                .first
-                .id;
+        lightModeTheme.value = builtInColorThemes
+            .where((element) => !element.isDarkTheme)
+            .first
+            .id;
       }
       if (darkModeTheme.value.isEmpty ||
           builtInColorThemes.every(
             (element) =>
                 !element.isDarkTheme || element.id != darkModeTheme.value,
           )) {
-        darkModeTheme.value =
-            builtInColorThemes.where((element) => element.isDarkTheme).first.id;
+        darkModeTheme.value = builtInColorThemes
+            .where((element) => element.isDarkTheme)
+            .first
+            .id;
       }
     });
     final dependencies = [
@@ -161,10 +162,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: nsfwInherit.value,
-                        onChanged:
-                            (value) async =>
-                                nsfwInherit.value =
-                                    value ?? NSFWInherit.inherit,
+                        onChanged: (value) async =>
+                            nsfwInherit.value = value ?? NSFWInherit.inherit,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).infiniteScroll),
@@ -178,10 +177,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: automaticPush.value,
-                        onChanged:
-                            (value) async =>
-                                automaticPush.value =
-                                    value ?? AutomaticPush.none,
+                        onChanged: (value) async =>
+                            automaticPush.value = value ?? AutomaticPush.none,
                       ),
                       Text(S.of(context).deckMode),
                       CheckboxListTile(
@@ -193,25 +190,22 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).enableAnimatedMfm),
                       CheckboxListTile(
                         value: enableAnimatedMFM.value,
-                        onChanged:
-                            (value) => enableAnimatedMFM.value = value ?? true,
+                        onChanged: (value) =>
+                            enableAnimatedMFM.value = value ?? true,
                         title: Text(S.of(context).enableAnimatedMfmDescription),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).collapseNotes),
                       CheckboxListTile(
                         value: enableFavoritedRenoteElipsed.value,
-                        onChanged:
-                            (value) =>
-                                enableFavoritedRenoteElipsed.value =
-                                    value ?? true,
+                        onChanged: (value) =>
+                            enableFavoritedRenoteElipsed.value = value ?? true,
                         title: Text(S.of(context).collapseReactionedRenotes),
                       ),
                       CheckboxListTile(
                         value: enableLongTextElipsed.value,
-                        onChanged:
-                            (value) async =>
-                                enableLongTextElipsed.value = value ?? true,
+                        onChanged: (value) async =>
+                            enableLongTextElipsed.value = value ?? true,
                         title: Text(S.of(context).collapseLongNotes),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
@@ -232,9 +226,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: tabPosition.value,
-                        onChanged:
-                            (value) async =>
-                                tabPosition.value = value ?? TabPosition.top,
+                        onChanged: (value) async =>
+                            tabPosition.value = value ?? TabPosition.top,
                       ),
                     ],
                   ),
@@ -265,8 +258,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: lightModeTheme.value,
-                        onChanged:
-                            (value) async => lightModeTheme.value = value ?? "",
+                        onChanged: (value) async =>
+                            lightModeTheme.value = value ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).themeForDarkMode),
@@ -294,10 +287,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: colorSystem.value,
-                        onChanged:
-                            (value) =>
-                                colorSystem.value =
-                                    value ?? ThemeColorSystem.system,
+                        onChanged: (value) => colorSystem.value =
+                            value ?? ThemeColorSystem.system,
                       ),
                     ],
                   ),
@@ -321,9 +312,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         subtitle: Text(
                           S.of(context).emojiTapReactionDescription,
                         ),
-                        onChanged:
-                            (value) =>
-                                enableDirectReaction.value = value ?? false,
+                        onChanged: (value) =>
+                            enableDirectReaction.value = value ?? false,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).emojiStyle),
@@ -337,9 +327,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         ],
                         value: emojiType.value,
                         isExpanded: true,
-                        onChanged:
-                            (value) =>
-                                emojiType.value = value ?? EmojiType.twemoji,
+                        onChanged: (value) =>
+                            emojiType.value = value ?? EmojiType.twemoji,
                       ),
                     ],
                   ),
@@ -371,9 +360,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         child: ElevatedButton(
                           onPressed:
                               (settings.textScaleFactor ==
-                                      textScaleFactor.value)
-                                  ? null
-                                  : save,
+                                  textScaleFactor.value)
+                              ? null
+                              : save,
                           child: const Text("変更"),
                         ),
                       ),
@@ -400,9 +389,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged:
-                            (item) =>
-                                defaultFontName.value = item?.actualName ?? "",
+                        onChanged: (item) =>
+                            defaultFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -427,9 +415,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged:
-                            (item) =>
-                                serifFontName.value = item?.actualName ?? "",
+                        onChanged: (item) =>
+                            serifFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -454,10 +441,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged:
-                            (item) =>
-                                monospaceFontName.value =
-                                    item?.actualName ?? "",
+                        onChanged: (item) =>
+                            monospaceFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -482,9 +467,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged:
-                            (item) =>
-                                cursiveFontName.value = item?.actualName ?? "",
+                        onChanged: (item) =>
+                            cursiveFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -509,9 +493,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged:
-                            (item) =>
-                                fantasyFontName.value = item?.actualName ?? "",
+                        onChanged: (item) =>
+                            fantasyFontName.value = item?.actualName ?? "",
                       ),
                     ],
                   ),

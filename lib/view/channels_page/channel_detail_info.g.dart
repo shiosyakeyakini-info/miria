@@ -47,14 +47,15 @@ final class ChannelDetailProvider
   _$ChannelDetailElement $createElement($ProviderPointer pointer) =>
       _$ChannelDetailElement(pointer);
 
-  ProviderListenable<ChannelDetail$Follow> get follow => $LazyProxyListenable<
-    ChannelDetail$Follow,
-    AsyncValue<ChannelDetailState>
-  >(this, (element) {
-    element as _$ChannelDetailElement;
+  ProviderListenable<ChannelDetail$Follow> get follow =>
+      $LazyProxyListenable<
+        ChannelDetail$Follow,
+        AsyncValue<ChannelDetailState>
+      >(this, (element) {
+        element as _$ChannelDetailElement;
 
-    return element._$follow;
-  });
+        return element._$follow;
+      });
 
   ProviderListenable<ChannelDetail$Unfollow> get unfollow =>
       $LazyProxyListenable<

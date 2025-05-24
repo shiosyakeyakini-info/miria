@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/providers.dart";
@@ -86,11 +86,10 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 items: buildCacheStrategyItems,
                 value: iCacheStrategy,
                 isExpanded: true,
-                onChanged:
-                    (value) => setState(() {
-                      iCacheStrategy = value;
-                      save();
-                    }),
+                onChanged: (value) => setState(() {
+                  iCacheStrategy = value;
+                  save();
+                }),
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Text(
@@ -101,11 +100,10 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 items: buildCacheStrategyItems,
                 value: emojisCacheStrategy,
                 isExpanded: true,
-                onChanged:
-                    (value) => setState(() {
-                      emojisCacheStrategy = value;
-                      save();
-                    }),
+                onChanged: (value) => setState(() {
+                  emojisCacheStrategy = value;
+                  save();
+                }),
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Text(
@@ -116,11 +114,10 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 items: buildCacheStrategyItems,
                 value: metaCacheStrategy,
                 isExpanded: true,
-                onChanged:
-                    (value) => setState(() {
-                      metaCacheStrategy = value;
-                      save();
-                    }),
+                onChanged: (value) => setState(() {
+                  metaCacheStrategy = value;
+                  save();
+                }),
               ),
             ],
           ),

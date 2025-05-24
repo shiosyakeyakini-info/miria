@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/futable_list_builder.dart";
@@ -122,13 +122,12 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                     }
                     return list.toList();
                   }(),
-                  builder:
-                      (context, item) => Row(
-                        children: [
-                          const Icon(Icons.description),
-                          Expanded(child: Text(item.name)),
-                        ],
-                      ),
+                  builder: (context, item) => Row(
+                    children: [
+                      const Icon(Icons.description),
+                      Expanded(child: Text(item.name)),
+                    ],
+                  ),
                 ),
             ],
           ),

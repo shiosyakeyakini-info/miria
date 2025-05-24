@@ -46,14 +46,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       mentionStyle: TextStyle(color: theme.mention),
       serifStyle: resolveFontFamilySerif(serifFontName, languages),
       monospaceStyle: resolveFontFamilyMonospace(monospaceFontName, languages),
-      cursiveStyle:
-          cursiveFontName.isNotEmpty
-              ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
-              : const TextStyle(),
-      fantasyStyle:
-          fantasyFontName.isNotEmpty
-              ? (fromGoogleFont(fantasyFontName) ?? const TextStyle())
-              : const TextStyle(),
+      cursiveStyle: cursiveFontName.isNotEmpty
+          ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
+          : const TextStyle(),
+      fantasyStyle: fantasyFontName.isNotEmpty
+          ? (fromGoogleFont(fantasyFontName) ?? const TextStyle())
+          : const TextStyle(),
       reactionButtonBackgroundColor: theme.buttonBackground,
       reactionButtonMeReactedColor: theme.accentedBackground,
       renoteBorderColor: theme.renote,
@@ -62,8 +60,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       renoteStrokePadding: 0.0,
       renoteDashPattern: [10.0, 6.0],
       buttonBackground: theme.buttonBackground,
-      currentDisplayTabColor:
-          theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+      currentDisplayTabColor: theme.isDarkTheme
+          ? theme.primaryDarken
+          : theme.primaryLighten,
       unicodeEmojiStyle: resolveUnicodeEmojiStyle(),
       languages: languages,
     );
@@ -183,7 +182,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     }
     return (monospaceFontName.isNotEmpty
             ? (fromGoogleFont(monospaceFontName) ??
-                TextStyle(fontFamily: fontName))
+                  TextStyle(fontFamily: fontName))
             : TextStyle(fontFamily: fontName))
         .copyWith(fontFamilyFallback: fallback);
   }
@@ -239,10 +238,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     );
     final textTheme = textThemePre.copyWith(
       bodySmall: textThemePre.bodySmall?.copyWith(
-        color:
-            theme.isDarkTheme
-                ? theme.foreground.darken(0.1)
-                : theme.foreground.lighten(0.1),
+        color: theme.isDarkTheme
+            ? theme.foreground.darken(0.1)
+            : theme.foreground.lighten(0.1),
       ),
     );
 
@@ -262,15 +260,16 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         elevation: 0,
         titleSpacing: 0,
         titleTextStyle: textTheme.headlineSmall?.copyWith(color: Colors.white),
-        backgroundColor:
-            theme.isDarkTheme ? theme.panelBackground : theme.primary,
+        backgroundColor: theme.isDarkTheme
+            ? theme.panelBackground
+            : theme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       bottomAppBarTheme: BottomAppBarTheme(color: theme.primary),
       drawerTheme: DrawerThemeData(backgroundColor: theme.panel),
       listTileTheme: ListTileThemeData(iconColor: theme.foreground),
       scaffoldBackgroundColor: theme.panel,
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         overlayColor: WidgetStatePropertyAll(theme.primary),
         labelColor: Colors.white,
         labelStyle: textTheme.titleSmall,
@@ -325,8 +324,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         filled: true,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color:
-                theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+            color: theme.isDarkTheme
+                ? theme.primaryDarken
+                : theme.primaryLighten,
             width: 1.0,
           ),
           borderRadius: BorderRadius.circular(10),
@@ -338,10 +338,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         contentPadding: const EdgeInsets.all(5),
         hintStyle: textTheme.bodySmall?.copyWith(
           fontSize: textTheme.titleMedium?.fontSize,
-          color:
-              theme.isDarkTheme
-                  ? theme.foreground.darken(0.2)
-                  : theme.foreground.lighten(0.2),
+          color: theme.isDarkTheme
+              ? theme.foreground.darken(0.2)
+              : theme.foreground.lighten(0.2),
         ),
         prefixIconColor: theme.primary,
         suffixIconColor: theme.primary,
@@ -364,24 +363,27 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         selectedColor: Colors.white,
         borderColor: theme.divider,
         borderWidth: 1.0,
-        highlightColor:
-            theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
-        fillColor:
-            theme.isDarkTheme ? theme.primaryDarken : theme.primaryLighten,
+        highlightColor: theme.isDarkTheme
+            ? theme.primaryDarken
+            : theme.primaryLighten,
+        fillColor: theme.isDarkTheme
+            ? theme.primaryDarken
+            : theme.primaryLighten,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: theme.primary,
         unselectedItemColor: Colors.white,
       ),
-      sliderTheme: SliderThemeData.fromPrimaryColors(
-        primaryColor: theme.primary,
-        primaryColorDark: theme.primaryDarken,
-        primaryColorLight: theme.primaryLighten,
-        valueIndicatorTextStyle: textTheme.bodySmall ?? const TextStyle(),
-      ).copyWith(
-        valueIndicatorColor: theme.panel,
-        valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
-      ),
+      sliderTheme:
+          SliderThemeData.fromPrimaryColors(
+            primaryColor: theme.primary,
+            primaryColorDark: theme.primaryDarken,
+            primaryColorLight: theme.primaryLighten,
+            valueIndicatorTextStyle: textTheme.bodySmall ?? const TextStyle(),
+          ).copyWith(
+            valueIndicatorColor: theme.panel,
+            valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+          ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: theme.primary,
         selectionColor: theme.accentedBackground,
@@ -486,12 +488,11 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: true,
-            textScaler:
-                textScaleFactor != 1
-                    ? TextScaler.linear(
-                      MediaQuery.textScalerOf(context).scale(textScaleFactor),
-                    )
-                    : null,
+            textScaler: textScaleFactor != 1
+                ? TextScaler.linear(
+                    MediaQuery.textScalerOf(context).scale(textScaleFactor),
+                  )
+                : null,
           ),
           child: widget.child,
         ),

@@ -9,10 +9,9 @@ part of 'share_extension_page.dart';
 _ShareExtensionData _$ShareExtensionDataFromJson(Map<String, dynamic> json) =>
     _ShareExtensionData(
       text: (json['text'] as List<dynamic>).map((e) => e as String).toList(),
-      files:
-          (json['files'] as List<dynamic>)
-              .map((e) => SharedFiles.fromJson(e as Map<String, dynamic>))
-              .toList(),
+      files: (json['files'] as List<dynamic>)
+          .map((e) => SharedFiles.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ShareExtensionDataToJson(_ShareExtensionData instance) =>

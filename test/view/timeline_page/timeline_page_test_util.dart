@@ -34,21 +34,20 @@ class TimelinePageTest {
     String? listId,
     bool renoteDisplay = false,
   }) {
-    tabSetting =
-        TabSetting(
-          icon: const TabIcon(customEmojiName: ":ai_yay:"),
-          tabType: tabType,
-          isSubscribe: isSubscribe,
-          isIncludeReplies: isIncludeReplies,
-          isMediaOnly: isMediaOnly,
-          roleId: roleId,
-          antennaId: antennaId,
-          channelId: channelId,
-          listId: listId,
-          name: "ろーかる",
-          acct: TestData.account.acct,
-          renoteDisplay: renoteDisplay,
-        ).copyWith();
+    tabSetting = TabSetting(
+      icon: const TabIcon(customEmojiName: ":ai_yay:"),
+      tabType: tabType,
+      isSubscribe: isSubscribe,
+      isIncludeReplies: isIncludeReplies,
+      isMediaOnly: isMediaOnly,
+      roleId: roleId,
+      antennaId: antennaId,
+      channelId: channelId,
+      listId: listId,
+      name: "ろーかる",
+      acct: TestData.account.acct,
+      renoteDisplay: renoteDisplay,
+    ).copyWith();
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
     when(mockMisskey.streamingService).thenReturn(mockWebSocketController);
     when(

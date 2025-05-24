@@ -120,25 +120,24 @@ class AvatarIcon extends HookConsumerWidget {
                   child: Transform.rotate(
                     angle: (decoration.angle ?? 0) * 2 * pi,
                     alignment: Alignment.center,
-                    child:
-                        decoration.flipH
-                            ? Transform.flip(
-                              flipX: true,
-                              child: SizedBox(
-                                width: baseHeight,
-                                child: NetworkImageView(
-                                  url: decoration.url,
-                                  type: ImageType.other,
-                                ),
-                              ),
-                            )
-                            : SizedBox(
+                    child: decoration.flipH
+                        ? Transform.flip(
+                            flipX: true,
+                            child: SizedBox(
                               width: baseHeight,
                               child: NetworkImageView(
                                 url: decoration.url,
-                                type: ImageType.avatarDecoration,
+                                type: ImageType.other,
                               ),
                             ),
+                          )
+                        : SizedBox(
+                            width: baseHeight,
+                            child: NetworkImageView(
+                              url: decoration.url,
+                              type: ImageType.avatarDecoration,
+                            ),
+                          ),
                   ),
                 ),
               ),

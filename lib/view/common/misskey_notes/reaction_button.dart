@@ -2,10 +2,10 @@ import "dart:math";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -35,20 +35,19 @@ class ReactionButton extends HookConsumerWidget {
         (emojiData is CustomEmojiData && myReaction == emojiData.hostedName) ||
         (emojiData is UnicodeEmojiData && myReaction == emojiData.char);
 
-    final backgroundColor =
-        isMyReaction
-            ? AppTheme.of(context).reactionButtonMeReactedColor
-            : (emojiData is CustomEmojiData && !emojiData.isCurrentServer)
-            ? Colors.transparent
-            : AppTheme.of(context).reactionButtonBackgroundColor;
+    final backgroundColor = isMyReaction
+        ? AppTheme.of(context).reactionButtonMeReactedColor
+        : (emojiData is CustomEmojiData && !emojiData.isCurrentServer)
+        ? Colors.transparent
+        : AppTheme.of(context).reactionButtonBackgroundColor;
 
-    final foreground =
-        isMyReaction
-            ? Theme.of(context).primaryColor
-            : Theme.of(context).textTheme.bodyMedium?.color;
+    final foreground = isMyReaction
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).textTheme.bodyMedium?.color;
 
-    final borderColor =
-        isMyReaction ? Theme.of(context).primaryColor : Colors.transparent;
+    final borderColor = isMyReaction
+        ? Theme.of(context).primaryColor
+        : Colors.transparent;
 
     final reaction = useAsync(() async {
       final accountContext = ref.read(accountContextProvider);
@@ -60,11 +59,10 @@ class ReactionButton extends HookConsumerWidget {
             .read(dialogStateNotifierProvider.notifier)
             .showDialog(
               message: (context) => S.of(context).confirmDeleteReaction,
-              actions:
-                  (context) => [
-                    S.of(context).cancelReaction,
-                    S.of(context).cancel,
-                  ],
+              actions: (context) => [
+                S.of(context).cancelReaction,
+                S.of(context).cancel,
+              ],
             );
         if (dialogValue != 0) return;
 

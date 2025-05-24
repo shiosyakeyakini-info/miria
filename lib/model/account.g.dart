@@ -11,10 +11,9 @@ _Account _$AccountFromJson(Map<String, dynamic> json) => _Account(
   userId: json['userId'] as String,
   i: MeDetailed.fromJson(json['i'] as Map<String, dynamic>),
   token: json['token'] as String?,
-  meta:
-      json['meta'] == null
-          ? null
-          : MetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
+  meta: json['meta'] == null
+      ? null
+      : MetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$AccountToJson(_Account instance) => <String, dynamic>{

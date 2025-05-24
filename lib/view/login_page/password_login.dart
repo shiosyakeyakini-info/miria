@@ -38,8 +38,10 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
     if (!mounted) return;
     await context.pushRoute(
       TimeLineRoute(
-        initialTabSetting:
-            ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+        initialTabSetting: ref
+            .read(tabSettingsRepositoryProvider)
+            .tabSettings
+            .first,
       ),
     );
   }

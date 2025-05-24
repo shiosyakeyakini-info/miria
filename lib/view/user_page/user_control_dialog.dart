@@ -3,11 +3,11 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
@@ -79,12 +79,11 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
     final copyLinks = useAsync(() async {
       await Clipboard.setData(
         ClipboardData(
-          text:
-              Uri(
-                scheme: "https",
-                host: account.host,
-                path: response.acct,
-              ).toString(),
+          text: Uri(
+            scheme: "https",
+            host: account.host,
+            path: response.acct,
+          ).toString(),
         ),
       );
       if (!context.mounted) return;
@@ -109,15 +108,14 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
           .openUserInOtherAccount(response),
     );
 
-    final isLoading =
-        [
-          createBlocking.value,
-          deleteBlocking.value,
-          createRenoteMute.value,
-          deleteRenoteMute.value,
-          createMute.value,
-          deleteMute.value,
-        ].where((e) => e is AsyncData || e is AsyncLoading).isNotEmpty;
+    final isLoading = [
+      createBlocking.value,
+      deleteBlocking.value,
+      createRenoteMute.value,
+      deleteRenoteMute.value,
+      createMute.value,
+      deleteMute.value,
+    ].where((e) => e is AsyncData || e is AsyncLoading).isNotEmpty;
 
     if (isLoading) {
       return const Center(child: CircularProgressIndicator.adaptive());
@@ -167,31 +165,26 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
         ListTile(
           leading: const Icon(Icons.search),
           title: Text(S.of(context).searchNote),
-          onTap:
-              () async => context.pushRoute(
-                SearchRoute(
-                  accountContext: ref.read(accountContextProvider),
-                  initialNoteSearchCondition: NoteSearchCondition(
-                    user: response,
-                  ),
-                ),
-              ),
+          onTap: () async => context.pushRoute(
+            SearchRoute(
+              accountContext: ref.read(accountContextProvider),
+              initialNoteSearchCondition: NoteSearchCondition(user: response),
+            ),
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.list),
           title: Text(S.of(context).addToList),
-          onTap:
-              () async => context.pushRoute(
-                UsersListModalRoute(account: account, user: response),
-              ),
+          onTap: () async => context.pushRoute(
+            UsersListModalRoute(account: account, user: response),
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.settings_input_antenna),
           title: Text(S.of(context).addToAntenna),
-          onTap:
-              () async => context.pushRoute(
-                AntennaModalRoute(account: account, user: user),
-              ),
+          onTap: () async => context.pushRoute(
+            AntennaModalRoute(account: account, user: user),
+          ),
         ),
         if (user is UserDetailedNotMeWithRelations) ...[
           if (user.isRenoteMuted)

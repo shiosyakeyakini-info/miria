@@ -46,12 +46,11 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   Uri resolveFallbackCustomEmojiUrl(CustomEmojiData emojiData) {
     return Uri(
       scheme: "https",
-      host:
-          emojiData.isCurrentServer
-              ? ref.read(accountContextProvider).getAccount.host
-              : emojiData.hostedName
-                  .replaceAll(RegExp(r"^\:(.+?)@"), "")
-                  .replaceAll(":", ""),
+      host: emojiData.isCurrentServer
+          ? ref.read(accountContextProvider).getAccount.host
+          : emojiData.hostedName
+                .replaceAll(RegExp(r"^\:(.+?)@"), "")
+                .replaceAll(":", ""),
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
         "url": Uri.encodeFull(emojiData.url.toString()),
@@ -84,23 +83,17 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
           child: NetworkImageView(
             url: emojiData.url.toString(),
             type: ImageType.customEmoji,
-            errorBuilder:
-                (context, e, s) => NetworkImageView(
-                  url: resolveFallbackCustomEmojiUrl(emojiData).toString(),
-                  type: ImageType.customEmoji,
-                  loadingBuilder:
-                      (context, widget, chunk) => SizedBox(
-                        height: scopedFontSize,
-                        width: scopedFontSize,
-                      ),
-                  height: scopedFontSize,
-                  errorBuilder:
-                      (context, e, s) =>
-                          Text(emojiData.hostedName, style: style),
-                ),
-            loadingBuilder:
-                (context, widget, chunk) =>
-                    SizedBox(height: scopedFontSize, width: scopedFontSize),
+            errorBuilder: (context, e, s) => NetworkImageView(
+              url: resolveFallbackCustomEmojiUrl(emojiData).toString(),
+              type: ImageType.customEmoji,
+              loadingBuilder: (context, widget, chunk) =>
+                  SizedBox(height: scopedFontSize, width: scopedFontSize),
+              height: scopedFontSize,
+              errorBuilder: (context, e, s) =>
+                  Text(emojiData.hostedName, style: style),
+            ),
+            loadingBuilder: (context, widget, chunk) =>
+                SizedBox(height: scopedFontSize, width: scopedFontSize),
             width: widget.forceSquare ? scopedFontSize : null,
             height: scopedFontSize,
           ),

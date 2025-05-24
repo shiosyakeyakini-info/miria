@@ -1,4 +1,4 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -36,8 +36,10 @@ class UsersListsNotifier extends _$UsersListsNotifier {
         .read(dialogStateNotifierProvider.notifier)
         .showDialog(
           message: (context) => S.of(context).confirmDeleteList,
-          actions:
-              (context) => [S.of(context).doDeleting, S.of(context).cancel],
+          actions: (context) => [
+            S.of(context).doDeleting,
+            S.of(context).cancel,
+          ],
         );
     if (result != 0) return;
 
@@ -70,8 +72,10 @@ class UsersListsNotifier extends _$UsersListsNotifier {
         for (final list in [...?state.value])
           list.id == listId
               ? list.copyWith(
-                userIds: [...list.userIds.where((userId) => userId != user.id)],
-              )
+                  userIds: [
+                    ...list.userIds.where((userId) => userId != user.id),
+                  ],
+                )
               : list,
       ]);
     });

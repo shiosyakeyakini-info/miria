@@ -2,10 +2,10 @@ import "dart:async";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -115,27 +115,26 @@ class RenoteOtherAccountNotifier extends _$RenoteOtherAccountNotifier {
             host: note.localOnly ? this.account.host : null,
             remoteHost:
                 note.user.host != this.account.host && note.user.host != null
-                    ? note.user.host
-                    : null,
+                ? note.user.host
+                : null,
           ),
         );
     if (selectedAccount == null) return;
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       final accountContext = AccountContext(
         getAccount: selectedAccount,
-        postAccount:
-            selectedAccount.isDemoAccount
-                ? ref.read(accountContextProvider).postAccount
-                : selectedAccount,
+        postAccount: selectedAccount.isDemoAccount
+            ? ref.read(accountContextProvider).postAccount
+            : selectedAccount,
       );
       state = const AsyncLoading();
       final foundNote =
           note.user.host == null &&
-                  note.uri?.host == accountContext.getAccount.host
-              ? note
-              : await ref
-                  .read(misskeyNoteNotifierProvider.notifier)
-                  .lookupNote(note: note, accountContext: accountContext);
+              note.uri?.host == accountContext.getAccount.host
+          ? note
+          : await ref
+                .read(misskeyNoteNotifierProvider.notifier)
+                .lookupNote(note: note, accountContext: accountContext);
       if (foundNote == null) {
         state = null;
         return;
@@ -217,8 +216,8 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
       isLocalOnly.value = accountSettings.defaultIsLocalOnly;
       visibility.value =
           accountSettings.defaultNoteVisibility == NoteVisibility.specified
-              ? NoteVisibility.followers
-              : accountSettings.defaultNoteVisibility;
+          ? NoteVisibility.followers
+          : accountSettings.defaultNoteVisibility;
       return null;
     }, const []);
 
@@ -243,24 +242,19 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           trailing: IconButton(
-            onPressed:
-                () async =>
-                    await ref
-                        .read(
-                          renoteOtherAccountNotifierProvider(
-                            account,
-                            note,
-                          ).notifier,
-                        )
-                        .renoteOtherAccount(),
+            onPressed: () async => await ref
+                .read(
+                  renoteOtherAccountNotifierProvider(account, note).notifier,
+                )
+                .renoteOtherAccount(),
             icon: const Icon(Icons.keyboard_arrow_down),
           ),
         ),
         Divider(color: Theme.of(context).primaryColor, thickness: 2),
         if (channel != null) ...[
           ListTile(
-            onTap:
-                () async => await ref.read(notifier).renoteInSpecificChannel(),
+            onTap: () async =>
+                await ref.read(notifier).renoteInSpecificChannel(),
             leading: const SizedBox(
               height: 30,
               width: 30,
@@ -314,10 +308,8 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
         ],
         if (note.channel?.allowRenoteToExternal != false) ...[
           ListTile(
-            onTap:
-                () async => ref
-                    .read(notifier)
-                    .renote(isLocalOnly.value, visibility.value),
+            onTap: () async =>
+                ref.read(notifier).renote(isLocalOnly.value, visibility.value),
             leading: const Icon(Icons.repeat),
             title: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -338,17 +330,15 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
                         ),
                     ],
                     value: visibility.value,
-                    onChanged:
-                        (value) =>
-                            visibility.value = value ?? NoteVisibility.public,
+                    onChanged: (value) =>
+                        visibility.value = value ?? NoteVisibility.public,
                   ),
                 ),
                 IconButton(
                   onPressed: () => isLocalOnly.value = !isLocalOnly.value,
-                  icon:
-                      isLocalOnly.value
-                          ? const LocalOnlyIcon()
-                          : const Icon(Icons.rocket),
+                  icon: isLocalOnly.value
+                      ? const LocalOnlyIcon()
+                      : const Icon(Icons.rocket),
                 ),
               ],
             ),

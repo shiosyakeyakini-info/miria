@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
@@ -44,7 +44,8 @@ class _QuotedRenote implements MentionQuoteNotificationDataType {
 
 class _Reply implements MentionQuoteNotificationDataType {
   @override
-  String Function(BuildContext context) get name => (context) => "";
+  String Function(BuildContext context) get name =>
+      (context) => "";
 }
 
 class MentionQuoteNotificationData extends NotificationData {

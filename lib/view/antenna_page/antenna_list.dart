@@ -1,12 +1,7 @@
-import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:miria/providers.dart";
-import "package:miria/router/app_router.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/experimental/mutation.dart";
 
@@ -20,8 +15,8 @@ class AntennaList extends ConsumerWidget {
     return switch (antennas) {
       AsyncData(value: final antennas) => ListView.builder(
         itemCount: antennas.length,
-        itemBuilder:
-            (context, index) => AntennaListItem(antenna: antennas[index]),
+        itemBuilder: (context, index) =>
+            AntennaListItem(antenna: antennas[index]),
       ),
       AsyncError(error: final e, stackTrace: final st) => Center(
         child: ErrorDetail(error: e, stackTrace: st),
@@ -46,10 +41,9 @@ class AntennaListItem extends ConsumerWidget {
       title: Text(antenna.name),
       trailing: IconButton(
         icon: const Icon(Icons.delete),
-        onPressed:
-            deleteAntenna is PendingMutation
-                ? null
-                : () async => deleteAntenna.call(antenna.id),
+        onPressed: deleteAntenna is PendingMutation
+            ? null
+            : () async => deleteAntenna.call(antenna.id),
       ),
     );
   }

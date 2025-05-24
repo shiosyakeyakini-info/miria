@@ -424,10 +424,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
               registeredNote.copyWith(
                 reactions: reaction,
                 reactionEmojis: reactionEmojis,
-                myReaction:
-                    body.userId == account.i.id
-                        ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-                        : registeredNote.myReaction,
+                myReaction: body.userId == account.i.id
+                    ? (emoji?.name != null ? ":${emoji?.name}:" : null)
+                    : registeredNote.myReaction,
               ),
             );
           case UnreactedChannelEvent(:final body, :final id):
@@ -450,10 +449,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
               registeredNote.copyWith(
                 reactions: reaction,
                 reactionEmojis: reactionEmojis,
-                myReaction:
-                    body.userId == account.i.id
-                        ? ""
-                        : registeredNote.myReaction,
+                myReaction: body.userId == account.i.id
+                    ? ""
+                    : registeredNote.myReaction,
               ),
             );
           case PollVotedChannelEvent(:final body, :final id):

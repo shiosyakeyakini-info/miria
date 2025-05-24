@@ -11,8 +11,9 @@ _UnicodeEmoji _$UnicodeEmojiFromJson(Map<String, dynamic> json) =>
       category: json['category'] as String,
       char: json['char'] as String,
       name: json['name'] as String,
-      keywords:
-          (json['keywords'] as List<dynamic>).map((e) => e as String).toList(),
+      keywords: (json['keywords'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$UnicodeEmojiToJson(_UnicodeEmoji instance) =>

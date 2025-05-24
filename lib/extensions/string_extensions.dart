@@ -11,24 +11,22 @@ extension StringExtensions on String {
     final code = startsWith("#") ? substring(1) : this;
     switch (code.length) {
       case 3:
-        final rgb =
-            code
-                .split("")
-                .map((c) => int.tryParse(c, radix: 16))
-                .nonNulls
-                .map((i) => i * 16 + i)
-                .toList();
+        final rgb = code
+            .split("")
+            .map((c) => int.tryParse(c, radix: 16))
+            .nonNulls
+            .map((i) => i * 16 + i)
+            .toList();
         if (rgb.length == 3) {
           return Color.fromRGBO(rgb[0], rgb[1], rgb[2], 1);
         }
       case 4:
-        final argb =
-            code
-                .split("")
-                .map((c) => int.tryParse(c, radix: 16))
-                .nonNulls
-                .map((i) => i * 16 + i)
-                .toList();
+        final argb = code
+            .split("")
+            .map((c) => int.tryParse(c, radix: 16))
+            .nonNulls
+            .map((i) => i * 16 + i)
+            .toList();
         if (argb.length != 4) {
           return Color.fromARGB(argb[0], argb[1], argb[2], argb[3]);
         }

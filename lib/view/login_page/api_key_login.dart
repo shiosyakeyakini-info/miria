@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -39,8 +39,10 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
       if (!mounted) return;
       await context.pushRoute(
         TimeLineRoute(
-          initialTabSetting:
-              ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+          initialTabSetting: ref
+              .read(tabSettingsRepositoryProvider)
+              .tabSettings
+              .first,
         ),
       );
     } catch (e) {
@@ -74,8 +76,8 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                         onPressed: () async {
                           final url = await showDialog<String?>(
                             context: context,
-                            builder:
-                                (context) => const MisskeyServerListDialog(),
+                            builder: (context) =>
+                                const MisskeyServerListDialog(),
                           );
                           if (url != null && url.isNotEmpty) {
                             serverController.text = url;

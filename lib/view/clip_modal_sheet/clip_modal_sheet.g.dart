@@ -164,14 +164,15 @@ final class _ClipModalSheetNotifierProvider
       });
 
   ProviderListenable<_ClipModalSheetNotifier$RemoveFromClip>
-  get removeFromClip => $LazyProxyListenable<
-    _ClipModalSheetNotifier$RemoveFromClip,
-    AsyncValue<List<(Clip, bool)>>
-  >(this, (element) {
-    element as _$ClipModalSheetNotifierElement;
+  get removeFromClip =>
+      $LazyProxyListenable<
+        _ClipModalSheetNotifier$RemoveFromClip,
+        AsyncValue<List<(Clip, bool)>>
+      >(this, (element) {
+        element as _$ClipModalSheetNotifierElement;
 
-    return element._$removeFromClip;
-  });
+        return element._$removeFromClip;
+      });
 
   @override
   bool operator ==(Object other) {

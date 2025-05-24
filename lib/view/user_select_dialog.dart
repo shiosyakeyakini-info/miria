@@ -146,12 +146,11 @@ class UsersSelectContentList extends ConsumerWidget {
             );
         return response.toList();
       },
-      itemBuilder:
-          (context2, item) => UserListItem(
-            user: item,
-            isDetail: isDetail,
-            onTap: () => onSelected.call(item),
-          ),
+      itemBuilder: (context2, item) => UserListItem(
+        user: item,
+        isDetail: isDetail,
+        onTap: () => onSelected.call(item),
+      ),
     );
   }
 }

@@ -48,13 +48,13 @@ class MediaViewer extends HookConsumerWidget {
       height: MediaQuery.of(context).size.height,
       child:
           (enabledAutoPlay.value ||
-                  (!enabledAutoPlay.value && !isThumbnailVisible.value))
-              ? MediaPlayer(
-                url: file.url,
-                fileType: file.type,
-                thumbnailUrl: file.thumbnailUrl,
-              )
-              : thumbnailWidget,
+              (!enabledAutoPlay.value && !isThumbnailVisible.value))
+          ? MediaPlayer(
+              url: file.url,
+              fileType: file.type,
+              thumbnailUrl: file.thumbnailUrl,
+            )
+          : thumbnailWidget,
     );
   }
 }

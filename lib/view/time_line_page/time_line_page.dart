@@ -166,33 +166,28 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       title: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children:
-              tabSettings.mapIndexed((index, tabSetting) {
-                final account = ref.watch(accountProvider(tabSetting.acct));
-                return Ink(
-                  color:
-                      tabSetting == currentTabSetting
-                          ? AppTheme.of(context).currentDisplayTabColor
-                          : Colors.transparent,
-                  child: AccountContextScope.as(
-                    account: account,
-                    child: IconButton(
-                      icon: TabIconView(
-                        icon: tabSetting.icon,
-                        color:
-                            tabSetting == currentTabSetting
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
-                      ),
-                      onPressed:
-                          () =>
-                              tabSetting == currentTabSetting
-                                  ? reload()
-                                  : pageController.jumpToPage(index),
-                    ),
+          children: tabSettings.mapIndexed((index, tabSetting) {
+            final account = ref.watch(accountProvider(tabSetting.acct));
+            return Ink(
+              color: tabSetting == currentTabSetting
+                  ? AppTheme.of(context).currentDisplayTabColor
+                  : Colors.transparent,
+              child: AccountContextScope.as(
+                account: account,
+                child: IconButton(
+                  icon: TabIconView(
+                    icon: tabSetting.icon,
+                    color: tabSetting == currentTabSetting
+                        ? Theme.of(context).primaryColor
+                        : Colors.white,
                   ),
-                );
-              }).toList(),
+                  onPressed: () => tabSetting == currentTabSetting
+                      ? reload()
+                      : pageController.jumpToPage(index),
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ),
       actions: [
@@ -218,10 +213,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     if (deckMode) return const TimelineTablet();
 
     timelineRepository = ref.watch(timelineProvider(currentTabSetting));
-    final socketTimeline =
-        timelineRepository is SocketTimelineRepository
-            ? timelineRepository as SocketTimelineRepository?
-            : null;
+    final socketTimeline = timelineRepository is SocketTimelineRepository
+        ? timelineRepository as SocketTimelineRepository?
+        : null;
     tabSettings = ref.watch(
       tabSettingsRepositoryProvider.select((repo) => repo.tabSettings.toList()),
     );
@@ -308,15 +302,13 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   ],
                   const Padding(padding: EdgeInsets.only(right: 5)),
                   IconButton(
-                    onPressed:
-                        () async =>
-                            ref
-                                .read(timelineProvider(currentTabSetting))
-                                .reconnect(),
+                    onPressed: () async => ref
+                        .read(timelineProvider(currentTabSetting))
+                        .reconnect(),
                     icon:
                         socketTimeline != null && socketTimeline.isReconnecting
-                            ? const CircularProgressIndicator.adaptive()
-                            : const Icon(Icons.refresh),
+                        ? const CircularProgressIndicator.adaptive()
+                        : const Icon(Icons.refresh),
                   ),
                 ],
               ),
@@ -534,8 +526,6 @@ class AnnouncementIcon extends StatelessWidget {
         return const Icon(Icons.error, color: Colors.white);
       case AnnouncementIconType.success:
         return const Icon(Icons.check, color: Colors.white);
-      default:
-        return const SizedBox.shrink();
     }
   }
 }

@@ -1,10 +1,10 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
 import "package:miria/providers.dart";
@@ -60,12 +60,11 @@ class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
   void updateExcludeKeywords(String? excludeKeywords) {
     if (excludeKeywords != null) {
       state = state.copyWith(
-        excludeKeywords:
-            excludeKeywords
-                .trim()
-                .split("\n")
-                .map((e) => e.split(" "))
-                .toList(),
+        excludeKeywords: excludeKeywords
+            .trim()
+            .split("\n")
+            .map((e) => e.split(" "))
+            .toList(),
       );
     }
   }
@@ -172,46 +171,45 @@ class AntennaSettingsForm extends HookConsumerWidget {
               }
               return null;
             },
-            onSaved:
-                ref.read(_antennaSettingsNotifierProvider.notifier).updateName,
+            onSaved: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateName,
           ),
           const SizedBox(height: 10),
           Text(S.of(context).antennaSource),
           const SizedBox(height: 5),
           DropdownButtonFormField<AntennaSource>(
-            items:
-                AntennaSource.values
-                    .map(
-                      (e) => DropdownMenuItem<AntennaSource>(
-                        value: e,
-                        child: Text(switch (e) {
-                          AntennaSource.home => S.of(context).antennaSourceHome,
-                          AntennaSource.all => S.of(context).antennaSourceAll,
-                          AntennaSource.users =>
-                            S.of(context).antennaSourceUser,
-                          AntennaSource.usersBlackList => "指定したユーザー以外",
-                          AntennaSource.list => S.of(context).antennaSourceList,
-                        }),
-                      ),
-                    )
-                    .toList(),
+            items: AntennaSource.values
+                .map(
+                  (e) => DropdownMenuItem<AntennaSource>(
+                    value: e,
+                    child: Text(switch (e) {
+                      AntennaSource.home => S.of(context).antennaSourceHome,
+                      AntennaSource.all => S.of(context).antennaSourceAll,
+                      AntennaSource.users => S.of(context).antennaSourceUser,
+                      AntennaSource.usersBlackList => "指定したユーザー以外",
+                      AntennaSource.list => S.of(context).antennaSourceList,
+                    }),
+                  ),
+                )
+                .toList(),
             value: settings.src,
             hint: Text(S.of(context).selectAntennaSource),
-            onChanged:
-                ref.read(_antennaSettingsNotifierProvider.notifier).updateSrc,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateSrc,
           ),
           const SizedBox(height: 10),
           if (settings.src == AntennaSource.list)
             DropdownButtonFormField<UsersList>(
-              items:
-                  list.value
-                      ?.map(
-                        (list) => DropdownMenuItem(
-                          value: list,
-                          child: Text(list.name ?? ""),
-                        ),
-                      )
-                      .toList(),
+              items: list.value
+                  ?.map(
+                    (list) => DropdownMenuItem(
+                      value: list,
+                      child: Text(list.name ?? ""),
+                    ),
+                  )
+                  .toList(),
               validator: (value) {
                 if (value == null) {
                   return S.of(context).pleaseInput;
@@ -222,10 +220,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 (e) => e.id == settings.userListId,
               ),
               hint: Text(S.of(context).selectList),
-              onChanged:
-                  ref
-                      .read(_antennaSettingsNotifierProvider.notifier)
-                      .updateUserList,
+              onChanged: ref
+                  .read(_antennaSettingsNotifierProvider.notifier)
+                  .updateUserList,
             ),
           if (settings.src == AntennaSource.users ||
               settings.src == AntennaSource.usersBlackList) ...[
@@ -238,10 +235,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 hintText: S.of(context).antennaSourceUserHintText,
                 contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
               ),
-              onSaved:
-                  ref
-                      .read(_antennaSettingsNotifierProvider.notifier)
-                      .updateUsers,
+              onSaved: ref
+                  .read(_antennaSettingsNotifierProvider.notifier)
+                  .updateUsers,
             ),
             TextButton(
               onPressed: () async {
@@ -275,10 +271,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
             ),
             // Misskey 2023.9.0 で条件が変更されるためバリデーションを行わない
             // https://github.com/misskey-dev/misskey/pull/11469
-            onSaved:
-                ref
-                    .read(_antennaSettingsNotifierProvider.notifier)
-                    .updateKeywords,
+            onSaved: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateKeywords,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -293,44 +288,39 @@ class AntennaSettingsForm extends HookConsumerWidget {
               helperMaxLines: 5,
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
-            onSaved:
-                ref
-                    .read(_antennaSettingsNotifierProvider.notifier)
-                    .updateExcludeKeywords,
+            onSaved: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateExcludeKeywords,
           ),
           const SizedBox(height: 10),
           CheckboxListTile(
             title: Text(S.of(context).discriminateUpperLower),
             value: settings.caseSensitive,
-            onChanged:
-                ref
-                    .read(_antennaSettingsNotifierProvider.notifier)
-                    .updateCaseSensitive,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateCaseSensitive,
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveReplies),
             value: settings.withReplies,
-            onChanged:
-                ref
-                    .read(_antennaSettingsNotifierProvider.notifier)
-                    .updateWithReplies,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateWithReplies,
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveOnlyFiles),
             value: settings.withFile,
-            onChanged:
-                ref
-                    .read(_antennaSettingsNotifierProvider.notifier)
-                    .updateWithFile,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateWithFile,
           ),
           CheckboxListTile(
             title: Text(S.of(context).receiveLocal),
             subtitle: Text(S.of(context).receiveLocalAvailability),
             value: settings.localOnly,
-            onChanged:
-                ref
-                    .read(_antennaSettingsNotifierProvider.notifier)
-                    .updateLocalOnly,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateLocalOnly,
           ),
 
           // notifyは機能していない?

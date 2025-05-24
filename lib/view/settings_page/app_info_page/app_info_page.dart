@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -31,7 +31,8 @@ class AppInfoPage extends ConsumerWidget {
             child: Column(
               children: [
                 MfmText(
-                  mfmText: '''
+                  mfmText:
+                      '''
 <center>\$[x3 Miria]</center>
 ${S.of(context).packageName}: ${packageInfo?.packageName ?? ""}
 ${S.of(context).version}: ${packageInfo?.version ?? ""}+${packageInfo?.buildNumber ?? ""}
