@@ -161,7 +161,9 @@ class CommonDrawer extends ConsumerWidget {
                     ListTile(
                       leading: const Icon(Icons.settings),
                       title: Text(
-                        S.of(context).accountSetting(
+                        S
+                            .of(context)
+                            .accountSetting(
                               account.i.name ?? account.i.username,
                             ),
                       ),

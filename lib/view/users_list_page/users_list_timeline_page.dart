@@ -26,12 +26,13 @@ class UsersListTimelinePage extends ConsumerWidget implements AutoRouteWrapper {
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
-            onPressed: () async => context.pushRoute(
-              UsersListDetailRoute(
-                accountContext: accountContext,
-                listId: list.id,
-              ),
-            ),
+            onPressed:
+                () async => context.pushRoute(
+                  UsersListDetailRoute(
+                    accountContext: accountContext,
+                    listId: list.id,
+                  ),
+                ),
           ),
         ],
       ),

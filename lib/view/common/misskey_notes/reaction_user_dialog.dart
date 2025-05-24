@@ -44,9 +44,7 @@ class ReactionUserDialog extends ConsumerWidget implements AutoRouteWrapper {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomEmoji(
-            emojiData: emojiData,
-          ),
+          CustomEmoji(emojiData: emojiData),
           Text(
             emojiData.baseName,
             style: Theme.of(context).textTheme.bodySmall,
@@ -64,9 +62,7 @@ class ReactionUserDialog extends ConsumerWidget implements AutoRouteWrapper {
                   .read(misskeyGetContextProvider)
                   .notes
                   .reactions
-                  .reactions(
-                    NotesReactionsRequest(noteId: noteId, type: type),
-                  );
+                  .reactions(NotesReactionsRequest(noteId: noteId, type: type));
               return response.toList();
             },
             nextFuture: (item, index) async {

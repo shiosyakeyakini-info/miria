@@ -3,6 +3,9 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/clip_settings.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+
+part "clip_settings_dialog.g.dart";
 
 final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
 
@@ -10,13 +13,8 @@ final _initialSettingsProvider = Provider.autoDispose<ClipSettings>(
   (ref) => throw UnimplementedError(),
 );
 
-final _clipSettingsNotifierProvider =
-    NotifierProvider.autoDispose<_ClipSettingsNotifier, ClipSettings>(
-  _ClipSettingsNotifier.new,
-  dependencies: [_initialSettingsProvider],
-);
-
-class _ClipSettingsNotifier extends AutoDisposeNotifier<ClipSettings> {
+@riverpod
+class _ClipSettingsNotifier extends _$ClipSettingsNotifier {
   @override
   ClipSettings build() {
     return ref.watch(_initialSettingsProvider);
@@ -43,7 +41,7 @@ class _ClipSettingsNotifier extends AutoDisposeNotifier<ClipSettings> {
   }
 }
 
-@RoutePage<ClipSettings>()
+@RoutePage()
 class ClipSettingsDialog extends StatelessWidget {
   const ClipSettingsDialog({
     super.key,
@@ -108,9 +106,10 @@ class UsersListSettingsForm extends ConsumerWidget {
               labelText: S.of(context).clipDescription,
               contentPadding: const EdgeInsets.fromLTRB(12, 24, 12, 16),
             ),
-            onSaved: ref
-                .read(_clipSettingsNotifierProvider.notifier)
-                .updateDescription,
+            onSaved:
+                ref
+                    .read(_clipSettingsNotifierProvider.notifier)
+                    .updateDescription,
           ),
           CheckboxListTile(
             title: Text(S.of(context).public),

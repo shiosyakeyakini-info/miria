@@ -13,14 +13,12 @@ part "dialog_state.freezed.dart";
 part "dialog_state.g.dart";
 
 @freezed
-class DialogsState with _$DialogsState {
-  factory DialogsState({
-    @Default([]) List<DialogData> dialogs,
-  }) = _DialogsState;
+abstract class DialogsState with _$DialogsState {
+  factory DialogsState({@Default([]) List<DialogData> dialogs}) = _DialogsState;
 }
 
 @freezed
-class DialogData with _$DialogData {
+abstract class DialogData with _$DialogData {
   factory DialogData({
     required String Function(BuildContext context) message,
     required List<String> Function(BuildContext context) actions,

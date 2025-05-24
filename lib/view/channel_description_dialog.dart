@@ -3,10 +3,20 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
+import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/channels_page/channel_detail_info.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
 @RoutePage()
+@Dependencies([
+  ChannelDetail,
+  accountContext,
+  misskeyPostContext,
+  notesWith,
+  MisskeyNoteNotifier,
+])
 class ChannelDescriptionDialog extends ConsumerWidget
     implements AutoRouteWrapper {
   @override

@@ -60,13 +60,15 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
     await windowManager.setPreventClose(true);
     final config = ref.read(desktopSettingsRepositoryProvider).settings;
 
-    final size = (config.window.w > 0 && config.window.h > 0)
-        ? Size(config.window.w, config.window.h)
-        : const Size(400, 700);
+    final size =
+        (config.window.w > 0 && config.window.h > 0)
+            ? Size(config.window.w, config.window.h)
+            : const Size(400, 700);
 
-    final position = (config.window.x != null && config.window.y != null)
-        ? Offset(config.window.x!, config.window.y!)
-        : null;
+    final position =
+        (config.window.x != null && config.window.y != null)
+            ? Offset(config.window.x!, config.window.y!)
+            : null;
 
     final opt = WindowOptions(
       size: size,
@@ -87,19 +89,16 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useEffect(
-      () {
-        if (!isDesktop) return null;
-        final windowListener = ref.read(miriaWindowListenerProvider);
-        WidgetsBinding.instance.addObserver(this);
-        windowManager.addListener(windowListener);
-        return () {
-          WidgetsBinding.instance.removeObserver(this);
-          windowManager.removeListener(windowListener);
-        };
-      },
-      const [],
-    );
+    useEffect(() {
+      if (!isDesktop) return null;
+      final windowListener = ref.read(miriaWindowListenerProvider);
+      WidgetsBinding.instance.addObserver(this);
+      windowManager.addListener(windowListener);
+      return () {
+        WidgetsBinding.instance.removeObserver(this);
+        windowManager.removeListener(windowListener);
+      };
+    }, const []);
     useMemoized(() {
       unawaited(() async {
         await ref.read(desktopSettingsRepositoryProvider).load();
@@ -108,8 +107,9 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
     });
 
     final language = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.languages),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.languages,
+      ),
     );
     final appRouter = ref.watch(appRouterProvider);
 
@@ -134,9 +134,7 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
           child: AppThemeScope(
             child: SharingIntentListener(
               router: appRouter,
-              child: ErrorDialogListener(
-                child: widget ?? Container(),
-              ),
+              child: ErrorDialogListener(child: widget ?? Container()),
             ),
           ),
         );
@@ -149,15 +147,14 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        PointerDeviceKind.trackpad,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+  };
 }
 
 @riverpod
-MiriaWindowListener miriaWindowListener(MiriaWindowListenerRef ref) =>
-    MiriaWindowListener(ref);
+MiriaWindowListener miriaWindowListener(Ref ref) => MiriaWindowListener(ref);
 
 class MiriaWindowListener with WindowListener {
   final Ref ref;
@@ -175,7 +172,9 @@ class MiriaWindowListener with WindowListener {
     final position = await windowManager.getPosition();
     try {
       final settings = ref.read(desktopSettingsRepositoryProvider).settings;
-      await ref.read(desktopSettingsRepositoryProvider).update(
+      await ref
+          .read(desktopSettingsRepositoryProvider)
+          .update(
             settings.copyWith(
               window: DesktopWindowSettings(
                 w: size.width,

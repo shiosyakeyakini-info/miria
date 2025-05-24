@@ -9,10 +9,7 @@ import "package:miria/view/common/note_create/custom_keyboard_button.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 
 class MfmFnArg {
-  const MfmFnArg({
-    required this.name,
-    this.defaultValue,
-  });
+  const MfmFnArg({required this.name, this.defaultValue});
 
   final String name;
   final String? defaultValue;
@@ -51,10 +48,7 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "speed", defaultValue: "0.75s"),
     MfmFnArg(name: "delay", defaultValue: "0s"),
   ],
-  "flip": [
-    MfmFnArg(name: "v"),
-    MfmFnArg(name: "h"),
-  ],
+  "flip": [MfmFnArg(name: "v"), MfmFnArg(name: "h")],
   "x2": [],
   "x3": [],
   "x4": [],
@@ -66,12 +60,8 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "x", defaultValue: "0"),
     MfmFnArg(name: "y", defaultValue: "0"),
   ],
-  "fg": [
-    MfmFnArg(name: "color"),
-  ],
-  "bg": [
-    MfmFnArg(name: "color"),
-  ],
+  "fg": [MfmFnArg(name: "color")],
+  "bg": [MfmFnArg(name: "color")],
   "border": [
     MfmFnArg(name: "style", defaultValue: "solid"),
     MfmFnArg(name: "color"),
@@ -86,15 +76,9 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "fantasy"),
   ],
   "blur": [],
-  "rainbow": [
-    MfmFnArg(name: "speed", defaultValue: "1s"),
-  ],
-  "sparkle": [
-    MfmFnArg(name: "speed", defaultValue: "1.5s"),
-  ],
-  "rotate": [
-    MfmFnArg(name: "deg", defaultValue: "90"),
-  ],
+  "rainbow": [MfmFnArg(name: "speed", defaultValue: "1s")],
+  "sparkle": [MfmFnArg(name: "speed", defaultValue: "1.5s")],
+  "rotate": [MfmFnArg(name: "deg", defaultValue: "90")],
   "ruby": [],
   "unixtime": [],
 };
@@ -238,35 +222,34 @@ class MfmFnKeyboard extends ConsumerWidget {
 
     if (filteredArgs.isNotEmpty) {
       return Row(
-        children: filteredArgs
-            .map(
-              (arg) => CustomKeyboardButton(
-                keyboard: arg.name,
-                controller: controller,
-                focusNode: focusNode,
-                onTap: () async => insertMfmFnArg(arg),
-              ),
-            )
-            .toList(),
+        children:
+            filteredArgs
+                .map(
+                  (arg) => CustomKeyboardButton(
+                    keyboard: arg.name,
+                    controller: controller,
+                    focusNode: focusNode,
+                    onTap: () async => insertMfmFnArg(arg),
+                  ),
+                )
+                .toList(),
       );
     } else if (filteredNames.isNotEmpty) {
       return Row(
-        children: filteredNames
-            .map(
-              (name) => CustomKeyboardButton(
-                keyboard: name,
-                controller: controller,
-                focusNode: focusNode,
-                onTap: () async => insertMfmFnName(name),
-              ),
-            )
-            .toList(),
+        children:
+            filteredNames
+                .map(
+                  (name) => CustomKeyboardButton(
+                    keyboard: name,
+                    controller: controller,
+                    focusNode: focusNode,
+                    onTap: () async => insertMfmFnName(name),
+                  ),
+                )
+                .toList(),
       );
     } else {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
   }
 }

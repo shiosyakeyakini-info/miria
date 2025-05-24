@@ -7,10 +7,7 @@ import "package:miria/view/themes/app_theme.dart";
 class CopyNoteModalSheet extends ConsumerWidget {
   final String note;
 
-  const CopyNoteModalSheet({
-    required this.note,
-    super.key,
-  });
+  const CopyNoteModalSheet({required this.note, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,9 +20,7 @@ class CopyNoteModalSheet extends ConsumerWidget {
               title: Text(S.of(context).detail),
               trailing: IconButton(
                 onPressed: () {
-                  Clipboard.setData(
-                    ClipboardData(text: note),
-                  );
+                  Clipboard.setData(ClipboardData(text: note));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(S.of(context).doneCopy),

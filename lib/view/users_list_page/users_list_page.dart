@@ -53,25 +53,26 @@ class UsersListPage extends ConsumerWidget implements AutoRouteWrapper {
                   title: Text(list.name ?? ""),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () async => ref
-                        .read(usersListsNotifierProvider.notifier)
-                        .delete(list.id),
+                    onPressed:
+                        () async => ref
+                            .read(usersListsNotifierProvider.notifier)
+                            .delete(list.id),
                   ),
-                  onTap: () async => context.pushRoute(
-                    UsersListTimelineRoute(
-                      accountContext: ref.read(accountContextProvider),
-                      list: list,
-                    ),
-                  ),
+                  onTap:
+                      () async => context.pushRoute(
+                        UsersListTimelineRoute(
+                          accountContext: ref.read(accountContextProvider),
+                          list: list,
+                        ),
+                      ),
                 );
               },
             );
           },
-          error: (e, st) =>
-              Center(child: ErrorDetail(error: e, stackTrace: st)),
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
+          error:
+              (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
+          loading:
+              () => const Center(child: CircularProgressIndicator.adaptive()),
         ),
       ),
     );

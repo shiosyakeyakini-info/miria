@@ -35,14 +35,11 @@ class NoteFileDialog extends HookConsumerWidget {
     final isAutoPlay = useState(true);
     final isEnabledSaveButton = useState(true);
 
-    useEffect(
-      () {
-        final f = driveFiles[initialPage].type.startsWith("image");
-        isEnabledSaveButton.value = f;
-        return () {};
-      },
-      [],
-    );
+    useEffect(() {
+      final f = driveFiles[initialPage].type.startsWith("image");
+      isEnabledSaveButton.value = f;
+      return () {};
+    }, []);
 
     final pageController = usePageController(initialPage: initialPage);
     pageController.addListener(() {
@@ -88,33 +85,30 @@ class NoteFileDialog extends HookConsumerWidget {
               child: Dismissible(
                 key: const ValueKey(""),
                 behavior: HitTestBehavior.translucent,
-                direction: (!imageViewInfo.isDoubleTap &&
-                        imageViewInfo.scale == 1.0 &&
-                        imageViewInfo.pointersCount <= 1)
-                    ? DismissDirection.vertical
-                    : DismissDirection.none,
+                direction:
+                    (!imageViewInfo.isDoubleTap &&
+                            imageViewInfo.scale == 1.0 &&
+                            imageViewInfo.pointersCount <= 1)
+                        ? DismissDirection.vertical
+                        : DismissDirection.none,
                 resizeDuration: null,
                 onDismissed: (_) => {Navigator.of(context).pop()},
                 child: Stack(
                   children: [
                     PageView(
                       controller: pageController,
-                      physics: (!imageViewInfo.isDoubleTap &&
-                              imageViewInfo.scale == 1.0 &&
-                              imageViewInfo.pointersCount <= 1)
-                          ? const ScrollPhysics()
-                          : const NeverScrollableScrollPhysics(),
+                      physics:
+                          (!imageViewInfo.isDoubleTap &&
+                                  imageViewInfo.scale == 1.0 &&
+                                  imageViewInfo.pointersCount <= 1)
+                              ? const ScrollPhysics()
+                              : const NeverScrollableScrollPhysics(),
                       children: [
                         for (final file in driveFiles)
                           if (file.type.startsWith("image"))
-                            ImageViewer(
-                              file: file,
-                            )
+                            ImageViewer(file: file)
                           else if (file.type.startsWith(RegExp("video|audio")))
-                            MediaViewer(
-                              file: file,
-                              autoPlay: isAutoPlay.value,
-                            )
+                            MediaViewer(file: file, autoPlay: isAutoPlay.value)
                           else
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
@@ -134,23 +128,23 @@ class NoteFileDialog extends HookConsumerWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        constraints:
-                            const BoxConstraints(minWidth: 0, minHeight: 0),
+                        constraints: const BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         padding: EdgeInsets.zero,
-                        fillColor: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withAlpha(200),
+                        fillColor: Theme.of(
+                          context,
+                        ).scaffoldBackgroundColor.withAlpha(200),
                         shape: const CircleBorder(),
                         child: Padding(
                           padding: const EdgeInsets.all(5),
                           child: Icon(
                             Icons.close,
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.color
-                                ?.withAlpha(200),
+                            color: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.color?.withAlpha(200),
                           ),
                         ),
                       ),
@@ -173,40 +167,39 @@ class NoteFileDialog extends HookConsumerWidget {
                             if (f != DownloadFileResult.succeeded) {
                               await showDialog(
                                 context: context,
-                                builder: (context) => SimpleMessageDialog(
-                                  message:
-                                      "${S.of(context).failedFileSave}\n[$f]",
-                                ),
+                                builder:
+                                    (context) => SimpleMessageDialog(
+                                      message:
+                                          "${S.of(context).failedFileSave}\n[$f]",
+                                    ),
                               );
                               return;
                             }
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(
-                                  S.of(context).savedImage,
-                                ),
+                                content: Text(S.of(context).savedImage),
                                 duration: const Duration(seconds: 1),
                               ),
                             );
                           },
-                          constraints:
-                              const BoxConstraints(minWidth: 0, minHeight: 0),
+                          constraints: const BoxConstraints(
+                            minWidth: 0,
+                            minHeight: 0,
+                          ),
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
                           padding: EdgeInsets.zero,
-                          fillColor: Theme.of(context)
-                              .scaffoldBackgroundColor
-                              .withAlpha(200),
+                          fillColor: Theme.of(
+                            context,
+                          ).scaffoldBackgroundColor.withAlpha(200),
                           shape: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(5),
                             child: Icon(
                               Icons.save,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.color
-                                  ?.withAlpha(200),
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color?.withAlpha(200),
                             ),
                           ),
                         ),

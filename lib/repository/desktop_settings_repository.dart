@@ -14,9 +14,12 @@ class DesktopSettingsRepository extends ChangeNotifier {
     final f = File(await getSettingPath());
     if (kDebugMode) print("path: ${f.path}");
     try {
-      _settings = (await f.exists())
-          ? DesktopSettings.fromJson(await json.decode(await f.readAsString()))
-          : const DesktopSettings();
+      _settings =
+          (await f.exists())
+              ? DesktopSettings.fromJson(
+                await json.decode(await f.readAsString()),
+              )
+              : const DesktopSettings();
     } catch (e) {
       if (kDebugMode) print(e);
       _settings = const DesktopSettings();

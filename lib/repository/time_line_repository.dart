@@ -148,10 +148,16 @@ abstract class TimelineRepository extends ChangeNotifier {
     });
   }
 
-  late final QueueList<Note> newerNotes =
-      NotifierQueueList(noteRepository, generalSettingsRepository, tabSetting);
-  late final QueueList<Note> olderNotes =
-      NotifierQueueList(noteRepository, generalSettingsRepository, tabSetting);
+  late final QueueList<Note> newerNotes = NotifierQueueList(
+    noteRepository,
+    generalSettingsRepository,
+    tabSetting,
+  );
+  late final QueueList<Note> olderNotes = NotifierQueueList(
+    noteRepository,
+    generalSettingsRepository,
+    tabSetting,
+  );
 
   void startTimeLine() {}
 
@@ -196,8 +202,9 @@ abstract class TimelineRepository extends ChangeNotifier {
   }
 
   void subscribe(SubscribeItem item) {
-    final index =
-        subscribedList.indexWhere((element) => element.noteId == item.noteId);
+    final index = subscribedList.indexWhere(
+      (element) => element.noteId == item.noteId,
+    );
     if (index == -1) {
       subscribedList.add(item);
     } else {

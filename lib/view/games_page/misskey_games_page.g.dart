@@ -6,24 +6,45 @@ part of 'misskey_games_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchReversiDataHash() => r'38cce5ae9d15fe973565196ea2c1dfc283c8c7df';
-
-/// See also [_fetchReversiData].
 @ProviderFor(_fetchReversiData)
-final _fetchReversiDataProvider =
-    AutoDisposeFutureProvider<List<User>>.internal(
-  _fetchReversiData,
-  name: r'_fetchReversiDataProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$fetchReversiDataHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+const _fetchReversiDataProvider = _FetchReversiDataProvider._();
 
-typedef _FetchReversiDataRef = AutoDisposeFutureProviderRef<List<User>>;
+final class _FetchReversiDataProvider
+    extends $FunctionalProvider<AsyncValue<List<User>>, FutureOr<List<User>>>
+    with $FutureModifier<List<User>>, $FutureProvider<List<User>> {
+  const _FetchReversiDataProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_fetchReversiDataProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _FetchReversiDataProvider.$allTransitiveDependencies0,
+          _FetchReversiDataProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$fetchReversiDataHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<User>> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<User>> create(Ref ref) {
+    return _fetchReversiData(ref);
+  }
+}
+
+String _$fetchReversiDataHash() => r'c83ae0f4b7d51c2f9b8d800e959556517d4a8839';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

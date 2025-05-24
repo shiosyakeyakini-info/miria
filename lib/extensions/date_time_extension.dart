@@ -16,17 +16,17 @@ extension DateTimeExtension on DateTime {
 
   String formatUntilSeconds(BuildContext context) {
     final localeName = Localizations.localeOf(context).toLanguageTag();
-    final formattedDate =
-        DateFormat.yMMMd(localeName).add_Hms().format(toUtc().toLocal());
+    final formattedDate = DateFormat.yMMMd(
+      localeName,
+    ).add_Hms().format(toUtc().toLocal());
     return "${year < 0 ? "-" : ""}$formattedDate";
   }
 
   String formatUntilMilliSeconds(BuildContext context) {
     final localeName = Localizations.localeOf(context).toLanguageTag();
-    final formattedDate = DateFormat.yMd(localeName)
-        .add_Hms()
-        .addPattern("S", ".")
-        .format(toUtc().toLocal());
+    final formattedDate = DateFormat.yMd(
+      localeName,
+    ).add_Hms().addPattern("S", ".").format(toUtc().toLocal());
     return "${year < 0 ? "-" : ""}$formattedDate";
   }
 

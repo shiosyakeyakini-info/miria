@@ -6,25 +6,69 @@ part of 'photo_edit_state_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(PhotoEditStateNotifier)
+const photoEditStateNotifierProvider = PhotoEditStateNotifierProvider._();
+
+final class PhotoEditStateNotifierProvider
+    extends $NotifierProvider<PhotoEditStateNotifier, PhotoEdit> {
+  const PhotoEditStateNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'photoEditStateNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          PhotoEditStateNotifierProvider.$allTransitiveDependencies0,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = accountContextProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$photoEditStateNotifierHash();
+
+  @$internal
+  @override
+  PhotoEditStateNotifier create() => PhotoEditStateNotifier();
+
+  @$internal
+  @override
+  $NotifierProviderElement<PhotoEditStateNotifier, PhotoEdit> $createElement(
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(pointer);
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PhotoEdit value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<PhotoEdit>(value),
+    );
+  }
+}
+
 String _$photoEditStateNotifierHash() =>
     r'8775951cc945fb8d595f0c3ac490e2e3d8820039';
 
-/// See also [PhotoEditStateNotifier].
-@ProviderFor(PhotoEditStateNotifier)
-final photoEditStateNotifierProvider =
-    AutoDisposeNotifierProvider<PhotoEditStateNotifier, PhotoEdit>.internal(
-  PhotoEditStateNotifier.new,
-  name: r'photoEditStateNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$photoEditStateNotifierHash,
-  dependencies: <ProviderOrFamily>[accountContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
-  },
-);
+abstract class _$PhotoEditStateNotifier extends $Notifier<PhotoEdit> {
+  PhotoEdit build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<PhotoEdit>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<PhotoEdit>,
+              PhotoEdit,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$PhotoEditStateNotifier = AutoDisposeNotifier<PhotoEdit>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

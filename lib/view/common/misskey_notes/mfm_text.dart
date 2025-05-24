@@ -33,9 +33,10 @@ InlineSpan _unicodeEmojiBuilder(
     return TextSpan(
       text: emoji,
       style: style,
-      recognizer: MfmBlurScope.of(builderContext)
-          ? null
-          : (TapGestureRecognizer()..onTap = () => onTap),
+      recognizer:
+          MfmBlurScope.of(builderContext)
+              ? null
+              : (TapGestureRecognizer()..onTap = () => onTap),
     );
   } else {
     return WidgetSpan(
@@ -43,9 +44,11 @@ InlineSpan _unicodeEmojiBuilder(
         onTap: MfmBlurScope.of(builderContext) ? null : () => onTap,
         child: Twemoji(
           emoji: emoji,
-          width: style?.fontSize ??
+          width:
+              style?.fontSize ??
               DefaultTextStyle.of(builderContext).style.fontSize,
-          height: style?.fontSize ??
+          height:
+              style?.fontSize ??
               DefaultTextStyle.of(builderContext).style.fontSize ??
               22,
         ),
@@ -110,9 +113,10 @@ class MfmText extends ConsumerWidget {
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,
           child: GestureDetector(
-            onTap: MfmBlurScope.of(builderContext)
-                ? null
-                : () => onEmojiTap?.call(emojiData),
+            onTap:
+                MfmBlurScope.of(builderContext)
+                    ? null
+                    : () => onEmojiTap?.call(emojiData),
             child: EmojiInk(
               child: CustomEmoji(
                 emojiData: emojiData,
@@ -123,17 +127,16 @@ class MfmText extends ConsumerWidget {
           ),
         );
       },
-      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
-        context,
-        emoji,
-        style,
-        ref,
-        () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
-      ),
-      codeBlockBuilder: (context, code, lang) => CodeBlock(
-        code: code,
-        language: lang,
-      ),
+      unicodeEmojiBuilder:
+          (context, emoji, style) => _unicodeEmojiBuilder(
+            context,
+            emoji,
+            style,
+            ref,
+            () => onEmojiTap?.call(UnicodeEmojiData(char: emoji)),
+          ),
+      codeBlockBuilder:
+          (context, code, lang) => CodeBlock(code: code, language: lang),
       unixTimeBuilder: (context, unixtime, style) {
         return WidgetSpan(
           alignment: PlaceholderAlignment.middle,
@@ -159,30 +162,27 @@ class MfmText extends ConsumerWidget {
       monospaceStyle: AppTheme.of(context).monospaceStyle,
       cursiveStyle: AppTheme.of(context).cursiveStyle,
       fantasyStyle: AppTheme.of(context).fantasyStyle,
-      linkTap: (src) async =>
-          const LinkNavigator().onTapLink(context, ref, src, host),
+      linkTap:
+          (src) async =>
+              const LinkNavigator().onTapLink(context, ref, src, host),
       linkStyle: AppTheme.of(context).linkStyle,
       hashtagStyle: AppTheme.of(context).hashtagStyle,
-      mentionTap: (userName, host, acct) async =>
-          const LinkNavigator().onMentionTap(
-        context,
-        ref,
-        acct,
-        host,
-      ),
-      hashtagTap: (hashtag) async => await context.pushRoute(
-        HashtagRoute(
-          accountContext: ref.read(accountContextProvider),
-          hashtag: hashtag,
-        ),
-      ),
+      mentionTap:
+          (userName, host, acct) async =>
+              const LinkNavigator().onMentionTap(context, ref, acct, host),
+      hashtagTap:
+          (hashtag) async => await context.pushRoute(
+            HashtagRoute(
+              accountContext: ref.read(accountContextProvider),
+              hashtag: hashtag,
+            ),
+          ),
       searchTap: onSearch,
       style: style,
       isNyaize: isNyaize,
       suffixSpan: suffixSpan,
       prefixSpan: prefixSpan,
       isUseAnimation: isEnableAnimatedMFM,
-      defaultBorderColor: Theme.of(context).primaryColor,
       maxLines: maxLines,
     );
   }
@@ -192,11 +192,7 @@ class CodeBlock extends StatelessWidget {
   final String? language;
   final String code;
 
-  const CodeBlock({
-    required this.code,
-    super.key,
-    this.language,
-  });
+  const CodeBlock({required this.code, super.key, this.language});
 
   String resolveLanguage(String language) {
     if (language == "js") return "javascript";
@@ -235,8 +231,9 @@ class EmojiInk extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEnabled = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.enableDirectReaction),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.enableDirectReaction,
+      ),
     );
     if (isEnabled) {
       return InkWell(child: child);
@@ -268,29 +265,26 @@ class SimpleMfmText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfm(
       text,
-      emojiBuilder: (context, emojiName, style) => DefaultTextStyle.merge(
-        style: style ?? DefaultTextStyle.of(context).style,
-        child: CustomEmoji(
-          emojiData: MisskeyEmojiData.fromEmojiName(
-            emojiName: ":$emojiName:",
-            repository: ref.read(
-              emojiRepositoryProvider(
-                ref.read(accountContextProvider).getAccount,
+      emojiBuilder:
+          (context, emojiName, style) => DefaultTextStyle.merge(
+            style: style ?? DefaultTextStyle.of(context).style,
+            child: CustomEmoji(
+              emojiData: MisskeyEmojiData.fromEmojiName(
+                emojiName: ":$emojiName:",
+                repository: ref.read(
+                  emojiRepositoryProvider(
+                    ref.read(accountContextProvider).getAccount,
+                  ),
+                ),
+                emojiInfo: emojis,
               ),
+              fontSizeRatio: 1,
+              style: style,
             ),
-            emojiInfo: emojis,
           ),
-          fontSizeRatio: 1,
-          style: style,
-        ),
-      ),
-      unicodeEmojiBuilder: (context, emoji, style) => _unicodeEmojiBuilder(
-        context,
-        emoji,
-        style,
-        ref,
-        () => {},
-      ),
+      unicodeEmojiBuilder:
+          (context, emoji, style) =>
+              _unicodeEmojiBuilder(context, emoji, style, ref, () => {}),
       style: style,
       suffixSpan: suffixSpan,
       prefixSpan: prefixSpan,
@@ -301,10 +295,7 @@ class SimpleMfmText extends ConsumerWidget {
 
 class UserInformation extends ConsumerWidget {
   final User user;
-  const UserInformation({
-    required this.user,
-    super.key,
-  });
+  const UserInformation({required this.user, super.key});
 
   String resolveIconUrl(Uri uri, WidgetRef ref) {
     final baseUrl = uri.toString();
@@ -319,10 +310,9 @@ class UserInformation extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SimpleMfmText(
       user.name ?? user.username,
-      style: Theme.of(context)
-          .textTheme
-          .bodyMedium
-          ?.copyWith(fontWeight: FontWeight.bold),
+      style: Theme.of(
+        context,
+      ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
       emojis: user.emojis,
       suffixSpan: [
         for (final badge in user.badgeRoles)
@@ -335,14 +325,20 @@ class UserInformation extends ConsumerWidget {
                   type: ImageType.role,
                   url: resolveIconUrl(badge.iconUrl!, ref),
                   height: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                  loadingBuilder: (context, widget, event) => SizedBox(
-                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                  ),
-                  errorBuilder: (context, e, s) => SizedBox(
-                    width: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                    height: DefaultTextStyle.of(context).style.fontSize ?? 22,
-                  ),
+                  loadingBuilder:
+                      (context, widget, event) => SizedBox(
+                        width:
+                            DefaultTextStyle.of(context).style.fontSize ?? 22,
+                        height:
+                            DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      ),
+                  errorBuilder:
+                      (context, e, s) => SizedBox(
+                        width:
+                            DefaultTextStyle.of(context).style.fontSize ?? 22,
+                        height:
+                            DefaultTextStyle.of(context).style.fontSize ?? 22,
+                      ),
                 ),
               ),
             ),

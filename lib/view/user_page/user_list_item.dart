@@ -24,13 +24,14 @@ class UserListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () async => context.pushRoute(
-                UserRoute(
-                  userId: user.id,
-                  accountContext: ref.read(accountContextProvider),
-                ),
-              ),
+            UserRoute(
+              userId: user.id,
+              accountContext: ref.read(accountContextProvider),
+            ),
+          ),
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(

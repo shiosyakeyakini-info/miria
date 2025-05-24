@@ -13,7 +13,7 @@ enum ImageType {
   serverIcon,
   role,
   ad,
-  other
+  other,
 }
 
 class NetworkImageView extends ConsumerWidget {
@@ -44,9 +44,10 @@ class NetworkImageView extends ConsumerWidget {
         width: width,
         height: height,
         fit: fit ?? BoxFit.contain,
-        placeholderBuilder: (context) =>
-            loadingBuilder?.call(context, Container(), null) ??
-            const SizedBox.shrink(),
+        placeholderBuilder:
+            (context) =>
+                loadingBuilder?.call(context, Container(), null) ??
+                const SizedBox.shrink(),
       );
     }
 
@@ -59,34 +60,38 @@ class NetworkImageView extends ConsumerWidget {
       return CachedNetworkImage(
         imageUrl: url,
         fit: fit,
-        errorWidget: (context, url, error) =>
-            errorBuilder?.call(context, error, StackTrace.current) ??
-            Container(
-              alignment: Alignment.center,
-              decoration: type == ImageType.avatarDecoration
-                  ? null
-                  : BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: const Color.fromARGB(255, 224, 224, 224),
-                    ),
-              child: type == ImageType.avatarDecoration
-                  ? null
-                  : SvgPicture.asset(
-                      "assets/images/miria_error.svg",
-                      colorFilter: const ColorFilter.mode(
-                        Color.fromARGB(255, 117, 117, 117),
-                        BlendMode.srcIn,
-                      ),
-                      width: 48,
-                      height: 48,
-                    ),
-            ),
+        errorWidget:
+            (context, url, error) =>
+                errorBuilder?.call(context, error, StackTrace.current) ??
+                Container(
+                  alignment: Alignment.center,
+                  decoration:
+                      type == ImageType.avatarDecoration
+                          ? null
+                          : BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: const Color.fromARGB(255, 224, 224, 224),
+                          ),
+                  child:
+                      type == ImageType.avatarDecoration
+                          ? null
+                          : SvgPicture.asset(
+                            "assets/images/miria_error.svg",
+                            colorFilter: const ColorFilter.mode(
+                              Color.fromARGB(255, 117, 117, 117),
+                              BlendMode.srcIn,
+                            ),
+                            width: 48,
+                            height: 48,
+                          ),
+                ),
         cacheManager: ref.read(cacheManagerProvider),
         width: width,
         height: height,
-        placeholder: (context, url) =>
-            loadingBuilder?.call(context, Container(), null) ??
-            const SizedBox.shrink(),
+        placeholder:
+            (context, url) =>
+                loadingBuilder?.call(context, Container(), null) ??
+                const SizedBox.shrink(),
         fadeInDuration: Duration.zero,
       );
     } else {

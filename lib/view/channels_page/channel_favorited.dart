@@ -17,12 +17,14 @@ class ChannelFavorited extends ConsumerWidget {
           .read(misskeyPostContextProvider)
           .channels
           .myFavorite(const ChannelsMyFavoriteRequest()),
-      builder: (context, item) => CommunityChannelView(
-        channel: item,
-        onTap: onChannelSelected != null
-            ? () => onChannelSelected?.call(item)
-            : null,
-      ),
+      builder:
+          (context, item) => CommunityChannelView(
+            channel: item,
+            onTap:
+                onChannelSelected != null
+                    ? () => onChannelSelected?.call(item)
+                    : null,
+          ),
     );
   }
 }

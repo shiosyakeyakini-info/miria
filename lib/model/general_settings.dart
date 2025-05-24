@@ -84,7 +84,7 @@ enum Languages {
 }
 
 @freezed
-class GeneralSettings with _$GeneralSettings {
+abstract class GeneralSettings with _$GeneralSettings {
   const factory GeneralSettings({
     @Default("") String lightColorThemeId,
     @Default("") String darkColorThemeId,

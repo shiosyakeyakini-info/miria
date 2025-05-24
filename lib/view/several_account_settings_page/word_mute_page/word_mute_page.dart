@@ -45,14 +45,17 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
   Future<void> save(String text, BuildContext context, WidgetRef ref) async {
     final wordMutes =
         text.split("\n").whereNot((element) => element.trim().isEmpty).map((e) {
-      if (e.startsWith("/")) {
-        return MuteWord(regExp: e);
-      } else {
-        return MuteWord(content: e.split(" "));
-      }
-    }).toList();
+          if (e.startsWith("/")) {
+            return MuteWord(regExp: e);
+          } else {
+            return MuteWord(content: e.split(" "));
+          }
+        }).toList();
 
-    await ref.read(misskeyGetContextProvider).i.update(
+    await ref
+        .read(misskeyGetContextProvider)
+        .i
+        .update(
           IUpdateRequest(
             mutedWords: muteType == MuteType.soft ? wordMutes : null,
             hardMutedWords: muteType == MuteType.hard ? wordMutes : null,
@@ -68,12 +71,10 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          switch (muteType) {
-            MuteType.soft => S.of(context).wordMute,
-            MuteType.hard => S.of(context).hardWordMute,
-          },
-        ),
+        title: Text(switch (muteType) {
+          MuteType.soft => S.of(context).wordMute,
+          MuteType.hard => S.of(context).hardWordMute,
+        }),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -90,9 +91,7 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
             complete: (context, data) {
               return Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10),
-                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
                   TextField(
                     maxLines: null,
                     minLines: 5,

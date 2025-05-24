@@ -9,11 +9,7 @@ class ErrorDetail extends StatelessWidget {
   final Object? error;
   final StackTrace? stackTrace;
 
-  const ErrorDetail({
-    required this.error,
-    required this.stackTrace,
-    super.key,
-  });
+  const ErrorDetail({required this.error, required this.stackTrace, super.key});
 
   @override
   Widget build(BuildContext context) {

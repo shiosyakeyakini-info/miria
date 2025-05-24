@@ -79,11 +79,12 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
     final copyLinks = useAsync(() async {
       await Clipboard.setData(
         ClipboardData(
-          text: Uri(
-            scheme: "https",
-            host: account.host,
-            path: response.acct,
-          ).toString(),
+          text:
+              Uri(
+                scheme: "https",
+                host: account.host,
+                path: response.acct,
+              ).toString(),
         ),
       );
       if (!context.mounted) return;
@@ -108,14 +109,15 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
           .openUserInOtherAccount(response),
     );
 
-    final isLoading = [
-      createBlocking.value,
-      deleteBlocking.value,
-      createRenoteMute.value,
-      deleteRenoteMute.value,
-      createMute.value,
-      deleteMute.value,
-    ].where((e) => e is AsyncData || e is AsyncLoading).isNotEmpty;
+    final isLoading =
+        [
+          createBlocking.value,
+          deleteBlocking.value,
+          createRenoteMute.value,
+          deleteRenoteMute.value,
+          createMute.value,
+          deleteMute.value,
+        ].where((e) => e is AsyncData || e is AsyncLoading).isNotEmpty;
 
     if (isLoading) {
       return const Center(child: CircularProgressIndicator.adaptive());
@@ -144,11 +146,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
           title: Text(S.of(context).openBrowsers),
           onTap: () async {
             await launchUrl(
-              Uri(
-                scheme: "https",
-                host: account.host,
-                path: response.acct,
-              ),
+              Uri(scheme: "https", host: account.host, path: response.acct),
               mode: LaunchMode.externalApplication,
             );
             if (!context.mounted) return;
@@ -169,26 +167,31 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
         ListTile(
           leading: const Icon(Icons.search),
           title: Text(S.of(context).searchNote),
-          onTap: () async => context.pushRoute(
-            SearchRoute(
-              accountContext: ref.read(accountContextProvider),
-              initialNoteSearchCondition: NoteSearchCondition(
-                user: response,
+          onTap:
+              () async => context.pushRoute(
+                SearchRoute(
+                  accountContext: ref.read(accountContextProvider),
+                  initialNoteSearchCondition: NoteSearchCondition(
+                    user: response,
+                  ),
+                ),
               ),
-            ),
-          ),
         ),
         ListTile(
           leading: const Icon(Icons.list),
           title: Text(S.of(context).addToList),
-          onTap: () async => context
-              .pushRoute(UsersListModalRoute(account: account, user: response)),
+          onTap:
+              () async => context.pushRoute(
+                UsersListModalRoute(account: account, user: response),
+              ),
         ),
         ListTile(
           leading: const Icon(Icons.settings_input_antenna),
           title: Text(S.of(context).addToAntenna),
-          onTap: () async => context
-              .pushRoute(AntennaModalRoute(account: account, user: user)),
+          onTap:
+              () async => context.pushRoute(
+                AntennaModalRoute(account: account, user: user),
+              ),
         ),
         if (user is UserDetailedNotMeWithRelations) ...[
           if (user.isRenoteMuted)
@@ -235,7 +238,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
                 context.maybePop(),
                 context.pushRoute(
                   AbuseRoute(account: account, targetUser: response),
-                )
+                ),
               ).wait;
             },
           ),
@@ -267,7 +270,7 @@ enum Expire {
   }
 }
 
-@RoutePage<Expire>()
+@RoutePage()
 class ExpireSelectDialog extends HookWidget {
   const ExpireSelectDialog({super.key});
 

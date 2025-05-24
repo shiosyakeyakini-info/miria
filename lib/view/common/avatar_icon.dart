@@ -44,13 +44,14 @@ class AvatarIcon extends HookConsumerWidget {
     final catEarColor = useMemoized(() => user.isCat ? averageColor() : null);
 
     return GestureDetector(
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () async => context.pushRoute(
-                UserRoute(
-                  userId: user.id,
-                  accountContext: ref.read(accountContextProvider),
-                ),
-              ),
+            UserRoute(
+              userId: user.id,
+              accountContext: ref.read(accountContextProvider),
+            ),
+          ),
       child: Padding(
         padding: EdgeInsets.only(
           top: 3,
@@ -68,10 +69,7 @@ class AvatarIcon extends HookConsumerWidget {
                 child: Transform.rotate(
                   angle: -0 * pi / 180,
                   child: Transform.translate(
-                    offset: Offset(
-                      -baseHeight * 0.333,
-                      -baseHeight * 0.3,
-                    ),
+                    offset: Offset(-baseHeight * 0.333, -baseHeight * 0.3),
                     child: Icon(
                       Icons.play_arrow_rounded,
                       color: catEarColor ?? Theme.of(context).primaryColor,
@@ -87,10 +85,7 @@ class AvatarIcon extends HookConsumerWidget {
                 width: baseHeight,
                 height: baseHeight,
                 child: Transform.translate(
-                  offset: Offset(
-                    baseHeight * 1.333,
-                    -baseHeight * 0.3,
-                  ),
+                  offset: Offset(baseHeight * 1.333, -baseHeight * 0.3),
                   child: Transform(
                     transform: Matrix4.rotationY(pi),
                     child: Icon(
@@ -125,24 +120,25 @@ class AvatarIcon extends HookConsumerWidget {
                   child: Transform.rotate(
                     angle: (decoration.angle ?? 0) * 2 * pi,
                     alignment: Alignment.center,
-                    child: decoration.flipH
-                        ? Transform.flip(
-                            flipX: true,
-                            child: SizedBox(
+                    child:
+                        decoration.flipH
+                            ? Transform.flip(
+                              flipX: true,
+                              child: SizedBox(
+                                width: baseHeight,
+                                child: NetworkImageView(
+                                  url: decoration.url,
+                                  type: ImageType.other,
+                                ),
+                              ),
+                            )
+                            : SizedBox(
                               width: baseHeight,
                               child: NetworkImageView(
                                 url: decoration.url,
-                                type: ImageType.other,
+                                type: ImageType.avatarDecoration,
                               ),
                             ),
-                          )
-                        : SizedBox(
-                            width: baseHeight,
-                            child: NetworkImageView(
-                              url: decoration.url,
-                              type: ImageType.avatarDecoration,
-                            ),
-                          ),
                   ),
                 ),
               ),

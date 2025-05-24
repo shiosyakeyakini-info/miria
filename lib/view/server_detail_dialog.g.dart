@@ -6,57 +6,125 @@ part of 'server_detail_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$onlineCountsHash() => r'9b9bdbde8ef6371fcbd1fc821ffa4dd8a0b3cc45';
-
-/// See also [_onlineCounts].
 @ProviderFor(_onlineCounts)
-final _onlineCountsProvider = AutoDisposeFutureProvider<int>.internal(
-  _onlineCounts,
-  name: r'_onlineCountsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$onlineCountsHash,
-  dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+const _onlineCountsProvider = _OnlineCountsProvider._();
 
-typedef _OnlineCountsRef = AutoDisposeFutureProviderRef<int>;
-String _$totalMemoriesHash() => r'1da96291809626dde75f32632d9a7bc6ee1d8cb6';
+final class _OnlineCountsProvider
+    extends $FunctionalProvider<AsyncValue<int>, FutureOr<int>>
+    with $FutureModifier<int>, $FutureProvider<int> {
+  const _OnlineCountsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_onlineCountsProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _OnlineCountsProvider.$allTransitiveDependencies0,
+          _OnlineCountsProvider.$allTransitiveDependencies1,
+        ],
+      );
 
-/// See also [_totalMemories].
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$onlineCountsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<int> create(Ref ref) {
+    return _onlineCounts(ref);
+  }
+}
+
+String _$onlineCountsHash() => r'948bcc533f8c06ee79935fc5386ad67051c03bb9';
+
 @ProviderFor(_totalMemories)
-final _totalMemoriesProvider = AutoDisposeFutureProvider<int>.internal(
-  _totalMemories,
-  name: r'_totalMemoriesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$totalMemoriesHash,
-  dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+const _totalMemoriesProvider = _TotalMemoriesProvider._();
 
-typedef _TotalMemoriesRef = AutoDisposeFutureProviderRef<int>;
-String _$pingHash() => r'd6ff1de136a88b171fa0d694ba12d34e5e6701a7';
+final class _TotalMemoriesProvider
+    extends $FunctionalProvider<AsyncValue<int>, FutureOr<int>>
+    with $FutureModifier<int>, $FutureProvider<int> {
+  const _TotalMemoriesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_totalMemoriesProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _TotalMemoriesProvider.$allTransitiveDependencies0,
+          _TotalMemoriesProvider.$allTransitiveDependencies1,
+        ],
+      );
 
-/// See also [_ping].
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$totalMemoriesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<int> create(Ref ref) {
+    return _totalMemories(ref);
+  }
+}
+
+String _$totalMemoriesHash() => r'd7f5bc52076ca1a74f8cdf65938cff571a92acd8';
+
 @ProviderFor(_ping)
-final _pingProvider = AutoDisposeFutureProvider<int>.internal(
-  _ping,
-  name: r'_pingProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$pingHash,
-  dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+const _pingProvider = _PingProvider._();
 
-typedef _PingRef = AutoDisposeFutureProviderRef<int>;
+final class _PingProvider
+    extends $FunctionalProvider<AsyncValue<int>, FutureOr<int>>
+    with $FutureModifier<int>, $FutureProvider<int> {
+  const _PingProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_pingProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _PingProvider.$allTransitiveDependencies0,
+          _PingProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$pingHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<int> create(Ref ref) {
+    return _ping(ref);
+  }
+}
+
+String _$pingHash() => r'3e002e48252dd1158c3ecdf4c6c4a635c5bc80fa';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

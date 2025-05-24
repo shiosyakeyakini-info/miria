@@ -8,34 +8,29 @@ import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/custom_keyboard_button.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 import "package:misskey_dart/misskey_dart.dart" hide Hashtag;
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _hashtagsSearchProvider = AsyncNotifierProviderFamily<_HashtagsSearch,
-    List<String>, (String, Account)>(_HashtagsSearch.new);
+part "hashtag_keyboard.g.dart";
 
-class _HashtagsSearch
-    extends FamilyAsyncNotifier<List<String>, (String, Account)> {
+@riverpod
+class _HashtagsSearch extends _$HashtagsSearch {
   @override
   Future<List<String>> build((String, Account) arg) async {
     final (query, account) = arg;
     if (query.isEmpty) {
       return [];
     } else {
-      final response = await ref.read(misskeyProvider(account)).hashtags.search(
-            HashtagsSearchRequest(
-              query: query,
-              limit: 30,
-            ),
-          );
+      final response = await ref
+          .read(misskeyProvider(account))
+          .hashtags
+          .search(HashtagsSearchRequest(query: query, limit: 30));
       return response.toList();
     }
   }
 }
 
-final _filteredHashtagsProvider = NotifierProvider.autoDispose
-    .family<_FilteredHashtags, List<String>, Account>(_FilteredHashtags.new);
-
-class _FilteredHashtags
-    extends AutoDisposeFamilyNotifier<List<String>, Account> {
+@riverpod
+class _FilteredHashtags extends _$FilteredHashtags {
   @override
   List<String> build(Account arg) {
     ref.listen(
@@ -89,10 +84,7 @@ class HashtagKeyboard extends ConsumerWidget {
     );
 
     if (filteredHashtags.isEmpty) {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
 
     return Row(

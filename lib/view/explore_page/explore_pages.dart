@@ -31,10 +31,9 @@ class ExplorePages extends ConsumerWidget {
             },
             title: MfmText(
               mfmText: item.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             subtitle: MfmText(mfmText: item.summary ?? ""),
           );

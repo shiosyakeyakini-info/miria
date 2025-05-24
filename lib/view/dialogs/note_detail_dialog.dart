@@ -1,13 +1,22 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/time_line_repository.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
+@Dependencies([
+  accountContext,
+  misskeyPostContext,
+  notesWith,
+  MisskeyNoteNotifier,
+])
 class NoteDetailDialog extends ConsumerStatefulWidget {
   final Note note;
   final Account account;
@@ -43,10 +52,12 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
                     .emoji
                     ?.where(
                       (element) =>
-                          element.emoji.baseName
-                              .contains(reactionTextField.text) ||
-                          element.aliases
-                              .any((e) => e.contains(reactionTextField.text)),
+                          element.emoji.baseName.contains(
+                            reactionTextField.text,
+                          ) ||
+                          element.aliases.any(
+                            (e) => e.contains(reactionTextField.text),
+                          ),
                     )
                     .take(10)
                     .map((e) => e.emoji) ??
@@ -75,9 +86,7 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
             child: Column(
               children: [
                 MisskeyNote(note: widget.note),
-                TextField(
-                  controller: reactionTextField,
-                ),
+                TextField(controller: reactionTextField),
                 Wrap(
                   children: [
                     for (final emoji in foundEmojis)

@@ -3,12 +3,21 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
+@Dependencies([
+  accountContext,
+  misskeyGetContext,
+  notesWith,
+  misskeyPostContext,
+  MisskeyNoteNotifier,
+])
 @RoutePage()
 class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
   final RolesListResponse item;
@@ -49,19 +58,17 @@ class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
                 return response.toList();
               },
               nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyGetContextProvider).roles.users(
-                          RolesUsersRequest(
-                            roleId: item.id,
-                            untilId: lastItem.id,
-                          ),
-                        );
+                final response = await ref
+                    .read(misskeyGetContextProvider)
+                    .roles
+                    .users(
+                      RolesUsersRequest(roleId: item.id, untilId: lastItem.id),
+                    );
                 return response.toList();
               },
-              itemBuilder: (context, item) => UserListItem(
-                user: item.user,
-                isDetail: true,
-              ),
+              itemBuilder:
+                  (context, item) =>
+                      UserListItem(user: item.user, isDetail: true),
             ),
             PushableListView(
               initializeFuture: () async {
@@ -73,13 +80,12 @@ class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
                 return response.toList();
               },
               nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyGetContextProvider).roles.notes(
-                          RolesNotesRequest(
-                            roleId: item.id,
-                            untilId: lastItem.id,
-                          ),
-                        );
+                final response = await ref
+                    .read(misskeyGetContextProvider)
+                    .roles
+                    .notes(
+                      RolesNotesRequest(roleId: item.id, untilId: lastItem.id),
+                    );
                 ref.read(notesWithProvider).registerAll(response);
                 return response.toList();
               },

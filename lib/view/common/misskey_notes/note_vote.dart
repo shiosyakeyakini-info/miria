@@ -25,34 +25,30 @@ class NoteVoteNotifier extends _$NoteVoteNotifier {
     final dialogValue = await ref
         .read(dialogStateNotifierProvider.notifier)
         .showDialog(
-          message: (context) =>
-              S.of(context).confirmPoll(poll.choices[index].text),
+          message:
+              (context) => S.of(context).confirmPoll(poll.choices[index].text),
           actions: (context) => [S.of(context).doVoting, S.of(context).cancel],
         );
 
     if (dialogValue != 0) return false;
     state = const AsyncLoading();
 
-    state =
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyPostContextProvider).notes.polls.vote(
-            NotesPollsVoteRequest(
-              noteId: note.id,
-              choice: index,
-            ),
-          );
-      await ref.read(notesWithProvider).refresh(note.id);
-    });
+    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+      () async {
+        await ref
+            .read(misskeyPostContextProvider)
+            .notes
+            .polls
+            .vote(NotesPollsVoteRequest(noteId: note.id, choice: index));
+        await ref.read(notesWithProvider).refresh(note.id);
+      },
+    );
     return true;
   }
 }
 
 class NoteVote extends HookConsumerWidget {
-  const NoteVote({
-    required this.displayNote,
-    required this.poll,
-    super.key,
-  });
+  const NoteVote({required this.displayNote, required this.poll, super.key});
 
   final Note displayNote;
   final NotePoll poll;
@@ -75,9 +71,10 @@ class NoteVote extends HookConsumerWidget {
     final totalVotes = poll.choices.map((e) => e.votes).sum;
     final expiresAt = poll.expiresAt;
     final isExpired = expiresAt != null && expiresAt < DateTime.now();
-    final differ = isExpired
-        ? null
-        : poll.expiresAt?.difference(DateTime.now()).format(context);
+    final differ =
+        isExpired
+            ? null
+            : poll.expiresAt?.difference(DateTime.now()).format(context);
     final colorTheme = AppTheme.of(context).colorTheme;
 
     final isOpened = useState(useMemoized(() => !isAnyVotable(ref)));
@@ -99,20 +96,21 @@ class NoteVote extends HookConsumerWidget {
                 border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(5),
                 color: isOpened.value ? null : colorTheme.accentedBackground,
-                gradient: isOpened.value
-                    ? LinearGradient(
-                        colors: [
-                          colorTheme.buttonGradateA,
-                          colorTheme.buttonGradateB,
-                          colorTheme.accentedBackground,
-                        ],
-                        stops: [
-                          0,
-                          choice.element.votes / totalVotes,
-                          choice.element.votes / totalVotes,
-                        ],
-                      )
-                    : null,
+                gradient:
+                    isOpened.value
+                        ? LinearGradient(
+                          colors: [
+                            colorTheme.buttonGradateA,
+                            colorTheme.buttonGradateB,
+                            colorTheme.accentedBackground,
+                          ],
+                          stops: [
+                            0,
+                            choice.element.votes / totalVotes,
+                            choice.element.votes / totalVotes,
+                          ],
+                        )
+                        : null,
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -138,9 +136,9 @@ class NoteVote extends HookConsumerWidget {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent),
                       borderRadius: BorderRadius.circular(3),
-                      color: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withAlpha(215),
+                      color: Theme.of(
+                        context,
+                      ).scaffoldBackgroundColor.withAlpha(215),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 3, right: 3),
@@ -154,24 +152,21 @@ class NoteVote extends HookConsumerWidget {
                               child: Icon(
                                 Icons.check,
                                 size: MediaQuery.textScalerOf(context).scale(
-                                  Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.fontSize ??
+                                  Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.fontSize ??
                                       22,
                                 ),
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.color,
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium?.color,
                               ),
                             ),
                         ],
                         suffixSpan: [
                           const WidgetSpan(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 5),
-                            ),
+                            child: Padding(padding: EdgeInsets.only(left: 5)),
                           ),
                           if (isOpened.value)
                             TextSpan(
@@ -195,20 +190,20 @@ class NoteVote extends HookConsumerWidget {
             children: [
               TextSpan(text: S.of(context).totalVotesCount(totalVotes)),
               TextSpan(
-                text: isExpired
-                    ? S.of(context).finished
-                    : !isOpened.value
+                text:
+                    isExpired
+                        ? S.of(context).finished
+                        : !isOpened.value
                         ? S.of(context).openResult
                         : isAnyVotable(ref)
-                            ? S.of(context).doVoting
-                            : S.of(context).alreadyVoted,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => isOpened.value = !isOpened.value,
+                        ? S.of(context).doVoting
+                        : S.of(context).alreadyVoted,
+                recognizer:
+                    TapGestureRecognizer()
+                      ..onTap = () => isOpened.value = !isOpened.value,
               ),
               const WidgetSpan(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                ),
+                child: Padding(padding: EdgeInsets.only(left: 10)),
               ),
               TextSpan(
                 text: differ == null ? "" : S.of(context).remainDiffer(differ),

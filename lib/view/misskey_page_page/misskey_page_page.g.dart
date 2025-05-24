@@ -6,202 +6,86 @@ part of 'misskey_page_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchNoteHash() => r'93baa5042998814028ccf0597aeee9d344c2e189';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [fetchNote].
 @ProviderFor(fetchNote)
-const fetchNoteProvider = FetchNoteFamily();
+const fetchNoteProvider = FetchNoteFamily._();
 
-/// See also [fetchNote].
-class FetchNoteFamily extends Family {
-  /// See also [fetchNote].
-  const FetchNoteFamily();
+final class FetchNoteProvider
+    extends $FunctionalProvider<AsyncValue<Note>, FutureOr<Note>>
+    with $FutureModifier<Note>, $FutureProvider<Note> {
+  const FetchNoteProvider._({
+    required FetchNoteFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'fetchNoteProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyGetContextProvider,
-    notesWithProvider
-  ];
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies,
-    notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies
-  };
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = notesWithProvider;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  String debugGetCreateSourceHash() => _$fetchNoteHash();
 
   @override
-  String? get name => r'fetchNoteProvider';
-
-  /// See also [fetchNote].
-  FetchNoteProvider call(
-    String noteId,
-  ) {
-    return FetchNoteProvider(
-      noteId,
-    );
+  String toString() {
+    return r'fetchNoteProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  FetchNoteProvider getProviderOverride(
-    covariant FetchNoteProvider provider,
-  ) {
-    return call(
-      provider.noteId,
-    );
-  }
-
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(FutureOr<Note> Function(FetchNoteRef ref) create) {
-    return _$FetchNoteFamilyOverride(this, create);
-  }
-}
-
-class _$FetchNoteFamilyOverride implements FamilyOverride {
-  _$FetchNoteFamilyOverride(this.overriddenFamily, this.create);
-
-  final FutureOr<Note> Function(FetchNoteRef ref) create;
+  $FutureProviderElement<Note> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  final FetchNoteFamily overriddenFamily;
-
-  @override
-  FetchNoteProvider getProviderOverride(
-    covariant FetchNoteProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [fetchNote].
-class FetchNoteProvider extends AutoDisposeFutureProvider<Note> {
-  /// See also [fetchNote].
-  FetchNoteProvider(
-    String noteId,
-  ) : this._internal(
-          (ref) => fetchNote(
-            ref as FetchNoteRef,
-            noteId,
-          ),
-          from: fetchNoteProvider,
-          name: r'fetchNoteProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$fetchNoteHash,
-          dependencies: FetchNoteFamily._dependencies,
-          allTransitiveDependencies: FetchNoteFamily._allTransitiveDependencies,
-          noteId: noteId,
-        );
-
-  FetchNoteProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.noteId,
-  }) : super.internal();
-
-  final String noteId;
-
-  @override
-  Override overrideWith(
-    FutureOr<Note> Function(FetchNoteRef ref) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: FetchNoteProvider._internal(
-        (ref) => create(ref as FetchNoteRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        noteId: noteId,
-      ),
-    );
-  }
-
-  @override
-  (String,) get argument {
-    return (noteId,);
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<Note> createElement() {
-    return _FetchNoteProviderElement(this);
-  }
-
-  FetchNoteProvider _copyWith(
-    FutureOr<Note> Function(FetchNoteRef ref) create,
-  ) {
-    return FetchNoteProvider._internal(
-      (ref) => create(ref as FetchNoteRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      noteId: noteId,
-    );
+  FutureOr<Note> create(Ref ref) {
+    final argument = this.argument as String;
+    return fetchNote(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FetchNoteProvider && other.noteId == noteId;
+    return other is FetchNoteProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, noteId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin FetchNoteRef on AutoDisposeFutureProviderRef<Note> {
-  /// The parameter `noteId` of this provider.
-  String get noteId;
-}
+String _$fetchNoteHash() => r'a791492c94a0fd09c655fe5a35b00405396d3b82';
 
-class _FetchNoteProviderElement extends AutoDisposeFutureProviderElement<Note>
-    with FetchNoteRef {
-  _FetchNoteProviderElement(super.provider);
+final class FetchNoteFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Note>, String> {
+  const FetchNoteFamily._()
+    : super(
+        retry: null,
+        name: r'fetchNoteProvider',
+        dependencies: const <ProviderOrFamily>[
+          misskeyGetContextProvider,
+          notesWithProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          FetchNoteProvider.$allTransitiveDependencies0,
+          FetchNoteProvider.$allTransitiveDependencies1,
+          FetchNoteProvider.$allTransitiveDependencies2,
+        ],
+        isAutoDispose: true,
+      );
+
+  FetchNoteProvider call(String noteId) =>
+      FetchNoteProvider._(argument: noteId, from: this);
 
   @override
-  String get noteId => (origin as FetchNoteProvider).noteId;
+  String toString() => r'fetchNoteProvider';
 }
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

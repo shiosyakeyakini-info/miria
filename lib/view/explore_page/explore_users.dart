@@ -13,15 +13,11 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "explore_users.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UserDetailed>> _pinnedUser(_PinnedUserRef ref) async {
+Future<List<UserDetailed>> _pinnedUser(Ref ref) async {
   return (await ref.read(misskeyGetContextProvider).pinnedUsers()).toList();
 }
 
-enum ExploreUserType {
-  pinned,
-  local,
-  remote,
-}
+enum ExploreUserType { pinned, local, remote }
 
 class ExploreUsers extends HookConsumerWidget {
   const ExploreUsers({super.key});
@@ -47,34 +43,39 @@ class ExploreUsers extends HookConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 3, bottom: 3),
                       child: LayoutBuilder(
-                        builder: (context, constraints) => ToggleButtons(
-                          constraints: BoxConstraints.expand(
-                            width: constraints.maxWidth / 3 -
-                                Theme.of(context)
-                                        .toggleButtonsTheme
-                                        .borderWidth!
-                                        .toInt() *
-                                    3,
-                          ),
-                          onPressed: (index) => exploreUserType.value =
-                              ExploreUserType.values[index],
-                          isSelected: [
-                            for (final element in ExploreUserType.values)
-                              element == exploreUserType.value,
-                          ],
-                          children: [
-                            Text(S.of(context).pinnedUser),
-                            Text(S.of(context).local),
-                            Text(S.of(context).remote),
-                          ],
-                        ),
+                        builder:
+                            (context, constraints) => ToggleButtons(
+                              constraints: BoxConstraints.expand(
+                                width:
+                                    constraints.maxWidth / 3 -
+                                    Theme.of(context)
+                                            .toggleButtonsTheme
+                                            .borderWidth!
+                                            .toInt() *
+                                        3,
+                              ),
+                              onPressed:
+                                  (index) =>
+                                      exploreUserType.value =
+                                          ExploreUserType.values[index],
+                              isSelected: [
+                                for (final element in ExploreUserType.values)
+                                  element == exploreUserType.value,
+                              ],
+                              children: [
+                                Text(S.of(context).pinnedUser),
+                                Text(S.of(context).local),
+                                Text(S.of(context).remote),
+                              ],
+                            ),
                       ),
                     ),
                   ),
                   IconButton(
-                    onPressed: exploreUserType == ExploreUserType.pinned
-                        ? null
-                        : () => isDetailOpen.value = !isDetailOpen.value,
+                    onPressed:
+                        exploreUserType == ExploreUserType.pinned
+                            ? null
+                            : () => isDetailOpen.value = !isDetailOpen.value,
                     icon: Icon(
                       isDetailOpen.value
                           ? Icons.keyboard_arrow_up
@@ -87,8 +88,10 @@ class ExploreUsers extends HookConsumerWidget {
                 Row(
                   children: [
                     Expanded(
-                      child:
-                          Text(S.of(context).sort, textAlign: TextAlign.center),
+                      child: Text(
+                        S.of(context).sort,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     Expanded(
                       child: DropdownButton<UsersSortType>(
@@ -100,8 +103,10 @@ class ExploreUsers extends HookConsumerWidget {
                             ),
                         ],
                         value: sortType.value,
-                        onChanged: (e) => sortType.value =
-                            e ?? UsersSortType.followerDescendant,
+                        onChanged:
+                            (e) =>
+                                sortType.value =
+                                    e ?? UsersSortType.followerDescendant,
                       ),
                     ),
                   ],
@@ -111,59 +116,64 @@ class ExploreUsers extends HookConsumerWidget {
           ),
           if (exploreUserType.value == ExploreUserType.pinned)
             switch (pinnedUser) {
-              AsyncLoading() =>
-                const Center(child: CircularProgressIndicator.adaptive()),
-              AsyncError(:final error, :final stackTrace) =>
-                ErrorDetail(error: error, stackTrace: stackTrace),
+              AsyncLoading() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+              AsyncError(:final error, :final stackTrace) => ErrorDetail(
+                error: error,
+                stackTrace: stackTrace,
+              ),
               AsyncData(:final value) => Expanded(
-                  child: ListView.builder(
-                    itemCount: value.length,
-                    itemBuilder: (context, index) => UserListItem(
-                      user: value[index],
-                      isDetail: true,
-                    ),
-                  ),
-                )
+                child: ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder:
+                      (context, index) =>
+                          UserListItem(user: value[index], isDetail: true),
+                ),
+              ),
             }
           else
             Expanded(
               child: PushableListView(
-                listKey: Object.hashAll(
-                  [sortType.value, exploreUserType.value],
-                ),
+                listKey: Object.hashAll([
+                  sortType.value,
+                  exploreUserType.value,
+                ]),
                 initializeFuture: () async {
-                  final response =
-                      await ref.read(misskeyGetContextProvider).users.users(
-                            UsersUsersRequest(
-                              sort: sortType.value,
-                              state: UsersState.alive,
-                              origin: exploreUserType.value ==
-                                      ExploreUserType.remote
+                  final response = await ref
+                      .read(misskeyGetContextProvider)
+                      .users
+                      .users(
+                        UsersUsersRequest(
+                          sort: sortType.value,
+                          state: UsersState.alive,
+                          origin:
+                              exploreUserType.value == ExploreUserType.remote
                                   ? Origin.remote
                                   : Origin.local,
-                            ),
-                          );
+                        ),
+                      );
                   return response.toList();
                 },
                 nextFuture: (_, index) async {
-                  final response =
-                      await ref.read(misskeyGetContextProvider).users.users(
-                            UsersUsersRequest(
-                              sort: sortType.value,
-                              state: UsersState.alive,
-                              offset: index,
-                              origin: exploreUserType.value ==
-                                      ExploreUserType.remote
+                  final response = await ref
+                      .read(misskeyGetContextProvider)
+                      .users
+                      .users(
+                        UsersUsersRequest(
+                          sort: sortType.value,
+                          state: UsersState.alive,
+                          offset: index,
+                          origin:
+                              exploreUserType.value == ExploreUserType.remote
                                   ? Origin.remote
                                   : Origin.local,
-                            ),
-                          );
+                        ),
+                      );
                   return response.toList();
                 },
-                itemBuilder: (context, user) => UserListItem(
-                  user: user,
-                  isDetail: true,
-                ),
+                itemBuilder:
+                    (context, user) => UserListItem(user: user, isDetail: true),
               ),
             ),
         ],

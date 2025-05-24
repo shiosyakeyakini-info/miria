@@ -3,14 +3,21 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
+@Dependencies([
+  accountContext,
+  misskeyGetContext,
+  notesWith,
+  misskeyPostContext,
+  MisskeyNoteNotifier,
+])
 class ExploreHighlight extends HookConsumerWidget {
-  const ExploreHighlight({
-    super.key,
-  });
+  const ExploreHighlight({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,25 +29,23 @@ class ExploreHighlight extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10),
             child: LayoutBuilder(
-              builder: (context, constraints) => ToggleButtons(
-                constraints: BoxConstraints.expand(
-                  width: constraints.maxWidth / 2 -
-                      Theme.of(context)
-                              .toggleButtonsTheme
-                              .borderWidth!
-                              .toInt() *
-                          2,
-                ),
-                onPressed: (index) => isNote.value = index == 0,
-                isSelected: [
-                  isNote.value,
-                  !isNote.value,
-                ],
-                children: [
-                  Text(S.of(context).note),
-                  Text(S.of(context).searchVoteTab),
-                ],
-              ),
+              builder:
+                  (context, constraints) => ToggleButtons(
+                    constraints: BoxConstraints.expand(
+                      width:
+                          constraints.maxWidth / 2 -
+                          Theme.of(
+                                context,
+                              ).toggleButtonsTheme.borderWidth!.toInt() *
+                              2,
+                    ),
+                    onPressed: (index) => isNote.value = index == 0,
+                    isSelected: [isNote.value, !isNote.value],
+                    children: [
+                      Text(S.of(context).note),
+                      Text(S.of(context).searchVoteTab),
+                    ],
+                  ),
             ),
           ),
           Expanded(
@@ -66,13 +71,12 @@ class ExploreHighlight extends HookConsumerWidget {
               nextFuture: (item, index) async {
                 final Iterable<Note> note;
                 if (isNote.value) {
-                  note =
-                      await ref.read(misskeyGetContextProvider).notes.featured(
-                            NotesFeaturedRequest(
-                              offset: index,
-                              untilId: item.id,
-                            ),
-                          );
+                  note = await ref
+                      .read(misskeyGetContextProvider)
+                      .notes
+                      .featured(
+                        NotesFeaturedRequest(offset: index, untilId: item.id),
+                      );
                 } else {
                   note = await ref
                       .read(misskeyGetContextProvider)

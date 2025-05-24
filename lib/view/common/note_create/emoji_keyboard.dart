@@ -10,14 +10,12 @@ import "package:miria/router/app_router.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _filteredEmojisProvider = NotifierProvider.autoDispose
-    .family<_FilteredEmojis, List<MisskeyEmojiData>, Account>(
-  _FilteredEmojis.new,
-);
+part "emoji_keyboard.g.dart";
 
-class _FilteredEmojis
-    extends AutoDisposeFamilyNotifier<List<MisskeyEmojiData>, Account> {
+@riverpod
+class _FilteredEmojis extends _$FilteredEmojis {
   @override
   List<MisskeyEmojiData> build(Account arg) {
     ref.listen(
@@ -29,8 +27,9 @@ class _FilteredEmojis
 
   Future<void> _updateEmojis(InputCompletionType type) async {
     if (type is Emoji) {
-      state =
-          await ref.read(emojiRepositoryProvider(arg)).searchEmojis(type.query);
+      state = await ref
+          .read(emojiRepositoryProvider(arg))
+          .searchEmojis(type.query);
     }
   }
 }
@@ -49,12 +48,15 @@ class EmojiKeyboard extends ConsumerWidget {
     final currentPosition = controller.selection.base.offset;
     final text = controller.text;
 
-    final beforeSearchText =
-        text.substring(0, text.substring(0, currentPosition).lastIndexOf(":"));
+    final beforeSearchText = text.substring(
+      0,
+      text.substring(0, currentPosition).lastIndexOf(":"),
+    );
 
-    final after = (currentPosition == text.length || currentPosition == -1)
-        ? ""
-        : text.substring(currentPosition, text.length);
+    final after =
+        (currentPosition == text.length || currentPosition == -1)
+            ? ""
+            : text.substring(currentPosition, text.length);
 
     switch (emoji) {
       case CustomEmojiData():
@@ -84,10 +86,7 @@ class EmojiKeyboard extends ConsumerWidget {
     );
 
     if (filteredEmojis.isEmpty) {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
 
     return Row(

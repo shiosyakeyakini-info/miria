@@ -13,7 +13,7 @@ import "package:miria/view/photo_edit_page/clip_mode.dart";
 import "package:miria/view/photo_edit_page/color_filter_image_preview.dart";
 import "package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart";
 
-@RoutePage<Uint8List?>()
+@RoutePage()
 class PhotoEditPage extends ConsumerStatefulWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
   final MisskeyPostFile file;
@@ -100,9 +100,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                     height: constraints.maxHeight,
                     child: FittedBox(
                       fit: BoxFit.contain,
-                      child: ClipMode(
-                        renderingGlobalKey: renderingAreaKey,
-                      ),
+                      child: ClipMode(renderingGlobalKey: renderingAreaKey),
                     ),
                   );
                 },

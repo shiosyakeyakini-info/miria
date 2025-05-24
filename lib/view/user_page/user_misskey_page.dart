@@ -33,18 +33,18 @@ class UserMisskeyPage extends ConsumerWidget {
         return ListTile(
           title: MfmText(
             mfmText: page.title,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           subtitle: MfmText(mfmText: page.summary ?? ""),
-          onTap: () async => context.pushRoute(
-            MisskeyRouteRoute(
-              accountContext: ref.read(accountContextProvider),
-              page: page,
-            ),
-          ),
+          onTap:
+              () async => context.pushRoute(
+                MisskeyRouteRoute(
+                  accountContext: ref.read(accountContextProvider),
+                  page: page,
+                ),
+              ),
         );
       },
     );

@@ -8,6 +8,7 @@ import "package:miria/router/app_router.dart";
 import "package:miria/view/antenna_page/antenna_list.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:riverpod_annotation/experimental/mutation.dart";
 
 @RoutePage()
 class AntennaPage extends ConsumerWidget implements AutoRouteWrapper {
@@ -21,6 +22,8 @@ class AntennaPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final createAntenna = ref.watch(antennasNotifierProvider.createAntenna);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).antenna),
@@ -28,6 +31,7 @@ class AntennaPage extends ConsumerWidget implements AutoRouteWrapper {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
+              if (createAntenna is PendingMutation) return;
               final settings = await context.pushRoute<AntennaSettings>(
                 AntennaSettingsRoute(
                   title: Text(S.of(context).create),
@@ -36,9 +40,7 @@ class AntennaPage extends ConsumerWidget implements AutoRouteWrapper {
               );
               if (!context.mounted) return;
               if (settings == null) return;
-              await ref
-                  .read(antennasNotifierProvider.notifier)
-                  .create(settings);
+              await createAntenna.call(settings);
             },
           ),
         ],

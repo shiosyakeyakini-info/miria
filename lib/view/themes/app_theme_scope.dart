@@ -46,12 +46,14 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       mentionStyle: TextStyle(color: theme.mention),
       serifStyle: resolveFontFamilySerif(serifFontName, languages),
       monospaceStyle: resolveFontFamilyMonospace(monospaceFontName, languages),
-      cursiveStyle: cursiveFontName.isNotEmpty
-          ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
-          : const TextStyle(),
-      fantasyStyle: fantasyFontName.isNotEmpty
-          ? (fromGoogleFont(fantasyFontName) ?? const TextStyle())
-          : const TextStyle(),
+      cursiveStyle:
+          cursiveFontName.isNotEmpty
+              ? (fromGoogleFont(cursiveFontName) ?? const TextStyle())
+              : const TextStyle(),
+      fantasyStyle:
+          fantasyFontName.isNotEmpty
+              ? (fromGoogleFont(fantasyFontName) ?? const TextStyle())
+              : const TextStyle(),
       reactionButtonBackgroundColor: theme.buttonBackground,
       reactionButtonMeReactedColor: theme.accentedBackground,
       renoteBorderColor: theme.renote,
@@ -95,7 +97,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   }
 
   List<String> resolveFontFamilyFallback(
-      String defaultFontName, Languages languages) {
+    String defaultFontName,
+    Languages languages,
+  ) {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       return [
@@ -118,9 +122,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       fontName = "Hiragino Mincho ProN";
-      fallback.addAll(const [
-        "Apple Color Emoji",
-      ]);
+      fallback.addAll(const ["Apple Color Emoji"]);
     } else {
       if (defaultTargetPlatform == TargetPlatform.android ||
           defaultTargetPlatform == TargetPlatform.windows) {
@@ -140,9 +142,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           fontName = "Noto Serif";
         }
       }
-      fallback.addAll(const [
-        "Noto Color Emoji",
-      ]);
+      fallback.addAll(const ["Noto Color Emoji"]);
     }
     return (serifFontName.isNotEmpty
             ? (fromGoogleFont(serifFontName) ?? TextStyle(fontFamily: fontName))
@@ -151,7 +151,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   }
 
   TextStyle resolveFontFamilyMonospace(
-      String monospaceFontName, Languages languages) {
+    String monospaceFontName,
+    Languages languages,
+  ) {
     final String? fontName;
     final fallback = <String>[];
 
@@ -162,10 +164,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       } else {
         fontName = "Monaco";
       }
-      fallback.addAll(const [
-        "Apple Color Emoji",
-        "Hiragino Maru Gothic ProN",
-      ]);
+      fallback.addAll(const ["Apple Color Emoji", "Hiragino Maru Gothic ProN"]);
     } else {
       if (defaultTargetPlatform == TargetPlatform.android) {
         fontName = "Droid Sans Mono";
@@ -180,10 +179,7 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           fontName = "Noto Sans";
         }
       }
-      fallback.addAll(const [
-        "Noto Color Emoji",
-        "Noto Mono",
-      ]);
+      fallback.addAll(const ["Noto Color Emoji", "Noto Mono"]);
     }
     return (monospaceFontName.isNotEmpty
             ? (fromGoogleFont(monospaceFontName) ??
@@ -197,16 +193,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         defaultTargetPlatform == TargetPlatform.macOS) {
       return const TextStyle(
         fontFamily: "Apple Color Emoji",
-        fontFamilyFallback: [
-          "Hiragino Maru Gothic ProN",
-        ],
+        fontFamilyFallback: ["Hiragino Maru Gothic ProN"],
       );
     } else {
       return const TextStyle(
         fontFamily: "Noto Color Emoji",
-        fontFamilyFallback: [
-          "Noto Sans",
-        ],
+        fontFamilyFallback: ["Noto Sans"],
       );
     }
   }
@@ -233,22 +225,24 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   }) {
     final textThemePre = applyGoogleFont(
       Theme.of(context).textTheme.merge(
-            (theme.isDarkTheme ? ThemeData.dark() : ThemeData.light())
-                .textTheme
-                .apply(
-                  fontFamily: resolveFontFamilyName(defaultFontName, languages),
-                  fontFamilyFallback:
-                      resolveFontFamilyFallback(defaultFontName, languages),
-                  bodyColor: theme.foreground,
-                ),
-          ),
+        (theme.isDarkTheme ? ThemeData.dark() : ThemeData.light()).textTheme
+            .apply(
+              fontFamily: resolveFontFamilyName(defaultFontName, languages),
+              fontFamilyFallback: resolveFontFamilyFallback(
+                defaultFontName,
+                languages,
+              ),
+              bodyColor: theme.foreground,
+            ),
+      ),
       defaultFontName,
     );
     final textTheme = textThemePre.copyWith(
       bodySmall: textThemePre.bodySmall?.copyWith(
-        color: theme.isDarkTheme
-            ? theme.foreground.darken(0.1)
-            : theme.foreground.lighten(0.1),
+        color:
+            theme.isDarkTheme
+                ? theme.foreground.darken(0.1)
+                : theme.foreground.lighten(0.1),
       ),
     );
 
@@ -280,8 +274,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         overlayColor: WidgetStatePropertyAll(theme.primary),
         labelColor: Colors.white,
         labelStyle: textTheme.titleSmall,
-        unselectedLabelStyle:
-            textTheme.titleSmall?.copyWith(color: Colors.white60),
+        unselectedLabelStyle: textTheme.titleSmall?.copyWith(
+          color: Colors.white60,
+        ),
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(color: theme.primary),
         ),
@@ -297,8 +292,9 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
           backgroundColor: theme.primary,
           foregroundColor: Colors.white,
           elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
           visualDensity: const VisualDensity(horizontal: 0, vertical: 0),
           tapTargetSize: MaterialTapTargetSize.padded,
         ),
@@ -342,26 +338,25 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         contentPadding: const EdgeInsets.all(5),
         hintStyle: textTheme.bodySmall?.copyWith(
           fontSize: textTheme.titleMedium?.fontSize,
-          color: theme.isDarkTheme
-              ? theme.foreground.darken(0.2)
-              : theme.foreground.lighten(0.2),
+          color:
+              theme.isDarkTheme
+                  ? theme.foreground.darken(0.2)
+                  : theme.foreground.lighten(0.2),
         ),
         prefixIconColor: theme.primary,
         suffixIconColor: theme.primary,
         isDense: true,
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith(
-          (states) {
-            if (states.contains(WidgetState.disabled)) {
-              return null;
-            }
-            if (states.contains(WidgetState.selected)) {
-              return theme.primary;
-            }
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
-          },
-        ),
+          }
+          if (states.contains(WidgetState.selected)) {
+            return theme.primary;
+          }
+          return null;
+        }),
       ),
       expansionTileTheme: ExpansionTileThemeData(iconColor: theme.primary),
       toggleButtonsTheme: ToggleButtonsThemeData(
@@ -400,49 +395,60 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
   @override
   Widget build(BuildContext context) {
     final colorSystem = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.themeColorSystem),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.themeColorSystem,
+      ),
     );
     final lightTheme = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.lightColorThemeId),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.lightColorThemeId,
+      ),
     );
     final darkTheme = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.darkColorThemeId),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.darkColorThemeId,
+      ),
     );
     final textScaleFactor = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.textScaleFactor),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.textScaleFactor,
+      ),
     );
     final defaultFontName = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.defaultFontName),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.defaultFontName,
+      ),
     );
     final serifFontName = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.serifFontName),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.serifFontName,
+      ),
     );
     final monospaceFontName = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.monospaceFontName),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.monospaceFontName,
+      ),
     );
     final cursiveFontName = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.cursiveFontName),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.cursiveFontName,
+      ),
     );
     final fantasyFontName = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.fantasyFontName),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.fantasyFontName,
+      ),
     );
     final languages = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.languages),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.languages,
+      ),
     );
 
     final bool isDark;
     if (colorSystem == ThemeColorSystem.system) {
-      isDark = WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+      isDark =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness ==
           Brightness.dark;
     } else if (colorSystem == ThemeColorSystem.forceDark) {
       isDark = true;
@@ -450,13 +456,15 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
       isDark = false;
     }
 
-    final foundColorTheme = builtInColorThemes.firstWhereOrNull(
+    final foundColorTheme =
+        builtInColorThemes.firstWhereOrNull(
           (e) =>
               e.isDarkTheme == isDark &&
               e.id == (isDark ? darkTheme : lightTheme),
         ) ??
-        builtInColorThemes
-            .firstWhere((element) => element.isDarkTheme == isDark);
+        builtInColorThemes.firstWhere(
+          (element) => element.isDarkTheme == isDark,
+        );
 
     return Theme(
       data: buildTheme(
@@ -478,11 +486,12 @@ class AppThemeScopeState extends ConsumerState<AppThemeScope> {
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
             alwaysUse24HourFormat: true,
-            textScaler: textScaleFactor != 1
-                ? TextScaler.linear(
-                    MediaQuery.textScalerOf(context).scale(textScaleFactor),
-                  )
-                : null,
+            textScaler:
+                textScaleFactor != 1
+                    ? TextScaler.linear(
+                      MediaQuery.textScalerOf(context).scale(textScaleFactor),
+                    )
+                    : null,
           ),
           child: widget.child,
         ),

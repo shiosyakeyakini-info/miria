@@ -54,10 +54,11 @@ class AddReactionsDialog extends HookConsumerWidget {
                     children: [
                       Text(S.of(context).bulkAddReactionsDescription2),
                       TextButton(
-                        onPressed: () async => launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        ),
+                        onPressed:
+                            () async => launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            ),
                         child: Text(
                           uri.toString(),
                           style: AppTheme.of(context).linkStyle,
@@ -98,8 +99,9 @@ class AddReactionsDialog extends HookConsumerWidget {
               onSaved: (value) {
                 if (formKey.value.currentState!.validate()) {
                   final emojiNames = JSON5.parse(value!) as List;
-                  Navigator.of(context)
-                      .pop(emojiNames.map((name) => name as String).toList());
+                  Navigator.of(
+                    context,
+                  ).pop(emojiNames.map((name) => name as String).toList());
                 }
               },
             ),

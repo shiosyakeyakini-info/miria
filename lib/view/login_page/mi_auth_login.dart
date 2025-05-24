@@ -73,8 +73,8 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                         onPressed: () async {
                           final url = await showDialog<String?>(
                             context: context,
-                            builder: (context) =>
-                                const MisskeyServerListDialog(),
+                            builder:
+                                (context) => const MisskeyServerListDialog(),
                           );
                           if (url != null && url.isNotEmpty) {
                             serverController.text = url;

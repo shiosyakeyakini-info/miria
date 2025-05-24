@@ -31,9 +31,10 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfo = ref.watch(userInfoProxyProvider(userId)).valueOrNull;
+    final userInfo = ref.watch(userInfoProxyProvider(userId)).value;
 
-    final isReactionAvailable = userInfo?.response.publicReactions == true ||
+    final isReactionAvailable =
+        userInfo?.response.publicReactions == true ||
         (userInfo?.response.host == null &&
             userInfo?.response.username == accountContext.postAccount.userId);
     final isRemoteUser =
@@ -88,9 +89,7 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
                     ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: UserNotes(
-                      userId: userId,
-                    ),
+                    child: UserNotes(userId: userId),
                   ),
                   if (isRemoteUser)
                     AccountContextScope(
@@ -185,13 +184,14 @@ class UserDetailTab extends ConsumerWidget {
     final userDetail = ref.watch(userInfoProxyProvider(userId));
 
     return switch (userDetail) {
-      AsyncLoading() =>
-        const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncLoading() => const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(
-          error: error,
-          stackTrace: stackTrace,
-        ),
-      AsyncData(:final value) => UserDetail(response: value.response)
+        error: error,
+        stackTrace: stackTrace,
+      ),
+      AsyncData(:final value) => UserDetail(response: value.response),
     };
   }
 }

@@ -4,7 +4,7 @@ import "package:flutter_colorpicker/flutter_colorpicker.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 
-@RoutePage<Color>()
+@RoutePage()
 class ColorPickerDialog extends HookWidget {
   const ColorPickerDialog({super.key});
 

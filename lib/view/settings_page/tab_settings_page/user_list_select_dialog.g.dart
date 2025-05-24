@@ -6,22 +6,50 @@ part of 'user_list_select_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$usersListHash() => r'a1c8ccd94f9b25bed8160a8a4eb27b1678661ece';
-
-/// See also [_usersList].
 @ProviderFor(_usersList)
-final _usersListProvider = AutoDisposeFutureProvider<List<UsersList>>.internal(
-  _usersList,
-  name: r'_usersListProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$usersListHash,
-  dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+const _usersListProvider = _UsersListProvider._();
 
-typedef _UsersListRef = AutoDisposeFutureProviderRef<List<UsersList>>;
+final class _UsersListProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<UsersList>>,
+          FutureOr<List<UsersList>>
+        >
+    with $FutureModifier<List<UsersList>>, $FutureProvider<List<UsersList>> {
+  const _UsersListProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_usersListProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _UsersListProvider.$allTransitiveDependencies0,
+          _UsersListProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$usersListHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<UsersList>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<UsersList>> create(Ref ref) {
+    return _usersList(ref);
+  }
+}
+
+String _$usersListHash() => r'd7fab580bf6bc18fc282743de3d482f5d1d62a49';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

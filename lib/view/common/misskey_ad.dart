@@ -45,8 +45,9 @@ class MisskeyAd extends HookConsumerWidget {
 
     return Center(
       child: GestureDetector(
-        onTap: () async =>
-            launchUrl(targetAd.url, mode: LaunchMode.externalApplication),
+        onTap:
+            () async =>
+                launchUrl(targetAd.url, mode: LaunchMode.externalApplication),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ConstrainedBox(

@@ -20,10 +20,7 @@ import "package:misskey_dart/misskey_dart.dart";
 class UserDetail extends ConsumerWidget {
   final UserDetailed response;
 
-  const UserDetail({
-    required this.response,
-    super.key,
-  });
+  const UserDetail({required this.response, super.key});
 
   Widget buildContent(BuildContext context, WidgetRef ref) {
     final response = this.response;
@@ -94,9 +91,7 @@ class UserDetail extends ConsumerWidget {
                             else if (response.hasPendingFollowRequestFromYou)
                               ElevatedButton(
                                 onPressed: notifier.cancelFollowRequest,
-                                child: Text(
-                                  S.of(context).followRequestPending,
-                                ),
+                                child: Text(S.of(context).followRequestPending),
                               )
                             else
                               OutlinedButton(
@@ -138,12 +133,14 @@ class UserDetail extends ConsumerWidget {
                 Align(
                   alignment: Alignment.center,
                   child: IconButton(
-                    onPressed: () async => await context.pushRoute(
-                      UserControlRoute(
-                        account: ref.read(accountContextProvider).postAccount,
-                        response: response,
-                      ),
-                    ),
+                    onPressed:
+                        () async => await context.pushRoute(
+                          UserControlRoute(
+                            account:
+                                ref.read(accountContextProvider).postAccount,
+                            response: response,
+                          ),
+                        ),
                     icon: const Icon(Icons.more_vert),
                   ),
                 ),
@@ -157,10 +154,7 @@ class UserDetail extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  AvatarIcon(
-                    user: response,
-                    height: 80,
-                  ),
+                  AvatarIcon(user: response, height: 80),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -197,21 +191,25 @@ class UserDetail extends ConsumerWidget {
                             memo.isNotEmpty
                                 ? memo
                                 : S.of(context).memoDescription,
-                            style: memo.isNotEmpty
-                                ? null
-                                : Theme.of(context)
-                                    .inputDecorationTheme
-                                    .hintStyle,
+                            style:
+                                memo.isNotEmpty
+                                    ? null
+                                    : Theme.of(
+                                      context,
+                                    ).inputDecorationTheme.hintStyle,
                           ),
                         ),
                         IconButton(
-                          onPressed: () async => await context.pushRoute(
-                            UpdateMemoRoute(
-                              accountContext: ref.read(accountContextProvider),
-                              initialMemo: memo,
-                              userId: response.id,
-                            ),
-                          ),
+                          onPressed:
+                              () async => await context.pushRoute(
+                                UpdateMemoRoute(
+                                  accountContext: ref.read(
+                                    accountContextProvider,
+                                  ),
+                                  initialMemo: memo,
+                                  userId: response.id,
+                                ),
+                              ),
                           icon: const Icon(Icons.edit),
                         ),
                       ],
@@ -254,12 +252,15 @@ class UserDetail extends ConsumerWidget {
                           ],
                         ),
                         GestureDetector(
-                          onTap: () async => context.pushRoute(
-                            FederationRoute(
-                              accountContext: ref.read(accountContextProvider),
-                              host: response.host!,
-                            ),
-                          ),
+                          onTap:
+                              () async => context.pushRoute(
+                                FederationRoute(
+                                  accountContext: ref.read(
+                                    accountContextProvider,
+                                  ),
+                                  host: response.host!,
+                                ),
+                              ),
                           child: Text(
                             S.of(context).showServerInformation,
                             style: AppTheme.of(context).linkStyle,
@@ -368,12 +369,13 @@ class UserDetail extends ConsumerWidget {
                   ),
                   if (response.isFollowingVisibleForMe)
                     InkWell(
-                      onTap: () async => context.pushRoute(
-                        UserFolloweeRoute(
-                          userId: response.id,
-                          accountContext: ref.read(accountContextProvider),
-                        ),
-                      ),
+                      onTap:
+                          () async => context.pushRoute(
+                            UserFolloweeRoute(
+                              userId: response.id,
+                              accountContext: ref.read(accountContextProvider),
+                            ),
+                          ),
                       child: Column(
                         children: [
                           Text(
@@ -389,12 +391,13 @@ class UserDetail extends ConsumerWidget {
                     ),
                   if (response.isFollowersVisibleForMe)
                     InkWell(
-                      onTap: () async => context.pushRoute(
-                        UserFollowerRoute(
-                          userId: response.id,
-                          accountContext: ref.read(accountContextProvider),
-                        ),
-                      ),
+                      onTap:
+                          () async => context.pushRoute(
+                            UserFollowerRoute(
+                              userId: response.id,
+                              accountContext: ref.read(accountContextProvider),
+                            ),
+                          ),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -446,9 +449,9 @@ class UserDetail extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 10),
             sliver: SliverList.builder(
               itemCount: response.pinnedNotes!.length,
-              itemBuilder: (context, index) => MisskeyNote(
-                note: response.pinnedNotes![index],
-              ),
+              itemBuilder:
+                  (context, index) =>
+                      MisskeyNote(note: response.pinnedNotes![index]),
             ),
           ),
       ],
@@ -471,8 +474,9 @@ class BirthdayConfetti extends StatefulWidget {
 }
 
 class BirthdayConfettiState extends State<BirthdayConfetti> {
-  final confettiController =
-      ConfettiController(duration: const Duration(seconds: 30));
+  final confettiController = ConfettiController(
+    duration: const Duration(seconds: 30),
+  );
 
   @override
   void initState() {
@@ -511,8 +515,9 @@ class RoleChip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = Theme.of(context).textTheme.bodyMedium;
-    final height = MediaQuery.textScalerOf(context)
-        .scale((textStyle?.fontSize ?? 14) * (textStyle?.height ?? 1));
+    final height = MediaQuery.textScalerOf(
+      context,
+    ).scale((textStyle?.fontSize ?? 14) * (textStyle?.height ?? 1));
     return Tooltip(
       message: role.description,
       child: GestureDetector(
@@ -538,10 +543,7 @@ class RoleChip extends ConsumerWidget {
             ),
             borderRadius: BorderRadius.circular(height),
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 5,
-            horizontal: 10,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

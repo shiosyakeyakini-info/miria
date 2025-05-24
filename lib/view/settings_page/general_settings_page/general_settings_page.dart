@@ -27,8 +27,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final enableDirectReaction = useState(settings.enableDirectReaction);
     final enableAnimatedMFM = useState(settings.enableAnimatedMFM);
     final enableLongTextElipsed = useState(settings.enableLongTextElipsed);
-    final enableFavoritedRenoteElipsed =
-        useState(settings.enableFavoritedRenoteElipsed);
+    final enableFavoritedRenoteElipsed = useState(
+      settings.enableFavoritedRenoteElipsed,
+    );
     final tabPosition = useState(settings.tabPosition);
     final textScaleFactor = useState(settings.textScaleFactor);
     final emojiType = useState(settings.emojiType);
@@ -42,10 +43,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
 
     useMemoized(() {
       if (lightModeTheme.value.isEmpty) {
-        lightModeTheme.value = builtInColorThemes
-            .where((element) => !element.isDarkTheme)
-            .first
-            .id;
+        lightModeTheme.value =
+            builtInColorThemes
+                .where((element) => !element.isDarkTheme)
+                .first
+                .id;
       }
       if (darkModeTheme.value.isEmpty ||
           builtInColorThemes.every(
@@ -78,35 +80,33 @@ class GeneralSettingsPage extends HookConsumerWidget {
       language.value,
       isDeckMode.value,
     ];
-    final save = useCallback(
-      () async {
-        await ref.read(generalSettingsRepositoryProvider).update(
-              GeneralSettings(
-                lightColorThemeId: lightModeTheme.value,
-                darkColorThemeId: darkModeTheme.value,
-                themeColorSystem: colorSystem.value,
-                nsfwInherit: nsfwInherit.value,
-                enableDirectReaction: enableDirectReaction.value,
-                automaticPush: automaticPush.value,
-                enableAnimatedMFM: enableAnimatedMFM.value,
-                enableFavoritedRenoteElipsed:
-                    enableFavoritedRenoteElipsed.value,
-                enableLongTextElipsed: enableLongTextElipsed.value,
-                tabPosition: tabPosition.value,
-                emojiType: emojiType.value,
-                textScaleFactor: textScaleFactor.value,
-                defaultFontName: defaultFontName.value,
-                serifFontName: serifFontName.value,
-                monospaceFontName: monospaceFontName.value,
-                cursiveFontName: cursiveFontName.value,
-                fantasyFontName: fantasyFontName.value,
-                languages: language.value,
-                isDeckMode: isDeckMode.value,
-              ),
-            );
-      },
-      dependencies,
-    );
+    final save = useCallback(() async {
+      await ref
+          .read(generalSettingsRepositoryProvider)
+          .update(
+            GeneralSettings(
+              lightColorThemeId: lightModeTheme.value,
+              darkColorThemeId: darkModeTheme.value,
+              themeColorSystem: colorSystem.value,
+              nsfwInherit: nsfwInherit.value,
+              enableDirectReaction: enableDirectReaction.value,
+              automaticPush: automaticPush.value,
+              enableAnimatedMFM: enableAnimatedMFM.value,
+              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed.value,
+              enableLongTextElipsed: enableLongTextElipsed.value,
+              tabPosition: tabPosition.value,
+              emojiType: emojiType.value,
+              textScaleFactor: textScaleFactor.value,
+              defaultFontName: defaultFontName.value,
+              serifFontName: serifFontName.value,
+              monospaceFontName: monospaceFontName.value,
+              cursiveFontName: cursiveFontName.value,
+              fantasyFontName: fantasyFontName.value,
+              languages: language.value,
+              isDeckMode: isDeckMode.value,
+            ),
+          );
+    }, dependencies);
 
     useMemoized(() => unawaited(save()), dependencies);
 
@@ -161,8 +161,10 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: nsfwInherit.value,
-                        onChanged: (value) async =>
-                            nsfwInherit.value = value ?? NSFWInherit.inherit,
+                        onChanged:
+                            (value) async =>
+                                nsfwInherit.value =
+                                    value ?? NSFWInherit.inherit,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).infiniteScroll),
@@ -176,8 +178,10 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: automaticPush.value,
-                        onChanged: (value) async =>
-                            automaticPush.value = value ?? AutomaticPush.none,
+                        onChanged:
+                            (value) async =>
+                                automaticPush.value =
+                                    value ?? AutomaticPush.none,
                       ),
                       Text(S.of(context).deckMode),
                       CheckboxListTile(
@@ -189,22 +193,25 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).enableAnimatedMfm),
                       CheckboxListTile(
                         value: enableAnimatedMFM.value,
-                        onChanged: (value) =>
-                            enableAnimatedMFM.value = value ?? true,
+                        onChanged:
+                            (value) => enableAnimatedMFM.value = value ?? true,
                         title: Text(S.of(context).enableAnimatedMfmDescription),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).collapseNotes),
                       CheckboxListTile(
                         value: enableFavoritedRenoteElipsed.value,
-                        onChanged: (value) =>
-                            enableFavoritedRenoteElipsed.value = value ?? true,
+                        onChanged:
+                            (value) =>
+                                enableFavoritedRenoteElipsed.value =
+                                    value ?? true,
                         title: Text(S.of(context).collapseReactionedRenotes),
                       ),
                       CheckboxListTile(
                         value: enableLongTextElipsed.value,
-                        onChanged: (value) async =>
-                            enableLongTextElipsed.value = value ?? true,
+                        onChanged:
+                            (value) async =>
+                                enableLongTextElipsed.value = value ?? true,
                         title: Text(S.of(context).collapseLongNotes),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
@@ -216,15 +223,18 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             DropdownMenuItem(
                               value: element,
                               child: Text(
-                                S.of(context).tabPositionDescription(
+                                S
+                                    .of(context)
+                                    .tabPositionDescription(
                                       element.displayName(context),
                                     ),
                               ),
                             ),
                         ],
                         value: tabPosition.value,
-                        onChanged: (value) async =>
-                            tabPosition.value = value ?? TabPosition.top,
+                        onChanged:
+                            (value) async =>
+                                tabPosition.value = value ?? TabPosition.top,
                       ),
                     ],
                   ),
@@ -246,23 +256,25 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).themeForLightMode),
                       DropdownButton<String>(
                         items: [
-                          for (final element in builtInColorThemes
-                              .where((element) => !element.isDarkTheme))
+                          for (final element in builtInColorThemes.where(
+                            (element) => !element.isDarkTheme,
+                          ))
                             DropdownMenuItem(
                               value: element.id,
                               child: Text(S.of(context).themeIsh(element.name)),
                             ),
                         ],
                         value: lightModeTheme.value,
-                        onChanged: (value) async =>
-                            lightModeTheme.value = value ?? "",
+                        onChanged:
+                            (value) async => lightModeTheme.value = value ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).themeForDarkMode),
                       DropdownButton<String>(
                         items: [
-                          for (final element in builtInColorThemes
-                              .where((element) => element.isDarkTheme))
+                          for (final element in builtInColorThemes.where(
+                            (element) => element.isDarkTheme,
+                          ))
                             DropdownMenuItem(
                               value: element.id,
                               child: Text(S.of(context).themeIsh(element.name)),
@@ -282,8 +294,10 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             ),
                         ],
                         value: colorSystem.value,
-                        onChanged: (value) => colorSystem.value =
-                            value ?? ThemeColorSystem.system,
+                        onChanged:
+                            (value) =>
+                                colorSystem.value =
+                                    value ?? ThemeColorSystem.system,
                       ),
                     ],
                   ),
@@ -304,10 +318,12 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       CheckboxListTile(
                         value: enableDirectReaction.value,
                         title: Text(S.of(context).emojiTapReaction),
-                        subtitle:
-                            Text(S.of(context).emojiTapReactionDescription),
-                        onChanged: (value) =>
-                            enableDirectReaction.value = value ?? false,
+                        subtitle: Text(
+                          S.of(context).emojiTapReactionDescription,
+                        ),
+                        onChanged:
+                            (value) =>
+                                enableDirectReaction.value = value ?? false,
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(S.of(context).emojiStyle),
@@ -321,8 +337,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         ],
                         value: emojiType.value,
                         isExpanded: true,
-                        onChanged: (value) =>
-                            emojiType.value = value ?? EmojiType.twemoji,
+                        onChanged:
+                            (value) =>
+                                emojiType.value = value ?? EmojiType.twemoji,
                       ),
                     ],
                   ),
@@ -352,10 +369,11 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       ),
                       Center(
                         child: ElevatedButton(
-                          onPressed: (settings.textScaleFactor ==
-                                  textScaleFactor.value)
-                              ? null
-                              : save,
+                          onPressed:
+                              (settings.textScaleFactor ==
+                                      textScaleFactor.value)
+                                  ? null
+                                  : save,
                           child: const Text("変更"),
                         ),
                       ),
@@ -376,13 +394,15 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == defaultFontName.value,
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) =>
-                            defaultFontName.value = item?.actualName ?? "",
+                        onChanged:
+                            (item) =>
+                                defaultFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -401,13 +421,15 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == serifFontName.value,
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) =>
-                            serifFontName.value = item?.actualName ?? "",
+                        onChanged:
+                            (item) =>
+                                serifFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -426,13 +448,16 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == monospaceFontName.value,
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) =>
-                            monospaceFontName.value = item?.actualName ?? "",
+                        onChanged:
+                            (item) =>
+                                monospaceFontName.value =
+                                    item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -451,13 +476,15 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == cursiveFontName.value,
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) =>
-                            cursiveFontName.value = item?.actualName ?? "",
+                        onChanged:
+                            (item) =>
+                                cursiveFontName.value = item?.actualName ?? "",
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),
                       Text(
@@ -476,13 +503,15 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == fantasyFontName.value,
                             ) ??
                             choosableFonts.first,
                         isExpanded: true,
-                        onChanged: (item) =>
-                            fantasyFontName.value = item?.actualName ?? "",
+                        onChanged:
+                            (item) =>
+                                fantasyFontName.value = item?.actualName ?? "",
                       ),
                     ],
                   ),

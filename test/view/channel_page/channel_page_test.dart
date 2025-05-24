@@ -24,7 +24,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -75,7 +75,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -103,7 +103,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -118,8 +118,9 @@ void main() {
 
         expect(find.text(TestData.channel1.name), findsOneWidget);
         verify(
-          channel
-              .myFavorite(argThat(equals(const ChannelsMyFavoriteRequest()))),
+          channel.myFavorite(
+            argThat(equals(const ChannelsMyFavoriteRequest())),
+          ),
         );
       });
     });
@@ -135,7 +136,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,

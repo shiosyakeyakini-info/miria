@@ -16,16 +16,13 @@ class NoteSearch extends HookConsumerWidget {
   final NoteSearchCondition? initialCondition;
   final FocusNode? focusNode;
 
-  const NoteSearch({
-    super.key,
-    this.initialCondition,
-    this.focusNode,
-  });
+  const NoteSearch({super.key, this.initialCondition, this.focusNode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conditionController =
-        useTextEditingController(text: initialCondition?.query);
+    final conditionController = useTextEditingController(
+      text: initialCondition?.query,
+    );
     final searchQuery = useState("");
     final selectedUser = useState(initialCondition?.user);
     final selectedChannel = useState(initialCondition?.channel);
@@ -55,9 +52,10 @@ class NoteSearch extends HookConsumerWidget {
               ),
               IconButton(
                 onPressed: () => isDetail.value = !isDetail.value,
-                icon: isDetail.value
-                    ? const Icon(Icons.keyboard_arrow_up)
-                    : const Icon(Icons.keyboard_arrow_down),
+                icon:
+                    isDetail.value
+                        ? const Icon(Icons.keyboard_arrow_up)
+                        : const Icon(Icons.keyboard_arrow_down),
               ),
             ],
           ),
@@ -96,23 +94,28 @@ class NoteSearch extends HookConsumerWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Expanded(
-                                    child: selectedUserValue == null
-                                        ? Container()
-                                        : UserListItem(user: selectedUserValue),
+                                    child:
+                                        selectedUserValue == null
+                                            ? Container()
+                                            : UserListItem(
+                                              user: selectedUserValue,
+                                            ),
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      final selected =
-                                          await context.pushRoute<User?>(
-                                        UserSelectRoute(
-                                          accountContext:
-                                              ref.read(accountContextProvider),
-                                        ),
-                                      );
+                                      final selected = await context
+                                          .pushRoute<User?>(
+                                            UserSelectRoute(
+                                              accountContext: ref.read(
+                                                accountContextProvider,
+                                              ),
+                                            ),
+                                          );
                                       selectedUser.value = selected;
                                     },
-                                    icon:
-                                        const Icon(Icons.keyboard_arrow_right),
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_right,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -127,24 +130,29 @@ class NoteSearch extends HookConsumerWidget {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Expanded(
-                                    child: selectedChannelValue == null
-                                        ? Container()
-                                        : Text(selectedChannelValue.name),
+                                    child:
+                                        selectedChannelValue == null
+                                            ? Container()
+                                            : Text(selectedChannelValue.name),
                                   ),
                                   IconButton(
                                     onPressed: () async {
                                       final selected = await context
                                           .pushRoute<CommunityChannel>(
-                                        ChannelSelectRoute(
-                                          account: ref
-                                              .read(accountContextProvider)
-                                              .postAccount,
-                                        ),
-                                      );
+                                            ChannelSelectRoute(
+                                              account:
+                                                  ref
+                                                      .read(
+                                                        accountContextProvider,
+                                                      )
+                                                      .postAccount,
+                                            ),
+                                          );
                                       selectedChannel.value = selected;
                                     },
-                                    icon:
-                                        const Icon(Icons.keyboard_arrow_right),
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_right,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -157,8 +165,9 @@ class NoteSearch extends HookConsumerWidget {
                                 children: [
                                   Checkbox(
                                     value: localOnly.value,
-                                    onChanged: (value) =>
-                                        localOnly.value = value ?? false,
+                                    onChanged:
+                                        (value) =>
+                                            localOnly.value = value ?? false,
                                   ),
                                 ],
                               ),
@@ -215,13 +224,19 @@ class NoteSearchList extends ConsumerWidget {
       initializeFuture: () async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyGetContextProvider).notes.search(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,
@@ -237,14 +252,20 @@ class NoteSearchList extends ConsumerWidget {
       nextFuture: (lastItem, _) async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                   untilId: lastItem.id,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyGetContextProvider).notes.search(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,

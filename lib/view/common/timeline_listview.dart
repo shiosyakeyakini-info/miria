@@ -222,18 +222,21 @@ class _TimelineListViewState extends State<TimelineListView> {
     final itemExtent = widget.itemExtent;
     return <Widget>[
       SliverPadding(
-        sliver: (itemExtent != null)
-            ? SliverFixedExtentList(
-                delegate: negative
-                    ? negativeChildrenDelegate
-                    : positiveChildrenDelegate,
-                itemExtent: itemExtent,
-              )
-            : SliverList(
-                delegate: negative
-                    ? negativeChildrenDelegate
-                    : positiveChildrenDelegate,
-              ),
+        sliver:
+            (itemExtent != null)
+                ? SliverFixedExtentList(
+                  delegate:
+                      negative
+                          ? negativeChildrenDelegate
+                          : positiveChildrenDelegate,
+                  itemExtent: itemExtent,
+                )
+                : SliverList(
+                  delegate:
+                      negative
+                          ? negativeChildrenDelegate
+                          : positiveChildrenDelegate,
+                ),
         padding: EdgeInsets.zero,
       ),
     ];
@@ -245,9 +248,10 @@ class _TimelineListViewState extends State<TimelineListView> {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           final negativeOffset = _negativeOffset;
           if (negativeOffset == null) return;
-          final extent = negativeOffset.hasContentDimensions
-              ? negativeOffset.maxScrollExtent
-              : null;
+          final extent =
+              negativeOffset.hasContentDimensions
+                  ? negativeOffset.maxScrollExtent
+                  : null;
           negativeOffset._minMaxExtent = -(extent ?? 0);
           _controller?._offset = -(extent ?? 0);
         });
@@ -273,15 +277,16 @@ class _TimelineListViewState extends State<TimelineListView> {
     return SliverChildBuilderDelegate(
       (separatorBuilder != null)
           ? (context, index) {
-              final itemIndex = index ~/ 2;
-              return index.isEven
-                  ? widget.itemBuilder(context, itemIndex)
-                  : separatorBuilder(context, itemIndex);
-            }
+            final itemIndex = index ~/ 2;
+            return index.isEven
+                ? widget.itemBuilder(context, itemIndex)
+                : separatorBuilder(context, itemIndex);
+          }
           : (context, index) => widget.itemBuilder(context, index),
-      childCount: separatorBuilder == null
-          ? itemCount
-          : (itemCount != null ? math.max(0, itemCount * 2 - 1) : null),
+      childCount:
+          separatorBuilder == null
+              ? itemCount
+              : (itemCount != null ? math.max(0, itemCount * 2 - 1) : null),
       addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
       addRepaintBoundaries: widget.addRepaintBoundaries,
     );
@@ -323,9 +328,7 @@ class _TimelineListViewState extends State<TimelineListView> {
           defaultValue: null,
         ),
       )
-      ..add(
-        DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null),
-      )
+      ..add(DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null))
       ..add(
         DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null),
       );

@@ -36,19 +36,17 @@ class UserFollowerPage extends ConsumerWidget implements AutoRouteWrapper {
           return response.toList();
         },
         nextFuture: (lastItem, _) async {
-          final response =
-              await ref.read(misskeyGetContextProvider).users.followers(
-                    UsersFollowersRequest(
-                      userId: userId,
-                      untilId: lastItem.id,
-                    ),
-                  );
+          final response = await ref
+              .read(misskeyGetContextProvider)
+              .users
+              .followers(
+                UsersFollowersRequest(userId: userId, untilId: lastItem.id),
+              );
           return response.toList();
         },
-        itemBuilder: (context, item) => UserListItem(
-          user: item.follower!,
-          isDetail: true,
-        ),
+        itemBuilder:
+            (context, item) =>
+                UserListItem(user: item.follower!, isDetail: true),
       ),
     );
   }

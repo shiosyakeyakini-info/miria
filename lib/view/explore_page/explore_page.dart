@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/explore_page/explore_hashtags.dart";
 import "package:miria/view/explore_page/explore_highlight.dart";
@@ -11,15 +12,21 @@ import "package:miria/view/explore_page/explore_plays.dart";
 import "package:miria/view/explore_page/explore_role.dart";
 import "package:miria/view/explore_page/explore_server.dart";
 import "package:miria/view/explore_page/explore_users.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
+// ignore: provider_dependencies
+@Dependencies([
+  accountContext,
+  misskeyGetContext,
+  notesWith,
+  misskeyPostContext,
+  MisskeyNoteNotifier,
+])
 @RoutePage()
 class ExplorePage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
 
-  const ExplorePage({
-    required this.accountContext,
-    super.key,
-  });
+  const ExplorePage({required this.accountContext, super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) =>

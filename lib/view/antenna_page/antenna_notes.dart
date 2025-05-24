@@ -1,10 +1,21 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
+import "package:miria/view/common/misskey_notes/note_vote.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
+@Dependencies([
+  accountContext,
+  misskeyGetContext,
+  notesWith,
+  misskeyPostContext,
+  MisskeyNoteNotifier,
+  NoteVoteNotifier,
+])
 class AntennaNotes extends ConsumerWidget {
   final String antennaId;
 
@@ -22,13 +33,12 @@ class AntennaNotes extends ConsumerWidget {
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
-        final response =
-            await ref.read(misskeyGetContextProvider).antennas.notes(
-                  AntennasNotesRequest(
-                    antennaId: antennaId,
-                    untilId: lastItem.id,
-                  ),
-                );
+        final response = await ref
+            .read(misskeyGetContextProvider)
+            .antennas
+            .notes(
+              AntennasNotesRequest(antennaId: antennaId, untilId: lastItem.id),
+            );
         ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },

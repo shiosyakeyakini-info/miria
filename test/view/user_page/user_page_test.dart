@@ -18,13 +18,14 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse1);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse1);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -49,19 +50,25 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse3AsRemoteUser);
-        when(mockUser.showByName(any))
-            .thenAnswer((_) async => TestData.usersShowResponse3AsLocalUser);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse3AsRemoteUser);
+        when(
+          mockUser.showByName(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse3AsLocalUser);
 
         final emojiRepository = MockEmojiRepository();
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
-              misskeyWithoutAccountProvider.overrideWith((ref) => mockMisskey),
-              emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+              misskeyWithoutAccountProvider.overrideWith(
+                (ref, account) => mockMisskey,
+              ),
+              emojiRepositoryProvider.overrideWith(
+                (ref, account) => emojiRepository,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -91,7 +98,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -117,7 +124,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -143,7 +150,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -157,8 +164,9 @@ void main() {
 
           expect(find.text("フォロー解除"), findsOneWidget);
         });
-        testWidgets("フォローしていない場合でフォロー申請が必要ない場合、フォローするのボタンが表示されること",
-            (tester) async {
+        testWidgets("フォローしていない場合でフォロー申請が必要ない場合、フォローするのボタンが表示されること", (
+          tester,
+        ) async {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
@@ -172,7 +180,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -186,8 +194,9 @@ void main() {
 
           expect(find.text("フォローする"), findsOneWidget);
         });
-        testWidgets("フォローしていない場合でフォロー申請が必要な場合、フォロー申請のボタンが表示されること",
-            (tester) async {
+        testWidgets("フォローしていない場合でフォロー申請が必要な場合、フォロー申請のボタンが表示されること", (
+          tester,
+        ) async {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
@@ -203,7 +212,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -231,7 +240,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -256,7 +265,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -281,7 +290,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: UserRoute(
@@ -314,7 +323,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -354,14 +363,15 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -412,14 +422,15 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -451,14 +462,15 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -490,14 +502,15 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -529,16 +542,18 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
-        when(mockUser.featuredNotes(any))
-            .thenAnswer((_) async => [TestData.note2]);
+        when(
+          mockUser.featuredNotes(any),
+        ).thenAnswer((_) async => [TestData.note2]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -565,14 +580,15 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.clips(any)).thenAnswer((_) async => [TestData.clip]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -629,7 +645,7 @@ void main() {
       //       ]);
 
       //   await tester.pumpWidget(ProviderScope(
-      //     overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+      //     overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
       //     child: DefaultRootWidget(
       //       initialRoute: UserRoute(
       //           userId: TestData.usersShowResponse2.id,
@@ -672,7 +688,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -735,7 +751,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(

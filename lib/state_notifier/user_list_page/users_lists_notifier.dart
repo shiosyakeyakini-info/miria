@@ -24,78 +24,54 @@ class UsersListsNotifier extends _$UsersListsNotifier {
       );
       if (settings.isPublic) {
         await _misskey.users.list.update(
-          UsersListsUpdateRequest(
-            listId: list.id,
-            isPublic: settings.isPublic,
-          ),
+          UsersListsUpdateRequest(listId: list.id, isPublic: settings.isPublic),
         );
       }
-      state = AsyncValue.data([...?state.valueOrNull, list]);
+      state = AsyncValue.data([...?state.value, list]);
     });
   }
 
   Future<void> delete(String listId) async {
-    final result =
-        await ref.read(dialogStateNotifierProvider.notifier).showDialog(
-              message: (context) => S.of(context).confirmDeleteList,
-              actions: (context) => [
-                S.of(context).doDeleting,
-                S.of(context).cancel,
-              ],
-            );
+    final result = await ref
+        .read(dialogStateNotifierProvider.notifier)
+        .showDialog(
+          message: (context) => S.of(context).confirmDeleteList,
+          actions:
+              (context) => [S.of(context).doDeleting, S.of(context).cancel],
+        );
     if (result != 0) return;
 
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       await _misskey.users.list.delete(UsersListsDeleteRequest(listId: listId));
-      state = AsyncValue.data(
-        [...?state.valueOrNull?.where((e) => e.id != listId)],
-      );
+      state = AsyncValue.data([...?state.value?.where((e) => e.id != listId)]);
     });
   }
 
-  Future<void> push(
-    String listId,
-    User user,
-  ) async {
-    await ref.read(dialogStateNotifierProvider.notifier).guard(
-      () async {
-        await _misskey.users.list.push(
-          UsersListsPushRequest(
-            listId: listId,
-            userId: user.id,
-          ),
-        );
-        state = AsyncValue.data(
-          [
-            for (final list in [...?state.valueOrNull])
-              list.id == listId
-                  ? list.copyWith(userIds: [...list.userIds, user.id])
-                  : list,
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> pull(
-    String listId,
-    User user,
-  ) async {
+  Future<void> push(String listId, User user) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await _misskey.users.list.pull(
-        UsersListsPullRequest(
-          listId: listId,
-          userId: user.id,
-        ),
+      await _misskey.users.list.push(
+        UsersListsPushRequest(listId: listId, userId: user.id),
       );
       state = AsyncValue.data([
-        for (final list in [...?state.valueOrNull])
+        for (final list in [...?state.value])
+          list.id == listId
+              ? list.copyWith(userIds: [...list.userIds, user.id])
+              : list,
+      ]);
+    });
+  }
+
+  Future<void> pull(String listId, User user) async {
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await _misskey.users.list.pull(
+        UsersListsPullRequest(listId: listId, userId: user.id),
+      );
+      state = AsyncValue.data([
+        for (final list in [...?state.value])
           list.id == listId
               ? list.copyWith(
-                  userIds: [
-                    ...list.userIds.where((userId) => userId != user.id),
-                  ],
-                )
+                userIds: [...list.userIds.where((userId) => userId != user.id)],
+              )
               : list,
       ]);
     });

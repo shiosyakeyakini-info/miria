@@ -27,16 +27,21 @@ class ErrorDialogListener extends ConsumerWidget {
           await SimpleMessageDialog.show(next.$2!, error.message);
         } else if (error is ValidateMisskeyException) {
           final message = switch (error) {
-            InvalidServerException(:final server) =>
-              S.of(context).invalidServer(server),
-            ServerIsNotMisskeyException(:final server) =>
-              S.of(context).serverIsNotMisskey(server),
-            SoftwareNotSupportedException(:final software) =>
-              S.of(context).softwareNotSupported(software),
-            SoftwareNotCompatibleException(:final software, :final version) =>
-              S.of(context).softwareNotCompatible(software, version),
-            AlreadyLoggedInException(:final acct) =>
-              S.of(context).alreadyLoggedIn(acct),
+            InvalidServerException(:final server) => S
+                .of(context)
+                .invalidServer(server),
+            ServerIsNotMisskeyException(:final server) => S
+                .of(context)
+                .serverIsNotMisskey(server),
+            SoftwareNotSupportedException(:final software) => S
+                .of(context)
+                .softwareNotSupported(software),
+            SoftwareNotCompatibleException(:final software, :final version) => S
+                .of(context)
+                .softwareNotCompatible(software, version),
+            AlreadyLoggedInException(:final acct) => S
+                .of(context)
+                .alreadyLoggedIn(acct),
           };
           await SimpleMessageDialog.show(next.$2!, message);
         } else {

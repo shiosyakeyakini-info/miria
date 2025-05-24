@@ -47,8 +47,9 @@ class TimelineTablet extends HookConsumerWidget {
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         border: Border(
-                          right:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                          right: BorderSide(
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
                       ),
                       child: SizedBox(
@@ -74,22 +75,17 @@ class TimelineTabletDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firstAccount =
-        ref.watch(accountsProvider.select((value) => value.first.acct));
-    return CommonDrawer(
-      initialOpenAcct: firstAccount,
-      allOpen: true,
+    final firstAccount = ref.watch(
+      accountsProvider.select((value) => value.first.acct),
     );
+    return CommonDrawer(initialOpenAcct: firstAccount, allOpen: true);
   }
 }
 
 class Timeline extends HookConsumerWidget {
   final TabSetting tabSetting;
 
-  const Timeline({
-    required this.tabSetting,
-    super.key,
-  });
+  const Timeline({required this.tabSetting, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -131,13 +127,15 @@ class SectionHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final faviconUrl = ref.watch(
-      accountProvider(ref.read(accountContextProvider).getAccount.acct)
-          .select((value) => value.meta?.iconUrl),
+      accountProvider(
+        ref.read(accountContextProvider).getAccount.acct,
+      ).select((value) => value.meta?.iconUrl),
     );
     final socketTimelineBase = ref.watch(timelineProvider(tabSetting));
-    final socketTimeline = socketTimelineBase is SocketTimelineRepository
-        ? socketTimelineBase
-        : null;
+    final socketTimeline =
+        socketTimelineBase is SocketTimelineRepository
+            ? socketTimelineBase
+            : null;
 
     return Row(
       children: [
@@ -169,23 +167,24 @@ class SectionHeader extends ConsumerWidget {
 class TabTextField extends HookConsumerWidget {
   final TabSetting tabSetting;
 
-  const TabTextField({
-    required this.tabSetting,
-    super.key,
-  });
+  const TabTextField({required this.tabSetting, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController();
     final account = ref.watch(accountContextProvider).postAccount;
-    final settings =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    final settings = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(account);
     final reactionAppearance = useState(settings.defaultReactionAcceptance);
     final localOnly = useState(settings.defaultIsLocalOnly);
     final visibility = useState(settings.defaultNoteVisibility);
 
     final note = useHandledFuture(() async {
-      await ref.read(misskeyPostContextProvider).notes.create(
+      await ref
+          .read(misskeyPostContextProvider)
+          .notes
+          .create(
             NotesCreateRequest(
               text: controller.text,
               localOnly: localOnly.value,
@@ -206,9 +205,10 @@ class TabTextField extends HookConsumerWidget {
               onPressed: () async {
                 final result = await showModalBottomSheet<NoteVisibility?>(
                   context: context,
-                  builder: (context) => NoteVisibilityDialog(
-                    account: ref.read(accountContextProvider).postAccount,
-                  ),
+                  builder:
+                      (context) => NoteVisibilityDialog(
+                        account: ref.read(accountContextProvider).postAccount,
+                      ),
                 );
                 if (result != null) visibility.value = result;
               },
@@ -216,9 +216,10 @@ class TabTextField extends HookConsumerWidget {
             ),
             IconButton(
               onPressed: () => localOnly.value = !localOnly.value,
-              icon: localOnly.value
-                  ? const LocalOnlyIcon()
-                  : const Icon(Icons.rocket),
+              icon:
+                  localOnly.value
+                      ? const LocalOnlyIcon()
+                      : const Icon(Icons.rocket),
             ),
             IconButton(
               onPressed: () async {
@@ -258,10 +259,7 @@ class TabTextField extends HookConsumerWidget {
 class EmojiInputComplement extends HookWidget {
   final TextEditingController controller;
 
-  const EmojiInputComplement({
-    required this.controller,
-    super.key,
-  });
+  const EmojiInputComplement({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -279,116 +277,98 @@ class EmojiInputComplement extends HookWidget {
       ],
     );
 
-    final hideOverlay = useCallback(
-      () {
-        overlayEntry.value?.remove();
-        overlayEntry.value = null;
-      },
-      [overlayEntry],
-    );
+    final hideOverlay = useCallback(() {
+      overlayEntry.value?.remove();
+      overlayEntry.value = null;
+    }, [overlayEntry]);
 
-    final selectOption = useCallback<void Function(String)>(
-      (option) {
-        final text = controller.text;
-        final selection = controller.selection;
-        final newText =
-            text.replaceRange(selection.start, selection.end, option);
+    final selectOption = useCallback<void Function(String)>((option) {
+      final text = controller.text;
+      final selection = controller.selection;
+      final newText = text.replaceRange(selection.start, selection.end, option);
 
-        controller.value = controller.value.copyWith(
-          text: newText,
-          selection:
-              TextSelection.collapsed(offset: selection.start + option.length),
-        );
+      controller.value = controller.value.copyWith(
+        text: newText,
+        selection: TextSelection.collapsed(
+          offset: selection.start + option.length,
+        ),
+      );
 
-        hideOverlay();
-      },
-      [controller, hideOverlay],
-    );
+      hideOverlay();
+    }, [controller, hideOverlay]);
 
-    final getCursorOffset = useCallback(
-      () {
-        final textPainter = TextPainter(
-          text: TextSpan(
-            text: controller.text,
-            style: DefaultTextStyle.of(context).style,
-          ),
-          textDirection: TextDirection.ltr,
-        )..layout();
-        final caretOffset =
-            textPainter.getOffsetForCaret(controller.selection.base, Rect.zero);
-        return caretOffset.translate(0, textPainter.height);
-      },
-      [controller],
-    );
+    final getCursorOffset = useCallback(() {
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: controller.text,
+          style: DefaultTextStyle.of(context).style,
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      final caretOffset = textPainter.getOffsetForCaret(
+        controller.selection.base,
+        Rect.zero,
+      );
+      return caretOffset.translate(0, textPainter.height);
+    }, [controller]);
 
-    final createOverlayEntry = useCallback(
-      () {
-        final renderBox = context.findRenderObject() as RenderBox?;
-        if (renderBox == null) return null;
-        final size = renderBox.size;
-        final cursorOffset = getCursorOffset();
+    final createOverlayEntry = useCallback(() {
+      final renderBox = context.findRenderObject() as RenderBox?;
+      if (renderBox == null) return null;
+      final size = renderBox.size;
+      final cursorOffset = getCursorOffset();
 
-        return OverlayEntry(
-          builder: (context) => Positioned(
-            width: size.width,
-            child: CompositedTransformFollower(
-              link: layerLink,
-              showWhenUnlinked: false,
-              offset: cursorOffset,
-              child: Material(
-                elevation: 4.0,
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  children: [
-                    for (final option in options)
-                      ListTile(
-                        title: Text(option),
-                        onTap: () => selectOption(option),
-                      ),
-                  ],
+      return OverlayEntry(
+        builder:
+            (context) => Positioned(
+              width: size.width,
+              child: CompositedTransformFollower(
+                link: layerLink,
+                showWhenUnlinked: false,
+                offset: cursorOffset,
+                child: Material(
+                  elevation: 4.0,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: [
+                      for (final option in options)
+                        ListTile(
+                          title: Text(option),
+                          onTap: () => selectOption(option),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
-      [context, layerLink, options, getCursorOffset, selectOption],
-    );
+      );
+    }, [context, layerLink, options, getCursorOffset, selectOption]);
 
-    final showOverlay = useCallback(
-      () {
-        if (overlayEntry.value != null) {
-          overlayEntry.value!.remove();
+    final showOverlay = useCallback(() {
+      if (overlayEntry.value != null) {
+        overlayEntry.value!.remove();
+      }
+      final entry = createOverlayEntry();
+      if (entry == null) return;
+      overlayEntry.value = entry;
+      Overlay.of(context).insert(entry);
+    }, [createOverlayEntry, overlayEntry]);
+
+    useEffect(() {
+      void onTextChanged() {
+        if (controller.text.contains("@")) {
+          showOverlay();
+        } else {
+          hideOverlay();
         }
-        final entry = createOverlayEntry();
-        if (entry == null) return;
-        overlayEntry.value = entry;
-        Overlay.of(context).insert(entry);
-      },
-      [createOverlayEntry, overlayEntry],
-    );
+      }
 
-    useEffect(
-      () {
-        void onTextChanged() {
-          if (controller.text.contains("@")) {
-            showOverlay();
-          } else {
-            hideOverlay();
-          }
-        }
+      controller.addListener(onTextChanged);
 
-        controller.addListener(onTextChanged);
+      return () => controller.removeListener(onTextChanged);
+    }, [controller]);
 
-        return () => controller.removeListener(onTextChanged);
-      },
-      [controller],
-    );
-
-    return TextField(
-      controller: controller,
-      maxLines: 2,
-    );
+    return TextField(controller: controller, maxLines: 2);
   }
 }

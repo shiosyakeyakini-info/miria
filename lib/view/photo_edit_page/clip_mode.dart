@@ -35,11 +35,13 @@ class ClipModeState extends ConsumerState<ClipMode> {
     final cropSize = ref.watch(
       photoEditStateNotifierProvider.select((value) => value.cropSize),
     );
-    final reactions = ref
-        .watch(photoEditStateNotifierProvider.select((value) => value.emojis));
+    final reactions = ref.watch(
+      photoEditStateNotifierProvider.select((value) => value.emojis),
+    );
     final selectedReaction = ref.watch(
-      photoEditStateNotifierProvider
-          .select((value) => value.selectedEmojiIndex),
+      photoEditStateNotifierProvider.select(
+        (value) => value.selectedEmojiIndex,
+      ),
     );
 
     final ratio = defaultSize.width / actualSize.width;
@@ -48,23 +50,26 @@ class ClipModeState extends ConsumerState<ClipMode> {
       width: defaultSize.width + (basePadding * ratio) * 2,
       height: defaultSize.height + (basePadding * ratio) * 2,
       child: Listener(
-        onPointerMove: selectedReaction == null
-            ? null
-            : (detail) => ref
-                .read(photoEditStateNotifierProvider.notifier)
-                .reactionMove(detail),
+        onPointerMove:
+            selectedReaction == null
+                ? null
+                : (detail) => ref
+                    .read(photoEditStateNotifierProvider.notifier)
+                    .reactionMove(detail),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onScaleStart: selectedReaction == null
-              ? null
-              : (detail) => ref
-                  .read(photoEditStateNotifierProvider.notifier)
-                  .reactionScaleStart(detail),
-          onScaleUpdate: selectedReaction == null
-              ? null
-              : (detail) => ref
-                  .read(photoEditStateNotifierProvider.notifier)
-                  .reactionScaleUpdate(detail),
+          onScaleStart:
+              selectedReaction == null
+                  ? null
+                  : (detail) => ref
+                      .read(photoEditStateNotifierProvider.notifier)
+                      .reactionScaleStart(detail),
+          onScaleUpdate:
+              selectedReaction == null
+                  ? null
+                  : (detail) => ref
+                      .read(photoEditStateNotifierProvider.notifier)
+                      .reactionScaleUpdate(detail),
           child: RepaintBoundary(
             key: widget.renderingGlobalKey,
             child: Stack(
@@ -95,8 +100,9 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     width: cropOffset.dx,
                     height: defaultSize.height,
                     child: DecoratedBox(
-                      decoration:
-                          BoxDecoration(color: Colors.black87.withAlpha(150)),
+                      decoration: BoxDecoration(
+                        color: Colors.black87.withAlpha(150),
+                      ),
                     ),
                   ),
                   //right top-down
@@ -145,66 +151,77 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     height: iconSize * ratio,
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
-                      onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
-                          .cropMoveLeftTop(detail),
+                      onPointerMove:
+                          (detail) => ref
+                              .read(photoEditStateNotifierProvider.notifier)
+                              .cropMoveLeftTop(detail),
                       child: Icon(Icons.add, size: iconSize * ratio),
                     ),
                   ),
                   Positioned(
-                    left: cropOffset.dx +
+                    left:
+                        cropOffset.dx +
                         cropSize.width -
                         (iconSize / 2 - basePadding) * ratio,
                     top: cropOffset.dy - (iconSize / 2 - basePadding) * ratio,
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
-                      onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
-                          .cropMoveRightTop(detail),
+                      onPointerMove:
+                          (detail) => ref
+                              .read(photoEditStateNotifierProvider.notifier)
+                              .cropMoveRightTop(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
                   ),
                   Positioned(
                     left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
-                    top: cropOffset.dy +
+                    top:
+                        cropOffset.dy +
                         cropSize.height -
                         (iconSize / 2 - basePadding) / 2 * ratio,
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
-                      onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
-                          .cropMoveLeftBottom(detail),
+                      onPointerMove:
+                          (detail) => ref
+                              .read(photoEditStateNotifierProvider.notifier)
+                              .cropMoveLeftBottom(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
                   ),
                   Positioned(
-                    left: cropOffset.dx +
+                    left:
+                        cropOffset.dx +
                         cropSize.width -
                         (iconSize / 2 - basePadding) * ratio,
-                    top: cropOffset.dy +
+                    top:
+                        cropOffset.dy +
                         cropSize.height -
                         (iconSize / 2 - basePadding) * ratio,
                     child: Listener(
                       behavior: HitTestBehavior.translucent,
-                      onPointerMove: (detail) => ref
-                          .read(photoEditStateNotifierProvider.notifier)
-                          .cropMoveRightBottom(detail),
+                      onPointerMove:
+                          (detail) => ref
+                              .read(photoEditStateNotifierProvider.notifier)
+                              .cropMoveRightBottom(detail),
                       child: Icon(Icons.add, size: 40 * ratio),
                     ),
                   ),
                 ],
 
                 // Reactions
-                for (final reaction
-                    in reactions.mapIndexed((index, e) => (index, e)))
+                for (final reaction in reactions.mapIndexed(
+                  (index, e) => (index, e),
+                ))
                   Positioned(
-                    left: reaction.$2.position.dx +
+                    left:
+                        reaction.$2.position.dx +
                         basePadding * ratio +
                         (clipMode
                             ? 0
                             : (defaultSize.width - cropSize.width) / 2 -
                                 cropOffset.dx),
-                    top: reaction.$2.position.dy +
+                    top:
+                        reaction.$2.position.dy +
                         basePadding * ratio +
                         (clipMode
                             ? 0
@@ -213,14 +230,16 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     width: reaction.$2.scale,
                     height: reaction.$2.scale,
                     child: GestureDetector(
-                      onTap: () => ref
-                          .read(photoEditStateNotifierProvider.notifier)
-                          .selectReaction(reaction.$1),
+                      onTap:
+                          () => ref
+                              .read(photoEditStateNotifierProvider.notifier)
+                              .selectReaction(reaction.$1),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          border: reaction.$1 == selectedReaction
-                              ? Border.all(color: Colors.white)
-                              : null,
+                          border:
+                              reaction.$1 == selectedReaction
+                                  ? Border.all(color: Colors.white)
+                                  : null,
                         ),
                         child: SizedBox(
                           width: reaction.$2.scale,

@@ -3,7 +3,6 @@ import "dart:math";
 
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
@@ -17,21 +16,20 @@ import "package:uuid/uuid.dart";
 part "socket_timeline_repository.g.dart";
 
 @Riverpod(keepAlive: true)
-Future<StreamingController> misskeyStreaming(
-  MisskeyStreamingRef ref,
-  Misskey misskey,
-) async {
+Future<StreamingController> misskeyStreaming(Ref ref, Misskey misskey) async {
   return await misskey.streamingService.stream();
 }
 
 abstract class SocketTimelineRepository extends TimelineRepository {
   final Misskey misskey;
   final Account account;
-  late final EmojiRepository emojiRepository =
-      ref.read(emojiRepositoryProvider(account));
+  late final EmojiRepository emojiRepository = ref.read(
+    emojiRepositoryProvider(account),
+  );
   bool isReconnecting = false;
-  late final AccountRepository accountRepository =
-      ref.read(accountRepositoryProvider.notifier);
+  late final AccountRepository accountRepository = ref.read(
+    accountRepositoryProvider.notifier,
+  );
 
   StreamingController? streamingController;
   bool isLoading = true;
@@ -102,11 +100,13 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     }
 
     if (misskey.streamingService.isClosed) {
-      streamingController =
-          await ref.refresh(misskeyStreamingProvider(misskey).future);
+      streamingController = await ref.refresh(
+        misskeyStreamingProvider(misskey).future,
+      );
     } else {
-      streamingController =
-          await ref.read(misskeyStreamingProvider(misskey).future);
+      streamingController = await ref.read(
+        misskeyStreamingProvider(misskey).future,
+      );
     }
     await _listenStreaming();
     await Future.wait([
@@ -151,7 +151,7 @@ abstract class SocketTimelineRepository extends TimelineRepository {
       await (
         disconnect(),
         timelineSubscription?.cancel() ?? Future.value(),
-        mainSubscription?.cancel() ?? Future.value()
+        mainSubscription?.cancel() ?? Future.value(),
       ).wait;
     } catch (e) {
       print(e);
@@ -209,8 +209,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
   Future<void> subscribe(SubscribeItem item) async {
     if (!tabSetting.isSubscribe) return;
     await ref.read(misskeyStreamingProvider(misskey).future);
-    final index =
-        subscribedList.indexWhere((element) => element.noteId == item.noteId);
+    final index = subscribedList.indexWhere(
+      (element) => element.noteId == item.noteId,
+    );
     final isSubscribed = subscribedList.indexWhere(
       (element) =>
           element.noteId == item.noteId ||
@@ -272,8 +273,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
     timelineSubscription = streamingController
         ?.addChannel(channel, parameters, generatedId)
         .listen(listenTimeline);
-    mainSubscription =
-        streamingController?.mainStream(id: generatedId2).listen(listenMain);
+    mainSubscription = streamingController
+        ?.mainStream(id: generatedId2)
+        .listen(listenMain);
   }
 
   Future<void> listenMain(StreamingResponse response) async {
@@ -321,6 +323,20 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case DeletedChannelEvent():
           case PollVotedChannelEvent():
           case UpdatedChannelEvent():
+          case ChatMessageChannelEvent():
+          // TODO: Handle this case.
+          case NewChatMessageEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case ChatDeletedChannelEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case ChatReactChannelEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case ChatUnreactChannelEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
         }
       case StreamingChannelEmojiAddedResponse():
       case StreamingChannelEmojiUpdatedResponse():
@@ -377,6 +393,20 @@ abstract class SocketTimelineRepository extends TimelineRepository {
           case ReadAntennaChannelEvent():
           case ReceiveFollowRequestChannelEvent():
           case FallbackChannelEvent():
+          case ChatMessageChannelEvent():
+          // TODO: Handle this case.
+          case NewChatMessageEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case ChatDeletedChannelEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case ChatReactChannelEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case ChatUnreactChannelEvent():
+            // TODO: Handle this case.
+            throw UnimplementedError();
         }
       case StreamingChannelNoteUpdatedResponse(:final body):
         switch (body) {
@@ -394,17 +424,20 @@ abstract class SocketTimelineRepository extends TimelineRepository {
               registeredNote.copyWith(
                 reactions: reaction,
                 reactionEmojis: reactionEmojis,
-                myReaction: body.userId == account.i.id
-                    ? (emoji?.name != null ? ":${emoji?.name}:" : null)
-                    : registeredNote.myReaction,
+                myReaction:
+                    body.userId == account.i.id
+                        ? (emoji?.name != null ? ":${emoji?.name}:" : null)
+                        : registeredNote.myReaction,
               ),
             );
           case UnreactedChannelEvent(:final body, :final id):
             final registeredNote = noteRepository.notes[id];
             if (registeredNote == null) return;
             final reaction = Map.of(registeredNote.reactions);
-            reaction[body.reaction] =
-                max((reaction[body.reaction] ?? 0) - 1, 0);
+            reaction[body.reaction] = max(
+              (reaction[body.reaction] ?? 0) - 1,
+              0,
+            );
             if (reaction[body.reaction] == 0) {
               reaction.remove(body.reaction);
             }
@@ -417,9 +450,10 @@ abstract class SocketTimelineRepository extends TimelineRepository {
               registeredNote.copyWith(
                 reactions: reaction,
                 reactionEmojis: reactionEmojis,
-                myReaction: body.userId == account.i.id
-                    ? ""
-                    : registeredNote.myReaction,
+                myReaction:
+                    body.userId == account.i.id
+                        ? ""
+                        : registeredNote.myReaction,
               ),
             );
           case PollVotedChannelEvent(:final body, :final id):
@@ -430,8 +464,9 @@ abstract class SocketTimelineRepository extends TimelineRepository {
             if (poll == null) return;
 
             final choices = poll.choices.toList();
-            choices[body.choice] = choices[body.choice]
-                .copyWith(votes: choices[body.choice].votes + 1);
+            choices[body.choice] = choices[body.choice].copyWith(
+              votes: choices[body.choice].votes + 1,
+            );
             noteRepository.registerNote(
               registeredNote.copyWith(poll: poll.copyWith(choices: choices)),
             );

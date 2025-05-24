@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -13,8 +14,9 @@ import "package:misskey_dart/misskey_dart.dart";
 
 final noteSearchProvider = StateProvider.autoDispose((ref) => "");
 final noteSearchUserProvider = StateProvider.autoDispose<User?>((ref) => null);
-final noteSearchChannelProvider =
-    StateProvider.autoDispose<CommunityChannel?>((ref) => null);
+final noteSearchChannelProvider = StateProvider.autoDispose<CommunityChannel?>(
+  (ref) => null,
+);
 
 final noteSearchLocalOnlyProvider = StateProvider.autoDispose((ref) => false);
 
@@ -50,10 +52,7 @@ class SearchPage extends HookConsumerWidget implements AutoRouteWrapper {
         title: Text(S.of(context).search),
         bottom: TabBar(
           controller: tabController,
-          tabs: [
-            Tab(text: S.of(context).note),
-            Tab(text: S.of(context).user),
-          ],
+          tabs: [Tab(text: S.of(context).note), Tab(text: S.of(context).user)],
         ),
       ),
       body: TabBarView(
@@ -68,12 +67,13 @@ class SearchPage extends HookConsumerWidget implements AutoRouteWrapper {
             child: UserSelectContent(
               focusNode: focusNodes[1],
               isDetail: true,
-              onSelected: (item) async => context.pushRoute(
-                UserRoute(
-                  userId: item.id,
-                  accountContext: ref.read(accountContextProvider),
-                ),
-              ),
+              onSelected:
+                  (item) async => context.pushRoute(
+                    UserRoute(
+                      userId: item.id,
+                      accountContext: ref.read(accountContextProvider),
+                    ),
+                  ),
             ),
           ),
         ],

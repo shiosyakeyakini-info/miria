@@ -10,10 +10,7 @@ class SimpleMessageDialog extends StatelessWidget {
         builder: (context) => SimpleMessageDialog(message: message),
       );
 
-  const SimpleMessageDialog({
-    required this.message,
-    super.key,
-  });
+  const SimpleMessageDialog({required this.message, super.key});
 
   @override
   Widget build(BuildContext context) {

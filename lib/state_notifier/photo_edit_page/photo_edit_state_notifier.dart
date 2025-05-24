@@ -18,7 +18,7 @@ part "photo_edit_state_notifier.freezed.dart";
 part "photo_edit_state_notifier.g.dart";
 
 @freezed
-class PhotoEdit with _$PhotoEdit {
+abstract class PhotoEdit with _$PhotoEdit {
   const factory PhotoEdit({
     @Default(false) bool clipMode,
     @Default(false) bool colorFilterMode,
@@ -38,13 +38,13 @@ class PhotoEdit with _$PhotoEdit {
 }
 
 @freezed
-class ColorFilterPreview with _$ColorFilterPreview {
+abstract class ColorFilterPreview with _$ColorFilterPreview {
   const factory ColorFilterPreview({required String name, Uint8List? image}) =
       _ColorFilterPreview;
 }
 
 @freezed
-class EditedEmojiData with _$EditedEmojiData {
+abstract class EditedEmojiData with _$EditedEmojiData {
   const factory EditedEmojiData({
     required MisskeyEmojiData emoji,
     required double scale,
@@ -77,8 +77,10 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
     final imageData = await ImageDescriptor.encoded(
       await ImmutableBuffer.fromUint8List(initialImage),
     );
-    final defaultSize =
-        Size(imageData.width.toDouble(), imageData.height.toDouble());
+    final defaultSize = Size(
+      imageData.width.toDouble(),
+      imageData.height.toDouble(),
+    );
 
     state = state.copyWith(
       isInitialized: true,
@@ -133,8 +135,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   Future<Uint8List?> createSaveData(GlobalKey renderingAreaKey) async {
     // RenderObjectを取得
-    final boundary = renderingAreaKey.currentContext?.findRenderObject()
-        as RenderRepaintBoundary?;
+    final boundary =
+        renderingAreaKey.currentContext?.findRenderObject()
+            as RenderRepaintBoundary?;
     if (boundary == null) return null;
     final image = await boundary.toImage();
     final byteData = await image.toByteData(format: ImageByteFormat.png);
@@ -145,15 +148,17 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
     final removedPaddingImage = await ImageEditor.editImage(
       image: resultImage,
-      imageEditorOption: ImageEditorOption()
-        ..addOptions([
-          ClipOption(
-            x: padding + (state.defaultSize.width - state.cropSize.width) / 2,
-            y: padding + (state.defaultSize.height - state.cropSize.height) / 2,
-            width: state.cropSize.width,
-            height: state.cropSize.height,
-          ),
-        ]),
+      imageEditorOption:
+          ImageEditorOption()..addOptions([
+            ClipOption(
+              x: padding + (state.defaultSize.width - state.cropSize.width) / 2,
+              y:
+                  padding +
+                  (state.defaultSize.height - state.cropSize.height) / 2,
+              width: state.cropSize.width,
+              height: state.cropSize.height,
+            ),
+          ]),
     );
     return removedPaddingImage;
   }
@@ -306,20 +311,23 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
     if (editedImage == null) return;
     final previewImage = await ImageEditor.editImage(
       image: editedImage,
-      imageEditorOption: ImageEditorOption()
-        ..addOption(const ScaleOption(300, 300, keepRatio: true)),
+      imageEditorOption:
+          ImageEditorOption()
+            ..addOption(const ScaleOption(300, 300, keepRatio: true)),
     );
     if (previewImage == null) return;
-    final result = [
-      for (final preset in ColorFilterPresets().presets)
-        ColorFilterPreview(
-          name: preset.name,
-          image: await ImageEditor.editImage(
-            image: previewImage,
-            imageEditorOption: ImageEditorOption()..addOptions(preset.option),
-          ),
-        ),
-    ].whereNotNull();
+    final result =
+        [
+          for (final preset in ColorFilterPresets().presets)
+            ColorFilterPreview(
+              name: preset.name,
+              image: await ImageEditor.editImage(
+                image: previewImage,
+                imageEditorOption:
+                    ImageEditorOption()..addOptions(preset.option),
+              ),
+            ),
+        ].whereNotNull();
 
     state = state.copyWith(colorFilterPreviewImages: result.toList());
   }
@@ -327,8 +335,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
   /// 画像の色調補正を設定する
   Future<void> selectColorFilter(String name) async {
     if (state.adaptivePresets.any((element) => element == name)) {
-      final list = state.adaptivePresets.toList()
-        ..removeWhere((element) => element == name);
+      final list =
+          state.adaptivePresets.toList()
+            ..removeWhere((element) => element == name);
       await draw(state.copyWith(adaptivePresets: list));
     } else {
       await draw(
@@ -340,7 +349,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   /// リアクションを追加する
   Future<void> addReaction() async {
-    final reaction = await ref.read(appRouterProvider).push<MisskeyEmojiData>(
+    final reaction = await ref
+        .read(appRouterProvider)
+        .push<MisskeyEmojiData>(
           ReactionPickerRoute(
             account: ref.read(accountContextProvider).postAccount,
             isAcceptSensitive: true,
@@ -352,7 +363,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
       case CustomEmojiData():
         // カスタム絵文字の場合、ライセンスを確認する
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
-          final dialogResult = await ref.read(appRouterProvider).push<bool>(
+          final dialogResult = await ref
+              .read(appRouterProvider)
+              .push<bool>(
                 LicenseConfirmRoute(
                   emoji: reaction.baseName,
                   account: ref.read(accountContextProvider).postAccount,

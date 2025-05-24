@@ -27,12 +27,13 @@ class TabSettingsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final initialTabSetting = tabIndex != null
-        ? ref
-            .read(tabSettingsRepositoryProvider)
-            .tabSettings
-            .toList()[tabIndex!]
-        : null;
+    final initialTabSetting =
+        tabIndex != null
+            ? ref
+                .read(tabSettingsRepositoryProvider)
+                .tabSettings
+                .toList()[tabIndex!]
+            : null;
 
     final selectedAccount = useState<Account?>(
       initialTabSetting != null
@@ -63,22 +64,24 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedAntenna = useState<Antenna?>(null);
 
     final nameController = useTextEditingController(
-      text: initialTabSetting != null
-          ? initialTabSetting.name ??
-              initialTabSetting.tabType.displayName(context)
-          : "",
+      text:
+          initialTabSetting != null
+              ? initialTabSetting.name ??
+                  initialTabSetting.tabType.displayName(context)
+              : "",
     );
 
     final availableIncludeReply =
         selectedTabType.value == TabType.localTimeline ||
-            selectedTabType.value == TabType.hybridTimeline;
+        selectedTabType.value == TabType.hybridTimeline;
 
     final selectedIcon = useState<TabIcon?>(initialTabSetting?.icon);
     final renoteDisplay = useState(initialTabSetting?.renoteDisplay ?? true);
     final isSubscribe = useState(initialTabSetting?.isSubscribe ?? true);
     final isMediaOnly = useState(initialTabSetting?.isMediaOnly ?? false);
-    final isIncludeReply =
-        useState(initialTabSetting?.isIncludeReplies ?? false);
+    final isIncludeReply = useState(
+      initialTabSetting?.isIncludeReplies ?? false,
+    );
 
     final initialize = useAsync(() async {
       if (initialTabSetting == null) return;
@@ -101,12 +104,12 @@ class TabSettingsPage extends HookConsumerWidget {
             .show(ChannelsShowRequest(channelId: channelId));
       }
       if (listId != null) {
-        selectedUserList.value = (await ref
+        selectedUserList.value =
+            (await ref
                 .read(misskeyProvider(selectedAccount.value!))
                 .users
                 .list
-                .show(UsersListsShowRequest(listId: listId)))
-            .toUsersList();
+                .show(UsersListsShowRequest(listId: listId))).toUsersList();
       }
       if (antennaId != null) {
         selectedAntenna.value = await ref
@@ -126,7 +129,9 @@ class TabSettingsPage extends HookConsumerWidget {
           if (tabIndex != null)
             IconButton(
               onPressed: () async {
-                await ref.read(tabSettingsRepositoryProvider).save(
+                await ref
+                    .read(tabSettingsRepositoryProvider)
+                    .save(
                       ref
                           .read(tabSettingsRepositoryProvider)
                           .tabSettings
@@ -195,24 +200,24 @@ class TabSettingsPage extends HookConsumerWidget {
                 Text(S.of(context).roleTimeline),
                 switch (initialize.value) {
                   AsyncData() => Row(
-                      children: [
-                        Expanded(child: Text(selectedRole.value?.name ?? "")),
-                        IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                    children: [
+                      Expanded(child: Text(selectedRole.value?.name ?? "")),
+                      IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedRole.value =
-                                await context.pushRoute<RolesListResponse>(
-                              RoleSelectRoute(account: selected),
-                            );
-                            nameController.text =
-                                selectedRole.value?.name ?? nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
-                      ],
-                    ),
+                          selectedRole.value = await context
+                              .pushRoute<RolesListResponse>(
+                                RoleSelectRoute(account: selected),
+                              );
+                          nameController.text =
+                              selectedRole.value?.name ?? nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
+                    ],
+                  ),
                   _ => const CircularProgressIndicator.adaptive(),
                 },
               ],
@@ -220,25 +225,24 @@ class TabSettingsPage extends HookConsumerWidget {
                 Text(S.of(context).channel),
                 switch (initialize.value) {
                   AsyncData() => Row(
-                      children: [
-                        Expanded(
-                          child: Text(selectedChannel.value?.name ?? ""),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                    children: [
+                      Expanded(child: Text(selectedChannel.value?.name ?? "")),
+                      IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedChannel.value = await context.pushRoute(
-                              ChannelSelectRoute(account: selected),
-                            );
-                            nameController.text = selectedChannel.value?.name ??
-                                nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
-                      ],
-                    ),
+                          selectedChannel.value = await context.pushRoute(
+                            ChannelSelectRoute(account: selected),
+                          );
+                          nameController.text =
+                              selectedChannel.value?.name ??
+                              nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
+                    ],
+                  ),
                   _ => const CircularProgressIndicator.adaptive(),
                 },
               ],
@@ -246,26 +250,24 @@ class TabSettingsPage extends HookConsumerWidget {
                 Text(S.of(context).list),
                 switch (initialize.value) {
                   AsyncData() => Row(
-                      children: [
-                        Expanded(
-                          child: Text(selectedUserList.value?.name ?? ""),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                    children: [
+                      Expanded(child: Text(selectedUserList.value?.name ?? "")),
+                      IconButton(
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedUserList.value = await context.pushRoute(
-                              UserListSelectRoute(account: selected),
-                            );
-                            nameController.text =
-                                selectedUserList.value?.name ??
-                                    nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
-                      ],
-                    ),
+                          selectedUserList.value = await context.pushRoute(
+                            UserListSelectRoute(account: selected),
+                          );
+                          nameController.text =
+                              selectedUserList.value?.name ??
+                              nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
+                    ],
+                  ),
                   _ => const CircularProgressIndicator.adaptive(),
                 },
               ],
@@ -276,18 +278,19 @@ class TabSettingsPage extends HookConsumerWidget {
                     Expanded(child: Text(selectedAntenna.value?.name ?? "")),
                     switch (initialize.value) {
                       AsyncData() => IconButton(
-                          onPressed: () async {
-                            final selected = selectedAccount.value;
-                            if (selected == null) return;
+                        onPressed: () async {
+                          final selected = selectedAccount.value;
+                          if (selected == null) return;
 
-                            selectedAntenna.value = await context.pushRoute(
-                              AntennaSelectRoute(account: selected),
-                            );
-                            nameController.text = selectedAntenna.value?.name ??
-                                nameController.text;
-                          },
-                          icon: const Icon(Icons.navigate_next),
-                        ),
+                          selectedAntenna.value = await context.pushRoute(
+                            AntennaSelectRoute(account: selected),
+                          );
+                          nameController.text =
+                              selectedAntenna.value?.name ??
+                              nameController.text;
+                        },
+                        icon: const Icon(Icons.navigate_next),
+                      ),
                       _ => const CircularProgressIndicator.adaptive(),
                     },
                   ],
@@ -304,27 +307,29 @@ class TabSettingsPage extends HookConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: selectedAccount.value == null
-                        ? Container()
-                        : AccountContextScope.as(
-                            account: selectedAccount.value!,
-                            child: SizedBox(
-                              height: 32,
-                              child: TabIconView(
-                                icon: selectedIcon.value,
-                                size: IconTheme.of(context).size,
+                    child:
+                        selectedAccount.value == null
+                            ? Container()
+                            : AccountContextScope.as(
+                              account: selectedAccount.value!,
+                              child: SizedBox(
+                                height: 32,
+                                child: TabIconView(
+                                  icon: selectedIcon.value,
+                                  size: IconTheme.of(context).size,
+                                ),
                               ),
                             ),
-                          ),
                   ),
                   IconButton(
                     onPressed: () async {
                       if (selectedAccount.value == null) return;
                       selectedIcon.value = await showDialog<TabIcon>(
                         context: context,
-                        builder: (context) => IconSelectDialog(
-                          account: selectedAccount.value!,
-                        ),
+                        builder:
+                            (context) => IconSelectDialog(
+                              account: selectedAccount.value!,
+                            ),
                       );
                     },
                     icon: const Icon(Icons.navigate_next),
@@ -334,8 +339,8 @@ class TabSettingsPage extends HookConsumerWidget {
               CheckboxListTile(
                 title: Text(S.of(context).displayRenotes),
                 value: renoteDisplay.value,
-                onChanged: (value) =>
-                    renoteDisplay.value = !renoteDisplay.value,
+                onChanged:
+                    (value) => renoteDisplay.value = !renoteDisplay.value,
               ),
               if (availableIncludeReply)
                 CheckboxListTile(
@@ -432,10 +437,11 @@ class TabSettingsPage extends HookConsumerWidget {
                       return;
                     }
 
-                    final list = ref
-                        .read(tabSettingsRepositoryProvider)
-                        .tabSettings
-                        .toList();
+                    final list =
+                        ref
+                            .read(tabSettingsRepositoryProvider)
+                            .tabSettings
+                            .toList();
                     final newTabSetting = TabSetting(
                       icon: icon,
                       tabType: tabType,
@@ -451,9 +457,10 @@ class TabSettingsPage extends HookConsumerWidget {
                       isMediaOnly: isMediaOnly.value,
                     );
                     if (tabIndex == null) {
-                      await ref
-                          .read(tabSettingsRepositoryProvider)
-                          .save([...list, newTabSetting]);
+                      await ref.read(tabSettingsRepositoryProvider).save([
+                        ...list,
+                        newTabSetting,
+                      ]);
                     } else {
                       list[tabIndex!] = newTabSetting;
                       await ref.read(tabSettingsRepositoryProvider).save(list);

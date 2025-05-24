@@ -53,8 +53,9 @@ class AlreadyLoggedInException implements ValidateMisskeyException {
 
 @riverpod
 class AccountRepository extends _$AccountRepository {
-  late final SharedPreferenceController sharedPreferenceController =
-      ref.read(sharedPrefenceControllerProvider);
+  late final SharedPreferenceController sharedPreferenceController = ref.read(
+    sharedPrefenceControllerProvider,
+  );
 
   AccountRepository();
 
@@ -74,8 +75,9 @@ class AccountRepository extends _$AccountRepository {
       );
     }
 
-    final storedData =
-        await sharedPreferenceController.getStringSecure("accounts");
+    final storedData = await sharedPreferenceController.getStringSecure(
+      "accounts",
+    );
     if (storedData == null) return;
 
     try {
@@ -84,9 +86,10 @@ class AccountRepository extends _$AccountRepository {
       for (final element in list) {
         if ((element as Map<String, dynamic>)["meta"] == null) {
           try {
-            final meta = await ref
-                .read(misskeyWithoutAccountProvider(element["host"]))
-                .meta();
+            final meta =
+                await ref
+                    .read(misskeyWithoutAccountProvider(element["host"]))
+                    .meta();
             element["meta"] = jsonDecode(jsonEncode(meta.toJson()));
           } catch (e) {
             logger.warning(e);
@@ -105,8 +108,9 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> updateI(Account account) async {
-    final setting =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    final setting = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(account);
     _validatedAccts.add(account.acct);
 
     final i = await ref.read(misskeyProvider(account)).i.i();
@@ -124,8 +128,9 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> updateMeta(Account account) async {
-    final setting =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    final setting = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(account);
     _validateMetaAccts.add(account.acct);
 
     final meta = await ref.read(misskeyProvider(account)).meta();
@@ -199,9 +204,7 @@ class AccountRepository extends _$AccountRepository {
 
   Future<void> removeUnreadAnnouncement(Account account) async {
     final index = state.indexOf(account);
-    final i = state[index].i.copyWith(
-      unreadAnnouncements: [],
-    );
+    final i = state[index].i.copyWith(unreadAnnouncements: []);
 
     final accounts = List.of(state);
     accounts[index] = account.copyWith(i: i);
@@ -269,9 +272,10 @@ class AccountRepository extends _$AccountRepository {
     try {
       final meta = await ref.read(misskeyWithoutAccountProvider(server)).meta();
 
-      final endpoints = await ref
-          .read(misskeyProvider(Account.demoAccount(server, meta)))
-          .endpoints();
+      final endpoints =
+          await ref
+              .read(misskeyProvider(Account.demoAccount(server, meta)))
+              .endpoints();
       if (!endpoints.contains("emojis")) {
         throw SoftwareNotCompatibleException(
           software.toString(),
@@ -291,12 +295,20 @@ class AccountRepository extends _$AccountRepository {
     String userId,
     String password,
   ) async {
-    final token =
-        await MisskeyServer().loginAsPassword(server, userId, password);
+    final token = await MisskeyServer().loginAsPassword(
+      server,
+      userId,
+      password,
+    );
     final i = await Misskey(token: token, host: server).i.i();
     final meta = await Misskey(token: token, host: server).meta();
-    final account =
-        Account(host: server, token: token, userId: userId, i: i, meta: meta);
+    final account = Account(
+      host: server,
+      token: token,
+      userId: userId,
+      i: i,
+      meta: meta,
+    );
     await _addAccount(account);
   }
 

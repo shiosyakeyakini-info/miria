@@ -1,10 +1,19 @@
 import "package:flutter/cupertino.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
+@Dependencies([
+  misskeyGetContext,
+  notesWith,
+  accountContext,
+  misskeyPostContext,
+  MisskeyNoteNotifier,
+])
 class ClipDetailNoteList extends ConsumerWidget {
   final String id;
 

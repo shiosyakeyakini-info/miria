@@ -8,7 +8,7 @@ import "package:misskey_dart/misskey_dart.dart";
 part "note_repository.freezed.dart";
 
 @freezed
-class NoteStatus with _$NoteStatus {
+abstract class NoteStatus with _$NoteStatus {
   const factory NoteStatus({
     required bool isCwOpened,
     required bool isLongVisible,
@@ -71,8 +71,9 @@ class NoteRepository extends ChangeNotifier {
       }
       if (regExp != null) {
         try {
-          hardMuteWordRegExps
-              .add(RegExp(regExp.substring(1, regExp.length - 1)));
+          hardMuteWordRegExps.add(
+            RegExp(regExp.substring(1, regExp.length - 1)),
+          );
         } catch (e) {}
       }
     }
@@ -113,10 +114,13 @@ class NoteRepository extends ChangeNotifier {
       renote: note.renote ?? _notes[note.renoteId],
       reply: note.reply ?? _notes[note.replyId],
       poll: note.poll ?? registeredNote?.poll,
-      myReaction: note.myReaction?.isEmpty == true
-          ? null
-          : (note.myReaction ??
-              (note.reactions.isNotEmpty ? registeredNote?.myReaction : null)),
+      myReaction:
+          note.myReaction?.isEmpty == true
+              ? null
+              : (note.myReaction ??
+                  (note.reactions.isNotEmpty
+                      ? registeredNote?.myReaction
+                      : null)),
     );
     _noteStatuses[note.id] ??= NoteStatus(
       isCwOpened: false,
@@ -125,8 +129,8 @@ class NoteRepository extends ChangeNotifier {
       isLongVisibleInitialized: false,
       isIncludeMuteWord:
           (note.user.host != null || note.user.id != account.i.id) &&
-                  softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
-              softMuteWordRegExps.any(isMuteTarget),
+              softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
+          softMuteWordRegExps.any(isMuteTarget),
       isMuteOpened: false,
     );
     final renote = note.renote;

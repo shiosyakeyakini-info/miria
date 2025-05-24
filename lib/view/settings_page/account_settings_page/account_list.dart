@@ -59,10 +59,11 @@ class AccountListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () async => await context.router.pushAndPopUntil(
-                  const SplashRoute(),
-                  predicate: (_) => false,
-                ),
+                onPressed:
+                    () async => await context.router.pushAndPopUntil(
+                      const SplashRoute(),
+                      predicate: (_) => false,
+                    ),
                 child: Text(S.of(context).quitAccountSettings),
               ),
             ),
@@ -106,29 +107,28 @@ class AccountListItem extends ConsumerWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  content: Text(S.of(context).confirmDelete),
-                  actions: [
-                    OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(S.of(context).cancel),
+                builder:
+                    (context) => AlertDialog(
+                      content: Text(S.of(context).confirmDelete),
+                      actions: [
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(S.of(context).cancel),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await ref
+                                .read(accountRepositoryProvider.notifier)
+                                .remove(account);
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(S.of(context).doDeleting),
+                        ),
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await ref
-                            .read(
-                              accountRepositoryProvider.notifier,
-                            )
-                            .remove(account);
-                        if (!context.mounted) return;
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(S.of(context).doDeleting),
-                    ),
-                  ],
-                ),
               );
             },
           ),

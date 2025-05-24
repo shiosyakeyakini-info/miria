@@ -6,23 +6,33 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart" hide MfmText;
 import "package:miria/extensions/list_mfm_node_extension.dart";
 import "package:miria/providers.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
-import "package:miria/view/common/note_file_dialog/note_file_dialog.dart";
 import "package:miria/view/common/misskey_notes/link_preview.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:miria/view/common/note_file_dialog/note_file_dialog.dart";
 import "package:miria/view/misskey_page_page/misskey_page_notifier.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart" as misskey;
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:url_launcher/url_launcher.dart";
 
 part "misskey_page_page.g.dart";
 
+@Dependencies([
+  accountContext,
+  fetchNote,
+  misskeyPostContext,
+  notesWith,
+  MisskeyNoteNotifier,
+  MisskeyPageNotifier,
+])
 @RoutePage()
 class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
@@ -82,17 +92,18 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                       ),
                       const Padding(padding: EdgeInsets.only(left: 10)),
                       GestureDetector(
-                        onTap: () async => launchUrl(
-                          Uri(
-                            scheme: "https",
-                            host: accountContext.getAccount.host,
-                            pathSegments: [
-                              "@${page.user.username}",
-                              "pages",
-                              page.name,
-                            ],
-                          ),
-                        ),
+                        onTap:
+                            () async => launchUrl(
+                              Uri(
+                                scheme: "https",
+                                host: accountContext.getAccount.host,
+                                pathSegments: [
+                                  "@${page.user.username}",
+                                  "pages",
+                                  page.name,
+                                ],
+                              ),
+                            ),
                         child: Text(
                           S.of(context).openBrowsers,
                           style: AppTheme.of(context).linkStyle,
@@ -123,7 +134,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
 }
 
 @Riverpod(dependencies: [misskeyGetContext, notesWith])
-Future<Note> fetchNote(FetchNoteRef ref, String noteId) async {
+Future<Note> fetchNote(Ref ref, String noteId) async {
   final note = await ref
       .read(misskeyGetContextProvider)
       .notes
@@ -132,14 +143,17 @@ Future<Note> fetchNote(FetchNoteRef ref, String noteId) async {
   return note;
 }
 
+@Dependencies([
+  accountContext,
+  fetchNote,
+  misskeyPostContext,
+  notesWith,
+  MisskeyNoteNotifier,
+])
 class PageContent extends ConsumerWidget {
   final misskey.AbstractPageContent content;
   final misskey.Page page;
-  const PageContent({
-    required this.content,
-    required this.page,
-    super.key,
-  });
+  const PageContent({required this.content, required this.page, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -149,16 +163,11 @@ class PageContent extends ConsumerWidget {
       final nodes = const MfmParser().parse(text);
       return Column(
         children: [
-          MfmText(
-            mfmNode: nodes,
-          ),
+          MfmText(mfmNode: nodes),
           ...nodes.extractLinks().map(
-                (link) => LinkPreview(
-                  account: account,
-                  link: link,
-                  host: account.host,
-                ),
-              ),
+            (link) =>
+                LinkPreview(account: account, link: link, host: account.host),
+          ),
         ],
       );
     }
@@ -167,15 +176,18 @@ class PageContent extends ConsumerWidget {
       if (file != null) {
         final url = file.url;
 
-        final thumbnailUrl = page.attachedFiles
-            .firstWhereOrNull((e) => e.id == content.fileId)
-            ?.thumbnailUrl;
+        final thumbnailUrl =
+            page.attachedFiles
+                .firstWhereOrNull((e) => e.id == content.fileId)
+                ?.thumbnailUrl;
         return GestureDetector(
-          onTap: () async => showDialog(
-            context: context,
-            builder: (context) =>
-                NoteFileDialog(driveFiles: [file], initialPage: 0),
-          ),
+          onTap:
+              () async => showDialog(
+                context: context,
+                builder:
+                    (context) =>
+                        NoteFileDialog(driveFiles: [file], initialPage: 0),
+              ),
           child: NetworkImageView(
             url: thumbnailUrl ?? url,
             type: ImageType.image,
@@ -189,13 +201,13 @@ class PageContent extends ConsumerWidget {
       final note = ref.watch(fetchNoteProvider(noteId));
       return switch (note) {
         AsyncLoading() => const Center(
-            child: SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator.adaptive(),
-            ),
+          child: SizedBox.square(
+            dimension: 20,
+            child: CircularProgressIndicator.adaptive(),
           ),
+        ),
         AsyncError() => Text(S.of(context).thrownError),
-        AsyncData(:final value) => MisskeyNote(note: value)
+        AsyncData(:final value) => MisskeyNote(note: value),
       };
     }
     if (content is misskey.PageSection) {
@@ -250,13 +262,13 @@ class PageLikeButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = misskeyPageNotifierProvider(pageId);
     final liked = ref.watch(
-      provider.select((value) => value.valueOrNull?.page.isLiked ?? false),
+      provider.select((value) => value.value?.page.isLiked ?? false),
     );
     final likeCount = ref.watch(
-      provider.select((value) => value.valueOrNull?.page.likedCount ?? 0),
+      provider.select((value) => value.value?.page.likedCount ?? 0),
     );
     final isLoading = ref.watch(
-      provider.select((value) => value.valueOrNull?.likeOr is AsyncLoading),
+      provider.select((value) => value.value?.likeOr is AsyncLoading),
     );
 
     if (liked) {
@@ -265,8 +277,9 @@ class PageLikeButton extends ConsumerWidget {
             isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
-          size: MediaQuery.textScalerOf(context)
-              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+          size: MediaQuery.textScalerOf(
+            context,
+          ).scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
         ),
         label: Text(likeCount.format()),
       );
@@ -276,8 +289,9 @@ class PageLikeButton extends ConsumerWidget {
             isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
-          size: MediaQuery.textScalerOf(context)
-              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+          size: MediaQuery.textScalerOf(
+            context,
+          ).scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
         ),
         label: Text(likeCount.format()),
       );

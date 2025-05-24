@@ -10,6 +10,7 @@ import "package:miria/view/antenna_page/antenna_notes.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/mutation.dart";
 
 @RoutePage()
 class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
@@ -28,13 +29,17 @@ class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final antenna = ref.watch(
+    final antenna =
+        ref.watch(
           antennasNotifierProvider.select(
-            (antennas) => antennas.valueOrNull
-                ?.firstWhereOrNull((e) => e.id == this.antenna.id),
+            (antennas) => antennas.value?.firstWhereOrNull(
+              (e) => e.id == this.antenna.id,
+            ),
           ),
         ) ??
         this.antenna;
+
+    final updateAntenna = ref.watch(antennasNotifierProvider.updateAntenna);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,20 +47,21 @@ class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () async {
-              final settings = await context.pushRoute<AntennaSettings>(
-                AntennaSettingsRoute(
-                  title: Text(S.of(context).edit),
-                  initialSettings: AntennaSettings.fromAntenna(antenna),
-                  account: accountContext.postAccount,
-                ),
-              );
-              if (!context.mounted) return;
-              if (settings == null) return;
-              await ref
-                  .read(antennasNotifierProvider.notifier)
-                  .updateAntenna(antenna.id, settings);
-            },
+            onPressed:
+                updateAntenna is PendingMutation
+                    ? null
+                    : () async {
+                      final settings = await context.pushRoute<AntennaSettings>(
+                        AntennaSettingsRoute(
+                          title: Text(S.of(context).edit),
+                          initialSettings: AntennaSettings.fromAntenna(antenna),
+                          account: accountContext.postAccount,
+                        ),
+                      );
+                      if (!context.mounted) return;
+                      if (settings == null) return;
+                      await updateAntenna.call(antenna.id, settings);
+                    },
           ),
         ],
       ),

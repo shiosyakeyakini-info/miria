@@ -152,11 +152,11 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.id == e.note?.id)
               .forEach((e) {
-            isSummarize = true;
-            if (element.user != null) {
-              e.reactionUsers.add((element.reaction!, element.user!));
-            }
-          });
+                isSummarize = true;
+                if (element.user != null) {
+                  e.reactionUsers.add((element.reaction!, element.user!));
+                }
+              });
 
           if (!isSummarize) {
             resultList.add(
@@ -176,9 +176,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.renote?.id == e.note?.id)
               .forEach((e) {
-            isSummarize = true;
-            e.renoteUsers.add(element.user);
-          });
+                isSummarize = true;
+                e.renoteUsers.add(element.user);
+              });
 
           if (!isSummarize) {
             resultList.add(
@@ -241,7 +241,8 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted(
-                  element.message),
+                element.message,
+              ),
               id: element.id,
             ),
           );
@@ -344,6 +345,10 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               id: element.id,
             ),
           );
+        case NotificationType.createToken:
+        // TODO: Handle this case.
+        case NotificationType.chatRoomInvitationReceived:
+        // TODO: Handle this case.
       }
     }
 

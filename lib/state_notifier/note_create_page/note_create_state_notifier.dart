@@ -59,7 +59,7 @@ enum VoteExpireDurationType {
 }
 
 @freezed
-class NoteCreate with _$NoteCreate {
+abstract class NoteCreate with _$NoteCreate {
   const factory NoteCreate({
     required NoteVisibility noteVisibility,
     required bool localOnly,
@@ -89,20 +89,12 @@ class NoteCreate with _$NoteCreate {
 }
 
 @freezed
-class NoteCreateChannel with _$NoteCreateChannel {
-  const factory NoteCreateChannel({
-    required String id,
-    required String name,
-  }) = _NoteCreateChannel;
+abstract class NoteCreateChannel with _$NoteCreateChannel {
+  const factory NoteCreateChannel({required String id, required String name}) =
+      _NoteCreateChannel;
 }
 
-@Riverpod(
-  dependencies: [
-    misskeyPostContext,
-    notesWith,
-    accountContext,
-  ],
-)
+@Riverpod(dependencies: [misskeyPostContext, notesWith, accountContext])
 class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _fileSystem = ref.read(fileSystemProvider);
   late final _dio = ref.read(dioProvider);
@@ -114,18 +106,21 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   NoteCreate build() {
     final account = ref.read(accountContextProvider).postAccount;
     return NoteCreate(
-      noteVisibility: ref
-          .read(accountSettingsRepositoryProvider)
-          .fromAccount(account)
-          .defaultNoteVisibility,
-      localOnly: ref
-          .read(accountSettingsRepositoryProvider)
-          .fromAccount(account)
-          .defaultIsLocalOnly,
-      reactionAcceptance: ref
-          .read(accountSettingsRepositoryProvider)
-          .fromAccount(account)
-          .defaultReactionAcceptance,
+      noteVisibility:
+          ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(account)
+              .defaultNoteVisibility,
+      localOnly:
+          ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(account)
+              .defaultIsLocalOnly,
+      reactionAcceptance:
+          ref
+              .read(accountSettingsRepositoryProvider)
+              .fromAccount(account)
+              .defaultReactionAcceptance,
     );
   }
 
@@ -145,8 +140,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     if (channel != null) {
       channelData = NoteCreateChannel(id: channel.id, name: channel.name);
     } else if (reply?.channel != null) {
-      channelData =
-          NoteCreateChannel(id: reply!.channel!.id, name: reply.channel!.name);
+      channelData = NoteCreateChannel(
+        id: reply!.channel!.id,
+        name: reply.channel!.name,
+      );
     } else {
       channelData = null;
     }
@@ -159,32 +156,41 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     }
     if (initialMediaFiles != null && initialMediaFiles.isNotEmpty) {
       resultState = resultState.copyWith(
-        files: (await Future.wait(
-          initialMediaFiles.map((media) async {
-            final file = _fileSystem.file(media);
-            final fileName = file.basename;
-            final extension = fileName.split(".").last.toLowerCase();
-            if (["jpg", "jpeg", "png", "gif", "webp", "heic", "tif", "tiff"]
-                .contains(extension)) {
-              final d = await loadImage(file);
-              if (d.data.isEmpty) {
-                await _dialogNotifier.showSimpleDialog(
-                  message: (context) =>
-                      S.of(context).unsupportedFileWithFilename(fileName),
-                );
-                return null;
-              }
-              return d;
-            } else {
-              return UnknownFile(
-                data: await file.readAsBytes(),
-                fileName: fileName,
-              );
-            }
-          }),
-        ))
-            .nonNulls
-            .toList(),
+        files:
+            (await Future.wait(
+              initialMediaFiles.map((media) async {
+                final file = _fileSystem.file(media);
+                final fileName = file.basename;
+                final extension = fileName.split(".").last.toLowerCase();
+                if ([
+                  "jpg",
+                  "jpeg",
+                  "png",
+                  "gif",
+                  "webp",
+                  "heic",
+                  "tif",
+                  "tiff",
+                ].contains(extension)) {
+                  final d = await loadImage(file);
+                  if (d.data.isEmpty) {
+                    await _dialogNotifier.showSimpleDialog(
+                      message:
+                          (context) => S
+                              .of(context)
+                              .unsupportedFileWithFilename(fileName),
+                    );
+                    return null;
+                  }
+                  return d;
+                } else {
+                  return UnknownFile(
+                    data: await file.readAsBytes(),
+                    fileName: fileName,
+                  );
+                }
+              }),
+            )).nonNulls.toList(),
       );
     }
 
@@ -223,8 +229,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final replyTo = <User>[];
       if (note.mentions.isNotEmpty) {
         replyTo.addAll(
-          await _misskey.users
-              .showByIds(UsersShowByIdsRequest(userIds: note.mentions)),
+          await _misskey.users.showByIds(
+            UsersShowByIdsRequest(userIds: note.mentions),
+          ),
         );
       }
 
@@ -232,12 +239,13 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         noteVisibility: note.visibility,
         localOnly: note.localOnly,
         files: files,
-        channel: deletedNoteChannel != null
-            ? NoteCreateChannel(
-                id: deletedNoteChannel.id,
-                name: deletedNoteChannel.name,
-              )
-            : null,
+        channel:
+            deletedNoteChannel != null
+                ? NoteCreateChannel(
+                  id: deletedNoteChannel.id,
+                  name: deletedNoteChannel.name,
+                )
+                : null,
         cwText: note.cw ?? "",
         isCw: note.cw?.isNotEmpty == true,
         text: note.text ?? "",
@@ -245,9 +253,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         replyTo: replyTo.toList(),
         isVote: note.poll != null,
         isVoteMultiple: note.poll?.multiple ?? false,
-        voteExpireType: note.poll?.expiresAt == null
-            ? VoteExpireType.unlimited
-            : VoteExpireType.date,
+        voteExpireType:
+            note.poll?.expiresAt == null
+                ? VoteExpireType.unlimited
+                : VoteExpireType.date,
         voteContentCount: note.poll?.choices.map((e) => e.text).length ?? 2,
         voteContent: note.poll?.choices.map((e) => e.text).toList() ?? [],
         voteDate: note.poll?.expiresAt,
@@ -274,24 +283,24 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final replyTo = <User>[];
       if (reply.mentions.isNotEmpty) {
         replyTo.addAll(
-          await _misskey.users
-              .showByIds(UsersShowByIdsRequest(userIds: reply.mentions)),
+          await _misskey.users.showByIds(
+            UsersShowByIdsRequest(userIds: reply.mentions),
+          ),
         );
       }
 
       resultState = resultState.copyWith(
         reply: reply,
-        noteVisibility:
-            NoteVisibility.min(resultState.noteVisibility, reply.visibility),
+        noteVisibility: NoteVisibility.min(
+          resultState.noteVisibility,
+          reply.visibility,
+        ),
         cwText: reply.cw ?? "",
         isCw: reply.cw?.isNotEmpty == true,
-        replyTo: [
-          reply.user,
-          ...replyTo,
-        ]..removeWhere(
-            (element) =>
-                element.id == ref.read(accountContextProvider).postAccount.i.id,
-          ),
+        replyTo: [reply.user, ...replyTo]..removeWhere(
+          (element) =>
+              element.id == ref.read(accountContextProvider).postAccount.i.id,
+        ),
       );
     }
 
@@ -370,8 +379,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
                     fileName.endsWith("jpeg") ||
                     fileName.endsWith("tiff") ||
                     fileName.endsWith("tif")) {
-                  imageData =
-                      await FlutterImageCompress.compressWithList(file.data);
+                  imageData = await FlutterImageCompress.compressWithList(
+                    file.data,
+                  );
                 }
               } catch (e) {
                 logger.shout("failed to compress file");
@@ -432,8 +442,11 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
               !ref.read(accountContextProvider).postAccount.i.alwaysMarkNsfw) {
             final result = await _dialogNotifier.showDialog(
               message: (context) => S.of(context).unexpectedSensitive,
-              actions: (context) =>
-                  [S.of(context).staySensitive, S.of(context).unsetSensitive],
+              actions:
+                  (context) => [
+                    S.of(context).staySensitive,
+                    S.of(context).unsetSensitive,
+                  ],
             );
             if (result == 1) {
               await _misskey.drive.files.update(
@@ -467,8 +480,8 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
                   element.host != null && element.host != _misskey.host,
             )) {
           await _dialogNotifier.showSimpleDialog(
-            message: (context) =>
-                S.of(context).cannotMentionToRemoteInLocalOnlyNote,
+            message:
+                (context) => S.of(context).cannotMentionToRemoteInLocalOnlyNote,
           );
           return;
         }
@@ -482,8 +495,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
               ),
             ),
         ];
-        final visibleUserIds = state.replyTo.map((e) => e.id).toList()
-          ..addAll(mentionTargetUsers.map((e) => e.id));
+        final visibleUserIds =
+            state.replyTo.map((e) => e.id).toList()
+              ..addAll(mentionTargetUsers.map((e) => e.id));
 
         final baseText =
             "${state.replyTo.map((e) => "@${e.username}${e.host == null ? " " : "@${e.host} "}").join("")}${state.text}";
@@ -491,29 +505,35 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
         final durationType = state.voteDurationType;
         final voteDuration = Duration(
-          days: durationType == VoteExpireDurationType.day
-              ? state.voteDuration ?? 0
-              : 0,
-          hours: durationType == VoteExpireDurationType.hours
-              ? state.voteDuration ?? 0
-              : 0,
-          minutes: durationType == VoteExpireDurationType.minutes
-              ? state.voteDuration ?? 0
-              : 0,
-          seconds: durationType == VoteExpireDurationType.seconds
-              ? state.voteDuration ?? 0
-              : 0,
+          days:
+              durationType == VoteExpireDurationType.day
+                  ? state.voteDuration ?? 0
+                  : 0,
+          hours:
+              durationType == VoteExpireDurationType.hours
+                  ? state.voteDuration ?? 0
+                  : 0,
+          minutes:
+              durationType == VoteExpireDurationType.minutes
+                  ? state.voteDuration ?? 0
+                  : 0,
+          seconds:
+              durationType == VoteExpireDurationType.seconds
+                  ? state.voteDuration ?? 0
+                  : 0,
         );
 
         final poll = NotesCreatePollRequest(
           choices: state.voteContent,
           multiple: state.isVoteMultiple,
-          expiresAt: state.voteExpireType == VoteExpireType.date
-              ? state.voteDate
-              : null,
-          expiredAfter: state.voteExpireType == VoteExpireType.duration
-              ? voteDuration
-              : null,
+          expiresAt:
+              state.voteExpireType == VoteExpireType.date
+                  ? state.voteDate
+                  : null,
+          expiredAfter:
+              state.voteExpireType == VoteExpireType.duration
+                  ? voteDuration
+                  : null,
         );
 
         if (state.noteCreationMode == NoteCreationMode.update) {
@@ -562,7 +582,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         .push<DriveModalSheetReturnValue>(const DriveModalRoute());
 
     if (result == DriveModalSheetReturnValue.drive) {
-      final result = await ref.read(appRouterProvider).push<List<DriveFile>>(
+      final result = await ref
+          .read(appRouterProvider)
+          .push<List<DriveFile>>(
             DriveFileSelectRoute(
               account: ref.read(accountContextProvider).postAccount,
               allowMultiple: true,
@@ -593,12 +615,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           );
         }),
       );
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
+      state = state.copyWith(files: [...state.files, ...files]);
     } else if (result == DriveModalSheetReturnValue.upload) {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -608,35 +625,30 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       );
       if (result == null || result.files.isEmpty) return;
 
-      final fsFiles = result.files.map((file) {
-        final path = file.path;
-        if (path != null) {
-          return _fileSystem.file(path);
-        }
-        return null;
-      }).nonNulls;
-      final files = await Future.wait(
-        fsFiles.map(
-          (file) async {
-            final d = await loadImage(file);
-            if (d.data.isEmpty) {
-              await _dialogNotifier.showSimpleDialog(
-                message: (context) =>
-                    S.of(context).unsupportedFileWithFilename(file.basename),
-              );
-              return null;
+      final fsFiles =
+          result.files.map((file) {
+            final path = file.path;
+            if (path != null) {
+              return _fileSystem.file(path);
             }
-            return d;
-          },
-        ),
+            return null;
+          }).nonNulls;
+      final files = await Future.wait(
+        fsFiles.map((file) async {
+          final d = await loadImage(file);
+          if (d.data.isEmpty) {
+            await _dialogNotifier.showSimpleDialog(
+              message:
+                  (context) =>
+                      S.of(context).unsupportedFileWithFilename(file.basename),
+            );
+            return null;
+          }
+          return d;
+        }),
       );
 
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files.nonNulls,
-        ],
-      );
+      state = state.copyWith(files: [...state.files, ...files.nonNulls]);
     }
   }
 
@@ -658,9 +670,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           }
 
           final exif = ExifData();
-          exif.imageIfd.orientation = (origExif.imageIfd.hasOrientation)
-              ? origExif.imageIfd.orientation
-              : 1;
+          exif.imageIfd.orientation =
+              (origExif.imageIfd.hasOrientation)
+                  ? origExif.imageIfd.orientation
+                  : 1;
 
           return ImageFile(
             fileName: basename,
@@ -691,7 +704,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           tiff.exif = exif;
 
           return ImageFile(
-              fileName: "$basename.jpg", data: encodeJpg(tiff, quality: 95));
+            fileName: "$basename.jpg",
+            data: encodeJpg(tiff, quality: 95),
+          );
 
         default:
           return ImageFile(fileName: basename, data: imageBytes);
@@ -790,7 +805,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   /// リプライ先ユーザーを追加する
   Future<void> addReplyUser() async {
-    final user = await ref.read(appRouterProvider).push<User>(
+    final user = await ref
+        .read(appRouterProvider)
+        .push<User>(
           UserSelectRoute(accountContext: ref.read(accountContextProvider)),
         );
     if (user != null) {
@@ -808,17 +825,18 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     state = state.copyWith(isCw: !state.isCw);
   }
 
-  Future<bool> validateNoteVisibility(
-    NoteVisibility visibility,
-  ) async {
+  Future<bool> validateNoteVisibility(NoteVisibility visibility) async {
     final replyVisibility = state.reply?.visibility;
     if (replyVisibility == NoteVisibility.specified ||
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
       await _dialogNotifier.showSimpleDialog(
-        message: (context) => S.of(context).cannotPublicReplyToPrivateNote(
-              replyVisibility!.displayName(context),
-            ),
+        message:
+            (context) => S
+                .of(context)
+                .cannotPublicReplyToPrivateNote(
+                  replyVisibility!.displayName(context),
+                ),
       );
 
       return false;
@@ -841,22 +859,28 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   Future<void> toggleLocalOnly() async {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
             message: (context) => S.of(context).cannotFederateNoteToChannel,
           );
       return;
     }
     if (state.reply?.localOnly == true) {
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
-            message: (context) =>
-                S.of(context).cannotFederateReplyToLocalOnlyNote,
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
+            message:
+                (context) => S.of(context).cannotFederateReplyToLocalOnlyNote,
           );
       return;
     }
     if (state.renote?.localOnly == true) {
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
-            message: (context) =>
-                S.of(context).cannotFederateRenoteToLocalOnlyNote,
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
+            message:
+                (context) => S.of(context).cannotFederateRenoteToLocalOnlyNote,
           );
       return;
     }

@@ -36,9 +36,10 @@ class SplashPageState extends ConsumerState<SplashPage> {
 
     if (_isFirst) {
       if (Platform.isAndroid || Platform.isIOS) {
-        initialSharingMedias = (await ReceiveSharingIntent.getInitialMedia())
-            .map((e) => e.path)
-            .toList();
+        initialSharingMedias =
+            (await ReceiveSharingIntent.getInitialMedia())
+                .map((e) => e.path)
+                .toList();
         initialSharingText = await ReceiveSharingIntent.getInitialText() ?? "";
       }
 

@@ -3,10 +3,12 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
@@ -17,11 +19,19 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/notification_page/notification_page_data.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "notification_page.g.dart";
 
 @RoutePage()
+@Dependencies([
+  misskeyPostContext,
+  accountContext,
+  notesWith,
+  followRequests,
+  MisskeyNoteNotifier,
+])
 class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
 
@@ -54,14 +64,11 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                 initializeFuture: () async {
                   final localize = S.of(context);
                   final result = await misskey.i.notifications(
-                    const INotificationsRequest(
-                      limit: 50,
-                      markAsRead: true,
-                    ),
+                    const INotificationsRequest(limit: 50, markAsRead: true),
                   );
                   ref
                       .read(notesWithProvider)
-                      .registerAll(result.map((e) => e.note).whereNotNull());
+                      .registerAll(result.map((e) => e.note).nonNulls);
 
                   await ref
                       .read(accountRepositoryProvider.notifier)
@@ -71,23 +78,21 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                 nextFuture: (lastElement, _) async {
                   final localize = S.of(context);
                   final result = await misskey.i.notifications(
-                    INotificationsRequest(
-                      limit: 50,
-                      untilId: lastElement.id,
-                    ),
+                    INotificationsRequest(limit: 50, untilId: lastElement.id),
                   );
                   ref
                       .read(notesWithProvider)
                       .registerAll(result.map((e) => e.note).whereNotNull());
                   return result.toNotificationData(localize);
                 },
-                itemBuilder: (context, notification) => Align(
-                  alignment: Alignment.center,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 800),
-                    child: NotificationItem(notification: notification),
-                  ),
-                ),
+                itemBuilder:
+                    (context, notification) => Align(
+                      alignment: Alignment.center,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 800),
+                        child: NotificationItem(notification: notification),
+                      ),
+                    ),
               ),
               PushableListView<Note>(
                 initializeFuture: () async {
@@ -112,23 +117,27 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
               ),
               PushableListView<Note>(
                 initializeFuture: () async {
-                  final notes =
-                      await ref.read(misskeyPostContextProvider).notes.mentions(
-                            const NotesMentionsRequest(
-                              visibility: NoteVisibility.specified,
-                            ),
-                          );
+                  final notes = await ref
+                      .read(misskeyPostContextProvider)
+                      .notes
+                      .mentions(
+                        const NotesMentionsRequest(
+                          visibility: NoteVisibility.specified,
+                        ),
+                      );
                   ref.read(notesWithProvider).registerAll(notes);
                   return notes.toList();
                 },
                 nextFuture: (item, _) async {
-                  final notes =
-                      await ref.read(misskeyPostContextProvider).notes.mentions(
-                            NotesMentionsRequest(
-                              untilId: item.id,
-                              visibility: NoteVisibility.specified,
-                            ),
-                          );
+                  final notes = await ref
+                      .read(misskeyPostContextProvider)
+                      .notes
+                      .mentions(
+                        NotesMentionsRequest(
+                          untilId: item.id,
+                          visibility: NoteVisibility.specified,
+                        ),
+                      );
                   ref.read(notesWithProvider).registerAll(notes);
                   return notes.toList();
                 },
@@ -144,11 +153,11 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   }
 }
 
-final showActionsProvider =
-    StateProvider.autoDispose.family<bool, NotificationData>((ref, _) => true);
+final showActionsProvider = StateProvider.autoDispose
+    .family<bool, NotificationData>((ref, _) => true);
 
 @Riverpod(dependencies: [misskeyPostContext])
-Future<List<FollowRequest>> followRequests(FollowRequestsRef ref) async {
+Future<List<FollowRequest>> followRequests(Ref ref) async {
   final response = await ref
       .watch(misskeyPostContextProvider)
       .following
@@ -157,13 +166,17 @@ Future<List<FollowRequest>> followRequests(FollowRequestsRef ref) async {
   return response.toList();
 }
 
+@Dependencies([
+  followRequests,
+  accountContext,
+  misskeyPostContext,
+  notesWith,
+  MisskeyNoteNotifier,
+])
 class NotificationItem extends ConsumerWidget {
   final NotificationData notification;
 
-  const NotificationItem({
-    required this.notification,
-    super.key,
-  });
+  const NotificationItem({required this.notification, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -189,27 +202,37 @@ class NotificationItem extends ConsumerWidget {
                     if (hasReaction && hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).renoteAndReactionsNotification(
+                          S
+                              .of(context)
+                              .renoteAndReactionsNotification(
                                 notification.reactionUsers.first.$2?.name ??
                                     notification
-                                        .reactionUsers.first.$2?.username,
+                                        .reactionUsers
+                                        .first
+                                        .$2
+                                        ?.username,
                                 notification.renoteUsers.first?.name ??
                                     notification.renoteUsers.first?.username,
                               ),
                           emojis: Map.of(
                             notification.reactionUsers.first.$2?.emojis ?? {},
                           )..addAll(
-                              notification.renoteUsers.first?.emojis ?? {},
-                            ),
+                            notification.renoteUsers.first?.emojis ?? {},
+                          ),
                         ),
                       ),
                     if (hasReaction && !hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).reactionNotification(
+                          S
+                              .of(context)
+                              .reactionNotification(
                                 notification.reactionUsers.first.$2?.name ??
                                     notification
-                                        .reactionUsers.first.$2?.username,
+                                        .reactionUsers
+                                        .first
+                                        .$2
+                                        ?.username,
                               ),
                           emojis:
                               notification.reactionUsers.first.$2?.emojis ?? {},
@@ -218,7 +241,9 @@ class NotificationItem extends ConsumerWidget {
                     if (hasRenote && !hasReaction)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).renoteNotification(
+                          S
+                              .of(context)
+                              .renoteNotification(
                                 notification.renoteUsers.first?.name ??
                                     notification.renoteUsers.first?.username,
                               ),
@@ -276,15 +301,15 @@ class NotificationItem extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(S.of(context).reactionUsersInNotification),
-                            for (final reaction
-                                in notification.reactionUsers.mapIndexed(
-                              (index, element) => (index, element),
-                            )) ...[
+                            for (final reaction in notification.reactionUsers
+                                .mapIndexed(
+                                  (index, element) => (index, element),
+                                )) ...[
                               if (reaction.$2.$1 != null &&
                                       (reaction.$1 > 0 &&
                                           notification
-                                                  .reactionUsers[
-                                                      reaction.$1 - 1]
+                                                  .reactionUsers[reaction.$1 -
+                                                      1]
                                                   .$1 !=
                                               reaction.$2.$1) ||
                                   reaction.$1 == 0)
@@ -334,8 +359,12 @@ class NotificationItem extends ConsumerWidget {
         final type = notification.type;
 
         return Padding(
-          padding:
-              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          padding: const EdgeInsets.only(
+            left: 10,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,8 +373,10 @@ class NotificationItem extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: SimpleMfmText(
-                      notification.type
-                          .name(context, (user?.name ?? user?.username) ?? ""),
+                      notification.type.name(
+                        context,
+                        (user?.name ?? user?.username) ?? "",
+                      ),
                       emojis: user?.emojis ?? {},
                     ),
                   ),
@@ -358,8 +389,9 @@ class NotificationItem extends ConsumerWidget {
                     FollowNotificationDataType.receiveFollowRequest)
                   followRequests.maybeWhen(
                     data: (requests) {
-                      final isPending = requests
-                          .any((request) => request.follower.id == user.id);
+                      final isPending = requests.any(
+                        (request) => request.follower.id == user.id,
+                      );
                       if (isPending) {
                         return Row(
                           children: [
@@ -368,11 +400,12 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: ElevatedButton(
-                                onPressed: () async => handleFollowRequest(
-                                  ref,
-                                  accept: true,
-                                  userId: user.id,
-                                ),
+                                onPressed:
+                                    () async => handleFollowRequest(
+                                      ref,
+                                      accept: true,
+                                      userId: user.id,
+                                    ),
                                 child: Text(S.of(context).accept),
                               ),
                             ),
@@ -381,11 +414,12 @@ class NotificationItem extends ConsumerWidget {
                               flex: 5,
                               fit: FlexFit.tight,
                               child: OutlinedButton(
-                                onPressed: () async => handleFollowRequest(
-                                  ref,
-                                  accept: false,
-                                  userId: user.id,
-                                ),
+                                onPressed:
+                                    () async => handleFollowRequest(
+                                      ref,
+                                      accept: false,
+                                      userId: user.id,
+                                    ),
                                 child: Text(S.of(context).reject),
                               ),
                             ),
@@ -401,14 +435,18 @@ class NotificationItem extends ConsumerWidget {
               if (type is FollowRequestAccepted && type.message != null)
                 SimpleMfmText(
                   S.of(context).messageForFollower(type.message ?? ""),
-                )
+                ),
             ],
           ),
         );
       case SimpleNotificationData():
         return Padding(
-          padding:
-              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          padding: const EdgeInsets.only(
+            left: 10,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
           child: Row(
             children: [
               Expanded(child: Text(notification.text)),
@@ -460,8 +498,12 @@ class NotificationItem extends ConsumerWidget {
         );
       case RoleNotification():
         return Padding(
-          padding:
-              const EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10.0),
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+            right: 10,
+            left: 10.0,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -486,11 +528,13 @@ class NotificationItem extends ConsumerWidget {
       final misskey = ref.watch(misskeyPostContextProvider);
 
       if (accept) {
-        await misskey.following.requests
-            .accept(FollowingRequestsAcceptRequest(userId: userId));
+        await misskey.following.requests.accept(
+          FollowingRequestsAcceptRequest(userId: userId),
+        );
       } else {
-        await misskey.following.requests
-            .reject(FollowingRequestsRejectRequest(userId: userId));
+        await misskey.following.requests.reject(
+          FollowingRequestsRejectRequest(userId: userId),
+        );
       }
 
       ref.invalidate(followRequestsProvider);

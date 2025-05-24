@@ -11,7 +11,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<List<DriveFile>>()
+@RoutePage()
 class DriveFileSelectDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   final Account account;
@@ -35,14 +35,16 @@ class DriveFileSelectDialog extends HookConsumerWidget
     return AlertDialog(
       title: AppBar(
         leading: IconButton(
-          onPressed: path.value.isEmpty
-              ? null
-              : () => path.value = [...path.value..removeLast()],
+          onPressed:
+              path.value.isEmpty
+                  ? null
+                  : () => path.value = [...path.value..removeLast()],
           icon: const Icon(Icons.arrow_back),
         ),
-        title: path.value.isEmpty
-            ? Text(S.of(context).chooseFile)
-            : Text(path.value.map((e) => e.name).join("/")),
+        title:
+            path.value.isEmpty
+                ? Text(S.of(context).chooseFile)
+                : Text(path.value.map((e) => e.name).join("/")),
         actions: [
           if (files.value.isNotEmpty)
             Center(
@@ -53,9 +55,10 @@ class DriveFileSelectDialog extends HookConsumerWidget
             ),
           if (allowMultiple)
             IconButton(
-              onPressed: files.value.isEmpty
-                  ? null
-                  : () => Navigator.of(context).pop(files.value),
+              onPressed:
+                  files.value.isEmpty
+                      ? null
+                      : () => Navigator.of(context).pop(files.value),
               icon: const Icon(Icons.check),
             ),
         ],
@@ -125,8 +128,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
                 },
                 listKey: path.value.map((e) => e.id).join("/"),
                 itemBuilder: (context, item) {
-                  final isSelected =
-                      files.value.any((file) => file.id == item.id);
+                  final isSelected = files.value.any(
+                    (file) => file.id == item.id,
+                  );
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     child: InkWell(
@@ -136,9 +140,10 @@ class DriveFileSelectDialog extends HookConsumerWidget
                       onTap: () {
                         if (allowMultiple) {
                           if (isSelected) {
-                            files.value = files.value
-                                .where((file) => file.id != item.id)
-                                .toList();
+                            files.value =
+                                files.value
+                                    .where((file) => file.id != item.id)
+                                    .toList();
                           } else {
                             files.value = [...files.value, item];
                           }
@@ -148,30 +153,32 @@ class DriveFileSelectDialog extends HookConsumerWidget
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: (allowMultiple && isSelected)
-                            ? BoxDecoration(
-                                color: AppTheme.of(context)
-                                    .currentDisplayTabColor
-                                    .withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(5),
-                              )
-                            : null,
+                        decoration:
+                            (allowMultiple && isSelected)
+                                ? BoxDecoration(
+                                  color: AppTheme.of(
+                                    context,
+                                  ).currentDisplayTabColor.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(5),
+                                )
+                                : null,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
                               width: double.infinity,
                               height: 200,
-                              child: item.thumbnailUrl == null
-                                  ? const SizedBox.shrink()
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: NetworkImageView(
-                                        fit: BoxFit.cover,
-                                        url: item.thumbnailUrl!,
-                                        type: ImageType.imageThumbnail,
+                              child:
+                                  item.thumbnailUrl == null
+                                      ? const SizedBox.shrink()
+                                      : ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: NetworkImageView(
+                                          fit: BoxFit.cover,
+                                          url: item.thumbnailUrl!,
+                                          type: ImageType.imageThumbnail,
+                                        ),
                                       ),
-                                    ),
                             ),
                             Text(item.name),
                           ],

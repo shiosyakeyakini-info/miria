@@ -11,7 +11,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "app_info_page.g.dart";
 
 @riverpod
-Future<PackageInfo> packageInfo(PackageInfoRef ref) async =>
+Future<PackageInfo> packageInfo(Ref ref) async =>
     await PackageInfo.fromPlatform();
 
 @RoutePage()
@@ -20,7 +20,7 @@ class AppInfoPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final packageInfo = ref.watch(packageInfoProvider).valueOrNull;
+    final packageInfo = ref.watch(packageInfoProvider).value;
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).aboutMiria)),
       body: SingleChildScrollView(

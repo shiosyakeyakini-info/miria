@@ -23,32 +23,33 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).misskeyGames),
-      ),
+      appBar: AppBar(title: Text(S.of(context).misskeyGames)),
       body: Column(
         children: [
           ListTile(
             title: Text(S.of(context).cookieCliker),
-            onTap: () async => launchUrlString(
-              "https://${accountContext.postAccount.host}/clicker",
-              mode: LaunchMode.externalApplication,
-            ),
+            onTap:
+                () async => launchUrlString(
+                  "https://${accountContext.postAccount.host}/clicker",
+                  mode: LaunchMode.externalApplication,
+                ),
           ),
           ListTile(
             title: Text(S.of(context).bubbleGame),
-            onTap: () async => launchUrlString(
-              "https://${accountContext.postAccount.host}/bubble-game",
-              mode: LaunchMode.externalApplication,
-            ),
+            onTap:
+                () async => launchUrlString(
+                  "https://${accountContext.postAccount.host}/bubble-game",
+                  mode: LaunchMode.externalApplication,
+                ),
           ),
           ListTile(
             title: Text(S.of(context).reversi),
             subtitle: const ReversiInvite(),
-            onTap: () async => launchUrlString(
-              "https://${accountContext.postAccount.host}/reversi",
-              mode: LaunchMode.externalApplication,
-            ),
+            onTap:
+                () async => launchUrlString(
+                  "https://${accountContext.postAccount.host}/reversi",
+                  mode: LaunchMode.externalApplication,
+                ),
           ),
         ],
       ),
@@ -57,9 +58,7 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
 }
 
 @Riverpod(dependencies: [misskeyPostContext])
-Future<List<User>> _fetchReversiData(
-  _FetchReversiDataRef ref,
-) async {
+Future<List<User>> _fetchReversiData(Ref ref) async {
   return [...await ref.read(misskeyPostContextProvider).reversi.invitations()];
 }
 
@@ -72,10 +71,13 @@ class ReversiInvite extends ConsumerWidget {
 
     return switch (reversiInvitation) {
       AsyncLoading() => Text(S.of(context).loading),
-      AsyncData<List<User>>(:final value) => value.isEmpty
-          ? Text(S.of(context).nonInvitedReversi)
-          : Text(
-              S.of(context).invitedReversi(
+      AsyncData<List<User>>(:final value) =>
+        value.isEmpty
+            ? Text(S.of(context).nonInvitedReversi)
+            : Text(
+              S
+                  .of(context)
+                  .invitedReversi(
                     value.map((e) => e.name ?? e.username).join(", "),
                   ),
             ),

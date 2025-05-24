@@ -6,30 +6,64 @@ part of 'misskey_note_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$misskeyNoteNotifierHash() =>
-    r'5edd4690a767107f9c8a30e6b480a74de4e83d74';
-
-/// See also [MisskeyNoteNotifier].
 @ProviderFor(MisskeyNoteNotifier)
-final misskeyNoteNotifierProvider =
-    NotifierProvider<MisskeyNoteNotifier, void>.internal(
-  MisskeyNoteNotifier.new,
-  name: r'misskeyNoteNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$misskeyNoteNotifierHash,
-  dependencies: <ProviderOrFamily>[
-    accountContextProvider,
-    misskeyGetContextProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies,
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+const misskeyNoteNotifierProvider = MisskeyNoteNotifierProvider._();
 
-typedef _$MisskeyNoteNotifier = Notifier<void>;
+final class MisskeyNoteNotifierProvider
+    extends $NotifierProvider<MisskeyNoteNotifier, void> {
+  const MisskeyNoteNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'misskeyNoteNotifierProvider',
+        isAutoDispose: false,
+        dependencies: const <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          MisskeyNoteNotifierProvider.$allTransitiveDependencies0,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = accountContextProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$misskeyNoteNotifierHash();
+
+  @$internal
+  @override
+  MisskeyNoteNotifier create() => MisskeyNoteNotifier();
+
+  @$internal
+  @override
+  $NotifierProviderElement<MisskeyNoteNotifier, void> $createElement(
+    $ProviderPointer pointer,
+  ) => $NotifierProviderElement(pointer);
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<void>(value),
+    );
+  }
+}
+
+String _$misskeyNoteNotifierHash() =>
+    r'30eda0d11cd6ab399588640cb08e0c3ead597b69';
+
+abstract class _$MisskeyNoteNotifier extends $Notifier<void> {
+  void build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<AnyNotifier<void>, void, Object?, Object?>;
+    element.handleValue(ref, null);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -16,12 +16,14 @@ class TabSettingsListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabSettings = ref
-        .watch(
-          tabSettingsRepositoryProvider
-              .select((repository) => repository.tabSettings),
-        )
-        .toList();
+    final tabSettings =
+        ref
+            .watch(
+              tabSettingsRepositoryProvider.select(
+                (repository) => repository.tabSettings,
+              ),
+            )
+            .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -78,10 +80,11 @@ class TabSettingsListPage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
-                onPressed: () async => await context.router.pushAndPopUntil(
-                  const SplashRoute(),
-                  predicate: (_) => false,
-                ),
+                onPressed:
+                    () async => await context.router.pushAndPopUntil(
+                      const SplashRoute(),
+                      predicate: (_) => false,
+                    ),
                 child: Text(S.of(context).apply),
               ),
             ),

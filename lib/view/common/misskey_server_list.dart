@@ -27,9 +27,7 @@ class MisskeyServerList extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: TextField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-              ),
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
               onChanged:
                   ref.read(misskeyServerListNotifierProvider.notifier).setQuery,
             ),
@@ -37,96 +35,113 @@ class MisskeyServerList extends ConsumerWidget {
           Expanded(
             child: servers.when(
               skipLoadingOnReload: true,
-              data: (servers) => ListView.builder(
-                itemCount: servers.length,
-                itemBuilder: (context, index) {
-                  final server = servers[index];
-                  final description =
-                      server.description?.replaceAll(htmlTagRemove, "") ?? "";
-                  final available = !isDisableUnloginable ||
-                      server.nodeInfo?.software?.name == "misskey" &&
-                          availableServerVersion
-                              .allMatches(
-                                server.nodeInfo?.software?.version ?? "",
-                              )
-                              .isNotEmpty;
-                  return Padding(
-                    key: ValueKey(server.url),
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: InkWell(
-                      onTap: available ? () => onTap.call(server) : null,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: available ? null : Colors.grey.withAlpha(160),
-                          border:
-                              Border.all(color: Theme.of(context).dividerColor),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+              data:
+                  (servers) => ListView.builder(
+                    itemCount: servers.length,
+                    itemBuilder: (context, index) {
+                      final server = servers[index];
+                      final description =
+                          server.description?.replaceAll(htmlTagRemove, "") ??
+                          "";
+                      final available =
+                          !isDisableUnloginable ||
+                          server.nodeInfo?.software?.name == "misskey" &&
+                              availableServerVersion
+                                  .allMatches(
+                                    server.nodeInfo?.software?.version ?? "",
+                                  )
+                                  .isNotEmpty;
+                      return Padding(
+                        key: ValueKey(server.url),
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: InkWell(
+                          onTap: available ? () => onTap.call(server) : null,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color:
+                                  available ? null : Colors.grey.withAlpha(160),
+                              border: Border.all(
+                                color: Theme.of(context).dividerColor,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (server.icon)
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: SizedBox(
-                                      width: MediaQuery.textScalerOf(context)
-                                          .scale(
-                                        Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.fontSize ??
-                                            22 * 2,
+                                Row(
+                                  children: [
+                                    if (server.icon)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 10,
+                                        ),
+                                        child: SizedBox(
+                                          width: MediaQuery.textScalerOf(
+                                            context,
+                                          ).scale(
+                                            Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.fontSize ??
+                                                22 * 2,
+                                          ),
+                                          child: Image.network(
+                                            "https://instanceapp.misskey.page/instance-icons/${server.url}.webp",
+                                          ),
+                                        ),
                                       ),
-                                      child: Image.network(
-                                        "https://instanceapp.misskey.page/instance-icons/${server.url}.webp",
+                                    Expanded(child: Text(server.name)),
+                                  ],
+                                ),
+                                Text(
+                                  description,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                ),
+                                Text(
+                                  S
+                                      .of(context)
+                                      .joiningServerUsers(
+                                        server.nodeInfo?.usage?.users?.total ??
+                                            0,
                                       ),
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "${server.nodeInfo?.software?.name ?? ""} ${server.nodeInfo?.software?.version}",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                                if (!available)
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      S.of(context).unsupportedServer,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      textAlign: TextAlign.right,
                                     ),
                                   ),
-                                Expanded(child: Text(server.name)),
                               ],
                             ),
-                            Text(
-                              description,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 10)),
-                            Text(
-                              S.of(context).joiningServerUsers(
-                                    server.nodeInfo?.usage?.users?.total ?? 0,
-                                  ),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 10)),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "${server.nodeInfo?.software?.name ?? ""} ${server.nodeInfo?.software?.version}",
-                                style: Theme.of(context).textTheme.bodySmall,
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                            if (!available)
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  S.of(context).unsupportedServer,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
               error: (e, st) => ErrorDetail(error: e, stackTrace: st),
-              loading: () => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
+              loading:
+                  () =>
+                      const Center(child: CircularProgressIndicator.adaptive()),
             ),
           ),
         ],

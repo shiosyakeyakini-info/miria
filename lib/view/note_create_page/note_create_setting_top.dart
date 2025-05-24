@@ -30,18 +30,19 @@ class AcceptanceIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (acceptance) {
       null => SvgPicture.asset(
-          "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
-          colorFilter: ColorFilter.mode(
-            Theme.of(context).textTheme.bodyMedium!.color ??
-                const Color(0xff5f6368),
-            BlendMode.srcIn,
-          ),
-          width: 28,
-          height: 28,
+        "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).textTheme.bodyMedium!.color ??
+              const Color(0xff5f6368),
+          BlendMode.srcIn,
         ),
+        width: 28,
+        height: 28,
+      ),
       ReactionAcceptance.likeOnly => const Icon(Icons.favorite_border),
-      ReactionAcceptance.likeOnlyForRemote =>
-        const Icon(Icons.add_reaction_outlined),
+      ReactionAcceptance.likeOnlyForRemote => const Icon(
+        Icons.add_reaction_outlined,
+      ),
       ReactionAcceptance.nonSensitiveOnly => const Icon(Icons.shield_outlined),
       ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote =>
         const Icon(Icons.add_moderator_outlined),
@@ -72,47 +73,51 @@ class NoteCreateSettingTop extends ConsumerWidget {
           user: ref.read(accountContextProvider).postAccount.i,
           height:
               Theme.of(context).iconButtonTheme.style?.iconSize?.resolve({}) ??
-                  32,
+              32,
         ),
         Expanded(child: Container()),
         Builder(
-          builder: (context2) => IconButton(
-            onPressed: () async {
-              final result = await showModalBottomSheet<NoteVisibility?>(
-                context: context2,
-                builder: (context3) => NoteVisibilityDialog(
-                  account: ref.read(accountContextProvider).postAccount,
-                ),
-              );
-              if (result != null) {
-                if (result == NoteVisibility.public &&
-                    !await ref
-                        .read(noteCreateNotifierProvider.notifier)
-                        .validateNoteVisibility(NoteVisibility.public)) {
-                  return;
-                }
+          builder:
+              (context2) => IconButton(
+                onPressed: () async {
+                  final result = await showModalBottomSheet<NoteVisibility?>(
+                    context: context2,
+                    builder:
+                        (context3) => NoteVisibilityDialog(
+                          account: ref.read(accountContextProvider).postAccount,
+                        ),
+                  );
+                  if (result != null) {
+                    if (result == NoteVisibility.public &&
+                        !await ref
+                            .read(noteCreateNotifierProvider.notifier)
+                            .validateNoteVisibility(NoteVisibility.public)) {
+                      return;
+                    }
 
-                notifier.setNoteVisibility(result);
-              }
-            },
-            icon: Icon(resolveVisibilityIcon(noteVisibility)),
-          ),
+                    notifier.setNoteVisibility(result);
+                  }
+                },
+                icon: Icon(resolveVisibilityIcon(noteVisibility)),
+              ),
         ),
         IconButton(
           onPressed: () async => notifier.toggleLocalOnly(),
           icon: isLocal ? const LocalOnlyIcon() : const Icon(Icons.rocket),
         ),
         Builder(
-          builder: (context2) => IconButton(
-            onPressed: () async {
-              final result = await showModalBottomSheet<ReactionAcceptance?>(
-                context: context2,
-                builder: (context) => const ReactionAcceptanceDialog(),
-              );
-              notifier.setReactionAcceptance(result);
-            },
-            icon: AcceptanceIcon(acceptance: reactionAcceptance),
-          ),
+          builder:
+              (context2) => IconButton(
+                onPressed: () async {
+                  final result =
+                      await showModalBottomSheet<ReactionAcceptance?>(
+                        context: context2,
+                        builder: (context) => const ReactionAcceptanceDialog(),
+                      );
+                  notifier.setReactionAcceptance(result);
+                },
+                icon: AcceptanceIcon(acceptance: reactionAcceptance),
+              ),
         ),
       ],
     );

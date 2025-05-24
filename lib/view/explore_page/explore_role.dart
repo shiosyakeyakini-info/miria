@@ -39,8 +39,9 @@ class RoleListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final iconHeight = MediaQuery.textScalerOf(context)
-        .scale(Theme.of(context).textTheme.bodyMedium!.fontSize!);
+    final iconHeight = MediaQuery.textScalerOf(
+      context,
+    ).scale(Theme.of(context).textTheme.bodyMedium!.fontSize!);
 
     return ListTile(
       onTap: () async {
@@ -61,14 +62,11 @@ class RoleListItem extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 10),
                   child: NetworkImageView(
                     height: iconHeight,
-                    loadingBuilder: (context, _, __) => SizedBox(
-                      width: iconHeight,
-                      height: iconHeight,
-                    ),
-                    errorBuilder: (context, e, s) => const SizedBox(
-                      width: 1,
-                      height: 1,
-                    ),
+                    loadingBuilder:
+                        (context, _, __) =>
+                            SizedBox(width: iconHeight, height: iconHeight),
+                    errorBuilder:
+                        (context, e, s) => const SizedBox(width: 1, height: 1),
                     url: item.iconUrl!.toString(),
                     type: ImageType.avatarIcon,
                   ),
@@ -79,8 +77,9 @@ class RoleListItem extends ConsumerWidget {
         ),
       ),
       subtitle: Text(item.description ?? ""),
-      trailing:
-          MfmText(mfmText: S.of(context).allocatedRolesCount(item.usersCount)),
+      trailing: MfmText(
+        mfmText: S.of(context).allocatedRolesCount(item.usersCount),
+      ),
     );
   }
 }

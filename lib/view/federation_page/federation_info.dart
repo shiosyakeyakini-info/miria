@@ -19,8 +19,12 @@ class FederationInfo extends ConsumerWidget {
     final description = data.description;
     return SingleChildScrollView(
       child: Padding(
-        padding:
-            const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 20),
+        padding: const EdgeInsets.only(
+          left: 10,
+          top: 10,
+          right: 10,
+          bottom: 20,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -53,9 +57,7 @@ class FederationInfo extends ConsumerWidget {
             const Padding(padding: EdgeInsets.only(top: 5)),
             Html(
               data: description,
-              style: {
-                "a": Style(color: AppTheme.of(context).linkStyle.color),
-              },
+              style: {"a": Style(color: AppTheme.of(context).linkStyle.color)},
               onLinkTap: (url, _, __) async {
                 await launchUrlString(url.toString());
               },
@@ -71,10 +73,7 @@ class FederationInfo extends ConsumerWidget {
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    Text(
-                      S.of(context).user,
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(S.of(context).user, textAlign: TextAlign.center),
                   ],
                 ),
                 Column(
@@ -98,20 +97,14 @@ class FederationInfo extends ConsumerWidget {
               children: [
                 TableRow(
                   children: [
-                    Text(
-                      S.of(context).software,
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(S.of(context).software, textAlign: TextAlign.center),
                     Text("${data.softwareName} ${data.softwareVersion}"),
                   ],
                 ),
                 if (data.languages.isNotEmpty)
                   TableRow(
                     children: [
-                      Text(
-                        S.of(context).language,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text(S.of(context).language, textAlign: TextAlign.center),
                       Text(data.languages.join(", ")),
                     ],
                   ),
@@ -128,10 +121,7 @@ class FederationInfo extends ConsumerWidget {
                 if (data.maintainerEmail != null)
                   TableRow(
                     children: [
-                      Text(
-                        S.of(context).contact,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text(S.of(context).contact, textAlign: TextAlign.center),
                       Text("${data.maintainerEmail}"),
                     ],
                   ),
@@ -165,10 +155,7 @@ class FederationInfo extends ConsumerWidget {
                 if (data.tosUrl != null)
                   TableRow(
                     children: [
-                      Text(
-                        S.of(context).tos,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text(S.of(context).tos, textAlign: TextAlign.center),
                       GestureDetector(
                         onTap: () async => launchUrl(Uri.parse(data.tosUrl!)),
                         child: Text(
@@ -186,8 +173,9 @@ class FederationInfo extends ConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
-                        onTap: () async =>
-                            launchUrl(Uri.parse(data.privacyPolicyUrl!)),
+                        onTap:
+                            () async =>
+                                launchUrl(Uri.parse(data.privacyPolicyUrl!)),
                         child: Text(
                           data.privacyPolicyUrl!.toString().tight,
                           style: AppTheme.of(context).linkStyle,
@@ -203,8 +191,9 @@ class FederationInfo extends ConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       GestureDetector(
-                        onTap: () async =>
-                            launchUrl(Uri.parse(data.impressumUrl!)),
+                        onTap:
+                            () async =>
+                                launchUrl(Uri.parse(data.impressumUrl!)),
                         child: Text(
                           data.impressumUrl!.toString().tight,
                           style: AppTheme.of(context).linkStyle,

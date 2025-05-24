@@ -6,6 +6,7 @@ import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
@@ -30,12 +31,13 @@ import "package:misskey_dart/misskey_dart.dart";
 
 final noteInputTextProvider =
     ChangeNotifierProvider.autoDispose<TextEditingController>((ref) {
-  final controller = TextEditingController();
+      final controller = TextEditingController();
 
-  return controller;
-});
-final noteFocusProvider =
-    ChangeNotifierProvider.autoDispose((ref) => FocusNode());
+      return controller;
+    });
+final noteFocusProvider = ChangeNotifierProvider.autoDispose(
+  (ref) => FocusNode(),
+);
 
 enum NoteCreationMode { update, recreate }
 
@@ -64,8 +66,9 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     this.noteCreationMode,
   });
 
-  static const shareExtensionMethodChannel =
-      MethodChannel("info.shiosyakeyakini.miria/share_extension");
+  static const shareExtensionMethodChannel = MethodChannel(
+    "info.shiosyakeyakini.miria/share_extension",
+  );
 
   @override
   Widget wrappedRoute(BuildContext context) =>
@@ -77,67 +80,66 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
     final notifier = ref.read(noteCreateNotifierProvider.notifier);
     final controller = ref.watch(noteInputTextProvider);
 
-    useEffect(
-      () {
-        WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
-          await notifier.initialize(
-            channel,
-            initialText,
-            initialMediaFiles,
-            note,
-            renote,
-            reply,
-            noteCreationMode,
-          );
-        });
-
-        controller.addListener(() {
-          notifier.setContentText(ref.read(noteInputTextProvider).text);
-        });
-        focusNode.addListener(() {
-          notifier.setContentTextFocused(focusNode.hasFocus);
-        });
-        return () => {};
-      },
-      const [],
-    );
-
-    ref
-      ..listen(
-        noteCreateNotifierProvider.select((value) => value.text),
-        (_, next) {
-          if (next != ref.read(noteInputTextProvider).text) {
-            ref.read(noteInputTextProvider).text = next;
-          }
-        },
-      )
-      ..listen(
-          noteCreateNotifierProvider.select((value) => value.isNoteSending),
-          (_, next) async {
-        switch (next) {
-          case NoteSendStatus.sending:
-            IndicatorView.showIndicator(context);
-          case NoteSendStatus.finished:
-            IndicatorView.hideIndicator(context);
-            if (exitOnNoted) {
-              await shareExtensionMethodChannel.invokeMethod("exit");
-            } else {
-              Navigator.of(context).pop();
-            }
-
-          case NoteSendStatus.error:
-            IndicatorView.hideIndicator(context);
-          case null:
-            break;
-        }
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+        await notifier.initialize(
+          channel,
+          initialText,
+          initialMediaFiles,
+          note,
+          renote,
+          reply,
+          noteCreationMode,
+        );
       });
 
+      controller.addListener(() {
+        notifier.setContentText(ref.read(noteInputTextProvider).text);
+      });
+      focusNode.addListener(() {
+        notifier.setContentTextFocused(focusNode.hasFocus);
+      });
+      return () => {};
+    }, const []);
+
+    ref
+      ..listen(noteCreateNotifierProvider.select((value) => value.text), (
+        _,
+        next,
+      ) {
+        if (next != ref.read(noteInputTextProvider).text) {
+          ref.read(noteInputTextProvider).text = next;
+        }
+      })
+      ..listen(
+        noteCreateNotifierProvider.select((value) => value.isNoteSending),
+        (_, next) async {
+          switch (next) {
+            case NoteSendStatus.sending:
+              IndicatorView.showIndicator(context);
+            case NoteSendStatus.finished:
+              IndicatorView.hideIndicator(context);
+              if (exitOnNoted) {
+                await shareExtensionMethodChannel.invokeMethod("exit");
+              } else {
+                Navigator.of(context).pop();
+              }
+
+            case NoteSendStatus.error:
+              IndicatorView.hideIndicator(context);
+            case null:
+              break;
+          }
+        },
+      );
+
     final noteDecoration = AppTheme.of(context).noteTextStyle.copyWith(
-          hintText: (renote != null || reply != null)
+      hintText:
+          (renote != null || reply != null)
               ? S.of(context).replyNotePlaceholder
               : S.of(context).defaultNotePlaceholder,
-          contentPadding: const EdgeInsets.all(5),
-        );
+      contentPadding: const EdgeInsets.all(5),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -215,15 +217,16 @@ class NoteCreatePage extends HookConsumerWidget implements AutoRouteWrapper {
                           ),
                         IconButton(
                           onPressed: () async {
-                            final selectedEmoji =
-                                await context.pushRoute<MisskeyEmojiData>(
-                              ReactionPickerRoute(
-                                account: ref
-                                    .read(accountContextProvider)
-                                    .postAccount,
-                                isAcceptSensitive: true,
-                              ),
-                            );
+                            final selectedEmoji = await context
+                                .pushRoute<MisskeyEmojiData>(
+                                  ReactionPickerRoute(
+                                    account:
+                                        ref
+                                            .read(accountContextProvider)
+                                            .postAccount,
+                                    isAcceptSensitive: true,
+                                  ),
+                                );
                             if (selectedEmoji == null) return;
                             switch (selectedEmoji) {
                               case CustomEmojiData():

@@ -4,11 +4,21 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/channels_page/channel_detail_info.dart";
 import "package:miria/view/channels_page/channel_timeline.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
 @RoutePage()
+@Dependencies([
+  ChannelDetail,
+  accountContext,
+  misskeyPostContext,
+  notesWith,
+  MisskeyNoteNotifier,
+  misskeyGetContext,
+])
 class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
   final String channelId;
@@ -51,11 +61,10 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
             ),
           ],
         ),
-        floatingActionButton: ref.read(accountContextProvider).isSame
-            ? ChannelDetailFloatingActionButton(
-                channelId: channelId,
-              )
-            : null,
+        floatingActionButton:
+            ref.read(accountContextProvider).isSame
+                ? ChannelDetailFloatingActionButton(channelId: channelId)
+                : null,
       ),
     );
   }
@@ -71,17 +80,17 @@ class ChannelDetailFloatingActionButton extends ConsumerWidget {
     final channelDetail = ref.watch(channelDetailProvider(channelId));
     return switch (channelDetail) {
       AsyncData(:final value) => FloatingActionButton(
-          child: const Icon(Icons.edit),
-          onPressed: () async {
-            if (!context.mounted) return;
-            await context.pushRoute(
-              NoteCreateRoute(
-                initialAccount: ref.read(accountContextProvider).postAccount,
-                channel: value.channel,
-              ),
-            );
-          },
-        ),
+        child: const Icon(Icons.edit),
+        onPressed: () async {
+          if (!context.mounted) return;
+          await context.pushRoute(
+            NoteCreateRoute(
+              initialAccount: ref.read(accountContextProvider).postAccount,
+              channel: value.channel,
+            ),
+          );
+        },
+      ),
       _ => const SizedBox.shrink(),
     };
   }

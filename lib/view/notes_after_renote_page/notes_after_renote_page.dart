@@ -43,10 +43,9 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
         child: PushableListView<Note>(
           showAd: false,
           initializeFuture: () async {
-            final (
-              notesAfterRenote,
-              lastRenoteId,
-            ) = await getNotesAfterRenote(misskey);
+            final (notesAfterRenote, lastRenoteId) = await getNotesAfterRenote(
+              misskey,
+            );
             ref.read(notesWithProvider).registerAll(notesAfterRenote);
             setState(() {
               untilId = lastRenoteId;
@@ -54,10 +53,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
             return notesAfterRenote;
           },
           nextFuture: (_, __) async {
-            final (
-              notesAfterRenote,
-              lastRenoteId,
-            ) = await getNotesAfterRenote(
+            final (notesAfterRenote, lastRenoteId) = await getNotesAfterRenote(
               misskey,
               untilId: untilId,
             );
@@ -82,10 +78,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     String? untilId,
   }) async {
     final renotesAndQuotes = await misskey.notes.renotes(
-      NotesRenoteRequest(
-        noteId: widget.note.id,
-        untilId: untilId,
-      ),
+      NotesRenoteRequest(noteId: widget.note.id, untilId: untilId),
     );
     if (renotesAndQuotes.isEmpty) {
       return (List<Note>.empty(), untilId);
@@ -95,11 +88,10 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
     final notesAfterRenote = await Future.wait(
       renotes.map((renote) => getNoteAfterNote(misskey, renote)),
     );
-    final notes = notesAfterRenote.nonNulls
-        .where(
-          (note) => note.renoteId == null && note.replyId == null,
-        )
-        .toList();
+    final notes =
+        notesAfterRenote.nonNulls
+            .where((note) => note.renoteId == null && note.replyId == null)
+            .toList();
     if (notes.isEmpty) {
       // リノートがまだあるときに空のリストを返すと次が呼ばれなくなるため
       return getNotesAfterRenote(misskey, untilId: lastRenoteId);
@@ -110,11 +102,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
   /// 指定されたノートを投稿したユーザーがその次に投稿したノートを (あれば) 返す
   Future<Note?> getNoteAfterNote(Misskey misskey, Note note) async {
     final notes = await misskey.users.notes(
-      UsersNotesRequest(
-        userId: note.userId,
-        sinceId: note.id,
-        limit: 1,
-      ),
+      UsersNotesRequest(userId: note.userId, sinceId: note.id, limit: 1),
     );
     return notes.singleOrNull;
   }

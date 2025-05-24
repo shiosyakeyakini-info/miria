@@ -6,418 +6,384 @@ part of 'clip_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notesClipsNotifierHash() =>
-    r'7962974959d64b1ca68c7365025f910dc39e75e8';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$NotesClipsNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<List<Clip>> {
-  late final String noteId;
-
-  FutureOr<List<Clip>> build(
-    String noteId,
-  );
-}
-
-/// See also [_NotesClipsNotifier].
 @ProviderFor(_NotesClipsNotifier)
-const _notesClipsNotifierProvider = _NotesClipsNotifierFamily();
+const _notesClipsNotifierProvider = _NotesClipsNotifierFamily._();
 
-/// See also [_NotesClipsNotifier].
-class _NotesClipsNotifierFamily extends Family {
-  /// See also [_NotesClipsNotifier].
-  const _NotesClipsNotifierFamily();
+final class _NotesClipsNotifierProvider
+    extends $AsyncNotifierProvider<_NotesClipsNotifier, List<Clip>> {
+  const _NotesClipsNotifierProvider._({
+    required _NotesClipsNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'_notesClipsNotifierProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyPostContextProvider
-  ];
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  };
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
 
   @override
-  String? get name => r'_notesClipsNotifierProvider';
+  String debugGetCreateSourceHash() => _$notesClipsNotifierHash();
 
-  /// See also [_NotesClipsNotifier].
-  _NotesClipsNotifierProvider call(
-    String noteId,
-  ) {
-    return _NotesClipsNotifierProvider(
-      noteId,
-    );
+  @override
+  String toString() {
+    return r'_notesClipsNotifierProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  _NotesClipsNotifierProvider getProviderOverride(
-    covariant _NotesClipsNotifierProvider provider,
-  ) {
-    return call(
-      provider.noteId,
-    );
-  }
+  _NotesClipsNotifier create() => _NotesClipsNotifier();
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(_NotesClipsNotifier Function() create) {
-    return _$NotesClipsNotifierFamilyOverride(this, create);
-  }
-}
-
-class _$NotesClipsNotifierFamilyOverride implements FamilyOverride {
-  _$NotesClipsNotifierFamilyOverride(this.overriddenFamily, this.create);
-
-  final _NotesClipsNotifier Function() create;
-
+  @$internal
   @override
-  final _NotesClipsNotifierFamily overriddenFamily;
-
-  @override
-  _NotesClipsNotifierProvider getProviderOverride(
-    covariant _NotesClipsNotifierProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [_NotesClipsNotifier].
-class _NotesClipsNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    _NotesClipsNotifier, List<Clip>> {
-  /// See also [_NotesClipsNotifier].
-  _NotesClipsNotifierProvider(
-    String noteId,
-  ) : this._internal(
-          () => _NotesClipsNotifier()..noteId = noteId,
-          from: _notesClipsNotifierProvider,
-          name: r'_notesClipsNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$notesClipsNotifierHash,
-          dependencies: _NotesClipsNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              _NotesClipsNotifierFamily._allTransitiveDependencies,
-          noteId: noteId,
-        );
-
-  _NotesClipsNotifierProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.noteId,
-  }) : super.internal();
-
-  final String noteId;
-
-  @override
-  FutureOr<List<Clip>> runNotifierBuild(
-    covariant _NotesClipsNotifier notifier,
-  ) {
-    return notifier.build(
-      noteId,
-    );
-  }
-
-  @override
-  Override overrideWith(_NotesClipsNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: _NotesClipsNotifierProvider._internal(
-        () => create()..noteId = noteId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        noteId: noteId,
-      ),
-    );
-  }
-
-  @override
-  (String,) get argument {
-    return (noteId,);
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<_NotesClipsNotifier, List<Clip>>
-      createElement() {
-    return _NotesClipsNotifierProviderElement(this);
-  }
-
-  _NotesClipsNotifierProvider _copyWith(
-    _NotesClipsNotifier Function() create,
-  ) {
-    return _NotesClipsNotifierProvider._internal(
-      () => create()..noteId = noteId,
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      noteId: noteId,
-    );
-  }
+  $AsyncNotifierProviderElement<_NotesClipsNotifier, List<Clip>> $createElement(
+    $ProviderPointer pointer,
+  ) => $AsyncNotifierProviderElement(pointer);
 
   @override
   bool operator ==(Object other) {
-    return other is _NotesClipsNotifierProvider && other.noteId == noteId;
+    return other is _NotesClipsNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, noteId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin _NotesClipsNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<List<Clip>> {
-  /// The parameter `noteId` of this provider.
-  String get noteId;
-}
+String _$notesClipsNotifierHash() =>
+    r'ac73f5e5d6dcc731e9c023a03e84eb10fd14de9c';
 
-class _NotesClipsNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<_NotesClipsNotifier,
-        List<Clip>> with _NotesClipsNotifierRef {
-  _NotesClipsNotifierProviderElement(super.provider);
+final class _NotesClipsNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          _NotesClipsNotifier,
+          AsyncValue<List<Clip>>,
+          List<Clip>,
+          FutureOr<List<Clip>>,
+          String
+        > {
+  const _NotesClipsNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'_notesClipsNotifierProvider',
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _NotesClipsNotifierProvider.$allTransitiveDependencies0,
+          _NotesClipsNotifierProvider.$allTransitiveDependencies1,
+        ],
+        isAutoDispose: true,
+      );
+
+  _NotesClipsNotifierProvider call(String noteId) =>
+      _NotesClipsNotifierProvider._(argument: noteId, from: this);
 
   @override
-  String get noteId => (origin as _NotesClipsNotifierProvider).noteId;
+  String toString() => r'_notesClipsNotifierProvider';
+}
+
+abstract class _$NotesClipsNotifier extends $AsyncNotifier<List<Clip>> {
+  late final _$args = ref.$arg as String;
+  String get noteId => _$args;
+
+  FutureOr<List<Clip>> build(String noteId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<List<Clip>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Clip>>>,
+              AsyncValue<List<Clip>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(_ClipModalSheetNotifier)
+const _clipModalSheetNotifierProvider = _ClipModalSheetNotifierFamily._();
+
+final class _ClipModalSheetNotifierProvider
+    extends
+        $AsyncNotifierProvider<_ClipModalSheetNotifier, List<(Clip, bool)>> {
+  const _ClipModalSheetNotifierProvider._({
+    required _ClipModalSheetNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'_clipModalSheetNotifierProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  static const $allTransitiveDependencies0 = clipsNotifierProvider;
+  static const $allTransitiveDependencies1 =
+      ClipsNotifierProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 =
+      ClipsNotifierProvider.$allTransitiveDependencies1;
+  static const $allTransitiveDependencies3 = _notesClipsNotifierProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$clipModalSheetNotifierHash();
+
+  @override
+  String toString() {
+    return r'_clipModalSheetNotifierProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  _ClipModalSheetNotifier create() => _ClipModalSheetNotifier();
+
+  @$internal
+  @override
+  _$ClipModalSheetNotifierElement $createElement($ProviderPointer pointer) =>
+      _$ClipModalSheetNotifierElement(pointer);
+
+  ProviderListenable<_ClipModalSheetNotifier$AddToClip> get addToClip =>
+      $LazyProxyListenable<
+        _ClipModalSheetNotifier$AddToClip,
+        AsyncValue<List<(Clip, bool)>>
+      >(this, (element) {
+        element as _$ClipModalSheetNotifierElement;
+
+        return element._$addToClip;
+      });
+
+  ProviderListenable<_ClipModalSheetNotifier$RemoveFromClip>
+  get removeFromClip => $LazyProxyListenable<
+    _ClipModalSheetNotifier$RemoveFromClip,
+    AsyncValue<List<(Clip, bool)>>
+  >(this, (element) {
+    element as _$ClipModalSheetNotifierElement;
+
+    return element._$removeFromClip;
+  });
+
+  @override
+  bool operator ==(Object other) {
+    return other is _ClipModalSheetNotifierProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
 String _$clipModalSheetNotifierHash() =>
-    r'978ab378797102eac12dd3714bf742a671d769ad';
+    r'ed0bec6b648cba697c8373a5f73b1ee2a66fae3f';
+
+final class _ClipModalSheetNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          _ClipModalSheetNotifier,
+          AsyncValue<List<(Clip, bool)>>,
+          List<(Clip, bool)>,
+          FutureOr<List<(Clip, bool)>>,
+          String
+        > {
+  const _ClipModalSheetNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'_clipModalSheetNotifierProvider',
+        dependencies: const <ProviderOrFamily>[
+          clipsNotifierProvider,
+          _notesClipsNotifierProvider,
+          misskeyPostContextProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          _ClipModalSheetNotifierProvider.$allTransitiveDependencies0,
+          _ClipModalSheetNotifierProvider.$allTransitiveDependencies1,
+          _ClipModalSheetNotifierProvider.$allTransitiveDependencies2,
+          _ClipModalSheetNotifierProvider.$allTransitiveDependencies3,
+        },
+        isAutoDispose: true,
+      );
+
+  _ClipModalSheetNotifierProvider call(String noteId) =>
+      _ClipModalSheetNotifierProvider._(argument: noteId, from: this);
+
+  @override
+  String toString() => r'_clipModalSheetNotifierProvider';
+}
 
 abstract class _$ClipModalSheetNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<List<(Clip, bool)>> {
-  late final String noteId;
+    extends $AsyncNotifier<List<(Clip, bool)>> {
+  late final _$args = ref.$arg as String;
+  String get noteId => _$args;
 
-  FutureOr<List<(Clip, bool)>> build(
-    String noteId,
-  );
+  FutureOr<List<(Clip, bool)>> build(String noteId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<List<(Clip, bool)>>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<(Clip, bool)>>>,
+              AsyncValue<List<(Clip, bool)>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
 }
 
-/// See also [_ClipModalSheetNotifier].
-@ProviderFor(_ClipModalSheetNotifier)
-const _clipModalSheetNotifierProvider = _ClipModalSheetNotifierFamily();
-
-/// See also [_ClipModalSheetNotifier].
-class _ClipModalSheetNotifierFamily extends Family {
-  /// See also [_ClipModalSheetNotifier].
-  const _ClipModalSheetNotifierFamily();
-
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    clipsNotifierProvider,
-    _notesClipsNotifierProvider,
-    misskeyPostContextProvider
-  ];
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    clipsNotifierProvider,
-    ...?clipsNotifierProvider.allTransitiveDependencies,
-    _notesClipsNotifierProvider,
-    ...?_notesClipsNotifierProvider.allTransitiveDependencies,
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  };
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'_clipModalSheetNotifierProvider';
-
-  /// See also [_ClipModalSheetNotifier].
-  _ClipModalSheetNotifierProvider call(
-    String noteId,
-  ) {
-    return _ClipModalSheetNotifierProvider(
-      noteId,
+class _$ClipModalSheetNotifierElement
+    extends
+        $AsyncNotifierProviderElement<
+          _ClipModalSheetNotifier,
+          List<(Clip, bool)>
+        > {
+  _$ClipModalSheetNotifierElement(super.pointer) {
+    _$addToClip.result = $Result.data(
+      _$_ClipModalSheetNotifier$AddToClip(this),
+    );
+    _$removeFromClip.result = $Result.data(
+      _$_ClipModalSheetNotifier$RemoveFromClip(this),
     );
   }
-
-  @visibleForOverriding
+  final _$addToClip = $ElementLense<_$_ClipModalSheetNotifier$AddToClip>();
+  final _$removeFromClip =
+      $ElementLense<_$_ClipModalSheetNotifier$RemoveFromClip>();
   @override
-  _ClipModalSheetNotifierProvider getProviderOverride(
-    covariant _ClipModalSheetNotifierProvider provider,
-  ) {
-    return call(
-      provider.noteId,
-    );
+  void mount() {
+    super.mount();
+    _$addToClip.result!.value!.reset();
+    _$removeFromClip.result!.value!.reset();
   }
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(_ClipModalSheetNotifier Function() create) {
-    return _$ClipModalSheetNotifierFamilyOverride(this, create);
-  }
-}
-
-class _$ClipModalSheetNotifierFamilyOverride implements FamilyOverride {
-  _$ClipModalSheetNotifierFamilyOverride(this.overriddenFamily, this.create);
-
-  final _ClipModalSheetNotifier Function() create;
-
   @override
-  final _ClipModalSheetNotifierFamily overriddenFamily;
-
-  @override
-  _ClipModalSheetNotifierProvider getProviderOverride(
-    covariant _ClipModalSheetNotifierProvider provider,
+  void visitListenables(
+    void Function($ElementLense element) listenableVisitor,
   ) {
-    return provider._copyWith(create);
+    super.visitListenables(listenableVisitor);
+
+    listenableVisitor(_$addToClip);
+    listenableVisitor(_$removeFromClip);
   }
 }
 
-/// See also [_ClipModalSheetNotifier].
-class _ClipModalSheetNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<_ClipModalSheetNotifier,
-        List<(Clip, bool)>> {
-  /// See also [_ClipModalSheetNotifier].
-  _ClipModalSheetNotifierProvider(
-    String noteId,
-  ) : this._internal(
-          () => _ClipModalSheetNotifier()..noteId = noteId,
-          from: _clipModalSheetNotifierProvider,
-          name: r'_clipModalSheetNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$clipModalSheetNotifierHash,
-          dependencies: _ClipModalSheetNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              _ClipModalSheetNotifierFamily._allTransitiveDependencies,
-          noteId: noteId,
-        );
+sealed class _ClipModalSheetNotifier$AddToClip extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [_ClipModalSheetNotifier.addToClip] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call(Clip clip);
+}
 
-  _ClipModalSheetNotifierProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.noteId,
-  }) : super.internal();
-
-  final String noteId;
+final class _$_ClipModalSheetNotifier$AddToClip
+    extends
+        $AsyncMutationBase<
+          void,
+          _$_ClipModalSheetNotifier$AddToClip,
+          _ClipModalSheetNotifier
+        >
+    implements _ClipModalSheetNotifier$AddToClip {
+  _$_ClipModalSheetNotifier$AddToClip(this.element, {super.state, super.key});
 
   @override
-  FutureOr<List<(Clip, bool)>> runNotifierBuild(
-    covariant _ClipModalSheetNotifier notifier,
-  ) {
-    return notifier.build(
-      noteId,
+  final _$ClipModalSheetNotifierElement element;
+
+  @override
+  $ElementLense<_$_ClipModalSheetNotifier$AddToClip> get listenable =>
+      element._$addToClip;
+
+  @override
+  Future<void> call(Clip clip) {
+    return mutate(
+      Invocation.method(#addToClip, [clip]),
+      ($notifier) => $notifier.addToClip(clip),
     );
   }
 
   @override
-  Override overrideWith(_ClipModalSheetNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: _ClipModalSheetNotifierProvider._internal(
-        () => create()..noteId = noteId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        noteId: noteId,
-      ),
+  _$_ClipModalSheetNotifier$AddToClip copyWith(
+    MutationState<void> state, {
+    Object? key,
+  }) => _$_ClipModalSheetNotifier$AddToClip(element, state: state, key: key);
+}
+
+sealed class _ClipModalSheetNotifier$RemoveFromClip extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [_ClipModalSheetNotifier.removeFromClip] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call(Clip clip);
+}
+
+final class _$_ClipModalSheetNotifier$RemoveFromClip
+    extends
+        $AsyncMutationBase<
+          void,
+          _$_ClipModalSheetNotifier$RemoveFromClip,
+          _ClipModalSheetNotifier
+        >
+    implements _ClipModalSheetNotifier$RemoveFromClip {
+  _$_ClipModalSheetNotifier$RemoveFromClip(
+    this.element, {
+    super.state,
+    super.key,
+  });
+
+  @override
+  final _$ClipModalSheetNotifierElement element;
+
+  @override
+  $ElementLense<_$_ClipModalSheetNotifier$RemoveFromClip> get listenable =>
+      element._$removeFromClip;
+
+  @override
+  Future<void> call(Clip clip) {
+    return mutate(
+      Invocation.method(#removeFromClip, [clip]),
+      ($notifier) => $notifier.removeFromClip(clip),
     );
   }
 
   @override
-  (String,) get argument {
-    return (noteId,);
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<_ClipModalSheetNotifier,
-      List<(Clip, bool)>> createElement() {
-    return _ClipModalSheetNotifierProviderElement(this);
-  }
-
-  _ClipModalSheetNotifierProvider _copyWith(
-    _ClipModalSheetNotifier Function() create,
-  ) {
-    return _ClipModalSheetNotifierProvider._internal(
-      () => create()..noteId = noteId,
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      noteId: noteId,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is _ClipModalSheetNotifierProvider && other.noteId == noteId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, noteId.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
+  _$_ClipModalSheetNotifier$RemoveFromClip copyWith(
+    MutationState<void> state, {
+    Object? key,
+  }) =>
+      _$_ClipModalSheetNotifier$RemoveFromClip(element, state: state, key: key);
 }
 
-mixin _ClipModalSheetNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<List<(Clip, bool)>> {
-  /// The parameter `noteId` of this provider.
-  String get noteId;
-}
-
-class _ClipModalSheetNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<_ClipModalSheetNotifier,
-        List<(Clip, bool)>> with _ClipModalSheetNotifierRef {
-  _ClipModalSheetNotifierProviderElement(super.provider);
-
-  @override
-  String get noteId => (origin as _ClipModalSheetNotifierProvider).noteId;
-}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

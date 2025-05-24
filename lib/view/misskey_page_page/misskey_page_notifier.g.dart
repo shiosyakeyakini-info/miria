@@ -6,224 +6,116 @@ part of 'misskey_page_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$misskeyPageNotifierHash() =>
-    r'ee6d060c8b5eddfefb89f6062692fdfa8b0e4d47';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$MisskeyPageNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<MisskeyPageNotifierState> {
-  late final String pageId;
-
-  FutureOr<MisskeyPageNotifierState> build(
-    String pageId,
-  );
-}
-
-/// See also [MisskeyPageNotifier].
 @ProviderFor(MisskeyPageNotifier)
-const misskeyPageNotifierProvider = MisskeyPageNotifierFamily();
+const misskeyPageNotifierProvider = MisskeyPageNotifierFamily._();
 
-/// See also [MisskeyPageNotifier].
-class MisskeyPageNotifierFamily extends Family {
-  /// See also [MisskeyPageNotifier].
-  const MisskeyPageNotifierFamily();
+final class MisskeyPageNotifierProvider
+    extends
+        $AsyncNotifierProvider<MisskeyPageNotifier, MisskeyPageNotifierState> {
+  const MisskeyPageNotifierProvider._({
+    required MisskeyPageNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'misskeyPageNotifierProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    accountContextProvider,
-    misskeyGetContextProvider,
-    misskeyPostContextProvider
-  ];
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies,
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies,
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  };
+  static const $allTransitiveDependencies0 = accountContextProvider;
+  static const $allTransitiveDependencies1 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies2 = misskeyPostContextProvider;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  String debugGetCreateSourceHash() => _$misskeyPageNotifierHash();
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'misskeyPageNotifierProvider';
-
-  /// See also [MisskeyPageNotifier].
-  MisskeyPageNotifierProvider call(
-    String pageId,
-  ) {
-    return MisskeyPageNotifierProvider(
-      pageId,
-    );
+  String toString() {
+    return r'misskeyPageNotifierProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  MisskeyPageNotifierProvider getProviderOverride(
-    covariant MisskeyPageNotifierProvider provider,
-  ) {
-    return call(
-      provider.pageId,
-    );
-  }
+  MisskeyPageNotifier create() => MisskeyPageNotifier();
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(MisskeyPageNotifier Function() create) {
-    return _$MisskeyPageNotifierFamilyOverride(this, create);
-  }
-}
-
-class _$MisskeyPageNotifierFamilyOverride implements FamilyOverride {
-  _$MisskeyPageNotifierFamilyOverride(this.overriddenFamily, this.create);
-
-  final MisskeyPageNotifier Function() create;
-
+  @$internal
   @override
-  final MisskeyPageNotifierFamily overriddenFamily;
-
-  @override
-  MisskeyPageNotifierProvider getProviderOverride(
-    covariant MisskeyPageNotifierProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [MisskeyPageNotifier].
-class MisskeyPageNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    MisskeyPageNotifier, MisskeyPageNotifierState> {
-  /// See also [MisskeyPageNotifier].
-  MisskeyPageNotifierProvider(
-    String pageId,
-  ) : this._internal(
-          () => MisskeyPageNotifier()..pageId = pageId,
-          from: misskeyPageNotifierProvider,
-          name: r'misskeyPageNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$misskeyPageNotifierHash,
-          dependencies: MisskeyPageNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              MisskeyPageNotifierFamily._allTransitiveDependencies,
-          pageId: pageId,
-        );
-
-  MisskeyPageNotifierProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.pageId,
-  }) : super.internal();
-
-  final String pageId;
-
-  @override
-  FutureOr<MisskeyPageNotifierState> runNotifierBuild(
-    covariant MisskeyPageNotifier notifier,
-  ) {
-    return notifier.build(
-      pageId,
-    );
-  }
-
-  @override
-  Override overrideWith(MisskeyPageNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: MisskeyPageNotifierProvider._internal(
-        () => create()..pageId = pageId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        pageId: pageId,
-      ),
-    );
-  }
-
-  @override
-  (String,) get argument {
-    return (pageId,);
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<MisskeyPageNotifier,
-      MisskeyPageNotifierState> createElement() {
-    return _MisskeyPageNotifierProviderElement(this);
-  }
-
-  MisskeyPageNotifierProvider _copyWith(
-    MisskeyPageNotifier Function() create,
-  ) {
-    return MisskeyPageNotifierProvider._internal(
-      () => create()..pageId = pageId,
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      pageId: pageId,
-    );
-  }
+  $AsyncNotifierProviderElement<MisskeyPageNotifier, MisskeyPageNotifierState>
+  $createElement($ProviderPointer pointer) =>
+      $AsyncNotifierProviderElement(pointer);
 
   @override
   bool operator ==(Object other) {
-    return other is MisskeyPageNotifierProvider && other.pageId == pageId;
+    return other is MisskeyPageNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, pageId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin MisskeyPageNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<MisskeyPageNotifierState> {
-  /// The parameter `pageId` of this provider.
-  String get pageId;
-}
+String _$misskeyPageNotifierHash() =>
+    r'ee6d060c8b5eddfefb89f6062692fdfa8b0e4d47';
 
-class _MisskeyPageNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<MisskeyPageNotifier,
-        MisskeyPageNotifierState> with MisskeyPageNotifierRef {
-  _MisskeyPageNotifierProviderElement(super.provider);
+final class MisskeyPageNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          MisskeyPageNotifier,
+          AsyncValue<MisskeyPageNotifierState>,
+          MisskeyPageNotifierState,
+          FutureOr<MisskeyPageNotifierState>,
+          String
+        > {
+  const MisskeyPageNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'misskeyPageNotifierProvider',
+        dependencies: const <ProviderOrFamily>[
+          accountContextProvider,
+          misskeyGetContextProvider,
+          misskeyPostContextProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          MisskeyPageNotifierProvider.$allTransitiveDependencies0,
+          MisskeyPageNotifierProvider.$allTransitiveDependencies1,
+          MisskeyPageNotifierProvider.$allTransitiveDependencies2,
+        ],
+        isAutoDispose: true,
+      );
+
+  MisskeyPageNotifierProvider call(String pageId) =>
+      MisskeyPageNotifierProvider._(argument: pageId, from: this);
 
   @override
-  String get pageId => (origin as MisskeyPageNotifierProvider).pageId;
+  String toString() => r'misskeyPageNotifierProvider';
 }
+
+abstract class _$MisskeyPageNotifier
+    extends $AsyncNotifier<MisskeyPageNotifierState> {
+  late final _$args = ref.$arg as String;
+  String get pageId => _$args;
+
+  FutureOr<MisskeyPageNotifierState> build(String pageId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<MisskeyPageNotifierState>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<MisskeyPageNotifierState>>,
+              AsyncValue<MisskeyPageNotifierState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

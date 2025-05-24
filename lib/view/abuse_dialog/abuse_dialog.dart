@@ -11,6 +11,37 @@ import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/common/sending_elevated_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/mutation.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+
+part "abuse_dialog.g.dart";
+
+@riverpod
+class AbuseDialogNotifier extends _$AbuseDialogNotifier {
+  @override
+  void build() {}
+
+  @mutation
+  Future<void> reportAbuse({
+    required String userId,
+    required String comment,
+  }) async {
+    await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+      await ref
+          .read(misskeyPostContextProvider)
+          .users
+          .reportAbuse(
+            UsersReportAbuseRequest(userId: userId, comment: comment),
+          );
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
+            message: (context) => S.of(context).thanksForReport,
+          );
+      await ref.read(appRouterProvider).maybePop();
+    });
+  }
+}
 
 @RoutePage()
 class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
@@ -26,27 +57,14 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountContextScope.as(
-        account: account,
-        child: this,
-      );
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: defaultText);
 
-    final abuse = useHandledFuture(() async {
-      await ref.read(misskeyPostContextProvider).users.reportAbuse(
-            UsersReportAbuseRequest(
-              userId: targetUser.id,
-              comment: controller.text,
-            ),
-          );
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
-            message: (context) => S.of(context).thanksForReport,
-          );
-      await ref.read(appRouterProvider).maybePop();
-    });
+    final abuse = ref.watch(abuseDialogNotifierProvider.reportAbuse);
 
     return AlertDialog(
       title: SimpleMfmText(
@@ -71,13 +89,16 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
         ),
       ),
       actions: [
-        switch (abuse.value) {
-          AsyncLoading() => const SendingElevatedButton(),
-          _ => ElevatedButton(
-              onPressed: () async => abuse.execute(),
-              child: Text(S.of(context).reportAbuse),
-            ),
-        },
+        ElevatedButton(
+          onPressed:
+              abuse.state is PendingMutation
+                  ? null
+                  : () async => abuse.call(
+                    userId: targetUser.id,
+                    comment: controller.text,
+                  ),
+          child: Text(S.of(context).reportAbuse),
+        ),
       ],
     );
   }

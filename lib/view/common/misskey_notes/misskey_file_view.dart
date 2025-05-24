@@ -70,9 +70,10 @@ class MisskeyFileView extends HookConsumerWidget {
                   width: double.infinity,
                   child: MisskeyImage(
                     isSensitive: targetFile.element.isSensitive,
-                    thumbnailUrl: (targetFile.element.type.startsWith("audio"))
-                        ? null
-                        : targetFile.element.thumbnailUrl,
+                    thumbnailUrl:
+                        (targetFile.element.type.startsWith("audio"))
+                            ? null
+                            : targetFile.element.thumbnailUrl,
                     targetFiles: targetFiles,
                     fileType: targetFile.element.type,
                     name: targetFile.element.name,
@@ -117,8 +118,9 @@ class MisskeyImage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final initialNsfw = useMemoized(() {
       final nsfwSetting = ref.read(
-        generalSettingsRepositoryProvider
-            .select((repository) => repository.settings.nsfwInherit),
+        generalSettingsRepositoryProvider.select(
+          (repository) => repository.settings.nsfwInherit,
+        ),
       );
       if (nsfwSetting == NSFWInherit.allHidden) {
         // 強制的にNSFW表示
@@ -138,15 +140,14 @@ class MisskeyImage extends HookConsumerWidget {
     final nsfwAccepted = useState(initialNsfw);
 
     final nsfwSetting = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((repository) => repository.settings.nsfwInherit),
+      generalSettingsRepositoryProvider.select(
+        (repository) => repository.settings.nsfwInherit,
+      ),
     );
 
     final delayed = useFuture(
       // ignore: discarded_futures
-      useMemoized(
-        () => Future.delayed(const Duration(milliseconds: 100)),
-      ),
+      useMemoized(() => Future.delayed(const Duration(milliseconds: 100))),
     );
 
     if (delayed.connectionState != ConnectionState.done) return Container();
@@ -162,11 +163,12 @@ class MisskeyImage extends HookConsumerWidget {
               } else {
                 await showDialog(
                   context: context,
-                  builder: (context) => NoteFileDialog(
-                    driveFiles: targetFiles,
-                    initialPage: position,
-                    noteUrl: noteUrl,
-                  ),
+                  builder:
+                      (context) => NoteFileDialog(
+                        driveFiles: targetFiles,
+                        initialPage: position,
+                        noteUrl: noteUrl,
+                      ),
                 );
               }
             },
@@ -198,10 +200,10 @@ class MisskeyImage extends HookConsumerWidget {
                                   S.of(context).tapToShow,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.fontSize,
+                                    fontSize:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall?.fontSize,
                                   ),
                                 ),
                               ],
@@ -219,11 +221,12 @@ class MisskeyImage extends HookConsumerWidget {
                     child: NetworkImageView(
                       url: thumbnailUrl ?? targetFiles[position].url,
                       type: ImageType.imageThumbnail,
-                      loadingBuilder: (context, widget, chunkEvent) => SizedBox(
-                        width: double.infinity,
-                        height: 200,
-                        child: widget,
-                      ),
+                      loadingBuilder:
+                          (context, widget, chunkEvent) => SizedBox(
+                            width: double.infinity,
+                            height: 200,
+                            child: widget,
+                          ),
                     ),
                   );
                 } else if (fileType.startsWith(RegExp("video|audio"))) {
@@ -232,24 +235,24 @@ class MisskeyImage extends HookConsumerWidget {
                       Positioned.fill(
                         child: SizedBox(
                           height: 200,
-                          child: thumbnailUrl != null
-                              ? NetworkImageView(
-                                  url: thumbnailUrl!,
-                                  type: ImageType.imageThumbnail,
-                                  loadingBuilder:
-                                      (context, widget, chunkEvent) => SizedBox(
-                                    width: double.infinity,
-                                    height: 200,
-                                    child: widget,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
+                          child:
+                              thumbnailUrl != null
+                                  ? NetworkImageView(
+                                    url: thumbnailUrl!,
+                                    type: ImageType.imageThumbnail,
+                                    loadingBuilder:
+                                        (context, widget, chunkEvent) =>
+                                            SizedBox(
+                                              width: double.infinity,
+                                              height: 200,
+                                              child: widget,
+                                            ),
+                                  )
+                                  : const SizedBox.shrink(),
                         ),
                       ),
                       const Positioned.fill(
-                        child: Center(
-                          child: Icon(Icons.play_circle, size: 60),
-                        ),
+                        child: Center(child: Icon(Icons.play_circle, size: 60)),
                       ),
                     ],
                   );
@@ -262,17 +265,11 @@ class MisskeyImage extends HookConsumerWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.file_present,
-                          ),
+                          const Icon(Icons.file_present),
                           const Padding(padding: EdgeInsets.only(left: 5)),
                           Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                name,
-                              ),
-                            ],
+                            children: [Text(name)],
                           ),
                         ],
                       ),

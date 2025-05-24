@@ -4,7 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 enum DriveModalSheetReturnValue { upload, drive }
 
-@RoutePage<DriveModalSheetReturnValue>()
+@RoutePage()
 class DriveModalSheet extends StatelessWidget {
   const DriveModalSheet({super.key});
 
@@ -15,8 +15,8 @@ class DriveModalSheet extends StatelessWidget {
         ListTile(
           title: Text(S.of(context).uploadFile),
           leading: const Icon(Icons.upload),
-          onTap: () async =>
-              context.maybePop(DriveModalSheetReturnValue.upload),
+          onTap:
+              () async => context.maybePop(DriveModalSheetReturnValue.upload),
         ),
         ListTile(
           title: Text(S.of(context).fromDrive),

@@ -9,8 +9,7 @@ enum TabType {
   roleTimeline,
   channel,
   userList,
-  antenna,
-  ;
+  antenna;
 
   String displayName(BuildContext context) {
     return switch (this) {

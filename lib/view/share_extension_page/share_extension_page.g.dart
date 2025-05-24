@@ -6,30 +6,25 @@ part of 'share_extension_page.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ShareExtensionDataImpl _$$ShareExtensionDataImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ShareExtensionDataImpl(
+_ShareExtensionData _$ShareExtensionDataFromJson(Map<String, dynamic> json) =>
+    _ShareExtensionData(
       text: (json['text'] as List<dynamic>).map((e) => e as String).toList(),
-      files: (json['files'] as List<dynamic>)
-          .map((e) => SharedFiles.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      files:
+          (json['files'] as List<dynamic>)
+              .map((e) => SharedFiles.fromJson(e as Map<String, dynamic>))
+              .toList(),
     );
 
-Map<String, dynamic> _$$ShareExtensionDataImplToJson(
-        _$ShareExtensionDataImpl instance) =>
+Map<String, dynamic> _$ShareExtensionDataToJson(_ShareExtensionData instance) =>
     <String, dynamic>{
       'text': instance.text,
       'files': instance.files.map((e) => e.toJson()).toList(),
     };
 
-_$SharedFilesImpl _$$SharedFilesImplFromJson(Map<String, dynamic> json) =>
-    _$SharedFilesImpl(
-      path: json['path'] as String,
-      type: (json['type'] as num).toInt(),
-    );
+_SharedFiles _$SharedFilesFromJson(Map<String, dynamic> json) => _SharedFiles(
+  path: json['path'] as String,
+  type: (json['type'] as num).toInt(),
+);
 
-Map<String, dynamic> _$$SharedFilesImplToJson(_$SharedFilesImpl instance) =>
-    <String, dynamic>{
-      'path': instance.path,
-      'type': instance.type,
-    };
+Map<String, dynamic> _$SharedFilesToJson(_SharedFiles instance) =>
+    <String, dynamic>{'path': instance.path, 'type': instance.type};

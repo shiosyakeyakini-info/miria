@@ -30,29 +30,32 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final setting =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
+    final setting = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(widget.account);
     iCacheStrategy = setting.iCacheStrategy;
     emojisCacheStrategy = setting.emojiCacheStrategy;
     metaCacheStrategy = setting.metaChacheStrategy;
   }
 
   List<DropdownMenuItem> get buildCacheStrategyItems => [
-        DropdownMenuItem(
-          value: CacheStrategy.whenTabChange,
-          child: Text(S.of(context).refreshOnTabChange),
-        ),
-        DropdownMenuItem(
-          value: CacheStrategy.whenLaunch,
-          child: Text(S.of(context).refreshOnLaunch),
-        ),
-        DropdownMenuItem(
-          value: CacheStrategy.whenOneDay,
-          child: Text(S.of(context).refreshOnceADay),
-        ),
-      ];
+    DropdownMenuItem(
+      value: CacheStrategy.whenTabChange,
+      child: Text(S.of(context).refreshOnTabChange),
+    ),
+    DropdownMenuItem(
+      value: CacheStrategy.whenLaunch,
+      child: Text(S.of(context).refreshOnLaunch),
+    ),
+    DropdownMenuItem(
+      value: CacheStrategy.whenOneDay,
+      child: Text(S.of(context).refreshOnceADay),
+    ),
+  ];
   Future<void> save() async {
-    await ref.read(accountSettingsRepositoryProvider).save(
+    await ref
+        .read(accountSettingsRepositoryProvider)
+        .save(
           ref
               .read(accountSettingsRepositoryProvider)
               .fromAccount(widget.account)
@@ -83,10 +86,11 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 items: buildCacheStrategyItems,
                 value: iCacheStrategy,
                 isExpanded: true,
-                onChanged: (value) => setState(() {
-                  iCacheStrategy = value;
-                  save();
-                }),
+                onChanged:
+                    (value) => setState(() {
+                      iCacheStrategy = value;
+                      save();
+                    }),
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Text(
@@ -97,10 +101,11 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 items: buildCacheStrategyItems,
                 value: emojisCacheStrategy,
                 isExpanded: true,
-                onChanged: (value) => setState(() {
-                  emojisCacheStrategy = value;
-                  save();
-                }),
+                onChanged:
+                    (value) => setState(() {
+                      emojisCacheStrategy = value;
+                      save();
+                    }),
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Text(
@@ -111,10 +116,11 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 items: buildCacheStrategyItems,
                 value: metaCacheStrategy,
                 isExpanded: true,
-                onChanged: (value) => setState(() {
-                  metaCacheStrategy = value;
-                  save();
-                }),
+                onChanged:
+                    (value) => setState(() {
+                      metaCacheStrategy = value;
+                      save();
+                    }),
               ),
             ],
           ),

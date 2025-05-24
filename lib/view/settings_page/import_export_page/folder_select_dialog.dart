@@ -14,7 +14,7 @@ class FolderResult {
   final DriveFolder? folder;
 }
 
-@RoutePage<FolderResult>()
+@RoutePage()
 class FolderSelectDialog extends ConsumerStatefulWidget {
   final Account account;
   final List<String>? fileShowTarget;
@@ -122,12 +122,13 @@ class FolderSelectDialogState extends ConsumerState<FolderSelectDialog> {
                     }
                     return list.toList();
                   }(),
-                  builder: (context, item) => Row(
-                    children: [
-                      const Icon(Icons.description),
-                      Expanded(child: Text(item.name)),
-                    ],
-                  ),
+                  builder:
+                      (context, item) => Row(
+                        children: [
+                          const Icon(Icons.description),
+                          Expanded(child: Text(item.name)),
+                        ],
+                      ),
                 ),
             ],
           ),

@@ -13,6 +13,7 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/mutation.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "clip_modal_sheet.g.dart";
@@ -21,38 +22,36 @@ part "clip_modal_sheet.g.dart";
 class _NotesClipsNotifier extends _$NotesClipsNotifier {
   @override
   Future<List<Clip>> build(String noteId) async {
-    final response = await ref.read(misskeyPostContextProvider).notes.clips(
-          NotesClipsRequest(noteId: noteId),
-        );
+    final response = await ref
+        .read(misskeyPostContextProvider)
+        .notes
+        .clips(NotesClipsRequest(noteId: noteId));
     return response.toList();
   }
 
   void addClip(Clip clip) {
-    state = AsyncValue.data([...state.valueOrNull ?? [], clip]);
+    state = AsyncValue.data([...state.value ?? [], clip]);
   }
 
   void removeClip(String clipId) {
     state = AsyncValue.data(
-      (state.valueOrNull ?? []).where((clip) => clip.id != clipId).toList(),
+      (state.value ?? []).where((clip) => clip.id != clipId).toList(),
     );
   }
 }
 
 @Riverpod(
   keepAlive: false,
-  dependencies: [
-    ClipsNotifier,
-    _NotesClipsNotifier,
-    misskeyPostContext,
-  ],
+  dependencies: [ClipsNotifier, _NotesClipsNotifier, misskeyPostContext],
 )
 class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   @override
   Future<List<(Clip, bool)>> build(String noteId) async {
-    final (userClips, noteClips) = await (
-      ref.watch(clipsNotifierProvider.future),
-      ref.watch(_notesClipsNotifierProvider(noteId).future),
-    ).wait;
+    final (userClips, noteClips) =
+        await (
+          ref.watch(clipsNotifierProvider.future),
+          ref.watch(_notesClipsNotifierProvider(noteId).future),
+        ).wait;
 
     return [
       for (final userClip in userClips)
@@ -60,43 +59,44 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
     ];
   }
 
+  @mutation
   Future<void> addToClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       try {
-        await ref.read(misskeyPostContextProvider).clips.addNote(
-              ClipsAddNoteRequest(clipId: clip.id, noteId: noteId),
-            );
+        await ref
+            .read(misskeyPostContextProvider)
+            .clips
+            .addNote(ClipsAddNoteRequest(clipId: clip.id, noteId: noteId));
         ref.read(_notesClipsNotifierProvider(noteId).notifier).addClip(clip);
-      } on DioException catch (e) {
-        if (e.response != null) {
-          // すでにクリップに追加されている場合、削除するかどうかを確認する
-          if (((e.response?.data as Map?)?["error"] as Map?)?["code"] ==
-              "ALREADY_CLIPPED") {
-            final confirm =
-                await ref.read(dialogStateNotifierProvider.notifier).showDialog(
-                      message: (context) => S.of(context).alreadyAddedClip,
-                      actions: (context) =>
-                          [S.of(context).deleteClip, S.of(context).noneAction],
-                    );
-            if (confirm == 0) {
-              await removeFromClip(clip);
-            }
-            return;
+      } on MisskeyException catch (e) {
+        if (e.code == "ALREADY_CLIPPED") {
+          final confirm = await ref
+              .read(dialogStateNotifierProvider.notifier)
+              .showDialog(
+                message: (context) => S.of(context).alreadyAddedClip,
+                actions:
+                    (context) => [
+                      S.of(context).deleteClip,
+                      S.of(context).noneAction,
+                    ],
+              );
+          if (confirm == 0) {
+            await removeFromClip(clip);
           }
+        } else {
+          rethrow;
         }
-        rethrow;
       }
     });
   }
 
+  @mutation
   Future<void> removeFromClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyPostContextProvider).clips.removeNote(
-            ClipsRemoveNoteRequest(
-              clipId: clip.id,
-              noteId: noteId,
-            ),
-          );
+      await ref
+          .read(misskeyPostContextProvider)
+          .clips
+          .removeNote(ClipsRemoveNoteRequest(clipId: clip.id, noteId: noteId));
       ref
           .read(_notesClipsNotifierProvider(noteId).notifier)
           .removeClip(clip.id);
@@ -134,37 +134,40 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
 
     return switch (state) {
       AsyncData(:final value) => ListView.builder(
-          itemCount: value.length + 1,
-          itemBuilder: (context, index) {
-            if (index < value.length) {
-              final (clip, isClipped) = value[index];
-              return ListTile(
-                leading: isClipped
-                    ? const Icon(Icons.check)
-                    : SizedBox(width: Theme.of(context).iconTheme.size),
-                onTap: () async {
-                  if (isClipped) {
-                    await ref.read(notifier).removeFromClip(clip);
-                  } else {
-                    await ref.read(notifier).addToClip(clip);
-                  }
-                },
-                title: Text(clip.name ?? ""),
-                subtitle: Text(clip.description ?? ""),
-              );
-            } else {
-              return ListTile(
-                leading: const Icon(Icons.add),
-                title: Text(S.of(context).createClip),
-                onTap: create.executeOrNull,
-              );
-            }
-          },
-        ),
-      AsyncLoading() =>
-        const Center(child: CircularProgressIndicator.adaptive()),
-      AsyncError(:final error, :final stackTrace) =>
-        Center(child: ErrorDetail(error: error, stackTrace: stackTrace))
+        itemCount: value.length + 1,
+        itemBuilder: (context, index) {
+          if (index < value.length) {
+            final (clip, isClipped) = value[index];
+            return ListTile(
+              leading:
+                  isClipped
+                      ? const Icon(Icons.check)
+                      : SizedBox(width: Theme.of(context).iconTheme.size),
+              onTap: () async {
+                if (isClipped) {
+                  await ref.read(notifier).removeFromClip(clip);
+                } else {
+                  await ref.read(notifier).addToClip(clip);
+                }
+              },
+              title: Text(clip.name ?? ""),
+              subtitle: Text(clip.description ?? ""),
+            );
+          } else {
+            return ListTile(
+              leading: const Icon(Icons.add),
+              title: Text(S.of(context).createClip),
+              onTap: create.executeOrNull,
+            );
+          }
+        },
+      ),
+      AsyncLoading() => const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+      AsyncError(:final error, :final stackTrace) => Center(
+        child: ErrorDetail(error: error, stackTrace: stackTrace),
+      ),
     };
   }
 }

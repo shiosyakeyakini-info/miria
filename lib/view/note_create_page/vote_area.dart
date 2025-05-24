@@ -14,8 +14,9 @@ class VoteArea extends ConsumerWidget {
     final expireType = ref.watch(
       noteCreateNotifierProvider.select((value) => value.voteExpireType),
     );
-    final isVote =
-        ref.watch(noteCreateNotifierProvider.select((value) => value.isVote));
+    final isVote = ref.watch(
+      noteCreateNotifierProvider.select((value) => value.isVote),
+    );
 
     if (!isVote) {
       return Container();
@@ -67,8 +68,9 @@ class VoteContentListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onVoteContentChange = ref.watch(
-      noteCreateNotifierProvider
-          .select((notifier) => notifier.voteContentCount),
+      noteCreateNotifierProvider.select(
+        (notifier) => notifier.voteContentCount,
+      ),
     );
 
     final initial = useMemoized(
@@ -76,25 +78,21 @@ class VoteContentListItem extends HookConsumerWidget {
       [onVoteContentChange],
     );
     final controller = useTextEditingController(text: initial);
-    useEffect(
-      () {
-        controller
-          ..text = initial
-          ..addListener(() {
-            final voteContent =
-                ref.read(noteCreateNotifierProvider).voteContent;
-            if (voteContent.length <= index ||
-                voteContent[index] == controller.text) {
-              return;
-            }
-            ref
-                .read(noteCreateNotifierProvider.notifier)
-                .setVoteContent(index, controller.text);
-          });
-        return null;
-      },
-      [index, onVoteContentChange],
-    );
+    useEffect(() {
+      controller
+        ..text = initial
+        ..addListener(() {
+          final voteContent = ref.read(noteCreateNotifierProvider).voteContent;
+          if (voteContent.length <= index ||
+              voteContent[index] == controller.text) {
+            return;
+          }
+          ref
+              .read(noteCreateNotifierProvider.notifier)
+              .setVoteContent(index, controller.text);
+        });
+      return null;
+    }, [index, onVoteContentChange]);
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
@@ -153,10 +151,7 @@ class VoteDuration extends ConsumerWidget {
       ),
       items: [
         for (final item in VoteExpireType.values)
-          DropdownMenuItem(
-            value: item,
-            child: Text(item.displayText(context)),
-          ),
+          DropdownMenuItem(value: item, child: Text(item.displayText(context))),
       ],
       onChanged: (item) {
         if (item == null) return;
@@ -167,9 +162,7 @@ class VoteDuration extends ConsumerWidget {
 }
 
 class VoteUntilDate extends ConsumerWidget {
-  const VoteUntilDate({
-    super.key,
-  });
+  const VoteUntilDate({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -198,7 +191,9 @@ class VoteUntilDate extends ConsumerWidget {
           );
           if (resultTime == null) return;
 
-          ref.read(noteCreateNotifierProvider.notifier).setVoteExpireDate(
+          ref
+              .read(noteCreateNotifierProvider.notifier)
+              .setVoteExpireDate(
                 DateTime(
                   resultDate.year,
                   resultDate.month,
@@ -222,11 +217,7 @@ class VoteUntilDate extends ConsumerWidget {
               children: [
                 const Icon(Icons.date_range),
                 const Padding(padding: EdgeInsets.only(left: 10)),
-                Expanded(
-                  child: Text(
-                    date?.formatUntilSeconds(context) ?? "",
-                  ),
-                ),
+                Expanded(child: Text(date?.formatUntilSeconds(context) ?? "")),
               ],
             ),
           ),
@@ -260,9 +251,7 @@ class VoteUntilDuration extends HookConsumerWidget {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(left: 10),
-        ),
+        const Padding(padding: EdgeInsets.only(left: 10)),
         DropdownButton(
           items: [
             for (final item in VoteExpireDurationType.values)
@@ -272,8 +261,9 @@ class VoteUntilDuration extends HookConsumerWidget {
               ),
           ],
           value: ref.watch(
-            noteCreateNotifierProvider
-                .select((value) => value.voteDurationType),
+            noteCreateNotifierProvider.select(
+              (value) => value.voteDurationType,
+            ),
           ),
           onChanged: (value) {
             if (value == null) return;

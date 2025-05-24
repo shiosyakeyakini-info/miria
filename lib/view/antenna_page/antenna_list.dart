@@ -7,6 +7,8 @@ import "package:miria/router/app_router.dart";
 import "package:miria/view/antenna_page/antennas_notifier.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/experimental/mutation.dart";
 
 class AntennaList extends ConsumerWidget {
   const AntennaList({super.key});
@@ -17,42 +19,38 @@ class AntennaList extends ConsumerWidget {
 
     return switch (antennas) {
       AsyncData(value: final antennas) => ListView.builder(
-          itemCount: antennas.length,
-          itemBuilder: (context, index) {
-            final antenna = antennas[index];
-            return ListTile(
-              title: Text(antenna.name),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () async {
-                  final result = await SimpleConfirmDialog.show(
-                    context: context,
-                    message: S.of(context).confirmDeletingAntenna,
-                    primary: S.of(context).delete,
-                    secondary: S.of(context).cancel,
-                  );
-                  if (!context.mounted) return;
-                  if (result ?? false) {
-                    await ref
-                        .read(antennasNotifierProvider.notifier)
-                        .delete(antenna.id);
-                  }
-                },
-              ),
-              onTap: () async => context.pushRoute(
-                AntennaNotesRoute(
-                  antenna: antenna,
-                  accountContext: ref.read(accountContextProvider),
-                ),
-              ),
-            );
-          },
-        ),
-      AsyncError(error: final e, stackTrace: final st) =>
-        Center(child: ErrorDetail(error: e, stackTrace: st)),
+        itemCount: antennas.length,
+        itemBuilder:
+            (context, index) => AntennaListItem(antenna: antennas[index]),
+      ),
+      AsyncError(error: final e, stackTrace: final st) => Center(
+        child: ErrorDetail(error: e, stackTrace: st),
+      ),
       AsyncLoading() => const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        child: CircularProgressIndicator.adaptive(),
+      ),
     };
+  }
+}
+
+class AntennaListItem extends ConsumerWidget {
+  final Antenna antenna;
+
+  const AntennaListItem({required this.antenna, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final deleteAntenna = ref.watch(antennasNotifierProvider.deleteAntenna);
+
+    return ListTile(
+      title: Text(antenna.name),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed:
+            deleteAntenna is PendingMutation
+                ? null
+                : () async => deleteAntenna.call(antenna.id),
+      ),
+    );
   }
 }

@@ -6,223 +6,359 @@ part of 'channel_detail_info.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelDetailHash() => r'1856423bc5f37b9238872a785f42fa214c0bb2c5';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ChannelDetail
-    extends BuildlessAutoDisposeAsyncNotifier<ChannelDetailState> {
-  late final String channelId;
-
-  FutureOr<ChannelDetailState> build(
-    String channelId,
-  );
-}
-
-/// See also [ChannelDetail].
 @ProviderFor(ChannelDetail)
-const channelDetailProvider = ChannelDetailFamily();
+const channelDetailProvider = ChannelDetailFamily._();
 
-/// See also [ChannelDetail].
-class ChannelDetailFamily extends Family {
-  /// See also [ChannelDetail].
-  const ChannelDetailFamily();
+final class ChannelDetailProvider
+    extends $AsyncNotifierProvider<ChannelDetail, ChannelDetailState> {
+  const ChannelDetailProvider._({
+    required ChannelDetailFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'channelDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyGetContextProvider,
-    misskeyPostContextProvider,
-    notesWithProvider
-  ];
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies,
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies,
-    notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies
-  };
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies3 = notesWithProvider;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  String debugGetCreateSourceHash() => _$channelDetailHash();
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'channelDetailProvider';
-
-  /// See also [ChannelDetail].
-  ChannelDetailProvider call(
-    String channelId,
-  ) {
-    return ChannelDetailProvider(
-      channelId,
-    );
+  String toString() {
+    return r'channelDetailProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  ChannelDetailProvider getProviderOverride(
-    covariant ChannelDetailProvider provider,
-  ) {
-    return call(
-      provider.channelId,
-    );
-  }
+  ChannelDetail create() => ChannelDetail();
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(ChannelDetail Function() create) {
-    return _$ChannelDetailFamilyOverride(this, create);
-  }
-}
-
-class _$ChannelDetailFamilyOverride implements FamilyOverride {
-  _$ChannelDetailFamilyOverride(this.overriddenFamily, this.create);
-
-  final ChannelDetail Function() create;
-
+  @$internal
   @override
-  final ChannelDetailFamily overriddenFamily;
+  _$ChannelDetailElement $createElement($ProviderPointer pointer) =>
+      _$ChannelDetailElement(pointer);
 
-  @override
-  ChannelDetailProvider getProviderOverride(
-    covariant ChannelDetailProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
+  ProviderListenable<ChannelDetail$Follow> get follow => $LazyProxyListenable<
+    ChannelDetail$Follow,
+    AsyncValue<ChannelDetailState>
+  >(this, (element) {
+    element as _$ChannelDetailElement;
 
-/// See also [ChannelDetail].
-class ChannelDetailProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    ChannelDetail, ChannelDetailState> {
-  /// See also [ChannelDetail].
-  ChannelDetailProvider(
-    String channelId,
-  ) : this._internal(
-          () => ChannelDetail()..channelId = channelId,
-          from: channelDetailProvider,
-          name: r'channelDetailProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$channelDetailHash,
-          dependencies: ChannelDetailFamily._dependencies,
-          allTransitiveDependencies:
-              ChannelDetailFamily._allTransitiveDependencies,
-          channelId: channelId,
-        );
+    return element._$follow;
+  });
 
-  ChannelDetailProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.channelId,
-  }) : super.internal();
+  ProviderListenable<ChannelDetail$Unfollow> get unfollow =>
+      $LazyProxyListenable<
+        ChannelDetail$Unfollow,
+        AsyncValue<ChannelDetailState>
+      >(this, (element) {
+        element as _$ChannelDetailElement;
 
-  final String channelId;
+        return element._$unfollow;
+      });
 
-  @override
-  FutureOr<ChannelDetailState> runNotifierBuild(
-    covariant ChannelDetail notifier,
-  ) {
-    return notifier.build(
-      channelId,
-    );
-  }
+  ProviderListenable<ChannelDetail$Favorite> get favorite =>
+      $LazyProxyListenable<
+        ChannelDetail$Favorite,
+        AsyncValue<ChannelDetailState>
+      >(this, (element) {
+        element as _$ChannelDetailElement;
 
-  @override
-  Override overrideWith(ChannelDetail Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: ChannelDetailProvider._internal(
-        () => create()..channelId = channelId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        channelId: channelId,
-      ),
-    );
-  }
+        return element._$favorite;
+      });
 
-  @override
-  (String,) get argument {
-    return (channelId,);
-  }
+  ProviderListenable<ChannelDetail$Unfavorite> get unfavorite =>
+      $LazyProxyListenable<
+        ChannelDetail$Unfavorite,
+        AsyncValue<ChannelDetailState>
+      >(this, (element) {
+        element as _$ChannelDetailElement;
 
-  @override
-  AutoDisposeAsyncNotifierProviderElement<ChannelDetail, ChannelDetailState>
-      createElement() {
-    return _ChannelDetailProviderElement(this);
-  }
-
-  ChannelDetailProvider _copyWith(
-    ChannelDetail Function() create,
-  ) {
-    return ChannelDetailProvider._internal(
-      () => create()..channelId = channelId,
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      channelId: channelId,
-    );
-  }
+        return element._$unfavorite;
+      });
 
   @override
   bool operator ==(Object other) {
-    return other is ChannelDetailProvider && other.channelId == channelId;
+    return other is ChannelDetailProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin ChannelDetailRef
-    on AutoDisposeAsyncNotifierProviderRef<ChannelDetailState> {
-  /// The parameter `channelId` of this provider.
-  String get channelId;
-}
+String _$channelDetailHash() => r'5eaa439fc6ef806ecf76d47c1650006df7c13693';
 
-class _ChannelDetailProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<ChannelDetail,
-        ChannelDetailState> with ChannelDetailRef {
-  _ChannelDetailProviderElement(super.provider);
+final class ChannelDetailFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          ChannelDetail,
+          AsyncValue<ChannelDetailState>,
+          ChannelDetailState,
+          FutureOr<ChannelDetailState>,
+          String
+        > {
+  const ChannelDetailFamily._()
+    : super(
+        retry: null,
+        name: r'channelDetailProvider',
+        dependencies: const <ProviderOrFamily>[
+          misskeyGetContextProvider,
+          misskeyPostContextProvider,
+          notesWithProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          ChannelDetailProvider.$allTransitiveDependencies0,
+          ChannelDetailProvider.$allTransitiveDependencies1,
+          ChannelDetailProvider.$allTransitiveDependencies2,
+          ChannelDetailProvider.$allTransitiveDependencies3,
+        },
+        isAutoDispose: true,
+      );
+
+  ChannelDetailProvider call(String channelId) =>
+      ChannelDetailProvider._(argument: channelId, from: this);
 
   @override
-  String get channelId => (origin as ChannelDetailProvider).channelId;
+  String toString() => r'channelDetailProvider';
 }
+
+abstract class _$ChannelDetail extends $AsyncNotifier<ChannelDetailState> {
+  late final _$args = ref.$arg as String;
+  String get channelId => _$args;
+
+  FutureOr<ChannelDetailState> build(String channelId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<ChannelDetailState>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<ChannelDetailState>>,
+              AsyncValue<ChannelDetailState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+class _$ChannelDetailElement
+    extends $AsyncNotifierProviderElement<ChannelDetail, ChannelDetailState> {
+  _$ChannelDetailElement(super.pointer) {
+    _$follow.result = $Result.data(_$ChannelDetail$Follow(this));
+    _$unfollow.result = $Result.data(_$ChannelDetail$Unfollow(this));
+    _$favorite.result = $Result.data(_$ChannelDetail$Favorite(this));
+    _$unfavorite.result = $Result.data(_$ChannelDetail$Unfavorite(this));
+  }
+  final _$follow = $ElementLense<_$ChannelDetail$Follow>();
+  final _$unfollow = $ElementLense<_$ChannelDetail$Unfollow>();
+  final _$favorite = $ElementLense<_$ChannelDetail$Favorite>();
+  final _$unfavorite = $ElementLense<_$ChannelDetail$Unfavorite>();
+  @override
+  void mount() {
+    super.mount();
+    _$follow.result!.value!.reset();
+    _$unfollow.result!.value!.reset();
+    _$favorite.result!.value!.reset();
+    _$unfavorite.result!.value!.reset();
+  }
+
+  @override
+  void visitListenables(
+    void Function($ElementLense element) listenableVisitor,
+  ) {
+    super.visitListenables(listenableVisitor);
+
+    listenableVisitor(_$follow);
+    listenableVisitor(_$unfollow);
+    listenableVisitor(_$favorite);
+    listenableVisitor(_$unfavorite);
+  }
+}
+
+sealed class ChannelDetail$Follow extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [ChannelDetail.follow] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call();
+}
+
+final class _$ChannelDetail$Follow
+    extends $AsyncMutationBase<void, _$ChannelDetail$Follow, ChannelDetail>
+    implements ChannelDetail$Follow {
+  _$ChannelDetail$Follow(this.element, {super.state, super.key});
+
+  @override
+  final _$ChannelDetailElement element;
+
+  @override
+  $ElementLense<_$ChannelDetail$Follow> get listenable => element._$follow;
+
+  @override
+  Future<void> call() {
+    return mutate(
+      Invocation.method(#follow, []),
+      ($notifier) => $notifier.follow(),
+    );
+  }
+
+  @override
+  _$ChannelDetail$Follow copyWith(MutationState<void> state, {Object? key}) =>
+      _$ChannelDetail$Follow(element, state: state, key: key);
+}
+
+sealed class ChannelDetail$Unfollow extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [ChannelDetail.unfollow] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call();
+}
+
+final class _$ChannelDetail$Unfollow
+    extends $AsyncMutationBase<void, _$ChannelDetail$Unfollow, ChannelDetail>
+    implements ChannelDetail$Unfollow {
+  _$ChannelDetail$Unfollow(this.element, {super.state, super.key});
+
+  @override
+  final _$ChannelDetailElement element;
+
+  @override
+  $ElementLense<_$ChannelDetail$Unfollow> get listenable => element._$unfollow;
+
+  @override
+  Future<void> call() {
+    return mutate(
+      Invocation.method(#unfollow, []),
+      ($notifier) => $notifier.unfollow(),
+    );
+  }
+
+  @override
+  _$ChannelDetail$Unfollow copyWith(MutationState<void> state, {Object? key}) =>
+      _$ChannelDetail$Unfollow(element, state: state, key: key);
+}
+
+sealed class ChannelDetail$Favorite extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [ChannelDetail.favorite] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call();
+}
+
+final class _$ChannelDetail$Favorite
+    extends $AsyncMutationBase<void, _$ChannelDetail$Favorite, ChannelDetail>
+    implements ChannelDetail$Favorite {
+  _$ChannelDetail$Favorite(this.element, {super.state, super.key});
+
+  @override
+  final _$ChannelDetailElement element;
+
+  @override
+  $ElementLense<_$ChannelDetail$Favorite> get listenable => element._$favorite;
+
+  @override
+  Future<void> call() {
+    return mutate(
+      Invocation.method(#favorite, []),
+      ($notifier) => $notifier.favorite(),
+    );
+  }
+
+  @override
+  _$ChannelDetail$Favorite copyWith(MutationState<void> state, {Object? key}) =>
+      _$ChannelDetail$Favorite(element, state: state, key: key);
+}
+
+sealed class ChannelDetail$Unfavorite extends MutationBase<void> {
+  /// Starts the mutation.
+  ///
+  /// This will first set the state to [PendingMutation], then
+  /// will call [ChannelDetail.unfavorite] with the provided parameters.
+  ///
+  /// After the method completes, the mutation state will be updated to either
+  /// [SuccessMutation] or [ErrorMutation] based on if the method
+  /// threw or not.
+  ///
+  /// **Note**:
+  /// If the notifier threw in its constructor, the mutation won't start
+  /// and [call] will throw.
+  /// This should generally never happen though, as Notifiers are not supposed
+  /// to have logic in their constructors.
+  Future<void> call();
+}
+
+final class _$ChannelDetail$Unfavorite
+    extends $AsyncMutationBase<void, _$ChannelDetail$Unfavorite, ChannelDetail>
+    implements ChannelDetail$Unfavorite {
+  _$ChannelDetail$Unfavorite(this.element, {super.state, super.key});
+
+  @override
+  final _$ChannelDetailElement element;
+
+  @override
+  $ElementLense<_$ChannelDetail$Unfavorite> get listenable =>
+      element._$unfavorite;
+
+  @override
+  Future<void> call() {
+    return mutate(
+      Invocation.method(#unfavorite, []),
+      ($notifier) => $notifier.unfavorite(),
+    );
+  }
+
+  @override
+  _$ChannelDetail$Unfavorite copyWith(
+    MutationState<void> state, {
+    Object? key,
+  }) => _$ChannelDetail$Unfavorite(element, state: state, key: key);
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

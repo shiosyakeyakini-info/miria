@@ -24,9 +24,7 @@ class LoginPage extends StatelessWidget {
             tabAlignment: TabAlignment.center,
           ),
         ),
-        body: const TabBarView(
-          children: [MiAuthLogin(), ApiKeyLogin()],
-        ),
+        body: const TabBarView(children: [MiAuthLogin(), ApiKeyLogin()]),
       ),
     );
   }

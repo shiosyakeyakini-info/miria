@@ -62,8 +62,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   Future<void> loadFromLocalCache() async {
-    final storedData =
-        await sharePreferenceController.getString("emojis@${account.host}");
+    final storedData = await sharePreferenceController.getString(
+      "emojis@${account.host}",
+    );
     if (storedData == null || storedData.isEmpty) {
       return;
     }
@@ -118,39 +119,40 @@ class EmojiRepositoryImpl extends EmojiRepository {
   Future<void> _setEmojiData(EmojisResponse response) async {
     final toH = toHiraganaSafe;
 
-    final unicodeEmojis =
-        (jsonDecode(await rootBundle.loadString("assets/emoji_list.json"))
-                as List)
-            .map((e) => UnicodeEmoji.fromJson(e))
-            .map(
-              (e) => EmojiRepositoryData(
-                emoji: UnicodeEmojiData(char: e.char),
-                kanaName: toH(format(e.char)),
-                kanaAliases: [e.name, ...e.keywords]
-                    .map((e2) => toH(format(e2)))
-                    .toList(),
-                aliases: [e.name, ...e.keywords],
-                category: e.category,
-              ),
-            );
-
-    emoji = response.emojis
+    final unicodeEmojis = (jsonDecode(
+              await rootBundle.loadString("assets/emoji_list.json"),
+            )
+            as List)
+        .map((e) => UnicodeEmoji.fromJson(e))
         .map(
           (e) => EmojiRepositoryData(
-            emoji: CustomEmojiData(
-              baseName: e.name,
-              hostedName: ":${e.name}@.:",
-              url: e.url,
-              isCurrentServer: true,
-              isSensitive: e.isSensitive,
-            ),
-            category: e.category ?? "",
-            kanaName: toH(format(e.name)),
-            aliases: e.aliases,
-            kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList(),
+            emoji: UnicodeEmojiData(char: e.char),
+            kanaName: toH(format(e.char)),
+            kanaAliases:
+                [e.name, ...e.keywords].map((e2) => toH(format(e2))).toList(),
+            aliases: [e.name, ...e.keywords],
+            category: e.category,
           ),
-        )
-        .toList();
+        );
+
+    emoji =
+        response.emojis
+            .map(
+              (e) => EmojiRepositoryData(
+                emoji: CustomEmojiData(
+                  baseName: e.name,
+                  hostedName: ":${e.name}@.:",
+                  url: e.url,
+                  isCurrentServer: true,
+                  isSensitive: e.isSensitive,
+                ),
+                category: e.category ?? "",
+                kanaName: toH(format(e.name)),
+                aliases: e.aliases,
+                kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList(),
+              ),
+            )
+            .toList();
     emoji!.addAll(unicodeEmojis);
 
     emojiMap = HashMap<String, EmojiRepositoryData>.fromIterable(
@@ -174,8 +176,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
     return element.emoji.baseName.contains(query) ||
         element.aliases.any((element2) => element2.contains(query)) ||
         element.kanaName.contains(convertedQuery) ||
-        element.kanaAliases
-            .any((element2) => element2.contains(convertedQuery));
+        element.kanaAliases.any(
+          (element2) => element2.contains(convertedQuery),
+        );
   }
 
   @override

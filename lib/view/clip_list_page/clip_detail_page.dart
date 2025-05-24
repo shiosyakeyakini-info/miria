@@ -8,10 +8,20 @@ import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/clip_list_page/clips_notifier.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 import "package:miria/view/clip_list_page/clip_detail_note_list.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:riverpod_annotation/experimental/scope.dart";
 
 @RoutePage()
+@Dependencies([
+  ClipsNotifier,
+  misskeyGetContext,
+  notesWith,
+  accountContext,
+  misskeyPostContext,
+  MisskeyNoteNotifier,
+])
 class ClipDetailPage extends HookConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
   final String id;
@@ -29,7 +39,7 @@ class ClipDetailPage extends HookConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final clip = ref.watch(
       clipsNotifierProvider.select(
-        (clips) => clips.valueOrNull?.firstWhereOrNull((e) => e.id == id),
+        (clips) => clips.value?.firstWhereOrNull((e) => e.id == id),
       ),
     );
     final updateClip = useAsync(() async {

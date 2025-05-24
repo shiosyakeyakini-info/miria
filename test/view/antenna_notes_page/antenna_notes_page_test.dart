@@ -20,7 +20,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
           child: DefaultRootWidget(
             initialRoute: AntennaNotesRoute(
               accountContext: TestData.accountContext,
@@ -34,9 +34,7 @@ void main() {
       expect(find.text(TestData.note1.text!), findsOneWidget);
       verify(
         antennas.notes(
-          argThat(
-            equals(AntennasNotesRequest(antennaId: TestData.antenna.id)),
-          ),
+          argThat(equals(AntennasNotesRequest(antennaId: TestData.antenna.id))),
         ),
       );
 
