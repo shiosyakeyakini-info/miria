@@ -3216,6 +3216,18 @@ abstract class S {
   /// **'なんもないで'**
   String get nothingHere;
 
+  /// No description provided for @refresh.
+  ///
+  /// In ja, this message translates to:
+  /// **'更新'**
+  String get refresh;
+
+  /// No description provided for @cacheManualUpdateCompleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'情報の取得が完了したで'**
+  String get cacheManualUpdateCompleted;
+
   /// No description provided for @deckMode.
   ///
   /// In ja, this message translates to:

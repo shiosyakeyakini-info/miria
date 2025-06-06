@@ -5,6 +5,7 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
 
 @RoutePage()
 class CacheManagementPage extends ConsumerStatefulWidget {
@@ -26,6 +27,8 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
   CacheStrategy iCacheStrategy = CacheStrategy.whenTabChange;
   CacheStrategy emojisCacheStrategy = CacheStrategy.whenLaunch;
   CacheStrategy metaCacheStrategy = CacheStrategy.whenOneDay;
+
+  bool isRefreshing = false;
 
   @override
   void didChangeDependencies() {
@@ -65,6 +68,25 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 emojiCacheStrategy: emojisCacheStrategy,
               ),
         );
+  }
+
+  Future<void> refresh() async {
+    setState(() {
+      isRefreshing = true;
+    });
+    await ref.read(emojiRepositoryProvider(widget.account)).loadFromSource();
+    await ref.read(accountRepositoryProvider.notifier).updateI(widget.account);
+    await ref
+        .read(accountRepositoryProvider.notifier)
+        .updateMeta(widget.account);
+    if (!context.mounted) return;
+    setState(() {
+      isRefreshing = false;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context).cacheManualUpdateCompleted)),
+    );
   }
 
   @override
@@ -119,6 +141,43 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                   save();
                 }),
               ),
+              const Padding(padding: EdgeInsets.only(top: 20)),
+              if (isRefreshing)
+                OutlinedButton(
+                  onPressed: null,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(5),
+                    minimumSize: const Size(double.infinity, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width:
+                            Theme.of(context).textTheme.bodyMedium?.fontSize ??
+                            22,
+                        height:
+                            Theme.of(context).textTheme.bodyMedium?.fontSize ??
+                            22,
+                        child: const CircularProgressIndicator(),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(S.of(context).refreshing),
+                    ],
+                  ),
+                )
+              else
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: refresh,
+                  label: Text(S.of(context).refresh),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(5),
+                    minimumSize: const Size(double.infinity, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
             ],
           ),
         ),

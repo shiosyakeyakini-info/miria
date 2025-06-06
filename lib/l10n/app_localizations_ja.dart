@@ -1862,6 +1862,12 @@ class SJa extends S {
   String get nothingHere => 'なんもないで';
 
   @override
+  String get refresh => '更新';
+
+  @override
+  String get cacheManualUpdateCompleted => '情報の取得が完了したで';
+
+  @override
   String get deckMode => 'デッキモード';
 
   @override
@@ -2202,4 +2208,7 @@ class SJaOj extends SJa {
 
   @override
   String get nothingHere => 'ここには何もありませんわ';
+
+  @override
+  String get cacheManualUpdateCompleted => '情報の取得が完了しましたわ';
 }
