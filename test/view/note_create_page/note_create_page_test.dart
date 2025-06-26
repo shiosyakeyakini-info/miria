@@ -1600,7 +1600,6 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.byIcon(Icons.send));
         await tester.pumpAndSettle();
-        debugDumpApp();
         expect(find.byType(Dialog), findsOneWidget);
         await tester.tap(find.byType(TextButton));
         await tester.pumpAndSettle();
@@ -2709,8 +2708,6 @@ void main() {
                 find.byType(TextField).hitTestable(), "おいしいbot");
             await tester.testTextInput.receiveAction(TextInputAction.done);
             await tester.pumpAndSettle();
-
-            debugDumpApp();
 
             await tester.tap(
                 find.text(TestData.detailedUser1.name!, findRichText: true));
