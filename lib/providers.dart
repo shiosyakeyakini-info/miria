@@ -29,6 +29,7 @@ import "package:miria/repository/shared_preference_controller.dart";
 import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
+import "package:miria/repository/custom_timeline_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -232,6 +233,13 @@ final timelineProvider =
         ref.read(generalSettingsRepositoryProvider),
         setting,
         ref,
+      ),
+    TabType.customTimeline => CustomTimelineRepository(
+        ref.read(misskeyProvider(account)),
+        account,
+        ref.read(notesProvider(account)),
+        ref.read(generalSettingsRepositoryProvider),
+        setting,
       )
   };
 });

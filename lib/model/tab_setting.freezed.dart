@@ -44,6 +44,16 @@ mixin _$TabSetting {
   /// アンテナのノートの場合、アンテナID
   String? get antennaId => throw _privateConstructorUsedError;
 
+  /// カスタムタイムラインのWebSocketパス
+  String? get customWebSocketPath => throw _privateConstructorUsedError;
+
+  /// カスタムタイムラインのAPIパス
+  String? get customApiPath => throw _privateConstructorUsedError;
+
+  /// カスタムタイムラインのパラメータ
+  Map<String, dynamic>? get customParameters =>
+      throw _privateConstructorUsedError;
+
   /// ノートの投稿のキャプチャをするかどうか
   bool get isSubscribe => throw _privateConstructorUsedError;
 
@@ -83,6 +93,9 @@ abstract class $TabSettingCopyWith<$Res> {
       String? channelId,
       String? listId,
       String? antennaId,
+      String? customWebSocketPath,
+      String? customApiPath,
+      Map<String, dynamic>? customParameters,
       bool isSubscribe,
       bool isIncludeReplies,
       bool isMediaOnly,
@@ -115,6 +128,9 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
     Object? channelId = freezed,
     Object? listId = freezed,
     Object? antennaId = freezed,
+    Object? customWebSocketPath = freezed,
+    Object? customApiPath = freezed,
+    Object? customParameters = freezed,
     Object? isSubscribe = null,
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
@@ -150,6 +166,18 @@ class _$TabSettingCopyWithImpl<$Res, $Val extends TabSetting>
           ? _value.antennaId
           : antennaId // ignore: cast_nullable_to_non_nullable
               as String?,
+      customWebSocketPath: freezed == customWebSocketPath
+          ? _value.customWebSocketPath
+          : customWebSocketPath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customApiPath: freezed == customApiPath
+          ? _value.customApiPath
+          : customApiPath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customParameters: freezed == customParameters
+          ? _value.customParameters
+          : customParameters // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
       isSubscribe: null == isSubscribe
           ? _value.isSubscribe
           : isSubscribe // ignore: cast_nullable_to_non_nullable
@@ -210,6 +238,9 @@ abstract class _$$TabSettingImplCopyWith<$Res>
       String? channelId,
       String? listId,
       String? antennaId,
+      String? customWebSocketPath,
+      String? customApiPath,
+      Map<String, dynamic>? customParameters,
       bool isSubscribe,
       bool isIncludeReplies,
       bool isMediaOnly,
@@ -242,6 +273,9 @@ class __$$TabSettingImplCopyWithImpl<$Res>
     Object? channelId = freezed,
     Object? listId = freezed,
     Object? antennaId = freezed,
+    Object? customWebSocketPath = freezed,
+    Object? customApiPath = freezed,
+    Object? customParameters = freezed,
     Object? isSubscribe = null,
     Object? isIncludeReplies = null,
     Object? isMediaOnly = null,
@@ -277,6 +311,18 @@ class __$$TabSettingImplCopyWithImpl<$Res>
           ? _value.antennaId
           : antennaId // ignore: cast_nullable_to_non_nullable
               as String?,
+      customWebSocketPath: freezed == customWebSocketPath
+          ? _value.customWebSocketPath
+          : customWebSocketPath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customApiPath: freezed == customApiPath
+          ? _value.customApiPath
+          : customApiPath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customParameters: freezed == customParameters
+          ? _value._customParameters
+          : customParameters // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
       isSubscribe: null == isSubscribe
           ? _value.isSubscribe
           : isSubscribe // ignore: cast_nullable_to_non_nullable
@@ -312,12 +358,16 @@ class _$TabSettingImpl extends _TabSetting {
       this.channelId,
       this.listId,
       this.antennaId,
+      this.customWebSocketPath,
+      this.customApiPath,
+      final Map<String, dynamic>? customParameters,
       this.isSubscribe = true,
       this.isIncludeReplies = true,
       this.isMediaOnly = false,
       this.name,
       this.renoteDisplay = true})
-      : super._();
+      : _customParameters = customParameters,
+        super._();
 
   factory _$TabSettingImpl.fromJson(Map<String, dynamic> json) =>
       _$$TabSettingImplFromJson(json);
@@ -353,6 +403,27 @@ class _$TabSettingImpl extends _TabSetting {
   @override
   final String? antennaId;
 
+  /// カスタムタイムラインのWebSocketパス
+  @override
+  final String? customWebSocketPath;
+
+  /// カスタムタイムラインのAPIパス
+  @override
+  final String? customApiPath;
+
+  /// カスタムタイムラインのパラメータ
+  final Map<String, dynamic>? _customParameters;
+
+  /// カスタムタイムラインのパラメータ
+  @override
+  Map<String, dynamic>? get customParameters {
+    final value = _customParameters;
+    if (value == null) return null;
+    if (_customParameters is EqualUnmodifiableMapView) return _customParameters;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   /// ノートの投稿のキャプチャをするかどうか
   @override
   @JsonKey()
@@ -379,7 +450,7 @@ class _$TabSettingImpl extends _TabSetting {
 
   @override
   String toString() {
-    return 'TabSetting(icon: $icon, tabType: $tabType, acct: $acct, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, isSubscribe: $isSubscribe, isIncludeReplies: $isIncludeReplies, isMediaOnly: $isMediaOnly, name: $name, renoteDisplay: $renoteDisplay)';
+    return 'TabSetting(icon: $icon, tabType: $tabType, acct: $acct, roleId: $roleId, channelId: $channelId, listId: $listId, antennaId: $antennaId, customWebSocketPath: $customWebSocketPath, customApiPath: $customApiPath, customParameters: $customParameters, isSubscribe: $isSubscribe, isIncludeReplies: $isIncludeReplies, isMediaOnly: $isMediaOnly, name: $name, renoteDisplay: $renoteDisplay)';
   }
 
   @override
@@ -396,6 +467,12 @@ class _$TabSettingImpl extends _TabSetting {
             (identical(other.listId, listId) || other.listId == listId) &&
             (identical(other.antennaId, antennaId) ||
                 other.antennaId == antennaId) &&
+            (identical(other.customWebSocketPath, customWebSocketPath) ||
+                other.customWebSocketPath == customWebSocketPath) &&
+            (identical(other.customApiPath, customApiPath) ||
+                other.customApiPath == customApiPath) &&
+            const DeepCollectionEquality()
+                .equals(other._customParameters, _customParameters) &&
             (identical(other.isSubscribe, isSubscribe) ||
                 other.isSubscribe == isSubscribe) &&
             (identical(other.isIncludeReplies, isIncludeReplies) ||
@@ -418,6 +495,9 @@ class _$TabSettingImpl extends _TabSetting {
       channelId,
       listId,
       antennaId,
+      customWebSocketPath,
+      customApiPath,
+      const DeepCollectionEquality().hash(_customParameters),
       isSubscribe,
       isIncludeReplies,
       isMediaOnly,
@@ -449,6 +529,9 @@ abstract class _TabSetting extends TabSetting {
       final String? channelId,
       final String? listId,
       final String? antennaId,
+      final String? customWebSocketPath,
+      final String? customApiPath,
+      final Map<String, dynamic>? customParameters,
       final bool isSubscribe,
       final bool isIncludeReplies,
       final bool isMediaOnly,
@@ -489,6 +572,18 @@ abstract class _TabSetting extends TabSetting {
   /// アンテナのノートの場合、アンテナID
   @override
   String? get antennaId;
+
+  /// カスタムタイムラインのWebSocketパス
+  @override
+  String? get customWebSocketPath;
+
+  /// カスタムタイムラインのAPIパス
+  @override
+  String? get customApiPath;
+
+  /// カスタムタイムラインのパラメータ
+  @override
+  Map<String, dynamic>? get customParameters;
 
   /// ノートの投稿のキャプチャをするかどうか
   @override

@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:convert";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
@@ -61,6 +62,18 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedChannel = useState<CommunityChannel?>(null);
     final selectedUserList = useState<UsersList?>(null);
     final selectedAntenna = useState<Antenna?>(null);
+
+    final customWebSocketController = useTextEditingController(
+      text: initialTabSetting?.customWebSocketPath ?? "",
+    );
+    final customApiController = useTextEditingController(
+      text: initialTabSetting?.customApiPath ?? "",
+    );
+    final customParamsController = useTextEditingController(
+      text: initialTabSetting?.customParameters != null
+          ? jsonEncode(initialTabSetting!.customParameters)
+          : "{}",
+    );
 
     final nameController = useTextEditingController(
       text: initialTabSetting != null
@@ -293,6 +306,20 @@ class TabSettingsPage extends HookConsumerWidget {
                   ],
                 ),
               ],
+              if (selectedTabType.value == TabType.customTimeline) ...[
+                Text(S.of(context).customWebSocketPath),
+                TextField(controller: customWebSocketController),
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).customApiPath),
+                TextField(controller: customApiController),
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).customTimelineParameters),
+                TextField(
+                  controller: customParamsController,
+                  minLines: 3,
+                  maxLines: null,
+                ),
+              ],
               const Padding(padding: EdgeInsets.all(10)),
               Text(S.of(context).tabName),
               TextField(
@@ -431,6 +458,30 @@ class TabSettingsPage extends HookConsumerWidget {
                       );
                       return;
                     }
+                    Map<String, dynamic>? customParams;
+                    if (tabType == TabType.customTimeline) {
+                      if (customApiController.text.isEmpty) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).invalidInput,
+                        );
+                        return;
+                      }
+                      try {
+                        final decoded = jsonDecode(customParamsController.text);
+                        if (decoded is Map<String, dynamic>) {
+                          customParams = decoded;
+                        } else {
+                          throw Exception();
+                        }
+                      } catch (_) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).invalidInput,
+                        );
+                        return;
+                      }
+                    }
 
                     final list = ref
                         .read(tabSettingsRepositoryProvider)
@@ -445,6 +496,13 @@ class TabSettingsPage extends HookConsumerWidget {
                       channelId: selectedChannel.value?.id,
                       listId: selectedUserList.value?.id,
                       antennaId: selectedAntenna.value?.id,
+                      customWebSocketPath: customWebSocketController.text.isNotEmpty
+                          ? customWebSocketController.text
+                          : null,
+                      customApiPath: customApiController.text.isNotEmpty
+                          ? customApiController.text
+                          : null,
+                      customParameters: customParams,
                       renoteDisplay: renoteDisplay.value,
                       isSubscribe: isSubscribe.value,
                       isIncludeReplies: isIncludeReply.value,
