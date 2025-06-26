@@ -44,7 +44,10 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final permissionStatus = await Permission.photosAddOnly.status;
       if (!permissionStatus.isGranted) {
-        return DownloadFileResult.permissionDenied;
+        final p = await Permission.photosAddOnly.request();
+        if (!p.isGranted) {
+          return DownloadFileResult.permissionDenied;
+        }
       }
     }
 
