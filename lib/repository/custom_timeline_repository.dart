@@ -46,11 +46,11 @@ class CustomTimelineRepository extends TimelineRepository {
   @override
   void startTimeLine() {
     unawaited(() async {
-      if (olderNotes.isEmpty) {
-        final res = await _request();
-        olderNotes.addAll(res);
-        notifyListeners();
-      }
+      final res = await _request();
+      olderNotes
+        ..clear()
+        ..addAll(res);
+      notifyListeners();
     }());
 
     final path = tabSetting.customWebSocketPath;
