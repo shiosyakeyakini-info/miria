@@ -176,9 +176,15 @@ class MfmFnKeyboard extends ConsumerWidget {
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
-        controller.insert(
-          ".color=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
-        );
+        if (result.value.alpha == 1) {
+          controller.insert(
+            ".color=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
+          );
+        } else {
+          controller.insert(
+            ".color=${(result.value.red / 16).toInt().toRadixString(16)}${(result.value.green / 16).toInt().toRadixString(16)}${(result.value.blue / 16).toInt().toRadixString(16)}${(result.value.alpha / 16).toInt().toRadixString(16)} ",
+          );
+        }
       } else {
         controller.insert(" ");
       }
@@ -219,9 +225,15 @@ class MfmFnKeyboard extends ConsumerWidget {
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
-        controller.insert(
-          "=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
-        );
+        if (result.value.alpha == 1) {
+          controller.insert(
+            "=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
+          );
+        } else {
+          controller.insert(
+            "=${(result.value.red / 16).toInt().toRadixString(16)}${(result.value.green / 16).toInt().toRadixString(16)}${(result.value.blue / 16).toInt().toRadixString(16)}${(result.value.alpha / 16).toInt().toRadixString(16)} ",
+          );
+        }
       } else {
         controller.insert("=f00 ");
       }

@@ -181,7 +181,15 @@ class ChannelDetailArea extends ConsumerWidget {
               ),
             ),
           ),
-        const Padding(padding: EdgeInsets.only(top: 10)),
+        const Padding(padding: EdgeInsets.only(top: 5)),
+        if (channel.isArchived)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(S.of(context).thisChannelIsArchived),
+            ),
+          ),
+        const Padding(padding: EdgeInsets.only(top: 5)),
         Wrap(
           spacing: 5,
           alignment: WrapAlignment.end,
@@ -217,6 +225,7 @@ class ChannelDetailArea extends ConsumerWidget {
         MfmText(mfmText: channel.description ?? ""),
         for (final pinnedNote in channel.pinnedNotes ?? [])
           MisskeyNote(note: pinnedNote),
+        const Padding(padding: EdgeInsets.only(bottom: 80)),
       ],
     );
   }
