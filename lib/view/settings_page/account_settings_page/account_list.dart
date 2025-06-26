@@ -97,7 +97,7 @@ class AccountListItem extends ConsumerWidget {
             icon: const Icon(Icons.settings),
             onPressed: () {
               context.pushRoute(
-                SeveralAccountGeneralSettingsRoute(account: account),
+                SeveralAccountSettingsRoute(account: account),
               );
             },
           ),
