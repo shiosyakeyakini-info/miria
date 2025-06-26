@@ -240,6 +240,7 @@ final timelineProvider =
         ref.read(notesProvider(account)),
         ref.read(generalSettingsRepositoryProvider),
         setting,
+        ref,
       )
   };
 });

@@ -18,7 +18,9 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/tab_icon_view.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/timeline_preset_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:miria/model/server_preset.dart";
 
 @RoutePage()
 class TabSettingsPage extends HookConsumerWidget {
@@ -66,8 +68,8 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedUserList = useState<UsersList?>(null);
     final selectedAntenna = useState<Antenna?>(null);
 
-    final customWebSocketController = useTextEditingController(
-      text: initialTabSetting?.customWebSocketPath ?? "",
+    final customChannelController = useTextEditingController(
+      text: initialTabSetting?.customChannelName ?? "",
     );
     final customApiController = useTextEditingController(
       text: initialTabSetting?.customApiPath ?? "",
@@ -310,8 +312,27 @@ class TabSettingsPage extends HookConsumerWidget {
                 ),
               ],
               if (selectedTabType.value == TabType.customTimeline) ...[
-                Text(S.of(context).customWebSocketPath),
-                TextField(controller: customWebSocketController),
+                Row(
+                  children: [
+                    Expanded(child: Text(S.of(context).customChannelName)),
+                    IconButton(
+                      icon: const Icon(Icons.list),
+                      onPressed: () async {
+                        final preset = await context.pushRoute<TimelinePreset>(
+                          TimelinePresetRoute(),
+                        );
+                        if (preset != null) {
+                          customChannelController.text =
+                              preset.websocketChannelName;
+                          customApiController.text = preset.endpoint;
+                          customParamsController.text =
+                              jsonEncode(preset.parameters);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                TextField(controller: customChannelController),
                 const Padding(padding: EdgeInsets.all(10)),
                 Text(S.of(context).customApiPath),
                 TextField(controller: customApiController),
@@ -499,10 +520,9 @@ class TabSettingsPage extends HookConsumerWidget {
                       channelId: selectedChannel.value?.id,
                       listId: selectedUserList.value?.id,
                       antennaId: selectedAntenna.value?.id,
-                      customWebSocketPath:
-                          customWebSocketController.text.isNotEmpty
-                              ? customWebSocketController.text
-                              : null,
+                      customChannelName: customChannelController.text.isNotEmpty
+                          ? customChannelController.text
+                          : null,
                       customApiPath: customApiController.text.isNotEmpty
                           ? customApiController.text
                           : null,

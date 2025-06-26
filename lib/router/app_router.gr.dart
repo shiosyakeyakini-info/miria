@@ -646,6 +646,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    TimelinePresetRoute.name: (routeData) {
+      return AutoRoutePage<TimelinePreset>(
+        routeData: routeData,
+        child: const TimelinePresetDialog(),
+      );
+    },
     UpdateMemoRoute.name: (routeData) {
       final args = routeData.argsAs<UpdateMemoRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -2982,6 +2988,20 @@ class TimeLineRouteArgs {
   String toString() {
     return 'TimeLineRouteArgs{initialTabSetting: $initialTabSetting, key: $key}';
   }
+}
+
+/// generated route for
+/// [TimelinePresetDialog]
+class TimelinePresetRoute extends PageRouteInfo<void> {
+  const TimelinePresetRoute({List<PageRouteInfo>? children})
+      : super(
+          TimelinePresetRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TimelinePresetRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
