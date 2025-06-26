@@ -56,8 +56,6 @@ dependencies:
   device_info_plus: ^10.1.0
   colorfilter_generator: ^0.0.8
   matrix2d: ^1.0.4
-  # TODO: DISCONTINUED
-  twemoji_v2: ^0.6.0
   flutter_image_compress: ^2.0.4
   webview_flutter: ^4.3.0
   webview_flutter_android: ^3.12.0
@@ -77,6 +75,7 @@ dependencies:
   flutter_hooks: ^0.20.5
   punycode: ^1.0.0
   image: ^4.3.0
+  flutter_twemoji: ^1.0.1
   mime: ^1.0.6
 
 dependency_overrides:

@@ -12,10 +12,12 @@ class AddReactionsDialog extends HookConsumerWidget {
     required this.account,
     super.key,
     this.domain = "system",
+    this.useEmojiPalette = false,
   });
 
   final Account account;
   final String domain;
+  final bool useEmojiPalette;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,17 +27,21 @@ class AddReactionsDialog extends HookConsumerWidget {
     final uri = Uri(
       scheme: "https",
       host: host,
-      pathSegments: [
-        "registry",
-        "value",
-        domain,
-        "client",
-        "base",
-        "reactions",
-      ],
+      pathSegments: useEmojiPalette
+          ? ["settings", "emoji-palette"]
+          : [
+              "registry",
+              "value",
+              domain,
+              "client",
+              "base",
+              "reactions",
+            ],
     );
+    final s = S.of(context);
+
     return AlertDialog(
-      title: Text(S.of(context).bulkAddReactions),
+      title: Text(s.bulkAddReactions),
       scrollable: true,
       content: Form(
         key: formKey.value,
@@ -46,13 +52,16 @@ class AddReactionsDialog extends HookConsumerWidget {
               children: [
                 ListTile(
                   title: const Text("1"),
-                  subtitle: Text(S.of(context).bulkAddReactionsDescription1),
+                  subtitle: Text(s.bulkAddReactionsDescription1),
                 ),
                 ListTile(
                   title: const Text("2"),
                   subtitle: Column(
                     children: [
-                      Text(S.of(context).bulkAddReactionsDescription2),
+                      if (useEmojiPalette)
+                        Text(s.bulkAddReactionsDescription2ForEmojiPalette)
+                      else
+                        Text(s.bulkAddReactionsDescription2),
                       TextButton(
                         onPressed: () async => launchUrl(
                           uri,
@@ -68,14 +77,14 @@ class AddReactionsDialog extends HookConsumerWidget {
                 ),
                 ListTile(
                   title: const Text("3"),
-                  subtitle: Text(S.of(context).bulkAddReactionsDescription3),
+                  subtitle: Text(s.bulkAddReactionsDescription3),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             TextFormField(
               decoration: InputDecoration(
-                hintText: S.of(context).pasteHere,
+                hintText: s.pasteHere,
                 contentPadding: const EdgeInsets.all(10),
                 isDense: true,
               ),
@@ -85,19 +94,26 @@ class AddReactionsDialog extends HookConsumerWidget {
               textAlignVertical: TextAlignVertical.top,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return S.of(context).pleaseInput;
+                  return s.pleaseInput;
                 }
-                try {
-                  (JSON5.parse(value) as List).map((name) => name as String);
-                } catch (e) {
-                  return S.of(context).invalidInput;
+                final text = value.trim();
+                if (text.startsWith("[")) {
+                  try {
+                    (JSON5.parse(value) as List).map((name) => name as String);
+                  } catch (e) {
+                    return s.invalidInput;
+                  }
                 }
                 return null;
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
               onSaved: (value) {
                 if (formKey.value.currentState!.validate()) {
-                  final emojiNames = JSON5.parse(value!) as List;
+                  final text = value?.trim();
+                  if (text == null) return;
+                  final emojiNames = text.startsWith("[")
+                      ? JSON5.parse(value!) as List
+                      : text.split(" ");
                   Navigator.of(context)
                       .pop(emojiNames.map((name) => name as String).toList());
                 }
@@ -105,7 +121,7 @@ class AddReactionsDialog extends HookConsumerWidget {
             ),
             ElevatedButton(
               onPressed: () => formKey.value.currentState?.save(),
-              child: Text(S.of(context).done),
+              child: Text(s.done),
             ),
           ],
         ),
