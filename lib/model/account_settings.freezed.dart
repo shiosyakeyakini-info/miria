@@ -23,6 +23,7 @@ mixin _$AccountSettings {
   String get userId => throw _privateConstructorUsedError;
   String get host => throw _privateConstructorUsedError;
   List<String> get reactions => throw _privateConstructorUsedError;
+  List<String> get mutedReactions => throw _privateConstructorUsedError;
   NoteVisibility get defaultNoteVisibility =>
       throw _privateConstructorUsedError;
   bool get defaultIsLocalOnly => throw _privateConstructorUsedError;
@@ -56,6 +57,7 @@ abstract class $AccountSettingsCopyWith<$Res> {
       {String userId,
       String host,
       List<String> reactions,
+      List<String> mutedReactions,
       NoteVisibility defaultNoteVisibility,
       bool defaultIsLocalOnly,
       ReactionAcceptance? defaultReactionAcceptance,
@@ -86,6 +88,7 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
     Object? userId = null,
     Object? host = null,
     Object? reactions = null,
+    Object? mutedReactions = null,
     Object? defaultNoteVisibility = null,
     Object? defaultIsLocalOnly = null,
     Object? defaultReactionAcceptance = freezed,
@@ -109,6 +112,10 @@ class _$AccountSettingsCopyWithImpl<$Res, $Val extends AccountSettings>
       reactions: null == reactions
           ? _value.reactions
           : reactions // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      mutedReactions: null == mutedReactions
+          ? _value.mutedReactions
+          : mutedReactions // ignore: cast_nullable_to_non_nullable
               as List<String>,
       defaultNoteVisibility: null == defaultNoteVisibility
           ? _value.defaultNoteVisibility
@@ -166,6 +173,7 @@ abstract class _$$AccountSettingsImplCopyWith<$Res>
       {String userId,
       String host,
       List<String> reactions,
+      List<String> mutedReactions,
       NoteVisibility defaultNoteVisibility,
       bool defaultIsLocalOnly,
       ReactionAcceptance? defaultReactionAcceptance,
@@ -194,6 +202,7 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? host = null,
     Object? reactions = null,
+    Object? mutedReactions = null,
     Object? defaultNoteVisibility = null,
     Object? defaultIsLocalOnly = null,
     Object? defaultReactionAcceptance = freezed,
@@ -217,6 +226,10 @@ class __$$AccountSettingsImplCopyWithImpl<$Res>
       reactions: null == reactions
           ? _value._reactions
           : reactions // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      mutedReactions: null == mutedReactions
+          ? _value._mutedReactions
+          : mutedReactions // ignore: cast_nullable_to_non_nullable
               as List<String>,
       defaultNoteVisibility: null == defaultNoteVisibility
           ? _value.defaultNoteVisibility
@@ -269,6 +282,7 @@ class _$AccountSettingsImpl extends _AccountSettings {
       {required this.userId,
       required this.host,
       final List<String> reactions = const [],
+      final List<String> mutedReactions = const [],
       this.defaultNoteVisibility = NoteVisibility.public,
       this.defaultIsLocalOnly = false,
       this.defaultReactionAcceptance = null,
@@ -280,6 +294,7 @@ class _$AccountSettingsImpl extends _AccountSettings {
       this.latestMetaCached,
       this.forceShowAd = false})
       : _reactions = reactions,
+        _mutedReactions = mutedReactions,
         super._();
 
   factory _$AccountSettingsImpl.fromJson(Map<String, dynamic> json) =>
@@ -296,6 +311,15 @@ class _$AccountSettingsImpl extends _AccountSettings {
     if (_reactions is EqualUnmodifiableListView) return _reactions;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_reactions);
+  }
+
+  final List<String> _mutedReactions;
+  @override
+  @JsonKey()
+  List<String> get mutedReactions {
+    if (_mutedReactions is EqualUnmodifiableListView) return _mutedReactions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_mutedReactions);
   }
 
   @override
@@ -328,7 +352,7 @@ class _$AccountSettingsImpl extends _AccountSettings {
 
   @override
   String toString() {
-    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance, iCacheStrategy: $iCacheStrategy, latestICached: $latestICached, emojiCacheStrategy: $emojiCacheStrategy, latestEmojiCached: $latestEmojiCached, metaChacheStrategy: $metaChacheStrategy, latestMetaCached: $latestMetaCached, forceShowAd: $forceShowAd)';
+    return 'AccountSettings(userId: $userId, host: $host, reactions: $reactions, mutedReactions: $mutedReactions, defaultNoteVisibility: $defaultNoteVisibility, defaultIsLocalOnly: $defaultIsLocalOnly, defaultReactionAcceptance: $defaultReactionAcceptance, iCacheStrategy: $iCacheStrategy, latestICached: $latestICached, emojiCacheStrategy: $emojiCacheStrategy, latestEmojiCached: $latestEmojiCached, metaChacheStrategy: $metaChacheStrategy, latestMetaCached: $latestMetaCached, forceShowAd: $forceShowAd)';
   }
 
   @override
@@ -340,6 +364,8 @@ class _$AccountSettingsImpl extends _AccountSettings {
             (identical(other.host, host) || other.host == host) &&
             const DeepCollectionEquality()
                 .equals(other._reactions, _reactions) &&
+            const DeepCollectionEquality()
+                .equals(other._mutedReactions, _mutedReactions) &&
             (identical(other.defaultNoteVisibility, defaultNoteVisibility) ||
                 other.defaultNoteVisibility == defaultNoteVisibility) &&
             (identical(other.defaultIsLocalOnly, defaultIsLocalOnly) ||
@@ -370,6 +396,7 @@ class _$AccountSettingsImpl extends _AccountSettings {
       userId,
       host,
       const DeepCollectionEquality().hash(_reactions),
+      const DeepCollectionEquality().hash(_mutedReactions),
       defaultNoteVisibility,
       defaultIsLocalOnly,
       defaultReactionAcceptance,
@@ -403,6 +430,7 @@ abstract class _AccountSettings extends AccountSettings {
       {required final String userId,
       required final String host,
       final List<String> reactions,
+      final List<String> mutedReactions,
       final NoteVisibility defaultNoteVisibility,
       final bool defaultIsLocalOnly,
       final ReactionAcceptance? defaultReactionAcceptance,
@@ -424,6 +452,8 @@ abstract class _AccountSettings extends AccountSettings {
   String get host;
   @override
   List<String> get reactions;
+  @override
+  List<String> get mutedReactions;
   @override
   NoteVisibility get defaultNoteVisibility;
   @override

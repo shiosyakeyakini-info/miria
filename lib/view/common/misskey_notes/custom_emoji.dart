@@ -4,6 +4,7 @@ import "package:miria/model/general_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:twemoji_v2/twemoji_v2.dart";
 
@@ -36,8 +37,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   void didUpdateWidget(covariant CustomEmoji oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.emojiData != widget.emojiData ||
-        oldWidget.size != widget.size) {
+    if (oldWidget.emojiData != widget.emojiData || oldWidget.size != widget.size) {
       cachedImage = null;
     }
   }
@@ -48,9 +48,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
       scheme: "https",
       host: emojiData.isCurrentServer
           ? ref.read(accountContextProvider).getAccount.host
-          : emojiData.hostedName
-              .replaceAll(RegExp(r"^\:(.+?)@"), "")
-              .replaceAll(":", ""),
+          : emojiData.hostedName.replaceAll(RegExp(r"^\:(.+?)@"), "").replaceAll(":", ""),
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
         "url": Uri.encodeFull(emojiData.url.toString()),
@@ -62,9 +60,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   @override
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
-    final scopedFontSize = widget.size ??
-        (DefaultTextStyle.of(context).style.fontSize ?? 22) *
-            widget.fontSizeRatio;
+    final scopedFontSize = widget.size ?? (DefaultTextStyle.of(context).style.fontSize ?? 22) * widget.fontSizeRatio;
     final style = widget.style ??
         TextStyle(
           height: 1.0,
@@ -73,6 +69,44 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
         );
 
     final emojiData = widget.emojiData;
+
+    bool isMuted = false;
+    if (emojiData is CustomEmojiData) {
+      final settings =
+          ref.read(accountSettingsRepositoryProvider).fromAccount(ref.read(accountContextProvider).getAccount);
+      final host = emojiData.isCurrentServer
+          ? ref.read(accountContextProvider).getAccount.host
+          : emojiData.hostedName.replaceAll(RegExp(r'^:(.+?)@'), '').replaceAll(':', '');
+      final candidates = <String>[
+        ':${emojiData.baseName}:',
+        ':${emojiData.baseName}@$host:',
+        '@$host',
+      ];
+      isMuted = settings.mutedReactions.any(candidates.contains);
+    }
+
+    if (isMuted) {
+      cachedImage = Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 224, 224, 224),
+        ),
+        height: scopedFontSize,
+        width: scopedFontSize,
+        child: SvgPicture.asset(
+          'assets/images/miria_error.svg',
+          colorFilter: const ColorFilter.mode(
+            Color.fromARGB(255, 117, 117, 117),
+            BlendMode.srcIn,
+          ),
+          width: scopedFontSize,
+          height: scopedFontSize,
+        ),
+      );
+      return cachedImage!;
+    }
+
     switch (emojiData) {
       case CustomEmojiData():
         cachedImage = ConditionalTooltip(
@@ -89,8 +123,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
                 width: scopedFontSize,
               ),
               height: scopedFontSize,
-              errorBuilder: (context, e, s) =>
-                  Text(emojiData.hostedName, style: style),
+              errorBuilder: (context, e, s) => Text(emojiData.hostedName, style: style),
             ),
             loadingBuilder: (context, widget, chunk) => SizedBox(
               height: scopedFontSize,
@@ -101,8 +134,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
           ),
         );
       case UnicodeEmojiData():
-        switch (
-            ref.read(generalSettingsRepositoryProvider).settings.emojiType) {
+        switch (ref.read(generalSettingsRepositoryProvider).settings.emojiType) {
           case EmojiType.system:
             cachedImage = FittedBox(
               fit: BoxFit.fitHeight,

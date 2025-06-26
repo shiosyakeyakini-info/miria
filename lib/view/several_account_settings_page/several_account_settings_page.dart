@@ -37,6 +37,13 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
+            onTap: () async =>
+                await context.pushRoute(ReactionMuteRoute(account: account)),
+            title: Text(S.of(context).reactionMute),
+            leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
             onTap: () async => await context.pushRoute(
               WordMuteRoute(account: account, muteType: MuteType.soft),
             ),

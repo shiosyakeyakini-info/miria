@@ -15,6 +15,10 @@ _$AccountSettingsImpl _$$AccountSettingsImplFromJson(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      mutedReactions: (json['mutedReactions'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       defaultNoteVisibility: $enumDecodeNullable(
               _$NoteVisibilityEnumMap, json['defaultNoteVisibility']) ??
           NoteVisibility.public,
@@ -49,6 +53,7 @@ Map<String, dynamic> _$$AccountSettingsImplToJson(
       'userId': instance.userId,
       'host': instance.host,
       'reactions': instance.reactions,
+      'mutedReactions': instance.mutedReactions,
       'defaultNoteVisibility':
           _$NoteVisibilityEnumMap[instance.defaultNoteVisibility]!,
       'defaultIsLocalOnly': instance.defaultIsLocalOnly,

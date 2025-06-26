@@ -107,12 +107,13 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<AntennaSettingsRouteArgs>();
       return AutoRoutePage<AntennaSettings>(
         routeData: routeData,
-        child: AntennaSettingsDialog(
+        child: WrappedRoute(
+            child: AntennaSettingsDialog(
           account: args.account,
           key: args.key,
           title: args.title,
           initialSettings: args.initialSettings,
-        ),
+        )),
       );
     },
     AppInfoRoute.name: (routeData) {
@@ -483,6 +484,17 @@ abstract class _$AppRouter extends RootStackRouter {
           account: args.account,
           key: args.key,
         ),
+      );
+    },
+    ReactionMuteRoute.name: (routeData) {
+      final args = routeData.argsAs<ReactionMuteRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ReactionMutePage(
+          account: args.account,
+          key: args.key,
+        )),
       );
     },
     ReactionPickerRoute.name: (routeData) {
@@ -2431,6 +2443,44 @@ class ReactionDeckRouteArgs {
   @override
   String toString() {
     return 'ReactionDeckRouteArgs{account: $account, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ReactionMutePage]
+class ReactionMuteRoute extends PageRouteInfo<ReactionMuteRouteArgs> {
+  ReactionMuteRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ReactionMuteRoute.name,
+          args: ReactionMuteRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ReactionMuteRoute';
+
+  static const PageInfo<ReactionMuteRouteArgs> page =
+      PageInfo<ReactionMuteRouteArgs>(name);
+}
+
+class ReactionMuteRouteArgs {
+  const ReactionMuteRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ReactionMuteRouteArgs{account: $account, key: $key}';
   }
 }
 
