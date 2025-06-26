@@ -165,7 +165,8 @@ class __$$NoteModalSheetStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
+class _$NoteModalSheetStateImpl extends _NoteModalSheetState
+    with DiagnosticableTreeMixin {
   _$NoteModalSheetStateImpl(
       {this.noteState,
       this.isSharingMode = false,
@@ -190,8 +191,21 @@ class _$NoteModalSheetStateImpl extends _NoteModalSheetState {
   final AsyncValue<void>? favorite;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'NoteModalSheetState(noteState: $noteState, isSharingMode: $isSharingMode, user: $user, delete: $delete, deleteRecreate: $deleteRecreate, favorite: $favorite)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'NoteModalSheetState'))
+      ..add(DiagnosticsProperty('noteState', noteState))
+      ..add(DiagnosticsProperty('isSharingMode', isSharingMode))
+      ..add(DiagnosticsProperty('user', user))
+      ..add(DiagnosticsProperty('delete', delete))
+      ..add(DiagnosticsProperty('deleteRecreate', deleteRecreate))
+      ..add(DiagnosticsProperty('favorite', favorite));
   }
 
   @override
