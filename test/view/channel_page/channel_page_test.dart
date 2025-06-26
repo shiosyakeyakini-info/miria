@@ -191,7 +191,7 @@ void main() {
         verify(
           channel.owned(argThat(equals(const ChannelsOwnedRequest()))),
         );
-        await tester.paginate();
+        await tester.pageNation();
         verify(
           channel.owned(
             argThat(
