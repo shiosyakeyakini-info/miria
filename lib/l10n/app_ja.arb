@@ -862,9 +862,10 @@
     "pleaseSelectList": "リストを選択してください。",
     "pleaseSelectAntenna": "アンテナを選択してください。",
     "pleaseSelectRole": "ロールを選択してください。",
-    "customWebSocketPath": "WebSocketのパス",
+    "customChannelName": "チャンネル名",
     "customApiPath": "POSTエンドポイントのパス",
     "customTimelineParameters": "パラメータ (JSON)",
+    "customPresetSelect": "プリセットから選択",
 
     "reactionDeck": "リアクションデッキ",
     "wordMute": "ワードミュート",

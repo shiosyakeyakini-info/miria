@@ -12,6 +12,23 @@ import 'package:misskey_dart/src/services/api_service.dart';
 
 import '../../test_util/mock.mocks.dart';
 import '../../test_util/test_datas.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:miria/repository/emoji_repository.dart';
+import 'package:miria/repository/account_repository.dart';
+import 'package:miria/providers.dart';
+
+class FakeRef extends Fake implements Ref {
+  final Map<dynamic, dynamic> values = {};
+
+  @override
+  ProviderContainer get container => throw UnimplementedError();
+
+  @override
+  T read<T>(ProviderListenable<T> provider) => values[provider] as T;
+
+  @override
+  T refresh<T>(Refreshable<T> provider) => read(provider);
+}
 
 class FakeApiService extends Fake implements ApiService {
   String? lastPath;
@@ -34,6 +51,9 @@ void main() {
     late FakeApiService apiService;
     late MockNoteRepository noteRepository;
     late MockGeneralSettingsRepository generalSettings;
+    late MockEmojiRepository emojiRepository;
+    late MockAccountRepository accountRepository;
+    late FakeRef ref;
     late TabSetting setting;
 
     setUp(() {
@@ -41,6 +61,11 @@ void main() {
       apiService = FakeApiService();
       noteRepository = MockNoteRepository();
       generalSettings = MockGeneralSettingsRepository();
+      emojiRepository = MockEmojiRepository();
+      accountRepository = MockAccountRepository();
+      ref = FakeRef();
+      ref.values[emojiRepositoryProvider(TestData.account)] = emojiRepository;
+      ref.values[accountRepositoryProvider.notifier] = accountRepository;
       when(generalSettings.settings).thenReturn(const GeneralSettings());
       when(misskey.apiService).thenReturn(apiService);
       when(misskey.host).thenReturn('example.com');
@@ -66,14 +91,14 @@ void main() {
         noteRepository,
         generalSettings,
         setting,
+        ref,
       );
 
-      repo.startTimeLine();
-      await Future.delayed(Duration.zero);
+      final notes = await repo.requestNotes();
 
       expect(apiService.lastPath, 'notes/custom');
       expect(apiService.lastRequest, {'foo': 'bar'});
-      expect(repo.olderNotes.first.id, TestData.note1.id);
+      expect(notes.first.id, TestData.note1.id);
     });
 
     test('previousLoad uses untilId when available', () async {
@@ -84,6 +109,7 @@ void main() {
         noteRepository,
         generalSettings,
         setting,
+        ref,
       );
       repo.olderNotes.add(TestData.note1);
 

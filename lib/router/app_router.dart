@@ -11,6 +11,7 @@ import "package:miria/model/note_search_condition.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/model/server_preset.dart";
 import "package:miria/view/abuse_dialog/abuse_dialog.dart";
 import "package:miria/view/announcements_page/announcements_page.dart";
 import "package:miria/view/antenna_page/antenna_notes_page.dart";
@@ -24,6 +25,7 @@ import "package:miria/view/clip_list_page/clip_list_page.dart";
 import "package:miria/view/clip_list_page/clip_settings_dialog.dart";
 import "package:miria/view/clip_modal_sheet/clip_modal_sheet.dart";
 import "package:miria/view/common/account_select_dialog.dart";
+import "package:miria/view/settings_page/tab_settings_page/timeline_preset_dialog.dart";
 import "package:miria/view/common/color_picker_dialog.dart";
 import "package:miria/view/common/misskey_notes/reaction_user_dialog.dart";
 import "package:miria/view/common/misskey_notes/renote_modal_sheet.dart";
@@ -162,6 +164,7 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
     AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
     AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
+    AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),
