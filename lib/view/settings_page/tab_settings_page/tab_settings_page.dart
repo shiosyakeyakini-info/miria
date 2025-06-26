@@ -499,9 +499,10 @@ class TabSettingsPage extends HookConsumerWidget {
                       channelId: selectedChannel.value?.id,
                       listId: selectedUserList.value?.id,
                       antennaId: selectedAntenna.value?.id,
-                      customWebSocketPath: customWebSocketController.text.isNotEmpty
-                          ? customWebSocketController.text
-                          : null,
+                      customWebSocketPath:
+                          customWebSocketController.text.isNotEmpty
+                              ? customWebSocketController.text
+                              : null,
                       customApiPath: customApiController.text.isNotEmpty
                           ? customApiController.text
                           : null,
