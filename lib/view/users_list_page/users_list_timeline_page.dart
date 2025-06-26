@@ -26,7 +26,7 @@ class UsersListTimelinePage extends ConsumerWidget implements AutoRouteWrapper {
       appBar: AppBar(
         title: Text(list.name ?? ""),
         actions: [
-          if (list.isPublic!) ...[
+          if (list.isPublic ?? false) ...[
             IconButton(
               icon: const Icon(Icons.link),
               onPressed: () async {
