@@ -18,7 +18,7 @@ import "package:miria/view/common/misskey_notes/link_navigator.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import "package:twemoji_v2/twemoji_v2.dart";
+import "package:flutter_twemoji/flutter_twemoji.dart";
 import "package:url_launcher/url_launcher.dart";
 
 InlineSpan _unicodeEmojiBuilder(

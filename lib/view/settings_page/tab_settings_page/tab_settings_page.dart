@@ -54,7 +54,10 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedTabType = useState<TabType?>(
       initialTabSetting != null && isTabTypeAvailable(initialTabSetting.tabType)
           ? initialTabSetting.tabType
-          : TabType.localTimeline,
+          : (selectedAccount.value != null &&
+                  selectedAccount.value!.i.policies.ltlAvailable
+              ? TabType.localTimeline
+              : TabType.homeTimeline),
     );
 
     final selectedRole = useState<RolesListResponse?>(null);

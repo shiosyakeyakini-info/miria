@@ -5,7 +5,7 @@ import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
-import "package:twemoji_v2/twemoji_v2.dart";
+import "package:flutter_twemoji/flutter_twemoji.dart";
 
 class CustomEmoji extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
