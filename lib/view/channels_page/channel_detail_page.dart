@@ -5,6 +5,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/channels_page/channel_detail_info.dart";
+import "package:miria/view/channels_page/channel_note_highlight.dart";
+import "package:miria/view/channels_page/channel_note_search.dart";
 import "package:miria/view/channels_page/channel_timeline.dart";
 import "package:miria/view/common/account_scope.dart";
 
@@ -26,7 +28,7 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).channel),
@@ -34,7 +36,11 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
             tabs: [
               Tab(child: Text(S.of(context).channelInformation)),
               Tab(child: Text(S.of(context).timeline)),
+              Tab(child: Text(S.of(context).highlight)),
+              Tab(child: Text(S.of(context).search)),
             ],
+            isScrollable: true,
+            tabAlignment: TabAlignment.center,
           ),
         ),
         body: TabBarView(
@@ -48,6 +54,14 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: ChannelTimeline(channelId: channelId),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: ChannelNoteHighlight(channelId: channelId),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: ChannelNoteSearch(channelId: channelId),
             ),
           ],
         ),
@@ -70,18 +84,21 @@ class ChannelDetailFloatingActionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final channelDetail = ref.watch(channelDetailProvider(channelId));
     return switch (channelDetail) {
-      AsyncData(:final value) => FloatingActionButton(
-          child: const Icon(Icons.edit),
-          onPressed: () async {
-            if (!context.mounted) return;
-            await context.pushRoute(
-              NoteCreateRoute(
-                initialAccount: ref.read(accountContextProvider).postAccount,
-                channel: value.channel,
-              ),
-            );
-          },
-        ),
+      AsyncData(:final value) => (value.channel.isArchived)
+          ? const SizedBox.shrink()
+          : FloatingActionButton(
+              child: const Icon(Icons.edit),
+              onPressed: () async {
+                if (!context.mounted) return;
+                await context.pushRoute(
+                  NoteCreateRoute(
+                    initialAccount:
+                        ref.read(accountContextProvider).postAccount,
+                    channel: value.channel,
+                  ),
+                );
+              },
+            ),
       _ => const SizedBox.shrink(),
     };
   }

@@ -3,6 +3,7 @@ import "dart:io";
 import "dart:ui";
 
 import "package:auto_route/auto_route.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/services.dart";
@@ -293,7 +294,8 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
               await showModalBottomSheet(
                 context: context,
                 builder: (context) => CopyNoteModalSheet(
-                  note: targetNote.text ?? "",
+                  text: targetNote.text ?? "",
+                  cw: targetNote.cw,
                 ),
               );
             },
@@ -366,26 +368,29 @@ class NoteModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                 .read(misskeyNoteNotifierProvider.notifier)
                 .openNoteInOtherAccount(targetNote),
           ),
-        ListTile(
-          leading: const Icon(Icons.share),
-          title: Text(S.of(context).shareNotes),
-          onTap: () {
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              Future(() async {
-                if (!context.mounted) return;
-                final box = context.findRenderObject() as RenderBox?;
-                if (box == null) return;
-                final boundary = noteBoundaryKey.currentContext!
-                    .findRenderObject()! as RenderRepaintBoundary;
-                await ref.read(targetNoteNotifierProvider.notifier).copyAsImage(
-                      box,
-                      boundary,
-                      View.of(context).devicePixelRatio,
-                    );
+        if (defaultTargetPlatform != TargetPlatform.linux)
+          ListTile(
+            leading: const Icon(Icons.share),
+            title: Text(S.of(context).shareNotes),
+            onTap: () {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                Future(() async {
+                  if (!context.mounted) return;
+                  final box = context.findRenderObject() as RenderBox?;
+                  if (box == null) return;
+                  final boundary = noteBoundaryKey.currentContext!
+                      .findRenderObject()! as RenderRepaintBoundary;
+                  await ref
+                      .read(targetNoteNotifierProvider.notifier)
+                      .copyAsImage(
+                        box,
+                        boundary,
+                        View.of(context).devicePixelRatio,
+                      );
+                });
               });
-            });
-          },
-        ),
+            },
+          ),
         if (accountContext.isSame)
           switch (noteStatus) {
             null => const SizedBox.shrink(),

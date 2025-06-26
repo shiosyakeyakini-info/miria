@@ -125,6 +125,7 @@
             }
         }
     },
+    "thisChannelIsArchived": "このチャンネルはアーカイブされています",
     "favorited": "お気に入り中",
     "willFavorite": "お気に入りに入れるで",
     "willFollow": "フォローするで",

@@ -162,5 +162,44 @@ void main() {
         );
       });
     });
+
+    group("管理中", () {
+      testWidgets("自分が所有するチャンネルが表示されること", (tester) async {
+        final channel = MockMisskeyChannels();
+        final misskey = MockMisskey();
+        when(misskey.channels).thenReturn(channel);
+        when(channel.owned(any)).thenAnswer(
+          (_) async => [TestData.channel1.copyWith(bannerUrl: null)],
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            child: DefaultRootWidget(
+              initialRoute: ChannelsRoute(
+                accountContext: TestData.accountContext,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("管理中"));
+        await tester.pumpAndSettle();
+
+        expect(find.text(TestData.channel1.name), findsOneWidget);
+        verify(
+          channel.owned(argThat(equals(const ChannelsOwnedRequest()))),
+        );
+        await tester.pageNation();
+        verify(
+          channel.owned(
+            argThat(
+              equals(ChannelsOwnedRequest(untilId: TestData.channel1.id)),
+            ),
+          ),
+        );
+      });
+    });
   });
 }
