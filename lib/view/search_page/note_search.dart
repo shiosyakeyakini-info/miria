@@ -79,92 +79,40 @@ class NoteSearch extends HookConsumerWidget {
                         S.of(context).disabledInHashtag,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      Table(
-                        columnWidths: const {
-                          0: IntrinsicColumnWidth(),
-                          1: IntrinsicColumnWidth(),
+                      ListTile(
+                        title: selectedUserValue == null
+                            ? Text(S.of(context).user)
+                            : UserListItem(user: selectedUserValue),
+                        onTap: () async {
+                          final selected = await context.pushRoute<User?>(
+                            UserSelectRoute(
+                              accountContext: ref.read(accountContextProvider),
+                            ),
+                          );
+                          selectedUser.value = selected;
                         },
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
-                        children: [
-                          TableRow(
-                            children: [
-                              Text(S.of(context).user),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: selectedUserValue == null
-                                        ? Container()
-                                        : UserListItem(user: selectedUserValue),
-                                  ),
-                                  IconButton(
-                                    onPressed: () async {
-                                      final selected =
-                                          await context.pushRoute<User?>(
-                                        UserSelectRoute(
-                                          accountContext:
-                                              ref.read(accountContextProvider),
-                                        ),
-                                      );
-                                      selectedUser.value = selected;
-                                    },
-                                    icon:
-                                        const Icon(Icons.keyboard_arrow_right),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              Text(S.of(context).channel),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: selectedChannelValue == null
-                                        ? Container()
-                                        : Text(selectedChannelValue.name),
-                                  ),
-                                  IconButton(
-                                    onPressed: () async {
-                                      final selected = await context
-                                          .pushRoute<CommunityChannel>(
-                                        ChannelSelectRoute(
-                                          account: ref
-                                              .read(accountContextProvider)
-                                              .postAccount,
-                                        ),
-                                      );
-                                      selectedChannel.value = selected;
-                                    },
-                                    icon:
-                                        const Icon(Icons.keyboard_arrow_right),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              Text(S.of(context).onlyLocal),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: localOnly.value,
-                                    onChanged: (value) =>
-                                        localOnly.value = value ?? false,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      ),
+                      ListTile(
+                        title: selectedChannelValue == null
+                            ? Text(S.of(context).channel)
+                            : Text(selectedChannelValue.name),
+                        onTap: () async {
+                          final selected =
+                              await context.pushRoute<CommunityChannel>(
+                            ChannelSelectRoute(
+                              account:
+                                  ref.read(accountContextProvider).postAccount,
+                            ),
+                          );
+                          selectedChannel.value = selected;
+                        },
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      ),
+                      CheckboxListTile(
+                        title: Text(S.of(context).onlyLocal),
+                        value: localOnly.value,
+                        onChanged: (value) => localOnly.value = value ?? false,
                       ),
                     ],
                   ),

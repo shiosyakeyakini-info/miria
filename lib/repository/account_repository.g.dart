@@ -6,7 +6,7 @@ part of 'account_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$accountRepositoryHash() => r'8d1b97fd138499b9c1431688ae5b028c8944c5b4';
+String _$accountRepositoryHash() => r'751ae0a9419c63b9becca16da0d29a5d7a5a7551';
 
 /// See also [AccountRepository].
 @ProviderFor(AccountRepository)

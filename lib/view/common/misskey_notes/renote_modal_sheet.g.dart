@@ -431,7 +431,7 @@ class _RenoteChannelNotifierProviderElement
 }
 
 String _$renoteOtherAccountNotifierHash() =>
-    r'6ce80b97d6f49aa3302dfd27b2b1b8242dc559cb';
+    r'e3176e375b9657de2d8e05483e5f6d7add7a1ef2';
 
 abstract class _$RenoteOtherAccountNotifier
     extends BuildlessAutoDisposeNotifier<AsyncValue<(Account, Note)>?> {

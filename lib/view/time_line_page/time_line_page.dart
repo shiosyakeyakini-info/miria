@@ -205,6 +205,11 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       generalSettingsRepositoryProvider
           .select((value) => value.settings.isDeckMode),
     );
+    final tabPosition = ref.watch(
+      generalSettingsRepositoryProvider
+          .select((value) => value.settings.tabPosition),
+    );
+
     if (deckMode) return const TimelineTablet();
 
     timelineRepository = ref.watch(timelineProvider(currentTabSetting));
@@ -227,12 +232,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       body: SafeArea(
         child: Column(
           children: [
-            if (ref
-                    .read(generalSettingsRepositoryProvider)
-                    .settings
-                    .tabPosition ==
-                TabPosition.top)
-              buildAppbar(),
+            if (tabPosition == TabPosition.top) buildAppbar(),
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -377,20 +377,16 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                   ),
                   IconButton(
                     onPressed: note.expectFailure(context),
-                    icon: const Icon(Icons.edit),
+                    icon: const Icon(Icons.send),
                   ),
                   IconButton(
                     onPressed: noteCreateRoute,
-                    icon: const Icon(Icons.keyboard_arrow_right),
+                    icon: const Icon(Icons.edit_note),
                   ),
                 ],
               ),
             ),
-            if (ref
-                        .read(generalSettingsRepositoryProvider)
-                        .settings
-                        .tabPosition ==
-                    TabPosition.bottom &&
+            if (tabPosition == TabPosition.bottom &&
                 !ref.watch(timelineFocusNode).hasFocus)
               buildAppbar(),
           ],
