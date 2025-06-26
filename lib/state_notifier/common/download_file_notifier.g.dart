@@ -7,7 +7,7 @@ part of 'download_file_notifier.dart';
 // **************************************************************************
 
 String _$downloadFileNotifierHash() =>
-    r'1e16b1a213ec582509b1843d15b1987e27020a26';
+    r'570a3519348813c4ebee6976af9634c1350258f3';
 
 /// See also [DownloadFileNotifier].
 @ProviderFor(DownloadFileNotifier)

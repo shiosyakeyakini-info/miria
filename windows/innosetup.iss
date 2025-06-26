@@ -24,8 +24,9 @@ DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile={#MyWorkDir}\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
+UsePreviousPrivileges=yes
 OutputDir={#MyWorkDir}
 OutputBaseFilename=miria-installer
 SetupIconFile={#MyWorkDir}\windows\runner\resources\app_icon.ico
@@ -55,7 +56,8 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange (MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: files; Name: {userappdata}\info.shiosyakeyakini\miria\*
+Type: filesandordirs; Name: {userappdata}\info.shiosyakeyakini\miria
 
 [InstallDelete]
 Type: files; Name: {app}/api-ms-*.dll
+Type: filesandordirs; Name: {app}/data/flutter_assets/packages/twemoji_v2
