@@ -5,7 +5,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/util/punycode.dart";
+import "package:miria/util/server_utils.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
@@ -34,7 +34,10 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
       IndicatorView.showIndicator(context);
       await ref
           .read(accountRepositoryProvider.notifier)
-          .loginAsToken(toAscii(serverController.text), apiKeyController.text);
+          .loginAsToken(
+            normalizeServer(serverController.text),
+            apiKeyController.text,
+          );
 
       if (!mounted) return;
       await context.pushRoute(
