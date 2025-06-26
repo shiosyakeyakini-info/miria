@@ -106,6 +106,9 @@
     "cannotMentionToRemoteInLocalOnlyNote": "連合切られているのに他のサーバーの人がメンションに含まれているようですわ",
     "cannotPublicReplyToPrivateNote": "リプライが{visibility}のようでして……パブリックにはできませんこと",
 
+    "cache": "キャッシュ",
+    "clearCache": "キャッシュとお別れいたしますわ",
+
     "unsupportedFile": "対応してないファイルのようですわ",
     "failedFileSave": "ファイルの保存に失敗したようですわね…"
 

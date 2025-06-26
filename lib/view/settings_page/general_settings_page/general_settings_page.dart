@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
@@ -9,6 +10,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/util/cache_size.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
 @RoutePage()
@@ -39,6 +41,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final fantasyFontName = useState(settings.fantasyFontName);
     final language = useState(settings.languages);
     final isDeckMode = useState(settings.isDeckMode);
+    final cacheSize = useState<String>("");
 
     useMemoized(() {
       if (lightModeTheme.value.isEmpty) {
@@ -109,6 +112,17 @@ class GeneralSettingsPage extends HookConsumerWidget {
 
     useMemoized(() => unawaited(save()), dependencies);
 
+    // キャッシュサイズ表示
+    final getCacheSize = useMemoized(() => (){
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        cacheSize.value = await getCacheSizeWithUnit();
+      });
+    },);
+    useEffect(() {
+      getCacheSize();
+      return null;
+    }, [],);
+  
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).generalSettings)),
       body: SingleChildScrollView(
@@ -482,6 +496,39 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         isExpanded: true,
                         onChanged: (item) =>
                             fantasyFontName.value = item?.actualName ?? "",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).cache,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      ListTile(
+                        title: (cacheSize.value != "")
+                              ? Text(cacheSize.value)
+                              : const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [CircularProgressIndicator()],
+                                ),
+                        trailing: ElevatedButton(
+                          onPressed: (cacheSize.value != "")
+                              ? () async {
+                                cacheSize.value = "";
+                                cacheSize.value = await clearCache();
+                              }
+                              : null,
+                          child: Text(S.of(context).clearCache),
+                        ),
                       ),
                     ],
                   ),

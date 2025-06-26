@@ -826,6 +826,9 @@
     "fontSize": "フォントサイズ",
     "systemFont": "システム標準",
 
+    "cache": "キャッシュ",
+    "clearCache": "キャッシュをクリア",
+
     "selectFolder": "フォルダー選択",
     "settingsFileManagement": "設定ファイルの管理",
     "importAndExportSettingsDescription": "現在の設定から、アカウントのログイン情報を除くすべての設定を設定ファイルに出力して管理することができます。設定ファイルは、指定したアカウントの「ドライブ」内に保存されます。",

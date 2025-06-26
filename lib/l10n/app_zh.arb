@@ -773,6 +773,8 @@
     "fontFantasy": "字体 （适用于 $[font.fantasy ）",
     "fontSize": "字体大小",
     "systemFont": "系统标准",
+    "cache": "快取",
+    "clearCache": "清除快取",
     "selectFolder": "选择文件夹",
     "importSettings": "导入设置",
     "importSettingsDescription": "从驱动器加载配置文件。配置文件保存时会记录所有账号的配置信息，但只会加载登录本设备的账号的信息。",
