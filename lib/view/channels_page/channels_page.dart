@@ -58,7 +58,7 @@ class ChannelsPage extends StatelessWidget implements AutoRouteWrapper {
             ),
             const Padding(
               padding: EdgeInsets.only(left: 10, right: 10),
-              child: ChannelManaging(),
+              child: const ChannelManaging(),
             ),
           ],
         ),
