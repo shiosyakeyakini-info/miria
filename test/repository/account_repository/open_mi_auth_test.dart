@@ -20,7 +20,7 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(
-      () => accountRepository.openMiAuth("https://misskey.io/"),
+      () => accountRepository.openMiAuth("https://misskey.io/path"),
       throwsA(isA<InvalidServerException>()),
     );
   });

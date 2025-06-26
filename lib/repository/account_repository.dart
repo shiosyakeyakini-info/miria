@@ -11,6 +11,7 @@ import "package:miria/model/acct.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/shared_preference_controller.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:miria/util/server_utils.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preference_app_group/shared_preference_app_group.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -240,16 +241,19 @@ class AccountRepository extends _$AccountRepository {
     //先にnodeInfoを取得する
     final Response nodeInfo;
 
-    final Uri uri;
+    final Uri serverUri;
     try {
-      uri = Uri(
-        scheme: "https",
-        host: server,
-        pathSegments: [".well-known", "nodeinfo"],
-      );
+      serverUri = serverToUri(server);
     } catch (e) {
       throw InvalidServerException(server);
     }
+
+    final uri = Uri(
+      scheme: serverUri.scheme,
+      host: serverUri.host,
+      port: serverUri.hasPort ? serverUri.port : null,
+      pathSegments: [".well-known", "nodeinfo"],
+    );
 
     try {
       nodeInfo = await ref.read(dioProvider).getUri(uri);
@@ -269,10 +273,13 @@ class AccountRepository extends _$AccountRepository {
     final version = nodeInfoResult["software"]["version"];
 
     try {
-      final meta = await ref.read(misskeyWithoutAccountProvider(server)).meta();
+      final hostWithPort =
+          serverUri.hasPort ? '${serverUri.host}:${serverUri.port}' : serverUri.host;
+      final meta =
+          await ref.read(misskeyWithoutAccountProvider(hostWithPort)).meta();
 
       final endpoints = await ref
-          .read(misskeyProvider(Account.demoAccount(server, meta)))
+          .read(misskeyProvider(Account.demoAccount(hostWithPort, meta)))
           .endpoints();
       if (!endpoints.contains("emojis")) {
         throw SoftwareNotCompatibleException(
@@ -293,15 +300,20 @@ class AccountRepository extends _$AccountRepository {
     String userId,
     String password,
   ) async {
-    final token = await MisskeyServer().loginAsPassword(
-      server,
-      userId,
-      password,
-    );
-    final i = await Misskey(token: token, host: server).i.i();
-    final meta = await Misskey(token: token, host: server).meta();
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final token =
+        await MisskeyServer().loginAsPassword(hostWithPort, userId, password);
+    final i = await Misskey(
+      token: token,
+      host: hostWithPort,
+    ).i.i();
+    final meta = await Misskey(
+      token: token,
+      host: hostWithPort,
+    ).meta();
     final account = Account(
-      host: server,
+      host: hostWithPort,
       token: token,
       userId: userId,
       i: i,
@@ -312,21 +324,28 @@ class AccountRepository extends _$AccountRepository {
 
   Future<void> loginAsToken(String server, String token) async {
     await _validateMisskey(server);
-    final misskey = Misskey(token: token, host: server);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final misskey = Misskey(
+      token: token,
+      host: hostWithPort,
+    );
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
-      Account(host: server, userId: i.username, token: token, i: i, meta: meta),
+      Account(host: hostWithPort, userId: i.username, token: token, i: i, meta: meta),
     );
   }
 
   Future<void> openMiAuth(String server) async {
     await _validateMisskey(server);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
 
     _sessionId = const Uuid().v4();
     await launchUrl(
       MisskeyServer().buildMiAuthURL(
-        server,
+        hostWithPort,
         _sessionId,
         name: "Miria",
         permission: Permission.values,
@@ -336,12 +355,17 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> validateMiAuth(String server) async {
-    final token = await MisskeyServer().checkMiAuthToken(server, _sessionId);
-    final misskey = Misskey(token: token, host: server);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final token = await MisskeyServer().checkMiAuthToken(hostWithPort, _sessionId);
+    final misskey = Misskey(
+      token: token,
+      host: hostWithPort,
+    );
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
-      Account(host: server, userId: i.username, token: token, i: i, meta: meta),
+      Account(host: hostWithPort, userId: i.username, token: token, i: i, meta: meta),
     );
   }
 

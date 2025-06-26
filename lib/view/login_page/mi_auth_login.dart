@@ -6,7 +6,7 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/util/punycode.dart";
+import "package:miria/util/server_utils.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
@@ -34,7 +34,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
       IndicatorView.showIndicator(context);
       await ref
           .read(accountRepositoryProvider.notifier)
-          .validateMiAuth(toAscii(serverController.text));
+          .validateMiAuth(normalizeServer(serverController.text));
       if (!mounted) return;
       await context.pushRoute(
         TimeLineRoute(
@@ -101,7 +101,7 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     onPressed: () async {
                       await ref
                           .read(accountRepositoryProvider.notifier)
-                          .openMiAuth(toAscii(serverController.text))
+                          .openMiAuth(normalizeServer(serverController.text))
                           .expectFailure(context);
                       setState(() {
                         isAuthed = true;
