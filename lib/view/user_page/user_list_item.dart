@@ -61,44 +61,48 @@ class UserListItem extends ConsumerWidget {
                           children: [
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isFollowing)
-                                Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      S.of(context).following,
-                                      style: Theme.of(context).textTheme.bodySmall),
-                                    ),
-                                  ),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(S.of(context).following,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                ),
+                              ),
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isFollowed)
-                                Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      S.of(context).followed,
-                                      style: Theme.of(context).textTheme.bodySmall),
-                                    ),
-                                  ),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(S.of(context).followed,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                ),
+                              ),
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isMuted)
-                                Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      S.of(context).muting,
-                                      style: Theme.of(context).textTheme.bodySmall),
-                                    ),
-                                  ),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(S.of(context).muting,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                ),
+                              ),
                             if ((user as UserDetailedNotMeWithRelations)
                                 .isBlocking)
-                                Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      S.of(context).blocking,
-                                      style: Theme.of(context).textTheme.bodySmall),
-                                    ),
-                                  ),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(S.of(context).blocking,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                ),
+                              ),
                           ],
                         ),
                       ),
