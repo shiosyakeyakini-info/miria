@@ -1,0 +1,943 @@
+{
+    "announcement": "公告",
+    "antenna": "天線",
+    "user": "使用者",
+    "channel": "頻道",
+    "timeline": "時間軸",
+    "sensitive": "敏感內容",
+    "favorite": "最愛",
+    "trend": "趨勢",
+    "clip": "書籤",
+    "edit": "編輯",
+    "create": "新增",
+    "delete": "刪除",
+    "search": "搜尋",
+    "detail": "詳細",
+    "save": "儲存",
+    "hide": "隱藏",
+    "note": "發文",
+    "mention": "提到",
+    "renote": "轉發",
+    "quotedRenote": "引用",
+    "notification": "通知",
+    "list": "列表",
+    "explore": "發現",
+    "highlight": "強調",
+    "role": "角色",
+    "page": "頁面",
+    "flash": "Play",
+    "hashtag": "標籤",
+    "otherServers": "其他伺服器",
+    "follow": "關注",
+    "following": "關注中",
+    "managing": "管理中",
+    "done": "完成",
+    "public": "公開",
+    "home": "首頁",
+    "local": "本機",
+    "direct": "直接",
+    "onlyLocal": "僅本站",
+    "remote": "遠端",
+    "@done": {
+        "description": "完成"
+    },
+    "software": "軟體",
+    "federatedPosts": "公開的發文",
+    "language": "語言",
+    "administrator": "管理員",
+    "contact": "聯絡人",
+    "serverRules": "伺服器原則",
+    "tos": "服務條款",
+    "privacyPolicy": "隱私權政策",
+    "impressum": "運營商資訊",
+    "willDelete": "將刪除",
+    "cancel": "取消",
+    "noneAction": "什麼也不做",
+    "pleaseInput": "請輸入",
+    "pleaseSelect": "請選擇",
+    "login": "登入",
+    "settings": "設定",
+    "ad": "廣告",
+    "customEmoji": "自訂表情符號",
+    "localTimeline": "本地時間軸",
+    "localTimelineAbbr": "LTL",
+    "homeTimeline": "首頁時間軸",
+    "homeTimelineAbbr": "HTL",
+    "socialTimeline": "社交時間軸",
+    "socialTimelineAbbr": "STL",
+    "globalTimeline": "廣域時間軸",
+    "roleTimeline": "角色時間軸",
+    "server": "伺服器",
+    "miAuth": "MiAuth",
+    "apiKey": "API金鑰",
+    "contentWarning": "標註",
+    "follower": "粉絲",
+    "antennaName": "天線名稱",
+    "antennaSource": "接收來源",
+    "antennaSourceHome": "首頁",
+    "antennaSourceAll": "全部",
+    "antennaSourceUser": "使用者",
+    "antennaSourceList": "列表",
+    "selectAntennaSource": "選擇源",
+    "selectList": "選擇列表",
+    "antennaSourceUserHintText": "指定使用者名稱，並用新行隔開",
+    "addUser": "新增使用者",
+    "keywords": "關鍵字",
+    "antennaSourceKeywordsHintText": "用空格分隔的單字按 AND 條件處理，用換行符分隔的行按 OR 條件處理",
+    "excludeKeywords": "排除關鍵字",
+    "antennaSourceExcludeKeywordsHintText": "用空格分隔的單字按 AND 條件處理，用換行符分隔的行按 OR 條件處理",
+    "discriminateUpperLower": "區分大小寫",
+    "receiveReplies": "接收回覆",
+    "receiveOnlyFiles": "只接收有附加檔案的回文",
+    "receiveLocal": "只接收本站",
+    "receiveLocalAvailability": "只指定本站，對 Misskey 2023.10.2 及更高版本有效。",
+    "confirmDeletingAntenna": "要刪除天線嗎？",
+    "channelJoinningCounts": "{usersCount} 人加入",
+    "@channelJoinningCounts": {
+        "description": "頻道加入人數",
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "channelNotes": "{notesCount} 篇投稿",
+    "@channelNotes": {
+        "description": "頻道發文數",
+        "placeholders": {
+            "notesCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "channelLastNotedAt": "{lastNotedAt} 更新",
+    "@channelLastNotedAt": {
+        "description": "頻道發文數",
+        "placeholders": {
+            "lastNotedAt": {
+                "type": "String"
+            }
+        }
+    },
+    "favorited": "已加入最愛夾。",
+    "willFavorite": "加入最愛夾",
+    "willFollow": "關注",
+    "channelInformation": "頻道資訊",
+    "channelStatistics": "{notesCount} 投稿 / {usersCount} 人加入 / {lastNotedAt} 更新",
+    "@channelStatistics": {
+        "description": "頻道統計資訊",
+        "placeholders": {
+            "notesCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            },
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            },
+            "lastNotedAt": {
+                "type": "String"
+            }
+        }
+    },
+    "notImplemented": "準備中",
+    "createClip": "建立便利貼",
+    "confirmDeleteClip": "要刪除這張便利貼嗎？",
+    "clipName": "便利貼名稱",
+    "clipDescription": "說明（可省略）",
+    "alreadyAddedClip": "這篇文好像已經在便利貼上了",
+    "deleteClip": "從便利貼中刪除",
+    "thanksForReport": "您的內容已發送。感謝您的檢舉。",
+    "reportAbuseOf": "檢舉 {userName}",
+    "@reportAbuseOf": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "pleaseInputReasonWhyAbuse": "請詳細的輸入檢舉原因。如果您有掌握具體的發言，請同時輸入該文的 URL。",
+    "reportAbuse": "檢舉",
+    "closeTweet": "關閉推文",
+    "closePlayer": "關閉播放器",
+    "doneCopy": "複製了",
+    "mutedNotePlaceholder": "{userName} 說了些什麼",
+    "@mutedNotePlaceholder": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "showCw": "看看剩下隱藏的",
+    "showReactionedNote": "顯示更多",
+    "showLongText": "顯示更多",
+    "showMoreFiles": "顯示更多",
+    "otherReactions": "還有{reactionCounts}個",
+    "@otherReactions": {
+        "placeholders": {
+            "reactionCounts": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "confirmDeleteReaction": "要取消回應嗎？",
+    "cancelReaction": "取消",
+    "renotedBy": " 轉發了",
+    "selfRenotedBy": "自轉發了",
+    "savedImage": "圖片已儲存",
+    "tapToShow": "點選查看",
+    "copyContents": "複製內容",
+    "copyLinks": "複製連結",
+    "copyName": "複製使用者名稱",
+    "copyUserScreenName": "複製使用者螢幕名稱",
+    "openBrowsers": "在瀏覽器中打開",
+    "openBrowsersAsRemote": "使用瀏覽器打開遠端實例",
+    "openInAnotherAccount": "使用另一個帳戶打開",
+    "changeFullScreen": "切換到全螢幕",
+    "shareNotes": "分享貼文",
+    "deleteFavorite": "取消最愛",
+    "notesAfterRenote": "轉發後的文",
+    "deletedRecreate": "刪除並重發",
+    "confirmDeletedRecreate": "要刪除這篇文嗎？回應、轉發和回覆會消失且無法復原？",
+    "deleteRenote": "取消轉發",
+    "confirmDelete": "真的要刪除嗎？",
+    "doDeleting": "刪掉！",
+    "confirmPoll": "您想投票給{choiced}嗎？",
+    "@confirmPoll": {
+        "placeholders": {
+            "choiced": {
+                "type": "String"
+            }
+        }
+    },
+    "votesCount": "({votes}票)",
+    "@votesCount": {
+        "placeholders": {
+            "votes": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "totalVotesCount": "共{votes}票・",
+    "@totalVotesCount": {
+        "placeholders": {
+            "votes": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "finished": "已結束",
+    "openResult": "查看結果",
+    "doVoting": "投票",
+    "alreadyVoted": "已投票",
+    "remainDiffer": "還有{differ}",
+    "@remainDiffer": {
+        "placeholders": {
+            "differ": {
+                "type": "String"
+            }
+        }
+    },
+    "renoted": "已轉發。",
+    "renoteInSpecificChannel": "在{channelName}內轉發",
+    "@renoteInSpecificChannel": {
+        "placeholders": {
+            "channelName": {
+                "type": "String"
+            }
+        }
+    },
+    "quotedRenoteInSpecificChannel": "在{channelName}中引用轉發",
+    "@quotedRenoteInSpecificChannel": {
+        "placeholders": {
+            "channelName": {
+                "type": "String"
+            }
+        }
+    },
+    "renoteInChannel": "轉發至頻道",
+    "renoteInOtherChannel": "轉發至另一個頻道",
+    "quotedRenoteInChannel": "引用轉發至頻道",
+    "quotedRenoteInOtherChannel": "引用轉發至另一個頻道",
+    "renotedUsers": "轉發的使用者",
+    "otherComplementReactions": "其他的",
+    "openAsOtherAccount": "選擇要打開的帳戶",
+    "pickColor": "選擇顏色",
+    "decideColor": "就這個",
+    "accountSetting": "{accountName}的設定",
+    "@accountSetting": {
+        "placeholders": {
+            "accountName": {
+                "type": "String"
+            }
+        }
+    },
+    "chooseFile": "選擇文件",
+    "uploadFile": "上傳",
+    "fromDrive": "從網路硬碟中",
+    "fileName": "檔案名稱",
+    "randomizeFileName": "隨機化檔案名",
+    "caption": "標題",
+    "sensitiveSubTitle": "即使您刪除閱讀警告設定，該頁面也可能會自動標記為閱讀警告。",
+    "replyNotePlaceholder": "發點什麼？",
+    "defaultNotePlaceholder": "在幹什麼？",
+    "hasMediaButCannotEdit": "有媒體（無法編輯）",
+    "hasVoteButCannotEdit": "有投票（無法編輯）",
+    "followedNotification": "{userName}已關注",
+    "@followedNotification": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "followRequestAcceptedNotification": "{userName}同意了您的關注請求",
+    "@followRequestAcceptedNotification": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "receiveFollowRequestNotification": "{userName}希望您關注",
+    "@receiveFollowRequestNotification": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "achievementEarnedNotification": "成就已解鎖",
+    "testNotification": "這是一個測試",
+    "renotedUsersInNotification": "轉發的人",
+    "reactionUsersInNotification": "回應的人",
+    "finishedVotedNotification": "投票已經結束了",
+    "renoteAndReactionsNotification": "{reactionUser}回應了，{renotedUser}轉發了",
+    "@renoteAndReactionsNotification": {
+        "placeholders": {
+            "reactionUser": {
+                "type": "String?"
+            },
+            "renotedUser": {
+                "type": "String?"
+            }
+        }
+    },
+    "renoteNotification": "{renoteUser}已轉發",
+    "@renoteNotification": {
+        "placeholders": {
+            "renoteUser": {
+                "type": "String?"
+            }
+        }
+    },
+    "reactionNotification": "{reactionUser}已回應",
+    "@reactionNotification": {
+        "placeholders": {
+            "reactionUser": {
+                "type": "String?"
+            }
+        }
+    },
+    "notedNotification": "{notedUser}發了貼文",
+    "@notedNotification": {
+        "placeholders": {
+            "notedUser": {
+                "type": "String"
+            }
+        }
+    },
+    "roleAssignedNotification": "您已被分配至角色「{role}」",
+    "@roleAssignedNotification": {
+        "placeholders": {
+            "role": {
+                "type": "String"
+            }
+        }
+    },
+    "notificationAll": "所有人",
+    "notificationForMe": "給自己的",
+    "notificationDirect": "直接",
+    "editPhoto": "編輯圖片",
+    "customEmojiLicensedBy": "該自訂表情符號的許可如下。",
+    "customEmojiLicensedByNone": "※尚未為此自訂表情符號設定授權條款。",
+    "cancelEmojiChoosing": "取消表情符號選擇",
+    "doneEmojiChoosing": "完成表情符號選擇",
+    "confirmSavingPhoto": "儲存嗎？",
+    "doneEditingPhoto": "儲存",
+    "continueEditingPhoto": "繼續修改圖片",
+    "disabledUsingSensitiveCustomEmoji": "此處無法使用敏感的自訂表情符號",
+    "markAsSensitive": "標記為敏感內容",
+    "publicSubTitle": "向所有人開放",
+    "homeSubTitle": "僅在首頁時間軸上可見",
+    "followersSubTitle": "僅我的粉絲可見",
+    "specifiedSubTitle": "僅對選定的使用者可見",
+    "favoriteAll": "全部",
+    "favoriteLikeOnly": "僅按讚",
+    "favoriteLikeOnlyForRemote": "遠端僅按讚",
+    "favoriteNonSensitiveOnly": "僅非敏感內容",
+    "favoriteNonSensitiveOnlyAndLikeOnlyForRemote": "僅非敏感內容（遠端僅按讚）",
+    "replyTo": "回覆給",
+    "addChoice": "增加",
+    "choiceNumber": "選項{choice}",
+    "@choiceNumber": {
+        "placeholders": {
+            "choice": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "canMultipleChoice": "可多選",
+    "disabledInHashtag": "這在雜湊標籤中不起作用。",
+    "joiningHashtagUsers": "{usersCount}<small>人</small>",
+    "@joiningHashtagUsers": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "searchVoteTab": "問卷調查",
+    "allocatedRolesCount": "{usersCount}<small>人</small>",
+    "@allocatedRolesCount": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "pageWrittenBy": "寫此頁面的人",
+    "pageCreatedAt": "建立日期: {createdAt}",
+    "@pageCreatedAt": {
+        "placeholders": {
+            "createdAt": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            }
+        }
+    },
+    "pageUpdatedAt": "更新日期: {updatedAt}",
+    "@pageUpdatedAt": {
+        "placeholders": {
+            "updatedAt": {
+                "type": "DateTime",
+                "format": "yMMMd"
+            }
+        }
+    },
+    "unsupportedPage": "Miria 不支援此頁面，請使用瀏覽器中開啟",
+    "canNotFavoriteMyPage": "無法給自己的頁面按讚哦",
+    "activeAnnouncements": "目前的",
+    "inactiveAnnouncements": "以前的",
+    "announcementsForYou": "針對你的公告",
+    "confirmAnnouncementsRead": "已經好好閱讀了「{title}」的內容嗎？",
+    "readAnnouncement": "已讀",
+    "didNotReadAnnouncement": "還沒讀，請稍等",
+    "onlineUsers": "伺服器線上人數",
+    "onlineUsersCount": "{n} 人線上",
+    "@onlineUsersCount": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "cpuUsageRate": "CPU使用率",
+    "memoryUsageRate": "記憶體使用率",
+    "responseTime": "反應時間",
+    "inboxQueue": "收件佇列",
+    "inboxProcessQueue": "進度",
+    "inboxActiveQueue": "啟動",
+    "inboxDelayedQueue": "延遲",
+    "inboxWaitingQueue": "等待",
+    "deliverQueue": "送建佇列",
+    "deliverProcessQueue": "進度",
+    "deliverActiveQueue": "啟動",
+    "deliverDelayedQueue": "延遲",
+    "deliverWaitingQueue": "等待",
+    "persons": "人",
+    "milliSeconds": "毫秒",
+    "pinnedUser": "置頂使用者",
+    "sort": "排序",
+    "joiningServerUsers": "{usersCount} 人正在加入",
+    "@joiningServerUsers": {
+        "placeholders": {
+            "usersCount": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "serverInformation": "伺服器資訊",
+    "loginAsMiAuth": "使用 MiAuth 登入",
+    "loginAsAPIKey": "使用 API 金鑰登入",
+    "authorizate": "認證",
+    "reauthorizate": "再次驗證",
+    "chooseLoginServer": "請選擇要登入的伺服器",
+    "didAuthorize": "我已認證",
+    "thrownConnectionError": "通訊失敗。",
+    "thrownConnectionTimeout": "連接逾時。",
+    "thrownWebSocketException": "通訊失敗（WebSocketException）。",
+    "thrownTimeoutException": "伺服器沒有回應。",
+    "thrownUnknownError": "未知錯誤",
+    "thrownError": "似乎發生了錯誤",
+    "unsupportedServer": "這是不受支援的伺服器",
+    "future": "未來",
+    "justNow": "現在",
+    "secondsAgo": "{n}秒前",
+    "@secondsAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "minutesAgo": "{n}分前",
+    "@minutesAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "hoursAgo": "{n}小時前",
+    "@hoursAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "daysAgo": "{n}天前",
+    "@daysAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "yearsAgo": "{n}年前",
+    "@yearsAgo": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inSeconds": "{n}秒後",
+    "@inSeconds": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inMinutes": "{n}分後",
+    "@inMinutes": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inHours": "{n}小時後",
+    "@inHours": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inDays": "{n}天後",
+    "@inDays": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "inYears": "{n}年後",
+    "@inYears": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nSeconds": "{n, plural, other {{n}秒}}",
+    "@nSeconds": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nMinutes": "{n, plural, other {{n}分}}",
+    "@nMinutes": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nHours": "{n, plural, other {{n}小時}}",
+    "@nHours": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "nDays": "{n, plural, other {{n}日}}",
+    "@nDays": {
+        "placeholders": {
+            "n": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "lightMode": "淺色模式",
+    "darkMode": "深色模式",
+    "syncWithSystem": "遵循系統設定",
+    "hideSensitiveMedia": "隱藏閱讀警告的媒體",
+    "showSensitiveMedia": "不要隱藏閱讀警告的媒體",
+    "hideAllMedia": "始終隱藏媒體",
+    "removeSensitiveNotes": "TL上不顯示帶有閱讀警告的貼文",
+    "enableInfiniteScroll": "啟用自動滾動頁面模式",
+    "disableInfiniteScroll": "不自動載入下一個",
+    "top": "上",
+    "bottom": "下",
+    "systemEmoji": "系統",
+    "invalidServer": "{server} 無法識別為伺服器。\n請在伺服器欄位輸入類似「misskey.io」的內容。",
+    "@invalidServer": {
+        "placeholders": {
+            "server": {
+                "type": "String"
+            }
+        }
+    },
+    "serverIsNotMisskey": "{server} 無法識別為 Misskey 伺服器。",
+    "@serverIsNotMisskey": {
+        "placeholders": {
+            "server": {
+                "type": "String"
+            }
+        }
+    },
+    "softwareNotSupported": "Miria 與 {software} 不相容。",
+    "@softwareNotSupported": {
+        "placeholders": {
+            "software": {
+                "type": "String"
+            }
+        }
+    },
+    "softwareNotCompatible": "Miria 與該軟體不相容。\n{software} {version}",
+    "@softwareNotCompatible": {
+        "placeholders": {
+            "software": {
+                "type": "String"
+            },
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "alreadyLoggedIn": "已使用{acct}登入",
+    "@alreadyLoggedIn": {
+        "placeholders": {
+            "acct": {
+                "type": "String"
+            }
+        }
+    },
+    "importFromThisFolder": "從該資料夾匯入",
+    "exportedFileNotFound": "在這裡沒有找到 Miria 的設定檔",
+    "importCompleted": "匯入完成。",
+    "exportToThisFolder": "匯出到該資料夾",
+    "confirmOverwrite": "該文件已存在，你想覆蓋它嗎？",
+    "overwrite": "覆蓋",
+    "exportedFileComment": "Miria 設定檔",
+    "exportCompleted": "匯出完成",
+    "cannotOpenLocalOnlyNoteFromRemote": "無法在其他伺服器上瀏覽僅限本站的發文",
+    "unlimited": "無限期",
+    "specifyByDate": "日時指定",
+    "specifyByDuration": "期間指定",
+    "seconds": "秒",
+    "minutes": "分",
+    "hours": "小時",
+    "days": "天",
+    "pleaseInputSomething": "請輸入內容",
+    "pleaseAddVoteChoice": "請輸入兩個以上的投票選項",
+    "pleaseSpecifyExpirationDate": "請指定投票截止日期",
+    "pleaseSpecifyExpirationDuration": "請指定投票期限",
+    "cannotMentionToRemoteInLocalOnlyNote": "您不能在僅本站的貼文中提及其他伺服器的使用者",
+    "cannotPublicReplyToPrivateNote": "無法對{visibility}的私密貼文進行公開回覆",
+    "@cannotPublicReplyToPrivateNote": {
+        "placeholders": {
+            "visibility": {
+                "type": "String"
+            }
+        }
+    },
+    "cannotPublicNoteBySilencedUser": "由於使用者被禁言，無法公開發文。",
+    "cannotFederateNoteToChannel": "頻道中的發文不會出現在聯邦中。",
+    "cannotFederateReplyToLocalOnlyNote": "回應的原文是僅現本站的，是以本回文也將自動取消散布至聯邦的功能。",
+    "cannotFederateRenoteToLocalOnlyNote": "轉發的引文是僅現本站的，是以本文也無法向聯邦散布。",
+    "unexpectedSensitive": "試圖上傳的文件被伺服器認為是敏感文件，該怎麼辦？",
+    "staySensitive": "保持敏感",
+    "unsetSensitive": "取消設定敏感",
+    "noteCreatedAt": "發布時間: {createdAt}",
+    "@noteCreatedAt": {
+        "placeholders": {
+            "createdAt": {
+                "type": "String"
+            }
+        }
+    },
+    "accept": "允許",
+    "reject": "拒絕",
+    "generalSettings": "一般設定",
+    "accountSettings": "帳戶設定",
+    "tabSettings": "頁籤設定",
+    "settingsImportAndExport": "匯入/匯出設定",
+    "aboutMiria": "關於本應用程式",
+    "quitAccountSettings": "完成帳戶設定",
+    "packageName": "軟體名",
+    "version": "版本",
+    "developer": "開發者",
+    "officialWebSite": "官方網站",
+    "openSourceLicense": "開源授權協議",
+    "showLicense": "查看授權協議",
+    "general": "一般設定",
+    "displayOfSensitiveNotes": "強調標有閱讀警告的貼文",
+    "infiniteScroll": "無限捲動",
+    "enableAnimatedMfm": "啟用 MFM 動畫",
+    "enableAnimatedMfmDescription": "在繪製動畫時啟用 MFM。",
+    "collapseNotes": "摺疊貼文",
+    "collapseReactionedRenotes": "摺疊有回應的轉發的貼文。",
+    "collapseLongNotes": "摺疊長文。",
+    "tabPosition": "分頁欄位置",
+    "tabPositionDescription": "顯示在 {tabPosition}",
+    "@tabPositionDescription": {
+        "placeholders": {
+            "tabPosition": {
+                "type": "String"
+            }
+        }
+    },
+    "theme": "主題",
+    "themeForLightMode": "在淺色模式下使用的主題",
+    "themeForDarkMode": "在深色模式下使用的主題",
+    "themeIsh": "類似於 {theme} 的主題",
+    "@themeIsh": {
+        "placeholders": {
+            "theme": {
+                "type": "String"
+            }
+        }
+    },
+    "selectLightOrDarkMode": "選擇淺色或深色模式",
+    "reaction": "回應",
+    "emojiTapReaction": "在貼文中點擊表情符號以進行回應",
+    "emojiTapReactionDescription": "點擊貼文中的表情符號以進行回應。在某些情況下，來自 MFM 或外部伺服器的表情符號可能無法正常顯示。",
+    "emojiStyle": "表情符號的樣式",
+    "fontStandard": "非襯線字體（標準）",
+    "fontSerif": "襯線字體（$[font.serif ）",
+    "fontMonospace": "等寬字體（適用於 $[font.monospace）",
+    "fontCursive": "手寫字體（適用於 $[font.cursive）",
+    "fontFantasy": "華麗字體（適用於 $[font.fantasy）",
+    "fontSize": "字體大小",
+    "systemFont": "系統標準",
+    "selectFolder": "選擇資料夾",
+    "importSettings": "匯入設定",
+    "importSettingsDescription": "從檔案系統載入設定檔。設定檔儲存時會記錄所有帳號的配置資訊，但只會載入登入本裝置的帳號的資訊。",
+    "pleaseSelectAccount": "請選擇帳戶",
+    "select": "選擇",
+    "exportSettings": "匯出設定",
+    "exportSettingsDescription1": "將設定檔儲存到檔案系統。設定檔記錄了該裝置上登入的所有帳戶除登入資訊以外的資訊。",
+    "exportSettingsDescription2": "每次匯出都會為1個帳戶儲存1個設定檔。",
+    "pleaseSelectAccountToExportSettings": "選擇一個帳戶來儲存設定檔",
+    "selectAntenna": "選擇天線",
+    "selectChannel": "選擇頻道",
+    "selectIcon": "選擇圖示",
+    "standardIcon": "標準",
+    "emojiIcon": "自訂表情符號",
+    "selectRole": "選擇角色",
+    "apply": "套用",
+    "account": "帳戶",
+    "tabType": "頁籤類型",
+    "tabName": "頁籤名稱",
+    "icon": "大頭貼",
+    "displayRenotes": "顯示轉發貼文",
+    "includeReplies": "包括回覆",
+    "includeRepliesAvailability": "這是 Misskey v2023.10.1 或更高版本的功能。",
+    "mediaOnly": "僅文件",
+    "subscribeNotes": "自動更新回應和投票計數",
+    "subscribeNotesDescription": "如果將其關閉，回應和投票將不會自動更新，但可能會減少電池消耗。",
+    "pleaseSelectTabType": "請選擇頁籤類型。",
+    "pleaseSelectIcon": "請選擇圖示。",
+    "pleaseSelectChannel": "請選擇頻道。",
+    "pleaseSelectList": "請選擇列表。",
+    "pleaseSelectAntenna": "請選擇天線。",
+    "pleaseSelectRole": "請選擇角色。",
+    "reactionDeck": "回應面板",
+    "wordMute": "文字封鎖",
+    "hardWordMute": "封鎖關鍵字",
+    "instanceMute": "被封鎖的伺服器",
+    "cacheSettings": "快取設定",
+    "hideConditionalNotes": "從時間軸中隱藏具有指定條件的貼文。",
+    "muteSettingDescription": "用空格分隔的單字按 AND 條件處理，用換行符分隔的行按 OR 條件處理。\n用斜槓括住關鍵字可使其成為正規表示式。",
+    "refreshOnTabChange": "每次切換標籤時都重新整理",
+    "refreshOnLaunch": "每次啟動時重新整理",
+    "refreshOnceADay": "每天重新整理一次",
+    "userCache": "有關您自己的資訊（包括通知等）",
+    "emojiCache": "表情符號資訊",
+    "serverCache": "伺服器資訊",
+    "instanceMuteDescription1": "隱藏指定伺服器的貼文。",
+    "instanceMuteDescription2": "封鎖指定的伺服器上的所有貼文和轉文，包括對封鎖伺服器上的使用者的回覆。\n設定在新行上，以換行符號分隔。",
+    "bulkAddReactions": "批量新增",
+    "bulkAddReactionsDescription1": "請使用您的瀏覽器登入到要複製回應面板的帳戶",
+    "bulkAddReactionsDescription2": "在同一個瀏覽器中訪問以下 URL，選擇並複製「值 (JSON)」中的所有內容",
+    "bulkAddReactionsDescription3": "將複製的內容貼到下面的文字框中",
+    "pasteHere": "在這裡貼上",
+    "invalidInput": "輸入的值無效",
+    "clear": "清除",
+    "copy": "複製",
+    "editReactionDeckDescription": "長按以重新排序，短按以刪除，按+以新增。",
+    "confirmClearReactionDeck": "是否要清除所有已設定的回應面板？",
+    "clearReactionDeck": "清除",
+    "accountGeneralSettings": "{accountName} 一般設定",
+    "@accountGeneralSettings": {
+        "placeholders": {
+            "accountName": {
+                "type": "String"
+            }
+        }
+    },
+    "privacy": "隱私",
+    "setDefaultNoteVisibility": "設定預設公開範圍。",
+    "noteVisibility": "貼文公開範圍",
+    "disableFederation": "不參與聯邦",
+    "disableFederationDescription": "停用聯邦不會將貼文設為私有。在大多數情況下，不需要停用聯邦。",
+    "reactionAcceptance": "接受表情回應",
+    "reactionAcceptanceAll": "全部",
+    "forceShowAds": "總是顯示廣告",
+    "wordMuteDescription": "AND 條件用空格分隔，OR 條件用換行符分隔。\n用斜槓括住關鍵字可使其成為正規表示式。\n不過，由於正規表示式的規範與 Misskey Web 不同，在 Miria 中有效的正規表示式在 Misskey Web 中可能無效，反之亦然。",
+    "selectAccountToShare": "選擇要分享的帳戶",
+    "createAntenna": "建立天線",
+    "memo": "筆記",
+    "memoDescription": "有什麼要寫的，就寫下來吧",
+    "confirmCreateBlock": "確定要封鎖嗎？",
+    "createBlock": "封鎖",
+    "addToList": "新增到列表",
+    "addToAntenna": "新增到天線",
+    "searchNote": "搜尋貼文",
+    "deleteRenoteMute": "解除封鎖轉文",
+    "createRenoteMute": "封鎖轉文",
+    "deleteMute": "解除封鎖",
+    "createMute": "封鎖",
+    "deleteBlock": "取消封鎖",
+    "minutes10": "10分鐘",
+    "hours1": "1小時",
+    "day1": "1天",
+    "week1": "1週",
+    "selectDuration": "請選擇截止日期。",
+    "confirmUnfollow": "要取消關注嗎？",
+    "deleteFollow": "取消關注",
+    "renoteMuting": "封鎖轉文中",
+    "muting": "封鎖",
+    "blocking": "封鎖中",
+    "followed": "已關注",
+    "unfollow": "取消關注",
+    "followRequestPending": "關注請求批准中",
+    "followRequest": "關注申請",
+    "createFollow": "關注",
+    "refreshing": "重新整理中",
+    "remoteUserCaution": "由於此使用者來自其它伺服器，顯示的資訊可能不完整。",
+    "showServerInformation": "顯示伺服器資訊",
+    "location": "位置",
+    "registeredDate": "註冊於",
+    "birthday": "生日",
+    "includeRepliesShort": "包括回覆",
+    "mediaOnlyShort": "僅媒體",
+    "displayRenotesShort": "顯示轉帖",
+    "showNotesBeforeThisDate": "顯示此日期之前的貼文",
+    "userHighlightAvailability": "突顯顯示是從 Misskey 2023.10.0 開始提供的功能。",
+    "userInfomation": "帳戶資訊",
+    "userInfomationLocal": "帳戶資訊（本機）",
+    "userInfomationRemote": "帳戶資訊（遠端）",
+    "userNotes": "貼文",
+    "userNotesLocal": "貼文（本機）",
+    "userNotesRemote": "貼文（遠端）",
+    "userReactions": "回應",
+    "userPages": "頁面",
+    "userPlays": "Play",
+    "userPlaysAvailability": "該功能僅適用於 Misskey 2023.9 及更高版本。",
+    "createList": "建立列表",
+    "listName": "列表名稱",
+    "members": "成員",
+    "listCapacity": "{members}/{limit}人",
+    "@listCapacity": {
+        "placeholders": {
+            "members": {
+                "type": "int",
+                "format": "decimalPattern"
+            },
+            "limit": {
+                "type": "double",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "confirmRemoveUser": "確定將此使用者移出列表嗎？",
+    "removeUser": "移出",
+    "confirmDeleteList": "確定刪除此列表嗎？",
+    "homeOnly": "僅首頁",
+    "followersOnly": "僅粉絲",
+    "originCombined": "全部",
+    "followerAscendingOrder": "粉絲從少到多",
+    "followerDescendingOrder": "粉絲從多到少",
+    "createdAtAscendingOrder": "建立時間從舊到新",
+    "createdAtDescendingOrder": "建立時間從新到舊",
+    "updatedAtAscendingOrder": "更新時間從舊到新",
+    "updatedAtDescendingOrder": "更新時間從新到舊",
+    "misskeyGames": "Misskey Games",
+    "cookieCliker": "Cookie Cliker",
+    "bubbleGame": "Bubble Game",
+    "reversi": "黑白棋",
+    "loading": "載入中...",
+    "invitedReversi": "收到了來自{users}的邀請",
+    "@invitedReversi": {
+        "placeholders": {
+            "users": {
+                "type": "String"
+            }
+        }
+    },
+    "nonInvitedReversi": "好像沒有收到邀請"
+}
