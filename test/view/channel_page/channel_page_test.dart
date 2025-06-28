@@ -24,7 +24,9 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+            ],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -75,7 +77,9 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+            ],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -103,7 +107,9 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+            ],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -118,8 +124,9 @@ void main() {
 
         expect(find.text(TestData.channel1.name), findsOneWidget);
         verify(
-          channel
-              .myFavorite(argThat(equals(const ChannelsMyFavoriteRequest()))),
+          channel.myFavorite(
+            argThat(equals(const ChannelsMyFavoriteRequest())),
+          ),
         );
       });
     });
@@ -135,7 +142,9 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((_) => misskey)],
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+            ],
             child: DefaultRootWidget(
               initialRoute: ChannelsRoute(
                 accountContext: TestData.accountContext,
@@ -157,6 +166,45 @@ void main() {
           channel.followed(
             argThat(
               equals(ChannelsFollowedRequest(untilId: TestData.channel1.id)),
+            ),
+          ),
+        );
+      });
+    });
+
+    group("管理中", () {
+      testWidgets("自分が所有するチャンネルが表示されること", (tester) async {
+        final channel = MockMisskeyChannels();
+        final misskey = MockMisskey();
+        when(misskey.channels).thenReturn(channel);
+        when(channel.owned(any)).thenAnswer(
+          (_) async => [TestData.channel1.copyWith(bannerUrl: null)],
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: ChannelsRoute(
+                accountContext: TestData.accountContext,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("管理中"));
+        await tester.pumpAndSettle();
+
+        expect(find.text(TestData.channel1.name), findsOneWidget);
+        verify(channel.owned(argThat(equals(const ChannelsOwnedRequest()))));
+        await tester.pageNation();
+        verify(
+          channel.owned(
+            argThat(
+              equals(ChannelsOwnedRequest(untilId: TestData.channel1.id)),
             ),
           ),
         );

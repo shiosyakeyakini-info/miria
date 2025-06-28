@@ -8,7 +8,7 @@ class AuthTestData {
       {
         "rel": "http://nodeinfo.diaspora.software/ns/schema/2.0",
         "href": "https://calckey.jp/nodeinfo/2.0",
-      }
+      },
     ],
   };
 
@@ -63,7 +63,7 @@ class AuthTestData {
       {
         "rel": "http://nodeinfo.diaspora.software/ns/schema/2.0",
         "href": "https://misskey.dev/nodeinfo/2.0",
-      }
+      },
     ],
   };
 
@@ -110,7 +110,7 @@ class AuthTestData {
               "カスタム絵文字の依頼について：128x128px以上のpngもしくはsvg画像を添付し、 @cv_k までReplyまたはDMしてください。追加の検討を致します。\n\nRegarding local accounts and remote accounts : Accounts that repeat posts that violate the laws of Japan are freezed.\n<center>-----</center>アカウント/リモートアカウントに関して : 日本国の法律に抵触する投稿を繰り返し行うアカウントは凍結されます。",
           "image": null,
           "title": "Misskey Information 2",
-        }
+        },
       ],
       "disableRegistration": false,
       "disableLocalTimeline": false,

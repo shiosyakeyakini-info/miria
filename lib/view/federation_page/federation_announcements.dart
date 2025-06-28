@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -26,10 +26,7 @@ class FederationAnnouncements extends HookConsumerWidget {
             Expanded(
               child: Center(
                 child: ToggleButtons(
-                  isSelected: [
-                    isActive.value,
-                    !isActive.value,
-                  ],
+                  isSelected: [isActive.value, !isActive.value],
                   onPressed: (value) {
                     switch (value) {
                       case 0:
@@ -58,8 +55,10 @@ class FederationAnnouncements extends HookConsumerWidget {
             listKey: isActive.value,
             initializeFuture: () async {
               final Iterable<AnnouncementsResponse> response;
-              final request =
-                  AnnouncementsRequest(isActive: isActive.value, limit: 10);
+              final request = AnnouncementsRequest(
+                isActive: isActive.value,
+                limit: 10,
+              );
               response = await ref
                   .read(misskeyGetContextProvider)
                   .announcements(request);
@@ -106,22 +105,24 @@ class Announcement extends HookConsumerWidget {
 
     final confirm = useAsync(() async {
       if (data.value.needConfirmationToRead == true) {
-        final isConfirmed =
-            await ref.read(dialogStateNotifierProvider.notifier).showDialog(
-                  message: (context) =>
-                      S.of(context).confirmAnnouncementsRead(data.value.title),
-                  actions: (context) => [
-                    S.of(context).readAnnouncement,
-                    S.of(context).didNotReadAnnouncement,
-                  ],
-                );
+        final isConfirmed = await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .showDialog(
+              message: (context) =>
+                  S.of(context).confirmAnnouncementsRead(data.value.title),
+              actions: (context) => [
+                S.of(context).readAnnouncement,
+                S.of(context).didNotReadAnnouncement,
+              ],
+            );
         if (isConfirmed != 0) return;
       }
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-        await ref.read(misskeyPostContextProvider).i.readAnnouncement(
-              IReadAnnouncementRequest(
-                announcementId: data.value.id,
-              ),
+        await ref
+            .read(misskeyPostContextProvider)
+            .i
+            .readAnnouncement(
+              IReadAnnouncementRequest(announcementId: data.value.id),
             );
         data.value = data.value.copyWith(isRead: true);
       });
@@ -140,10 +141,9 @@ class Announcement extends HookConsumerWidget {
               if (data.value.forYou == true)
                 Text(
                   S.of(context).announcementsForYou,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: Theme.of(context).primaryColor),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               Row(
                 children: [
@@ -192,10 +192,7 @@ class Announcement extends HookConsumerWidget {
 class AnnouncementIcon extends StatelessWidget {
   final AnnouncementIconType iconType;
 
-  const AnnouncementIcon({
-    required this.iconType,
-    super.key,
-  });
+  const AnnouncementIcon({required this.iconType, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -203,10 +200,7 @@ class AnnouncementIcon extends StatelessWidget {
       case AnnouncementIconType.info:
         return const Icon(Icons.info);
       case AnnouncementIconType.warning:
-        return const Icon(
-          Icons.warning,
-          color: Colors.yellow,
-        );
+        return const Icon(Icons.warning, color: Colors.yellow);
       case AnnouncementIconType.error:
         return const Icon(Icons.error, color: Colors.red);
       case AnnouncementIconType.success:

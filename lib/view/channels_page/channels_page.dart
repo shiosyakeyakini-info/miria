@@ -1,9 +1,10 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/channels_page/channel_favorited.dart";
 import "package:miria/view/channels_page/channel_followed.dart";
+import "package:miria/view/channels_page/channel_managing.dart";
 import "package:miria/view/channels_page/channel_search.dart";
 import "package:miria/view/channels_page/channel_trend.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -55,7 +56,10 @@ class ChannelsPage extends StatelessWidget implements AutoRouteWrapper {
               padding: EdgeInsets.only(left: 10, right: 10),
               child: ChannelFollowed(),
             ),
-            Text(S.of(context).notImplemented),
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: ChannelManaging(),
+            ),
           ],
         ),
       ),

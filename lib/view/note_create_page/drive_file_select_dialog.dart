@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -11,7 +11,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<List<DriveFile>>()
+@RoutePage()
 class DriveFileSelectDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   final Account account;
@@ -125,8 +125,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
                 },
                 listKey: path.value.map((e) => e.id).join("/"),
                 itemBuilder: (context, item) {
-                  final isSelected =
-                      files.value.any((file) => file.id == item.id);
+                  final isSelected = files.value.any(
+                    (file) => file.id == item.id,
+                  );
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     child: InkWell(
@@ -150,9 +151,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
                         padding: const EdgeInsets.all(10),
                         decoration: (allowMultiple && isSelected)
                             ? BoxDecoration(
-                                color: AppTheme.of(context)
-                                    .currentDisplayTabColor
-                                    .withOpacity(0.7),
+                                color: AppTheme.of(
+                                  context,
+                                ).currentDisplayTabColor.withValues(alpha: 0.7),
                                 borderRadius: BorderRadius.circular(5),
                               )
                             : null,

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
@@ -43,10 +44,12 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
                     .emoji
                     ?.where(
                       (element) =>
-                          element.emoji.baseName
-                              .contains(reactionTextField.text) ||
-                          element.aliases
-                              .any((e) => e.contains(reactionTextField.text)),
+                          element.emoji.baseName.contains(
+                            reactionTextField.text,
+                          ) ||
+                          element.aliases.any(
+                            (e) => e.contains(reactionTextField.text),
+                          ),
                     )
                     .take(10)
                     .map((e) => e.emoji) ??
@@ -75,9 +78,7 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
             child: Column(
               children: [
                 MisskeyNote(note: widget.note),
-                TextField(
-                  controller: reactionTextField,
-                ),
+                TextField(controller: reactionTextField),
                 Wrap(
                   children: [
                     for (final emoji in foundEmojis)

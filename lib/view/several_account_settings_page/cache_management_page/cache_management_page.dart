@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/providers.dart";
@@ -30,29 +30,32 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final setting =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
+    final setting = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(widget.account);
     iCacheStrategy = setting.iCacheStrategy;
     emojisCacheStrategy = setting.emojiCacheStrategy;
     metaCacheStrategy = setting.metaChacheStrategy;
   }
 
   List<DropdownMenuItem> get buildCacheStrategyItems => [
-        DropdownMenuItem(
-          value: CacheStrategy.whenTabChange,
-          child: Text(S.of(context).refreshOnTabChange),
-        ),
-        DropdownMenuItem(
-          value: CacheStrategy.whenLaunch,
-          child: Text(S.of(context).refreshOnLaunch),
-        ),
-        DropdownMenuItem(
-          value: CacheStrategy.whenOneDay,
-          child: Text(S.of(context).refreshOnceADay),
-        ),
-      ];
+    DropdownMenuItem(
+      value: CacheStrategy.whenTabChange,
+      child: Text(S.of(context).refreshOnTabChange),
+    ),
+    DropdownMenuItem(
+      value: CacheStrategy.whenLaunch,
+      child: Text(S.of(context).refreshOnLaunch),
+    ),
+    DropdownMenuItem(
+      value: CacheStrategy.whenOneDay,
+      child: Text(S.of(context).refreshOnceADay),
+    ),
+  ];
   Future<void> save() async {
-    await ref.read(accountSettingsRepositoryProvider).save(
+    await ref
+        .read(accountSettingsRepositoryProvider)
+        .save(
           ref
               .read(accountSettingsRepositoryProvider)
               .fromAccount(widget.account)

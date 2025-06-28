@@ -1,13 +1,9 @@
-import "package:collection/collection.dart";
 import "package:miria/repository/emoji_repository.dart";
 
 sealed class MisskeyEmojiData {
   final String baseName;
   final bool isSensitive;
-  const MisskeyEmojiData(
-    this.baseName,
-    this.isSensitive,
-  );
+  const MisskeyEmojiData(this.baseName, this.isSensitive);
 
   factory MisskeyEmojiData.fromEmojiName({
     required String emojiName,
@@ -96,9 +92,7 @@ class CustomEmojiData extends MisskeyEmojiData {
 
 /// Unicode絵文字
 class UnicodeEmojiData extends MisskeyEmojiData {
-  const UnicodeEmojiData({
-    required this.char,
-  }) : super(char, false);
+  const UnicodeEmojiData({required this.char}) : super(char, false);
 
   final String char;
 }

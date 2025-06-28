@@ -30,7 +30,7 @@ class HomeTimelineRepository extends SocketTimelineRepository {
 
   @override
   Map<String, dynamic> get parameters => {
-        "withRenotes": tabSetting.renoteDisplay,
-        "withFiles": tabSetting.isMediaOnly,
-      };
+    "withRenotes": tabSetting.renoteDisplay,
+    "withFiles": tabSetting.isMediaOnly,
+  };
 }

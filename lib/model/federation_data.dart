@@ -11,7 +11,7 @@ part "federation_data.freezed.dart";
 part "federation_data.g.dart";
 
 @freezed
-class FederationData with _$FederationData {
+abstract class FederationData with _$FederationData {
   const factory FederationData({
     required bool isSupportedEmoji,
     required bool isSupportedAnnouncement,
@@ -98,7 +98,7 @@ class FederationState extends _$FederationState {
       isSupportedEmoji: false,
       isSupportedAnnouncement: false,
       isSupportedLocalTimeline: false,
-      name: federation.name,
+      name: federation.name ?? "",
       usersCount: federation.usersCount,
       notesCount: federation.notesCount,
       softwareName: federation.softwareName ?? "",
@@ -118,8 +118,10 @@ class FederationState extends _$FederationState {
 
       try {
         final misskeyServer = ref.read(misskeyWithoutAccountProvider(host));
-        final (endpoints, meta) =
-            await (misskeyServer.endpoints(), misskeyServer.meta()).wait;
+        final (endpoints, meta) = await (
+          misskeyServer.endpoints(),
+          misskeyServer.meta(),
+        ).wait;
         misskeyMeta = meta;
 
         if (endpoints.contains("announcement")) {
@@ -156,7 +158,7 @@ class FederationState extends _$FederationState {
       privacyPolicyUrl: misskeyMeta?.privacyPolicyUrl?.toString(),
       impressumUrl: misskeyMeta?.impressumUrl?.toString(),
       repositoryUrl: misskeyMeta?.repositoryUrl?.toString(),
-      name: misskeyMeta?.name ?? federation.name,
+      name: misskeyMeta?.name ?? federation.name ?? "",
       description: misskeyMeta?.description ?? federation.description ?? "",
       maintainerName: misskeyMeta?.maintainerName,
       maintainerEmail: misskeyMeta?.maintainerEmail,

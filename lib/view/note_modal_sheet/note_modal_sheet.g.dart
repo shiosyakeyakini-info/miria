@@ -6,227 +6,121 @@ part of 'note_modal_sheet.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$noteModalSheetNotifierHash() =>
-    r'6e16e66d1e8ce6671ac6ba8bd9bb208c9b7b6652';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$NoteModalSheetNotifier
-    extends BuildlessAutoDisposeNotifier<NoteModalSheetState> {
-  late final Note note;
-
-  NoteModalSheetState build(
-    Note note,
-  );
-}
-
-/// See also [NoteModalSheetNotifier].
 @ProviderFor(NoteModalSheetNotifier)
-const noteModalSheetNotifierProvider = NoteModalSheetNotifierFamily();
+const noteModalSheetNotifierProvider = NoteModalSheetNotifierFamily._();
 
-/// See also [NoteModalSheetNotifier].
-class NoteModalSheetNotifierFamily extends Family {
-  /// See also [NoteModalSheetNotifier].
-  const NoteModalSheetNotifierFamily();
+final class NoteModalSheetNotifierProvider
+    extends $NotifierProvider<NoteModalSheetNotifier, NoteModalSheetState> {
+  const NoteModalSheetNotifierProvider._({
+    required NoteModalSheetNotifierFamily super.from,
+    required Note super.argument,
+  }) : super(
+         retry: null,
+         name: r'noteModalSheetNotifierProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    misskeyGetContextProvider,
-    accountContextProvider,
-    notesWithProvider
-  };
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies,
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies,
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies,
-    notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies
-  };
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies3 = notesWithProvider;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  String debugGetCreateSourceHash() => _$noteModalSheetNotifierHash();
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'noteModalSheetNotifierProvider';
-
-  /// See also [NoteModalSheetNotifier].
-  NoteModalSheetNotifierProvider call(
-    Note note,
-  ) {
-    return NoteModalSheetNotifierProvider(
-      note,
-    );
+  String toString() {
+    return r'noteModalSheetNotifierProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  NoteModalSheetNotifierProvider getProviderOverride(
-    covariant NoteModalSheetNotifierProvider provider,
-  ) {
-    return call(
-      provider.note,
-    );
-  }
+  NoteModalSheetNotifier create() => NoteModalSheetNotifier();
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(NoteModalSheetNotifier Function() create) {
-    return _$NoteModalSheetNotifierFamilyOverride(this, create);
-  }
-}
-
-class _$NoteModalSheetNotifierFamilyOverride implements FamilyOverride {
-  _$NoteModalSheetNotifierFamilyOverride(this.overriddenFamily, this.create);
-
-  final NoteModalSheetNotifier Function() create;
-
-  @override
-  final NoteModalSheetNotifierFamily overriddenFamily;
-
-  @override
-  NoteModalSheetNotifierProvider getProviderOverride(
-    covariant NoteModalSheetNotifierProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [NoteModalSheetNotifier].
-class NoteModalSheetNotifierProvider extends AutoDisposeNotifierProviderImpl<
-    NoteModalSheetNotifier, NoteModalSheetState> {
-  /// See also [NoteModalSheetNotifier].
-  NoteModalSheetNotifierProvider(
-    Note note,
-  ) : this._internal(
-          () => NoteModalSheetNotifier()..note = note,
-          from: noteModalSheetNotifierProvider,
-          name: r'noteModalSheetNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$noteModalSheetNotifierHash,
-          dependencies: NoteModalSheetNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              NoteModalSheetNotifierFamily._allTransitiveDependencies,
-          note: note,
-        );
-
-  NoteModalSheetNotifierProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.note,
-  }) : super.internal();
-
-  final Note note;
-
-  @override
-  NoteModalSheetState runNotifierBuild(
-    covariant NoteModalSheetNotifier notifier,
-  ) {
-    return notifier.build(
-      note,
-    );
-  }
-
-  @override
-  Override overrideWith(NoteModalSheetNotifier Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NoteModalSheetState value) {
+    return $ProviderOverride(
       origin: this,
-      override: NoteModalSheetNotifierProvider._internal(
-        () => create()..note = note,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        note: note,
-      ),
-    );
-  }
-
-  @override
-  (Note,) get argument {
-    return (note,);
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<NoteModalSheetNotifier,
-      NoteModalSheetState> createElement() {
-    return _NoteModalSheetNotifierProviderElement(this);
-  }
-
-  NoteModalSheetNotifierProvider _copyWith(
-    NoteModalSheetNotifier Function() create,
-  ) {
-    return NoteModalSheetNotifierProvider._internal(
-      () => create()..note = note,
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      note: note,
+      providerOverride: $SyncValueProvider<NoteModalSheetState>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is NoteModalSheetNotifierProvider && other.note == note;
+    return other is NoteModalSheetNotifierProvider &&
+        other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, note.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin NoteModalSheetNotifierRef
-    on AutoDisposeNotifierProviderRef<NoteModalSheetState> {
-  /// The parameter `note` of this provider.
-  Note get note;
-}
+String _$noteModalSheetNotifierHash() =>
+    r'500faf8f42ddccca0502c701cbd2791aa39f3cdf';
 
-class _NoteModalSheetNotifierProviderElement
-    extends AutoDisposeNotifierProviderElement<NoteModalSheetNotifier,
-        NoteModalSheetState> with NoteModalSheetNotifierRef {
-  _NoteModalSheetNotifierProviderElement(super.provider);
+final class NoteModalSheetNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          NoteModalSheetNotifier,
+          NoteModalSheetState,
+          NoteModalSheetState,
+          NoteModalSheetState,
+          Note
+        > {
+  const NoteModalSheetNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'noteModalSheetNotifierProvider',
+        dependencies: const <ProviderOrFamily>[
+          misskeyPostContextProvider,
+          misskeyGetContextProvider,
+          accountContextProvider,
+          notesWithProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>{
+          NoteModalSheetNotifierProvider.$allTransitiveDependencies0,
+          NoteModalSheetNotifierProvider.$allTransitiveDependencies1,
+          NoteModalSheetNotifierProvider.$allTransitiveDependencies2,
+          NoteModalSheetNotifierProvider.$allTransitiveDependencies3,
+        },
+        isAutoDispose: true,
+      );
+
+  NoteModalSheetNotifierProvider call(Note note) =>
+      NoteModalSheetNotifierProvider._(argument: note, from: this);
 
   @override
-  Note get note => (origin as NoteModalSheetNotifierProvider).note;
+  String toString() => r'noteModalSheetNotifierProvider';
 }
+
+abstract class _$NoteModalSheetNotifier extends $Notifier<NoteModalSheetState> {
+  late final _$args = ref.$arg as Note;
+  Note get note => _$args;
+
+  NoteModalSheetState build(Note note);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<NoteModalSheetState, NoteModalSheetState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<NoteModalSheetState, NoteModalSheetState>,
+              NoteModalSheetState,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
