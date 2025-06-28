@@ -29,7 +29,6 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return CenteringWidget(
@@ -100,8 +99,10 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                             .guard(() async {
                           await ref
                               .read(accountRepositoryProvider.notifier)
-                              .loginAsToken(toAscii(serverController.text),
-                                  apiKeyController.text,);
+                              .loginAsToken(
+                                toAscii(serverController.text),
+                                apiKeyController.text,
+                              );
 
                           if (!context.mounted) return;
                           await context.pushRoute(
