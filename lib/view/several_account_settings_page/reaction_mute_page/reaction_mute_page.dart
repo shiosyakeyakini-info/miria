@@ -1,11 +1,11 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
-import "package:miria/view/common/account_scope.dart";
 import "package:miria/providers.dart";
+import "package:miria/view/common/account_scope.dart";
 
 @RoutePage()
 class ReactionMutePage extends HookConsumerWidget implements AutoRouteWrapper {
@@ -23,7 +23,7 @@ class ReactionMutePage extends HookConsumerWidget implements AutoRouteWrapper {
     final repo = ref.watch(accountSettingsRepositoryProvider);
     useEffect(() {
       final settings = repo.fromAccount(account);
-      controller.text = settings.mutedReactions.join('\n');
+      controller.text = settings.mutedReactions.join("\n");
       return null;
     }, [repo]);
 
@@ -48,7 +48,7 @@ class ReactionMutePage extends HookConsumerWidget implements AutoRouteWrapper {
             ElevatedButton.icon(
               onPressed: () {
                 final values = controller.text
-                    .split('\n')
+                    .split("\n")
                     .where((e) => e.trim().isNotEmpty)
                     .toList();
                 final current = repo.fromAccount(account);

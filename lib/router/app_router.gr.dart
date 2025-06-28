@@ -2356,6 +2356,55 @@ class ReactionDeckRouteArgs {
 }
 
 /// generated route for
+/// [ReactionMutePage]
+class ReactionMuteRoute extends PageRouteInfo<ReactionMuteRouteArgs> {
+  ReactionMuteRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ReactionMuteRoute.name,
+         args: ReactionMuteRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'ReactionMuteRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReactionMuteRouteArgs>();
+      return WrappedRoute(
+        child: ReactionMutePage(account: args.account, key: args.key),
+      );
+    },
+  );
+}
+
+class ReactionMuteRouteArgs {
+  const ReactionMuteRouteArgs({required this.account, this.key});
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ReactionMuteRouteArgs{account: $account, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionMuteRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ReactionPickerDialog]
 class ReactionPickerRoute extends PageRouteInfo<ReactionPickerRouteArgs> {
   ReactionPickerRoute({

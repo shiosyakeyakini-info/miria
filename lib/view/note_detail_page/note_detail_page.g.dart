@@ -146,7 +146,7 @@ final class _ConversationProvider
   }
 }
 
-String _$conversationHash() => r'1b0f6300985b5cc10656d4d7cf1906706fac6e24';
+String _$conversationHash() => r'b69ce226a89b66118fb9eb993e16b802e9c6210d';
 
 final class _ConversationFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Note>>, String> {
