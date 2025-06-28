@@ -10,7 +10,6 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/misskey_notes/reaction_button.dart";
-import "package:miria/view/common/misskey_notes/in_note_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";

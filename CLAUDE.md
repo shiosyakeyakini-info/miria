@@ -114,4 +114,5 @@ fvm flutter pub run build_runner build
 
 - `fvm dart analyze | grep 'error'`で致命的なエラーが出ていないかを確認する
 - `fvm dart format .`でフォーマッタを適用する
+- `fvm dart fix --apply`で機械的に修正可能なフォーマットを修正する
 - `fvm flutter test`でテストが動作することを確認する　（やや長い時間がかかります）

@@ -1,11 +1,11 @@
 import "package:auto_route/auto_route.dart";
 import "package:confetti/confetti.dart";
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/extensions/string_extensions.dart";
 import "package:miria/extensions/user_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/avatar_icon.dart";

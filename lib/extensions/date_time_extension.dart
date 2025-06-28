@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:intl/intl.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 extension DateTimeExtension on DateTime {
   Duration operator -(DateTime other) => difference(other);

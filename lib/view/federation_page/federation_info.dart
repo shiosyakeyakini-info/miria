@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/string_extensions.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/federation_data.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";

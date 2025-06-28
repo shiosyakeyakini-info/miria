@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:json5/json5.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:url_launcher/url_launcher.dart";

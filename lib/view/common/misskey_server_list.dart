@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/state_notifier/common/misskey_server_list_notifier.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/error_detail.dart";

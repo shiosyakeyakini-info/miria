@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 

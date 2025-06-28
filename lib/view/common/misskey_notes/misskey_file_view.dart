@@ -1,8 +1,8 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/misskey_notes/in_note_button.dart";

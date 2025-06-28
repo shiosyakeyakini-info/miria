@@ -3,11 +3,10 @@ import "dart:io";
 import "dart:math";
 
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:media_kit/media_kit.dart";
 import "package:media_kit_video/media_kit_video.dart";
 import "package:media_kit_video/media_kit_video_controls/src/controls/extensions/duration.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:url_launcher/url_launcher_string.dart";
 import "package:volume_controller/volume_controller.dart";
 

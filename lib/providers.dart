@@ -7,7 +7,6 @@ import "package:flutter_cache_manager/flutter_cache_manager.dart"
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/legacy.dart";
-import "package:riverpod/riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/model/tab_setting.dart";
@@ -33,6 +32,7 @@ import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod/riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "providers.freezed.dart";

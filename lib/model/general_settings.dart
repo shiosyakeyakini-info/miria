@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:miria/l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 part "general_settings.freezed.dart";
 part "general_settings.g.dart";
