@@ -110,6 +110,7 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
     Key? key,
     String? host,
     String? remoteHost,
+    bool showWithoutLogin = true,
     List<PageRouteInfo>? children,
   }) : super(
          AccountSelectRoute.name,
@@ -117,6 +118,7 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
            key: key,
            host: host,
            remoteHost: remoteHost,
+           showWithoutLogin: showWithoutLogin,
          ),
          initialChildren: children,
        );
@@ -133,13 +135,19 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
         key: args.key,
         host: args.host,
         remoteHost: args.remoteHost,
+        showWithoutLogin: args.showWithoutLogin,
       );
     },
   );
 }
 
 class AccountSelectRouteArgs {
-  const AccountSelectRouteArgs({this.key, this.host, this.remoteHost});
+  const AccountSelectRouteArgs({
+    this.key,
+    this.host,
+    this.remoteHost,
+    this.showWithoutLogin = true,
+  });
 
   final Key? key;
 
@@ -147,9 +155,11 @@ class AccountSelectRouteArgs {
 
   final String? remoteHost;
 
+  final bool showWithoutLogin;
+
   @override
   String toString() {
-    return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost}';
+    return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost, showWithoutLogin: $showWithoutLogin}';
   }
 
   @override
@@ -158,11 +168,16 @@ class AccountSelectRouteArgs {
     if (other is! AccountSelectRouteArgs) return false;
     return key == other.key &&
         host == other.host &&
-        remoteHost == other.remoteHost;
+        remoteHost == other.remoteHost &&
+        showWithoutLogin == other.showWithoutLogin;
   }
 
   @override
-  int get hashCode => key.hashCode ^ host.hashCode ^ remoteHost.hashCode;
+  int get hashCode =>
+      key.hashCode ^
+      host.hashCode ^
+      remoteHost.hashCode ^
+      showWithoutLogin.hashCode;
 }
 
 /// generated route for
@@ -3210,6 +3225,7 @@ class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
   UserControlRoute({
     required Account account,
     required UserDetailed response,
+    String? host,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -3217,6 +3233,7 @@ class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
          args: UserControlRouteArgs(
            account: account,
            response: response,
+           host: host,
            key: key,
          ),
          initialChildren: children,
@@ -3232,6 +3249,7 @@ class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
         child: UserControlDialog(
           account: args.account,
           response: args.response,
+          host: args.host,
           key: args.key,
         ),
       );
@@ -3243,6 +3261,7 @@ class UserControlRouteArgs {
   const UserControlRouteArgs({
     required this.account,
     required this.response,
+    this.host,
     this.key,
   });
 
@@ -3250,11 +3269,13 @@ class UserControlRouteArgs {
 
   final UserDetailed response;
 
+  final String? host;
+
   final Key? key;
 
   @override
   String toString() {
-    return 'UserControlRouteArgs{account: $account, response: $response, key: $key}';
+    return 'UserControlRouteArgs{account: $account, response: $response, host: $host, key: $key}';
   }
 
   @override
@@ -3263,11 +3284,13 @@ class UserControlRouteArgs {
     if (other is! UserControlRouteArgs) return false;
     return account == other.account &&
         response == other.response &&
+        host == other.host &&
         key == other.key;
   }
 
   @override
-  int get hashCode => account.hashCode ^ response.hashCode ^ key.hashCode;
+  int get hashCode =>
+      account.hashCode ^ response.hashCode ^ host.hashCode ^ key.hashCode;
 }
 
 /// generated route for

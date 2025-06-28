@@ -992,6 +992,13 @@
 
     "unsupportedFile": "対応してないファイルやわ",
     "unsupportedFileWithFilename": "{filename}は対応してないファイルやわ",
+    "@unsupportedFileWithFilename": {
+        "placeholders": {
+            "filename": {
+                "type": "String"
+            }
+        }
+    },
     "failedFileSave": "ファイルの保存に失敗したみたいや",
 
     "misskeyGames": "Misskey Games",

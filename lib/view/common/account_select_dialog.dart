@@ -11,13 +11,21 @@ import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
 @RoutePage()
 class AccountSelectDialog extends HookConsumerWidget {
-  const AccountSelectDialog({super.key, this.host, this.remoteHost});
+  const AccountSelectDialog({
+    super.key,
+    this.host,
+    this.remoteHost,
+    this.showWithoutLogin = true,
+  });
 
   /// nullではないとき, 指定されたサーバーのアカウントのみ表示する
   final String? host;
 
   /// 相手先のホスト
   final String? remoteHost;
+
+  // 相手先のサーバで開く（ログインなし）を表示
+  final bool showWithoutLogin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +50,7 @@ class AccountSelectDialog extends HookConsumerWidget {
         height: MediaQuery.of(context).size.height * 0.8,
         child: ListView(
           children: [
-            if (remoteHost != null)
+            if (showWithoutLogin && remoteHost != null)
               switch (navigateAsRemote.value) {
                 AsyncLoading() => const Center(
                   child: CircularProgressIndicator.adaptive(),

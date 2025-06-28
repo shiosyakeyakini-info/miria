@@ -3154,7 +3154,7 @@ abstract class S {
   ///
   /// In ja, this message translates to:
   /// **'{filename}は対応してないファイルやわ'**
-  String unsupportedFileWithFilename(Object filename);
+  String unsupportedFileWithFilename(String filename);
 
   /// No description provided for @failedFileSave.
   ///

@@ -6,7 +6,7 @@ import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/util/punycode.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
@@ -117,7 +117,29 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                     padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await login().expectFailure(context);
+                        IndicatorView.showIndicator(context);
+                        await ref
+                            .read(dialogStateNotifierProvider.notifier)
+                            .guard(() async {
+                              await ref
+                                  .read(accountRepositoryProvider.notifier)
+                                  .loginAsToken(
+                                    toAscii(serverController.text),
+                                    apiKeyController.text,
+                                  );
+
+                              if (!context.mounted) return;
+                              await context.pushRoute(
+                                TimeLineRoute(
+                                  initialTabSetting: ref
+                                      .read(tabSettingsRepositoryProvider)
+                                      .tabSettings
+                                      .first,
+                                ),
+                              );
+                            });
+                        if (!context.mounted) return;
+                        IndicatorView.hideIndicator(context);
                       },
                       child: Text(S.of(context).login),
                     ),
