@@ -1,5 +1,4 @@
 import "package:auto_route/auto_route.dart";
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
@@ -35,7 +34,7 @@ Future<List<Note>> _conversation(Ref ref, String noteId) async {
   ref.read(notesWithProvider).registerAll(conversationResult);
   ref
       .read(notesWithProvider)
-      .registerAll(conversationResult.map((e) => e.reply).whereNotNull());
+      .registerAll(conversationResult.map((e) => e.reply).nonNulls);
 
   return [
     ...[...conversationResult].reversed,

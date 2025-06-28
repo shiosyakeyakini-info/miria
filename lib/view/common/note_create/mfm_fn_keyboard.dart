@@ -160,13 +160,13 @@ class MfmFnKeyboard extends ConsumerWidget {
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
-        if (result.value.alpha == 1) {
+        if ((result.value.a * 255.0).round() & 0xff == 255) {
           controller.insert(
-            ".color=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
+            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         } else {
           controller.insert(
-            ".color=${(result.value.red / 16).toInt().toRadixString(16)}${(result.value.green / 16).toInt().toRadixString(16)}${(result.value.blue / 16).toInt().toRadixString(16)}${(result.value.alpha / 16).toInt().toRadixString(16)} ",
+            ".color=${((result.value.r * 255.0).round() & 0xff) ~/ 16.toRadixString(16)}${((result.value.g * 255.0).round() & 0xff) ~/ 16.toRadixString(16)}${((result.value.b * 255.0).round() & 0xff) ~/ 16.toRadixString(16)}${((result.value.a * 255.0).round() & 0xff) ~/ 16.toRadixString(16)} ",
           );
         }
       } else {
@@ -217,7 +217,7 @@ class MfmFnKeyboard extends ConsumerWidget {
           );
         } else {
           controller.insert(
-            "=${(result.value.red / 16).toInt().toRadixString(16)}${(result.value.green / 16).toInt().toRadixString(16)}${(result.value.blue / 16).toInt().toRadixString(16)}${(result.value.alpha / 16).toInt().toRadixString(16)} ",
+            "=${result.value.red ~/ 16.toRadixString(16)}${result.value.green ~/ 16.toRadixString(16)}${result.value.blue ~/ 16.toRadixString(16)}${result.value.alpha ~/ 16.toRadixString(16)} ",
           );
         }
       } else {

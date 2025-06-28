@@ -1,6 +1,5 @@
 import "dart:async";
 
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
@@ -44,7 +43,7 @@ class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
                 ?.map((e) => e.category)
                 .toSet()
                 .toList()
-                .whereNotNull() ??
+                .nonNulls ??
             [],
       );
   }

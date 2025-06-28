@@ -64,7 +64,7 @@ class RoleListItem extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 10),
                   child: NetworkImageView(
                     height: iconHeight,
-                    loadingBuilder: (context, _, __) =>
+                    loadingBuilder: (context, _, _) =>
                         SizedBox(width: iconHeight, height: iconHeight),
                     errorBuilder: (context, e, s) =>
                         const SizedBox(width: 1, height: 1),

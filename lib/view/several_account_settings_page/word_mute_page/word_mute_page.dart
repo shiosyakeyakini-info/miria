@@ -38,7 +38,7 @@ class WordMutePage extends HookConsumerWidget implements AutoRouteWrapper {
             return e.content!.join(" ");
           }
         })
-        .whereNotNull()
+        .nonNulls
         .join("\n");
   }
 

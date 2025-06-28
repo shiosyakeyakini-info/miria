@@ -1,5 +1,4 @@
 import "package:auto_route/auto_route.dart";
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -211,7 +210,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                   NotEmojiData() => null,
                 },
               )
-              .whereNotNull()
+              .nonNulls
               .toList(),
         ),
       ),

@@ -49,7 +49,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
           }
         }
 
-        ReceiveSharingIntent.instance.reset();
+        await ReceiveSharingIntent.instance.reset();
       }
 
       LicenseRegistry.addLicense(
@@ -113,7 +113,7 @@ class SplashPageState extends ConsumerState<SplashPage> {
                 }
                 if (!mounted) return;
 
-                context.replaceRoute(const LoginRoute());
+                await context.replaceRoute(const LoginRoute());
               });
             } else {
               context.replaceRoute(const LoginRoute());

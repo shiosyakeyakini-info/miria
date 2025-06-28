@@ -59,7 +59,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   );
                   ref
                       .read(notesWithProvider)
-                      .registerAll(result.map((e) => e.note).whereNotNull());
+                      .registerAll(result.map((e) => e.note).nonNulls);
 
                   await ref
                       .read(accountRepositoryProvider.notifier)
@@ -73,7 +73,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                   );
                   ref
                       .read(notesWithProvider)
-                      .registerAll(result.map((e) => e.note).whereNotNull());
+                      .registerAll(result.map((e) => e.note).nonNulls);
                   return result.toNotificationData(localize);
                 },
                 itemBuilder: (context, notification) => Align(
@@ -265,7 +265,7 @@ class NotificationItem extends ConsumerWidget {
                             Column(
                               children: [
                                 for (final user
-                                    in notification.renoteUsers.whereNotNull())
+                                    in notification.renoteUsers.nonNulls)
                                   UserListItem(user: user),
                               ],
                             ),

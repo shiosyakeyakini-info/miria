@@ -42,7 +42,7 @@ class CommunityChannelView extends ConsumerWidget {
                   child: Image.network(
                     channel.bannerUrl!.toString(),
                     fit: BoxFit.fitWidth,
-                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                    errorBuilder: (_, _, _) => const SizedBox.shrink(),
                   ),
                 ),
               Padding(

@@ -52,7 +52,7 @@ class _NotesAfterRenotePageState extends ConsumerState<NotesAfterRenotePage> {
             });
             return notesAfterRenote;
           },
-          nextFuture: (_, __) async {
+          nextFuture: (_, _) async {
             final (notesAfterRenote, lastRenoteId) = await getNotesAfterRenote(
               misskey,
               untilId: untilId,

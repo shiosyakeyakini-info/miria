@@ -322,7 +322,7 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
             imageEditorOption: ImageEditorOption()..addOptions(preset.option),
           ),
         ),
-    ].whereNotNull();
+    ].nonNulls;
 
     state = state.copyWith(colorFilterPreviewImages: result.toList());
   }

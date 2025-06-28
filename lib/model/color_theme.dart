@@ -55,7 +55,7 @@ abstract class ColorTheme with _$ColorTheme {
         return switch (func) {
           "darken" => color.darken(arg / 100),
           "lighten" => color.lighten(arg / 100),
-          "alpha" => color.withOpacity(arg),
+          "alpha" => color.withValues(alpha: arg),
           "hue" => color.spin(arg),
           "saturate" => color.saturate(arg / 100),
           _ => color,

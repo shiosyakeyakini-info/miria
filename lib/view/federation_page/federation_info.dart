@@ -58,7 +58,7 @@ class FederationInfo extends ConsumerWidget {
             Html(
               data: description,
               style: {"a": Style(color: AppTheme.of(context).linkStyle.color)},
-              onLinkTap: (url, _, __) async {
+              onLinkTap: (url, _, _) async {
                 await launchUrlString(url.toString());
               },
             ),
@@ -144,7 +144,7 @@ class FederationInfo extends ConsumerWidget {
                                   color: AppTheme.of(context).linkStyle.color,
                                 ),
                               },
-                              onLinkTap: (url, _, __) async {
+                              onLinkTap: (url, _, _) async {
                                 await launchUrlString(url.toString());
                               },
                             ),

@@ -238,7 +238,7 @@ class EmojiRepositoryImpl extends EmojiRepository {
     } else {
       return reactionDeck
           .map((e) => emojiMap?[e])
-          .whereNotNull()
+          .nonNulls
           .map((e) => e.emoji)
           .toList();
     }

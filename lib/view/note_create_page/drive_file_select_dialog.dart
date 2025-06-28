@@ -153,7 +153,7 @@ class DriveFileSelectDialog extends HookConsumerWidget
                             ? BoxDecoration(
                                 color: AppTheme.of(
                                   context,
-                                ).currentDisplayTabColor.withOpacity(0.7),
+                                ).currentDisplayTabColor.withValues(alpha: 0.7),
                                 borderRadius: BorderRadius.circular(5),
                               )
                             : null,

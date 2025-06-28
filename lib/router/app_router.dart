@@ -179,7 +179,7 @@ class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
   AutoDialogRoute({required super.page})
     : super(
         transitionsBuilder: TransitionsBuilders.fadeIn,
-        durationInMilliseconds: 200,
+        duration: const Duration(milliseconds: 200),
         fullscreenDialog: false,
         customRouteBuilder: <T>(context, child, page) => DialogRoute<T>(
           context: context,
@@ -194,7 +194,7 @@ class AutoModalRouteSheet<ReturnT extends Object> extends CustomRoute {
   AutoModalRouteSheet({required super.page})
     : super(
         transitionsBuilder: TransitionsBuilders.slideBottom,
-        durationInMilliseconds: 200,
+        duration: const Duration(milliseconds: 200),
         customRouteBuilder: <T>(context, child, page) =>
             ModalBottomSheetRoute<T>(
               builder: (context) => child,

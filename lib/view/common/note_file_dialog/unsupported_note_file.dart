@@ -29,7 +29,7 @@ class UnsupportedNoteFile extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         Container(
-          decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5)),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
