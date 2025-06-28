@@ -128,8 +128,8 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, widget) {
-        return DialogScope(
-          child: AppThemeScope(
+        return AppThemeScope(
+          child: DialogScope(
             child: SharingIntentListener(
               router: appRouter,
               child: ErrorDialogListener(child: widget ?? Container()),

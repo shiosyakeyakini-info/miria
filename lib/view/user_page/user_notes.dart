@@ -110,11 +110,11 @@ class UserNotes extends HookConsumerWidget {
                       result.year,
                       result.month,
                       result.day,
-                      23,
-                      59,
-                      59,
-                      999,
-                    );
+                      result.hour,
+                      result.minute,
+                      0,
+                      0,
+                    ).subtract(const Duration(milliseconds: 1));
                   }
                 },
                 icon: const Icon(Icons.date_range),

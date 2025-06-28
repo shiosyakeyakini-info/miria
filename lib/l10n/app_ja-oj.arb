@@ -94,22 +94,30 @@
     "thrownError": "なにか様子がおかしいですわね…",
 
     "exportedFileNotFound": "ここにMiriaの設定ファイル見つかりませんでしたわよ",
-    "importCompleted": "インポート終わりましたわ。",
+    "importCompleted": "インポート終わりましたわ",
     "confirmOverwrite": "ここにもうあるようですけれど……上書きいたしますの？",
+    "exportCompleted": "エクスポート終わりましたわ",
 
     "pleaseInputSomething": "なにか入れてくださいまし？",
-    "pleaseAddVoteChoice": "投票の選択肢を2つ以上入れてくださまいし？",
+    "pleaseAddVoteChoice": "投票の選択肢を2つ以上入れてくださいまし？",
     "pleaseSpecifyExpirationDate": "投票がいつまでか入れてくださいまし？",
     "pleaseSpecifyExpirationDuration": "投票期間を入れてくださいまし？",
     "cannotMentionToRemoteInLocalOnlyNote": "連合切られているのに他のサーバーの人がメンションに含まれているようですわ",
     "cannotPublicReplyToPrivateNote": "リプライが{visibility}のようでして……パブリックにはできませんこと",
 
+    "unexpectedSensitive": "上げようとしたファイルがサーバーから、センシティブと思われたようですわね",
+    "staySensitive": "センシティブのままにしますわ",
+
     "memoDescription": "メモしたいことをお書きくださいまし",
     "confirmCreateBlock": "ブロックなさりますの？",
+    "confirmUnfollow": "フォロー解除なさりますの？",
 
     "unsupportedFile": "対応してないファイルのようですわ",
     "unsupportedFileWithFilename": "{filename}は対応してないファイルのようですわ",
     "failedFileSave": "ファイルの保存に失敗したようですわね…",
+
+    "invitedReversi": "{users}から招待されているようですわ",
+    "nonInvitedReversi": "招待されていないようですわね…",
 
     "nothingHere": "ここには何もありませんわ"
 

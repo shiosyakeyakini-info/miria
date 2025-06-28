@@ -113,7 +113,11 @@ class LinkNavigator {
       );
     } else if (uri.pathSegments.length == 1 &&
         uri.pathSegments.first.startsWith("@")) {
-      await onMentionTap(context, ref, uri.pathSegments.first, host);
+      final userName = ("@".allMatches(uri.pathSegments.first).length == 1)
+          ? "${uri.pathSegments.first}@${uri.host}"
+          : uri.pathSegments.first;
+
+      await onMentionTap(context, ref, userName, host);
     } else {
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.externalApplication);

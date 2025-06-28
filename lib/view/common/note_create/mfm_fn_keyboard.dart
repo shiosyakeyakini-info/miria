@@ -160,13 +160,13 @@ class MfmFnKeyboard extends ConsumerWidget {
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
-        if ((result.value.a * 255.0).round() & 0xff == 255) {
+        if (((result.value.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
           controller.insert(
             ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         } else {
           controller.insert(
-            ".color=${((result.value.r * 15.0).round() & 0xff).toRadixString(16)}${((result.value.g * 15.0).round() & 0xff).toRadixString(16)}${((result.value.b * 15.0).round() & 0xff).toRadixString(16)}${((result.value.a * 15.0).round() & 0xff).toRadixString(16)} ",
+            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.a * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         }
       } else {
@@ -211,13 +211,13 @@ class MfmFnKeyboard extends ConsumerWidget {
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
-        if (result.value.alpha == 1) {
+        if (((result.value.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
           controller.insert(
-            "=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
+            "=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         } else {
           controller.insert(
-            "=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")}${result.value.alpha.toRadixString(16).padLeft(2, "0")} ",
+            "=${((result.value.r * 15.0).round() & 0xff).toRadixString(16)}${((result.value.g * 15.0).round() & 0xff).toRadixString(16)}${((result.value.b * 15.0).round() & 0xff).toRadixString(16)}${((result.value.a * 15.0).round() & 0xff).toRadixString(16)} ",
           );
         }
       } else {

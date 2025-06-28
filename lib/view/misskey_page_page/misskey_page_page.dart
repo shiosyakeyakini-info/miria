@@ -40,7 +40,6 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountHost = ref.read(accountContextProvider).getAccount.host;
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).page)),
       body: Padding(
@@ -74,7 +73,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                           onPressed: () async => launchUrl(
                             Uri(
                               scheme: "https",
-                              host: accountHost,
+                              host: accountContext.getAccount.host,
                               pathSegments: [
                                 "@${page.user.username}",
                                 "pages",
@@ -92,7 +91,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                             await Clipboard.setData(
                               ClipboardData(
                                 text:
-                                    "https://$accountHost/@${page.user.username}/pages/${page.name}",
+                                    "https://${accountContext.getAccount.host}/@${page.user.username}/pages/${page.name}",
                               ),
                             );
                             if (!context.mounted) return;
@@ -132,7 +131,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                         onPressed: () async => launchUrl(
                           Uri(
                             scheme: "https",
-                            host: accountHost,
+                            host: accountContext.getAccount.host,
                             pathSegments: [
                               "@${page.user.username}",
                               "pages",
@@ -150,7 +149,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                           await Clipboard.setData(
                             ClipboardData(
                               text:
-                                  "https://$accountHost/@${page.user.username}/pages/${page.name}",
+                                  "https://${accountContext.getAccount.host}/@${page.user.username}/pages/${page.name}",
                             ),
                           );
                           if (!context.mounted) return;

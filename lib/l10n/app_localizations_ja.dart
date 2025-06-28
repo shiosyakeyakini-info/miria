@@ -1832,7 +1832,7 @@ class SJa extends S {
   String get unsupportedFile => '対応してないファイルやわ';
 
   @override
-  String unsupportedFileWithFilename(Object filename) {
+  String unsupportedFileWithFilename(String filename) {
     return '$filenameは対応してないファイルやわ';
   }
 
@@ -2144,16 +2144,19 @@ class SJaOj extends SJa {
   String get exportedFileNotFound => 'ここにMiriaの設定ファイル見つかりませんでしたわよ';
 
   @override
-  String get importCompleted => 'インポート終わりましたわ。';
+  String get importCompleted => 'インポート終わりましたわ';
 
   @override
   String get confirmOverwrite => 'ここにもうあるようですけれど……上書きいたしますの？';
 
   @override
+  String get exportCompleted => 'エクスポート終わりましたわ';
+
+  @override
   String get pleaseInputSomething => 'なにか入れてくださいまし？';
 
   @override
-  String get pleaseAddVoteChoice => '投票の選択肢を2つ以上入れてくださまいし？';
+  String get pleaseAddVoteChoice => '投票の選択肢を2つ以上入れてくださいまし？';
 
   @override
   String get pleaseSpecifyExpirationDate => '投票がいつまでか入れてくださいまし？';
@@ -2171,21 +2174,38 @@ class SJaOj extends SJa {
   }
 
   @override
+  String get unexpectedSensitive => '上げようとしたファイルがサーバーから、センシティブと思われたようですわね';
+
+  @override
+  String get staySensitive => 'センシティブのままにしますわ';
+
+  @override
   String get memoDescription => 'メモしたいことをお書きくださいまし';
 
   @override
   String get confirmCreateBlock => 'ブロックなさりますの？';
 
   @override
+  String get confirmUnfollow => 'フォロー解除なさりますの？';
+
+  @override
   String get unsupportedFile => '対応してないファイルのようですわ';
 
   @override
-  String unsupportedFileWithFilename(Object filename) {
+  String unsupportedFileWithFilename(String filename) {
     return '$filenameは対応してないファイルのようですわ';
   }
 
   @override
   String get failedFileSave => 'ファイルの保存に失敗したようですわね…';
+
+  @override
+  String invitedReversi(String users) {
+    return '$usersから招待されているようですわ';
+  }
+
+  @override
+  String get nonInvitedReversi => '招待されていないようですわね…';
 
   @override
   String get nothingHere => 'ここには何もありませんわ';

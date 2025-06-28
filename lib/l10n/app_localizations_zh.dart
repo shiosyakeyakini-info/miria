@@ -1824,7 +1824,7 @@ class SZh extends S {
   String get unsupportedFile => '対応してないファイルやわ';
 
   @override
-  String unsupportedFileWithFilename(Object filename) {
+  String unsupportedFileWithFilename(String filename) {
     return '$filenameは対応してないファイルやわ';
   }
 

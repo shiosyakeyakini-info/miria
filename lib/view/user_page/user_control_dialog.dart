@@ -31,10 +31,12 @@ enum UserControl {
 class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final UserDetailed response;
+  final String? host;
 
   const UserControlDialog({
     required this.account,
     required this.response,
+    this.host,
     super.key,
   });
 
@@ -105,7 +107,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
     final openUserInOtherAccount = useAsync(
       () async => ref
           .read(misskeyNoteNotifierProvider.notifier)
-          .openUserInOtherAccount(response),
+          .openUserInOtherAccount(response, host),
     );
 
     final isLoading = [
