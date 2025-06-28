@@ -80,8 +80,9 @@ void main() {
   test("関数名と引数名の一部が入力されたとき入力された文字列で始まる引数を返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.s")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.s"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -90,17 +91,16 @@ void main() {
     final args = container.read(filteredMfmFnArgsProvider);
     expect(
       args,
-      orderedEquals(const [
-        MfmFnArg(name: "speed", defaultValue: "1.5s"),
-      ]),
+      orderedEquals(const [MfmFnArg(name: "speed", defaultValue: "1.5s")]),
     );
   });
 
   test("関数名と引数名が入力されたとき入力されていない引数を返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.x")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.x"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -122,8 +122,9 @@ void main() {
   test("関数名と引数名とコンマが入力されたとき入力されていない引数を返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.x,")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.x,"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -145,8 +146,9 @@ void main() {
   test("関数名と引数名と値が入力されたとき入力されていない引数を返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.speed=1.5s")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.speed=1.5s"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -168,8 +170,9 @@ void main() {
   test("関数名と引数名と値とコンマが入力されたとき入力されていない引数を返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.speed=1.5s,")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.speed=1.5s,"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -191,8 +194,9 @@ void main() {
   test("引数名が正しくない場合空のリストを返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.xy")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.xy"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -205,8 +209,9 @@ void main() {
   test("2つ目の引数名の一部が入力されたとき入力された文字列で始まる引数を返す", () {
     final container = ProviderContainer(
       overrides: [
-        inputCompletionTypeProvider
-            .overrideWith((ref) => const MfmFn("spin.x,s")),
+        inputCompletionTypeProvider.overrideWith(
+          (ref) => const MfmFn("spin.x,s"),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -215,9 +220,7 @@ void main() {
     final args = container.read(filteredMfmFnArgsProvider);
     expect(
       args,
-      orderedEquals(const [
-        MfmFnArg(name: "speed", defaultValue: "1.5s"),
-      ]),
+      orderedEquals(const [MfmFnArg(name: "speed", defaultValue: "1.5s")]),
     );
   });
 }

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/date_time_picker.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
@@ -13,11 +13,7 @@ class UserNotes extends HookConsumerWidget {
   final String userId;
   final String? remoteUserId;
 
-  const UserNotes({
-    required this.userId,
-    super.key,
-    this.remoteUserId,
-  });
+  const UserNotes({required this.userId, super.key, this.remoteUserId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -93,8 +89,9 @@ class UserNotes extends HookConsumerWidget {
               IconButton(
                 onPressed: () async {
                   final userInfo = ref.read(
-                    userInfoProxyProvider(userId)
-                        .select((value) => value.requireValue),
+                    userInfoProxyProvider(
+                      userId,
+                    ).select((value) => value.requireValue),
                   );
                   final firstDate = ref.read(accountContextProvider).isSame
                       ? userInfo.response.createdAt
@@ -127,15 +124,13 @@ class UserNotes extends HookConsumerWidget {
         ),
         Expanded(
           child: PushableListView<Note>(
-            listKey: Object.hashAll(
-              [
-                isFileOnly.value,
-                withReply.value,
-                renote.value,
-                untilDate.value,
-                highlight.value,
-              ],
-            ),
+            listKey: Object.hashAll([
+              isFileOnly.value,
+              withReply.value,
+              renote.value,
+              untilDate.value,
+              highlight.value,
+            ]),
             additionalErrorInfo: highlight.value
                 ? (context, e) => Text(S.of(context).userHighlightAvailability)
                 : null,
@@ -146,12 +141,13 @@ class UserNotes extends HookConsumerWidget {
                     .read(misskeyGetContextProvider)
                     .users
                     .featuredNotes(
-                      UsersFeaturedNotesRequest(
-                        userId: remoteUserId ?? userId,
-                      ),
+                      UsersFeaturedNotesRequest(userId: remoteUserId ?? userId),
                     );
               } else {
-                notes = await ref.read(misskeyGetContextProvider).users.notes(
+                notes = await ref
+                    .read(misskeyGetContextProvider)
+                    .users
+                    .notes(
                       UsersNotesRequest(
                         userId: remoteUserId ?? userId,
                         withFiles: isFileOnly.value,
@@ -182,7 +178,10 @@ class UserNotes extends HookConsumerWidget {
                       ),
                     );
               } else {
-                notes = await ref.read(misskeyGetContextProvider).users.notes(
+                notes = await ref
+                    .read(misskeyGetContextProvider)
+                    .users
+                    .notes(
                       UsersNotesRequest(
                         userId: remoteUserId ?? userId,
                         untilId: lastElement.id,

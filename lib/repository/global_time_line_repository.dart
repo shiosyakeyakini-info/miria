@@ -16,10 +16,7 @@ class GlobalTimelineRepository extends SocketTimelineRepository {
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
     return await misskey.notes.globalTimeline(
-      NotesGlobalTimelineRequest(
-        limit: 30,
-        untilId: untilId,
-      ),
+      NotesGlobalTimelineRequest(limit: 30, untilId: untilId),
     );
   }
 

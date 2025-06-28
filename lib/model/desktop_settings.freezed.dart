@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,385 +10,299 @@ part of 'desktop_settings.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-DesktopSettings _$DesktopSettingsFromJson(Map<String, dynamic> json) {
-  return _DesktopSettings.fromJson(json);
-}
 
 /// @nodoc
 mixin _$DesktopSettings {
-  DesktopWindowSettings get window => throw _privateConstructorUsedError;
+
+ DesktopWindowSettings get window;
+/// Create a copy of DesktopSettings
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DesktopSettingsCopyWith<DesktopSettings> get copyWith => _$DesktopSettingsCopyWithImpl<DesktopSettings>(this as DesktopSettings, _$identity);
 
   /// Serializes this DesktopSettings to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of DesktopSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DesktopSettingsCopyWith<DesktopSettings> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DesktopSettings&&(identical(other.window, window) || other.window == window));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,window);
+
+@override
+String toString() {
+  return 'DesktopSettings(window: $window)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DesktopSettingsCopyWith<$Res> {
-  factory $DesktopSettingsCopyWith(
-          DesktopSettings value, $Res Function(DesktopSettings) then) =
-      _$DesktopSettingsCopyWithImpl<$Res, DesktopSettings>;
-  @useResult
-  $Res call({DesktopWindowSettings window});
+abstract mixin class $DesktopSettingsCopyWith<$Res>  {
+  factory $DesktopSettingsCopyWith(DesktopSettings value, $Res Function(DesktopSettings) _then) = _$DesktopSettingsCopyWithImpl;
+@useResult
+$Res call({
+ DesktopWindowSettings window
+});
 
-  $DesktopWindowSettingsCopyWith<$Res> get window;
+
+$DesktopWindowSettingsCopyWith<$Res> get window;
+
 }
-
 /// @nodoc
-class _$DesktopSettingsCopyWithImpl<$Res, $Val extends DesktopSettings>
+class _$DesktopSettingsCopyWithImpl<$Res>
     implements $DesktopSettingsCopyWith<$Res> {
-  _$DesktopSettingsCopyWithImpl(this._value, this._then);
+  _$DesktopSettingsCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final DesktopSettings _self;
+  final $Res Function(DesktopSettings) _then;
 
-  /// Create a copy of DesktopSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? window = null,
-  }) {
-    return _then(_value.copyWith(
-      window: null == window
-          ? _value.window
-          : window // ignore: cast_nullable_to_non_nullable
-              as DesktopWindowSettings,
-    ) as $Val);
-  }
-
-  /// Create a copy of DesktopSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DesktopWindowSettingsCopyWith<$Res> get window {
-    return $DesktopWindowSettingsCopyWith<$Res>(_value.window, (value) {
-      return _then(_value.copyWith(window: value) as $Val);
-    });
-  }
+/// Create a copy of DesktopSettings
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? window = null,}) {
+  return _then(_self.copyWith(
+window: null == window ? _self.window : window // ignore: cast_nullable_to_non_nullable
+as DesktopWindowSettings,
+  ));
+}
+/// Create a copy of DesktopSettings
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DesktopWindowSettingsCopyWith<$Res> get window {
+  
+  return $DesktopWindowSettingsCopyWith<$Res>(_self.window, (value) {
+    return _then(_self.copyWith(window: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$DesktopSettingsImplCopyWith<$Res>
-    implements $DesktopSettingsCopyWith<$Res> {
-  factory _$$DesktopSettingsImplCopyWith(_$DesktopSettingsImpl value,
-          $Res Function(_$DesktopSettingsImpl) then) =
-      __$$DesktopSettingsImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({DesktopWindowSettings window});
-
-  @override
-  $DesktopWindowSettingsCopyWith<$Res> get window;
-}
-
-/// @nodoc
-class __$$DesktopSettingsImplCopyWithImpl<$Res>
-    extends _$DesktopSettingsCopyWithImpl<$Res, _$DesktopSettingsImpl>
-    implements _$$DesktopSettingsImplCopyWith<$Res> {
-  __$$DesktopSettingsImplCopyWithImpl(
-      _$DesktopSettingsImpl _value, $Res Function(_$DesktopSettingsImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of DesktopSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? window = null,
-  }) {
-    return _then(_$DesktopSettingsImpl(
-      window: null == window
-          ? _value.window
-          : window // ignore: cast_nullable_to_non_nullable
-              as DesktopWindowSettings,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$DesktopSettingsImpl implements _DesktopSettings {
-  const _$DesktopSettingsImpl({this.window = const DesktopWindowSettings()});
 
-  factory _$DesktopSettingsImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DesktopSettingsImplFromJson(json);
+class _DesktopSettings implements DesktopSettings {
+  const _DesktopSettings({this.window = const DesktopWindowSettings()});
+  factory _DesktopSettings.fromJson(Map<String, dynamic> json) => _$DesktopSettingsFromJson(json);
 
-  @override
-  @JsonKey()
-  final DesktopWindowSettings window;
+@override@JsonKey() final  DesktopWindowSettings window;
 
-  @override
-  String toString() {
-    return 'DesktopSettings(window: $window)';
-  }
+/// Create a copy of DesktopSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DesktopSettingsCopyWith<_DesktopSettings> get copyWith => __$DesktopSettingsCopyWithImpl<_DesktopSettings>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DesktopSettingsImpl &&
-            (identical(other.window, window) || other.window == window));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, window);
-
-  /// Create a copy of DesktopSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DesktopSettingsImplCopyWith<_$DesktopSettingsImpl> get copyWith =>
-      __$$DesktopSettingsImplCopyWithImpl<_$DesktopSettingsImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DesktopSettingsImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$DesktopSettingsToJson(this, );
 }
 
-abstract class _DesktopSettings implements DesktopSettings {
-  const factory _DesktopSettings({final DesktopWindowSettings window}) =
-      _$DesktopSettingsImpl;
-
-  factory _DesktopSettings.fromJson(Map<String, dynamic> json) =
-      _$DesktopSettingsImpl.fromJson;
-
-  @override
-  DesktopWindowSettings get window;
-
-  /// Create a copy of DesktopSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DesktopSettingsImplCopyWith<_$DesktopSettingsImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DesktopSettings&&(identical(other.window, window) || other.window == window));
 }
 
-DesktopWindowSettings _$DesktopWindowSettingsFromJson(
-    Map<String, dynamic> json) {
-  return _DesktopWindowSettings.fromJson(json);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,window);
+
+@override
+String toString() {
+  return 'DesktopSettings(window: $window)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DesktopSettingsCopyWith<$Res> implements $DesktopSettingsCopyWith<$Res> {
+  factory _$DesktopSettingsCopyWith(_DesktopSettings value, $Res Function(_DesktopSettings) _then) = __$DesktopSettingsCopyWithImpl;
+@override @useResult
+$Res call({
+ DesktopWindowSettings window
+});
+
+
+@override $DesktopWindowSettingsCopyWith<$Res> get window;
+
+}
+/// @nodoc
+class __$DesktopSettingsCopyWithImpl<$Res>
+    implements _$DesktopSettingsCopyWith<$Res> {
+  __$DesktopSettingsCopyWithImpl(this._self, this._then);
+
+  final _DesktopSettings _self;
+  final $Res Function(_DesktopSettings) _then;
+
+/// Create a copy of DesktopSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? window = null,}) {
+  return _then(_DesktopSettings(
+window: null == window ? _self.window : window // ignore: cast_nullable_to_non_nullable
+as DesktopWindowSettings,
+  ));
+}
+
+/// Create a copy of DesktopSettings
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DesktopWindowSettingsCopyWith<$Res> get window {
+  
+  return $DesktopWindowSettingsCopyWith<$Res>(_self.window, (value) {
+    return _then(_self.copyWith(window: value));
+  });
+}
+}
+
 
 /// @nodoc
 mixin _$DesktopWindowSettings {
-  double? get x => throw _privateConstructorUsedError;
-  double? get y => throw _privateConstructorUsedError;
-  double get w => throw _privateConstructorUsedError;
-  double get h => throw _privateConstructorUsedError;
+
+ double? get x; double? get y; double get w; double get h;
+/// Create a copy of DesktopWindowSettings
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DesktopWindowSettingsCopyWith<DesktopWindowSettings> get copyWith => _$DesktopWindowSettingsCopyWithImpl<DesktopWindowSettings>(this as DesktopWindowSettings, _$identity);
 
   /// Serializes this DesktopWindowSettings to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of DesktopWindowSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DesktopWindowSettingsCopyWith<DesktopWindowSettings> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DesktopWindowSettings&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y)&&(identical(other.w, w) || other.w == w)&&(identical(other.h, h) || other.h == h));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,x,y,w,h);
+
+@override
+String toString() {
+  return 'DesktopWindowSettings(x: $x, y: $y, w: $w, h: $h)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DesktopWindowSettingsCopyWith<$Res> {
-  factory $DesktopWindowSettingsCopyWith(DesktopWindowSettings value,
-          $Res Function(DesktopWindowSettings) then) =
-      _$DesktopWindowSettingsCopyWithImpl<$Res, DesktopWindowSettings>;
-  @useResult
-  $Res call({double? x, double? y, double w, double h});
-}
+abstract mixin class $DesktopWindowSettingsCopyWith<$Res>  {
+  factory $DesktopWindowSettingsCopyWith(DesktopWindowSettings value, $Res Function(DesktopWindowSettings) _then) = _$DesktopWindowSettingsCopyWithImpl;
+@useResult
+$Res call({
+ double? x, double? y, double w, double h
+});
 
+
+
+
+}
 /// @nodoc
-class _$DesktopWindowSettingsCopyWithImpl<$Res,
-        $Val extends DesktopWindowSettings>
+class _$DesktopWindowSettingsCopyWithImpl<$Res>
     implements $DesktopWindowSettingsCopyWith<$Res> {
-  _$DesktopWindowSettingsCopyWithImpl(this._value, this._then);
+  _$DesktopWindowSettingsCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final DesktopWindowSettings _self;
+  final $Res Function(DesktopWindowSettings) _then;
 
-  /// Create a copy of DesktopWindowSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
-    Object? w = null,
-    Object? h = null,
-  }) {
-    return _then(_value.copyWith(
-      x: freezed == x
-          ? _value.x
-          : x // ignore: cast_nullable_to_non_nullable
-              as double?,
-      y: freezed == y
-          ? _value.y
-          : y // ignore: cast_nullable_to_non_nullable
-              as double?,
-      w: null == w
-          ? _value.w
-          : w // ignore: cast_nullable_to_non_nullable
-              as double,
-      h: null == h
-          ? _value.h
-          : h // ignore: cast_nullable_to_non_nullable
-              as double,
-    ) as $Val);
-  }
+/// Create a copy of DesktopWindowSettings
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? x = freezed,Object? y = freezed,Object? w = null,Object? h = null,}) {
+  return _then(_self.copyWith(
+x: freezed == x ? _self.x : x // ignore: cast_nullable_to_non_nullable
+as double?,y: freezed == y ? _self.y : y // ignore: cast_nullable_to_non_nullable
+as double?,w: null == w ? _self.w : w // ignore: cast_nullable_to_non_nullable
+as double,h: null == h ? _self.h : h // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
 }
 
-/// @nodoc
-abstract class _$$DesktopWindowSettingsImplCopyWith<$Res>
-    implements $DesktopWindowSettingsCopyWith<$Res> {
-  factory _$$DesktopWindowSettingsImplCopyWith(
-          _$DesktopWindowSettingsImpl value,
-          $Res Function(_$DesktopWindowSettingsImpl) then) =
-      __$$DesktopWindowSettingsImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({double? x, double? y, double w, double h});
 }
 
-/// @nodoc
-class __$$DesktopWindowSettingsImplCopyWithImpl<$Res>
-    extends _$DesktopWindowSettingsCopyWithImpl<$Res,
-        _$DesktopWindowSettingsImpl>
-    implements _$$DesktopWindowSettingsImplCopyWith<$Res> {
-  __$$DesktopWindowSettingsImplCopyWithImpl(_$DesktopWindowSettingsImpl _value,
-      $Res Function(_$DesktopWindowSettingsImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of DesktopWindowSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
-    Object? w = null,
-    Object? h = null,
-  }) {
-    return _then(_$DesktopWindowSettingsImpl(
-      x: freezed == x
-          ? _value.x
-          : x // ignore: cast_nullable_to_non_nullable
-              as double?,
-      y: freezed == y
-          ? _value.y
-          : y // ignore: cast_nullable_to_non_nullable
-              as double?,
-      w: null == w
-          ? _value.w
-          : w // ignore: cast_nullable_to_non_nullable
-              as double,
-      h: null == h
-          ? _value.h
-          : h // ignore: cast_nullable_to_non_nullable
-              as double,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$DesktopWindowSettingsImpl implements _DesktopWindowSettings {
-  const _$DesktopWindowSettingsImpl(
-      {this.x = null, this.y = null, this.w = 400, this.h = 700});
 
-  factory _$DesktopWindowSettingsImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DesktopWindowSettingsImplFromJson(json);
+class _DesktopWindowSettings implements DesktopWindowSettings {
+  const _DesktopWindowSettings({this.x = null, this.y = null, this.w = 400, this.h = 700});
+  factory _DesktopWindowSettings.fromJson(Map<String, dynamic> json) => _$DesktopWindowSettingsFromJson(json);
 
-  @override
-  @JsonKey()
-  final double? x;
-  @override
-  @JsonKey()
-  final double? y;
-  @override
-  @JsonKey()
-  final double w;
-  @override
-  @JsonKey()
-  final double h;
+@override@JsonKey() final  double? x;
+@override@JsonKey() final  double? y;
+@override@JsonKey() final  double w;
+@override@JsonKey() final  double h;
 
-  @override
-  String toString() {
-    return 'DesktopWindowSettings(x: $x, y: $y, w: $w, h: $h)';
-  }
+/// Create a copy of DesktopWindowSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DesktopWindowSettingsCopyWith<_DesktopWindowSettings> get copyWith => __$DesktopWindowSettingsCopyWithImpl<_DesktopWindowSettings>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DesktopWindowSettingsImpl &&
-            (identical(other.x, x) || other.x == x) &&
-            (identical(other.y, y) || other.y == y) &&
-            (identical(other.w, w) || other.w == w) &&
-            (identical(other.h, h) || other.h == h));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, x, y, w, h);
-
-  /// Create a copy of DesktopWindowSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DesktopWindowSettingsImplCopyWith<_$DesktopWindowSettingsImpl>
-      get copyWith => __$$DesktopWindowSettingsImplCopyWithImpl<
-          _$DesktopWindowSettingsImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DesktopWindowSettingsImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$DesktopWindowSettingsToJson(this, );
 }
 
-abstract class _DesktopWindowSettings implements DesktopWindowSettings {
-  const factory _DesktopWindowSettings(
-      {final double? x,
-      final double? y,
-      final double w,
-      final double h}) = _$DesktopWindowSettingsImpl;
-
-  factory _DesktopWindowSettings.fromJson(Map<String, dynamic> json) =
-      _$DesktopWindowSettingsImpl.fromJson;
-
-  @override
-  double? get x;
-  @override
-  double? get y;
-  @override
-  double get w;
-  @override
-  double get h;
-
-  /// Create a copy of DesktopWindowSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DesktopWindowSettingsImplCopyWith<_$DesktopWindowSettingsImpl>
-      get copyWith => throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DesktopWindowSettings&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y)&&(identical(other.w, w) || other.w == w)&&(identical(other.h, h) || other.h == h));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,x,y,w,h);
+
+@override
+String toString() {
+  return 'DesktopWindowSettings(x: $x, y: $y, w: $w, h: $h)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DesktopWindowSettingsCopyWith<$Res> implements $DesktopWindowSettingsCopyWith<$Res> {
+  factory _$DesktopWindowSettingsCopyWith(_DesktopWindowSettings value, $Res Function(_DesktopWindowSettings) _then) = __$DesktopWindowSettingsCopyWithImpl;
+@override @useResult
+$Res call({
+ double? x, double? y, double w, double h
+});
+
+
+
+
+}
+/// @nodoc
+class __$DesktopWindowSettingsCopyWithImpl<$Res>
+    implements _$DesktopWindowSettingsCopyWith<$Res> {
+  __$DesktopWindowSettingsCopyWithImpl(this._self, this._then);
+
+  final _DesktopWindowSettings _self;
+  final $Res Function(_DesktopWindowSettings) _then;
+
+/// Create a copy of DesktopWindowSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? x = freezed,Object? y = freezed,Object? w = null,Object? h = null,}) {
+  return _then(_DesktopWindowSettings(
+x: freezed == x ? _self.x : x // ignore: cast_nullable_to_non_nullable
+as double?,y: freezed == y ? _self.y : y // ignore: cast_nullable_to_non_nullable
+as double?,w: null == w ? _self.w : w // ignore: cast_nullable_to_non_nullable
+as double,h: null == h ? _self.h : h // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+
+}
+
+// dart format on

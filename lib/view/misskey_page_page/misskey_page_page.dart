@@ -2,10 +2,10 @@ import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart" hide MfmText;
 import "package:miria/extensions/list_mfm_node_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/constants.dart";
@@ -128,41 +128,6 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                         pageId: page.id,
                         userId: page.userId,
                       ),
-                      OutlinedButton(
-                        onPressed: () async => launchUrl(
-                          Uri(
-                            scheme: "https",
-                            host: accountHost,
-                            pathSegments: [
-                              "@${page.user.username}",
-                              "pages",
-                              page.name,
-                            ],
-                          ),
-                        ),
-                        child: Text(
-                          S.of(context).openBrowsers,
-                          style: AppTheme.of(context).linkStyle,
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          await Clipboard.setData(
-                            ClipboardData(
-                              text:
-                                  "https://$accountHost/@${page.user.username}/pages/${page.name}",
-                            ),
-                          );
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(S.of(context).doneCopy),
-                              duration: const Duration(seconds: 1),
-                            ),
-                          );
-                        },
-                        child: const Icon(Icons.link),
-                      ),
                     ],
                   ),
                   Align(
@@ -188,7 +153,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
 }
 
 @Riverpod(dependencies: [misskeyGetContext, notesWith])
-Future<Note> fetchNote(FetchNoteRef ref, String noteId) async {
+Future<Note> fetchNote(Ref ref, String noteId) async {
   final note = await ref
       .read(misskeyGetContextProvider)
       .notes
@@ -200,11 +165,7 @@ Future<Note> fetchNote(FetchNoteRef ref, String noteId) async {
 class PageContent extends ConsumerWidget {
   final misskey.AbstractPageContent content;
   final misskey.Page page;
-  const PageContent({
-    required this.content,
-    required this.page,
-    super.key,
-  });
+  const PageContent({required this.content, required this.page, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -214,16 +175,11 @@ class PageContent extends ConsumerWidget {
       final nodes = const MfmParser().parse(text);
       return Column(
         children: [
-          MfmText(
-            mfmNode: nodes,
-          ),
+          MfmText(mfmNode: nodes),
           ...nodes.extractLinks().map(
-                (link) => LinkPreview(
-                  account: account,
-                  link: link,
-                  host: account.host,
-                ),
-              ),
+            (link) =>
+                LinkPreview(account: account, link: link, host: account.host),
+          ),
         ],
       );
     }
@@ -254,13 +210,13 @@ class PageContent extends ConsumerWidget {
       final note = ref.watch(fetchNoteProvider(noteId));
       return switch (note) {
         AsyncLoading() => const Center(
-            child: SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator.adaptive(),
-            ),
+          child: SizedBox.square(
+            dimension: 20,
+            child: CircularProgressIndicator.adaptive(),
           ),
+        ),
         AsyncError() => Text(S.of(context).thrownError),
-        AsyncData(:final value) => MisskeyNote(note: value)
+        AsyncData(:final value) => MisskeyNote(note: value),
       };
     }
     if (content is misskey.PageSection) {
@@ -315,34 +271,38 @@ class PageLikeButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = misskeyPageNotifierProvider(pageId);
     final liked = ref.watch(
-      provider.select((value) => value.valueOrNull?.page.isLiked ?? false),
+      provider.select((value) => value.value?.page.isLiked ?? false),
     );
     final likeCount = ref.watch(
-      provider.select((value) => value.valueOrNull?.page.likedCount ?? 0),
+      provider.select((value) => value.value?.page.likedCount ?? 0),
     );
     final isLoading = ref.watch(
-      provider.select((value) => value.valueOrNull?.likeOr is AsyncLoading),
+      provider.select((value) => value.value?.likeOr is AsyncLoading),
     );
 
     if (liked) {
       return ElevatedButton.icon(
-        onPressed:
-            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
+        onPressed: isLoading
+            ? null
+            : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
-          size: MediaQuery.textScalerOf(context)
-              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+          size: MediaQuery.textScalerOf(
+            context,
+          ).scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
         ),
         label: Text(likeCount.format()),
       );
     } else {
       return OutlinedButton.icon(
-        onPressed:
-            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
+        onPressed: isLoading
+            ? null
+            : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
-          size: MediaQuery.textScalerOf(context)
-              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+          size: MediaQuery.textScalerOf(
+            context,
+          ).scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
         ),
         label: Text(likeCount.format()),
       );

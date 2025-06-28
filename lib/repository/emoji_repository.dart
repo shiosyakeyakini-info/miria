@@ -53,6 +53,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   bool thisLaunchLoaded = false;
 
+  final romajiPattern = RegExp(r"^[A-Za-z0-9_+-]+$");
+  final splitPattern = RegExp("[_+-]");
+
   String format(String emojiName) {
     return emojiName
         .replaceAll("_", "")
@@ -62,8 +65,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   Future<void> loadFromLocalCache() async {
-    final storedData =
-        await sharePreferenceController.getString("emojis@${account.host}");
+    final storedData = await sharePreferenceController.getString(
+      "emojis@${account.host}",
+    );
     if (storedData == null || storedData.isEmpty) {
       return;
     }
@@ -109,7 +113,13 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   String toHiraganaSafe(String text) {
     try {
-      return const KanaKit().toHiragana(text);
+      if (romajiPattern.hasMatch(text)) {
+        return text
+            .split(splitPattern)
+            .map((e) => const KanaKit().toHiragana(e))
+            .join();
+      }
+      return const KanaKit().toHiragana(format(text));
     } catch (e) {
       return text;
     }
@@ -125,10 +135,11 @@ class EmojiRepositoryImpl extends EmojiRepository {
             .map(
               (e) => EmojiRepositoryData(
                 emoji: UnicodeEmojiData(char: e.char),
-                kanaName: toH(format(e.char)),
-                kanaAliases: [e.name, ...e.keywords]
-                    .map((e2) => toH(format(e2)))
-                    .toList(),
+                kanaName: toH(e.char),
+                kanaAliases: [
+                  e.name,
+                  ...e.keywords,
+                ].map((e2) => toH(e2)).toList(),
                 aliases: [e.name, ...e.keywords],
                 category: e.category,
               ),
@@ -145,9 +156,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
               isSensitive: e.isSensitive,
             ),
             category: e.category ?? "",
-            kanaName: toH(format(e.name)),
+            kanaName: toH(e.name),
             aliases: e.aliases,
-            kanaAliases: e.aliases.map((e2) => format(toH(e2))).toList(),
+            kanaAliases: e.aliases.map((e2) => toH(e2)).toList(),
           ),
         )
         .toList();
@@ -174,8 +185,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
     return element.emoji.baseName.contains(query) ||
         element.aliases.any((element2) => element2.contains(query)) ||
         element.kanaName.contains(convertedQuery) ||
-        element.kanaAliases
-            .any((element2) => element2.contains(convertedQuery));
+        element.kanaAliases.any(
+          (element2) => element2.contains(convertedQuery),
+        );
   }
 
   @override
@@ -218,14 +230,15 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   List<MisskeyEmojiData> defaultEmojis({int limit = 30}) {
-    final reactionDeck =
-        accountSettingsRepository.fromAccount(account).reactions;
+    final reactionDeck = accountSettingsRepository
+        .fromAccount(account)
+        .reactions;
     if (reactionDeck.isEmpty) {
       return [];
     } else {
       return reactionDeck
           .map((e) => emojiMap?[e])
-          .whereNotNull()
+          .nonNulls
           .map((e) => e.emoji)
           .toList();
     }

@@ -36,8 +36,9 @@ class PhotoEditBottomBar extends ConsumerWidget {
           ),
           DecoratedBox(
             decoration: BoxDecoration(
-              color:
-                  isColorFilterMode ? Theme.of(context).primaryColorDark : null,
+              color: isColorFilterMode
+                  ? Theme.of(context).primaryColorDark
+                  : null,
             ),
             child: IconButton(
               onPressed: () async => photoEdit.colorFilter(),

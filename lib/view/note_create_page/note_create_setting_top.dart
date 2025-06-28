@@ -30,18 +30,19 @@ class AcceptanceIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (acceptance) {
       null => SvgPicture.asset(
-          "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
-          colorFilter: ColorFilter.mode(
-            Theme.of(context).textTheme.bodyMedium!.color ??
-                const Color(0xff5f6368),
-            BlendMode.srcIn,
-          ),
-          width: 28,
-          height: 28,
+        "assets/images/play_shapes_FILL0_wght400_GRAD0_opsz48.svg",
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).textTheme.bodyMedium!.color ??
+              const Color(0xff5f6368),
+          BlendMode.srcIn,
         ),
+        width: 28,
+        height: 28,
+      ),
       ReactionAcceptance.likeOnly => const Icon(Icons.favorite_border),
-      ReactionAcceptance.likeOnlyForRemote =>
-        const Icon(Icons.add_reaction_outlined),
+      ReactionAcceptance.likeOnlyForRemote => const Icon(
+        Icons.add_reaction_outlined,
+      ),
       ReactionAcceptance.nonSensitiveOnly => const Icon(Icons.shield_outlined),
       ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote =>
         const Icon(Icons.add_moderator_outlined),
@@ -72,7 +73,7 @@ class NoteCreateSettingTop extends ConsumerWidget {
           user: ref.read(accountContextProvider).postAccount.i,
           height:
               Theme.of(context).iconButtonTheme.style?.iconSize?.resolve({}) ??
-                  32,
+              32,
         ),
         Expanded(child: Container()),
         Builder(

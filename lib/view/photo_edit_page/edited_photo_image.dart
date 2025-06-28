@@ -26,8 +26,6 @@ class EditedPhotoImage extends ConsumerWidget {
         ),
       );
     }
-    return const Positioned(
-      child: SizedBox.shrink(),
-    );
+    return const Positioned(child: SizedBox.shrink());
   }
 }

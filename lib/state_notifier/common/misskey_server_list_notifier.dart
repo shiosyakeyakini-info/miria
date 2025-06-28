@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
@@ -9,17 +10,18 @@ final _queryProvider = StateProvider.autoDispose((ref) {
   return "";
 });
 
-final _instanceInfosProvider = AsyncNotifierProvider.autoDispose<_InstanceInfos,
-    List<JoinMisskeyInstanceInfo>>(
-  _InstanceInfos.new,
-);
+final _instanceInfosProvider =
+    AsyncNotifierProvider.autoDispose<
+      _InstanceInfos,
+      List<JoinMisskeyInstanceInfo>
+    >(_InstanceInfos.new);
 
-class _InstanceInfos
-    extends AutoDisposeAsyncNotifier<List<JoinMisskeyInstanceInfo>> {
+class _InstanceInfos extends AsyncNotifier<List<JoinMisskeyInstanceInfo>> {
   @override
   Future<List<JoinMisskeyInstanceInfo>> build() async {
-    final response =
-        await JoinMisskey(host: "instanceapp.misskey.page").instances();
+    final response = await JoinMisskey(
+      host: "instanceapp.misskey.page",
+    ).instances();
     return response.instancesInfos
         .sortedByCompare(
           (info) => info.nodeInfo?.usage?.users?.total ?? 0,

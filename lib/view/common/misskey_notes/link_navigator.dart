@@ -25,17 +25,21 @@ class LinkNavigator {
     // 他サーバーや外部サイトは別アプリで起動する
     if (uri.host != accountContext.getAccount.host) {
       try {
-        await ref.read(dioProvider).getUri(
+        await ref
+            .read(dioProvider)
+            .getUri(
               Uri(
                 scheme: "https",
                 host: uri.host,
                 pathSegments: [".well-known", "nodeinfo"],
               ),
             );
-        final meta =
-            await ref.read(misskeyWithoutAccountProvider(uri.host)).meta();
-        final endpoints =
-            await ref.read(misskeyWithoutAccountProvider(uri.host)).endpoints();
+        final meta = await ref
+            .read(misskeyWithoutAccountProvider(uri.host))
+            .meta();
+        final endpoints = await ref
+            .read(misskeyWithoutAccountProvider(uri.host))
+            .endpoints();
         if (!endpoints.contains("emojis")) {
           throw Exception("Is not misskey");
         }
@@ -94,13 +98,15 @@ class LinkNavigator {
         FederationRoute(accountContext: accountContext, host: uri.host),
       );
     } else if (uri.pathSegments.length == 3 && uri.pathSegments[1] == "pages") {
-      final page =
-          await ref.read(misskeyProvider(accountContext.getAccount)).pages.show(
-                PagesShowRequest(
-                  name: uri.pathSegments[2],
-                  username: uri.pathSegments[0].substring(1),
-                ),
-              );
+      final page = await ref
+          .read(misskeyProvider(accountContext.getAccount))
+          .pages
+          .show(
+            PagesShowRequest(
+              name: uri.pathSegments[2],
+              username: uri.pathSegments[0].substring(1),
+            ),
+          );
       if (!context.mounted) return;
       await context.pushRoute(
         MisskeyRouteRoute(accountContext: accountContext, page: page),

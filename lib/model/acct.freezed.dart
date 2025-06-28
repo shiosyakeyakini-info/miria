@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,166 +10,134 @@ part of 'acct.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Acct _$AcctFromJson(Map<String, dynamic> json) {
-  return _Acct.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Acct {
-  String get host => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
+
+ String get host; String get username;
+/// Create a copy of Acct
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AcctCopyWith<Acct> get copyWith => _$AcctCopyWithImpl<Acct>(this as Acct, _$identity);
 
   /// Serializes this Acct to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of Acct
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AcctCopyWith<Acct> get copyWith => throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Acct&&(identical(other.host, host) || other.host == host)&&(identical(other.username, username) || other.username == username));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,host,username);
+
+
+
 }
 
 /// @nodoc
-abstract class $AcctCopyWith<$Res> {
-  factory $AcctCopyWith(Acct value, $Res Function(Acct) then) =
-      _$AcctCopyWithImpl<$Res, Acct>;
-  @useResult
-  $Res call({String host, String username});
-}
+abstract mixin class $AcctCopyWith<$Res>  {
+  factory $AcctCopyWith(Acct value, $Res Function(Acct) _then) = _$AcctCopyWithImpl;
+@useResult
+$Res call({
+ String host, String username
+});
 
+
+
+
+}
 /// @nodoc
-class _$AcctCopyWithImpl<$Res, $Val extends Acct>
+class _$AcctCopyWithImpl<$Res>
     implements $AcctCopyWith<$Res> {
-  _$AcctCopyWithImpl(this._value, this._then);
+  _$AcctCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Acct _self;
+  final $Res Function(Acct) _then;
 
-  /// Create a copy of Acct
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? host = null,
-    Object? username = null,
-  }) {
-    return _then(_value.copyWith(
-      host: null == host
-          ? _value.host
-          : host // ignore: cast_nullable_to_non_nullable
-              as String,
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
+/// Create a copy of Acct
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? host = null,Object? username = null,}) {
+  return _then(_self.copyWith(
+host: null == host ? _self.host : host // ignore: cast_nullable_to_non_nullable
+as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$AcctImplCopyWith<$Res> implements $AcctCopyWith<$Res> {
-  factory _$$AcctImplCopyWith(
-          _$AcctImpl value, $Res Function(_$AcctImpl) then) =
-      __$$AcctImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String host, String username});
 }
 
-/// @nodoc
-class __$$AcctImplCopyWithImpl<$Res>
-    extends _$AcctCopyWithImpl<$Res, _$AcctImpl>
-    implements _$$AcctImplCopyWith<$Res> {
-  __$$AcctImplCopyWithImpl(_$AcctImpl _value, $Res Function(_$AcctImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Acct
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? host = null,
-    Object? username = null,
-  }) {
-    return _then(_$AcctImpl(
-      host: null == host
-          ? _value.host
-          : host // ignore: cast_nullable_to_non_nullable
-              as String,
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$AcctImpl extends _Acct {
-  const _$AcctImpl({required this.host, required this.username}) : super._();
 
-  factory _$AcctImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AcctImplFromJson(json);
+class _Acct extends Acct {
+  const _Acct({required this.host, required this.username}): super._();
+  factory _Acct.fromJson(Map<String, dynamic> json) => _$AcctFromJson(json);
 
-  @override
-  final String host;
-  @override
-  final String username;
+@override final  String host;
+@override final  String username;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AcctImpl &&
-            (identical(other.host, host) || other.host == host) &&
-            (identical(other.username, username) ||
-                other.username == username));
-  }
+/// Create a copy of Acct
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AcctCopyWith<_Acct> get copyWith => __$AcctCopyWithImpl<_Acct>(this, _$identity);
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, host, username);
-
-  /// Create a copy of Acct
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AcctImplCopyWith<_$AcctImpl> get copyWith =>
-      __$$AcctImplCopyWithImpl<_$AcctImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$AcctImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$AcctToJson(this, );
 }
 
-abstract class _Acct extends Acct {
-  const factory _Acct(
-      {required final String host,
-      required final String username}) = _$AcctImpl;
-  const _Acct._() : super._();
-
-  factory _Acct.fromJson(Map<String, dynamic> json) = _$AcctImpl.fromJson;
-
-  @override
-  String get host;
-  @override
-  String get username;
-
-  /// Create a copy of Acct
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AcctImplCopyWith<_$AcctImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Acct&&(identical(other.host, host) || other.host == host)&&(identical(other.username, username) || other.username == username));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,host,username);
+
+
+
+}
+
+/// @nodoc
+abstract mixin class _$AcctCopyWith<$Res> implements $AcctCopyWith<$Res> {
+  factory _$AcctCopyWith(_Acct value, $Res Function(_Acct) _then) = __$AcctCopyWithImpl;
+@override @useResult
+$Res call({
+ String host, String username
+});
+
+
+
+
+}
+/// @nodoc
+class __$AcctCopyWithImpl<$Res>
+    implements _$AcctCopyWith<$Res> {
+  __$AcctCopyWithImpl(this._self, this._then);
+
+  final _Acct _self;
+  final $Res Function(_Acct) _then;
+
+/// Create a copy of Acct
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? host = null,Object? username = null,}) {
+  return _then(_Acct(
+host: null == host ? _self.host : host // ignore: cast_nullable_to_non_nullable
+as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

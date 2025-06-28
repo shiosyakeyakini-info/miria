@@ -39,13 +39,12 @@ class HashtagPage extends ConsumerWidget implements AutoRouteWrapper {
             return response.toList();
           },
           nextFuture: (lastItem, _) async {
-            final response =
-                await ref.read(misskeyGetContextProvider).notes.searchByTag(
-                      NotesSearchByTagRequest(
-                        tag: hashtag,
-                        untilId: lastItem.id,
-                      ),
-                    );
+            final response = await ref
+                .read(misskeyGetContextProvider)
+                .notes
+                .searchByTag(
+                  NotesSearchByTagRequest(tag: hashtag, untilId: lastItem.id),
+                );
             ref.read(notesWithProvider).registerAll(response);
             return response.toList();
           },

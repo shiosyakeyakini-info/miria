@@ -30,8 +30,8 @@ class LocalTimelineRepository extends SocketTimelineRepository {
 
   @override
   Map<String, dynamic> get parameters => {
-        "withRenotes": tabSetting.renoteDisplay,
-        "withReplies": tabSetting.isIncludeReplies,
-        "withFiles": tabSetting.isMediaOnly,
-      };
+    "withRenotes": tabSetting.renoteDisplay,
+    "withReplies": tabSetting.isIncludeReplies,
+    "withFiles": tabSetting.isMediaOnly,
+  };
 }

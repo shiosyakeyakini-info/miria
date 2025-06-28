@@ -6,22 +6,59 @@ part of 'download_file_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$downloadFileNotifierHash() =>
-    r'1e16b1a213ec582509b1843d15b1987e27020a26';
-
-/// See also [DownloadFileNotifier].
 @ProviderFor(DownloadFileNotifier)
-final downloadFileNotifierProvider =
-    NotifierProvider<DownloadFileNotifier, void>.internal(
-  DownloadFileNotifier.new,
-  name: r'downloadFileNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$downloadFileNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const downloadFileNotifierProvider = DownloadFileNotifierProvider._();
 
-typedef _$DownloadFileNotifier = Notifier<void>;
+final class DownloadFileNotifierProvider
+    extends $NotifierProvider<DownloadFileNotifier, void> {
+  const DownloadFileNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'downloadFileNotifierProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$downloadFileNotifierHash();
+
+  @$internal
+  @override
+  DownloadFileNotifier create() => DownloadFileNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
+}
+
+String _$downloadFileNotifierHash() =>
+    r'570a3519348813c4ebee6976af9634c1350258f3';
+
+abstract class _$DownloadFileNotifier extends $Notifier<void> {
+  void build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<void, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<void, void>,
+              void,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, null);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
