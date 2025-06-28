@@ -134,27 +134,41 @@ class LinkNavigator {
     final contextHost = accountContext.getAccount.host;
     final noteHost = host ?? accountContext.getAccount.host;
     final regResultHost = regResult?.group(3);
-    final String? finalHost;
+    
+    // どのホストのAPIを使用するかとユーザー検索のホストパラメータを決定
+    final String targetApiHost;
+    final String? searchHost;
 
-    if (regResultHost == null && noteHost == contextHost) {
-      // @なし
-      finalHost = null;
-    } else if (regResultHost == contextHost) {
-      // @自分ドメイン
-      finalHost = null;
-    } else if (regResultHost != null) {
-      finalHost = regResultHost;
+    if (regResultHost != null) {
+      // @aaa@example1.com 形式：明示的にホストが指定されている
+      targetApiHost = regResultHost;
+      searchHost = null; // 指定されたホストのローカルユーザーとして検索
+    } else if (noteHost != contextHost) {
+      // @aaa 形式かつノートが他ホストの投稿：ノートのホストで検索
+      targetApiHost = noteHost;
+      searchHost = null; // ノートのホストのローカルユーザーとして検索
     } else {
-      finalHost = noteHost;
+      // @aaa 形式かつノートが自ホストの投稿：自ホストで検索
+      targetApiHost = contextHost;
+      searchHost = null; // 自ホストのローカルユーザーとして検索
     }
 
-    final response = await ref
-        .read(misskeyProvider(accountContext.getAccount))
+    // 適切なAPIクライアントを選択
+    final Misskey misskeyClient;
+    if (targetApiHost == contextHost) {
+      // 自ホストの場合は認証済みクライアントを使用
+      misskeyClient = ref.read(misskeyProvider(accountContext.getAccount));
+    } else {
+      // 他ホストの場合は認証なしクライアントを使用
+      misskeyClient = ref.read(misskeyWithoutAccountProvider(targetApiHost));
+    }
+
+    final response = await misskeyClient
         .users
         .showByName(
           UsersShowByUserNameRequest(
             userName: regResult?.group(1) ?? "",
-            host: finalHost,
+            host: searchHost,
           ),
         );
 
