@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/main.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
@@ -32,9 +32,7 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       locale: const Locale("ja", "JP"),
-      supportedLocales: const [
-        Locale("ja", "JP"),
-      ],
+      supportedLocales: const [Locale("ja", "JP")],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,
@@ -47,9 +45,7 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
           child: SharingIntentListener(
             router: router,
             child: ErrorDialogListener(
-              child: DialogScope(
-                child: widget ?? Container(),
-              ),
+              child: DialogScope(child: widget ?? Container()),
             ),
           ),
         );
@@ -72,9 +68,7 @@ class DefaultRootNoRouterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       locale: const Locale("ja", "JP"),
-      supportedLocales: const [
-        Locale("ja", "JP"),
-      ],
+      supportedLocales: const [Locale("ja", "JP")],
       home: child,
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
@@ -85,9 +79,7 @@ class DefaultRootNoRouterWidget extends StatelessWidget {
       ],
       builder: (context, widget) {
         return AppThemeScope(
-          child: ErrorDialogListener(
-            child: widget ?? Container(),
-          ),
+          child: ErrorDialogListener(child: widget ?? Container()),
         );
       },
     );

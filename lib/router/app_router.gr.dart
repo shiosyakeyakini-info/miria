@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -9,803 +10,6 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    AbuseRoute.name: (routeData) {
-      final args = routeData.argsAs<AbuseRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AbuseDialog(
-          account: args.account,
-          targetUser: args.targetUser,
-          key: args.key,
-          defaultText: args.defaultText,
-        )),
-      );
-    },
-    AccountListRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AccountListPage(),
-      );
-    },
-    AccountSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<AccountSelectRouteArgs>(
-          orElse: () => const AccountSelectRouteArgs());
-      return AutoRoutePage<Account>(
-        routeData: routeData,
-        child: AccountSelectDialog(
-          key: args.key,
-          host: args.host,
-          remoteHost: args.remoteHost,
-          showWithoutLogin: args.showWithoutLogin,
-        ),
-      );
-    },
-    AnnouncementRoute.name: (routeData) {
-      final args = routeData.argsAs<AnnouncementRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AnnouncementPage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    AntennaModalRoute.name: (routeData) {
-      final args = routeData.argsAs<AntennaModalRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AntennaModalSheet(
-          account: args.account,
-          user: args.user,
-          key: args.key,
-        )),
-      );
-    },
-    AntennaNotesRoute.name: (routeData) {
-      final args = routeData.argsAs<AntennaNotesRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AntennaNotesPage(
-          antenna: args.antenna,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    AntennaRoute.name: (routeData) {
-      final args = routeData.argsAs<AntennaRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AntennaPage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    AntennaSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<AntennaSelectRouteArgs>();
-      return AutoRoutePage<Antenna>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AntennaSelectDialog(
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    AntennaSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<AntennaSettingsRouteArgs>();
-      return AutoRoutePage<AntennaSettings>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: AntennaSettingsDialog(
-          account: args.account,
-          key: args.key,
-          title: args.title,
-          initialSettings: args.initialSettings,
-        )),
-      );
-    },
-    AppInfoRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AppInfoPage(),
-      );
-    },
-    CacheManagementRoute.name: (routeData) {
-      final args = routeData.argsAs<CacheManagementRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: CacheManagementPage(
-          account: args.account,
-          key: args.key,
-        ),
-      );
-    },
-    ChannelDescriptionRoute.name: (routeData) {
-      final args = routeData.argsAs<ChannelDescriptionRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ChannelDescriptionDialog(
-          channelId: args.channelId,
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    ChannelDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<ChannelDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ChannelDetailPage(
-          accountContext: args.accountContext,
-          channelId: args.channelId,
-          key: args.key,
-        )),
-      );
-    },
-    ChannelSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<ChannelSelectRouteArgs>();
-      return AutoRoutePage<CommunityChannel>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ChannelSelectDialog(
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    ChannelsRoute.name: (routeData) {
-      final args = routeData.argsAs<ChannelsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ChannelsPage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    ClipDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<ClipDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ClipDetailPage(
-          accountContext: args.accountContext,
-          id: args.id,
-          key: args.key,
-        )),
-      );
-    },
-    ClipListRoute.name: (routeData) {
-      final args = routeData.argsAs<ClipListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ClipListPage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    ClipModalRoute.name: (routeData) {
-      final args = routeData.argsAs<ClipModalRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ClipModalSheet(
-          account: args.account,
-          noteId: args.noteId,
-          key: args.key,
-        )),
-      );
-    },
-    ClipSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<ClipSettingsRouteArgs>(
-          orElse: () => const ClipSettingsRouteArgs());
-      return AutoRoutePage<ClipSettings>(
-        routeData: routeData,
-        child: ClipSettingsDialog(
-          key: args.key,
-          title: args.title,
-          initialSettings: args.initialSettings,
-        ),
-      );
-    },
-    ColorPickerRoute.name: (routeData) {
-      return AutoRoutePage<Color>(
-        routeData: routeData,
-        child: const ColorPickerDialog(),
-      );
-    },
-    DriveFileSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<DriveFileSelectRouteArgs>();
-      return AutoRoutePage<List<DriveFile>>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: DriveFileSelectDialog(
-          account: args.account,
-          key: args.key,
-          allowMultiple: args.allowMultiple,
-        )),
-      );
-    },
-    DriveModalRoute.name: (routeData) {
-      return AutoRoutePage<DriveModalSheetReturnValue>(
-        routeData: routeData,
-        child: const DriveModalSheet(),
-      );
-    },
-    ExpireSelectRoute.name: (routeData) {
-      return AutoRoutePage<Expire>(
-        routeData: routeData,
-        child: const ExpireSelectDialog(),
-      );
-    },
-    ExploreRoute.name: (routeData) {
-      final args = routeData.argsAs<ExploreRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ExplorePage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    ExploreRoleUsersRoute.name: (routeData) {
-      final args = routeData.argsAs<ExploreRoleUsersRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ExploreRoleUsersPage(
-          item: args.item,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    FavoritedNoteRoute.name: (routeData) {
-      final args = routeData.argsAs<FavoritedNoteRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: FavoritedNotePage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    FederationRoute.name: (routeData) {
-      final args = routeData.argsAs<FederationRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: FederationPage(
-          accountContext: args.accountContext,
-          host: args.host,
-          key: args.key,
-        )),
-      );
-    },
-    FolderSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<FolderSelectRouteArgs>();
-      return AutoRoutePage<FolderResult>(
-        routeData: routeData,
-        child: FolderSelectDialog(
-          account: args.account,
-          fileShowTarget: args.fileShowTarget,
-          confirmationText: args.confirmationText,
-          key: args.key,
-        ),
-      );
-    },
-    GeneralSettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const GeneralSettingsPage(),
-      );
-    },
-    HashtagRoute.name: (routeData) {
-      final args = routeData.argsAs<HashtagRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: HashtagPage(
-          hashtag: args.hashtag,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    ImportExportRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ImportExportPage(),
-      );
-    },
-    InstanceMuteRoute.name: (routeData) {
-      final args = routeData.argsAs<InstanceMuteRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: InstanceMutePage(
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    LicenseConfirmRoute.name: (routeData) {
-      final args = routeData.argsAs<LicenseConfirmRouteArgs>();
-      return AutoRoutePage<bool>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: LicenseConfirmDialog(
-          emoji: args.emoji,
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    LoginRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const LoginPage(),
-      );
-    },
-    MisskeyGamesRoute.name: (routeData) {
-      final args = routeData.argsAs<MisskeyGamesRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: MisskeyGamesPage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    MisskeyRouteRoute.name: (routeData) {
-      final args = routeData.argsAs<MisskeyRouteRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: MisskeyPagePage(
-          accountContext: args.accountContext,
-          page: args.page,
-          key: args.key,
-        )),
-      );
-    },
-    MisskeyServerListRoute.name: (routeData) {
-      return AutoRoutePage<String>(
-        routeData: routeData,
-        child: const MisskeyServerListDialog(),
-      );
-    },
-    NoteCreateRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteCreateRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: NoteCreatePage(
-          initialAccount: args.initialAccount,
-          key: args.key,
-          initialText: args.initialText,
-          initialMediaFiles: args.initialMediaFiles,
-          exitOnNoted: args.exitOnNoted,
-          channel: args.channel,
-          reply: args.reply,
-          renote: args.renote,
-          note: args.note,
-          noteCreationMode: args.noteCreationMode,
-        )),
-      );
-    },
-    NoteDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: NoteDetailPage(
-          note: args.note,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    NoteModalRoute.name: (routeData) {
-      final args = routeData.argsAs<NoteModalRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: NoteModalSheet(
-          baseNote: args.baseNote,
-          targetNote: args.targetNote,
-          accountContext: args.accountContext,
-          noteBoundaryKey: args.noteBoundaryKey,
-          key: args.key,
-        )),
-      );
-    },
-    NotesAfterRenoteRoute.name: (routeData) {
-      final args = routeData.argsAs<NotesAfterRenoteRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: NotesAfterRenotePage(
-          note: args.note,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    NotificationRoute.name: (routeData) {
-      final args = routeData.argsAs<NotificationRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: NotificationPage(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    PhotoEditRoute.name: (routeData) {
-      final args = routeData.argsAs<PhotoEditRouteArgs>();
-      return AutoRoutePage<Uint8List?>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: PhotoEditPage(
-          accountContext: args.accountContext,
-          file: args.file,
-          onSubmit: args.onSubmit,
-          key: args.key,
-        )),
-      );
-    },
-    ReactionDeckRoute.name: (routeData) {
-      final args = routeData.argsAs<ReactionDeckRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ReactionDeckPage(
-          account: args.account,
-          key: args.key,
-        ),
-      );
-    },
-    ReactionPickerRoute.name: (routeData) {
-      final args = routeData.argsAs<ReactionPickerRouteArgs>();
-      return AutoRoutePage<MisskeyEmojiData>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ReactionPickerDialog(
-          account: args.account,
-          isAcceptSensitive: args.isAcceptSensitive,
-          key: args.key,
-        )),
-      );
-    },
-    ReactionUserRoute.name: (routeData) {
-      final args = routeData.argsAs<ReactionUserRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ReactionUserDialog(
-          accountContext: args.accountContext,
-          emojiData: args.emojiData,
-          noteId: args.noteId,
-          key: args.key,
-        )),
-      );
-    },
-    RenoteModalRoute.name: (routeData) {
-      final args = routeData.argsAs<RenoteModalRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: RenoteModalSheet(
-          note: args.note,
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    RenoteUserRoute.name: (routeData) {
-      final args = routeData.argsAs<RenoteUserRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: RenoteUserDialog(
-          account: args.account,
-          noteId: args.noteId,
-          key: args.key,
-        )),
-      );
-    },
-    RoleSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<RoleSelectRouteArgs>();
-      return AutoRoutePage<RolesListResponse>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: RoleSelectDialog(
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    SearchRoute.name: (routeData) {
-      final args = routeData.argsAs<SearchRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: SearchPage(
-          accountContext: args.accountContext,
-          key: args.key,
-          initialNoteSearchCondition: args.initialNoteSearchCondition,
-        )),
-      );
-    },
-    ServerDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<ServerDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: ServerDetailDialog(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    SettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SettingsPage(),
-      );
-    },
-    SeveralAccountGeneralSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<SeveralAccountGeneralSettingsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SeveralAccountGeneralSettingsPage(
-          account: args.account,
-          key: args.key,
-        ),
-      );
-    },
-    SeveralAccountSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<SeveralAccountSettingsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SeveralAccountSettingsPage(
-          account: args.account,
-          key: args.key,
-        ),
-      );
-    },
-    ShareExtensionRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ShareExtensionPage(),
-      );
-    },
-    SharingAccountSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<SharingAccountSelectRouteArgs>(
-          orElse: () => const SharingAccountSelectRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SharingAccountSelectPage(
-          key: args.key,
-          sharingText: args.sharingText,
-          filePath: args.filePath,
-        ),
-      );
-    },
-    SplashRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SplashPage(),
-      );
-    },
-    TabSettingsListRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const TabSettingsListPage(),
-      );
-    },
-    TabSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<TabSettingsRouteArgs>(
-          orElse: () => const TabSettingsRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TabSettingsPage(
-          key: args.key,
-          tabIndex: args.tabIndex,
-        ),
-      );
-    },
-    TimeLineRoute.name: (routeData) {
-      final args = routeData.argsAs<TimeLineRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: TimeLinePage(
-          initialTabSetting: args.initialTabSetting,
-          key: args.key,
-        ),
-      );
-    },
-    UpdateMemoRoute.name: (routeData) {
-      final args = routeData.argsAs<UpdateMemoRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UpdateMemoDialog(
-          accountContext: args.accountContext,
-          initialMemo: args.initialMemo,
-          userId: args.userId,
-          key: args.key,
-        )),
-      );
-    },
-    UserControlRoute.name: (routeData) {
-      final args = routeData.argsAs<UserControlRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UserControlDialog(
-          account: args.account,
-          response: args.response,
-          host: args.host,
-          key: args.key,
-        )),
-      );
-    },
-    UserFolloweeRoute.name: (routeData) {
-      final args = routeData.argsAs<UserFolloweeRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UserFolloweePage(
-          userId: args.userId,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    UserFollowerRoute.name: (routeData) {
-      final args = routeData.argsAs<UserFollowerRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UserFollowerPage(
-          userId: args.userId,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    UserListSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<UserListSelectRouteArgs>();
-      return AutoRoutePage<UsersList>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UserListSelectDialog(
-          account: args.account,
-          key: args.key,
-        )),
-      );
-    },
-    UserRoute.name: (routeData) {
-      final args = routeData.argsAs<UserRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UserPage(
-          userId: args.userId,
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    UserSelectRoute.name: (routeData) {
-      final args = routeData.argsAs<UserSelectRouteArgs>();
-      return AutoRoutePage<User>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UserSelectDialog(
-          accountContext: args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    UsersListDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<UsersListDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UsersListDetailPage(
-          accountContext: args.accountContext,
-          listId: args.listId,
-          key: args.key,
-        )),
-      );
-    },
-    UsersListModalRoute.name: (routeData) {
-      final args = routeData.argsAs<UsersListModalRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UsersListModalSheet(
-          account: args.account,
-          user: args.user,
-          key: args.key,
-        )),
-      );
-    },
-    UsersListRoute.name: (routeData) {
-      final args = routeData.argsAs<UsersListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UsersListPage(
-          args.accountContext,
-          key: args.key,
-        )),
-      );
-    },
-    UsersListSettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<UsersListSettingsRouteArgs>(
-          orElse: () => const UsersListSettingsRouteArgs());
-      return AutoRoutePage<UsersListSettings>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UsersListSettingsDialog(
-          key: args.key,
-          title: args.title,
-          initialSettings: args.initialSettings,
-        )),
-      );
-    },
-    UsersListTimelineRoute.name: (routeData) {
-      final args = routeData.argsAs<UsersListTimelineRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: UsersListTimelinePage(
-          args.accountContext,
-          args.list,
-          key: args.key,
-        )),
-      );
-    },
-    WordMuteRoute.name: (routeData) {
-      final args = routeData.argsAs<WordMuteRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WrappedRoute(
-            child: WordMutePage(
-          account: args.account,
-          muteType: args.muteType,
-          key: args.key,
-        )),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [AbuseDialog]
 class AbuseRoute extends PageRouteInfo<AbuseRouteArgs> {
@@ -816,19 +20,32 @@ class AbuseRoute extends PageRouteInfo<AbuseRouteArgs> {
     String? defaultText,
     List<PageRouteInfo>? children,
   }) : super(
-          AbuseRoute.name,
-          args: AbuseRouteArgs(
-            account: account,
-            targetUser: targetUser,
-            key: key,
-            defaultText: defaultText,
-          ),
-          initialChildren: children,
-        );
+         AbuseRoute.name,
+         args: AbuseRouteArgs(
+           account: account,
+           targetUser: targetUser,
+           key: key,
+           defaultText: defaultText,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'AbuseRoute';
 
-  static const PageInfo<AbuseRouteArgs> page = PageInfo<AbuseRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AbuseRouteArgs>();
+      return WrappedRoute(
+        child: AbuseDialog(
+          account: args.account,
+          targetUser: args.targetUser,
+          key: args.key,
+          defaultText: args.defaultText,
+        ),
+      );
+    },
+  );
 }
 
 class AbuseRouteArgs {
@@ -851,20 +68,39 @@ class AbuseRouteArgs {
   String toString() {
     return 'AbuseRouteArgs{account: $account, targetUser: $targetUser, key: $key, defaultText: $defaultText}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AbuseRouteArgs) return false;
+    return account == other.account &&
+        targetUser == other.targetUser &&
+        key == other.key &&
+        defaultText == other.defaultText;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      targetUser.hashCode ^
+      key.hashCode ^
+      defaultText.hashCode;
 }
 
 /// generated route for
 /// [AccountListPage]
 class AccountListRoute extends PageRouteInfo<void> {
   const AccountListRoute({List<PageRouteInfo>? children})
-      : super(
-          AccountListRoute.name,
-          initialChildren: children,
-        );
+    : super(AccountListRoute.name, initialChildren: children);
 
   static const String name = 'AccountListRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AccountListPage();
+    },
+  );
 }
 
 /// generated route for
@@ -877,20 +113,32 @@ class AccountSelectRoute extends PageRouteInfo<AccountSelectRouteArgs> {
     bool showWithoutLogin = true,
     List<PageRouteInfo>? children,
   }) : super(
-          AccountSelectRoute.name,
-          args: AccountSelectRouteArgs(
-            key: key,
-            host: host,
-            remoteHost: remoteHost,
-            showWithoutLogin: showWithoutLogin,
-          ),
-          initialChildren: children,
-        );
+         AccountSelectRoute.name,
+         args: AccountSelectRouteArgs(
+           key: key,
+           host: host,
+           remoteHost: remoteHost,
+           showWithoutLogin: showWithoutLogin,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'AccountSelectRoute';
 
-  static const PageInfo<AccountSelectRouteArgs> page =
-      PageInfo<AccountSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AccountSelectRouteArgs>(
+        orElse: () => const AccountSelectRouteArgs(),
+      );
+      return AccountSelectDialog(
+        key: args.key,
+        host: args.host,
+        remoteHost: args.remoteHost,
+        showWithoutLogin: args.showWithoutLogin,
+      );
+    },
+  );
 }
 
 class AccountSelectRouteArgs {
@@ -913,6 +161,23 @@ class AccountSelectRouteArgs {
   String toString() {
     return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost, showWithoutLogin: $showWithoutLogin}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AccountSelectRouteArgs) return false;
+    return key == other.key &&
+        host == other.host &&
+        remoteHost == other.remoteHost &&
+        showWithoutLogin == other.showWithoutLogin;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      host.hashCode ^
+      remoteHost.hashCode ^
+      showWithoutLogin.hashCode;
 }
 
 /// generated route for
@@ -923,25 +188,29 @@ class AnnouncementRoute extends PageRouteInfo<AnnouncementRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          AnnouncementRoute.name,
-          args: AnnouncementRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         AnnouncementRoute.name,
+         args: AnnouncementRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'AnnouncementRoute';
 
-  static const PageInfo<AnnouncementRouteArgs> page =
-      PageInfo<AnnouncementRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AnnouncementRouteArgs>();
+      return WrappedRoute(
+        child: AnnouncementPage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class AnnouncementRouteArgs {
-  const AnnouncementRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const AnnouncementRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -951,6 +220,16 @@ class AnnouncementRouteArgs {
   String toString() {
     return 'AnnouncementRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AnnouncementRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -962,19 +241,26 @@ class AntennaModalRoute extends PageRouteInfo<AntennaModalRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          AntennaModalRoute.name,
-          args: AntennaModalRouteArgs(
-            account: account,
-            user: user,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         AntennaModalRoute.name,
+         args: AntennaModalRouteArgs(account: account, user: user, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'AntennaModalRoute';
 
-  static const PageInfo<AntennaModalRouteArgs> page =
-      PageInfo<AntennaModalRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AntennaModalRouteArgs>();
+      return WrappedRoute(
+        child: AntennaModalSheet(
+          account: args.account,
+          user: args.user,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class AntennaModalRouteArgs {
@@ -994,6 +280,16 @@ class AntennaModalRouteArgs {
   String toString() {
     return 'AntennaModalRouteArgs{account: $account, user: $user, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaModalRouteArgs) return false;
+    return account == other.account && user == other.user && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ user.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1005,19 +301,30 @@ class AntennaNotesRoute extends PageRouteInfo<AntennaNotesRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          AntennaNotesRoute.name,
-          args: AntennaNotesRouteArgs(
-            antenna: antenna,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         AntennaNotesRoute.name,
+         args: AntennaNotesRouteArgs(
+           antenna: antenna,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'AntennaNotesRoute';
 
-  static const PageInfo<AntennaNotesRouteArgs> page =
-      PageInfo<AntennaNotesRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AntennaNotesRouteArgs>();
+      return WrappedRoute(
+        child: AntennaNotesPage(
+          antenna: args.antenna,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class AntennaNotesRouteArgs {
@@ -1037,6 +344,18 @@ class AntennaNotesRouteArgs {
   String toString() {
     return 'AntennaNotesRouteArgs{antenna: $antenna, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaNotesRouteArgs) return false;
+    return antenna == other.antenna &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => antenna.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1047,25 +366,26 @@ class AntennaRoute extends PageRouteInfo<AntennaRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          AntennaRoute.name,
-          args: AntennaRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         AntennaRoute.name,
+         args: AntennaRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'AntennaRoute';
 
-  static const PageInfo<AntennaRouteArgs> page =
-      PageInfo<AntennaRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AntennaRouteArgs>();
+      return WrappedRoute(
+        child: AntennaPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
 }
 
 class AntennaRouteArgs {
-  const AntennaRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const AntennaRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -1075,6 +395,16 @@ class AntennaRouteArgs {
   String toString() {
     return 'AntennaRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1085,25 +415,26 @@ class AntennaSelectRoute extends PageRouteInfo<AntennaSelectRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          AntennaSelectRoute.name,
-          args: AntennaSelectRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         AntennaSelectRoute.name,
+         args: AntennaSelectRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'AntennaSelectRoute';
 
-  static const PageInfo<AntennaSelectRouteArgs> page =
-      PageInfo<AntennaSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AntennaSelectRouteArgs>();
+      return WrappedRoute(
+        child: AntennaSelectDialog(account: args.account, key: args.key),
+      );
+    },
+  );
 }
 
 class AntennaSelectRouteArgs {
-  const AntennaSelectRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const AntennaSelectRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -1113,6 +444,16 @@ class AntennaSelectRouteArgs {
   String toString() {
     return 'AntennaSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1125,20 +466,32 @@ class AntennaSettingsRoute extends PageRouteInfo<AntennaSettingsRouteArgs> {
     AntennaSettings initialSettings = const AntennaSettings(),
     List<PageRouteInfo>? children,
   }) : super(
-          AntennaSettingsRoute.name,
-          args: AntennaSettingsRouteArgs(
-            account: account,
-            key: key,
-            title: title,
-            initialSettings: initialSettings,
-          ),
-          initialChildren: children,
-        );
+         AntennaSettingsRoute.name,
+         args: AntennaSettingsRouteArgs(
+           account: account,
+           key: key,
+           title: title,
+           initialSettings: initialSettings,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'AntennaSettingsRoute';
 
-  static const PageInfo<AntennaSettingsRouteArgs> page =
-      PageInfo<AntennaSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AntennaSettingsRouteArgs>();
+      return WrappedRoute(
+        child: AntennaSettingsDialog(
+          account: args.account,
+          key: args.key,
+          title: args.title,
+          initialSettings: args.initialSettings,
+        ),
+      );
+    },
+  );
 }
 
 class AntennaSettingsRouteArgs {
@@ -1161,20 +514,39 @@ class AntennaSettingsRouteArgs {
   String toString() {
     return 'AntennaSettingsRouteArgs{account: $account, key: $key, title: $title, initialSettings: $initialSettings}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaSettingsRouteArgs) return false;
+    return account == other.account &&
+        key == other.key &&
+        title == other.title &&
+        initialSettings == other.initialSettings;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      key.hashCode ^
+      title.hashCode ^
+      initialSettings.hashCode;
 }
 
 /// generated route for
 /// [AppInfoPage]
 class AppInfoRoute extends PageRouteInfo<void> {
   const AppInfoRoute({List<PageRouteInfo>? children})
-      : super(
-          AppInfoRoute.name,
-          initialChildren: children,
-        );
+    : super(AppInfoRoute.name, initialChildren: children);
 
   static const String name = 'AppInfoRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AppInfoPage();
+    },
+  );
 }
 
 /// generated route for
@@ -1185,25 +557,24 @@ class CacheManagementRoute extends PageRouteInfo<CacheManagementRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          CacheManagementRoute.name,
-          args: CacheManagementRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         CacheManagementRoute.name,
+         args: CacheManagementRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'CacheManagementRoute';
 
-  static const PageInfo<CacheManagementRouteArgs> page =
-      PageInfo<CacheManagementRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CacheManagementRouteArgs>();
+      return CacheManagementPage(account: args.account, key: args.key);
+    },
+  );
 }
 
 class CacheManagementRouteArgs {
-  const CacheManagementRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const CacheManagementRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -1213,6 +584,16 @@ class CacheManagementRouteArgs {
   String toString() {
     return 'CacheManagementRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CacheManagementRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1225,19 +606,30 @@ class ChannelDescriptionRoute
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ChannelDescriptionRoute.name,
-          args: ChannelDescriptionRouteArgs(
-            channelId: channelId,
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ChannelDescriptionRoute.name,
+         args: ChannelDescriptionRouteArgs(
+           channelId: channelId,
+           account: account,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ChannelDescriptionRoute';
 
-  static const PageInfo<ChannelDescriptionRouteArgs> page =
-      PageInfo<ChannelDescriptionRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChannelDescriptionRouteArgs>();
+      return WrappedRoute(
+        child: ChannelDescriptionDialog(
+          channelId: args.channelId,
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ChannelDescriptionRouteArgs {
@@ -1257,6 +649,18 @@ class ChannelDescriptionRouteArgs {
   String toString() {
     return 'ChannelDescriptionRouteArgs{channelId: $channelId, account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelDescriptionRouteArgs) return false;
+    return channelId == other.channelId &&
+        account == other.account &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => channelId.hashCode ^ account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1268,19 +672,30 @@ class ChannelDetailRoute extends PageRouteInfo<ChannelDetailRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ChannelDetailRoute.name,
-          args: ChannelDetailRouteArgs(
-            accountContext: accountContext,
-            channelId: channelId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ChannelDetailRoute.name,
+         args: ChannelDetailRouteArgs(
+           accountContext: accountContext,
+           channelId: channelId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ChannelDetailRoute';
 
-  static const PageInfo<ChannelDetailRouteArgs> page =
-      PageInfo<ChannelDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChannelDetailRouteArgs>();
+      return WrappedRoute(
+        child: ChannelDetailPage(
+          accountContext: args.accountContext,
+          channelId: args.channelId,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ChannelDetailRouteArgs {
@@ -1300,6 +715,19 @@ class ChannelDetailRouteArgs {
   String toString() {
     return 'ChannelDetailRouteArgs{accountContext: $accountContext, channelId: $channelId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelDetailRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        channelId == other.channelId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^ channelId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1310,25 +738,26 @@ class ChannelSelectRoute extends PageRouteInfo<ChannelSelectRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ChannelSelectRoute.name,
-          args: ChannelSelectRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ChannelSelectRoute.name,
+         args: ChannelSelectRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ChannelSelectRoute';
 
-  static const PageInfo<ChannelSelectRouteArgs> page =
-      PageInfo<ChannelSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChannelSelectRouteArgs>();
+      return WrappedRoute(
+        child: ChannelSelectDialog(account: args.account, key: args.key),
+      );
+    },
+  );
 }
 
 class ChannelSelectRouteArgs {
-  const ChannelSelectRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const ChannelSelectRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -1338,6 +767,16 @@ class ChannelSelectRouteArgs {
   String toString() {
     return 'ChannelSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1348,25 +787,26 @@ class ChannelsRoute extends PageRouteInfo<ChannelsRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ChannelsRoute.name,
-          args: ChannelsRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ChannelsRoute.name,
+         args: ChannelsRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ChannelsRoute';
 
-  static const PageInfo<ChannelsRouteArgs> page =
-      PageInfo<ChannelsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChannelsRouteArgs>();
+      return WrappedRoute(
+        child: ChannelsPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
 }
 
 class ChannelsRouteArgs {
-  const ChannelsRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const ChannelsRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -1376,6 +816,16 @@ class ChannelsRouteArgs {
   String toString() {
     return 'ChannelsRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelsRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1387,19 +837,30 @@ class ClipDetailRoute extends PageRouteInfo<ClipDetailRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ClipDetailRoute.name,
-          args: ClipDetailRouteArgs(
-            accountContext: accountContext,
-            id: id,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ClipDetailRoute.name,
+         args: ClipDetailRouteArgs(
+           accountContext: accountContext,
+           id: id,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ClipDetailRoute';
 
-  static const PageInfo<ClipDetailRouteArgs> page =
-      PageInfo<ClipDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ClipDetailRouteArgs>();
+      return WrappedRoute(
+        child: ClipDetailPage(
+          accountContext: args.accountContext,
+          id: args.id,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ClipDetailRouteArgs {
@@ -1419,6 +880,18 @@ class ClipDetailRouteArgs {
   String toString() {
     return 'ClipDetailRouteArgs{accountContext: $accountContext, id: $id, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipDetailRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        id == other.id &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ id.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1429,25 +902,26 @@ class ClipListRoute extends PageRouteInfo<ClipListRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ClipListRoute.name,
-          args: ClipListRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ClipListRoute.name,
+         args: ClipListRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ClipListRoute';
 
-  static const PageInfo<ClipListRouteArgs> page =
-      PageInfo<ClipListRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ClipListRouteArgs>();
+      return WrappedRoute(
+        child: ClipListPage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
 }
 
 class ClipListRouteArgs {
-  const ClipListRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const ClipListRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -1457,6 +931,16 @@ class ClipListRouteArgs {
   String toString() {
     return 'ClipListRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipListRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1468,19 +952,26 @@ class ClipModalRoute extends PageRouteInfo<ClipModalRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ClipModalRoute.name,
-          args: ClipModalRouteArgs(
-            account: account,
-            noteId: noteId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ClipModalRoute.name,
+         args: ClipModalRouteArgs(account: account, noteId: noteId, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ClipModalRoute';
 
-  static const PageInfo<ClipModalRouteArgs> page =
-      PageInfo<ClipModalRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ClipModalRouteArgs>();
+      return WrappedRoute(
+        child: ClipModalSheet(
+          account: args.account,
+          noteId: args.noteId,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ClipModalRouteArgs {
@@ -1500,6 +991,18 @@ class ClipModalRouteArgs {
   String toString() {
     return 'ClipModalRouteArgs{account: $account, noteId: $noteId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipModalRouteArgs) return false;
+    return account == other.account &&
+        noteId == other.noteId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ noteId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1511,19 +1014,30 @@ class ClipSettingsRoute extends PageRouteInfo<ClipSettingsRouteArgs> {
     ClipSettings initialSettings = const ClipSettings(),
     List<PageRouteInfo>? children,
   }) : super(
-          ClipSettingsRoute.name,
-          args: ClipSettingsRouteArgs(
-            key: key,
-            title: title,
-            initialSettings: initialSettings,
-          ),
-          initialChildren: children,
-        );
+         ClipSettingsRoute.name,
+         args: ClipSettingsRouteArgs(
+           key: key,
+           title: title,
+           initialSettings: initialSettings,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ClipSettingsRoute';
 
-  static const PageInfo<ClipSettingsRouteArgs> page =
-      PageInfo<ClipSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ClipSettingsRouteArgs>(
+        orElse: () => const ClipSettingsRouteArgs(),
+      );
+      return ClipSettingsDialog(
+        key: args.key,
+        title: args.title,
+        initialSettings: args.initialSettings,
+      );
+    },
+  );
 }
 
 class ClipSettingsRouteArgs {
@@ -1543,20 +1057,34 @@ class ClipSettingsRouteArgs {
   String toString() {
     return 'ClipSettingsRouteArgs{key: $key, title: $title, initialSettings: $initialSettings}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipSettingsRouteArgs) return false;
+    return key == other.key &&
+        title == other.title &&
+        initialSettings == other.initialSettings;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ title.hashCode ^ initialSettings.hashCode;
 }
 
 /// generated route for
 /// [ColorPickerDialog]
 class ColorPickerRoute extends PageRouteInfo<void> {
   const ColorPickerRoute({List<PageRouteInfo>? children})
-      : super(
-          ColorPickerRoute.name,
-          initialChildren: children,
-        );
+    : super(ColorPickerRoute.name, initialChildren: children);
 
   static const String name = 'ColorPickerRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ColorPickerDialog();
+    },
+  );
 }
 
 /// generated route for
@@ -1568,19 +1096,30 @@ class DriveFileSelectRoute extends PageRouteInfo<DriveFileSelectRouteArgs> {
     bool allowMultiple = false,
     List<PageRouteInfo>? children,
   }) : super(
-          DriveFileSelectRoute.name,
-          args: DriveFileSelectRouteArgs(
-            account: account,
-            key: key,
-            allowMultiple: allowMultiple,
-          ),
-          initialChildren: children,
-        );
+         DriveFileSelectRoute.name,
+         args: DriveFileSelectRouteArgs(
+           account: account,
+           key: key,
+           allowMultiple: allowMultiple,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'DriveFileSelectRoute';
 
-  static const PageInfo<DriveFileSelectRouteArgs> page =
-      PageInfo<DriveFileSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DriveFileSelectRouteArgs>();
+      return WrappedRoute(
+        child: DriveFileSelectDialog(
+          account: args.account,
+          key: args.key,
+          allowMultiple: args.allowMultiple,
+        ),
+      );
+    },
+  );
 }
 
 class DriveFileSelectRouteArgs {
@@ -1600,34 +1139,50 @@ class DriveFileSelectRouteArgs {
   String toString() {
     return 'DriveFileSelectRouteArgs{account: $account, key: $key, allowMultiple: $allowMultiple}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFileSelectRouteArgs) return false;
+    return account == other.account &&
+        key == other.key &&
+        allowMultiple == other.allowMultiple;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode ^ allowMultiple.hashCode;
 }
 
 /// generated route for
 /// [DriveModalSheet]
 class DriveModalRoute extends PageRouteInfo<void> {
   const DriveModalRoute({List<PageRouteInfo>? children})
-      : super(
-          DriveModalRoute.name,
-          initialChildren: children,
-        );
+    : super(DriveModalRoute.name, initialChildren: children);
 
   static const String name = 'DriveModalRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DriveModalSheet();
+    },
+  );
 }
 
 /// generated route for
 /// [ExpireSelectDialog]
 class ExpireSelectRoute extends PageRouteInfo<void> {
   const ExpireSelectRoute({List<PageRouteInfo>? children})
-      : super(
-          ExpireSelectRoute.name,
-          initialChildren: children,
-        );
+    : super(ExpireSelectRoute.name, initialChildren: children);
 
   static const String name = 'ExpireSelectRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ExpireSelectDialog();
+    },
+  );
 }
 
 /// generated route for
@@ -1638,25 +1193,26 @@ class ExploreRoute extends PageRouteInfo<ExploreRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ExploreRoute.name,
-          args: ExploreRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ExploreRoute.name,
+         args: ExploreRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ExploreRoute';
 
-  static const PageInfo<ExploreRouteArgs> page =
-      PageInfo<ExploreRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ExploreRouteArgs>();
+      return WrappedRoute(
+        child: ExplorePage(accountContext: args.accountContext, key: args.key),
+      );
+    },
+  );
 }
 
 class ExploreRouteArgs {
-  const ExploreRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const ExploreRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -1666,6 +1222,16 @@ class ExploreRouteArgs {
   String toString() {
     return 'ExploreRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ExploreRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1677,19 +1243,30 @@ class ExploreRoleUsersRoute extends PageRouteInfo<ExploreRoleUsersRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ExploreRoleUsersRoute.name,
-          args: ExploreRoleUsersRouteArgs(
-            item: item,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ExploreRoleUsersRoute.name,
+         args: ExploreRoleUsersRouteArgs(
+           item: item,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ExploreRoleUsersRoute';
 
-  static const PageInfo<ExploreRoleUsersRouteArgs> page =
-      PageInfo<ExploreRoleUsersRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ExploreRoleUsersRouteArgs>();
+      return WrappedRoute(
+        child: ExploreRoleUsersPage(
+          item: args.item,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ExploreRoleUsersRouteArgs {
@@ -1709,6 +1286,18 @@ class ExploreRoleUsersRouteArgs {
   String toString() {
     return 'ExploreRoleUsersRouteArgs{item: $item, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ExploreRoleUsersRouteArgs) return false;
+    return item == other.item &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => item.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1719,25 +1308,29 @@ class FavoritedNoteRoute extends PageRouteInfo<FavoritedNoteRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          FavoritedNoteRoute.name,
-          args: FavoritedNoteRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         FavoritedNoteRoute.name,
+         args: FavoritedNoteRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'FavoritedNoteRoute';
 
-  static const PageInfo<FavoritedNoteRouteArgs> page =
-      PageInfo<FavoritedNoteRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<FavoritedNoteRouteArgs>();
+      return WrappedRoute(
+        child: FavoritedNotePage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class FavoritedNoteRouteArgs {
-  const FavoritedNoteRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const FavoritedNoteRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -1747,6 +1340,16 @@ class FavoritedNoteRouteArgs {
   String toString() {
     return 'FavoritedNoteRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FavoritedNoteRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1758,19 +1361,30 @@ class FederationRoute extends PageRouteInfo<FederationRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          FederationRoute.name,
-          args: FederationRouteArgs(
-            accountContext: accountContext,
-            host: host,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         FederationRoute.name,
+         args: FederationRouteArgs(
+           accountContext: accountContext,
+           host: host,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'FederationRoute';
 
-  static const PageInfo<FederationRouteArgs> page =
-      PageInfo<FederationRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<FederationRouteArgs>();
+      return WrappedRoute(
+        child: FederationPage(
+          accountContext: args.accountContext,
+          host: args.host,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class FederationRouteArgs {
@@ -1790,6 +1404,18 @@ class FederationRouteArgs {
   String toString() {
     return 'FederationRouteArgs{accountContext: $accountContext, host: $host, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FederationRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        host == other.host &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ host.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1802,20 +1428,30 @@ class FolderSelectRoute extends PageRouteInfo<FolderSelectRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          FolderSelectRoute.name,
-          args: FolderSelectRouteArgs(
-            account: account,
-            fileShowTarget: fileShowTarget,
-            confirmationText: confirmationText,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         FolderSelectRoute.name,
+         args: FolderSelectRouteArgs(
+           account: account,
+           fileShowTarget: fileShowTarget,
+           confirmationText: confirmationText,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'FolderSelectRoute';
 
-  static const PageInfo<FolderSelectRouteArgs> page =
-      PageInfo<FolderSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<FolderSelectRouteArgs>();
+      return FolderSelectDialog(
+        account: args.account,
+        fileShowTarget: args.fileShowTarget,
+        confirmationText: args.confirmationText,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class FolderSelectRouteArgs {
@@ -1838,20 +1474,39 @@ class FolderSelectRouteArgs {
   String toString() {
     return 'FolderSelectRouteArgs{account: $account, fileShowTarget: $fileShowTarget, confirmationText: $confirmationText, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FolderSelectRouteArgs) return false;
+    return account == other.account &&
+        const ListEquality().equals(fileShowTarget, other.fileShowTarget) &&
+        confirmationText == other.confirmationText &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      const ListEquality().hash(fileShowTarget) ^
+      confirmationText.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
 /// [GeneralSettingsPage]
 class GeneralSettingsRoute extends PageRouteInfo<void> {
   const GeneralSettingsRoute({List<PageRouteInfo>? children})
-      : super(
-          GeneralSettingsRoute.name,
-          initialChildren: children,
-        );
+    : super(GeneralSettingsRoute.name, initialChildren: children);
 
   static const String name = 'GeneralSettingsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const GeneralSettingsPage();
+    },
+  );
 }
 
 /// generated route for
@@ -1863,19 +1518,30 @@ class HashtagRoute extends PageRouteInfo<HashtagRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          HashtagRoute.name,
-          args: HashtagRouteArgs(
-            hashtag: hashtag,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         HashtagRoute.name,
+         args: HashtagRouteArgs(
+           hashtag: hashtag,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'HashtagRoute';
 
-  static const PageInfo<HashtagRouteArgs> page =
-      PageInfo<HashtagRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<HashtagRouteArgs>();
+      return WrappedRoute(
+        child: HashtagPage(
+          hashtag: args.hashtag,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class HashtagRouteArgs {
@@ -1895,20 +1561,34 @@ class HashtagRouteArgs {
   String toString() {
     return 'HashtagRouteArgs{hashtag: $hashtag, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! HashtagRouteArgs) return false;
+    return hashtag == other.hashtag &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => hashtag.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
 /// [ImportExportPage]
 class ImportExportRoute extends PageRouteInfo<void> {
   const ImportExportRoute({List<PageRouteInfo>? children})
-      : super(
-          ImportExportRoute.name,
-          initialChildren: children,
-        );
+    : super(ImportExportRoute.name, initialChildren: children);
 
   static const String name = 'ImportExportRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ImportExportPage();
+    },
+  );
 }
 
 /// generated route for
@@ -1919,25 +1599,26 @@ class InstanceMuteRoute extends PageRouteInfo<InstanceMuteRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          InstanceMuteRoute.name,
-          args: InstanceMuteRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         InstanceMuteRoute.name,
+         args: InstanceMuteRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'InstanceMuteRoute';
 
-  static const PageInfo<InstanceMuteRouteArgs> page =
-      PageInfo<InstanceMuteRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<InstanceMuteRouteArgs>();
+      return WrappedRoute(
+        child: InstanceMutePage(account: args.account, key: args.key),
+      );
+    },
+  );
 }
 
 class InstanceMuteRouteArgs {
-  const InstanceMuteRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const InstanceMuteRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -1947,6 +1628,16 @@ class InstanceMuteRouteArgs {
   String toString() {
     return 'InstanceMuteRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! InstanceMuteRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1958,19 +1649,30 @@ class LicenseConfirmRoute extends PageRouteInfo<LicenseConfirmRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          LicenseConfirmRoute.name,
-          args: LicenseConfirmRouteArgs(
-            emoji: emoji,
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         LicenseConfirmRoute.name,
+         args: LicenseConfirmRouteArgs(
+           emoji: emoji,
+           account: account,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LicenseConfirmRoute';
 
-  static const PageInfo<LicenseConfirmRouteArgs> page =
-      PageInfo<LicenseConfirmRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<LicenseConfirmRouteArgs>();
+      return WrappedRoute(
+        child: LicenseConfirmDialog(
+          emoji: args.emoji,
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class LicenseConfirmRouteArgs {
@@ -1990,20 +1692,32 @@ class LicenseConfirmRouteArgs {
   String toString() {
     return 'LicenseConfirmRouteArgs{emoji: $emoji, account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! LicenseConfirmRouteArgs) return false;
+    return emoji == other.emoji && account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => emoji.hashCode ^ account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
 /// [LoginPage]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginRoute.name,
-          initialChildren: children,
-        );
+    : super(LoginRoute.name, initialChildren: children);
 
   static const String name = 'LoginRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LoginPage();
+    },
+  );
 }
 
 /// generated route for
@@ -2014,25 +1728,29 @@ class MisskeyGamesRoute extends PageRouteInfo<MisskeyGamesRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          MisskeyGamesRoute.name,
-          args: MisskeyGamesRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         MisskeyGamesRoute.name,
+         args: MisskeyGamesRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'MisskeyGamesRoute';
 
-  static const PageInfo<MisskeyGamesRouteArgs> page =
-      PageInfo<MisskeyGamesRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<MisskeyGamesRouteArgs>();
+      return WrappedRoute(
+        child: MisskeyGamesPage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class MisskeyGamesRouteArgs {
-  const MisskeyGamesRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const MisskeyGamesRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -2042,6 +1760,16 @@ class MisskeyGamesRouteArgs {
   String toString() {
     return 'MisskeyGamesRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MisskeyGamesRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2053,19 +1781,30 @@ class MisskeyRouteRoute extends PageRouteInfo<MisskeyRouteRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          MisskeyRouteRoute.name,
-          args: MisskeyRouteRouteArgs(
-            accountContext: accountContext,
-            page: page,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         MisskeyRouteRoute.name,
+         args: MisskeyRouteRouteArgs(
+           accountContext: accountContext,
+           page: page,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'MisskeyRouteRoute';
 
-  static const PageInfo<MisskeyRouteRouteArgs> page =
-      PageInfo<MisskeyRouteRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<MisskeyRouteRouteArgs>();
+      return WrappedRoute(
+        child: MisskeyPagePage(
+          accountContext: args.accountContext,
+          page: args.page,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class MisskeyRouteRouteArgs {
@@ -2085,20 +1824,34 @@ class MisskeyRouteRouteArgs {
   String toString() {
     return 'MisskeyRouteRouteArgs{accountContext: $accountContext, page: $page, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MisskeyRouteRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        page == other.page &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ page.hashCode ^ key.hashCode;
 }
 
 /// generated route for
 /// [MisskeyServerListDialog]
 class MisskeyServerListRoute extends PageRouteInfo<void> {
   const MisskeyServerListRoute({List<PageRouteInfo>? children})
-      : super(
-          MisskeyServerListRoute.name,
-          initialChildren: children,
-        );
+    : super(MisskeyServerListRoute.name, initialChildren: children);
 
   static const String name = 'MisskeyServerListRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MisskeyServerListDialog();
+    },
+  );
 }
 
 /// generated route for
@@ -2117,26 +1870,44 @@ class NoteCreateRoute extends PageRouteInfo<NoteCreateRouteArgs> {
     NoteCreationMode? noteCreationMode,
     List<PageRouteInfo>? children,
   }) : super(
-          NoteCreateRoute.name,
-          args: NoteCreateRouteArgs(
-            initialAccount: initialAccount,
-            key: key,
-            initialText: initialText,
-            initialMediaFiles: initialMediaFiles,
-            exitOnNoted: exitOnNoted,
-            channel: channel,
-            reply: reply,
-            renote: renote,
-            note: note,
-            noteCreationMode: noteCreationMode,
-          ),
-          initialChildren: children,
-        );
+         NoteCreateRoute.name,
+         args: NoteCreateRouteArgs(
+           initialAccount: initialAccount,
+           key: key,
+           initialText: initialText,
+           initialMediaFiles: initialMediaFiles,
+           exitOnNoted: exitOnNoted,
+           channel: channel,
+           reply: reply,
+           renote: renote,
+           note: note,
+           noteCreationMode: noteCreationMode,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'NoteCreateRoute';
 
-  static const PageInfo<NoteCreateRouteArgs> page =
-      PageInfo<NoteCreateRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NoteCreateRouteArgs>();
+      return WrappedRoute(
+        child: NoteCreatePage(
+          initialAccount: args.initialAccount,
+          key: args.key,
+          initialText: args.initialText,
+          initialMediaFiles: args.initialMediaFiles,
+          exitOnNoted: args.exitOnNoted,
+          channel: args.channel,
+          reply: args.reply,
+          renote: args.renote,
+          note: args.note,
+          noteCreationMode: args.noteCreationMode,
+        ),
+      );
+    },
+  );
 }
 
 class NoteCreateRouteArgs {
@@ -2177,6 +1948,38 @@ class NoteCreateRouteArgs {
   String toString() {
     return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NoteCreateRouteArgs) return false;
+    return initialAccount == other.initialAccount &&
+        key == other.key &&
+        initialText == other.initialText &&
+        const ListEquality().equals(
+          initialMediaFiles,
+          other.initialMediaFiles,
+        ) &&
+        exitOnNoted == other.exitOnNoted &&
+        channel == other.channel &&
+        reply == other.reply &&
+        renote == other.renote &&
+        note == other.note &&
+        noteCreationMode == other.noteCreationMode;
+  }
+
+  @override
+  int get hashCode =>
+      initialAccount.hashCode ^
+      key.hashCode ^
+      initialText.hashCode ^
+      const ListEquality().hash(initialMediaFiles) ^
+      exitOnNoted.hashCode ^
+      channel.hashCode ^
+      reply.hashCode ^
+      renote.hashCode ^
+      note.hashCode ^
+      noteCreationMode.hashCode;
 }
 
 /// generated route for
@@ -2188,19 +1991,30 @@ class NoteDetailRoute extends PageRouteInfo<NoteDetailRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          NoteDetailRoute.name,
-          args: NoteDetailRouteArgs(
-            note: note,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         NoteDetailRoute.name,
+         args: NoteDetailRouteArgs(
+           note: note,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'NoteDetailRoute';
 
-  static const PageInfo<NoteDetailRouteArgs> page =
-      PageInfo<NoteDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NoteDetailRouteArgs>();
+      return WrappedRoute(
+        child: NoteDetailPage(
+          note: args.note,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class NoteDetailRouteArgs {
@@ -2220,6 +2034,18 @@ class NoteDetailRouteArgs {
   String toString() {
     return 'NoteDetailRouteArgs{note: $note, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NoteDetailRouteArgs) return false;
+    return note == other.note &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => note.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2233,21 +2059,34 @@ class NoteModalRoute extends PageRouteInfo<NoteModalRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          NoteModalRoute.name,
-          args: NoteModalRouteArgs(
-            baseNote: baseNote,
-            targetNote: targetNote,
-            accountContext: accountContext,
-            noteBoundaryKey: noteBoundaryKey,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         NoteModalRoute.name,
+         args: NoteModalRouteArgs(
+           baseNote: baseNote,
+           targetNote: targetNote,
+           accountContext: accountContext,
+           noteBoundaryKey: noteBoundaryKey,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'NoteModalRoute';
 
-  static const PageInfo<NoteModalRouteArgs> page =
-      PageInfo<NoteModalRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NoteModalRouteArgs>();
+      return WrappedRoute(
+        child: NoteModalSheet(
+          baseNote: args.baseNote,
+          targetNote: args.targetNote,
+          accountContext: args.accountContext,
+          noteBoundaryKey: args.noteBoundaryKey,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class NoteModalRouteArgs {
@@ -2273,6 +2112,25 @@ class NoteModalRouteArgs {
   String toString() {
     return 'NoteModalRouteArgs{baseNote: $baseNote, targetNote: $targetNote, accountContext: $accountContext, noteBoundaryKey: $noteBoundaryKey, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NoteModalRouteArgs) return false;
+    return baseNote == other.baseNote &&
+        targetNote == other.targetNote &&
+        accountContext == other.accountContext &&
+        noteBoundaryKey == other.noteBoundaryKey &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      baseNote.hashCode ^
+      targetNote.hashCode ^
+      accountContext.hashCode ^
+      noteBoundaryKey.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -2284,19 +2142,30 @@ class NotesAfterRenoteRoute extends PageRouteInfo<NotesAfterRenoteRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          NotesAfterRenoteRoute.name,
-          args: NotesAfterRenoteRouteArgs(
-            note: note,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         NotesAfterRenoteRoute.name,
+         args: NotesAfterRenoteRouteArgs(
+           note: note,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'NotesAfterRenoteRoute';
 
-  static const PageInfo<NotesAfterRenoteRouteArgs> page =
-      PageInfo<NotesAfterRenoteRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NotesAfterRenoteRouteArgs>();
+      return WrappedRoute(
+        child: NotesAfterRenotePage(
+          note: args.note,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class NotesAfterRenoteRouteArgs {
@@ -2316,6 +2185,18 @@ class NotesAfterRenoteRouteArgs {
   String toString() {
     return 'NotesAfterRenoteRouteArgs{note: $note, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NotesAfterRenoteRouteArgs) return false;
+    return note == other.note &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => note.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2326,25 +2207,29 @@ class NotificationRoute extends PageRouteInfo<NotificationRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          NotificationRoute.name,
-          args: NotificationRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         NotificationRoute.name,
+         args: NotificationRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'NotificationRoute';
 
-  static const PageInfo<NotificationRouteArgs> page =
-      PageInfo<NotificationRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NotificationRouteArgs>();
+      return WrappedRoute(
+        child: NotificationPage(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class NotificationRouteArgs {
-  const NotificationRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const NotificationRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -2354,6 +2239,16 @@ class NotificationRouteArgs {
   String toString() {
     return 'NotificationRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NotificationRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2366,20 +2261,32 @@ class PhotoEditRoute extends PageRouteInfo<PhotoEditRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          PhotoEditRoute.name,
-          args: PhotoEditRouteArgs(
-            accountContext: accountContext,
-            file: file,
-            onSubmit: onSubmit,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         PhotoEditRoute.name,
+         args: PhotoEditRouteArgs(
+           accountContext: accountContext,
+           file: file,
+           onSubmit: onSubmit,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'PhotoEditRoute';
 
-  static const PageInfo<PhotoEditRouteArgs> page =
-      PageInfo<PhotoEditRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PhotoEditRouteArgs>();
+      return WrappedRoute(
+        child: PhotoEditPage(
+          accountContext: args.accountContext,
+          file: args.file,
+          onSubmit: args.onSubmit,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class PhotoEditRouteArgs {
@@ -2402,6 +2309,18 @@ class PhotoEditRouteArgs {
   String toString() {
     return 'PhotoEditRouteArgs{accountContext: $accountContext, file: $file, onSubmit: $onSubmit, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PhotoEditRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        file == other.file &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ file.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2412,25 +2331,24 @@ class ReactionDeckRoute extends PageRouteInfo<ReactionDeckRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ReactionDeckRoute.name,
-          args: ReactionDeckRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ReactionDeckRoute.name,
+         args: ReactionDeckRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ReactionDeckRoute';
 
-  static const PageInfo<ReactionDeckRouteArgs> page =
-      PageInfo<ReactionDeckRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReactionDeckRouteArgs>();
+      return ReactionDeckPage(account: args.account, key: args.key);
+    },
+  );
 }
 
 class ReactionDeckRouteArgs {
-  const ReactionDeckRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const ReactionDeckRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -2440,6 +2358,16 @@ class ReactionDeckRouteArgs {
   String toString() {
     return 'ReactionDeckRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionDeckRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2451,19 +2379,30 @@ class ReactionPickerRoute extends PageRouteInfo<ReactionPickerRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ReactionPickerRoute.name,
-          args: ReactionPickerRouteArgs(
-            account: account,
-            isAcceptSensitive: isAcceptSensitive,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ReactionPickerRoute.name,
+         args: ReactionPickerRouteArgs(
+           account: account,
+           isAcceptSensitive: isAcceptSensitive,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ReactionPickerRoute';
 
-  static const PageInfo<ReactionPickerRouteArgs> page =
-      PageInfo<ReactionPickerRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReactionPickerRouteArgs>();
+      return WrappedRoute(
+        child: ReactionPickerDialog(
+          account: args.account,
+          isAcceptSensitive: args.isAcceptSensitive,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ReactionPickerRouteArgs {
@@ -2483,6 +2422,19 @@ class ReactionPickerRouteArgs {
   String toString() {
     return 'ReactionPickerRouteArgs{account: $account, isAcceptSensitive: $isAcceptSensitive, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionPickerRouteArgs) return false;
+    return account == other.account &&
+        isAcceptSensitive == other.isAcceptSensitive &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^ isAcceptSensitive.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2495,20 +2447,32 @@ class ReactionUserRoute extends PageRouteInfo<ReactionUserRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ReactionUserRoute.name,
-          args: ReactionUserRouteArgs(
-            accountContext: accountContext,
-            emojiData: emojiData,
-            noteId: noteId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ReactionUserRoute.name,
+         args: ReactionUserRouteArgs(
+           accountContext: accountContext,
+           emojiData: emojiData,
+           noteId: noteId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ReactionUserRoute';
 
-  static const PageInfo<ReactionUserRouteArgs> page =
-      PageInfo<ReactionUserRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReactionUserRouteArgs>();
+      return WrappedRoute(
+        child: ReactionUserDialog(
+          accountContext: args.accountContext,
+          emojiData: args.emojiData,
+          noteId: args.noteId,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ReactionUserRouteArgs {
@@ -2531,6 +2495,23 @@ class ReactionUserRouteArgs {
   String toString() {
     return 'ReactionUserRouteArgs{accountContext: $accountContext, emojiData: $emojiData, noteId: $noteId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionUserRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        emojiData == other.emojiData &&
+        noteId == other.noteId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^
+      emojiData.hashCode ^
+      noteId.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -2542,19 +2523,26 @@ class RenoteModalRoute extends PageRouteInfo<RenoteModalRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          RenoteModalRoute.name,
-          args: RenoteModalRouteArgs(
-            note: note,
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         RenoteModalRoute.name,
+         args: RenoteModalRouteArgs(note: note, account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'RenoteModalRoute';
 
-  static const PageInfo<RenoteModalRouteArgs> page =
-      PageInfo<RenoteModalRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RenoteModalRouteArgs>();
+      return WrappedRoute(
+        child: RenoteModalSheet(
+          note: args.note,
+          account: args.account,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class RenoteModalRouteArgs {
@@ -2574,6 +2562,16 @@ class RenoteModalRouteArgs {
   String toString() {
     return 'RenoteModalRouteArgs{note: $note, account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RenoteModalRouteArgs) return false;
+    return note == other.note && account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => note.hashCode ^ account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2585,19 +2583,26 @@ class RenoteUserRoute extends PageRouteInfo<RenoteUserRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          RenoteUserRoute.name,
-          args: RenoteUserRouteArgs(
-            account: account,
-            noteId: noteId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         RenoteUserRoute.name,
+         args: RenoteUserRouteArgs(account: account, noteId: noteId, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'RenoteUserRoute';
 
-  static const PageInfo<RenoteUserRouteArgs> page =
-      PageInfo<RenoteUserRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RenoteUserRouteArgs>();
+      return WrappedRoute(
+        child: RenoteUserDialog(
+          account: args.account,
+          noteId: args.noteId,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class RenoteUserRouteArgs {
@@ -2617,6 +2622,18 @@ class RenoteUserRouteArgs {
   String toString() {
     return 'RenoteUserRouteArgs{account: $account, noteId: $noteId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RenoteUserRouteArgs) return false;
+    return account == other.account &&
+        noteId == other.noteId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ noteId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2627,25 +2644,26 @@ class RoleSelectRoute extends PageRouteInfo<RoleSelectRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          RoleSelectRoute.name,
-          args: RoleSelectRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         RoleSelectRoute.name,
+         args: RoleSelectRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'RoleSelectRoute';
 
-  static const PageInfo<RoleSelectRouteArgs> page =
-      PageInfo<RoleSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RoleSelectRouteArgs>();
+      return WrappedRoute(
+        child: RoleSelectDialog(account: args.account, key: args.key),
+      );
+    },
+  );
 }
 
 class RoleSelectRouteArgs {
-  const RoleSelectRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const RoleSelectRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -2655,6 +2673,16 @@ class RoleSelectRouteArgs {
   String toString() {
     return 'RoleSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RoleSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2666,18 +2694,30 @@ class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
     NoteSearchCondition? initialNoteSearchCondition,
     List<PageRouteInfo>? children,
   }) : super(
-          SearchRoute.name,
-          args: SearchRouteArgs(
-            accountContext: accountContext,
-            key: key,
-            initialNoteSearchCondition: initialNoteSearchCondition,
-          ),
-          initialChildren: children,
-        );
+         SearchRoute.name,
+         args: SearchRouteArgs(
+           accountContext: accountContext,
+           key: key,
+           initialNoteSearchCondition: initialNoteSearchCondition,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'SearchRoute';
 
-  static const PageInfo<SearchRouteArgs> page = PageInfo<SearchRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SearchRouteArgs>();
+      return WrappedRoute(
+        child: SearchPage(
+          accountContext: args.accountContext,
+          key: args.key,
+          initialNoteSearchCondition: args.initialNoteSearchCondition,
+        ),
+      );
+    },
+  );
 }
 
 class SearchRouteArgs {
@@ -2697,6 +2737,21 @@ class SearchRouteArgs {
   String toString() {
     return 'SearchRouteArgs{accountContext: $accountContext, key: $key, initialNoteSearchCondition: $initialNoteSearchCondition}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SearchRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        key == other.key &&
+        initialNoteSearchCondition == other.initialNoteSearchCondition;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^
+      key.hashCode ^
+      initialNoteSearchCondition.hashCode;
 }
 
 /// generated route for
@@ -2707,25 +2762,29 @@ class ServerDetailRoute extends PageRouteInfo<ServerDetailRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          ServerDetailRoute.name,
-          args: ServerDetailRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         ServerDetailRoute.name,
+         args: ServerDetailRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'ServerDetailRoute';
 
-  static const PageInfo<ServerDetailRouteArgs> page =
-      PageInfo<ServerDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ServerDetailRouteArgs>();
+      return WrappedRoute(
+        child: ServerDetailDialog(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class ServerDetailRouteArgs {
-  const ServerDetailRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const ServerDetailRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -2735,20 +2794,32 @@ class ServerDetailRouteArgs {
   String toString() {
     return 'ServerDetailRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ServerDetailRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
 /// [SettingsPage]
 class SettingsRoute extends PageRouteInfo<void> {
   const SettingsRoute({List<PageRouteInfo>? children})
-      : super(
-          SettingsRoute.name,
-          initialChildren: children,
-        );
+    : super(SettingsRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingsPage();
+    },
+  );
 }
 
 /// generated route for
@@ -2760,18 +2831,26 @@ class SeveralAccountGeneralSettingsRoute
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          SeveralAccountGeneralSettingsRoute.name,
-          args: SeveralAccountGeneralSettingsRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         SeveralAccountGeneralSettingsRoute.name,
+         args: SeveralAccountGeneralSettingsRouteArgs(
+           account: account,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'SeveralAccountGeneralSettingsRoute';
 
-  static const PageInfo<SeveralAccountGeneralSettingsRouteArgs> page =
-      PageInfo<SeveralAccountGeneralSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SeveralAccountGeneralSettingsRouteArgs>();
+      return SeveralAccountGeneralSettingsPage(
+        account: args.account,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class SeveralAccountGeneralSettingsRouteArgs {
@@ -2788,6 +2867,16 @@ class SeveralAccountGeneralSettingsRouteArgs {
   String toString() {
     return 'SeveralAccountGeneralSettingsRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SeveralAccountGeneralSettingsRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2799,25 +2888,24 @@ class SeveralAccountSettingsRoute
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          SeveralAccountSettingsRoute.name,
-          args: SeveralAccountSettingsRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         SeveralAccountSettingsRoute.name,
+         args: SeveralAccountSettingsRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'SeveralAccountSettingsRoute';
 
-  static const PageInfo<SeveralAccountSettingsRouteArgs> page =
-      PageInfo<SeveralAccountSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SeveralAccountSettingsRouteArgs>();
+      return SeveralAccountSettingsPage(account: args.account, key: args.key);
+    },
+  );
 }
 
 class SeveralAccountSettingsRouteArgs {
-  const SeveralAccountSettingsRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const SeveralAccountSettingsRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -2827,20 +2915,32 @@ class SeveralAccountSettingsRouteArgs {
   String toString() {
     return 'SeveralAccountSettingsRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SeveralAccountSettingsRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
 /// [ShareExtensionPage]
 class ShareExtensionRoute extends PageRouteInfo<void> {
   const ShareExtensionRoute({List<PageRouteInfo>? children})
-      : super(
-          ShareExtensionRoute.name,
-          initialChildren: children,
-        );
+    : super(ShareExtensionRoute.name, initialChildren: children);
 
   static const String name = 'ShareExtensionRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ShareExtensionPage();
+    },
+  );
 }
 
 /// generated route for
@@ -2853,19 +2953,30 @@ class SharingAccountSelectRoute
     List<String>? filePath,
     List<PageRouteInfo>? children,
   }) : super(
-          SharingAccountSelectRoute.name,
-          args: SharingAccountSelectRouteArgs(
-            key: key,
-            sharingText: sharingText,
-            filePath: filePath,
-          ),
-          initialChildren: children,
-        );
+         SharingAccountSelectRoute.name,
+         args: SharingAccountSelectRouteArgs(
+           key: key,
+           sharingText: sharingText,
+           filePath: filePath,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'SharingAccountSelectRoute';
 
-  static const PageInfo<SharingAccountSelectRouteArgs> page =
-      PageInfo<SharingAccountSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SharingAccountSelectRouteArgs>(
+        orElse: () => const SharingAccountSelectRouteArgs(),
+      );
+      return SharingAccountSelectPage(
+        key: args.key,
+        sharingText: args.sharingText,
+        filePath: args.filePath,
+      );
+    },
+  );
 }
 
 class SharingAccountSelectRouteArgs {
@@ -2885,63 +2996,78 @@ class SharingAccountSelectRouteArgs {
   String toString() {
     return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SharingAccountSelectRouteArgs) return false;
+    return key == other.key &&
+        sharingText == other.sharingText &&
+        const ListEquality().equals(filePath, other.filePath);
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ sharingText.hashCode ^ const ListEquality().hash(filePath);
 }
 
 /// generated route for
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
-      : super(
-          SplashRoute.name,
-          initialChildren: children,
-        );
+    : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SplashPage();
+    },
+  );
 }
 
 /// generated route for
 /// [TabSettingsListPage]
 class TabSettingsListRoute extends PageRouteInfo<void> {
   const TabSettingsListRoute({List<PageRouteInfo>? children})
-      : super(
-          TabSettingsListRoute.name,
-          initialChildren: children,
-        );
+    : super(TabSettingsListRoute.name, initialChildren: children);
 
   static const String name = 'TabSettingsListRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TabSettingsListPage();
+    },
+  );
 }
 
 /// generated route for
 /// [TabSettingsPage]
 class TabSettingsRoute extends PageRouteInfo<TabSettingsRouteArgs> {
-  TabSettingsRoute({
-    Key? key,
-    int? tabIndex,
-    List<PageRouteInfo>? children,
-  }) : super(
-          TabSettingsRoute.name,
-          args: TabSettingsRouteArgs(
-            key: key,
-            tabIndex: tabIndex,
-          ),
-          initialChildren: children,
-        );
+  TabSettingsRoute({Key? key, int? tabIndex, List<PageRouteInfo>? children})
+    : super(
+        TabSettingsRoute.name,
+        args: TabSettingsRouteArgs(key: key, tabIndex: tabIndex),
+        initialChildren: children,
+      );
 
   static const String name = 'TabSettingsRoute';
 
-  static const PageInfo<TabSettingsRouteArgs> page =
-      PageInfo<TabSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TabSettingsRouteArgs>(
+        orElse: () => const TabSettingsRouteArgs(),
+      );
+      return TabSettingsPage(key: args.key, tabIndex: args.tabIndex);
+    },
+  );
 }
 
 class TabSettingsRouteArgs {
-  const TabSettingsRouteArgs({
-    this.key,
-    this.tabIndex,
-  });
+  const TabSettingsRouteArgs({this.key, this.tabIndex});
 
   final Key? key;
 
@@ -2951,6 +3077,16 @@ class TabSettingsRouteArgs {
   String toString() {
     return 'TabSettingsRouteArgs{key: $key, tabIndex: $tabIndex}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TabSettingsRouteArgs) return false;
+    return key == other.key && tabIndex == other.tabIndex;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ tabIndex.hashCode;
 }
 
 /// generated route for
@@ -2961,25 +3097,30 @@ class TimeLineRoute extends PageRouteInfo<TimeLineRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          TimeLineRoute.name,
-          args: TimeLineRouteArgs(
-            initialTabSetting: initialTabSetting,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         TimeLineRoute.name,
+         args: TimeLineRouteArgs(
+           initialTabSetting: initialTabSetting,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'TimeLineRoute';
 
-  static const PageInfo<TimeLineRouteArgs> page =
-      PageInfo<TimeLineRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TimeLineRouteArgs>();
+      return TimeLinePage(
+        initialTabSetting: args.initialTabSetting,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class TimeLineRouteArgs {
-  const TimeLineRouteArgs({
-    required this.initialTabSetting,
-    this.key,
-  });
+  const TimeLineRouteArgs({required this.initialTabSetting, this.key});
 
   final TabSetting initialTabSetting;
 
@@ -2989,6 +3130,16 @@ class TimeLineRouteArgs {
   String toString() {
     return 'TimeLineRouteArgs{initialTabSetting: $initialTabSetting, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TimeLineRouteArgs) return false;
+    return initialTabSetting == other.initialTabSetting && key == other.key;
+  }
+
+  @override
+  int get hashCode => initialTabSetting.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3001,20 +3152,32 @@ class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UpdateMemoRoute.name,
-          args: UpdateMemoRouteArgs(
-            accountContext: accountContext,
-            initialMemo: initialMemo,
-            userId: userId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UpdateMemoRoute.name,
+         args: UpdateMemoRouteArgs(
+           accountContext: accountContext,
+           initialMemo: initialMemo,
+           userId: userId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UpdateMemoRoute';
 
-  static const PageInfo<UpdateMemoRouteArgs> page =
-      PageInfo<UpdateMemoRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UpdateMemoRouteArgs>();
+      return WrappedRoute(
+        child: UpdateMemoDialog(
+          accountContext: args.accountContext,
+          initialMemo: args.initialMemo,
+          userId: args.userId,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UpdateMemoRouteArgs {
@@ -3037,6 +3200,23 @@ class UpdateMemoRouteArgs {
   String toString() {
     return 'UpdateMemoRouteArgs{accountContext: $accountContext, initialMemo: $initialMemo, userId: $userId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UpdateMemoRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        initialMemo == other.initialMemo &&
+        userId == other.userId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^
+      initialMemo.hashCode ^
+      userId.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -3049,20 +3229,32 @@ class UserControlRoute extends PageRouteInfo<UserControlRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserControlRoute.name,
-          args: UserControlRouteArgs(
-            account: account,
-            response: response,
-            host: host,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserControlRoute.name,
+         args: UserControlRouteArgs(
+           account: account,
+           response: response,
+           host: host,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UserControlRoute';
 
-  static const PageInfo<UserControlRouteArgs> page =
-      PageInfo<UserControlRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserControlRouteArgs>();
+      return WrappedRoute(
+        child: UserControlDialog(
+          account: args.account,
+          response: args.response,
+          host: args.host,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UserControlRouteArgs {
@@ -3085,6 +3277,20 @@ class UserControlRouteArgs {
   String toString() {
     return 'UserControlRouteArgs{account: $account, response: $response, host: $host, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserControlRouteArgs) return false;
+    return account == other.account &&
+        response == other.response &&
+        host == other.host &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^ response.hashCode ^ host.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3096,19 +3302,30 @@ class UserFolloweeRoute extends PageRouteInfo<UserFolloweeRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserFolloweeRoute.name,
-          args: UserFolloweeRouteArgs(
-            userId: userId,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserFolloweeRoute.name,
+         args: UserFolloweeRouteArgs(
+           userId: userId,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UserFolloweeRoute';
 
-  static const PageInfo<UserFolloweeRouteArgs> page =
-      PageInfo<UserFolloweeRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserFolloweeRouteArgs>();
+      return WrappedRoute(
+        child: UserFolloweePage(
+          userId: args.userId,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UserFolloweeRouteArgs {
@@ -3128,6 +3345,18 @@ class UserFolloweeRouteArgs {
   String toString() {
     return 'UserFolloweeRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserFolloweeRouteArgs) return false;
+    return userId == other.userId &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => userId.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3139,19 +3368,30 @@ class UserFollowerRoute extends PageRouteInfo<UserFollowerRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserFollowerRoute.name,
-          args: UserFollowerRouteArgs(
-            userId: userId,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserFollowerRoute.name,
+         args: UserFollowerRouteArgs(
+           userId: userId,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UserFollowerRoute';
 
-  static const PageInfo<UserFollowerRouteArgs> page =
-      PageInfo<UserFollowerRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserFollowerRouteArgs>();
+      return WrappedRoute(
+        child: UserFollowerPage(
+          userId: args.userId,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UserFollowerRouteArgs {
@@ -3171,6 +3411,18 @@ class UserFollowerRouteArgs {
   String toString() {
     return 'UserFollowerRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserFollowerRouteArgs) return false;
+    return userId == other.userId &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => userId.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3181,25 +3433,26 @@ class UserListSelectRoute extends PageRouteInfo<UserListSelectRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserListSelectRoute.name,
-          args: UserListSelectRouteArgs(
-            account: account,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserListSelectRoute.name,
+         args: UserListSelectRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'UserListSelectRoute';
 
-  static const PageInfo<UserListSelectRouteArgs> page =
-      PageInfo<UserListSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserListSelectRouteArgs>();
+      return WrappedRoute(
+        child: UserListSelectDialog(account: args.account, key: args.key),
+      );
+    },
+  );
 }
 
 class UserListSelectRouteArgs {
-  const UserListSelectRouteArgs({
-    required this.account,
-    this.key,
-  });
+  const UserListSelectRouteArgs({required this.account, this.key});
 
   final Account account;
 
@@ -3209,6 +3462,16 @@ class UserListSelectRouteArgs {
   String toString() {
     return 'UserListSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserListSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3220,18 +3483,30 @@ class UserRoute extends PageRouteInfo<UserRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserRoute.name,
-          args: UserRouteArgs(
-            userId: userId,
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserRoute.name,
+         args: UserRouteArgs(
+           userId: userId,
+           accountContext: accountContext,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UserRoute';
 
-  static const PageInfo<UserRouteArgs> page = PageInfo<UserRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserRouteArgs>();
+      return WrappedRoute(
+        child: UserPage(
+          userId: args.userId,
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UserRouteArgs {
@@ -3251,6 +3526,18 @@ class UserRouteArgs {
   String toString() {
     return 'UserRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserRouteArgs) return false;
+    return userId == other.userId &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => userId.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3261,25 +3548,29 @@ class UserSelectRoute extends PageRouteInfo<UserSelectRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UserSelectRoute.name,
-          args: UserSelectRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UserSelectRoute.name,
+         args: UserSelectRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'UserSelectRoute';
 
-  static const PageInfo<UserSelectRouteArgs> page =
-      PageInfo<UserSelectRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserSelectRouteArgs>();
+      return WrappedRoute(
+        child: UserSelectDialog(
+          accountContext: args.accountContext,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UserSelectRouteArgs {
-  const UserSelectRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const UserSelectRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -3289,6 +3580,16 @@ class UserSelectRouteArgs {
   String toString() {
     return 'UserSelectRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserSelectRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3300,19 +3601,30 @@ class UsersListDetailRoute extends PageRouteInfo<UsersListDetailRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UsersListDetailRoute.name,
-          args: UsersListDetailRouteArgs(
-            accountContext: accountContext,
-            listId: listId,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UsersListDetailRoute.name,
+         args: UsersListDetailRouteArgs(
+           accountContext: accountContext,
+           listId: listId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UsersListDetailRoute';
 
-  static const PageInfo<UsersListDetailRouteArgs> page =
-      PageInfo<UsersListDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UsersListDetailRouteArgs>();
+      return WrappedRoute(
+        child: UsersListDetailPage(
+          accountContext: args.accountContext,
+          listId: args.listId,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UsersListDetailRouteArgs {
@@ -3332,6 +3644,18 @@ class UsersListDetailRouteArgs {
   String toString() {
     return 'UsersListDetailRouteArgs{accountContext: $accountContext, listId: $listId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListDetailRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        listId == other.listId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ listId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3343,19 +3667,26 @@ class UsersListModalRoute extends PageRouteInfo<UsersListModalRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UsersListModalRoute.name,
-          args: UsersListModalRouteArgs(
-            account: account,
-            user: user,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UsersListModalRoute.name,
+         args: UsersListModalRouteArgs(account: account, user: user, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'UsersListModalRoute';
 
-  static const PageInfo<UsersListModalRouteArgs> page =
-      PageInfo<UsersListModalRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UsersListModalRouteArgs>();
+      return WrappedRoute(
+        child: UsersListModalSheet(
+          account: args.account,
+          user: args.user,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UsersListModalRouteArgs {
@@ -3375,6 +3706,16 @@ class UsersListModalRouteArgs {
   String toString() {
     return 'UsersListModalRouteArgs{account: $account, user: $user, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListModalRouteArgs) return false;
+    return account == other.account && user == other.user && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ user.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3385,25 +3726,26 @@ class UsersListRoute extends PageRouteInfo<UsersListRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UsersListRoute.name,
-          args: UsersListRouteArgs(
-            accountContext: accountContext,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UsersListRoute.name,
+         args: UsersListRouteArgs(accountContext: accountContext, key: key),
+         initialChildren: children,
+       );
 
   static const String name = 'UsersListRoute';
 
-  static const PageInfo<UsersListRouteArgs> page =
-      PageInfo<UsersListRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UsersListRouteArgs>();
+      return WrappedRoute(
+        child: UsersListPage(args.accountContext, key: args.key),
+      );
+    },
+  );
 }
 
 class UsersListRouteArgs {
-  const UsersListRouteArgs({
-    required this.accountContext,
-    this.key,
-  });
+  const UsersListRouteArgs({required this.accountContext, this.key});
 
   final AccountContext accountContext;
 
@@ -3413,6 +3755,16 @@ class UsersListRouteArgs {
   String toString() {
     return 'UsersListRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3424,19 +3776,32 @@ class UsersListSettingsRoute extends PageRouteInfo<UsersListSettingsRouteArgs> {
     UsersListSettings initialSettings = const UsersListSettings(),
     List<PageRouteInfo>? children,
   }) : super(
-          UsersListSettingsRoute.name,
-          args: UsersListSettingsRouteArgs(
-            key: key,
-            title: title,
-            initialSettings: initialSettings,
-          ),
-          initialChildren: children,
-        );
+         UsersListSettingsRoute.name,
+         args: UsersListSettingsRouteArgs(
+           key: key,
+           title: title,
+           initialSettings: initialSettings,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UsersListSettingsRoute';
 
-  static const PageInfo<UsersListSettingsRouteArgs> page =
-      PageInfo<UsersListSettingsRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UsersListSettingsRouteArgs>(
+        orElse: () => const UsersListSettingsRouteArgs(),
+      );
+      return WrappedRoute(
+        child: UsersListSettingsDialog(
+          key: args.key,
+          title: args.title,
+          initialSettings: args.initialSettings,
+        ),
+      );
+    },
+  );
 }
 
 class UsersListSettingsRouteArgs {
@@ -3456,6 +3821,18 @@ class UsersListSettingsRouteArgs {
   String toString() {
     return 'UsersListSettingsRouteArgs{key: $key, title: $title, initialSettings: $initialSettings}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListSettingsRouteArgs) return false;
+    return key == other.key &&
+        title == other.title &&
+        initialSettings == other.initialSettings;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ title.hashCode ^ initialSettings.hashCode;
 }
 
 /// generated route for
@@ -3467,19 +3844,30 @@ class UsersListTimelineRoute extends PageRouteInfo<UsersListTimelineRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          UsersListTimelineRoute.name,
-          args: UsersListTimelineRouteArgs(
-            accountContext: accountContext,
-            list: list,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         UsersListTimelineRoute.name,
+         args: UsersListTimelineRouteArgs(
+           accountContext: accountContext,
+           list: list,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'UsersListTimelineRoute';
 
-  static const PageInfo<UsersListTimelineRouteArgs> page =
-      PageInfo<UsersListTimelineRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UsersListTimelineRouteArgs>();
+      return WrappedRoute(
+        child: UsersListTimelinePage(
+          args.accountContext,
+          args.list,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class UsersListTimelineRouteArgs {
@@ -3499,6 +3887,18 @@ class UsersListTimelineRouteArgs {
   String toString() {
     return 'UsersListTimelineRouteArgs{accountContext: $accountContext, list: $list, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListTimelineRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        list == other.list &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ list.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3510,19 +3910,30 @@ class WordMuteRoute extends PageRouteInfo<WordMuteRouteArgs> {
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
-          WordMuteRoute.name,
-          args: WordMuteRouteArgs(
-            account: account,
-            muteType: muteType,
-            key: key,
-          ),
-          initialChildren: children,
-        );
+         WordMuteRoute.name,
+         args: WordMuteRouteArgs(
+           account: account,
+           muteType: muteType,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'WordMuteRoute';
 
-  static const PageInfo<WordMuteRouteArgs> page =
-      PageInfo<WordMuteRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<WordMuteRouteArgs>();
+      return WrappedRoute(
+        child: WordMutePage(
+          account: args.account,
+          muteType: args.muteType,
+          key: args.key,
+        ),
+      );
+    },
+  );
 }
 
 class WordMuteRouteArgs {
@@ -3542,4 +3953,16 @@ class WordMuteRouteArgs {
   String toString() {
     return 'WordMuteRouteArgs{account: $account, muteType: $muteType, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! WordMuteRouteArgs) return false;
+    return account == other.account &&
+        muteType == other.muteType &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ muteType.hashCode ^ key.hashCode;
 }

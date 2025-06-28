@@ -3,8 +3,8 @@ import "dart:async";
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
@@ -14,14 +14,12 @@ part "dialog_state.freezed.dart";
 part "dialog_state.g.dart";
 
 @freezed
-class DialogsState with _$DialogsState {
-  factory DialogsState({
-    @Default([]) List<DialogData> dialogs,
-  }) = _DialogsState;
+abstract class DialogsState with _$DialogsState {
+  factory DialogsState({@Default([]) List<DialogData> dialogs}) = _DialogsState;
 }
 
 @freezed
-class DialogData with _$DialogData {
+abstract class DialogData with _$DialogData {
   factory DialogData({
     required String Function(BuildContext context) message,
     required List<String> Function(BuildContext context) actions,
@@ -101,17 +99,17 @@ String Function(BuildContext context) _handleError(
       return (context) => error.message;
     } else if (error is ValidateMisskeyException) {
       return (context) => switch (error) {
-            InvalidServerException(:final server) =>
-              S.of(context).invalidServer(server),
-            ServerIsNotMisskeyException(:final server) =>
-              S.of(context).serverIsNotMisskey(server),
-            SoftwareNotSupportedException(:final software) =>
-              S.of(context).softwareNotSupported(software),
-            SoftwareNotCompatibleException(:final software, :final version) =>
-              S.of(context).softwareNotCompatible(software, version),
-            AlreadyLoggedInException(:final acct) =>
-              S.of(context).alreadyLoggedIn(acct),
-          };
+        InvalidServerException(:final server) =>
+          S.of(context).invalidServer(server),
+        ServerIsNotMisskeyException(:final server) =>
+          S.of(context).serverIsNotMisskey(server),
+        SoftwareNotSupportedException(:final software) =>
+          S.of(context).softwareNotSupported(software),
+        SoftwareNotCompatibleException(:final software, :final version) =>
+          S.of(context).softwareNotCompatible(software, version),
+        AlreadyLoggedInException(:final acct) =>
+          S.of(context).alreadyLoggedIn(acct),
+      };
     }
     return (context) => "${S.of(context).thrownError}\n$error";
   }

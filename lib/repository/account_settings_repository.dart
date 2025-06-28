@@ -43,8 +43,9 @@ class AccountSettingsRepository extends ChangeNotifier {
       _accountSettings
         ..clear()
         ..addAll(
-          (jsonDecode(storedData) as List)
-              .map((e) => AccountSettings.fromJson(e)),
+          (jsonDecode(storedData) as List).map(
+            (e) => AccountSettings.fromJson(e),
+          ),
         );
     } catch (e) {
       if (kDebugMode) print(e);
@@ -70,8 +71,9 @@ class AccountSettingsRepository extends ChangeNotifier {
   }
 
   Future<void> removeAccount(Account account) async {
-    _accountSettings
-        .removeWhere((accountSettings) => accountSettings.acct == account.acct);
+    _accountSettings.removeWhere(
+      (accountSettings) => accountSettings.acct == account.acct,
+    );
     await _saveAsList(_accountSettings);
     notifyListeners();
   }
@@ -80,10 +82,7 @@ class AccountSettingsRepository extends ChangeNotifier {
     return _accountSettings.firstWhereOrNull(
           (accountSettings) => accountSettings.acct == acct,
         ) ??
-        AccountSettings(
-          userId: acct.username,
-          host: acct.host,
-        );
+        AccountSettings(userId: acct.username, host: acct.host);
   }
 
   AccountSettings fromAccount(Account account) {

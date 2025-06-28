@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 part "general_settings.freezed.dart";
 part "general_settings.g.dart";
@@ -84,7 +84,7 @@ enum Languages {
 }
 
 @freezed
-class GeneralSettings with _$GeneralSettings {
+abstract class GeneralSettings with _$GeneralSettings {
   const factory GeneralSettings({
     @Default("") String lightColorThemeId,
     @Default("") String darkColorThemeId,

@@ -6,21 +6,58 @@ part of 'account_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(AccountRepository)
+const accountRepositoryProvider = AccountRepositoryProvider._();
+
+final class AccountRepositoryProvider
+    extends $NotifierProvider<AccountRepository, List<Account>> {
+  const AccountRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'accountRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$accountRepositoryHash();
+
+  @$internal
+  @override
+  AccountRepository create() => AccountRepository();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Account> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Account>>(value),
+    );
+  }
+}
+
 String _$accountRepositoryHash() => r'751ae0a9419c63b9becca16da0d29a5d7a5a7551';
 
-/// See also [AccountRepository].
-@ProviderFor(AccountRepository)
-final accountRepositoryProvider =
-    AutoDisposeNotifierProvider<AccountRepository, List<Account>>.internal(
-  AccountRepository.new,
-  name: r'accountRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$accountRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$AccountRepository extends $Notifier<List<Account>> {
+  List<Account> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<Account>, List<Account>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<Account>, List<Account>>,
+              List<Account>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$AccountRepository = AutoDisposeNotifier<List<Account>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

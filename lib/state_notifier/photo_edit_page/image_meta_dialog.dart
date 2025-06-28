@@ -1,13 +1,13 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 part "image_meta_dialog.freezed.dart";
 
 @freezed
-class ImageMeta with _$ImageMeta {
+abstract class ImageMeta with _$ImageMeta {
   const factory ImageMeta({
     required String fileName,
     required bool isNsfw,
@@ -21,11 +21,13 @@ class ImageMetaDialog extends HookConsumerWidget {
   final ImageMeta initialMeta;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fileNameController =
-        useTextEditingController(text: initialMeta.fileName);
+    final fileNameController = useTextEditingController(
+      text: initialMeta.fileName,
+    );
     final isNsfw = useState(initialMeta.isNsfw);
-    final captionController =
-        useTextEditingController(text: initialMeta.caption);
+    final captionController = useTextEditingController(
+      text: initialMeta.caption,
+    );
 
     return AlertDialog(
       content: SizedBox(
@@ -36,8 +38,9 @@ class ImageMetaDialog extends HookConsumerWidget {
             Text(S.of(context).fileName),
             TextField(
               controller: fileNameController,
-              decoration:
-                  const InputDecoration(prefixIcon: Icon(Icons.file_present)),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.file_present),
+              ),
             ),
             CheckboxListTile(
               value: isNsfw.value,
@@ -47,8 +50,9 @@ class ImageMetaDialog extends HookConsumerWidget {
             Text(S.of(context).caption),
             TextField(
               controller: captionController,
-              decoration:
-                  const InputDecoration(prefixIcon: Icon(Icons.file_present)),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.file_present),
+              ),
               minLines: 5,
               maxLines: null,
             ),

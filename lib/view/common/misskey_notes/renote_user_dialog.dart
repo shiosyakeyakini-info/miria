@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -35,23 +35,22 @@ class RenoteUserDialog extends ConsumerWidget implements AutoRouteWrapper {
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: PushableListView<Note>(
             initializeFuture: () async {
-              final response =
-                  await ref.read(misskeyGetContextProvider).notes.renotes(
-                        NotesRenoteRequest(noteId: noteId),
-                      );
+              final response = await ref
+                  .read(misskeyGetContextProvider)
+                  .notes
+                  .renotes(NotesRenoteRequest(noteId: noteId));
               ref
                   .read(notesWithProvider)
                   .registerAll(response.where((e) => e.text != null));
               return response.toList();
             },
             nextFuture: (lastItem, _) async {
-              final response =
-                  await ref.read(misskeyGetContextProvider).notes.renotes(
-                        NotesRenoteRequest(
-                          noteId: noteId,
-                          untilId: lastItem.id,
-                        ),
-                      );
+              final response = await ref
+                  .read(misskeyGetContextProvider)
+                  .notes
+                  .renotes(
+                    NotesRenoteRequest(noteId: noteId, untilId: lastItem.id),
+                  );
               ref
                   .read(notesWithProvider)
                   .registerAll(response.where((e) => e.text != null));

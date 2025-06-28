@@ -6,35 +6,32 @@ part of 'desktop_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DesktopSettingsImpl _$$DesktopSettingsImplFromJson(
-        Map<String, dynamic> json) =>
-    _$DesktopSettingsImpl(
+_DesktopSettings _$DesktopSettingsFromJson(Map<String, dynamic> json) =>
+    _DesktopSettings(
       window: json['window'] == null
           ? const DesktopWindowSettings()
           : DesktopWindowSettings.fromJson(
-              json['window'] as Map<String, dynamic>),
+              json['window'] as Map<String, dynamic>,
+            ),
     );
 
-Map<String, dynamic> _$$DesktopSettingsImplToJson(
-        _$DesktopSettingsImpl instance) =>
-    <String, dynamic>{
-      'window': instance.window.toJson(),
-    };
+Map<String, dynamic> _$DesktopSettingsToJson(_DesktopSettings instance) =>
+    <String, dynamic>{'window': instance.window.toJson()};
 
-_$DesktopWindowSettingsImpl _$$DesktopWindowSettingsImplFromJson(
-        Map<String, dynamic> json) =>
-    _$DesktopWindowSettingsImpl(
-      x: (json['x'] as num?)?.toDouble() ?? null,
-      y: (json['y'] as num?)?.toDouble() ?? null,
-      w: (json['w'] as num?)?.toDouble() ?? 400,
-      h: (json['h'] as num?)?.toDouble() ?? 700,
-    );
+_DesktopWindowSettings _$DesktopWindowSettingsFromJson(
+  Map<String, dynamic> json,
+) => _DesktopWindowSettings(
+  x: (json['x'] as num?)?.toDouble() ?? null,
+  y: (json['y'] as num?)?.toDouble() ?? null,
+  w: (json['w'] as num?)?.toDouble() ?? 400,
+  h: (json['h'] as num?)?.toDouble() ?? 700,
+);
 
-Map<String, dynamic> _$$DesktopWindowSettingsImplToJson(
-        _$DesktopWindowSettingsImpl instance) =>
-    <String, dynamic>{
-      'x': instance.x,
-      'y': instance.y,
-      'w': instance.w,
-      'h': instance.h,
-    };
+Map<String, dynamic> _$DesktopWindowSettingsToJson(
+  _DesktopWindowSettings instance,
+) => <String, dynamic>{
+  'x': instance.x,
+  'y': instance.y,
+  'w': instance.w,
+  'h': instance.h,
+};

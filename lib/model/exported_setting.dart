@@ -7,7 +7,7 @@ part "exported_setting.freezed.dart";
 part "exported_setting.g.dart";
 
 @freezed
-class ExportedSetting with _$ExportedSetting {
+abstract class ExportedSetting with _$ExportedSetting {
   const factory ExportedSetting({
     required GeneralSettings generalSettings,
     @Default([]) List<AccountSettings> accountSettings,

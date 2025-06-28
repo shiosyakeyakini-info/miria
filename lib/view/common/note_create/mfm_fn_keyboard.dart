@@ -9,10 +9,7 @@ import "package:miria/view/common/note_create/custom_keyboard_button.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 
 class MfmFnArg {
-  const MfmFnArg({
-    required this.name,
-    this.defaultValue,
-  });
+  const MfmFnArg({required this.name, this.defaultValue});
 
   final String name;
   final String? defaultValue;
@@ -51,10 +48,7 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "speed", defaultValue: "0.75s"),
     MfmFnArg(name: "delay", defaultValue: "0s"),
   ],
-  "flip": [
-    MfmFnArg(name: "v"),
-    MfmFnArg(name: "h"),
-  ],
+  "flip": [MfmFnArg(name: "v"), MfmFnArg(name: "h")],
   "x2": [],
   "x3": [],
   "x4": [],
@@ -66,12 +60,8 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "x", defaultValue: "0"),
     MfmFnArg(name: "y", defaultValue: "0"),
   ],
-  "fg": [
-    MfmFnArg(name: "color"),
-  ],
-  "bg": [
-    MfmFnArg(name: "color"),
-  ],
+  "fg": [MfmFnArg(name: "color")],
+  "bg": [MfmFnArg(name: "color")],
   "border": [
     MfmFnArg(name: "style", defaultValue: "solid"),
     MfmFnArg(name: "color"),
@@ -86,15 +76,9 @@ const Map<String, List<MfmFnArg>> mfmFn = {
     MfmFnArg(name: "fantasy"),
   ],
   "blur": [],
-  "rainbow": [
-    MfmFnArg(name: "speed", defaultValue: "1s"),
-  ],
-  "sparkle": [
-    MfmFnArg(name: "speed", defaultValue: "1.5s"),
-  ],
-  "rotate": [
-    MfmFnArg(name: "deg", defaultValue: "90"),
-  ],
+  "rainbow": [MfmFnArg(name: "speed", defaultValue: "1s")],
+  "sparkle": [MfmFnArg(name: "speed", defaultValue: "1.5s")],
+  "rotate": [MfmFnArg(name: "deg", defaultValue: "90")],
   "ruby": [],
   "unixtime": [],
 };
@@ -176,13 +160,13 @@ class MfmFnKeyboard extends ConsumerWidget {
         builder: (context) => const ColorPickerDialog(),
       );
       if (result != null) {
-        if (result.value.alpha == 1) {
+        if ((result.value.a * 255.0).round() & 0xff == 255) {
           controller.insert(
-            ".color=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")} ",
+            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         } else {
           controller.insert(
-            ".color=${(result.value.red / 16).toInt().toRadixString(16)}${(result.value.green / 16).toInt().toRadixString(16)}${(result.value.blue / 16).toInt().toRadixString(16)}${(result.value.alpha / 16).toInt().toRadixString(16)} ",
+            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.a * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         }
       } else {
@@ -206,8 +190,10 @@ class MfmFnKeyboard extends ConsumerWidget {
     if (firstPeriodIndex < 0) {
       controller.insert(".${arg.name}");
     } else {
-      final lastArg =
-          textBeforeSelection.substring(firstPeriodIndex + 1).split(",").last;
+      final lastArg = textBeforeSelection
+          .substring(firstPeriodIndex + 1)
+          .split(",")
+          .last;
       final lastArgName = lastArg.split("=").first;
       if (mfmFn[mfmFnName]?.any((arg) => arg.name == lastArgName) ?? false) {
         controller.insert(",${arg.name}");
@@ -231,7 +217,7 @@ class MfmFnKeyboard extends ConsumerWidget {
           );
         } else {
           controller.insert(
-            "=${(result.value.red / 16).toInt().toRadixString(16)}${(result.value.green / 16).toInt().toRadixString(16)}${(result.value.blue / 16).toInt().toRadixString(16)}${(result.value.alpha / 16).toInt().toRadixString(16)} ",
+            "=${result.value.red.toRadixString(16).padLeft(2, "0")}${result.value.green.toRadixString(16).padLeft(2, "0")}${result.value.blue.toRadixString(16).padLeft(2, "0")}${result.value.alpha.toRadixString(16).padLeft(2, "0")} ",
           );
         }
       } else {
@@ -275,10 +261,7 @@ class MfmFnKeyboard extends ConsumerWidget {
             .toList(),
       );
     } else {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
   }
 }

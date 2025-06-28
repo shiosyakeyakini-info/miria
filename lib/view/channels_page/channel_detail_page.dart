@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/channels_page/channel_detail_info.dart";
@@ -66,9 +66,7 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
           ],
         ),
         floatingActionButton: ref.read(accountContextProvider).isSame
-            ? ChannelDetailFloatingActionButton(
-                channelId: channelId,
-              )
+            ? ChannelDetailFloatingActionButton(channelId: channelId)
             : null,
       ),
     );
@@ -84,21 +82,23 @@ class ChannelDetailFloatingActionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final channelDetail = ref.watch(channelDetailProvider(channelId));
     return switch (channelDetail) {
-      AsyncData(:final value) => (value.channel.isArchived)
-          ? const SizedBox.shrink()
-          : FloatingActionButton(
-              child: const Icon(Icons.edit),
-              onPressed: () async {
-                if (!context.mounted) return;
-                await context.pushRoute(
-                  NoteCreateRoute(
-                    initialAccount:
-                        ref.read(accountContextProvider).postAccount,
-                    channel: value.channel,
-                  ),
-                );
-              },
-            ),
+      AsyncData(:final value) =>
+        (value.channel.isArchived)
+            ? const SizedBox.shrink()
+            : FloatingActionButton(
+                child: const Icon(Icons.edit),
+                onPressed: () async {
+                  if (!context.mounted) return;
+                  await context.pushRoute(
+                    NoteCreateRoute(
+                      initialAccount: ref
+                          .read(accountContextProvider)
+                          .postAccount,
+                      channel: value.channel,
+                    ),
+                  );
+                },
+              ),
       _ => const SizedBox.shrink(),
     };
   }

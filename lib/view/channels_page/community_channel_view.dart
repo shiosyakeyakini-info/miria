@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -11,24 +11,21 @@ class CommunityChannelView extends ConsumerWidget {
   final CommunityChannel channel;
   final void Function()? onTap;
 
-  const CommunityChannelView({
-    required this.channel,
-    super.key,
-    this.onTap,
-  });
+  const CommunityChannelView({required this.channel, super.key, this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
-        onTap: onTap ??
+        onTap:
+            onTap ??
             () async => context.pushRoute(
-                  ChannelDetailRoute(
-                    accountContext: ref.read(accountContextProvider),
-                    channelId: channel.id,
-                  ),
-                ),
+              ChannelDetailRoute(
+                accountContext: ref.read(accountContextProvider),
+                channelId: channel.id,
+              ),
+            ),
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Theme.of(context).dividerColor),
@@ -45,7 +42,7 @@ class CommunityChannelView extends ConsumerWidget {
                   child: Image.network(
                     channel.bannerUrl!.toString(),
                     fit: BoxFit.fitWidth,
-                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                    errorBuilder: (_, _, _) => const SizedBox.shrink(),
                   ),
                 ),
               Padding(
@@ -75,7 +72,9 @@ class CommunityChannelView extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(5),
                           child: Text(
-                            S.of(context).channelStatistics(
+                            S
+                                .of(context)
+                                .channelStatistics(
                                   channel.notesCount,
                                   channel.usersCount,
                                   channel.lastNotedAt?.differenceNow(context) ??

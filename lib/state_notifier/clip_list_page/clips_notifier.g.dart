@@ -6,24 +6,57 @@ part of 'clips_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$clipsNotifierHash() => r'df24732aca182347a988675c5c7974a6a5bb587d';
-
-/// See also [ClipsNotifier].
 @ProviderFor(ClipsNotifier)
-final clipsNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<ClipsNotifier, List<Clip>>.internal(
-  ClipsNotifier.new,
-  name: r'clipsNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$clipsNotifierHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+const clipsNotifierProvider = ClipsNotifierProvider._();
 
-typedef _$ClipsNotifier = AutoDisposeAsyncNotifier<List<Clip>>;
+final class ClipsNotifierProvider
+    extends $AsyncNotifierProvider<ClipsNotifier, List<Clip>> {
+  const ClipsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clipsNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          ClipsNotifierProvider.$allTransitiveDependencies0,
+          ClipsNotifierProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$clipsNotifierHash();
+
+  @$internal
+  @override
+  ClipsNotifier create() => ClipsNotifier();
+}
+
+String _$clipsNotifierHash() => r'd2e5c8f6a083dbe75bb63070550f16728c7dde5d';
+
+abstract class _$ClipsNotifier extends $AsyncNotifier<List<Clip>> {
+  FutureOr<List<Clip>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<List<Clip>>, List<Clip>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Clip>>, List<Clip>>,
+              AsyncValue<List<Clip>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

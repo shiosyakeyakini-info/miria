@@ -2,10 +2,10 @@ import "dart:async";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -28,46 +28,58 @@ class RenoteNotifier extends _$RenoteNotifier {
   /// チャンネル内にRenote
   Future<void> renoteInSpecificChannel() async {
     state = const AsyncLoading();
-    state =
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(this.account)).notes.create(
-            NotesCreateRequest(
-              renoteId: note.id,
-              localOnly: true,
-              channelId: note.channel!.id,
-            ),
-          );
-    });
+    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+      () async {
+        await ref
+            .read(misskeyProvider(this.account))
+            .notes
+            .create(
+              NotesCreateRequest(
+                renoteId: note.id,
+                localOnly: true,
+                channelId: note.channel!.id,
+              ),
+            );
+      },
+    );
   }
 
   /// チャンネルにRenote
   Future<void> renoteInChannel(CommunityChannel channel) async {
     state = const AsyncLoading();
-    state =
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(this.account)).notes.create(
-            NotesCreateRequest(
-              renoteId: note.id,
-              channelId: channel.id,
-              localOnly: true,
-            ),
-          );
-    });
+    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+      () async {
+        await ref
+            .read(misskeyProvider(this.account))
+            .notes
+            .create(
+              NotesCreateRequest(
+                renoteId: note.id,
+                channelId: channel.id,
+                localOnly: true,
+              ),
+            );
+      },
+    );
   }
 
   /// 普通に引用Renote
   Future<void> renote(bool isLocalOnly, NoteVisibility visibility) async {
     state = const AsyncLoading();
-    state =
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyProvider(this.account)).notes.create(
-            NotesCreateRequest(
-              renoteId: note.id,
-              localOnly: isLocalOnly,
-              visibility: visibility,
-            ),
-          );
-    });
+    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+      () async {
+        await ref
+            .read(misskeyProvider(this.account))
+            .notes
+            .create(
+              NotesCreateRequest(
+                renoteId: note.id,
+                localOnly: isLocalOnly,
+                visibility: visibility,
+              ),
+            );
+      },
+    );
   }
 }
 
@@ -79,7 +91,9 @@ class RenoteChannelNotifier extends _$RenoteChannelNotifier {
   /// Renoteの画面でチャンネル情報を取得する
   Future<void> findChannel(String channelId) async {
     state = const AsyncLoading();
-    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+    state = await ref
+        .read(dialogStateNotifierProvider.notifier)
+        .guard(
           () async => await ref
               .read(misskeyProvider(this.account))
               .channels
@@ -94,13 +108,15 @@ class RenoteOtherAccountNotifier extends _$RenoteOtherAccountNotifier {
   AsyncValue<(Account, Note)>? build(Account account, Note note) => null;
 
   Future<void> renoteOtherAccount() async {
-    final selectedAccount = await ref.read(appRouterProvider).push<Account>(
+    final selectedAccount = await ref
+        .read(appRouterProvider)
+        .push<Account>(
           AccountSelectRoute(
             host: note.localOnly ? this.account.host : null,
             remoteHost:
                 note.user.host != this.account.host && note.user.host != null
-                    ? note.user.host
-                    : null,
+                ? note.user.host
+                : null,
             showWithoutLogin: false,
           ),
         );
@@ -113,12 +129,13 @@ class RenoteOtherAccountNotifier extends _$RenoteOtherAccountNotifier {
             : selectedAccount,
       );
       state = const AsyncLoading();
-      final foundNote = note.user.host == null &&
+      final foundNote =
+          note.user.host == null &&
               note.uri?.host == accountContext.getAccount.host
           ? note
           : await ref
-              .read(misskeyNoteNotifierProvider.notifier)
-              .lookupNote(note: note, accountContext: accountContext);
+                .read(misskeyNoteNotifierProvider.notifier)
+                .lookupNote(note: note, accountContext: accountContext);
       if (foundNote == null) {
         state = null;
         return;
@@ -141,10 +158,8 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountContextScope.as(
-        account: account,
-        child: this,
-      );
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -173,40 +188,39 @@ class RenoteModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
           ),
         );
       })
-      ..listen(renoteOtherAccountNotifierProvider(account, note),
-          (_, next) async {
+      ..listen(renoteOtherAccountNotifierProvider(account, note), (
+        _,
+        next,
+      ) async {
         if (next is! AsyncData<(Account, Note)>) return;
         unawaited(context.maybePop());
         await context.pushRoute(
-          RenoteModalRoute(
-            account: next.value.$1,
-            note: next.value.$2,
-          ),
+          RenoteModalRoute(account: next.value.$1, note: next.value.$2),
         );
       });
 
     final renoteState = ref.watch(renoteNotifierProvider(account, note));
-    final renoteChannelState =
-        ref.watch(renoteChannelNotifierProvider(account));
+    final renoteChannelState = ref.watch(
+      renoteChannelNotifierProvider(account),
+    );
 
-    final renoteOtherAccountState =
-        ref.watch(renoteOtherAccountNotifierProvider(account, note));
+    final renoteOtherAccountState = ref.watch(
+      renoteOtherAccountNotifierProvider(account, note),
+    );
 
     final isLocalOnly = useState(false);
     final visibility = useState(NoteVisibility.public);
-    useEffect(
-      () {
-        final accountSettings =
-            ref.read(accountSettingsRepositoryProvider).fromAccount(account);
-        isLocalOnly.value = accountSettings.defaultIsLocalOnly;
-        visibility.value =
-            accountSettings.defaultNoteVisibility == NoteVisibility.specified
-                ? NoteVisibility.followers
-                : accountSettings.defaultNoteVisibility;
-        return null;
-      },
-      const [],
-    );
+    useEffect(() {
+      final accountSettings = ref
+          .read(accountSettingsRepositoryProvider)
+          .fromAccount(account);
+      isLocalOnly.value = accountSettings.defaultIsLocalOnly;
+      visibility.value =
+          accountSettings.defaultNoteVisibility == NoteVisibility.specified
+          ? NoteVisibility.followers
+          : accountSettings.defaultNoteVisibility;
+      return null;
+    }, const []);
 
     if (renoteState is AsyncLoading ||
         renoteChannelState is AsyncLoading ||

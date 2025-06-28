@@ -7,10 +7,7 @@ import "package:miria/view/common/dialog/dialog_state.dart";
 class DialogScope extends ConsumerWidget {
   final Widget child;
 
-  const DialogScope({
-    required this.child,
-    super.key,
-  });
+  const DialogScope({required this.child, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,9 +34,7 @@ class DialogScope extends ConsumerWidget {
               content: dialog.isMFM
                   ? AccountContextScope(
                       context: dialog.accountContext!,
-                      child: Mfm(
-                        mfmText: dialog.message(context),
-                      ),
+                      child: Mfm(mfmText: dialog.message(context)),
                     )
                   : Text(dialog.message(context)),
               actions: [

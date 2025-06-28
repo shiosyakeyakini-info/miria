@@ -7,6 +7,7 @@ import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:mockito/mockito.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../test_util/default_root_widget.dart";
 import "../../test_util/mock.mocks.dart";
@@ -49,8 +50,9 @@ class TimelinePageTest {
     ).copyWith();
     when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
     when(mockMisskey.streamingService).thenReturn(mockWebSocketController);
-    when(mockWebSocketController.stream())
-        .thenAnswer((_) async => mockStreamingController);
+    when(
+      mockWebSocketController.stream(),
+    ).thenAnswer((_) async => mockStreamingController);
     when(mockWebSocketController.isClosed).thenReturn(false);
     when(mockMisskey.i).thenReturn(mockMisskeyI);
     // ignore: discarded_futures
@@ -61,17 +63,18 @@ class TimelinePageTest {
     when(mockTabSettingsRepository.tabSettings).thenReturn([tabSetting]);
   }
 
-  Widget buildWidget({
-    List<Override> overrides = const [],
-  }) {
+  Widget buildWidget({List<Override> overrides = const []}) {
     return ProviderScope(
       overrides: [
-        misskeyProvider.overrideWith((ref) => mockMisskey),
-        tabSettingsRepositoryProvider
-            .overrideWith((ref) => mockTabSettingsRepository),
+        misskeyProvider.overrideWith((ref, account) => mockMisskey),
+        tabSettingsRepositoryProvider.overrideWith(
+          (ref) => mockTabSettingsRepository,
+        ),
         accountRepositoryProvider.overrideWith(() => accountRepository),
         accountsProvider.overrideWith((ref) => [TestData.account]),
-        emojiRepositoryProvider.overrideWith((ref) => MockEmojiRepository()),
+        emojiRepositoryProvider.overrideWith(
+          (ref, account) => MockEmojiRepository(),
+        ),
       ],
       child: DefaultRootWidget(
         initialRoute: TimeLineRoute(initialTabSetting: tabSetting),

@@ -1,18 +1,14 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/view/themes/app_theme.dart";
 
 class CopyNoteModalSheet extends ConsumerWidget {
   final String text;
   final String? cw;
 
-  const CopyNoteModalSheet({
-    required this.text,
-    this.cw,
-    super.key,
-  });
+  const CopyNoteModalSheet({required this.text, this.cw, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,9 +21,7 @@ class CopyNoteModalSheet extends ConsumerWidget {
               title: Text(S.of(context).detail),
               trailing: IconButton(
                 onPressed: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: text),
-                  );
+                  await Clipboard.setData(ClipboardData(text: text));
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -59,9 +53,7 @@ class CopyNoteModalSheet extends ConsumerWidget {
                     ),
                     IconButton(
                       onPressed: () async {
-                        await Clipboard.setData(
-                          ClipboardData(text: cw!),
-                        );
+                        await Clipboard.setData(ClipboardData(text: cw!));
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

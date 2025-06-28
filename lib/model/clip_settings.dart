@@ -4,7 +4,7 @@ import "package:misskey_dart/misskey_dart.dart";
 part "clip_settings.freezed.dart";
 
 @freezed
-class ClipSettings with _$ClipSettings {
+abstract class ClipSettings with _$ClipSettings {
   const factory ClipSettings({
     @Default("") String name,
     String? description,

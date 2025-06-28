@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -27,6 +27,29 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
     serverController.dispose();
     apiKeyController.dispose();
     super.dispose();
+  }
+
+  Future<void> login() async {
+    try {
+      IndicatorView.showIndicator(context);
+      await ref
+          .read(accountRepositoryProvider.notifier)
+          .loginAsToken(toAscii(serverController.text), apiKeyController.text);
+
+      if (!mounted) return;
+      await context.pushRoute(
+        TimeLineRoute(
+          initialTabSetting: ref
+              .read(tabSettingsRepositoryProvider)
+              .tabSettings
+              .first,
+        ),
+      );
+    } catch (e) {
+      rethrow;
+    } finally {
+      IndicatorView.hideIndicator(context);
+    }
   }
 
   @override
@@ -80,8 +103,9 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                   ),
                   TextField(
                     controller: apiKeyController,
-                    decoration:
-                        const InputDecoration(prefixIcon: Icon(Icons.key)),
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.key),
+                    ),
                   ),
                 ],
               ),
@@ -97,23 +121,23 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                         await ref
                             .read(dialogStateNotifierProvider.notifier)
                             .guard(() async {
-                          await ref
-                              .read(accountRepositoryProvider.notifier)
-                              .loginAsToken(
-                                toAscii(serverController.text),
-                                apiKeyController.text,
-                              );
+                              await ref
+                                  .read(accountRepositoryProvider.notifier)
+                                  .loginAsToken(
+                                    toAscii(serverController.text),
+                                    apiKeyController.text,
+                                  );
 
-                          if (!context.mounted) return;
-                          await context.pushRoute(
-                            TimeLineRoute(
-                              initialTabSetting: ref
-                                  .read(tabSettingsRepositoryProvider)
-                                  .tabSettings
-                                  .first,
-                            ),
-                          );
-                        });
+                              if (!context.mounted) return;
+                              await context.pushRoute(
+                                TimeLineRoute(
+                                  initialTabSetting: ref
+                                      .read(tabSettingsRepositoryProvider)
+                                      .tabSettings
+                                      .first,
+                                ),
+                              );
+                            });
                         if (!context.mounted) return;
                         IndicatorView.hideIndicator(context);
                       },

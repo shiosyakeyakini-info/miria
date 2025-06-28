@@ -6,33 +6,72 @@ part of 'note_create_state_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(NoteCreateNotifier)
+const noteCreateNotifierProvider = NoteCreateNotifierProvider._();
+
+final class NoteCreateNotifierProvider
+    extends $NotifierProvider<NoteCreateNotifier, NoteCreate> {
+  const NoteCreateNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'noteCreateNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[
+          misskeyPostContextProvider,
+          notesWithProvider,
+          accountContextProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          NoteCreateNotifierProvider.$allTransitiveDependencies0,
+          NoteCreateNotifierProvider.$allTransitiveDependencies1,
+          NoteCreateNotifierProvider.$allTransitiveDependencies2,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = notesWithProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$noteCreateNotifierHash();
+
+  @$internal
+  @override
+  NoteCreateNotifier create() => NoteCreateNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NoteCreate value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<NoteCreate>(value),
+    );
+  }
+}
+
 String _$noteCreateNotifierHash() =>
     r'ede14304154ce4e5a7fd678f1471389c226ffb67';
 
-/// See also [NoteCreateNotifier].
-@ProviderFor(NoteCreateNotifier)
-final noteCreateNotifierProvider =
-    AutoDisposeNotifierProvider<NoteCreateNotifier, NoteCreate>.internal(
-  NoteCreateNotifier.new,
-  name: r'noteCreateNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$noteCreateNotifierHash,
-  dependencies: <ProviderOrFamily>[
-    misskeyPostContextProvider,
-    notesWithProvider,
-    accountContextProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies,
-    notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies,
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
-  },
-);
+abstract class _$NoteCreateNotifier extends $Notifier<NoteCreate> {
+  NoteCreate build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<NoteCreate, NoteCreate>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<NoteCreate, NoteCreate>,
+              NoteCreate,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$NoteCreateNotifier = AutoDisposeNotifier<NoteCreate>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

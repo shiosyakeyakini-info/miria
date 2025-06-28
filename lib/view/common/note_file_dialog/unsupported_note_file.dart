@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:url_launcher/url_launcher_string.dart";
@@ -29,31 +29,21 @@ class UnsupportedNoteFile extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
-          ),
+          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5)),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              S.of(context).unsupportedFile,
-            ),
+            Text(S.of(context).unsupportedFile),
             const SizedBox(height: 30),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.file_present,
-                ),
+                const Icon(Icons.file_present),
                 const Padding(padding: EdgeInsets.only(left: 5)),
                 Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      file.name,
-                    ),
-                  ],
+                  children: [Text(file.name)],
                 ),
               ],
             ),

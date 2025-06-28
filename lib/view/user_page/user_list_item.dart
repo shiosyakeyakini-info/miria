@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/avatar_icon.dart";
@@ -24,13 +24,14 @@ class UserListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () async => context.pushRoute(
-                UserRoute(
-                  userId: user.id,
-                  accountContext: ref.read(accountContextProvider),
-                ),
-              ),
+            UserRoute(
+              userId: user.id,
+              accountContext: ref.read(accountContextProvider),
+            ),
+          ),
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
@@ -64,10 +65,12 @@ class UserListItem extends ConsumerWidget {
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
-                                  child: Text(S.of(context).following,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
+                                  child: Text(
+                                    S.of(context).following,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
                                 ),
                               ),
                             if ((user as UserDetailedNotMeWithRelations)
@@ -75,10 +78,12 @@ class UserListItem extends ConsumerWidget {
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
-                                  child: Text(S.of(context).followed,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
+                                  child: Text(
+                                    S.of(context).followed,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
                                 ),
                               ),
                             if ((user as UserDetailedNotMeWithRelations)
@@ -86,10 +91,12 @@ class UserListItem extends ConsumerWidget {
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
-                                  child: Text(S.of(context).muting,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
+                                  child: Text(
+                                    S.of(context).muting,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
                                 ),
                               ),
                             if ((user as UserDetailedNotMeWithRelations)
@@ -97,10 +104,12 @@ class UserListItem extends ConsumerWidget {
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
-                                  child: Text(S.of(context).blocking,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
+                                  child: Text(
+                                    S.of(context).blocking,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
                                 ),
                               ),
                           ],
