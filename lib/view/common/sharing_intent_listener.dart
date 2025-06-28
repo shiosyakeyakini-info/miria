@@ -6,7 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart";
+import "package:receive_sharing_intent/receive_sharing_intent.dart";
 
 class SharingIntentListener extends ConsumerStatefulWidget {
   final AppRouter router;
@@ -26,7 +26,6 @@ class SharingIntentListener extends ConsumerStatefulWidget {
 class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
   late final StreamSubscription<List<SharedMediaFile>>
   intentDataStreamSubscription;
-  late final StreamSubscription<String> intentDataTextStreamSubscription;
   late Iterable<Account> account = [];
 
   @override
@@ -34,31 +33,35 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
     super.initState();
     if (defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS) {
-      intentDataStreamSubscription = ReceiveSharingIntentPlus.getMediaStream()
+      intentDataStreamSubscription = ReceiveSharingIntent.instance
+          .getMediaStream()
           .listen((event) {
-            final items = event.map((e) => e.path).toList();
-            if (account.length == 1) {
-              widget.router.push(
-                NoteCreateRoute(
-                  initialMediaFiles: items,
-                  initialAccount: account.first,
-                ),
-              );
-            } else {
-              widget.router.push(SharingAccountSelectRoute(filePath: items));
+            final mediaFiles = <String>[];
+            String? textContent;
+
+            for (final file in event) {
+              if (file.type == SharedMediaType.text) {
+                textContent = file.path;
+              } else {
+                mediaFiles.add(file.path);
+              }
             }
-          });
-      intentDataTextStreamSubscription =
-          ReceiveSharingIntentPlus.getTextStream().listen((event) {
+
             if (account.length == 1) {
               widget.router.push(
                 NoteCreateRoute(
-                  initialText: event,
+                  initialMediaFiles: mediaFiles.isNotEmpty ? mediaFiles : null,
+                  initialText: textContent,
                   initialAccount: account.first,
                 ),
               );
             } else {
-              widget.router.push(SharingAccountSelectRoute(sharingText: event));
+              widget.router.push(
+                SharingAccountSelectRoute(
+                  filePath: mediaFiles.isNotEmpty ? mediaFiles : null,
+                  sharingText: textContent,
+                ),
+              );
             }
           });
     }
@@ -67,7 +70,6 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
   @override
   void dispose() {
     intentDataStreamSubscription.cancel();
-    intentDataTextStreamSubscription.cancel();
     super.dispose();
   }
 

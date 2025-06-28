@@ -23,7 +23,7 @@ dependencies:
   path_provider: ^2.0.14
   dio: ^5.1.1
   path: ^1.8.2
-  auto_route: ^9.3.0+1
+  auto_route: ^10.1.0+1
   freezed_annotation: ^3.0.0
   url_launcher: ^6.1.10
   intl: ^0.20.2
@@ -46,7 +46,10 @@ dependencies:
   visibility_detector: ^0.4.0+2
   percent_indicator: ^4.2.3
   fl_chart: ^1.0.0
-  receive_sharing_intent_plus: ^1.0.1
+  receive_sharing_intent:
+    git:
+      url: https://github.com/KasemJaffer/receive_sharing_intent
+      ref: 2cea396843cd3ab1b5ec4334be4233864637874e
   share_plus: ^11.0.0
   mfm_parser: ^1.0.3
   flutter_svg: ^2.0.6
@@ -113,7 +116,7 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
-  auto_route_generator: ^9.0.0
+  auto_route_generator: ^10.2.3
   build_runner: ^2.3.3
   freezed: ^3.0.6
   json_serializable: ^6.6.1

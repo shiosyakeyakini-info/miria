@@ -68,6 +68,23 @@ class AbuseRouteArgs {
   String toString() {
     return 'AbuseRouteArgs{account: $account, targetUser: $targetUser, key: $key, defaultText: $defaultText}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AbuseRouteArgs) return false;
+    return account == other.account &&
+        targetUser == other.targetUser &&
+        key == other.key &&
+        defaultText == other.defaultText;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      targetUser.hashCode ^
+      key.hashCode ^
+      defaultText.hashCode;
 }
 
 /// generated route for
@@ -134,6 +151,18 @@ class AccountSelectRouteArgs {
   String toString() {
     return 'AccountSelectRouteArgs{key: $key, host: $host, remoteHost: $remoteHost}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AccountSelectRouteArgs) return false;
+    return key == other.key &&
+        host == other.host &&
+        remoteHost == other.remoteHost;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ host.hashCode ^ remoteHost.hashCode;
 }
 
 /// generated route for
@@ -176,6 +205,16 @@ class AnnouncementRouteArgs {
   String toString() {
     return 'AnnouncementRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AnnouncementRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -226,6 +265,16 @@ class AntennaModalRouteArgs {
   String toString() {
     return 'AntennaModalRouteArgs{account: $account, user: $user, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaModalRouteArgs) return false;
+    return account == other.account && user == other.user && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ user.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -280,6 +329,18 @@ class AntennaNotesRouteArgs {
   String toString() {
     return 'AntennaNotesRouteArgs{antenna: $antenna, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaNotesRouteArgs) return false;
+    return antenna == other.antenna &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => antenna.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -319,6 +380,16 @@ class AntennaRouteArgs {
   String toString() {
     return 'AntennaRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -358,6 +429,16 @@ class AntennaSelectRouteArgs {
   String toString() {
     return 'AntennaSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -418,6 +499,23 @@ class AntennaSettingsRouteArgs {
   String toString() {
     return 'AntennaSettingsRouteArgs{account: $account, key: $key, title: $title, initialSettings: $initialSettings}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AntennaSettingsRouteArgs) return false;
+    return account == other.account &&
+        key == other.key &&
+        title == other.title &&
+        initialSettings == other.initialSettings;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      key.hashCode ^
+      title.hashCode ^
+      initialSettings.hashCode;
 }
 
 /// generated route for
@@ -471,6 +569,16 @@ class CacheManagementRouteArgs {
   String toString() {
     return 'CacheManagementRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CacheManagementRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -526,6 +634,18 @@ class ChannelDescriptionRouteArgs {
   String toString() {
     return 'ChannelDescriptionRouteArgs{channelId: $channelId, account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelDescriptionRouteArgs) return false;
+    return channelId == other.channelId &&
+        account == other.account &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => channelId.hashCode ^ account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -580,6 +700,19 @@ class ChannelDetailRouteArgs {
   String toString() {
     return 'ChannelDetailRouteArgs{accountContext: $accountContext, channelId: $channelId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelDetailRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        channelId == other.channelId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^ channelId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -619,6 +752,16 @@ class ChannelSelectRouteArgs {
   String toString() {
     return 'ChannelSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -658,6 +801,16 @@ class ChannelsRouteArgs {
   String toString() {
     return 'ChannelsRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChannelsRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -712,6 +865,18 @@ class ClipDetailRouteArgs {
   String toString() {
     return 'ClipDetailRouteArgs{accountContext: $accountContext, id: $id, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipDetailRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        id == other.id &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ id.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -751,6 +916,16 @@ class ClipListRouteArgs {
   String toString() {
     return 'ClipListRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipListRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -801,6 +976,18 @@ class ClipModalRouteArgs {
   String toString() {
     return 'ClipModalRouteArgs{account: $account, noteId: $noteId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipModalRouteArgs) return false;
+    return account == other.account &&
+        noteId == other.noteId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ noteId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -855,6 +1042,18 @@ class ClipSettingsRouteArgs {
   String toString() {
     return 'ClipSettingsRouteArgs{key: $key, title: $title, initialSettings: $initialSettings}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClipSettingsRouteArgs) return false;
+    return key == other.key &&
+        title == other.title &&
+        initialSettings == other.initialSettings;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ title.hashCode ^ initialSettings.hashCode;
 }
 
 /// generated route for
@@ -925,6 +1124,18 @@ class DriveFileSelectRouteArgs {
   String toString() {
     return 'DriveFileSelectRouteArgs{account: $account, key: $key, allowMultiple: $allowMultiple}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! DriveFileSelectRouteArgs) return false;
+    return account == other.account &&
+        key == other.key &&
+        allowMultiple == other.allowMultiple;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode ^ allowMultiple.hashCode;
 }
 
 /// generated route for
@@ -996,6 +1207,16 @@ class ExploreRouteArgs {
   String toString() {
     return 'ExploreRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ExploreRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1050,6 +1271,18 @@ class ExploreRoleUsersRouteArgs {
   String toString() {
     return 'ExploreRoleUsersRouteArgs{item: $item, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ExploreRoleUsersRouteArgs) return false;
+    return item == other.item &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => item.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1092,6 +1325,16 @@ class FavoritedNoteRouteArgs {
   String toString() {
     return 'FavoritedNoteRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FavoritedNoteRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1146,6 +1389,18 @@ class FederationRouteArgs {
   String toString() {
     return 'FederationRouteArgs{accountContext: $accountContext, host: $host, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FederationRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        host == other.host &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ host.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1204,6 +1459,23 @@ class FolderSelectRouteArgs {
   String toString() {
     return 'FolderSelectRouteArgs{account: $account, fileShowTarget: $fileShowTarget, confirmationText: $confirmationText, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! FolderSelectRouteArgs) return false;
+    return account == other.account &&
+        const ListEquality().equals(fileShowTarget, other.fileShowTarget) &&
+        confirmationText == other.confirmationText &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^
+      const ListEquality().hash(fileShowTarget) ^
+      confirmationText.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -1274,6 +1546,18 @@ class HashtagRouteArgs {
   String toString() {
     return 'HashtagRouteArgs{hashtag: $hashtag, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! HashtagRouteArgs) return false;
+    return hashtag == other.hashtag &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => hashtag.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1329,6 +1613,16 @@ class InstanceMuteRouteArgs {
   String toString() {
     return 'InstanceMuteRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! InstanceMuteRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1383,6 +1677,16 @@ class LicenseConfirmRouteArgs {
   String toString() {
     return 'LicenseConfirmRouteArgs{emoji: $emoji, account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! LicenseConfirmRouteArgs) return false;
+    return emoji == other.emoji && account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => emoji.hashCode ^ account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1441,6 +1745,16 @@ class MisskeyGamesRouteArgs {
   String toString() {
     return 'MisskeyGamesRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MisskeyGamesRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1495,6 +1809,18 @@ class MisskeyRouteRouteArgs {
   String toString() {
     return 'MisskeyRouteRouteArgs{accountContext: $accountContext, page: $page, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MisskeyRouteRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        page == other.page &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ page.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1607,6 +1933,38 @@ class NoteCreateRouteArgs {
   String toString() {
     return 'NoteCreateRouteArgs{initialAccount: $initialAccount, key: $key, initialText: $initialText, initialMediaFiles: $initialMediaFiles, exitOnNoted: $exitOnNoted, channel: $channel, reply: $reply, renote: $renote, note: $note, noteCreationMode: $noteCreationMode}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NoteCreateRouteArgs) return false;
+    return initialAccount == other.initialAccount &&
+        key == other.key &&
+        initialText == other.initialText &&
+        const ListEquality().equals(
+          initialMediaFiles,
+          other.initialMediaFiles,
+        ) &&
+        exitOnNoted == other.exitOnNoted &&
+        channel == other.channel &&
+        reply == other.reply &&
+        renote == other.renote &&
+        note == other.note &&
+        noteCreationMode == other.noteCreationMode;
+  }
+
+  @override
+  int get hashCode =>
+      initialAccount.hashCode ^
+      key.hashCode ^
+      initialText.hashCode ^
+      const ListEquality().hash(initialMediaFiles) ^
+      exitOnNoted.hashCode ^
+      channel.hashCode ^
+      reply.hashCode ^
+      renote.hashCode ^
+      note.hashCode ^
+      noteCreationMode.hashCode;
 }
 
 /// generated route for
@@ -1661,6 +2019,18 @@ class NoteDetailRouteArgs {
   String toString() {
     return 'NoteDetailRouteArgs{note: $note, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NoteDetailRouteArgs) return false;
+    return note == other.note &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => note.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1727,6 +2097,25 @@ class NoteModalRouteArgs {
   String toString() {
     return 'NoteModalRouteArgs{baseNote: $baseNote, targetNote: $targetNote, accountContext: $accountContext, noteBoundaryKey: $noteBoundaryKey, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NoteModalRouteArgs) return false;
+    return baseNote == other.baseNote &&
+        targetNote == other.targetNote &&
+        accountContext == other.accountContext &&
+        noteBoundaryKey == other.noteBoundaryKey &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      baseNote.hashCode ^
+      targetNote.hashCode ^
+      accountContext.hashCode ^
+      noteBoundaryKey.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -1781,6 +2170,18 @@ class NotesAfterRenoteRouteArgs {
   String toString() {
     return 'NotesAfterRenoteRouteArgs{note: $note, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NotesAfterRenoteRouteArgs) return false;
+    return note == other.note &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => note.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1823,6 +2224,16 @@ class NotificationRouteArgs {
   String toString() {
     return 'NotificationRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NotificationRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1883,6 +2294,18 @@ class PhotoEditRouteArgs {
   String toString() {
     return 'PhotoEditRouteArgs{accountContext: $accountContext, file: $file, onSubmit: $onSubmit, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PhotoEditRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        file == other.file &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ file.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1920,6 +2343,16 @@ class ReactionDeckRouteArgs {
   String toString() {
     return 'ReactionDeckRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionDeckRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -1974,6 +2407,19 @@ class ReactionPickerRouteArgs {
   String toString() {
     return 'ReactionPickerRouteArgs{account: $account, isAcceptSensitive: $isAcceptSensitive, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionPickerRouteArgs) return false;
+    return account == other.account &&
+        isAcceptSensitive == other.isAcceptSensitive &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      account.hashCode ^ isAcceptSensitive.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2034,6 +2480,23 @@ class ReactionUserRouteArgs {
   String toString() {
     return 'ReactionUserRouteArgs{accountContext: $accountContext, emojiData: $emojiData, noteId: $noteId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReactionUserRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        emojiData == other.emojiData &&
+        noteId == other.noteId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^
+      emojiData.hashCode ^
+      noteId.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -2084,6 +2547,16 @@ class RenoteModalRouteArgs {
   String toString() {
     return 'RenoteModalRouteArgs{note: $note, account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RenoteModalRouteArgs) return false;
+    return note == other.note && account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => note.hashCode ^ account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2134,6 +2607,18 @@ class RenoteUserRouteArgs {
   String toString() {
     return 'RenoteUserRouteArgs{account: $account, noteId: $noteId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RenoteUserRouteArgs) return false;
+    return account == other.account &&
+        noteId == other.noteId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ noteId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2173,6 +2658,16 @@ class RoleSelectRouteArgs {
   String toString() {
     return 'RoleSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RoleSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2227,6 +2722,21 @@ class SearchRouteArgs {
   String toString() {
     return 'SearchRouteArgs{accountContext: $accountContext, key: $key, initialNoteSearchCondition: $initialNoteSearchCondition}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SearchRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        key == other.key &&
+        initialNoteSearchCondition == other.initialNoteSearchCondition;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^
+      key.hashCode ^
+      initialNoteSearchCondition.hashCode;
 }
 
 /// generated route for
@@ -2269,6 +2779,16 @@ class ServerDetailRouteArgs {
   String toString() {
     return 'ServerDetailRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ServerDetailRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2332,6 +2852,16 @@ class SeveralAccountGeneralSettingsRouteArgs {
   String toString() {
     return 'SeveralAccountGeneralSettingsRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SeveralAccountGeneralSettingsRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2370,6 +2900,16 @@ class SeveralAccountSettingsRouteArgs {
   String toString() {
     return 'SeveralAccountSettingsRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SeveralAccountSettingsRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2441,6 +2981,19 @@ class SharingAccountSelectRouteArgs {
   String toString() {
     return 'SharingAccountSelectRouteArgs{key: $key, sharingText: $sharingText, filePath: $filePath}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SharingAccountSelectRouteArgs) return false;
+    return key == other.key &&
+        sharingText == other.sharingText &&
+        const ListEquality().equals(filePath, other.filePath);
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ sharingText.hashCode ^ const ListEquality().hash(filePath);
 }
 
 /// generated route for
@@ -2509,6 +3062,16 @@ class TabSettingsRouteArgs {
   String toString() {
     return 'TabSettingsRouteArgs{key: $key, tabIndex: $tabIndex}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TabSettingsRouteArgs) return false;
+    return key == other.key && tabIndex == other.tabIndex;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ tabIndex.hashCode;
 }
 
 /// generated route for
@@ -2552,6 +3115,16 @@ class TimeLineRouteArgs {
   String toString() {
     return 'TimeLineRouteArgs{initialTabSetting: $initialTabSetting, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TimeLineRouteArgs) return false;
+    return initialTabSetting == other.initialTabSetting && key == other.key;
+  }
+
+  @override
+  int get hashCode => initialTabSetting.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2612,6 +3185,23 @@ class UpdateMemoRouteArgs {
   String toString() {
     return 'UpdateMemoRouteArgs{accountContext: $accountContext, initialMemo: $initialMemo, userId: $userId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UpdateMemoRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        initialMemo == other.initialMemo &&
+        userId == other.userId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      accountContext.hashCode ^
+      initialMemo.hashCode ^
+      userId.hashCode ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -2666,6 +3256,18 @@ class UserControlRouteArgs {
   String toString() {
     return 'UserControlRouteArgs{account: $account, response: $response, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserControlRouteArgs) return false;
+    return account == other.account &&
+        response == other.response &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ response.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2720,6 +3322,18 @@ class UserFolloweeRouteArgs {
   String toString() {
     return 'UserFolloweeRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserFolloweeRouteArgs) return false;
+    return userId == other.userId &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => userId.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2774,6 +3388,18 @@ class UserFollowerRouteArgs {
   String toString() {
     return 'UserFollowerRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserFollowerRouteArgs) return false;
+    return userId == other.userId &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => userId.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2813,6 +3439,16 @@ class UserListSelectRouteArgs {
   String toString() {
     return 'UserListSelectRouteArgs{account: $account, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserListSelectRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2867,6 +3503,18 @@ class UserRouteArgs {
   String toString() {
     return 'UserRouteArgs{userId: $userId, accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserRouteArgs) return false;
+    return userId == other.userId &&
+        accountContext == other.accountContext &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => userId.hashCode ^ accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2909,6 +3557,16 @@ class UserSelectRouteArgs {
   String toString() {
     return 'UserSelectRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserSelectRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -2963,6 +3621,18 @@ class UsersListDetailRouteArgs {
   String toString() {
     return 'UsersListDetailRouteArgs{accountContext: $accountContext, listId: $listId, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListDetailRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        listId == other.listId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ listId.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3013,6 +3683,16 @@ class UsersListModalRouteArgs {
   String toString() {
     return 'UsersListModalRouteArgs{account: $account, user: $user, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListModalRouteArgs) return false;
+    return account == other.account && user == other.user && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ user.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3052,6 +3732,16 @@ class UsersListRouteArgs {
   String toString() {
     return 'UsersListRouteArgs{accountContext: $accountContext, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListRouteArgs) return false;
+    return accountContext == other.accountContext && key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3108,6 +3798,18 @@ class UsersListSettingsRouteArgs {
   String toString() {
     return 'UsersListSettingsRouteArgs{key: $key, title: $title, initialSettings: $initialSettings}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListSettingsRouteArgs) return false;
+    return key == other.key &&
+        title == other.title &&
+        initialSettings == other.initialSettings;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ title.hashCode ^ initialSettings.hashCode;
 }
 
 /// generated route for
@@ -3162,6 +3864,18 @@ class UsersListTimelineRouteArgs {
   String toString() {
     return 'UsersListTimelineRouteArgs{accountContext: $accountContext, list: $list, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UsersListTimelineRouteArgs) return false;
+    return accountContext == other.accountContext &&
+        list == other.list &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => accountContext.hashCode ^ list.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -3216,4 +3930,16 @@ class WordMuteRouteArgs {
   String toString() {
     return 'WordMuteRouteArgs{account: $account, muteType: $muteType, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! WordMuteRouteArgs) return false;
+    return account == other.account &&
+        muteType == other.muteType &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ muteType.hashCode ^ key.hashCode;
 }

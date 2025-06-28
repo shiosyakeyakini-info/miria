@@ -242,13 +242,5 @@ final timelineProvider =
           setting,
           ref,
         ),
-        _ => LocalTimelineRepository(
-          ref.read(misskeyProvider(account)),
-          account,
-          ref.read(notesProvider(account)),
-          ref.read(generalSettingsRepositoryProvider),
-          setting,
-          ref,
-        ),
       };
     });

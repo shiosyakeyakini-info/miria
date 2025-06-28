@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.1"
+  ansicolor:
+    dependency: transitive
+    description:
+      name: ansicolor
+      sha256: "50e982d500bc863e1d703448afdbf9e5a72eb48840a4f766fa361ffd6877055f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   archive:
     dependency: transitive
     description:
@@ -69,18 +77,18 @@ packages:
     dependency: "direct main"
     description:
       name: auto_route
-      sha256: "1d1bd908a1fec327719326d5d0791edd37f16caff6493c01003689fb03315ad7"
+      sha256: b8c036fa613a98a759cf0fdcba26e62f4985dcbff01a5e760ab411e8554bbaf0
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.0+1"
+    version: "10.1.0+1"
   auto_route_generator:
     dependency: "direct dev"
     description:
       name: auto_route_generator
-      sha256: c2e359d8932986d4d1bcad7a428143f81384ce10fef8d4aa5bc29e1f83766a46
+      sha256: "2a5b5bf9c55d4a2098931037dac90921a4663808aed494bb4f134d82d46cb8ec"
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.1"
+    version: "10.2.3"
   badges:
     dependency: "direct main"
     description:
@@ -929,6 +937,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  lean_builder:
+    dependency: transitive
+    description:
+      name: lean_builder
+      sha256: dca2165cfe681c69ae903a0880cab90ee93d730777605a0f44c9dd08cec7e1b9
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0-alpha.13"
   lints:
     dependency: transitive
     description:
@@ -1320,10 +1336,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: f0d7856b6ca1887cfa6d1d394056a296ae33489db914e365e2044fdada449e62
+      sha256: "6323a5b0fa688b6a010df4905a56b00181479e6d10534cecfecede2aa55add61"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   pub_semver:
     dependency: transitive
     description:
@@ -1348,14 +1364,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  receive_sharing_intent_plus:
+  receive_sharing_intent:
     dependency: "direct main"
     description:
-      name: receive_sharing_intent_plus
-      sha256: "89020b3c72a0c70409c07f549ae7fc614a56278ecc9bde0a637e49918e00b083"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
+      path: "."
+      ref: "2cea396843cd3ab1b5ec4334be4233864637874e"
+      resolved-ref: "2cea396843cd3ab1b5ec4334be4233864637874e"
+      url: "https://github.com/KasemJaffer/receive_sharing_intent"
+    source: git
+    version: "1.8.1"
   reorderables:
     dependency: "direct main"
     description:
@@ -2073,6 +2090,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.5.0"
+  xxh3:
+    dependency: transitive
+    description:
+      name: xxh3
+      sha256: "399a0438f5d426785723c99da6b16e136f4953fb1e9db0bf270bd41dd4619916"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   yaml:
     dependency: transitive
     description:

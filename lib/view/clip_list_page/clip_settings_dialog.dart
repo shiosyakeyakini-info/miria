@@ -3,20 +3,20 @@ import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/clip_settings.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
+part "clip_settings_dialog.g.dart";
 
-final _initialSettingsProvider = Provider.autoDispose<ClipSettings>(
-  (ref) => throw UnimplementedError(),
-);
+@riverpod
+GlobalKey<FormState> _formKey(Ref ref) => GlobalKey<FormState>();
 
-final _clipSettingsNotifierProvider =
-    NotifierProvider.autoDispose<_ClipSettingsNotifier, ClipSettings>(
-      _ClipSettingsNotifier.new,
-      dependencies: [_initialSettingsProvider],
-    );
+@riverpod
+ClipSettings _initialSettings(Ref ref) {
+  throw UnimplementedError();
+}
 
-class _ClipSettingsNotifier extends Notifier<ClipSettings> {
+@riverpod
+class _ClipSettingsNotifier extends _$ClipSettingsNotifier {
   @override
   ClipSettings build() {
     return ref.watch(_initialSettingsProvider);

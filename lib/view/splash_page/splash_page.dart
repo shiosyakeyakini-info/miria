@@ -8,7 +8,7 @@ import "package:miria/licenses.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
-import "package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart";
+import "package:receive_sharing_intent/receive_sharing_intent.dart";
 
 @RoutePage()
 class SplashPage extends ConsumerStatefulWidget {
@@ -36,12 +36,20 @@ class SplashPageState extends ConsumerState<SplashPage> {
 
     if (_isFirst) {
       if (Platform.isAndroid || Platform.isIOS) {
-        initialSharingMedias =
-            (await ReceiveSharingIntentPlus.getInitialMedia())
-                .map((e) => e.path)
-                .toList();
-        initialSharingText =
-            await ReceiveSharingIntentPlus.getInitialText() ?? "";
+        final initialMedia = await ReceiveSharingIntent.instance
+            .getInitialMedia();
+        initialSharingMedias = [];
+        initialSharingText = "";
+
+        for (final file in initialMedia) {
+          if (file.type == SharedMediaType.text) {
+            initialSharingText = file.path;
+          } else {
+            initialSharingMedias.add(file.path);
+          }
+        }
+
+        ReceiveSharingIntent.instance.reset();
       }
 
       LicenseRegistry.addLicense(
