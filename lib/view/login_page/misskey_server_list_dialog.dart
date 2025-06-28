@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/view/common/misskey_server_list.dart";
 
-@RoutePage<String>()
+@RoutePage()
 class MisskeyServerListDialog extends StatelessWidget {
   const MisskeyServerListDialog({super.key});
 

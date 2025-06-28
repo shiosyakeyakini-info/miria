@@ -11,7 +11,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<List<DriveFile>>()
+@RoutePage()
 class DriveFileSelectDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   final Account account;

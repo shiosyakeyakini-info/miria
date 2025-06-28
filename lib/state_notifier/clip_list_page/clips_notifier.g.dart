@@ -37,7 +37,7 @@ final class ClipsNotifierProvider
   ClipsNotifier create() => ClipsNotifier();
 }
 
-String _$clipsNotifierHash() => r'df24732aca182347a988675c5c7974a6a5bb587d';
+String _$clipsNotifierHash() => r'd2e5c8f6a083dbe75bb63070550f16728c7dde5d';
 
 abstract class _$ClipsNotifier extends $AsyncNotifier<List<Clip>> {
   FutureOr<List<Clip>> build();

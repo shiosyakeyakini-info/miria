@@ -24,7 +24,7 @@ class ClipsNotifier extends _$ClipsNotifier {
               isPublic: settings.isPublic,
             ),
           );
-      state = AsyncValue.data([...?state.valueOrNull, list]);
+      state = AsyncValue.data([...?state.value, list]);
     });
   }
 
@@ -43,7 +43,7 @@ class ClipsNotifier extends _$ClipsNotifier {
           .clips
           .delete(ClipsDeleteRequest(clipId: clipId));
       state = AsyncValue.data(
-        [...?state.valueOrNull?.where((e) => e.id != clipId)],
+        [...?state.value?.where((e) => e.id != clipId)],
       );
     });
   }
@@ -62,7 +62,7 @@ class ClipsNotifier extends _$ClipsNotifier {
             ),
           );
       state = AsyncValue.data([
-        for (final e in [...?state.valueOrNull]) e.id == clipId ? clip : e,
+        for (final e in [...?state.value]) e.id == clipId ? clip : e,
       ]);
     });
   }

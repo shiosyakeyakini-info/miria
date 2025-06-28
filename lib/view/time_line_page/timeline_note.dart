@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/view/themes/app_theme.dart";
 
 final timelineNoteProvider =

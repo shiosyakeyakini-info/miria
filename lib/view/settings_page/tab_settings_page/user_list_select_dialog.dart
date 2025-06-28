@@ -15,7 +15,7 @@ part "user_list_select_dialog.g.dart";
 Future<List<UsersList>> _usersList(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).users.list.list()).toList();
 
-@RoutePage<UsersList>()
+@RoutePage()
 class UserListSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
 

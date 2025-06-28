@@ -32,7 +32,7 @@ class _UsersListSettingsNotifier extends _$UsersListSettingsNotifier {
   }
 }
 
-@RoutePage<UsersListSettings>()
+@RoutePage()
 class UsersListSettingsDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   const UsersListSettingsDialog({

@@ -93,7 +93,7 @@ class NoteModalSheetNotifier extends _$NoteModalSheetNotifier {
   }
 
   Future<void> favorite() async {
-    final isFavorited = state.noteState?.valueOrNull?.isFavorited;
+    final isFavorited = state.noteState?.value?.isFavorited;
     if (isFavorited == null) return;
     state = state.copyWith(favorite: const AsyncLoading());
     state = state.copyWith(

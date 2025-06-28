@@ -22,7 +22,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -53,7 +53,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -78,7 +78,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -113,7 +113,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -148,7 +148,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -183,7 +183,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -222,7 +222,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -276,7 +276,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -329,7 +329,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,

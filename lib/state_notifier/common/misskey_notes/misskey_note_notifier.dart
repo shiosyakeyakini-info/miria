@@ -86,7 +86,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
                       ),
                     ),
               );
-      final result = response.valueOrNull?.object;
+      final result = response.value?.object;
       if (result == null) return null;
       return Note.fromJson(result);
     }
@@ -113,7 +113,7 @@ class MisskeyNoteNotifier extends _$MisskeyNoteNotifier {
                 UsersShowByUserNameRequest(userName: user.username, host: host),
               ),
         );
-    return response.valueOrNull;
+    return response.value;
   }
 
   Future<void> navigateToNoteDetailPage(

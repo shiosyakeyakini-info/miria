@@ -52,7 +52,7 @@ final class _NotesClipsNotifierProvider
 }
 
 String _$notesClipsNotifierHash() =>
-    r'7962974959d64b1ca68c7365025f910dc39e75e8';
+    r'ac73f5e5d6dcc731e9c023a03e84eb10fd14de9c';
 
 final class _NotesClipsNotifierFamily extends $Family
     with

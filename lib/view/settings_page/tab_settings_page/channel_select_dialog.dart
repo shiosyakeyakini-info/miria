@@ -9,7 +9,7 @@ import "package:miria/view/channels_page/channel_trend.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<CommunityChannel>()
+@RoutePage()
 class ChannelSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final Account account;
 

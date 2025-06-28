@@ -30,7 +30,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
           ),
         );
       }
-      state = AsyncValue.data([...?state.valueOrNull, list]);
+      state = AsyncValue.data([...?state.value, list]);
     });
   }
 
@@ -48,7 +48,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       await _misskey.users.list.delete(UsersListsDeleteRequest(listId: listId));
       state = AsyncValue.data(
-        [...?state.valueOrNull?.where((e) => e.id != listId)],
+        [...?state.value?.where((e) => e.id != listId)],
       );
     });
   }
@@ -67,7 +67,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
         );
         state = AsyncValue.data(
           [
-            for (final list in [...?state.valueOrNull])
+            for (final list in [...?state.value])
               list.id == listId
                   ? list.copyWith(userIds: [...list.userIds, user.id])
                   : list,
@@ -89,7 +89,7 @@ class UsersListsNotifier extends _$UsersListsNotifier {
         ),
       );
       state = AsyncValue.data([
-        for (final list in [...?state.valueOrNull])
+        for (final list in [...?state.value])
           list.id == listId
               ? list.copyWith(
                   userIds: [

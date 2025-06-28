@@ -4,7 +4,7 @@ import "package:miria/l10n/app_localizations.dart";
 
 enum DriveModalSheetReturnValue { upload, drive }
 
-@RoutePage<DriveModalSheetReturnValue>()
+@RoutePage()
 class DriveModalSheet extends StatelessWidget {
   const DriveModalSheet({super.key});
 

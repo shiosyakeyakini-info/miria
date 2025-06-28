@@ -6,7 +6,7 @@ import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/reaction_picker_dialog/reaction_picker_content.dart";
 
-@RoutePage<MisskeyEmojiData>()
+@RoutePage()
 class ReactionPickerDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
   final bool isAcceptSensitive;

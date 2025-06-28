@@ -12,33 +12,29 @@ import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _usersListNotifierProvider = AsyncNotifierProviderFamily<
-    _UsersListNotifier, UsersList, (Misskey, String)>(_UsersListNotifier.new);
+part "users_list_detail_page.g.dart";
 
-class _UsersListNotifier
-    extends FamilyAsyncNotifier<UsersList, (Misskey, String)> {
+@riverpod
+class _UsersListNotifier extends _$UsersListNotifier {
   @override
-  Future<UsersList> build((Misskey, String) arg) async {
-    final response = await _misskey.users.list.show(
-      UsersListsShowRequest(listId: _listId),
+  Future<UsersList> build(Misskey misskey, String listId) async {
+    final response = await misskey.users.list.show(
+      UsersListsShowRequest(listId: listId),
     );
     return response.toUsersList();
   }
 
-  Misskey get _misskey => arg.$1;
-
-  String get _listId => arg.$2;
-
-  Future<void> updateList(UsersListSettings settings) async {
-    await _misskey.users.list.update(
+  Future<void> updateList(UsersListSettings settings, Misskey misskey, String listId) async {
+    await misskey.users.list.update(
       UsersListsUpdateRequest(
-        listId: _listId,
+        listId: listId,
         name: settings.name,
         isPublic: settings.isPublic,
       ),
     );
-    final list = state.valueOrNull;
+    final list = state.value;
     if (list != null) {
       state = AsyncValue.data(
         list.copyWith(
@@ -50,17 +46,12 @@ class _UsersListNotifier
   }
 }
 
-final _usersListUsersProvider = AsyncNotifierProviderFamily<
-    _UsersListUsers, List<User>, (Misskey, String)>(
-  _UsersListUsers.new,
-);
-
-class _UsersListUsers
-    extends FamilyAsyncNotifier<List<User>, (Misskey, String)> {
+@riverpod
+class _UsersListUsers extends _$UsersListUsers {
   @override
-  Future<List<User>> build((Misskey, String) arg) async {
-    final list = await ref.watch(_usersListNotifierProvider(arg).future);
-    final response = await _misskey.users.showByIds(
+  Future<List<User>> build(Misskey misskey, String listId) async {
+    final list = await ref.watch(_usersListNotifierProvider(misskey, listId).future);
+    final response = await misskey.users.showByIds(
       UsersShowByIdsRequest(
         userIds: list.userIds,
       ),
@@ -68,29 +59,25 @@ class _UsersListUsers
     return response.toList();
   }
 
-  Misskey get _misskey => arg.$1;
-
-  String get _listId => arg.$2;
-
-  Future<void> push(User user) async {
-    await _misskey.users.list.push(
+  Future<void> push(User user, Misskey misskey, String listId) async {
+    await misskey.users.list.push(
       UsersListsPushRequest(
-        listId: _listId,
+        listId: listId,
         userId: user.id,
       ),
     );
-    state = AsyncValue.data([...?state.valueOrNull, user]);
+    state = AsyncValue.data([...?state.value, user]);
   }
 
-  Future<void> pull(User user) async {
-    await _misskey.users.list.pull(
+  Future<void> pull(User user, Misskey misskey, String listId) async {
+    await misskey.users.list.pull(
       UsersListsPullRequest(
-        listId: _listId,
+        listId: listId,
         userId: user.id,
       ),
     );
     state = AsyncValue.data(
-      state.valueOrNull?.where((e) => e.id != user.id).toList() ?? [],
+      state.value?.where((e) => e.id != user.id).toList() ?? [],
     );
   }
 }
@@ -113,9 +100,8 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final misskey = ref.watch(misskeyGetContextProvider);
-    final arg = (misskey, listId);
-    final list = ref.watch(_usersListNotifierProvider(arg));
-    final users = ref.watch(_usersListUsersProvider(arg));
+    final list = ref.watch(_usersListNotifierProvider(misskey, listId));
+    final users = ref.watch(_usersListUsersProvider(misskey, listId));
 
     return Scaffold(
       appBar: list.maybeWhen(
@@ -135,8 +121,8 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                 if (settings == null) return;
 
                 await ref
-                    .read(_usersListNotifierProvider(arg).notifier)
-                    .updateList(settings)
+                    .read(_usersListNotifierProvider(misskey, listId).notifier)
+                    .updateList(settings, misskey, listId)
                     .expectFailure(context);
               },
             ),
@@ -170,8 +156,8 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                       if (user == null) return;
                       if (!context.mounted) return;
                       await ref
-                          .read(_usersListUsersProvider(arg).notifier)
-                          .push(user)
+                          .read(_usersListUsersProvider(misskey, listId).notifier)
+                          .push(user, misskey, listId)
                           .expectFailure(context);
                     },
                   ),
@@ -200,9 +186,9 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                               if (result ?? false) {
                                 await ref
                                     .read(
-                                      _usersListUsersProvider(arg).notifier,
+                                      _usersListUsersProvider(misskey, listId).notifier,
                                     )
-                                    .pull(user)
+                                    .pull(user, misskey, listId)
                                     .expectFailure(context);
                               }
                             },

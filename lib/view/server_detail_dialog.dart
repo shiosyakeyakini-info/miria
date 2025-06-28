@@ -61,9 +61,9 @@ class ServerDetailDialog extends HookConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onlineUsers = ref.watch(_onlineCountsProvider).valueOrNull;
-    final totalMemories = ref.watch(_totalMemoriesProvider).valueOrNull;
-    final ping = ref.watch(_pingProvider).valueOrNull;
+    final onlineUsers = ref.watch(_onlineCountsProvider).value;
+    final totalMemories = ref.watch(_totalMemoriesProvider).value;
+    final ping = ref.watch(_pingProvider).value;
 
     final logged = useState(<ServerMetricsResponse>[]);
     final queueLogged = useState(<JobQueueResponse>[]);

@@ -15,7 +15,7 @@ part "antenna_select_dialog.g.dart";
 Future<List<Antenna>> _antennas(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).antennas.list()).toList();
 
-@RoutePage<Antenna>()
+@RoutePage()
 class AntennaSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
 

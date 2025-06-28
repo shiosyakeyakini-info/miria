@@ -8,15 +8,14 @@ import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/custom_keyboard_button.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 import "package:misskey_dart/misskey_dart.dart" hide Hashtag;
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _hashtagsSearchProvider = AsyncNotifierProviderFamily<_HashtagsSearch,
-    List<String>, (String, Account)>(_HashtagsSearch.new);
+part "hashtag_keyboard.g.dart";
 
-class _HashtagsSearch
-    extends FamilyAsyncNotifier<List<String>, (String, Account)> {
+@riverpod
+class _HashtagsSearch extends _$HashtagsSearch {
   @override
-  Future<List<String>> build((String, Account) arg) async {
-    final (query, account) = arg;
+  Future<List<String>> build(String query, Account account) async {
     if (query.isEmpty) {
       return [];
     } else {
@@ -57,7 +56,7 @@ class _FilteredHashtags
         state = response.map((hashtag) => hashtag.tag).toList();
       } else {
         state = await ref.read(
-          _hashtagsSearchProvider((query, account)).future,
+          _hashtagsSearchProvider(query, account).future,
         );
       }
     }

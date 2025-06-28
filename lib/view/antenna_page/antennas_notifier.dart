@@ -32,7 +32,7 @@ class AntennasNotifier extends _$AntennasNotifier {
           localOnly: settings.localOnly,
         ),
       );
-      state = AsyncValue.data([...?state.valueOrNull, antenna]);
+      state = AsyncValue.data([...?state.value, antenna]);
     });
   }
 
@@ -41,7 +41,7 @@ class AntennasNotifier extends _$AntennasNotifier {
       await _misskey.antennas
           .delete(AntennasDeleteRequest(antennaId: antennaId));
       state = AsyncValue.data(
-        state.valueOrNull?.where((e) => e.id != antennaId).toList() ?? [],
+        state.value?.where((e) => e.id != antennaId).toList() ?? [],
       );
     });
   }
@@ -69,7 +69,7 @@ class AntennasNotifier extends _$AntennasNotifier {
     });
 
     state = AsyncValue.data([
-      for (final antenna in [...?state.valueOrNull])
+      for (final antenna in [...?state.value])
         antenna.id == antennaId
             ? antenna.copyWith(
                 name: settings.name,

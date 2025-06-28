@@ -9,7 +9,7 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/avatar_icon.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
 
-@RoutePage<Account>()
+@RoutePage()
 class AccountSelectDialog extends HookConsumerWidget {
   const AccountSelectDialog({super.key, this.host, this.remoteHost});
 

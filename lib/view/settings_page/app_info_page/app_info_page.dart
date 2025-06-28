@@ -20,7 +20,7 @@ class AppInfoPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final packageInfo = ref.watch(packageInfoProvider).valueOrNull;
+    final packageInfo = ref.watch(packageInfoProvider).value;
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).aboutMiria)),
       body: SingleChildScrollView(

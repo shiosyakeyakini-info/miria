@@ -28,12 +28,12 @@ class _NotesClipsNotifier extends _$NotesClipsNotifier {
   }
 
   void addClip(Clip clip) {
-    state = AsyncValue.data([...state.valueOrNull ?? [], clip]);
+    state = AsyncValue.data([...state.value ?? [], clip]);
   }
 
   void removeClip(String clipId) {
     state = AsyncValue.data(
-      (state.valueOrNull ?? []).where((clip) => clip.id != clipId).toList(),
+      (state.value ?? []).where((clip) => clip.id != clipId).toList(),
     );
   }
 }

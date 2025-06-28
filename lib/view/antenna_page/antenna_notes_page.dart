@@ -30,7 +30,7 @@ class AntennaNotesPage extends ConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final antenna = ref.watch(
           antennasNotifierProvider.select(
-            (antennas) => antennas.valueOrNull
+            (antennas) => antennas.value
                 ?.firstWhereOrNull((e) => e.id == this.antenna.id),
           ),
         ) ??

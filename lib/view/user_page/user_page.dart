@@ -31,7 +31,7 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfo = ref.watch(userInfoProxyProvider(userId)).valueOrNull;
+    final userInfo = ref.watch(userInfoProxyProvider(userId)).value;
 
     final isReactionAvailable = userInfo?.response.publicReactions == true ||
         (userInfo?.response.host == null &&

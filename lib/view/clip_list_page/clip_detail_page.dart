@@ -29,7 +29,7 @@ class ClipDetailPage extends HookConsumerWidget implements AutoRouteWrapper {
   Widget build(BuildContext context, WidgetRef ref) {
     final clip = ref.watch(
       clipsNotifierProvider.select(
-        (clips) => clips.valueOrNull?.firstWhereOrNull((e) => e.id == id),
+        (clips) => clips.value?.firstWhereOrNull((e) => e.id == id),
       ),
     );
     final updateClip = useAsync(() async {

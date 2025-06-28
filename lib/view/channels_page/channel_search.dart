@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/channels_page/community_channel_view.dart";
 import "package:miria/view/common/pushable_listview.dart";

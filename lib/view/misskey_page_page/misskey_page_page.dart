@@ -250,13 +250,13 @@ class PageLikeButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = misskeyPageNotifierProvider(pageId);
     final liked = ref.watch(
-      provider.select((value) => value.valueOrNull?.page.isLiked ?? false),
+      provider.select((value) => value.value?.page.isLiked ?? false),
     );
     final likeCount = ref.watch(
-      provider.select((value) => value.valueOrNull?.page.likedCount ?? 0),
+      provider.select((value) => value.value?.page.likedCount ?? 0),
     );
     final isLoading = ref.watch(
-      provider.select((value) => value.valueOrNull?.likeOr is AsyncLoading),
+      provider.select((value) => value.value?.likeOr is AsyncLoading),
     );
 
     if (liked) {

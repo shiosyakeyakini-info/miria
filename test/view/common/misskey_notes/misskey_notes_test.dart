@@ -12,6 +12,7 @@ import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/misskey_notes/reaction_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:url_launcher_platform_interface/url_launcher_platform_interface.dart";
 
 import "../../../test_util/default_root_widget.dart";
@@ -124,9 +125,7 @@ System.out.println("@ai uneune");
         final mockUrlLauncher = MockUrlLauncherPlatform();
         UrlLauncherPlatform.instance = mockUrlLauncher;
         await tester.pumpWidget(
-          buildTestWidget(
-            note: TestData.note1.copyWith(text: "藍ちゃんやっほー 検索"),
-          ),
+          buildTestWidget(note: TestData.note1.copyWith(text: "藍ちゃんやっほー 検索")),
         );
         await tester.pumpAndSettle();
         expect(
@@ -196,13 +195,15 @@ System.out.println("@ai uneune");
     group("長いノートの折りたたみ", () {
       testWidgets("長いノートの省略が有効な場合、500文字を超えるノートが折りたたまれること", (tester) async {
         final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(generalSettingsRepository.settings)
-            .thenReturn(const GeneralSettings(enableLongTextElipsed: true));
+        when(
+          generalSettingsRepository.settings,
+        ).thenReturn(const GeneralSettings(enableLongTextElipsed: true));
         await tester.pumpWidget(
           buildTestWidget(
             overrides: [
-              generalSettingsRepositoryProvider
-                  .overrideWith((ref) => generalSettingsRepository),
+              generalSettingsRepositoryProvider.overrideWith(
+                (ref) => generalSettingsRepository,
+              ),
             ],
             note: TestData.note1.copyWith(
               text: Iterable.generate(500, (index) => "あ").join(""),
@@ -216,13 +217,15 @@ System.out.println("@ai uneune");
       testWidgets("長いノートの省略が有効な場合、続きを表示をタップすると全てが表示されること", (tester) async {
         final longText = Iterable.generate(2000, (index) => "あ").join("");
         final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(generalSettingsRepository.settings)
-            .thenReturn(const GeneralSettings(enableLongTextElipsed: true));
+        when(
+          generalSettingsRepository.settings,
+        ).thenReturn(const GeneralSettings(enableLongTextElipsed: true));
         await tester.pumpWidget(
           buildTestWidget(
             overrides: [
-              generalSettingsRepositoryProvider
-                  .overrideWith((ref) => generalSettingsRepository),
+              generalSettingsRepositoryProvider.overrideWith(
+                (ref) => generalSettingsRepository,
+              ),
             ],
             note: TestData.note1.copyWith(text: longText),
           ),
@@ -281,8 +284,9 @@ System.out.println("@ai uneune");
         });
       });
 
-      testWidgets("閲覧注意に設定している場合、画像が表示されないこと　閲覧注意をタップすると画像が表示されること",
-          (tester) async {
+      testWidgets("閲覧注意に設定している場合、画像が表示されないこと　閲覧注意をタップすると画像が表示されること", (
+        tester,
+      ) async {
         await tester.runAsync(() async {
           await tester.pumpWidget(
             buildTestWidget(
@@ -330,8 +334,9 @@ System.out.println("@ai uneune");
       final mockMisskeyNotes = MockMisskeyNotes();
       final mockMisskeyNotesReactions = MockMisskeyNotesReactions();
       when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
-      when(mockMisskeyNotes.featured(any))
-          .thenAnswer((_) async => [TestData.note1]);
+      when(
+        mockMisskeyNotes.featured(any),
+      ).thenAnswer((_) async => [TestData.note1]);
       when(mockMisskeyNotes.reactions).thenReturn(mockMisskeyNotesReactions);
       when(mockMisskeyNotesReactions.reactions(any)).thenAnswer(
         (_) async => [
@@ -345,7 +350,9 @@ System.out.println("@ai uneune");
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [
+            misskeyProvider.overrideWith((ref, account) => mockMisskey),
+          ],
           child: DefaultRootWidget(
             initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
@@ -372,13 +379,17 @@ System.out.println("@ai uneune");
       final mockMisskey = MockMisskey();
       final mockMisskeyNotes = MockMisskeyNotes();
       when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
-      when(mockMisskeyNotes.renotes(any))
-          .thenAnswer((_) async => [TestData.note6AsRenote]);
-      when(mockMisskeyNotes.featured(any))
-          .thenAnswer((_) async => [TestData.note1]);
+      when(
+        mockMisskeyNotes.renotes(any),
+      ).thenAnswer((_) async => [TestData.note6AsRenote]);
+      when(
+        mockMisskeyNotes.featured(any),
+      ).thenAnswer((_) async => [TestData.note1]);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [
+            misskeyProvider.overrideWith((ref, account) => mockMisskey),
+          ],
           child: DefaultRootWidget(
             initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),

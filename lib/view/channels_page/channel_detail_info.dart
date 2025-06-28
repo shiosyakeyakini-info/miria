@@ -245,10 +245,10 @@ class ChannelFavoriteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = channelDetailProvider(channelId);
     final followingState = ref.watch(
-      provider.select((value) => value.valueOrNull?.favorite),
+      provider.select((value) => value.value?.favorite),
     );
 
-    ref.listen(provider.select((value) => value.valueOrNull?.favorite?.error),
+    ref.listen(provider.select((value) => value.value?.favorite?.error),
         (_, next) async {
       if (next == null) return;
       await SimpleMessageDialog.show(context, next.toString());
@@ -287,10 +287,10 @@ class ChannelFollowingButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = channelDetailProvider(channelId);
     final followState = ref.watch(
-      provider.select((value) => value.valueOrNull?.follow),
+      provider.select((value) => value.value?.follow),
     );
 
-    ref.listen(provider.select((value) => value.valueOrNull?.follow?.error),
+    ref.listen(provider.select((value) => value.value?.follow?.error),
         (_, next) async {
       if (next == null) return;
       await SimpleMessageDialog.show(context, next.toString());

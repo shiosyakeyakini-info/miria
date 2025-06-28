@@ -23,7 +23,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
           child: DefaultRootWidget(
             initialRoute: SearchRoute(accountContext: TestData.accountContext),
           ),
@@ -74,7 +74,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+            overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
             child: DefaultRootWidget(
               initialRoute:
                   SearchRoute(accountContext: TestData.accountContext),
@@ -133,7 +133,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+            overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
             child: DefaultRootWidget(
               initialRoute:
                   SearchRoute(accountContext: TestData.accountContext),
@@ -183,7 +183,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
           child: DefaultRootWidget(
             initialRoute: SearchRoute(accountContext: TestData.accountContext),
           ),
@@ -235,7 +235,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
           child: DefaultRootWidget(
             initialRoute: SearchRoute(accountContext: TestData.accountContext),
           ),
@@ -273,7 +273,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
           child: DefaultRootWidget(
             initialRoute: SearchRoute(accountContext: TestData.accountContext),
           ),
@@ -310,7 +310,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
           child: DefaultRootWidget(
             initialRoute: SearchRoute(accountContext: TestData.accountContext),
           ),
@@ -395,7 +395,7 @@ void main() {
 
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+            overrides: [misskeyProvider.overrideWith((ref, account) => mockMisskey)],
             child: DefaultRootWidget(
               initialRoute: SearchRoute(
                 accountContext: TestData.accountContext,

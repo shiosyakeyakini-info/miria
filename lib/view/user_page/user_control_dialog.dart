@@ -267,7 +267,7 @@ enum Expire {
   }
 }
 
-@RoutePage<Expire>()
+@RoutePage()
 class ExpireSelectDialog extends HookWidget {
   const ExpireSelectDialog({super.key});
 

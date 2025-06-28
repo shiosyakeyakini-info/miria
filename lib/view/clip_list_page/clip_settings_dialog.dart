@@ -43,7 +43,7 @@ class _ClipSettingsNotifier extends Notifier<ClipSettings> {
   }
 }
 
-@RoutePage<ClipSettings>()
+@RoutePage()
 class ClipSettingsDialog extends StatelessWidget {
   const ClipSettingsDialog({
     super.key,

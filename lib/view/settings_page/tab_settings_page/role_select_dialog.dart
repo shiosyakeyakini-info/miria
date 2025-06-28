@@ -15,7 +15,7 @@ part "role_select_dialog.g.dart";
 Future<List<RolesListResponse>> _roles(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).roles.list()).toList();
 
-@RoutePage<RolesListResponse>()
+@RoutePage()
 class RoleSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
 

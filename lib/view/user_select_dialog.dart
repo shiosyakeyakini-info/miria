@@ -9,7 +9,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<User>()
+@RoutePage()
 class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
 

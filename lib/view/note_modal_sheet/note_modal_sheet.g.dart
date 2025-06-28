@@ -63,7 +63,7 @@ final class NoteModalSheetNotifierProvider
 }
 
 String _$noteModalSheetNotifierHash() =>
-    r'7d2d5ee4f994089c0ae3b3b1fcbbec8ad53c8db9';
+    r'500faf8f42ddccca0502c701cbd2791aa39f3cdf';
 
 final class NoteModalSheetNotifierFamily extends $Family
     with

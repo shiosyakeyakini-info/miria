@@ -6,6 +6,7 @@ import "package:flutter_cache_manager/flutter_cache_manager.dart"
     hide FileSystem;
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:riverpod/riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/acct.dart";
@@ -125,7 +126,7 @@ final errorEventProvider =
 );
 
 final importExportRepositoryProvider =
-    Provider((ref) => ImportExportRepository(ref.read));
+    Provider((ref) => ImportExportRepository(ref));
 
 @Riverpod(keepAlive: true)
 BaseCacheManager? cacheManager(Ref ref) => null;

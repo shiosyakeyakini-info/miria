@@ -19,29 +19,29 @@ import "package:misskey_dart/misskey_dart.dart";
 import "package:package_info_plus/package_info_plus.dart";
 
 class ImportExportRepository extends ChangeNotifier {
-  final T Function<T>(ProviderListenable<T> provider) reader;
+  final Ref ref;
 
-  ImportExportRepository(this.reader);
+  ImportExportRepository(this.ref);
 
   Future<Iterable<DriveFile>> findExportedFiles(
     Account account,
     String? folderId,
   ) async {
     final files = await Future.wait([
-      reader(misskeyProvider(account)).drive.files.find(
+      ref.read(misskeyProvider(account)).drive.files.find(
             DriveFilesFindRequest(
               name: "miria.json",
               folderId: folderId,
             ),
           ),
-      reader(misskeyProvider(account)).drive.files.find(
+      ref.read(misskeyProvider(account)).drive.files.find(
             DriveFilesFindRequest(
               name: "miria.json.unknown",
               folderId: folderId,
             ),
           ),
     ]);
-    return files.flattened;
+    return files.expand((element) => element);
   }
 
   Future<void> import(BuildContext context, Account account) async {
@@ -69,7 +69,7 @@ class ImportExportRepository extends ChangeNotifier {
 
     final importFile = alreadyExists.sortedBy((file) => file.createdAt).last;
 
-    final response = await reader(dioProvider)
+    final response = await ref.read(dioProvider)
         .get(importFile.url, options: Options(responseType: ResponseType.json));
 
     final json = jsonDecode(response.data);
@@ -77,16 +77,16 @@ class ImportExportRepository extends ChangeNotifier {
     final importedSettings = ExportedSetting.fromJson(json);
 
     // アカウント設定よみこみ
-    final accounts = reader(accountsProvider);
+    final accounts = ref.read(accountsProvider);
     for (final accountSetting in importedSettings.accountSettings) {
       // この端末でログイン済みのアカウントであれば
       if (accounts.any((account) => account.acct == accountSetting.acct)) {
-        await reader(accountSettingsRepositoryProvider).save(accountSetting);
+        await ref.read(accountSettingsRepositoryProvider).save(accountSetting);
       }
     }
 
     // 全般設定
-    await reader(generalSettingsRepositoryProvider)
+    await ref.read(generalSettingsRepositoryProvider)
         .update(importedSettings.generalSettings);
 
     // タブ設定
@@ -102,7 +102,7 @@ class ImportExportRepository extends ChangeNotifier {
 
       tabSettings.add(tabSetting);
     }
-    await reader(tabSettingsRepositoryProvider).save(tabSettings);
+    await ref.read(tabSettingsRepositoryProvider).save(tabSettings);
 
     if (!context.mounted) return;
     await SimpleMessageDialog.show(context, S.of(context).importCompleted);
@@ -139,7 +139,7 @@ class ImportExportRepository extends ChangeNotifier {
       if (alreadyConfirm != true) return;
 
       for (final element in alreadyExists) {
-        await reader(misskeyProvider(account))
+        await ref.read(misskeyProvider(account))
             .drive
             .files
             .delete(DriveFilesDeleteRequest(fileId: element.id));
@@ -150,10 +150,10 @@ class ImportExportRepository extends ChangeNotifier {
 
     final data = {
       ...ExportedSetting(
-        generalSettings: reader(generalSettingsRepositoryProvider).settings,
-        tabSettings: reader(tabSettingsRepositoryProvider).tabSettings.toList(),
+        generalSettings: ref.read(generalSettingsRepositoryProvider).settings,
+        tabSettings: ref.read(tabSettingsRepositoryProvider).tabSettings.toList(),
         accountSettings:
-            reader(accountSettingsRepositoryProvider).accountSettings.toList(),
+            ref.read(accountSettingsRepositoryProvider).accountSettings.toList(),
       ).toJson(),
       "metadata": {
         "createdAt": DateTime.now().toUtc().toIso8601String(),
@@ -163,7 +163,7 @@ class ImportExportRepository extends ChangeNotifier {
     };
 
     if (!context.mounted) return;
-    await reader(misskeyProvider(account)).drive.files.createAsBinary(
+    await ref.read(misskeyProvider(account)).drive.files.createAsBinary(
           DriveFilesCreateRequest(
             folderId: folder?.id,
             name: "miria.json",

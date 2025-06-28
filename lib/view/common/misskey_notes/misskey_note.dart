@@ -684,19 +684,19 @@ class MisskeyNote extends HookConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(5),
                               child: DottedBorder(
-                                color: AppTheme.of(context).renoteBorderColor,
-                                radius: AppTheme.of(context).renoteBorderRadius,
-                                strokeWidth:
-                                    AppTheme.of(context).renoteStrokeWidth,
-                                dashPattern:
-                                    AppTheme.of(context).renoteDashPattern,
-                                child: Padding(
+                                options: RoundedRectDottedBorderOptions(
+                                  radius: AppTheme.of(context).renoteBorderRadius,
+                                  color: AppTheme.of(context).renoteBorderColor,
+                                  strokeWidth:
+                                      AppTheme.of(context).renoteStrokeWidth,
+                                  dashPattern:
+                                      AppTheme.of(context).renoteDashPattern,
                                   padding: const EdgeInsets.all(5),
-                                  child: MisskeyNote(
-                                    note: displayNote.renote!,
-                                    isDisplayBorder: false,
-                                    recursive: recursive + 1,
-                                  ),
+                                ),
+                                child: MisskeyNote(
+                                  note: displayNote.renote!,
+                                  isDisplayBorder: false,
+                                  recursive: recursive + 1,
                                 ),
                               ),
                             ),

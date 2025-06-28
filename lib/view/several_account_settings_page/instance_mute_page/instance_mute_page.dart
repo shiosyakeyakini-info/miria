@@ -64,7 +64,7 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
 
     ref.listen(
         instanceMutePageNotifierProvider
-            .select((value) => value.valueOrNull?.$1), (_, next) {
+            .select((value) => value.value?.$1), (_, next) {
       if (next == null) return;
       controller.text = next.join("\n");
     });

@@ -99,7 +99,7 @@ class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
 Future<List<UsersList>> _usersListList(Ref ref) async =>
     [...await ref.read(misskeyGetContextProvider).users.list.list()];
 
-@RoutePage<AntennaSettings>()
+@RoutePage()
 class AntennaSettingsDialog extends StatelessWidget
     implements AutoRouteWrapper {
   const AntennaSettingsDialog({
@@ -210,7 +210,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
           const SizedBox(height: 10),
           if (settings.src == AntennaSource.list)
             DropdownButtonFormField<UsersList>(
-              items: list.valueOrNull
+              items: list.value
                   ?.map(
                     (list) => DropdownMenuItem(
                       value: list,
@@ -224,7 +224,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 }
                 return null;
               },
-              value: list.valueOrNull
+              value: list.value
                   ?.firstWhereOrNull((e) => e.id == settings.userListId),
               hint: Text(S.of(context).selectList),
               onChanged: ref
