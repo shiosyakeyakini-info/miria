@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/string_extensions.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/federation_data.dart";
 import "package:miria/view/common/constants.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
@@ -19,8 +19,12 @@ class FederationInfo extends ConsumerWidget {
     final description = data.description;
     return SingleChildScrollView(
       child: Padding(
-        padding:
-            const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 20),
+        padding: const EdgeInsets.only(
+          left: 10,
+          top: 10,
+          right: 10,
+          bottom: 20,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -53,10 +57,8 @@ class FederationInfo extends ConsumerWidget {
             const Padding(padding: EdgeInsets.only(top: 5)),
             Html(
               data: description,
-              style: {
-                "a": Style(color: AppTheme.of(context).linkStyle.color),
-              },
-              onLinkTap: (url, _, __) async {
+              style: {"a": Style(color: AppTheme.of(context).linkStyle.color)},
+              onLinkTap: (url, _, _) async {
                 await launchUrlString(url.toString());
               },
             ),
@@ -71,10 +73,7 @@ class FederationInfo extends ConsumerWidget {
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    Text(
-                      S.of(context).user,
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(S.of(context).user, textAlign: TextAlign.center),
                   ],
                 ),
                 Column(
@@ -98,20 +97,14 @@ class FederationInfo extends ConsumerWidget {
               children: [
                 TableRow(
                   children: [
-                    Text(
-                      S.of(context).software,
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(S.of(context).software, textAlign: TextAlign.center),
                     Text("${data.softwareName} ${data.softwareVersion}"),
                   ],
                 ),
                 if (data.languages.isNotEmpty)
                   TableRow(
                     children: [
-                      Text(
-                        S.of(context).language,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text(S.of(context).language, textAlign: TextAlign.center),
                       Text(data.languages.join(", ")),
                     ],
                   ),
@@ -128,10 +121,7 @@ class FederationInfo extends ConsumerWidget {
                 if (data.maintainerEmail != null)
                   TableRow(
                     children: [
-                      Text(
-                        S.of(context).contact,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text(S.of(context).contact, textAlign: TextAlign.center),
                       Text("${data.maintainerEmail}"),
                     ],
                   ),
@@ -154,7 +144,7 @@ class FederationInfo extends ConsumerWidget {
                                   color: AppTheme.of(context).linkStyle.color,
                                 ),
                               },
-                              onLinkTap: (url, _, __) async {
+                              onLinkTap: (url, _, _) async {
                                 await launchUrlString(url.toString());
                               },
                             ),
@@ -165,10 +155,7 @@ class FederationInfo extends ConsumerWidget {
                 if (data.tosUrl != null)
                   TableRow(
                     children: [
-                      Text(
-                        S.of(context).tos,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text(S.of(context).tos, textAlign: TextAlign.center),
                       GestureDetector(
                         onTap: () async => launchUrl(Uri.parse(data.tosUrl!)),
                         child: Text(

@@ -7,31 +7,30 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class ChannelTimeline extends ConsumerWidget {
   final String channelId;
-  const ChannelTimeline({
-    required this.channelId,
-    super.key,
-  });
+  const ChannelTimeline({required this.channelId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PushableListView<Note>(
       initializeFuture: () async {
-        final response =
-            await ref.read(misskeyGetContextProvider).channels.timeline(
-                  ChannelsTimelineRequest(channelId: channelId, limit: 30),
-                );
+        final response = await ref
+            .read(misskeyGetContextProvider)
+            .channels
+            .timeline(ChannelsTimelineRequest(channelId: channelId, limit: 30));
         ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
-        final response =
-            await ref.read(misskeyGetContextProvider).channels.timeline(
-                  ChannelsTimelineRequest(
-                    channelId: channelId,
-                    untilId: lastItem.id,
-                    limit: 30,
-                  ),
-                );
+        final response = await ref
+            .read(misskeyGetContextProvider)
+            .channels
+            .timeline(
+              ChannelsTimelineRequest(
+                channelId: channelId,
+                untilId: lastItem.id,
+                limit: 30,
+              ),
+            );
         ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },

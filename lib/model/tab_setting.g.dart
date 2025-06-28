@@ -6,23 +6,22 @@ part of 'tab_setting.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TabSettingImpl _$$TabSettingImplFromJson(Map<String, dynamic> json) =>
-    _$TabSettingImpl(
-      icon: const IconDataConverter().fromJson(json['icon']),
-      tabType: $enumDecode(_$TabTypeEnumMap, json['tabType']),
-      acct: Acct.fromJson(_readAcct(json, 'acct') as Map<String, dynamic>),
-      roleId: json['roleId'] as String?,
-      channelId: json['channelId'] as String?,
-      listId: json['listId'] as String?,
-      antennaId: json['antennaId'] as String?,
-      isSubscribe: json['isSubscribe'] as bool? ?? true,
-      isIncludeReplies: json['isIncludeReplies'] as bool? ?? true,
-      isMediaOnly: json['isMediaOnly'] as bool? ?? false,
-      name: json['name'] as String?,
-      renoteDisplay: json['renoteDisplay'] as bool? ?? true,
-    );
+_TabSetting _$TabSettingFromJson(Map<String, dynamic> json) => _TabSetting(
+  icon: const IconDataConverter().fromJson(json['icon']),
+  tabType: $enumDecode(_$TabTypeEnumMap, json['tabType']),
+  acct: Acct.fromJson(_readAcct(json, 'acct') as Map<String, dynamic>),
+  roleId: json['roleId'] as String?,
+  channelId: json['channelId'] as String?,
+  listId: json['listId'] as String?,
+  antennaId: json['antennaId'] as String?,
+  isSubscribe: json['isSubscribe'] as bool? ?? true,
+  isIncludeReplies: json['isIncludeReplies'] as bool? ?? true,
+  isMediaOnly: json['isMediaOnly'] as bool? ?? false,
+  name: json['name'] as String?,
+  renoteDisplay: json['renoteDisplay'] as bool? ?? true,
+);
 
-Map<String, dynamic> _$$TabSettingImplToJson(_$TabSettingImpl instance) =>
+Map<String, dynamic> _$TabSettingToJson(_TabSetting instance) =>
     <String, dynamic>{
       'icon': const IconDataConverter().toJson(instance.icon),
       'tabType': _$TabTypeEnumMap[instance.tabType]!,

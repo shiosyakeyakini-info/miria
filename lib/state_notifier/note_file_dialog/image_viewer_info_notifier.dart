@@ -22,28 +22,21 @@ class ImageViewerInfoNotifier extends _$ImageViewerInfoNotifier {
   }
 
   void updateScale(double scale) {
-    state = state.copyWith(
-      scale: scale,
-    );
+    state = state.copyWith(scale: scale);
   }
 
   void addPointer() {
-    state = state.copyWith(
-      pointersCount: state.pointersCount + 1,
-    );
+    state = state.copyWith(pointersCount: state.pointersCount + 1);
   }
 
   void removePointer() {
     final v = max(0, state.pointersCount - 1);
-    state = state.copyWith(
-      pointersCount: v,
-      isDoubleTap: false,
-    );
+    state = state.copyWith(pointersCount: v, isDoubleTap: false);
   }
 }
 
 @freezed
-class ImageViewerInfo with _$ImageViewerInfo {
+abstract class ImageViewerInfo with _$ImageViewerInfo {
   const factory ImageViewerInfo({
     @Default(1.0) double scale,
     @Default(1.0) double lastScale,

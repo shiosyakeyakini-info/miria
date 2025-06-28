@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -12,10 +12,10 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "role_select_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<RolesListResponse>> _roles(_RolesRef ref) async =>
+Future<List<RolesListResponse>> _roles(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).roles.list()).toList();
 
-@RoutePage<RolesListResponse>()
+@RoutePage()
 class RoleSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
 
@@ -43,23 +43,26 @@ class RoleSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               switch (roles) {
-                AsyncLoading() =>
-                  const Center(child: CircularProgressIndicator.adaptive()),
-                AsyncError(:final error, :final stackTrace) =>
-                  ErrorDetail(error: error, stackTrace: stackTrace),
+                AsyncLoading() => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+                AsyncError(:final error, :final stackTrace) => ErrorDetail(
+                  error: error,
+                  stackTrace: stackTrace,
+                ),
                 AsyncData(:final value) => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.of(context).pop(value[index]);
-                        },
-                        title: Text(value[index].name),
-                      );
-                    },
-                  ),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(value[index]);
+                      },
+                      title: Text(value[index].name),
+                    );
+                  },
+                ),
               },
             ],
           ),

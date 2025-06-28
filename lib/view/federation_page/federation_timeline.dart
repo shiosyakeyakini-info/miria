@@ -9,11 +9,7 @@ class FederationTimeline extends ConsumerWidget {
   final String host;
   final MetaResponse meta;
 
-  const FederationTimeline({
-    required this.host,
-    required this.meta,
-    super.key,
-  });
+  const FederationTimeline({required this.host, required this.meta, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,18 +25,16 @@ class FederationTimeline extends ConsumerWidget {
           return result.toList();
         },
         nextFuture: (lastItem, _) async {
-          final result =
-              await ref.read(misskeyGetContextProvider).notes.localTimeline(
-                    NotesLocalTimelineRequest(untilId: lastItem.id),
-                  );
+          final result = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .localTimeline(NotesLocalTimelineRequest(untilId: lastItem.id));
           ref.read(notesWithProvider).registerAll(result);
           return result.toList();
         },
         itemBuilder: (context2, item) => Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: MisskeyNote(
-            note: item,
-          ),
+          child: MisskeyNote(note: item),
         ),
       ),
     );

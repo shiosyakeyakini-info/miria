@@ -1,15 +1,14 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/view/channels_page/channel_favorited.dart";
 import "package:miria/view/channels_page/channel_followed.dart";
 import "package:miria/view/channels_page/channel_search.dart";
 import "package:miria/view/channels_page/channel_trend.dart";
 import "package:miria/view/common/account_scope.dart";
-import "package:misskey_dart/misskey_dart.dart";
 
-@RoutePage<CommunityChannel>()
+@RoutePage()
 class ChannelSelectDialog extends StatelessWidget implements AutoRouteWrapper {
   final Account account;
 

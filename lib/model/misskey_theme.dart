@@ -4,7 +4,7 @@ part "misskey_theme.freezed.dart";
 part "misskey_theme.g.dart";
 
 @freezed
-class MisskeyTheme with _$MisskeyTheme {
+abstract class MisskeyTheme with _$MisskeyTheme {
   const factory MisskeyTheme({
     required String id,
     required String name,

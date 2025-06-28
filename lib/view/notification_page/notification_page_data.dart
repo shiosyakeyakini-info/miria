@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 sealed class NotificationData {
@@ -44,7 +44,8 @@ class _QuotedRenote implements MentionQuoteNotificationDataType {
 
 class _Reply implements MentionQuoteNotificationDataType {
   @override
-  String Function(BuildContext context) get name => (context) => "";
+  String Function(BuildContext context) get name =>
+      (context) => "";
 }
 
 class MentionQuoteNotificationData extends NotificationData {
@@ -152,11 +153,11 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.id == e.note?.id)
               .forEach((e) {
-            isSummarize = true;
-            if (element.user != null) {
-              e.reactionUsers.add((element.reaction!, element.user!));
-            }
-          });
+                isSummarize = true;
+                if (element.user != null) {
+                  e.reactionUsers.add((element.reaction!, element.user!));
+                }
+              });
 
           if (!isSummarize) {
             resultList.add(
@@ -176,9 +177,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.renote?.id == e.note?.id)
               .forEach((e) {
-            isSummarize = true;
-            e.renoteUsers.add(element.user);
-          });
+                isSummarize = true;
+                e.renoteUsers.add(element.user);
+              });
 
           if (!isSummarize) {
             resultList.add(
@@ -241,7 +242,8 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               user: element.user,
               createdAt: element.createdAt,
               type: FollowNotificationDataType.followRequestAccepted(
-                  element.message),
+                element.message,
+              ),
               id: element.id,
             ),
           );
@@ -344,6 +346,12 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               id: element.id,
             ),
           );
+        case NotificationType.createToken:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case NotificationType.chatRoomInvitationReceived:
+          // TODO: Handle this case.
+          throw UnimplementedError();
       }
     }
 

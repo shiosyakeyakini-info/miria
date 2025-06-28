@@ -12,9 +12,7 @@ class DebugInfoPageState extends State<DebugInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("デバッグ")),
-      body: ListView(
-        children: const [ListTile()],
-      ),
+      body: ListView(children: const [ListTile()]),
     );
   }
 }

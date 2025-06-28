@@ -11,49 +11,49 @@ MiriaはFlutterで開発されたMisskeyクライアントアプリです。iOS�
 ### 基本的な開発コマンド
 ```bash
 # 依存関係の取得
-flutter pub get
+fvm flutter pub get
 
 # 開発モードで実行
-flutter run
+fvm flutter run
 
 # コード生成
-flutter pub run build_runner build
+fvm flutter pub run build_runner build
 
 # テスト実行（カバレッジ付き）
-flutter test --coverage --coverage-path=~/coverage/lcov.info
+fvm flutter test --coverage --coverage-path=~/coverage/lcov.info
 
 # コードフォーマット
-dart format --output=none --set-exit-if-changed .
+fvm dart format --output=none --set-exit-if-changed .
 ```
 
 ### ビルドコマンド
 ```bash
 # iOS (リリース)
-flutter build ipa --no-tree-shake-icons --release --no-codesign
+fvm flutter build ipa --no-tree-shake-icons --release --no-codesign
 
 # Android APK
-flutter build apk --no-tree-shake-icons --release
+fvm flutter build apk --no-tree-shake-icons --release
 
 # Android AAB
-flutter build appbundle --no-tree-shake-icons --release
+fvm flutter build appbundle --no-tree-shake-icons --release
 
 # Windows
-flutter build windows --release
+fvm flutter build windows --release
 
 # Linux
-flutter build linux
+fvm flutter build linux
 ```
 
 ### その他のコマンド
 ```bash
 # アイコン生成
-flutter pub run flutter_launcher_icons:main
+fvm flutter pub run flutter_launcher_icons:main
 
 # バージョンアップ
-flutter pub run cider bump build --bump-build
+fvm flutter pub run cider bump build --bump-build
 
 # バージョン確認
-flutter pub run cider version
+fvm flutter pub run cider version
 ```
 
 ## アーキテクチャ
@@ -84,7 +84,7 @@ flutter pub run cider version
 ### コード生成
 新しいデータモデルやプロバイダーを追加した場合は、必ず以下を実行：
 ```bash
-flutter pub run build_runner build
+fvm flutter pub run build_runner build
 ```
 
 ### ルーティング
@@ -109,3 +109,10 @@ flutter pub run build_runner build
 - **国際化対応**: `l10n.yaml`設定、現在は日本語（規定は関西弁、ja_OJはお嬢様口調）・中国語をサポート
 - **マルチプラットフォーム**: モバイル・デスクトップの両方をサポート
 - **Misskeyバージョン**: v13以降のMisskey及びforkをサポート
+
+### 最後に必ずやること
+
+- `fvm dart analyze | grep 'error'`で致命的なエラーが出ていないかを確認する
+- `fvm dart format .`でフォーマッタを適用する
+- `fvm dart fix --apply`で機械的に修正可能なフォーマットを修正する
+- `fvm flutter test`でテストが動作することを確認する　（やや長い時間がかかります）

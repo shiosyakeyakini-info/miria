@@ -1,7 +1,9 @@
 import "package:flutter/foundation.dart";
 
 final miriaInheritedLicenses = <LicenseEntry>[
-  const LicenseEntryWithLineBreaks(["Blob Emoji"], """
+  const LicenseEntryWithLineBreaks(
+    ["Blob Emoji"],
+    """
 Copyright blob.gg
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +17,18 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-          """),
-  const LicenseEntryWithLineBreaks(["Meowmoji"], """
+          """,
+  ),
+  const LicenseEntryWithLineBreaks(
+    ["Meowmoji"],
+    """
 Meowmoji is a derivative of Blob Emoji, licensed under Apache 2.0.
 The license follows the meowmoji official server community at  https://discord.gg/pFUhE5z.
-          """),
-  const LicenseEntryWithLineBreaks(["misskey-dev/misskey"], """
+          """,
+  ),
+  const LicenseEntryWithLineBreaks(
+    ["misskey-dev/misskey"],
+    """
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
@@ -682,5 +690,6 @@ specific requirements.
 if any, to sign a "copyright disclaimer" for the program, if necessary.
 For more information on this, and how to apply and follow the GNU AGPL, see
 <http://www.gnu.org/licenses/>.  
-  """),
+  """,
+  ),
 ];
