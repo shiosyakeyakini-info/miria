@@ -3,11 +3,11 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/note_search_condition.dart";
 import "package:miria/providers.dart";
@@ -144,11 +144,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
           title: Text(S.of(context).openBrowsers),
           onTap: () async {
             await launchUrl(
-              Uri(
-                scheme: "https",
-                host: account.host,
-                path: response.acct,
-              ),
+              Uri(scheme: "https", host: account.host, path: response.acct),
               mode: LaunchMode.externalApplication,
             );
             if (!context.mounted) return;
@@ -172,23 +168,23 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
           onTap: () async => context.pushRoute(
             SearchRoute(
               accountContext: ref.read(accountContextProvider),
-              initialNoteSearchCondition: NoteSearchCondition(
-                user: response,
-              ),
+              initialNoteSearchCondition: NoteSearchCondition(user: response),
             ),
           ),
         ),
         ListTile(
           leading: const Icon(Icons.list),
           title: Text(S.of(context).addToList),
-          onTap: () async => context
-              .pushRoute(UsersListModalRoute(account: account, user: response)),
+          onTap: () async => context.pushRoute(
+            UsersListModalRoute(account: account, user: response),
+          ),
         ),
         ListTile(
           leading: const Icon(Icons.settings_input_antenna),
           title: Text(S.of(context).addToAntenna),
-          onTap: () async => context
-              .pushRoute(AntennaModalRoute(account: account, user: user)),
+          onTap: () async => context.pushRoute(
+            AntennaModalRoute(account: account, user: user),
+          ),
         ),
         if (user is UserDetailedNotMeWithRelations) ...[
           if (user.isRenoteMuted)
@@ -235,7 +231,7 @@ class UserControlDialog extends HookConsumerWidget implements AutoRouteWrapper {
                 context.maybePop(),
                 context.pushRoute(
                   AbuseRoute(account: account, targetUser: response),
-                )
+                ),
               ).wait;
             },
           ),
@@ -267,7 +263,7 @@ enum Expire {
   }
 }
 
-@RoutePage<Expire>()
+@RoutePage()
 class ExpireSelectDialog extends HookWidget {
   const ExpireSelectDialog({super.key});
 

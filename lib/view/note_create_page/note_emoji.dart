@@ -8,8 +8,9 @@ class NoteEmoji extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final baseHeight = MediaQuery.textScalerOf(context)
-        .scale((Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) * 1.35);
+    final baseHeight = MediaQuery.textScalerOf(
+      context,
+    ).scale((Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) * 1.35);
     return SizedBox(
       height: baseHeight + 40,
       child: InputComplement(

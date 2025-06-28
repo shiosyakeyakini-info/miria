@@ -30,39 +30,30 @@ class MisskeyTimeline extends HookConsumerWidget {
     final isDownDirectionLoading = useState(false);
     final isLastLoaded = useState(false);
 
-    useEffect(
-      () {
-        timelineRepository.startTimeLine();
-        return () => timelineRepository.disconnect();
-      },
-      [tabSetting],
-    );
+    useEffect(() {
+      timelineRepository.startTimeLine();
+      return () => timelineRepository.disconnect();
+    }, [tabSetting]);
 
-    useMemoized(
-      () {
-        isDownDirectionLoading.value = false;
-        isLastLoaded.value = false;
-      },
-      [tabSetting],
-    );
+    useMemoized(() {
+      isDownDirectionLoading.value = false;
+      isLastLoaded.value = false;
+    }, [tabSetting]);
 
-    final downDirectionLoad = useCallback(
-      () {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          if (isDownDirectionLoading.value) return;
-          try {
-            isDownDirectionLoading.value = true;
-            final result = await timelineRepository.previousLoad();
-            isDownDirectionLoading.value = false;
-            isLastLoaded.value = result == 0;
-          } catch (e) {
-            isDownDirectionLoading.value = false;
-            rethrow;
-          }
-        });
-      },
-      [isDownDirectionLoading],
-    );
+    final downDirectionLoad = useCallback(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (isDownDirectionLoading.value) return;
+        try {
+          isDownDirectionLoading.value = true;
+          final result = await timelineRepository.previousLoad();
+          isDownDirectionLoading.value = false;
+          isLastLoaded.value = result == 0;
+        } catch (e) {
+          isDownDirectionLoading.value = false;
+          rethrow;
+        }
+      });
+    }, [isDownDirectionLoading]);
 
     if (controller.positions.isNotEmpty) {
       controller.scrollToTop();
@@ -87,8 +78,10 @@ class MisskeyTimeline extends HookConsumerWidget {
           ];
           final correctedOlder = [
             if (timelineRepository.olderNotes.length > 5)
-              ...timelineRepository.olderNotes
-                  .slice(5, timelineRepository.olderNotes.length),
+              ...timelineRepository.olderNotes.slice(
+                5,
+                timelineRepository.olderNotes.length,
+              ),
           ];
 
           if (index > 0) {
@@ -117,8 +110,9 @@ class MisskeyTimeline extends HookConsumerWidget {
             }
 
             if (ref.read(
-                  generalSettingsRepositoryProvider
-                      .select((value) => value.settings.automaticPush),
+                  generalSettingsRepositoryProvider.select(
+                    (value) => value.settings.automaticPush,
+                  ),
                 ) ==
                 AutomaticPush.automatic) {
               unawaited(downDirectionLoad());

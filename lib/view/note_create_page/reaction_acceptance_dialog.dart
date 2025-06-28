@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class ReactionAcceptanceDialog extends StatelessWidget {
@@ -42,12 +42,13 @@ class ReactionAcceptanceDialog extends StatelessWidget {
           title: Text(S.of(context).favoriteNonSensitiveOnly),
         ),
         ListTile(
-          onTap: () => Navigator.of(context).pop(
-            ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote,
-          ),
+          onTap: () => Navigator.of(
+            context,
+          ).pop(ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote),
           leading: const Icon(Icons.add_moderator_outlined),
-          title:
-              Text(S.of(context).favoriteNonSensitiveOnlyAndLikeOnlyForRemote),
+          title: Text(
+            S.of(context).favoriteNonSensitiveOnlyAndLikeOnlyForRemote,
+          ),
         ),
       ],
     );

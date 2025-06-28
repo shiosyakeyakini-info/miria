@@ -124,6 +124,7 @@
             }
         }
     },
+    "thisChannelIsArchived": "このチャンネルはアーカイブされています",
     "favorited": "お気に入り中",
     "willFavorite": "お気に入りに入れるで",
     "willFollow": "フォローするで",
@@ -881,6 +882,7 @@
     "bulkAddReactions": "一括追加",
     "bulkAddReactionsDescription1": "お使いのブラウザでリアクションデッキをコピーしたいアカウントにログインしてください",
     "bulkAddReactionsDescription2": "同じブラウザで以下のURLにアクセスして「値 (JSON)」の内容をすべて選択してコピーしてください",
+    "bulkAddReactionsDescription2ForEmojiPalette": "同じブラウザで以下のURLにアクセスして絵文字パレットをコピーしてください",
     "bulkAddReactionsDescription3": "コピーしたものを下のテキストボックスに貼り付けてください",
     "pasteHere": "ここに貼り付け",
     "invalidInput": "入力が有効な値ではありません",

@@ -23,10 +23,8 @@ import "package:vector_math/vector_math_64.dart" show Matrix4, Quad, Vector3;
 ///
 ///   * [InteractiveViewer.builder], whose builder is of this type.
 ///   * [WidgetBuilder], which is similar, but takes no viewport.
-typedef InteractiveViewerWidgetBuilder = Widget Function(
-  BuildContext context,
-  Quad viewport,
-);
+typedef InteractiveViewerWidgetBuilder =
+    Widget Function(BuildContext context, Quad viewport);
 
 /// A widget that enables pan and zoom interactions with its child.
 ///
@@ -86,23 +84,23 @@ class InteractiveViewer extends StatefulWidget {
     this.alignment,
     this.trackpadScrollCausesScale = false,
     this.canChangeScale = true,
-  })  : assert(minScale > 0),
-        assert(interactionEndFrictionCoefficient > 0),
-        assert(minScale.isFinite),
-        assert(maxScale > 0),
-        assert(!maxScale.isNaN),
-        assert(maxScale >= minScale),
-        // boundaryMargin must be either fully infinite or fully finite, but not
-        // a mix of both.
-        assert(
-          (boundaryMargin.horizontal.isInfinite &&
-                  boundaryMargin.vertical.isInfinite) ||
-              (boundaryMargin.top.isFinite &&
-                  boundaryMargin.right.isFinite &&
-                  boundaryMargin.bottom.isFinite &&
-                  boundaryMargin.left.isFinite),
-        ),
-        builder = null;
+  }) : assert(minScale > 0),
+       assert(interactionEndFrictionCoefficient > 0),
+       assert(minScale.isFinite),
+       assert(maxScale > 0),
+       assert(!maxScale.isNaN),
+       assert(maxScale >= minScale),
+       // boundaryMargin must be either fully infinite or fully finite, but not
+       // a mix of both.
+       assert(
+         (boundaryMargin.horizontal.isInfinite &&
+                 boundaryMargin.vertical.isInfinite) ||
+             (boundaryMargin.top.isFinite &&
+                 boundaryMargin.right.isFinite &&
+                 boundaryMargin.bottom.isFinite &&
+                 boundaryMargin.left.isFinite),
+       ),
+       builder = null;
 
   /// Creates an InteractiveViewer for a child that is created on demand.
   ///
@@ -137,24 +135,24 @@ class InteractiveViewer extends StatefulWidget {
     this.alignment,
     this.trackpadScrollCausesScale = false,
     this.canChangeScale = true,
-  })  : assert(minScale > 0),
-        assert(interactionEndFrictionCoefficient > 0),
-        assert(minScale.isFinite),
-        assert(maxScale > 0),
-        assert(!maxScale.isNaN),
-        assert(maxScale >= minScale),
-        // boundaryMargin must be either fully infinite or fully finite, but not
-        // a mix of both.
-        assert(
-          (boundaryMargin.horizontal.isInfinite &&
-                  boundaryMargin.vertical.isInfinite) ||
-              (boundaryMargin.top.isFinite &&
-                  boundaryMargin.right.isFinite &&
-                  boundaryMargin.bottom.isFinite &&
-                  boundaryMargin.left.isFinite),
-        ),
-        constrained = false,
-        child = null;
+  }) : assert(minScale > 0),
+       assert(interactionEndFrictionCoefficient > 0),
+       assert(minScale.isFinite),
+       assert(maxScale > 0),
+       assert(!maxScale.isNaN),
+       assert(maxScale >= minScale),
+       // boundaryMargin must be either fully infinite or fully finite, but not
+       // a mix of both.
+       assert(
+         (boundaryMargin.horizontal.isInfinite &&
+                 boundaryMargin.vertical.isInfinite) ||
+             (boundaryMargin.top.isFinite &&
+                 boundaryMargin.right.isFinite &&
+                 boundaryMargin.bottom.isFinite &&
+                 boundaryMargin.left.isFinite),
+       ),
+       constrained = false,
+       child = null;
 
   /// The alignment of the child's origin, relative to the size of the box.
   final Alignment? alignment;
@@ -422,7 +420,8 @@ class InteractiveViewer extends StatefulWidget {
   /// Returns the closest point to the given point on the given line segment.
   @visibleForTesting
   static Vector3 getNearestPointOnLine(Vector3 point, Vector3 l1, Vector3 l2) {
-    final lengthSquared = math.pow(l2.x - l1.x, 2.0).toDouble() +
+    final lengthSquared =
+        math.pow(l2.x - l1.x, 2.0).toDouble() +
         math.pow(l2.y - l1.y, 2.0).toDouble();
 
     // In this case, l1 == l2.
@@ -443,43 +442,19 @@ class InteractiveViewer extends StatefulWidget {
   static Quad getAxisAlignedBoundingBox(Quad quad) {
     final double minX = math.min(
       quad.point0.x,
-      math.min(
-        quad.point1.x,
-        math.min(
-          quad.point2.x,
-          quad.point3.x,
-        ),
-      ),
+      math.min(quad.point1.x, math.min(quad.point2.x, quad.point3.x)),
     );
     final double minY = math.min(
       quad.point0.y,
-      math.min(
-        quad.point1.y,
-        math.min(
-          quad.point2.y,
-          quad.point3.y,
-        ),
-      ),
+      math.min(quad.point1.y, math.min(quad.point2.y, quad.point3.y)),
     );
     final double maxX = math.max(
       quad.point0.x,
-      math.max(
-        quad.point1.x,
-        math.max(
-          quad.point2.x,
-          quad.point3.x,
-        ),
-      ),
+      math.max(quad.point1.x, math.max(quad.point2.x, quad.point3.x)),
     );
     final double maxY = math.max(
       quad.point0.y,
-      math.max(
-        quad.point1.y,
-        math.max(
-          quad.point2.y,
-          quad.point3.y,
-        ),
-      ),
+      math.max(quad.point1.y, math.max(quad.point2.y, quad.point3.y)),
     );
     return Quad.points(
       Vector3(minX, minY, 0),
@@ -577,8 +552,9 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     final childRenderBox =
         _childKey.currentContext!.findRenderObject()! as RenderBox;
     final childSize = childRenderBox.size;
-    final boundaryRect =
-        widget.boundaryMargin.inflateRect(Offset.zero & childSize);
+    final boundaryRect = widget.boundaryMargin.inflateRect(
+      Offset.zero & childSize,
+    );
     assert(
       !boundaryRect.isEmpty,
       "InteractiveViewer's child must have nonzero dimensions.",
@@ -629,10 +605,7 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     }
 
     final nextMatrix = matrix.clone()
-      ..translate(
-        alignedTranslation.dx,
-        alignedTranslation.dy,
-      );
+      ..translate(alignedTranslation.dx, alignedTranslation.dy);
 
     // Transform the viewport to determine where its four corners will be after
     // the child has been transformed.
@@ -683,8 +656,10 @@ class _InteractiveViewerState extends State<InteractiveViewer>
 
     // Double check that the corrected translation fits.
     final correctedViewport = _transformViewport(correctedMatrix, _viewport);
-    final offendingCorrectedDistance =
-        _exceedsBy(boundariesAabbQuad, correctedViewport);
+    final offendingCorrectedDistance = _exceedsBy(
+      boundariesAabbQuad,
+      correctedViewport,
+    );
     if (offendingCorrectedDistance == Offset.zero) {
       return correctedMatrix;
     }
@@ -703,14 +678,13 @@ class _InteractiveViewerState extends State<InteractiveViewer>
       offendingCorrectedDistance.dx == 0.0 ? correctedTotalTranslation.dx : 0.0,
       offendingCorrectedDistance.dy == 0.0 ? correctedTotalTranslation.dy : 0.0,
     );
-    return matrix.clone()
-      ..setTranslation(
-        Vector3(
-          unidirectionalCorrectedTotalTranslation.dx,
-          unidirectionalCorrectedTotalTranslation.dy,
-          0.0,
-        ),
-      );
+    return matrix.clone()..setTranslation(
+      Vector3(
+        unidirectionalCorrectedTotalTranslation.dx,
+        unidirectionalCorrectedTotalTranslation.dy,
+        0.0,
+      ),
+    );
   }
 
   // Return a new matrix representing the given matrix after applying the given
@@ -748,9 +722,7 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     if (rotation == 0) {
       return matrix.clone();
     }
-    final focalPointScene = _transformationController!.toScene(
-      focalPoint,
-    );
+    final focalPointScene = _transformationController!.toScene(focalPoint);
     return matrix.clone()
       ..translate(focalPointScene.dx, focalPointScene.dy)
       ..rotateZ(-rotation)
@@ -935,8 +907,8 @@ class _InteractiveViewerState extends State<InteractiveViewer>
         _currentAxis = null;
         return;
       }
-      final translationVector =
-          _transformationController!.value.getTranslation();
+      final translationVector = _transformationController!.value
+          .getTranslation();
       final translation = Offset(translationVector.x, translationVector.y);
       final frictionSimulationX = FrictionSimulation(
         widget.interactionEndFrictionCoefficient,
@@ -955,12 +927,7 @@ class _InteractiveViewerState extends State<InteractiveViewer>
       _animation = Tween<Offset>(
         begin: translation,
         end: Offset(frictionSimulationX.finalX, frictionSimulationY.finalX),
-      ).animate(
-        CurvedAnimation(
-          parent: _controller,
-          curve: Curves.decelerate,
-        ),
-      );
+      ).animate(CurvedAnimation(parent: _controller, curve: Curves.decelerate));
       _controller.duration = Duration(milliseconds: (tFinal * 1000).round());
       _animation!.addListener(_onAnimate);
       _controller.forward();
@@ -980,17 +947,16 @@ class _InteractiveViewerState extends State<InteractiveViewer>
         widget.interactionEndFrictionCoefficient,
         effectivelyMotionless: 0.1,
       );
-      _scaleAnimation = Tween<double>(
-        begin: scale,
-        end: frictionSimulation.x(tFinal),
-      ).animate(
-        CurvedAnimation(
-          parent: _scaleController,
-          curve: Curves.decelerate,
-        ),
+      _scaleAnimation =
+          Tween<double>(
+            begin: scale,
+            end: frictionSimulation.x(tFinal),
+          ).animate(
+            CurvedAnimation(parent: _scaleController, curve: Curves.decelerate),
+          );
+      _scaleController.duration = Duration(
+        milliseconds: (tFinal * 1000).round(),
       );
-      _scaleController.duration =
-          Duration(milliseconds: (tFinal * 1000).round());
       _scaleAnimation!.addListener(_onScaleAnimate);
       _scaleController.forward();
     }
@@ -1121,9 +1087,7 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     // Translate such that the resulting translation is _animation.value.
     final translationVector = _transformationController!.value.getTranslation();
     final translation = Offset(translationVector.x, translationVector.y);
-    final translationScene = _transformationController!.toScene(
-      translation,
-    );
+    final translationScene = _transformationController!.toScene(translation);
     final animationScene = _transformationController!.toScene(
       _animation!.value,
     );
@@ -1180,12 +1144,8 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     _transformationController =
         widget.transformationController ?? TransformationController();
     _transformationController!.addListener(_onTransformationControllerChange);
-    _controller = AnimationController(
-      vsync: this,
-    );
-    _scaleController = AnimationController(
-      vsync: this,
-    );
+    _controller = AnimationController(vsync: this);
+    _scaleController = AnimationController(vsync: this);
   }
 
   @override
@@ -1195,27 +1155,33 @@ class _InteractiveViewerState extends State<InteractiveViewer>
     // transformationControllers.
     if (oldWidget.transformationController == null) {
       if (widget.transformationController != null) {
-        _transformationController!
-            .removeListener(_onTransformationControllerChange);
+        _transformationController!.removeListener(
+          _onTransformationControllerChange,
+        );
         _transformationController!.dispose();
         _transformationController = widget.transformationController;
-        _transformationController!
-            .addListener(_onTransformationControllerChange);
+        _transformationController!.addListener(
+          _onTransformationControllerChange,
+        );
       }
     } else {
       if (widget.transformationController == null) {
-        _transformationController!
-            .removeListener(_onTransformationControllerChange);
+        _transformationController!.removeListener(
+          _onTransformationControllerChange,
+        );
         _transformationController = TransformationController();
-        _transformationController!
-            .addListener(_onTransformationControllerChange);
+        _transformationController!.addListener(
+          _onTransformationControllerChange,
+        );
       } else if (widget.transformationController !=
           oldWidget.transformationController) {
-        _transformationController!
-            .removeListener(_onTransformationControllerChange);
+        _transformationController!.removeListener(
+          _onTransformationControllerChange,
+        );
         _transformationController = widget.transformationController;
-        _transformationController!
-            .addListener(_onTransformationControllerChange);
+        _transformationController!.addListener(
+          _onTransformationControllerChange,
+        );
       }
     }
   }
@@ -1224,8 +1190,9 @@ class _InteractiveViewerState extends State<InteractiveViewer>
   void dispose() {
     _controller.dispose();
     _scaleController.dispose();
-    _transformationController!
-        .removeListener(_onTransformationControllerChange);
+    _transformationController!.removeListener(
+      _onTransformationControllerChange,
+    );
     if (widget.transformationController == null) {
       _transformationController!.dispose();
     }
@@ -1313,10 +1280,7 @@ class _InteractiveViewerBuilt extends StatelessWidget {
     Widget child = Transform(
       transform: matrix,
       alignment: alignment,
-      child: KeyedSubtree(
-        key: childKey,
-        child: this.child,
-      ),
+      child: KeyedSubtree(key: childKey, child: this.child),
     );
 
     if (!constrained) {
@@ -1330,20 +1294,13 @@ class _InteractiveViewerBuilt extends StatelessWidget {
       );
     }
 
-    return ClipRect(
-      clipBehavior: clipBehavior,
-      child: child,
-    );
+    return ClipRect(clipBehavior: clipBehavior, child: child);
   }
 }
 
 // A classification of relevant user gestures. Each contiguous user gesture is
 // represented by exactly one _GestureType.
-enum _GestureType {
-  pan,
-  scale,
-  rotate,
-}
+enum _GestureType { pan, scale, rotate }
 
 // Given a velocity and drag, calculate the time at which motion will come to
 // a stop, within the margin of effectivelyMotionless.
@@ -1369,32 +1326,16 @@ Quad _transformViewport(Matrix4 matrix, Rect viewport) {
   final inverseMatrix = matrix.clone()..invert();
   return Quad.points(
     inverseMatrix.transform3(
-      Vector3(
-        viewport.topLeft.dx,
-        viewport.topLeft.dy,
-        0.0,
-      ),
+      Vector3(viewport.topLeft.dx, viewport.topLeft.dy, 0.0),
     ),
     inverseMatrix.transform3(
-      Vector3(
-        viewport.topRight.dx,
-        viewport.topRight.dy,
-        0.0,
-      ),
+      Vector3(viewport.topRight.dx, viewport.topRight.dy, 0.0),
     ),
     inverseMatrix.transform3(
-      Vector3(
-        viewport.bottomRight.dx,
-        viewport.bottomRight.dy,
-        0.0,
-      ),
+      Vector3(viewport.bottomRight.dx, viewport.bottomRight.dy, 0.0),
     ),
     inverseMatrix.transform3(
-      Vector3(
-        viewport.bottomLeft.dx,
-        viewport.bottomLeft.dy,
-        0.0,
-      ),
+      Vector3(viewport.bottomLeft.dx, viewport.bottomLeft.dy, 0.0),
     ),
   );
 }
@@ -1427,12 +1368,11 @@ Offset _exceedsBy(Quad boundary, Quad viewport) {
   ];
   var largestExcess = Offset.zero;
   for (final point in viewportPoints) {
-    final pointInside =
-        InteractiveViewer.getNearestPointInside(point, boundary);
-    final excess = Offset(
-      pointInside.x - point.x,
-      pointInside.y - point.y,
+    final pointInside = InteractiveViewer.getNearestPointInside(
+      point,
+      boundary,
     );
+    final excess = Offset(pointInside.x - point.x, pointInside.y - point.y);
     if (excess.dx.abs() > largestExcess.dx.abs()) {
       largestExcess = Offset(excess.dx, largestExcess.dy);
     }

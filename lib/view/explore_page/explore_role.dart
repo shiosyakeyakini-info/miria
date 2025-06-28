@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/futable_list_builder.dart";
@@ -19,8 +19,10 @@ class ExploreRole extends ConsumerWidget {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: FutureListView<RolesListResponse>(
         future: Future(() async {
-          final response =
-              await ref.read(misskeyGetContextProvider).roles.list();
+          final response = await ref
+              .read(misskeyGetContextProvider)
+              .roles
+              .list();
 
           return response
               .where((element) => element.usersCount != 0)
@@ -39,8 +41,9 @@ class RoleListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final iconHeight = MediaQuery.textScalerOf(context)
-        .scale(Theme.of(context).textTheme.bodyMedium!.fontSize!);
+    final iconHeight = MediaQuery.textScalerOf(
+      context,
+    ).scale(Theme.of(context).textTheme.bodyMedium!.fontSize!);
 
     return ListTile(
       onTap: () async {
@@ -61,14 +64,10 @@ class RoleListItem extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 10),
                   child: NetworkImageView(
                     height: iconHeight,
-                    loadingBuilder: (context, _, __) => SizedBox(
-                      width: iconHeight,
-                      height: iconHeight,
-                    ),
-                    errorBuilder: (context, e, s) => const SizedBox(
-                      width: 1,
-                      height: 1,
-                    ),
+                    loadingBuilder: (context, _, _) =>
+                        SizedBox(width: iconHeight, height: iconHeight),
+                    errorBuilder: (context, e, s) =>
+                        const SizedBox(width: 1, height: 1),
                     url: item.iconUrl!.toString(),
                     type: ImageType.avatarIcon,
                   ),
@@ -79,8 +78,9 @@ class RoleListItem extends ConsumerWidget {
         ),
       ),
       subtitle: Text(item.description ?? ""),
-      trailing:
-          MfmText(mfmText: S.of(context).allocatedRolesCount(item.usersCount)),
+      trailing: MfmText(
+        mfmText: S.of(context).allocatedRolesCount(item.usersCount),
+      ),
     );
   }
 }

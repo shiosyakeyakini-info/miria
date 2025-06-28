@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
@@ -16,12 +17,13 @@ void main() {
       final channel = MockMisskeyChannels();
       final misskey = MockMisskey();
       when(misskey.channels).thenReturn(channel);
-      when(channel.show(any))
-          .thenAnswer((_) async => TestData.channel1.copyWith(bannerUrl: null));
+      when(
+        channel.show(any),
+      ).thenAnswer((_) async => TestData.channel1.copyWith(bannerUrl: null));
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -33,10 +35,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.textContaining(
-          TestData.expectChannel1DescriptionContaining,
-          findRichText: true,
-        ),
+        find.textContaining(TestData.expectChannel1DescriptionContaining),
         findsOneWidget,
       );
     });
@@ -52,7 +51,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -77,7 +76,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -112,7 +111,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -147,7 +146,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -182,7 +181,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -216,12 +215,13 @@ void main() {
         (_) async =>
             TestData.channel1.copyWith(bannerUrl: null, isFollowing: false),
       );
-      when(channel.timeline(any))
-          .thenAnswer((realInvocation) async => [TestData.note1]);
+      when(
+        channel.timeline(any),
+      ).thenAnswer((realInvocation) async => [TestData.note1]);
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
           child: DefaultRootWidget(
             initialRoute: ChannelDetailRoute(
               accountContext: TestData.accountContext,
@@ -258,6 +258,107 @@ void main() {
           ),
         ),
       );
+    });
+
+    testWidgets("チャンネル内のハイライトノートが表示されること", (tester) async {
+      final notes = MockMisskeyNotes();
+      final channel = MockMisskeyChannels();
+      final misskey = MockMisskey();
+      when(misskey.channels).thenReturn(channel);
+      when(channel.show(any)).thenAnswer(
+        (_) async =>
+            TestData.channel1.copyWith(bannerUrl: null, isFollowing: false),
+      );
+
+      when(misskey.notes).thenReturn(notes);
+      when(notes.featured(any)).thenAnswer((_) async => [TestData.note1]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ChannelDetailRoute(
+              accountContext: TestData.accountContext,
+              channelId: TestData.channel1.id,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text("ハイライト"));
+      await tester.pumpAndSettle();
+
+      expect(find.text(TestData.note1.text!), findsOneWidget);
+
+      verify(
+        notes.featured(
+          argThat(
+            equals(NotesFeaturedRequest(channelId: TestData.channel1.id)),
+          ),
+        ),
+      );
+      await tester.pageNation();
+      verify(
+        notes.featured(
+          argThat(
+            equals(
+              NotesFeaturedRequest(
+                untilId: TestData.note1.id,
+                offset: 1,
+                channelId: TestData.channel1.id,
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+
+    testWidgets("チャンネル内の検索でノートが表示されること", (tester) async {
+      final notes = MockMisskeyNotes();
+      final channel = MockMisskeyChannels();
+      final misskey = MockMisskey();
+      when(misskey.channels).thenReturn(channel);
+      when(channel.show(any)).thenAnswer(
+        (_) async =>
+            TestData.channel1.copyWith(bannerUrl: null, isFollowing: false),
+      );
+      when(misskey.notes).thenReturn(notes);
+      when(notes.search(any)).thenAnswer((_) async => [TestData.note1]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
+          child: DefaultRootWidget(
+            initialRoute: ChannelDetailRoute(
+              accountContext: TestData.accountContext,
+              channelId: TestData.channel1.id,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text("検索"));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), "Misskey");
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      verify(
+        notes.search(
+          argThat(
+            equals(
+              NotesSearchRequest(
+                query: "Misskey",
+                channelId: TestData.channel1.id,
+              ),
+            ),
+          ),
+        ),
+      ).called(1);
+      expect(find.text(TestData.note1.text!), findsOneWidget);
     });
   });
 }

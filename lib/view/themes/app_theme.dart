@@ -5,11 +5,7 @@ import "package:miria/model/general_settings.dart";
 class AppTheme extends InheritedWidget {
   final AppThemeData themeData;
 
-  const AppTheme({
-    required super.child,
-    required this.themeData,
-    super.key,
-  });
+  const AppTheme({required super.child, required this.themeData, super.key});
 
   @override
   bool updateShouldNotify(covariant AppTheme oldWidget) {

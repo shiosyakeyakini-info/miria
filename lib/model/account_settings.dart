@@ -5,14 +5,10 @@ import "package:misskey_dart/misskey_dart.dart";
 part "account_settings.freezed.dart";
 part "account_settings.g.dart";
 
-enum CacheStrategy {
-  whenTabChange,
-  whenLaunch,
-  whenOneDay,
-}
+enum CacheStrategy { whenTabChange, whenLaunch, whenOneDay }
 
 @freezed
-class AccountSettings with _$AccountSettings {
+abstract class AccountSettings with _$AccountSettings {
   const AccountSettings._();
 
   const factory AccountSettings({
@@ -36,9 +32,6 @@ class AccountSettings with _$AccountSettings {
       _$AccountSettingsFromJson(json);
 
   Acct get acct {
-    return Acct(
-      host: host,
-      username: userId,
-    );
+    return Acct(host: host, username: userId);
   }
 }

@@ -3,10 +3,10 @@ import "dart:async";
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/const.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
@@ -27,8 +27,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final enableDirectReaction = useState(settings.enableDirectReaction);
     final enableAnimatedMFM = useState(settings.enableAnimatedMFM);
     final enableLongTextElipsed = useState(settings.enableLongTextElipsed);
-    final enableFavoritedRenoteElipsed =
-        useState(settings.enableFavoritedRenoteElipsed);
+    final enableFavoritedRenoteElipsed = useState(
+      settings.enableFavoritedRenoteElipsed,
+    );
     final tabPosition = useState(settings.tabPosition);
     final textScaleFactor = useState(settings.textScaleFactor);
     final emojiType = useState(settings.emojiType);
@@ -52,8 +53,10 @@ class GeneralSettingsPage extends HookConsumerWidget {
             (element) =>
                 !element.isDarkTheme || element.id != darkModeTheme.value,
           )) {
-        darkModeTheme.value =
-            builtInColorThemes.where((element) => element.isDarkTheme).first.id;
+        darkModeTheme.value = builtInColorThemes
+            .where((element) => element.isDarkTheme)
+            .first
+            .id;
       }
     });
     final dependencies = [
@@ -78,35 +81,33 @@ class GeneralSettingsPage extends HookConsumerWidget {
       language.value,
       isDeckMode.value,
     ];
-    final save = useCallback(
-      () async {
-        await ref.read(generalSettingsRepositoryProvider).update(
-              GeneralSettings(
-                lightColorThemeId: lightModeTheme.value,
-                darkColorThemeId: darkModeTheme.value,
-                themeColorSystem: colorSystem.value,
-                nsfwInherit: nsfwInherit.value,
-                enableDirectReaction: enableDirectReaction.value,
-                automaticPush: automaticPush.value,
-                enableAnimatedMFM: enableAnimatedMFM.value,
-                enableFavoritedRenoteElipsed:
-                    enableFavoritedRenoteElipsed.value,
-                enableLongTextElipsed: enableLongTextElipsed.value,
-                tabPosition: tabPosition.value,
-                emojiType: emojiType.value,
-                textScaleFactor: textScaleFactor.value,
-                defaultFontName: defaultFontName.value,
-                serifFontName: serifFontName.value,
-                monospaceFontName: monospaceFontName.value,
-                cursiveFontName: cursiveFontName.value,
-                fantasyFontName: fantasyFontName.value,
-                languages: language.value,
-                isDeckMode: isDeckMode.value,
-              ),
-            );
-      },
-      dependencies,
-    );
+    final save = useCallback(() async {
+      await ref
+          .read(generalSettingsRepositoryProvider)
+          .update(
+            GeneralSettings(
+              lightColorThemeId: lightModeTheme.value,
+              darkColorThemeId: darkModeTheme.value,
+              themeColorSystem: colorSystem.value,
+              nsfwInherit: nsfwInherit.value,
+              enableDirectReaction: enableDirectReaction.value,
+              automaticPush: automaticPush.value,
+              enableAnimatedMFM: enableAnimatedMFM.value,
+              enableFavoritedRenoteElipsed: enableFavoritedRenoteElipsed.value,
+              enableLongTextElipsed: enableLongTextElipsed.value,
+              tabPosition: tabPosition.value,
+              emojiType: emojiType.value,
+              textScaleFactor: textScaleFactor.value,
+              defaultFontName: defaultFontName.value,
+              serifFontName: serifFontName.value,
+              monospaceFontName: monospaceFontName.value,
+              cursiveFontName: cursiveFontName.value,
+              fantasyFontName: fantasyFontName.value,
+              languages: language.value,
+              isDeckMode: isDeckMode.value,
+            ),
+          );
+    }, dependencies);
 
     useMemoized(() => unawaited(save()), dependencies);
 
@@ -216,7 +217,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                             DropdownMenuItem(
                               value: element,
                               child: Text(
-                                S.of(context).tabPositionDescription(
+                                S
+                                    .of(context)
+                                    .tabPositionDescription(
                                       element.displayName(context),
                                     ),
                               ),
@@ -246,8 +249,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).themeForLightMode),
                       DropdownButton<String>(
                         items: [
-                          for (final element in builtInColorThemes
-                              .where((element) => !element.isDarkTheme))
+                          for (final element in builtInColorThemes.where(
+                            (element) => !element.isDarkTheme,
+                          ))
                             DropdownMenuItem(
                               value: element.id,
                               child: Text(S.of(context).themeIsh(element.name)),
@@ -261,8 +265,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       Text(S.of(context).themeForDarkMode),
                       DropdownButton<String>(
                         items: [
-                          for (final element in builtInColorThemes
-                              .where((element) => element.isDarkTheme))
+                          for (final element in builtInColorThemes.where(
+                            (element) => element.isDarkTheme,
+                          ))
                             DropdownMenuItem(
                               value: element.id,
                               child: Text(S.of(context).themeIsh(element.name)),
@@ -304,8 +309,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       CheckboxListTile(
                         value: enableDirectReaction.value,
                         title: Text(S.of(context).emojiTapReaction),
-                        subtitle:
-                            Text(S.of(context).emojiTapReactionDescription),
+                        subtitle: Text(
+                          S.of(context).emojiTapReactionDescription,
+                        ),
                         onChanged: (value) =>
                             enableDirectReaction.value = value ?? false,
                       ),
@@ -352,7 +358,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                       ),
                       Center(
                         child: ElevatedButton(
-                          onPressed: (settings.textScaleFactor ==
+                          onPressed:
+                              (settings.textScaleFactor ==
                                   textScaleFactor.value)
                               ? null
                               : save,
@@ -376,7 +383,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == defaultFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -401,7 +409,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == serifFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -426,7 +435,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == monospaceFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -451,7 +461,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == cursiveFontName.value,
                             ) ??
                             choosableFonts.first,
@@ -476,7 +487,8 @@ class GeneralSettingsPage extends HookConsumerWidget {
                               ),
                             ),
                         ],
-                        value: choosableFonts.firstWhereOrNull(
+                        value:
+                            choosableFonts.firstWhereOrNull(
                               (e) => e.actualName == fantasyFontName.value,
                             ) ??
                             choosableFonts.first,

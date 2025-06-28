@@ -1,6 +1,7 @@
 import "dart:typed_data";
 
 import "package:auto_route/auto_route.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Page;
 import "package:miria/model/account.dart";
 import "package:miria/model/antenna_settings.dart";
@@ -89,9 +90,9 @@ import "package:misskey_dart/misskey_dart.dart";
 part "app_router.gr.dart";
 
 @AutoRouterConfig(replaceInRouteName: "Page|Dialog|Sheet,Route")
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   @override
-  final List<AutoRoute> routes = [
+  List<AutoRoute> get routes => [
     AutoRoute(page: SplashRoute.page, initial: true),
     AutoRoute(page: TimeLineRoute.page),
     AutoRoute(page: NoteDetailRoute.page),
@@ -149,7 +150,6 @@ class AppRouter extends _$AppRouter {
     AutoDialogRoute<bool>(page: LicenseConfirmRoute.page),
     AutoDialogRoute(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
-    AutoDialogRoute(page: ChannelDetailRoute.page),
     AutoDialogRoute(page: ServerDetailRoute.page),
     AutoDialogRoute(page: ReactionUserRoute.page),
     AutoDialogRoute<CommunityChannel>(page: ChannelSelectRoute.page),
@@ -178,32 +178,30 @@ class AppRouter extends _$AppRouter {
 
 /// ダイアログ
 class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
-  AutoDialogRoute({
-    required super.page,
-  }) : super(
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 200,
-          fullscreenDialog: false,
-          customRouteBuilder: (context, widget, page) => DialogRoute<ReturnT>(
-            context: context,
-            builder: (context) => widget,
-            settings: page,
-          ),
-        );
+  AutoDialogRoute({required super.page})
+    : super(
+        transitionsBuilder: TransitionsBuilders.fadeIn,
+        duration: const Duration(milliseconds: 200),
+        fullscreenDialog: false,
+        customRouteBuilder: <T>(context, child, page) => DialogRoute<T>(
+          context: context,
+          builder: (context) => child,
+          settings: page,
+        ),
+      );
 }
 
 /// モーダルボトムシート
 class AutoModalRouteSheet<ReturnT extends Object> extends CustomRoute {
-  AutoModalRouteSheet({
-    required super.page,
-  }) : super(
-          transitionsBuilder: TransitionsBuilders.slideBottom,
-          durationInMilliseconds: 200,
-          customRouteBuilder: (context, widget, page) =>
-              ModalBottomSheetRoute<ReturnT>(
-            builder: (context) => widget,
-            isScrollControlled: false,
-            settings: page,
-          ),
-        );
+  AutoModalRouteSheet({required super.page})
+    : super(
+        transitionsBuilder: TransitionsBuilders.slideBottom,
+        duration: const Duration(milliseconds: 200),
+        customRouteBuilder: <T>(context, child, page) =>
+            ModalBottomSheetRoute<T>(
+              builder: (context) => child,
+              isScrollControlled: false,
+              settings: page,
+            ),
+      );
 }

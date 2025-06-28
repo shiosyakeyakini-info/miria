@@ -1,22 +1,22 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/clip_settings.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-final _formKeyProvider = Provider.autoDispose((ref) => GlobalKey<FormState>());
+part "clip_settings_dialog.g.dart";
 
-final _initialSettingsProvider = Provider.autoDispose<ClipSettings>(
-  (ref) => throw UnimplementedError(),
-);
+@riverpod
+GlobalKey<FormState> _formKey(Ref ref) => GlobalKey<FormState>();
 
-final _clipSettingsNotifierProvider =
-    NotifierProvider.autoDispose<_ClipSettingsNotifier, ClipSettings>(
-  _ClipSettingsNotifier.new,
-  dependencies: [_initialSettingsProvider],
-);
+@riverpod
+ClipSettings _initialSettings(Ref ref) {
+  throw UnimplementedError();
+}
 
-class _ClipSettingsNotifier extends AutoDisposeNotifier<ClipSettings> {
+@riverpod
+class _ClipSettingsNotifier extends _$ClipSettingsNotifier {
   @override
   ClipSettings build() {
     return ref.watch(_initialSettingsProvider);
@@ -43,7 +43,7 @@ class _ClipSettingsNotifier extends AutoDisposeNotifier<ClipSettings> {
   }
 }
 
-@RoutePage<ClipSettings>()
+@RoutePage()
 class ClipSettingsDialog extends StatelessWidget {
   const ClipSettingsDialog({
     super.key,
@@ -96,8 +96,9 @@ class UsersListSettingsForm extends ConsumerWidget {
               }
               return null;
             },
-            onSaved:
-                ref.read(_clipSettingsNotifierProvider.notifier).updateName,
+            onSaved: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateName,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -115,8 +116,9 @@ class UsersListSettingsForm extends ConsumerWidget {
           CheckboxListTile(
             title: Text(S.of(context).public),
             value: settings.isPublic,
-            onChanged:
-                ref.read(_clipSettingsNotifierProvider.notifier).updateIsPublic,
+            onChanged: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateIsPublic,
           ),
           ElevatedButton(
             child: Text(S.of(context).done),

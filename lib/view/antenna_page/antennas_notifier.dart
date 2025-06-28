@@ -32,24 +32,22 @@ class AntennasNotifier extends _$AntennasNotifier {
           localOnly: settings.localOnly,
         ),
       );
-      state = AsyncValue.data([...?state.valueOrNull, antenna]);
+      state = AsyncValue.data([...?state.value, antenna]);
     });
   }
 
   Future<void> delete(String antennaId) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await _misskey.antennas
-          .delete(AntennasDeleteRequest(antennaId: antennaId));
+      await _misskey.antennas.delete(
+        AntennasDeleteRequest(antennaId: antennaId),
+      );
       state = AsyncValue.data(
-        state.valueOrNull?.where((e) => e.id != antennaId).toList() ?? [],
+        state.value?.where((e) => e.id != antennaId).toList() ?? [],
       );
     });
   }
 
-  Future<void> updateAntenna(
-    String antennaId,
-    AntennaSettings settings,
-  ) async {
+  Future<void> updateAntenna(String antennaId, AntennaSettings settings) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       await _misskey.antennas.update(
         AntennasUpdateRequest(
@@ -69,7 +67,7 @@ class AntennasNotifier extends _$AntennasNotifier {
     });
 
     state = AsyncValue.data([
-      for (final antenna in [...?state.valueOrNull])
+      for (final antenna in [...?state.value])
         antenna.id == antennaId
             ? antenna.copyWith(
                 name: settings.name,

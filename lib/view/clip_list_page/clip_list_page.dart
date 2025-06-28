@@ -1,8 +1,8 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart" hide Clip;
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -44,17 +44,21 @@ class ClipListPage extends ConsumerWidget implements AutoRouteWrapper {
       ),
       body: switch (clips) {
         AsyncLoading() => const Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        AsyncError(:final error, :final stackTrace) =>
-          Center(child: ErrorDetail(error: error, stackTrace: stackTrace)),
+          child: CircularProgressIndicator.adaptive(),
+        ),
+        AsyncError(:final error, :final stackTrace) => Center(
+          child: ErrorDetail(error: error, stackTrace: stackTrace),
+        ),
         AsyncData(:final value) => ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              final clip = value[index];
-              return ClipItem(clip: clip, trailing: _RemoveButton(id: clip.id));
-            },
-          )
+          itemCount: value.length,
+          itemBuilder: (context, index) {
+            final clip = value[index];
+            return ClipItem(
+              clip: clip,
+              trailing: _RemoveButton(id: clip.id),
+            );
+          },
+        ),
       },
     );
   }

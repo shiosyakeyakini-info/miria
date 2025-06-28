@@ -1,16 +1,15 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "users_list_settings_dialog.g.dart";
 
 @Riverpod(dependencies: [])
-UsersListSettings _initialSettings(_InitialSettingsRef ref) =>
-    throw UnimplementedError();
+UsersListSettings _initialSettings(Ref ref) => throw UnimplementedError();
 
 @Riverpod(dependencies: [_initialSettings])
 class _UsersListSettingsNotifier extends _$UsersListSettingsNotifier {
@@ -32,7 +31,7 @@ class _UsersListSettingsNotifier extends _$UsersListSettingsNotifier {
   }
 }
 
-@RoutePage<UsersListSettings>()
+@RoutePage()
 class UsersListSettingsDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   const UsersListSettingsDialog({
@@ -46,11 +45,9 @@ class UsersListSettingsDialog extends HookConsumerWidget
 
   @override
   Widget wrappedRoute(BuildContext context) => ProviderScope(
-        overrides: [
-          _initialSettingsProvider.overrideWithValue(initialSettings),
-        ],
-        child: this,
-      );
+    overrides: [_initialSettingsProvider.overrideWithValue(initialSettings)],
+    child: this,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

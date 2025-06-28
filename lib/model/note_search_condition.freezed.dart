@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,214 +10,166 @@ part of 'note_search_condition.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$NoteSearchCondition {
-  String? get query => throw _privateConstructorUsedError;
-  User? get user => throw _privateConstructorUsedError;
-  CommunityChannel? get channel => throw _privateConstructorUsedError;
-  bool get localOnly => throw _privateConstructorUsedError;
 
-  /// Create a copy of NoteSearchCondition
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $NoteSearchConditionCopyWith<NoteSearchCondition> get copyWith =>
-      throw _privateConstructorUsedError;
+ String? get query; User? get user; CommunityChannel? get channel; bool get localOnly;
+/// Create a copy of NoteSearchCondition
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$NoteSearchConditionCopyWith<NoteSearchCondition> get copyWith => _$NoteSearchConditionCopyWithImpl<NoteSearchCondition>(this as NoteSearchCondition, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteSearchCondition&&(identical(other.query, query) || other.query == query)&&(identical(other.user, user) || other.user == user)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,query,user,channel,localOnly);
+
+@override
+String toString() {
+  return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $NoteSearchConditionCopyWith<$Res> {
-  factory $NoteSearchConditionCopyWith(
-          NoteSearchCondition value, $Res Function(NoteSearchCondition) then) =
-      _$NoteSearchConditionCopyWithImpl<$Res, NoteSearchCondition>;
-  @useResult
-  $Res call(
-      {String? query, User? user, CommunityChannel? channel, bool localOnly});
+abstract mixin class $NoteSearchConditionCopyWith<$Res>  {
+  factory $NoteSearchConditionCopyWith(NoteSearchCondition value, $Res Function(NoteSearchCondition) _then) = _$NoteSearchConditionCopyWithImpl;
+@useResult
+$Res call({
+ String? query, User? user, CommunityChannel? channel, bool localOnly
+});
 
-  $CommunityChannelCopyWith<$Res>? get channel;
+
+$CommunityChannelCopyWith<$Res>? get channel;
+
 }
-
 /// @nodoc
-class _$NoteSearchConditionCopyWithImpl<$Res, $Val extends NoteSearchCondition>
+class _$NoteSearchConditionCopyWithImpl<$Res>
     implements $NoteSearchConditionCopyWith<$Res> {
-  _$NoteSearchConditionCopyWithImpl(this._value, this._then);
+  _$NoteSearchConditionCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final NoteSearchCondition _self;
+  final $Res Function(NoteSearchCondition) _then;
 
-  /// Create a copy of NoteSearchCondition
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? query = freezed,
-    Object? user = freezed,
-    Object? channel = freezed,
-    Object? localOnly = null,
-  }) {
-    return _then(_value.copyWith(
-      query: freezed == query
-          ? _value.query
-          : query // ignore: cast_nullable_to_non_nullable
-              as String?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User?,
-      channel: freezed == channel
-          ? _value.channel
-          : channel // ignore: cast_nullable_to_non_nullable
-              as CommunityChannel?,
-      localOnly: null == localOnly
-          ? _value.localOnly
-          : localOnly // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+/// Create a copy of NoteSearchCondition
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? query = freezed,Object? user = freezed,Object? channel = freezed,Object? localOnly = null,}) {
+  return _then(_self.copyWith(
+query: freezed == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User?,channel: freezed == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
+as CommunityChannel?,localOnly: null == localOnly ? _self.localOnly : localOnly // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+/// Create a copy of NoteSearchCondition
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CommunityChannelCopyWith<$Res>? get channel {
+    if (_self.channel == null) {
+    return null;
   }
 
-  /// Create a copy of NoteSearchCondition
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CommunityChannelCopyWith<$Res>? get channel {
-    if (_value.channel == null) {
-      return null;
-    }
-
-    return $CommunityChannelCopyWith<$Res>(_value.channel!, (value) {
-      return _then(_value.copyWith(channel: value) as $Val);
-    });
-  }
+  return $CommunityChannelCopyWith<$Res>(_self.channel!, (value) {
+    return _then(_self.copyWith(channel: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$NoteSearchConditionImplCopyWith<$Res>
-    implements $NoteSearchConditionCopyWith<$Res> {
-  factory _$$NoteSearchConditionImplCopyWith(_$NoteSearchConditionImpl value,
-          $Res Function(_$NoteSearchConditionImpl) then) =
-      __$$NoteSearchConditionImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String? query, User? user, CommunityChannel? channel, bool localOnly});
-
-  @override
-  $CommunityChannelCopyWith<$Res>? get channel;
-}
-
-/// @nodoc
-class __$$NoteSearchConditionImplCopyWithImpl<$Res>
-    extends _$NoteSearchConditionCopyWithImpl<$Res, _$NoteSearchConditionImpl>
-    implements _$$NoteSearchConditionImplCopyWith<$Res> {
-  __$$NoteSearchConditionImplCopyWithImpl(_$NoteSearchConditionImpl _value,
-      $Res Function(_$NoteSearchConditionImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of NoteSearchCondition
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? query = freezed,
-    Object? user = freezed,
-    Object? channel = freezed,
-    Object? localOnly = null,
-  }) {
-    return _then(_$NoteSearchConditionImpl(
-      query: freezed == query
-          ? _value.query
-          : query // ignore: cast_nullable_to_non_nullable
-              as String?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User?,
-      channel: freezed == channel
-          ? _value.channel
-          : channel // ignore: cast_nullable_to_non_nullable
-              as CommunityChannel?,
-      localOnly: null == localOnly
-          ? _value.localOnly
-          : localOnly // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$NoteSearchConditionImpl extends _NoteSearchCondition {
-  const _$NoteSearchConditionImpl(
-      {this.query, this.user, this.channel, this.localOnly = false})
-      : super._();
 
-  @override
-  final String? query;
-  @override
-  final User? user;
-  @override
-  final CommunityChannel? channel;
-  @override
-  @JsonKey()
-  final bool localOnly;
+class _NoteSearchCondition extends NoteSearchCondition {
+  const _NoteSearchCondition({this.query, this.user, this.channel, this.localOnly = false}): super._();
+  
 
-  @override
-  String toString() {
-    return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly)';
-  }
+@override final  String? query;
+@override final  User? user;
+@override final  CommunityChannel? channel;
+@override@JsonKey() final  bool localOnly;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$NoteSearchConditionImpl &&
-            (identical(other.query, query) || other.query == query) &&
-            (identical(other.user, user) || other.user == user) &&
-            (identical(other.channel, channel) || other.channel == channel) &&
-            (identical(other.localOnly, localOnly) ||
-                other.localOnly == localOnly));
-  }
+/// Create a copy of NoteSearchCondition
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$NoteSearchConditionCopyWith<_NoteSearchCondition> get copyWith => __$NoteSearchConditionCopyWithImpl<_NoteSearchCondition>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, query, user, channel, localOnly);
 
-  /// Create a copy of NoteSearchCondition
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$NoteSearchConditionImplCopyWith<_$NoteSearchConditionImpl> get copyWith =>
-      __$$NoteSearchConditionImplCopyWithImpl<_$NoteSearchConditionImpl>(
-          this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteSearchCondition&&(identical(other.query, query) || other.query == query)&&(identical(other.user, user) || other.user == user)&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.localOnly, localOnly) || other.localOnly == localOnly));
 }
 
-abstract class _NoteSearchCondition extends NoteSearchCondition {
-  const factory _NoteSearchCondition(
-      {final String? query,
-      final User? user,
-      final CommunityChannel? channel,
-      final bool localOnly}) = _$NoteSearchConditionImpl;
-  const _NoteSearchCondition._() : super._();
 
-  @override
-  String? get query;
-  @override
-  User? get user;
-  @override
-  CommunityChannel? get channel;
-  @override
-  bool get localOnly;
+@override
+int get hashCode => Object.hash(runtimeType,query,user,channel,localOnly);
 
-  /// Create a copy of NoteSearchCondition
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$NoteSearchConditionImplCopyWith<_$NoteSearchConditionImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'NoteSearchCondition(query: $query, user: $user, channel: $channel, localOnly: $localOnly)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$NoteSearchConditionCopyWith<$Res> implements $NoteSearchConditionCopyWith<$Res> {
+  factory _$NoteSearchConditionCopyWith(_NoteSearchCondition value, $Res Function(_NoteSearchCondition) _then) = __$NoteSearchConditionCopyWithImpl;
+@override @useResult
+$Res call({
+ String? query, User? user, CommunityChannel? channel, bool localOnly
+});
+
+
+@override $CommunityChannelCopyWith<$Res>? get channel;
+
+}
+/// @nodoc
+class __$NoteSearchConditionCopyWithImpl<$Res>
+    implements _$NoteSearchConditionCopyWith<$Res> {
+  __$NoteSearchConditionCopyWithImpl(this._self, this._then);
+
+  final _NoteSearchCondition _self;
+  final $Res Function(_NoteSearchCondition) _then;
+
+/// Create a copy of NoteSearchCondition
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? query = freezed,Object? user = freezed,Object? channel = freezed,Object? localOnly = null,}) {
+  return _then(_NoteSearchCondition(
+query: freezed == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as User?,channel: freezed == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
+as CommunityChannel?,localOnly: null == localOnly ? _self.localOnly : localOnly // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+/// Create a copy of NoteSearchCondition
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CommunityChannelCopyWith<$Res>? get channel {
+    if (_self.channel == null) {
+    return null;
+  }
+
+  return $CommunityChannelCopyWith<$Res>(_self.channel!, (value) {
+    return _then(_self.copyWith(channel: value));
+  });
+}
+}
+
+// dart format on
