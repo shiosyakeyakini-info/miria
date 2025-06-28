@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NoteStatus implements DiagnosticableTreeMixin {
 
- bool get isCwOpened; bool get isLongVisible; bool get isReactionedRenote; bool get isLongVisibleInitialized; bool get isIncludeMuteWord; bool get isMuteOpened;
+ bool get isCwOpened; bool get isLongVisible; bool get isReactionedRenote; bool get isLongVisibleInitialized; bool get isIncludeMuteWord; bool get isMuteOpened; bool get isPollResultOpened;
 /// Create a copy of NoteStatus
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,21 +27,21 @@ $NoteStatusCopyWith<NoteStatus> get copyWith => _$NoteStatusCopyWithImpl<NoteSta
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'NoteStatus'))
-    ..add(DiagnosticsProperty('isCwOpened', isCwOpened))..add(DiagnosticsProperty('isLongVisible', isLongVisible))..add(DiagnosticsProperty('isReactionedRenote', isReactionedRenote))..add(DiagnosticsProperty('isLongVisibleInitialized', isLongVisibleInitialized))..add(DiagnosticsProperty('isIncludeMuteWord', isIncludeMuteWord))..add(DiagnosticsProperty('isMuteOpened', isMuteOpened));
+    ..add(DiagnosticsProperty('isCwOpened', isCwOpened))..add(DiagnosticsProperty('isLongVisible', isLongVisible))..add(DiagnosticsProperty('isReactionedRenote', isReactionedRenote))..add(DiagnosticsProperty('isLongVisibleInitialized', isLongVisibleInitialized))..add(DiagnosticsProperty('isIncludeMuteWord', isIncludeMuteWord))..add(DiagnosticsProperty('isMuteOpened', isMuteOpened))..add(DiagnosticsProperty('isPollResultOpened', isPollResultOpened));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteStatus&&(identical(other.isCwOpened, isCwOpened) || other.isCwOpened == isCwOpened)&&(identical(other.isLongVisible, isLongVisible) || other.isLongVisible == isLongVisible)&&(identical(other.isReactionedRenote, isReactionedRenote) || other.isReactionedRenote == isReactionedRenote)&&(identical(other.isLongVisibleInitialized, isLongVisibleInitialized) || other.isLongVisibleInitialized == isLongVisibleInitialized)&&(identical(other.isIncludeMuteWord, isIncludeMuteWord) || other.isIncludeMuteWord == isIncludeMuteWord)&&(identical(other.isMuteOpened, isMuteOpened) || other.isMuteOpened == isMuteOpened));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoteStatus&&(identical(other.isCwOpened, isCwOpened) || other.isCwOpened == isCwOpened)&&(identical(other.isLongVisible, isLongVisible) || other.isLongVisible == isLongVisible)&&(identical(other.isReactionedRenote, isReactionedRenote) || other.isReactionedRenote == isReactionedRenote)&&(identical(other.isLongVisibleInitialized, isLongVisibleInitialized) || other.isLongVisibleInitialized == isLongVisibleInitialized)&&(identical(other.isIncludeMuteWord, isIncludeMuteWord) || other.isIncludeMuteWord == isIncludeMuteWord)&&(identical(other.isMuteOpened, isMuteOpened) || other.isMuteOpened == isMuteOpened)&&(identical(other.isPollResultOpened, isPollResultOpened) || other.isPollResultOpened == isPollResultOpened));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isCwOpened,isLongVisible,isReactionedRenote,isLongVisibleInitialized,isIncludeMuteWord,isMuteOpened);
+int get hashCode => Object.hash(runtimeType,isCwOpened,isLongVisible,isReactionedRenote,isLongVisibleInitialized,isIncludeMuteWord,isMuteOpened,isPollResultOpened);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'NoteStatus(isCwOpened: $isCwOpened, isLongVisible: $isLongVisible, isReactionedRenote: $isReactionedRenote, isLongVisibleInitialized: $isLongVisibleInitialized, isIncludeMuteWord: $isIncludeMuteWord, isMuteOpened: $isMuteOpened)';
+  return 'NoteStatus(isCwOpened: $isCwOpened, isLongVisible: $isLongVisible, isReactionedRenote: $isReactionedRenote, isLongVisibleInitialized: $isLongVisibleInitialized, isIncludeMuteWord: $isIncludeMuteWord, isMuteOpened: $isMuteOpened, isPollResultOpened: $isPollResultOpened)';
 }
 
 
@@ -52,7 +52,7 @@ abstract mixin class $NoteStatusCopyWith<$Res>  {
   factory $NoteStatusCopyWith(NoteStatus value, $Res Function(NoteStatus) _then) = _$NoteStatusCopyWithImpl;
 @useResult
 $Res call({
- bool isCwOpened, bool isLongVisible, bool isReactionedRenote, bool isLongVisibleInitialized, bool isIncludeMuteWord, bool isMuteOpened
+ bool isCwOpened, bool isLongVisible, bool isReactionedRenote, bool isLongVisibleInitialized, bool isIncludeMuteWord, bool isMuteOpened, bool isPollResultOpened
 });
 
 
@@ -69,7 +69,7 @@ class _$NoteStatusCopyWithImpl<$Res>
 
 /// Create a copy of NoteStatus
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isCwOpened = null,Object? isLongVisible = null,Object? isReactionedRenote = null,Object? isLongVisibleInitialized = null,Object? isIncludeMuteWord = null,Object? isMuteOpened = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isCwOpened = null,Object? isLongVisible = null,Object? isReactionedRenote = null,Object? isLongVisibleInitialized = null,Object? isIncludeMuteWord = null,Object? isMuteOpened = null,Object? isPollResultOpened = null,}) {
   return _then(_self.copyWith(
 isCwOpened: null == isCwOpened ? _self.isCwOpened : isCwOpened // ignore: cast_nullable_to_non_nullable
 as bool,isLongVisible: null == isLongVisible ? _self.isLongVisible : isLongVisible // ignore: cast_nullable_to_non_nullable
@@ -77,6 +77,7 @@ as bool,isReactionedRenote: null == isReactionedRenote ? _self.isReactionedRenot
 as bool,isLongVisibleInitialized: null == isLongVisibleInitialized ? _self.isLongVisibleInitialized : isLongVisibleInitialized // ignore: cast_nullable_to_non_nullable
 as bool,isIncludeMuteWord: null == isIncludeMuteWord ? _self.isIncludeMuteWord : isIncludeMuteWord // ignore: cast_nullable_to_non_nullable
 as bool,isMuteOpened: null == isMuteOpened ? _self.isMuteOpened : isMuteOpened // ignore: cast_nullable_to_non_nullable
+as bool,isPollResultOpened: null == isPollResultOpened ? _self.isPollResultOpened : isPollResultOpened // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -88,7 +89,7 @@ as bool,
 
 
 class _NoteStatus with DiagnosticableTreeMixin implements NoteStatus {
-  const _NoteStatus({required this.isCwOpened, required this.isLongVisible, required this.isReactionedRenote, required this.isLongVisibleInitialized, required this.isIncludeMuteWord, required this.isMuteOpened});
+  const _NoteStatus({required this.isCwOpened, required this.isLongVisible, required this.isReactionedRenote, required this.isLongVisibleInitialized, required this.isIncludeMuteWord, required this.isMuteOpened, required this.isPollResultOpened});
   
 
 @override final  bool isCwOpened;
@@ -97,6 +98,7 @@ class _NoteStatus with DiagnosticableTreeMixin implements NoteStatus {
 @override final  bool isLongVisibleInitialized;
 @override final  bool isIncludeMuteWord;
 @override final  bool isMuteOpened;
+@override final  bool isPollResultOpened;
 
 /// Create a copy of NoteStatus
 /// with the given fields replaced by the non-null parameter values.
@@ -109,21 +111,21 @@ _$NoteStatusCopyWith<_NoteStatus> get copyWith => __$NoteStatusCopyWithImpl<_Not
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'NoteStatus'))
-    ..add(DiagnosticsProperty('isCwOpened', isCwOpened))..add(DiagnosticsProperty('isLongVisible', isLongVisible))..add(DiagnosticsProperty('isReactionedRenote', isReactionedRenote))..add(DiagnosticsProperty('isLongVisibleInitialized', isLongVisibleInitialized))..add(DiagnosticsProperty('isIncludeMuteWord', isIncludeMuteWord))..add(DiagnosticsProperty('isMuteOpened', isMuteOpened));
+    ..add(DiagnosticsProperty('isCwOpened', isCwOpened))..add(DiagnosticsProperty('isLongVisible', isLongVisible))..add(DiagnosticsProperty('isReactionedRenote', isReactionedRenote))..add(DiagnosticsProperty('isLongVisibleInitialized', isLongVisibleInitialized))..add(DiagnosticsProperty('isIncludeMuteWord', isIncludeMuteWord))..add(DiagnosticsProperty('isMuteOpened', isMuteOpened))..add(DiagnosticsProperty('isPollResultOpened', isPollResultOpened));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteStatus&&(identical(other.isCwOpened, isCwOpened) || other.isCwOpened == isCwOpened)&&(identical(other.isLongVisible, isLongVisible) || other.isLongVisible == isLongVisible)&&(identical(other.isReactionedRenote, isReactionedRenote) || other.isReactionedRenote == isReactionedRenote)&&(identical(other.isLongVisibleInitialized, isLongVisibleInitialized) || other.isLongVisibleInitialized == isLongVisibleInitialized)&&(identical(other.isIncludeMuteWord, isIncludeMuteWord) || other.isIncludeMuteWord == isIncludeMuteWord)&&(identical(other.isMuteOpened, isMuteOpened) || other.isMuteOpened == isMuteOpened));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoteStatus&&(identical(other.isCwOpened, isCwOpened) || other.isCwOpened == isCwOpened)&&(identical(other.isLongVisible, isLongVisible) || other.isLongVisible == isLongVisible)&&(identical(other.isReactionedRenote, isReactionedRenote) || other.isReactionedRenote == isReactionedRenote)&&(identical(other.isLongVisibleInitialized, isLongVisibleInitialized) || other.isLongVisibleInitialized == isLongVisibleInitialized)&&(identical(other.isIncludeMuteWord, isIncludeMuteWord) || other.isIncludeMuteWord == isIncludeMuteWord)&&(identical(other.isMuteOpened, isMuteOpened) || other.isMuteOpened == isMuteOpened)&&(identical(other.isPollResultOpened, isPollResultOpened) || other.isPollResultOpened == isPollResultOpened));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isCwOpened,isLongVisible,isReactionedRenote,isLongVisibleInitialized,isIncludeMuteWord,isMuteOpened);
+int get hashCode => Object.hash(runtimeType,isCwOpened,isLongVisible,isReactionedRenote,isLongVisibleInitialized,isIncludeMuteWord,isMuteOpened,isPollResultOpened);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'NoteStatus(isCwOpened: $isCwOpened, isLongVisible: $isLongVisible, isReactionedRenote: $isReactionedRenote, isLongVisibleInitialized: $isLongVisibleInitialized, isIncludeMuteWord: $isIncludeMuteWord, isMuteOpened: $isMuteOpened)';
+  return 'NoteStatus(isCwOpened: $isCwOpened, isLongVisible: $isLongVisible, isReactionedRenote: $isReactionedRenote, isLongVisibleInitialized: $isLongVisibleInitialized, isIncludeMuteWord: $isIncludeMuteWord, isMuteOpened: $isMuteOpened, isPollResultOpened: $isPollResultOpened)';
 }
 
 
@@ -134,7 +136,7 @@ abstract mixin class _$NoteStatusCopyWith<$Res> implements $NoteStatusCopyWith<$
   factory _$NoteStatusCopyWith(_NoteStatus value, $Res Function(_NoteStatus) _then) = __$NoteStatusCopyWithImpl;
 @override @useResult
 $Res call({
- bool isCwOpened, bool isLongVisible, bool isReactionedRenote, bool isLongVisibleInitialized, bool isIncludeMuteWord, bool isMuteOpened
+ bool isCwOpened, bool isLongVisible, bool isReactionedRenote, bool isLongVisibleInitialized, bool isIncludeMuteWord, bool isMuteOpened, bool isPollResultOpened
 });
 
 
@@ -151,7 +153,7 @@ class __$NoteStatusCopyWithImpl<$Res>
 
 /// Create a copy of NoteStatus
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isCwOpened = null,Object? isLongVisible = null,Object? isReactionedRenote = null,Object? isLongVisibleInitialized = null,Object? isIncludeMuteWord = null,Object? isMuteOpened = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isCwOpened = null,Object? isLongVisible = null,Object? isReactionedRenote = null,Object? isLongVisibleInitialized = null,Object? isIncludeMuteWord = null,Object? isMuteOpened = null,Object? isPollResultOpened = null,}) {
   return _then(_NoteStatus(
 isCwOpened: null == isCwOpened ? _self.isCwOpened : isCwOpened // ignore: cast_nullable_to_non_nullable
 as bool,isLongVisible: null == isLongVisible ? _self.isLongVisible : isLongVisible // ignore: cast_nullable_to_non_nullable
@@ -159,6 +161,7 @@ as bool,isReactionedRenote: null == isReactionedRenote ? _self.isReactionedRenot
 as bool,isLongVisibleInitialized: null == isLongVisibleInitialized ? _self.isLongVisibleInitialized : isLongVisibleInitialized // ignore: cast_nullable_to_non_nullable
 as bool,isIncludeMuteWord: null == isIncludeMuteWord ? _self.isIncludeMuteWord : isIncludeMuteWord // ignore: cast_nullable_to_non_nullable
 as bool,isMuteOpened: null == isMuteOpened ? _self.isMuteOpened : isMuteOpened // ignore: cast_nullable_to_non_nullable
+as bool,isPollResultOpened: null == isPollResultOpened ? _self.isPollResultOpened : isPollResultOpened // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

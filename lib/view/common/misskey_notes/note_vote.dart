@@ -76,7 +76,9 @@ class NoteVote extends HookConsumerWidget {
         : poll.expiresAt?.difference(DateTime.now()).format(context);
     final colorTheme = AppTheme.of(context).colorTheme;
 
-    final isOpened = useState(useMemoized(() => !isAnyVotable(ref)));
+    // Hook状態ではなく、NoteRepositoryの状態を使用
+    final noteRepository = ref.watch(notesProvider(ref.read(accountContextProvider).getAccount));
+    final isOpened = noteRepository.getPollResultOpened(displayNote.id);
 
     ref.watch(noteVoteNotifierProvider(displayNote));
 
@@ -94,8 +96,8 @@ class NoteVote extends HookConsumerWidget {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(5),
-                color: isOpened.value ? null : colorTheme.accentedBackground,
-                gradient: isOpened.value
+                color: isOpened ? null : colorTheme.accentedBackground,
+                gradient: isOpened
                     ? LinearGradient(
                         colors: [
                           colorTheme.buttonGradateA,
@@ -124,9 +126,13 @@ class NoteVote extends HookConsumerWidget {
                   if (!isVotable(choice.index, ref)) {
                     return;
                   }
-                  isOpened.value = await ref
+                  final success = await ref
                       .read(noteVoteNotifierProvider(displayNote).notifier)
                       .vote(choice.index);
+                  if (success) {
+                    // 投票成功時は結果を表示状態にする
+                    noteRepository.setPollResultOpened(displayNote.id, true);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(2),
@@ -165,7 +171,7 @@ class NoteVote extends HookConsumerWidget {
                           const WidgetSpan(
                             child: Padding(padding: EdgeInsets.only(left: 5)),
                           ),
-                          if (isOpened.value)
+                          if (isOpened)
                             TextSpan(
                               text: S
                                   .of(context)
@@ -189,13 +195,13 @@ class NoteVote extends HookConsumerWidget {
               TextSpan(
                 text: isExpired
                     ? S.of(context).finished
-                    : !isOpened.value
+                    : !isOpened
                     ? S.of(context).openResult
                     : isAnyVotable(ref)
                     ? S.of(context).doVoting
                     : S.of(context).alreadyVoted,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => isOpened.value = !isOpened.value,
+                  ..onTap = () => noteRepository.togglePollResult(displayNote.id),
               ),
               const WidgetSpan(
                 child: Padding(padding: EdgeInsets.only(left: 10)),
