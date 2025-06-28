@@ -4,7 +4,7 @@ part "desktop_settings.freezed.dart";
 part "desktop_settings.g.dart";
 
 @freezed
-class DesktopSettings with _$DesktopSettings {
+abstract class DesktopSettings with _$DesktopSettings {
   const factory DesktopSettings({
     @Default(DesktopWindowSettings()) DesktopWindowSettings window,
   }) = _DesktopSettings;
@@ -14,7 +14,7 @@ class DesktopSettings with _$DesktopSettings {
 }
 
 @freezed
-class DesktopWindowSettings with _$DesktopWindowSettings {
+abstract class DesktopWindowSettings with _$DesktopWindowSettings {
   const factory DesktopWindowSettings({
     @Default(null) double? x,
     @Default(null) double? y,

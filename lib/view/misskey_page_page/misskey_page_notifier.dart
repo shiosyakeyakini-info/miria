@@ -1,4 +1,4 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -9,7 +9,7 @@ part "misskey_page_notifier.freezed.dart";
 part "misskey_page_notifier.g.dart";
 
 @freezed
-class MisskeyPageNotifierState with _$MisskeyPageNotifierState {
+abstract class MisskeyPageNotifierState with _$MisskeyPageNotifierState {
   const factory MisskeyPageNotifierState({
     required Page page,
     AsyncValue<void>? likeOr,

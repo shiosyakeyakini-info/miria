@@ -7,7 +7,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
@@ -30,7 +30,7 @@ part "note_modal_sheet.freezed.dart";
 part "note_modal_sheet.g.dart";
 
 @freezed
-class NoteModalSheetState with _$NoteModalSheetState {
+abstract class NoteModalSheetState with _$NoteModalSheetState {
   factory NoteModalSheetState({
     AsyncValue<NotesStateResponse>? noteState,
     @Default(false) bool isSharingMode,

@@ -1,6 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
@@ -12,7 +12,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "antenna_select_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<Antenna>> _antennas(_AntennasRef ref) async =>
+Future<List<Antenna>> _antennas(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).antennas.list()).toList();
 
 @RoutePage<Antenna>()

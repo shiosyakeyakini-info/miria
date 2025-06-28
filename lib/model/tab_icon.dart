@@ -4,7 +4,7 @@ part "tab_icon.freezed.dart";
 part "tab_icon.g.dart";
 
 @freezed
-class TabIcon with _$TabIcon {
+abstract class TabIcon with _$TabIcon {
   const factory TabIcon({
     int? codePoint,
     String? customEmojiName,

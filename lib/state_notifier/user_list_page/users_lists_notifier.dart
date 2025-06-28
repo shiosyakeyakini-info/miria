@@ -1,4 +1,4 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";

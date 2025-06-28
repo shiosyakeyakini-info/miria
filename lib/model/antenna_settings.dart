@@ -4,7 +4,7 @@ import "package:misskey_dart/misskey_dart.dart";
 part "antenna_settings.freezed.dart";
 
 @freezed
-class AntennaSettings with _$AntennaSettings {
+abstract class AntennaSettings with _$AntennaSettings {
   const factory AntennaSettings({
     @Default("") String name,
     @Default(AntennaSource.all) AntennaSource src,

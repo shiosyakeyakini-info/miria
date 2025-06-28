@@ -1,6 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/model/users_list_settings.dart";
@@ -13,11 +13,11 @@ import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-final _usersListNotifierProvider = AutoDisposeAsyncNotifierProviderFamily<
+final _usersListNotifierProvider = AsyncNotifierProviderFamily<
     _UsersListNotifier, UsersList, (Misskey, String)>(_UsersListNotifier.new);
 
 class _UsersListNotifier
-    extends AutoDisposeFamilyAsyncNotifier<UsersList, (Misskey, String)> {
+    extends FamilyAsyncNotifier<UsersList, (Misskey, String)> {
   @override
   Future<UsersList> build((Misskey, String) arg) async {
     final response = await _misskey.users.list.show(
@@ -50,13 +50,13 @@ class _UsersListNotifier
   }
 }
 
-final _usersListUsersProvider = AutoDisposeAsyncNotifierProviderFamily<
+final _usersListUsersProvider = AsyncNotifierProviderFamily<
     _UsersListUsers, List<User>, (Misskey, String)>(
   _UsersListUsers.new,
 );
 
 class _UsersListUsers
-    extends AutoDisposeFamilyAsyncNotifier<List<User>, (Misskey, String)> {
+    extends FamilyAsyncNotifier<List<User>, (Misskey, String)> {
   @override
   Future<List<User>> build((Misskey, String) arg) async {
     final list = await ref.watch(_usersListNotifierProvider(arg).future);

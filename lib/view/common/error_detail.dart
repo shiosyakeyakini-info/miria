@@ -3,7 +3,7 @@ import "dart:io";
 
 import "package:dio/dio.dart";
 import "package:flutter/cupertino.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 class ErrorDetail extends StatelessWidget {
   final Object? error;

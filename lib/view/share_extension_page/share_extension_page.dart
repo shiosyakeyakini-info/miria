@@ -13,7 +13,7 @@ part "share_extension_page.freezed.dart";
 part "share_extension_page.g.dart";
 
 @freezed
-class ShareExtensionData with _$ShareExtensionData {
+abstract class ShareExtensionData with _$ShareExtensionData {
   factory ShareExtensionData({
     required List<String> text,
     required List<SharedFiles> files,
@@ -24,7 +24,7 @@ class ShareExtensionData with _$ShareExtensionData {
 }
 
 @freezed
-class SharedFiles with _$SharedFiles {
+abstract class SharedFiles with _$SharedFiles {
   factory SharedFiles({
     required String path,
     required int type,

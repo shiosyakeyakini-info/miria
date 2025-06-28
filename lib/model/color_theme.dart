@@ -8,7 +8,7 @@ import "package:miria/model/misskey_theme.dart";
 part "color_theme.freezed.dart";
 
 @freezed
-class ColorTheme with _$ColorTheme {
+abstract class ColorTheme with _$ColorTheme {
   const factory ColorTheme({
     required String id,
     required String name,

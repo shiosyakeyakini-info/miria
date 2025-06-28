@@ -5,7 +5,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 2.0.2+117
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   collection: ^1.16.0
@@ -15,16 +15,18 @@ dependencies:
     sdk: flutter
   flutter_html: ^3.0.0-beta.2
   misskey_dart:
-    git: https://github.com/shiosyakeyakini-info/misskey_dart.git
+    git: 
+      url: https://github.com/shiosyakeyakini-info/misskey_dart.git
+      ref: feature/migrate_freezed3
   mfm: ^1.0.5
   tuple: ^2.0.1
   path_provider: ^2.0.14
   dio: ^5.1.1
   path: ^1.8.2
-  auto_route: ^8.1.3
-  freezed_annotation: ^2.2.0
+  auto_route: ^9.3.0+1
+  freezed_annotation: ^3.0.0
   url_launcher: ^6.1.10
-  intl: ^0.19.0
+  intl: ^0.20.2
   scrollable_positioned_list: ^0.3.6
   kana_kit: ^2.0.0
   cached_network_image: ^3.2.3
@@ -34,49 +36,49 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   google_fonts: ^6.1.0
   uuid: ^4.4.0
-  file_picker: ^8.0.3
+  file_picker: ^10.2.0
   package_info_plus: ^8.0.0
   reorderables: ^0.6.0
-  confetti: ^0.7.0
+  confetti: ^0.8.0
   flutter_highlighting: ^0.9.0+11.8.0
   highlighting: ^0.9.0+11.8.0
-  dotted_border: ^2.0.0+3
+  dotted_border: ^3.0.1
   visibility_detector: ^0.4.0+2
   percent_indicator: ^4.2.3
-  fl_chart: ^0.68.0
-  receive_sharing_intent: 1.5.4
-  share_plus: ^9.0.0
+  fl_chart: ^1.0.0
+  receive_sharing_intent: ^1.8.1
+  share_plus: ^11.0.0
   mfm_parser: ^1.0.3
   flutter_svg: ^2.0.6
   image_editor: ^1.3.0
   json5: ^0.8.0
   file: ^7.0.0
   image_gallery_saver: ^2.0.3
-  permission_handler: ^11.3.1
-  device_info_plus: ^10.1.0
+  permission_handler: ^12.0.0+1
+  device_info_plus: ^11.5.0
   colorfilter_generator: ^0.0.8
   matrix2d: ^1.0.4
   flutter_image_compress: ^2.0.4
   webview_flutter: ^4.3.0
-  webview_flutter_android: ^3.12.0
+  webview_flutter_android: ^4.7.0
   webview_flutter_wkwebview: ^3.9.0
   media_kit: ^1.1.11
   media_kit_video: ^1.2.5
   media_kit_libs_video: ^1.0.5
   flutter_colorpicker: ^1.1.0
   volume_controller: ^2.0.7
-  window_manager: ^0.4.3
+  window_manager: ^0.5.0
   shared_preference_app_group: ^1.0.0+1
   stack_trace: ^1.11.1
   flutter_cache_manager: ^3.3.2
-  riverpod_annotation: ^3.0.0-dev.3
+  riverpod_annotation: ^3.0.0-dev.16
   simple_logger: ^1.9.0+3
-  hooks_riverpod: ^3.0.0-dev.3
-  flutter_hooks: ^0.20.5
+  hooks_riverpod: ^3.0.0-dev.16
+  flutter_hooks: ^0.21.2
   punycode: ^1.0.0
   image: ^4.3.0
   flutter_twemoji: ^1.0.1
-  mime: ^1.0.6
+  mime: ^2.0.0
 
 dependency_overrides:
   image_editor:
@@ -110,16 +112,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
-  auto_route_generator: ^8.0.0
+  flutter_lints: ^6.0.0
+  auto_route_generator: ^9.0.0
   build_runner: ^2.3.3
-  freezed: ^2.3.2
+  freezed: ^3.0.6
   json_serializable: ^6.6.1
   flutter_launcher_icons: ^0.14.1
-  mockito: ^5.4.2
+  mockito: ^5.4.6
   cider: ^0.2.3
-  riverpod_generator: ^3.0.0-dev.3
-  riverpod_lint: ^3.0.0-dev.4
+  riverpod_generator: ^3.0.0-dev.16
+  riverpod_lint: ^3.0.0-dev.16
 
 flutter:
   uses-material-design: true

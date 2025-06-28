@@ -1,4 +1,4 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
@@ -13,7 +13,7 @@ part "user_info_notifier.freezed.dart";
 part "user_info_notifier.g.dart";
 
 @freezed
-class UserInfo with _$UserInfo {
+abstract class UserInfo with _$UserInfo {
   const factory UserInfo({
     required String userId,
     required UserDetailed response,
@@ -31,7 +31,7 @@ class UserInfo with _$UserInfo {
 // UserInfoNotifierが直接accountContextにdependenciesを設定したり、引数のデフォルトにしたりすることが現状できない。
 @Riverpod(dependencies: [accountContext])
 Raw<UserInfoNotifier> userInfoNotifierProxy(
-  UserInfoNotifierProxyRef ref,
+  Ref ref,
   String userId,
 ) {
   return ref.read(
@@ -43,7 +43,7 @@ Raw<UserInfoNotifier> userInfoNotifierProxy(
 }
 
 @Riverpod(dependencies: [accountContext])
-AsyncValue<UserInfo> userInfoProxy(UserInfoProxyRef ref, String userId) {
+AsyncValue<UserInfo> userInfoProxy(Ref ref, String userId) {
   return ref.watch(
     userInfoNotifierProvider(
       userId: userId,

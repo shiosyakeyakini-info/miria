@@ -15,7 +15,7 @@ final _instanceInfosProvider = AsyncNotifierProvider.autoDispose<_InstanceInfos,
 );
 
 class _InstanceInfos
-    extends AutoDisposeAsyncNotifier<List<JoinMisskeyInstanceInfo>> {
+    extends AsyncNotifier<List<JoinMisskeyInstanceInfo>> {
   @override
   Future<List<JoinMisskeyInstanceInfo>> build() async {
     final response =

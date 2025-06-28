@@ -3,7 +3,7 @@ import "dart:async";
 import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
@@ -13,14 +13,14 @@ part "dialog_state.freezed.dart";
 part "dialog_state.g.dart";
 
 @freezed
-class DialogsState with _$DialogsState {
+abstract class DialogsState with _$DialogsState {
   factory DialogsState({
     @Default([]) List<DialogData> dialogs,
   }) = _DialogsState;
 }
 
 @freezed
-class DialogData with _$DialogData {
+abstract class DialogData with _$DialogData {
   factory DialogData({
     required String Function(BuildContext context) message,
     required List<String> Function(BuildContext context) actions,

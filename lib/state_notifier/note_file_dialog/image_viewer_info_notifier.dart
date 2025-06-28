@@ -43,7 +43,7 @@ class ImageViewerInfoNotifier extends _$ImageViewerInfoNotifier {
 }
 
 @freezed
-class ImageViewerInfo with _$ImageViewerInfo {
+abstract class ImageViewerInfo with _$ImageViewerInfo {
   const factory ImageViewerInfo({
     @Default(1.0) double scale,
     @Default(1.0) double lastScale,

@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/user_extension.dart";
@@ -16,7 +16,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "antenna_settings_dialog.g.dart";
 
 @Riverpod(dependencies: [])
-AntennaSettings _initialSettings(_InitialSettingsRef ref) =>
+AntennaSettings _initialSettings(Ref ref) =>
     throw UnimplementedError();
 
 @Riverpod(dependencies: [_initialSettings])
@@ -96,7 +96,7 @@ class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UsersList>> _usersListList(_UsersListListRef ref) async =>
+Future<List<UsersList>> _usersListList(Ref ref) async =>
     [...await ref.read(misskeyGetContextProvider).users.list.list()];
 
 @RoutePage<AntennaSettings>()

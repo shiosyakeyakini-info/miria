@@ -18,7 +18,7 @@ final inputComplementDelayedProvider = Provider((ref) => 300);
 
 class InputComplement extends HookConsumerWidget {
   final TextEditingController controller;
-  final AutoDisposeChangeNotifierProvider<FocusNode> focusNode;
+  final ChangeNotifierProvider<FocusNode> focusNode;
 
   const InputComplement({
     required this.controller,
@@ -88,6 +88,7 @@ class InputComplement extends HookConsumerWidget {
                       controller: controller,
                       focusNode: focusNode,
                     ),
+                  _ => BasicKeyboard(controller: controller, focusNode: focusNode),
                 },
               ),
             ),

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,158 +10,136 @@ part of 'users_list_settings.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$UsersListSettings {
-  String get name => throw _privateConstructorUsedError;
-  bool get isPublic => throw _privateConstructorUsedError;
 
-  /// Create a copy of UsersListSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $UsersListSettingsCopyWith<UsersListSettings> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get name; bool get isPublic;
+/// Create a copy of UsersListSettings
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UsersListSettingsCopyWith<UsersListSettings> get copyWith => _$UsersListSettingsCopyWithImpl<UsersListSettings>(this as UsersListSettings, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsersListSettings&&(identical(other.name, name) || other.name == name)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,name,isPublic);
+
+@override
+String toString() {
+  return 'UsersListSettings(name: $name, isPublic: $isPublic)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $UsersListSettingsCopyWith<$Res> {
-  factory $UsersListSettingsCopyWith(
-          UsersListSettings value, $Res Function(UsersListSettings) then) =
-      _$UsersListSettingsCopyWithImpl<$Res, UsersListSettings>;
-  @useResult
-  $Res call({String name, bool isPublic});
-}
+abstract mixin class $UsersListSettingsCopyWith<$Res>  {
+  factory $UsersListSettingsCopyWith(UsersListSettings value, $Res Function(UsersListSettings) _then) = _$UsersListSettingsCopyWithImpl;
+@useResult
+$Res call({
+ String name, bool isPublic
+});
 
+
+
+
+}
 /// @nodoc
-class _$UsersListSettingsCopyWithImpl<$Res, $Val extends UsersListSettings>
+class _$UsersListSettingsCopyWithImpl<$Res>
     implements $UsersListSettingsCopyWith<$Res> {
-  _$UsersListSettingsCopyWithImpl(this._value, this._then);
+  _$UsersListSettingsCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final UsersListSettings _self;
+  final $Res Function(UsersListSettings) _then;
 
-  /// Create a copy of UsersListSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? isPublic = null,
-  }) {
-    return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPublic: null == isPublic
-          ? _value.isPublic
-          : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
-  }
+/// Create a copy of UsersListSettings
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? isPublic = null,}) {
+  return _then(_self.copyWith(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
 }
 
-/// @nodoc
-abstract class _$$UsersListSettingsImplCopyWith<$Res>
-    implements $UsersListSettingsCopyWith<$Res> {
-  factory _$$UsersListSettingsImplCopyWith(_$UsersListSettingsImpl value,
-          $Res Function(_$UsersListSettingsImpl) then) =
-      __$$UsersListSettingsImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String name, bool isPublic});
 }
 
-/// @nodoc
-class __$$UsersListSettingsImplCopyWithImpl<$Res>
-    extends _$UsersListSettingsCopyWithImpl<$Res, _$UsersListSettingsImpl>
-    implements _$$UsersListSettingsImplCopyWith<$Res> {
-  __$$UsersListSettingsImplCopyWithImpl(_$UsersListSettingsImpl _value,
-      $Res Function(_$UsersListSettingsImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of UsersListSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? isPublic = null,
-  }) {
-    return _then(_$UsersListSettingsImpl(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPublic: null == isPublic
-          ? _value.isPublic
-          : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$UsersListSettingsImpl extends _UsersListSettings {
-  const _$UsersListSettingsImpl({this.name = "", this.isPublic = false})
-      : super._();
 
-  @override
-  @JsonKey()
-  final String name;
-  @override
-  @JsonKey()
-  final bool isPublic;
+class _UsersListSettings extends UsersListSettings {
+  const _UsersListSettings({this.name = "", this.isPublic = false}): super._();
+  
 
-  @override
-  String toString() {
-    return 'UsersListSettings(name: $name, isPublic: $isPublic)';
-  }
+@override@JsonKey() final  String name;
+@override@JsonKey() final  bool isPublic;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UsersListSettingsImpl &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.isPublic, isPublic) ||
-                other.isPublic == isPublic));
-  }
+/// Create a copy of UsersListSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UsersListSettingsCopyWith<_UsersListSettings> get copyWith => __$UsersListSettingsCopyWithImpl<_UsersListSettings>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, name, isPublic);
 
-  /// Create a copy of UsersListSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$UsersListSettingsImplCopyWith<_$UsersListSettingsImpl> get copyWith =>
-      __$$UsersListSettingsImplCopyWithImpl<_$UsersListSettingsImpl>(
-          this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UsersListSettings&&(identical(other.name, name) || other.name == name)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
 }
 
-abstract class _UsersListSettings extends UsersListSettings {
-  const factory _UsersListSettings({final String name, final bool isPublic}) =
-      _$UsersListSettingsImpl;
-  const _UsersListSettings._() : super._();
 
-  @override
-  String get name;
-  @override
-  bool get isPublic;
+@override
+int get hashCode => Object.hash(runtimeType,name,isPublic);
 
-  /// Create a copy of UsersListSettings
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UsersListSettingsImplCopyWith<_$UsersListSettingsImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'UsersListSettings(name: $name, isPublic: $isPublic)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UsersListSettingsCopyWith<$Res> implements $UsersListSettingsCopyWith<$Res> {
+  factory _$UsersListSettingsCopyWith(_UsersListSettings value, $Res Function(_UsersListSettings) _then) = __$UsersListSettingsCopyWithImpl;
+@override @useResult
+$Res call({
+ String name, bool isPublic
+});
+
+
+
+
+}
+/// @nodoc
+class __$UsersListSettingsCopyWithImpl<$Res>
+    implements _$UsersListSettingsCopyWith<$Res> {
+  __$UsersListSettingsCopyWithImpl(this._self, this._then);
+
+  final _UsersListSettings _self;
+  final $Res Function(_UsersListSettings) _then;
+
+/// Create a copy of UsersListSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? isPublic = null,}) {
+  return _then(_UsersListSettings(
+name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+// dart format on

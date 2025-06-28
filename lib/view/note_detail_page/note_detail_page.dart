@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
 import "package:miria/providers.dart";
@@ -15,7 +15,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "note_detail_page.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext, notesWith])
-Future<Note> _notesShow(_NotesShowRef ref, String noteId) async {
+Future<Note> _notesShow(Ref ref, String noteId) async {
   final note = await ref
       .read(misskeyGetContextProvider)
       .notes
@@ -27,7 +27,7 @@ Future<Note> _notesShow(_NotesShowRef ref, String noteId) async {
 }
 
 @Riverpod(dependencies: [misskeyGetContext, notesWith])
-Future<List<Note>> _conversation(_ConversationRef ref, String noteId) async {
+Future<List<Note>> _conversation(Ref ref, String noteId) async {
   final conversationResult = await ref
       .read(misskeyGetContextProvider)
       .notes

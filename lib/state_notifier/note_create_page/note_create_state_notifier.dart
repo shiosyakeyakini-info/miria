@@ -5,7 +5,7 @@ import "package:dio/dio.dart";
 import "package:file/file.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:image/image.dart";
@@ -59,7 +59,7 @@ enum VoteExpireDurationType {
 }
 
 @freezed
-class NoteCreate with _$NoteCreate {
+abstract class NoteCreate with _$NoteCreate {
   const factory NoteCreate({
     required NoteVisibility noteVisibility,
     required bool localOnly,
@@ -89,7 +89,7 @@ class NoteCreate with _$NoteCreate {
 }
 
 @freezed
-class NoteCreateChannel with _$NoteCreateChannel {
+abstract class NoteCreateChannel with _$NoteCreateChannel {
   const factory NoteCreateChannel({
     required String id,
     required String name,

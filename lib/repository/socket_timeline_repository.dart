@@ -18,7 +18,7 @@ part "socket_timeline_repository.g.dart";
 
 @Riverpod(keepAlive: true)
 Future<StreamingController> misskeyStreaming(
-  MisskeyStreamingRef ref,
+  Ref ref,
   Misskey misskey,
 ) async {
   return await misskey.streamingService.stream();

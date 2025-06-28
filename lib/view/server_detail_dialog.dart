@@ -5,7 +5,7 @@ import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
@@ -20,21 +20,21 @@ import "package:uuid/uuid.dart";
 part "server_detail_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<int> _onlineCounts(_OnlineCountsRef ref) async {
+Future<int> _onlineCounts(Ref ref) async {
   final onlineUserCountsResponse =
       await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
   return onlineUserCountsResponse.count;
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<int> _totalMemories(_TotalMemoriesRef ref) async {
+Future<int> _totalMemories(Ref ref) async {
   final serverInfoResponse =
       await ref.read(misskeyGetContextProvider).serverInfo();
   return serverInfoResponse.mem.total;
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<int> _ping(_PingRef ref) async {
+Future<int> _ping(Ref ref) async {
   final sendDate = DateTime.now();
   final pingResponse = await ref.read(misskeyGetContextProvider).ping();
 

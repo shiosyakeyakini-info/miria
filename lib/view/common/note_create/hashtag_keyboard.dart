@@ -35,7 +35,7 @@ final _filteredHashtagsProvider = NotifierProvider.autoDispose
     .family<_FilteredHashtags, List<String>, Account>(_FilteredHashtags.new);
 
 class _FilteredHashtags
-    extends AutoDisposeFamilyNotifier<List<String>, Account> {
+    extends FamilyNotifier<List<String>, Account> {
   @override
   List<String> build(Account arg) {
     ref.listen(

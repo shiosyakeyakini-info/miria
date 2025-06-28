@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
@@ -16,7 +16,7 @@ part "channel_detail_info.freezed.dart";
 part "channel_detail_info.g.dart";
 
 @freezed
-class ChannelDetailState with _$ChannelDetailState {
+abstract class ChannelDetailState with _$ChannelDetailState {
   factory ChannelDetailState({
     required CommunityChannel channel,
     AsyncValue<void>? follow,

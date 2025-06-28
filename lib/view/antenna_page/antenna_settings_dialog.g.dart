@@ -6,59 +6,151 @@ part of 'antenna_settings_dialog.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$initialSettingsHash() => r'3b39e5af696c3cf1f2c31b32096d8cff96734d61';
-
-/// See also [_initialSettings].
 @ProviderFor(_initialSettings)
-final _initialSettingsProvider = AutoDisposeProvider<AntennaSettings>.internal(
-  _initialSettings,
-  name: r'_initialSettingsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$initialSettingsHash,
-  dependencies: const <ProviderOrFamily>[],
-  allTransitiveDependencies: const <ProviderOrFamily>{},
-);
+const _initialSettingsProvider = _InitialSettingsProvider._();
 
-typedef _InitialSettingsRef = AutoDisposeProviderRef<AntennaSettings>;
-String _$usersListListHash() => r'348c98aa5cbb2c466be69801978f189e9f5a91fc';
+final class _InitialSettingsProvider
+    extends
+        $FunctionalProvider<AntennaSettings, AntennaSettings, AntennaSettings>
+    with $Provider<AntennaSettings> {
+  const _InitialSettingsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_initialSettingsProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[],
+        $allTransitiveDependencies: const <ProviderOrFamily>[],
+      );
 
-/// See also [_usersListList].
-@ProviderFor(_usersListList)
-final _usersListListProvider =
-    AutoDisposeFutureProvider<List<UsersList>>.internal(
-  _usersListList,
-  name: r'_usersListListProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$usersListListHash,
-  dependencies: <ProviderOrFamily>[misskeyGetContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyGetContextProvider,
-    ...?misskeyGetContextProvider.allTransitiveDependencies
-  },
-);
+  @override
+  String debugGetCreateSourceHash() => _$initialSettingsHash();
 
-typedef _UsersListListRef = AutoDisposeFutureProviderRef<List<UsersList>>;
+  @$internal
+  @override
+  $ProviderElement<AntennaSettings> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AntennaSettings create(Ref ref) {
+    return _initialSettings(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AntennaSettings value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AntennaSettings>(value),
+    );
+  }
+}
+
+String _$initialSettingsHash() => r'5e44622c97f922cd7aa8410ac695fa6f5f3351b0';
+
+@ProviderFor(_AntennaSettingsNotifier)
+const _antennaSettingsNotifierProvider = _AntennaSettingsNotifierProvider._();
+
+final class _AntennaSettingsNotifierProvider
+    extends $NotifierProvider<_AntennaSettingsNotifier, AntennaSettings> {
+  const _AntennaSettingsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_antennaSettingsNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[_initialSettingsProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _AntennaSettingsNotifierProvider.$allTransitiveDependencies0,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = _initialSettingsProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$antennaSettingsNotifierHash();
+
+  @$internal
+  @override
+  _AntennaSettingsNotifier create() => _AntennaSettingsNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AntennaSettings value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AntennaSettings>(value),
+    );
+  }
+}
+
 String _$antennaSettingsNotifierHash() =>
     r'a33758bbcc3f54c6eb50d2176d6ed1ce7b54f9b5';
 
-/// See also [_AntennaSettingsNotifier].
-@ProviderFor(_AntennaSettingsNotifier)
-final _antennaSettingsNotifierProvider = AutoDisposeNotifierProvider<
-    _AntennaSettingsNotifier, AntennaSettings>.internal(
-  _AntennaSettingsNotifier.new,
-  name: r'_antennaSettingsNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$antennaSettingsNotifierHash,
-  dependencies: <ProviderOrFamily>[_initialSettingsProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    _initialSettingsProvider,
-    ...?_initialSettingsProvider.allTransitiveDependencies
-  },
-);
+abstract class _$AntennaSettingsNotifier extends $Notifier<AntennaSettings> {
+  AntennaSettings build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AntennaSettings, AntennaSettings>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AntennaSettings, AntennaSettings>,
+              AntennaSettings,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$AntennaSettingsNotifier = AutoDisposeNotifier<AntennaSettings>;
+@ProviderFor(_usersListList)
+const _usersListListProvider = _UsersListListProvider._();
+
+final class _UsersListListProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<UsersList>>,
+          List<UsersList>,
+          FutureOr<List<UsersList>>
+        >
+    with $FutureModifier<List<UsersList>>, $FutureProvider<List<UsersList>> {
+  const _UsersListListProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'_usersListListProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyGetContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          _UsersListListProvider.$allTransitiveDependencies0,
+          _UsersListListProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyGetContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyGetContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$usersListListHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<UsersList>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<UsersList>> create(Ref ref) {
+    return _usersListList(ref);
+  }
+}
+
+String _$usersListListHash() => r'038d168265d5f26396ee6dd063774e9b55055283';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

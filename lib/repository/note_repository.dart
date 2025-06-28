@@ -8,7 +8,7 @@ import "package:misskey_dart/misskey_dart.dart";
 part "note_repository.freezed.dart";
 
 @freezed
-class NoteStatus with _$NoteStatus {
+abstract class NoteStatus with _$NoteStatus {
   const factory NoteStatus({
     required bool isCwOpened,
     required bool isLongVisible,

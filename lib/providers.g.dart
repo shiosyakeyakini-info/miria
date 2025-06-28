@@ -6,1008 +6,785 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'41b696b35e5b56ccb124ee5abab8b893747d2153';
-
-/// See also [dio].
 @ProviderFor(dio)
-final dioProvider = Provider<Dio>.internal(
-  dio,
-  name: r'dioProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$dioHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const dioProvider = DioProvider._();
 
-typedef DioRef = ProviderRef<Dio>;
-String _$fileSystemHash() => r'98684b2a2a8fd9ee5818ec713ba28d29da92c168';
+final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
+  const DioProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dioProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [fileSystem].
-@ProviderFor(fileSystem)
-final fileSystemProvider = Provider<FileSystem>.internal(
-  fileSystem,
-  name: r'fileSystemProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$fileSystemHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+  @override
+  String debugGetCreateSourceHash() => _$dioHash();
 
-typedef FileSystemRef = ProviderRef<FileSystem>;
-String _$misskeyHash() => r'796d9e849aca70f97031c38e646439a01bc5abe5';
+  @$internal
+  @override
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
+  @override
+  Dio create(Ref ref) {
+    return dio(ref);
   }
 
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Dio value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Dio>(value),
+    );
   }
 }
 
-/// See also [misskey].
+String _$dioHash() => r'73be4093313fcb2b7055df1752404e24a2b1f68c';
+
+@ProviderFor(fileSystem)
+const fileSystemProvider = FileSystemProvider._();
+
+final class FileSystemProvider
+    extends $FunctionalProvider<FileSystem, FileSystem, FileSystem>
+    with $Provider<FileSystem> {
+  const FileSystemProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'fileSystemProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$fileSystemHash();
+
+  @$internal
+  @override
+  $ProviderElement<FileSystem> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  FileSystem create(Ref ref) {
+    return fileSystem(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FileSystem value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FileSystem>(value),
+    );
+  }
+}
+
+String _$fileSystemHash() => r'9b96bb59d396159330bbfc15f1c8ea184af0a9b7';
+
 @ProviderFor(misskey)
 @Deprecated(
-    "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain")
-const misskeyProvider = MisskeyFamily();
+  "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
+)
+const misskeyProvider = MisskeyFamily._();
 
-/// See also [misskey].
-class MisskeyFamily extends Family {
-  /// See also [misskey].
-  const MisskeyFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+final class MisskeyProvider
+    extends $FunctionalProvider<Misskey, Misskey, Misskey>
+    with $Provider<Misskey> {
+  const MisskeyProvider._({
+    required MisskeyFamily super.from,
+    required Account super.argument,
+  }) : super(
+         retry: null,
+         name: r'misskeyProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  String debugGetCreateSourceHash() => _$misskeyHash();
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'misskeyProvider';
-
-  /// See also [misskey].
-  MisskeyProvider call(
-    Account account,
-  ) {
-    return MisskeyProvider(
-      account,
-    );
+  String toString() {
+    return r'misskeyProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  MisskeyProvider getProviderOverride(
-    covariant MisskeyProvider provider,
-  ) {
-    return call(
-      provider.account,
-    );
+  $ProviderElement<Misskey> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Misskey create(Ref ref) {
+    final argument = this.argument as Account;
+    return misskey(ref, argument);
   }
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(Misskey Function(MisskeyRef ref) create) {
-    return _$MisskeyFamilyOverride(this, create);
-  }
-}
-
-class _$MisskeyFamilyOverride implements FamilyOverride {
-  _$MisskeyFamilyOverride(this.overriddenFamily, this.create);
-
-  final Misskey Function(MisskeyRef ref) create;
-
-  @override
-  final MisskeyFamily overriddenFamily;
-
-  @override
-  MisskeyProvider getProviderOverride(
-    covariant MisskeyProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [misskey].
-class MisskeyProvider extends Provider<Misskey> {
-  /// See also [misskey].
-  MisskeyProvider(
-    Account account,
-  ) : this._internal(
-          (ref) => misskey(
-            ref as MisskeyRef,
-            account,
-          ),
-          from: misskeyProvider,
-          name: r'misskeyProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$misskeyHash,
-          dependencies: MisskeyFamily._dependencies,
-          allTransitiveDependencies: MisskeyFamily._allTransitiveDependencies,
-          account: account,
-        );
-
-  MisskeyProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.account,
-  }) : super.internal();
-
-  final Account account;
-
-  @override
-  Override overrideWith(
-    Misskey Function(MisskeyRef ref) create,
-  ) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Misskey value) {
+    return $ProviderOverride(
       origin: this,
-      override: MisskeyProvider._internal(
-        (ref) => create(ref as MisskeyRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        account: account,
-      ),
-    );
-  }
-
-  @override
-  (Account,) get argument {
-    return (account,);
-  }
-
-  @override
-  ProviderElement<Misskey> createElement() {
-    return _MisskeyProviderElement(this);
-  }
-
-  MisskeyProvider _copyWith(
-    Misskey Function(MisskeyRef ref) create,
-  ) {
-    return MisskeyProvider._internal(
-      (ref) => create(ref as MisskeyRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      account: account,
+      providerOverride: $SyncValueProvider<Misskey>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MisskeyProvider && other.account == account;
+    return other is MisskeyProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin MisskeyRef on ProviderRef<Misskey> {
-  /// The parameter `account` of this provider.
-  Account get account;
-}
+String _$misskeyHash() => r'5f10aa38a56d482bf42572c93b20bb2babd87058';
 
-class _MisskeyProviderElement extends ProviderElement<Misskey> with MisskeyRef {
-  _MisskeyProviderElement(super.provider);
+final class MisskeyFamily extends $Family
+    with $FunctionalFamilyOverride<Misskey, Account> {
+  const MisskeyFamily._()
+    : super(
+        retry: null,
+        name: r'misskeyProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  MisskeyProvider call(Account account) =>
+      MisskeyProvider._(argument: account, from: this);
 
   @override
-  Account get account => (origin as MisskeyProvider).account;
+  String toString() => r'misskeyProvider';
 }
 
-String _$appRouterHash() => r'bb30ea3f6e2863af290ea7544f9a9bd2a53f79f4';
-
-/// See also [appRouter].
 @ProviderFor(appRouter)
-final appRouterProvider = Provider<Raw<AppRouter>>.internal(
-  appRouter,
-  name: r'appRouterProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$appRouterHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const appRouterProvider = AppRouterProvider._();
 
-typedef AppRouterRef = ProviderRef<Raw<AppRouter>>;
-String _$misskeyWithoutAccountHash() =>
-    r'69fd2ed57ba01ab828bd39dd8adde72f977dd91e';
+final class AppRouterProvider
+    extends $FunctionalProvider<Raw<AppRouter>, Raw<AppRouter>, Raw<AppRouter>>
+    with $Provider<Raw<AppRouter>> {
+  const AppRouterProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appRouterProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [misskeyWithoutAccount].
+  @override
+  String debugGetCreateSourceHash() => _$appRouterHash();
+
+  @$internal
+  @override
+  $ProviderElement<Raw<AppRouter>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Raw<AppRouter> create(Ref ref) {
+    return appRouter(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<AppRouter> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<AppRouter>>(value),
+    );
+  }
+}
+
+String _$appRouterHash() => r'9ef2ee218086b41ec585ffa1b0ed6b63ebdbb7d8';
+
 @ProviderFor(misskeyWithoutAccount)
-const misskeyWithoutAccountProvider = MisskeyWithoutAccountFamily();
+const misskeyWithoutAccountProvider = MisskeyWithoutAccountFamily._();
 
-/// See also [misskeyWithoutAccount].
-class MisskeyWithoutAccountFamily extends Family {
-  /// See also [misskeyWithoutAccount].
-  const MisskeyWithoutAccountFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+final class MisskeyWithoutAccountProvider
+    extends $FunctionalProvider<Misskey, Misskey, Misskey>
+    with $Provider<Misskey> {
+  const MisskeyWithoutAccountProvider._({
+    required MisskeyWithoutAccountFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'misskeyWithoutAccountProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  String? get name => r'misskeyWithoutAccountProvider';
+  String debugGetCreateSourceHash() => _$misskeyWithoutAccountHash();
 
-  /// See also [misskeyWithoutAccount].
-  MisskeyWithoutAccountProvider call(
-    String host,
-  ) {
-    return MisskeyWithoutAccountProvider(
-      host,
-    );
+  @override
+  String toString() {
+    return r'misskeyWithoutAccountProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  MisskeyWithoutAccountProvider getProviderOverride(
-    covariant MisskeyWithoutAccountProvider provider,
-  ) {
-    return call(
-      provider.host,
-    );
+  $ProviderElement<Misskey> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Misskey create(Ref ref) {
+    final argument = this.argument as String;
+    return misskeyWithoutAccount(ref, argument);
   }
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(Misskey Function(MisskeyWithoutAccountRef ref) create) {
-    return _$MisskeyWithoutAccountFamilyOverride(this, create);
-  }
-}
-
-class _$MisskeyWithoutAccountFamilyOverride implements FamilyOverride {
-  _$MisskeyWithoutAccountFamilyOverride(this.overriddenFamily, this.create);
-
-  final Misskey Function(MisskeyWithoutAccountRef ref) create;
-
-  @override
-  final MisskeyWithoutAccountFamily overriddenFamily;
-
-  @override
-  MisskeyWithoutAccountProvider getProviderOverride(
-    covariant MisskeyWithoutAccountProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [misskeyWithoutAccount].
-class MisskeyWithoutAccountProvider extends AutoDisposeProvider<Misskey> {
-  /// See also [misskeyWithoutAccount].
-  MisskeyWithoutAccountProvider(
-    String host,
-  ) : this._internal(
-          (ref) => misskeyWithoutAccount(
-            ref as MisskeyWithoutAccountRef,
-            host,
-          ),
-          from: misskeyWithoutAccountProvider,
-          name: r'misskeyWithoutAccountProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$misskeyWithoutAccountHash,
-          dependencies: MisskeyWithoutAccountFamily._dependencies,
-          allTransitiveDependencies:
-              MisskeyWithoutAccountFamily._allTransitiveDependencies,
-          host: host,
-        );
-
-  MisskeyWithoutAccountProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.host,
-  }) : super.internal();
-
-  final String host;
-
-  @override
-  Override overrideWith(
-    Misskey Function(MisskeyWithoutAccountRef ref) create,
-  ) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Misskey value) {
+    return $ProviderOverride(
       origin: this,
-      override: MisskeyWithoutAccountProvider._internal(
-        (ref) => create(ref as MisskeyWithoutAccountRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        host: host,
-      ),
-    );
-  }
-
-  @override
-  (String,) get argument {
-    return (host,);
-  }
-
-  @override
-  AutoDisposeProviderElement<Misskey> createElement() {
-    return _MisskeyWithoutAccountProviderElement(this);
-  }
-
-  MisskeyWithoutAccountProvider _copyWith(
-    Misskey Function(MisskeyWithoutAccountRef ref) create,
-  ) {
-    return MisskeyWithoutAccountProvider._internal(
-      (ref) => create(ref as MisskeyWithoutAccountRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      host: host,
+      providerOverride: $SyncValueProvider<Misskey>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MisskeyWithoutAccountProvider && other.host == host;
+    return other is MisskeyWithoutAccountProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, host.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin MisskeyWithoutAccountRef on AutoDisposeProviderRef<Misskey> {
-  /// The parameter `host` of this provider.
-  String get host;
-}
+String _$misskeyWithoutAccountHash() =>
+    r'e222a8dd22abe066249f52f043f6a6a38446a225';
 
-class _MisskeyWithoutAccountProviderElement
-    extends AutoDisposeProviderElement<Misskey> with MisskeyWithoutAccountRef {
-  _MisskeyWithoutAccountProviderElement(super.provider);
+final class MisskeyWithoutAccountFamily extends $Family
+    with $FunctionalFamilyOverride<Misskey, String> {
+  const MisskeyWithoutAccountFamily._()
+    : super(
+        retry: null,
+        name: r'misskeyWithoutAccountProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  MisskeyWithoutAccountProvider call(String host) =>
+      MisskeyWithoutAccountProvider._(argument: host, from: this);
 
   @override
-  String get host => (origin as MisskeyWithoutAccountProvider).host;
+  String toString() => r'misskeyWithoutAccountProvider';
 }
 
-String _$notesWithHash() => r'0650987360236bb7d00f08b92ab03ebb6bfeb413';
-
-/// See also [notesWith].
 @ProviderFor(notesWith)
-final notesWithProvider = AutoDisposeProvider<Raw<NoteRepository>>.internal(
-  notesWith,
-  name: r'notesWithProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$notesWithHash,
-  dependencies: <ProviderOrFamily>[accountContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
-  },
-);
+const notesWithProvider = NotesWithProvider._();
 
-typedef NotesWithRef = AutoDisposeProviderRef<Raw<NoteRepository>>;
-String _$emojiRepositoryHash() => r'cce1a6d3e6daba91779840fde7973c6e6987e471';
+final class NotesWithProvider
+    extends
+        $FunctionalProvider<
+          Raw<NoteRepository>,
+          Raw<NoteRepository>,
+          Raw<NoteRepository>
+        >
+    with $Provider<Raw<NoteRepository>> {
+  const NotesWithProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notesWithProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          NotesWithProvider.$allTransitiveDependencies0,
+        ],
+      );
 
-/// See also [emojiRepository].
+  static const $allTransitiveDependencies0 = accountContextProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$notesWithHash();
+
+  @$internal
+  @override
+  $ProviderElement<Raw<NoteRepository>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  Raw<NoteRepository> create(Ref ref) {
+    return notesWith(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<NoteRepository> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<NoteRepository>>(value),
+    );
+  }
+}
+
+String _$notesWithHash() => r'a9573c0a72738c0f75dfba0916d1722cd9be8a44';
+
 @ProviderFor(emojiRepository)
-const emojiRepositoryProvider = EmojiRepositoryFamily();
+const emojiRepositoryProvider = EmojiRepositoryFamily._();
 
-/// See also [emojiRepository].
-class EmojiRepositoryFamily extends Family {
-  /// See also [emojiRepository].
-  const EmojiRepositoryFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+final class EmojiRepositoryProvider
+    extends
+        $FunctionalProvider<EmojiRepository, EmojiRepository, EmojiRepository>
+    with $Provider<EmojiRepository> {
+  const EmojiRepositoryProvider._({
+    required EmojiRepositoryFamily super.from,
+    required Account super.argument,
+  }) : super(
+         retry: null,
+         name: r'emojiRepositoryProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  String debugGetCreateSourceHash() => _$emojiRepositoryHash();
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'emojiRepositoryProvider';
-
-  /// See also [emojiRepository].
-  EmojiRepositoryProvider call(
-    Account account,
-  ) {
-    return EmojiRepositoryProvider(
-      account,
-    );
+  String toString() {
+    return r'emojiRepositoryProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  EmojiRepositoryProvider getProviderOverride(
-    covariant EmojiRepositoryProvider provider,
-  ) {
-    return call(
-      provider.account,
-    );
+  $ProviderElement<EmojiRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  EmojiRepository create(Ref ref) {
+    final argument = this.argument as Account;
+    return emojiRepository(ref, argument);
   }
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(
-      EmojiRepository Function(EmojiRepositoryRef ref) create) {
-    return _$EmojiRepositoryFamilyOverride(this, create);
-  }
-}
-
-class _$EmojiRepositoryFamilyOverride implements FamilyOverride {
-  _$EmojiRepositoryFamilyOverride(this.overriddenFamily, this.create);
-
-  final EmojiRepository Function(EmojiRepositoryRef ref) create;
-
-  @override
-  final EmojiRepositoryFamily overriddenFamily;
-
-  @override
-  EmojiRepositoryProvider getProviderOverride(
-    covariant EmojiRepositoryProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [emojiRepository].
-class EmojiRepositoryProvider extends Provider<EmojiRepository> {
-  /// See also [emojiRepository].
-  EmojiRepositoryProvider(
-    Account account,
-  ) : this._internal(
-          (ref) => emojiRepository(
-            ref as EmojiRepositoryRef,
-            account,
-          ),
-          from: emojiRepositoryProvider,
-          name: r'emojiRepositoryProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$emojiRepositoryHash,
-          dependencies: EmojiRepositoryFamily._dependencies,
-          allTransitiveDependencies:
-              EmojiRepositoryFamily._allTransitiveDependencies,
-          account: account,
-        );
-
-  EmojiRepositoryProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.account,
-  }) : super.internal();
-
-  final Account account;
-
-  @override
-  Override overrideWith(
-    EmojiRepository Function(EmojiRepositoryRef ref) create,
-  ) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(EmojiRepository value) {
+    return $ProviderOverride(
       origin: this,
-      override: EmojiRepositoryProvider._internal(
-        (ref) => create(ref as EmojiRepositoryRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        account: account,
-      ),
-    );
-  }
-
-  @override
-  (Account,) get argument {
-    return (account,);
-  }
-
-  @override
-  ProviderElement<EmojiRepository> createElement() {
-    return _EmojiRepositoryProviderElement(this);
-  }
-
-  EmojiRepositoryProvider _copyWith(
-    EmojiRepository Function(EmojiRepositoryRef ref) create,
-  ) {
-    return EmojiRepositoryProvider._internal(
-      (ref) => create(ref as EmojiRepositoryRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      account: account,
+      providerOverride: $SyncValueProvider<EmojiRepository>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is EmojiRepositoryProvider && other.account == account;
+    return other is EmojiRepositoryProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, account.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin EmojiRepositoryRef on ProviderRef<EmojiRepository> {
-  /// The parameter `account` of this provider.
-  Account get account;
-}
+String _$emojiRepositoryHash() => r'a3f4aeaa087ee4b3fd7c433960b5cb4c9c21b7c6';
 
-class _EmojiRepositoryProviderElement extends ProviderElement<EmojiRepository>
-    with EmojiRepositoryRef {
-  _EmojiRepositoryProviderElement(super.provider);
+final class EmojiRepositoryFamily extends $Family
+    with $FunctionalFamilyOverride<EmojiRepository, Account> {
+  const EmojiRepositoryFamily._()
+    : super(
+        retry: null,
+        name: r'emojiRepositoryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  EmojiRepositoryProvider call(Account account) =>
+      EmojiRepositoryProvider._(argument: account, from: this);
 
   @override
-  Account get account => (origin as EmojiRepositoryProvider).account;
+  String toString() => r'emojiRepositoryProvider';
 }
 
-String _$accountsHash() => r'd70730d18b80a35f4fac0b25ec10004ce706bef9';
-
-/// See also [accounts].
 @ProviderFor(accounts)
-final accountsProvider = AutoDisposeProvider<List<Account>>.internal(
-  accounts,
-  name: r'accountsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$accountsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const accountsProvider = AccountsProvider._();
 
-typedef AccountsRef = AutoDisposeProviderRef<List<Account>>;
-String _$iHash() => r'ed4b1dd720889e8c1651bba7506fcb941b45342d';
+final class AccountsProvider
+    extends $FunctionalProvider<List<Account>, List<Account>, List<Account>>
+    with $Provider<List<Account>> {
+  const AccountsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'accountsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [i].
+  @override
+  String debugGetCreateSourceHash() => _$accountsHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<Account>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<Account> create(Ref ref) {
+    return accounts(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Account> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Account>>(value),
+    );
+  }
+}
+
+String _$accountsHash() => r'6d734a28da45c1d169a7abfbc5405b93078bdc1d';
+
 @ProviderFor(i)
-const iProvider = IFamily();
+const iProvider = IFamily._();
 
-/// See also [i].
-class IFamily extends Family {
-  /// See also [i].
-  const IFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'iProvider';
-
-  /// See also [i].
-  IProvider call(
-    Acct acct,
-  ) {
-    return IProvider(
-      acct,
-    );
-  }
-
-  @visibleForOverriding
-  @override
-  IProvider getProviderOverride(
-    covariant IProvider provider,
-  ) {
-    return call(
-      provider.acct,
-    );
-  }
-
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(MeDetailed Function(IRef ref) create) {
-    return _$IFamilyOverride(this, create);
-  }
-}
-
-class _$IFamilyOverride implements FamilyOverride {
-  _$IFamilyOverride(this.overriddenFamily, this.create);
-
-  final MeDetailed Function(IRef ref) create;
-
-  @override
-  final IFamily overriddenFamily;
-
-  @override
-  IProvider getProviderOverride(
-    covariant IProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [i].
-class IProvider extends AutoDisposeProvider<MeDetailed> {
-  /// See also [i].
-  IProvider(
-    Acct acct,
-  ) : this._internal(
-          (ref) => i(
-            ref as IRef,
-            acct,
-          ),
-          from: iProvider,
-          name: r'iProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product') ? null : _$iHash,
-          dependencies: IFamily._dependencies,
-          allTransitiveDependencies: IFamily._allTransitiveDependencies,
-          acct: acct,
-        );
-
-  IProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.acct,
-  }) : super.internal();
-
-  final Acct acct;
-
-  @override
-  Override overrideWith(
-    MeDetailed Function(IRef ref) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: IProvider._internal(
-        (ref) => create(ref as IRef),
-        from: from,
-        name: null,
+final class IProvider
+    extends $FunctionalProvider<MeDetailed, MeDetailed, MeDetailed>
+    with $Provider<MeDetailed> {
+  const IProvider._({required IFamily super.from, required Acct super.argument})
+    : super(
+        retry: null,
+        name: r'iProvider',
+        isAutoDispose: true,
         dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        acct: acct,
-      ),
-    );
-  }
+        $allTransitiveDependencies: null,
+      );
 
   @override
-  (Acct,) get argument {
-    return (acct,);
-  }
+  String debugGetCreateSourceHash() => _$iHash();
 
   @override
-  AutoDisposeProviderElement<MeDetailed> createElement() {
-    return _IProviderElement(this);
+  String toString() {
+    return r'iProvider'
+        ''
+        '($argument)';
   }
 
-  IProvider _copyWith(
-    MeDetailed Function(IRef ref) create,
-  ) {
-    return IProvider._internal(
-      (ref) => create(ref as IRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      acct: acct,
+  @$internal
+  @override
+  $ProviderElement<MeDetailed> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MeDetailed create(Ref ref) {
+    final argument = this.argument as Acct;
+    return i(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MeDetailed value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MeDetailed>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is IProvider && other.acct == acct;
+    return other is IProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, acct.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin IRef on AutoDisposeProviderRef<MeDetailed> {
-  /// The parameter `acct` of this provider.
-  Acct get acct;
-}
+String _$iHash() => r'eb59c9498f7460da48dbfba37dd31a55083cc71d';
 
-class _IProviderElement extends AutoDisposeProviderElement<MeDetailed>
-    with IRef {
-  _IProviderElement(super.provider);
+final class IFamily extends $Family
+    with $FunctionalFamilyOverride<MeDetailed, Acct> {
+  const IFamily._()
+    : super(
+        retry: null,
+        name: r'iProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  IProvider call(Acct acct) => IProvider._(argument: acct, from: this);
 
   @override
-  Acct get acct => (origin as IProvider).acct;
+  String toString() => r'iProvider';
 }
 
-String _$accountHash() => r'1614cc4c66271ef2e69f4a527237ec179b58db56';
-
-/// See also [account].
 @ProviderFor(account)
-const accountProvider = AccountFamily();
+const accountProvider = AccountFamily._();
 
-/// See also [account].
-class AccountFamily extends Family {
-  /// See also [account].
-  const AccountFamily();
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+final class AccountProvider
+    extends $FunctionalProvider<Account, Account, Account>
+    with $Provider<Account> {
+  const AccountProvider._({
+    required AccountFamily super.from,
+    required Acct super.argument,
+  }) : super(
+         retry: null,
+         name: r'accountProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  String? get name => r'accountProvider';
+  String debugGetCreateSourceHash() => _$accountHash();
 
-  /// See also [account].
-  AccountProvider call(
-    Acct acct,
-  ) {
-    return AccountProvider(
-      acct,
-    );
+  @override
+  String toString() {
+    return r'accountProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  AccountProvider getProviderOverride(
-    covariant AccountProvider provider,
-  ) {
-    return call(
-      provider.acct,
-    );
+  $ProviderElement<Account> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Account create(Ref ref) {
+    final argument = this.argument as Acct;
+    return account(ref, argument);
   }
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(Account Function(AccountRef ref) create) {
-    return _$AccountFamilyOverride(this, create);
-  }
-}
-
-class _$AccountFamilyOverride implements FamilyOverride {
-  _$AccountFamilyOverride(this.overriddenFamily, this.create);
-
-  final Account Function(AccountRef ref) create;
-
-  @override
-  final AccountFamily overriddenFamily;
-
-  @override
-  AccountProvider getProviderOverride(
-    covariant AccountProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [account].
-class AccountProvider extends AutoDisposeProvider<Account> {
-  /// See also [account].
-  AccountProvider(
-    Acct acct,
-  ) : this._internal(
-          (ref) => account(
-            ref as AccountRef,
-            acct,
-          ),
-          from: accountProvider,
-          name: r'accountProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$accountHash,
-          dependencies: AccountFamily._dependencies,
-          allTransitiveDependencies: AccountFamily._allTransitiveDependencies,
-          acct: acct,
-        );
-
-  AccountProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.acct,
-  }) : super.internal();
-
-  final Acct acct;
-
-  @override
-  Override overrideWith(
-    Account Function(AccountRef ref) create,
-  ) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Account value) {
+    return $ProviderOverride(
       origin: this,
-      override: AccountProvider._internal(
-        (ref) => create(ref as AccountRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        acct: acct,
-      ),
-    );
-  }
-
-  @override
-  (Acct,) get argument {
-    return (acct,);
-  }
-
-  @override
-  AutoDisposeProviderElement<Account> createElement() {
-    return _AccountProviderElement(this);
-  }
-
-  AccountProvider _copyWith(
-    Account Function(AccountRef ref) create,
-  ) {
-    return AccountProvider._internal(
-      (ref) => create(ref as AccountRef),
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      acct: acct,
+      providerOverride: $SyncValueProvider<Account>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is AccountProvider && other.acct == acct;
+    return other is AccountProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, acct.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin AccountRef on AutoDisposeProviderRef<Account> {
-  /// The parameter `acct` of this provider.
-  Acct get acct;
-}
+String _$accountHash() => r'cc90ca8feaa911a399c33aaa744345120b0cfae4';
 
-class _AccountProviderElement extends AutoDisposeProviderElement<Account>
-    with AccountRef {
-  _AccountProviderElement(super.provider);
+final class AccountFamily extends $Family
+    with $FunctionalFamilyOverride<Account, Acct> {
+  const AccountFamily._()
+    : super(
+        retry: null,
+        name: r'accountProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  AccountProvider call(Acct acct) =>
+      AccountProvider._(argument: acct, from: this);
 
   @override
-  Acct get acct => (origin as AccountProvider).acct;
+  String toString() => r'accountProvider';
 }
 
-String _$cacheManagerHash() => r'0e854572e1bd7223650c8437a463a060314d0531';
-
-/// See also [cacheManager].
 @ProviderFor(cacheManager)
-final cacheManagerProvider = Provider<BaseCacheManager?>.internal(
-  cacheManager,
-  name: r'cacheManagerProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$cacheManagerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const cacheManagerProvider = CacheManagerProvider._();
 
-typedef CacheManagerRef = ProviderRef<BaseCacheManager?>;
-String _$accountContextHash() => r'1c9bff1004e7054ed091327e5a83c07d9da2c20a';
+final class CacheManagerProvider
+    extends
+        $FunctionalProvider<
+          BaseCacheManager?,
+          BaseCacheManager?,
+          BaseCacheManager?
+        >
+    with $Provider<BaseCacheManager?> {
+  const CacheManagerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cacheManagerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [accountContext].
+  @override
+  String debugGetCreateSourceHash() => _$cacheManagerHash();
+
+  @$internal
+  @override
+  $ProviderElement<BaseCacheManager?> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  BaseCacheManager? create(Ref ref) {
+    return cacheManager(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(BaseCacheManager? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<BaseCacheManager?>(value),
+    );
+  }
+}
+
+String _$cacheManagerHash() => r'4de111f3ed09ad0694b65f0a69ee9cacfacae1e7';
+
 @ProviderFor(accountContext)
-final accountContextProvider = AutoDisposeProvider<AccountContext>.internal(
-  accountContext,
-  name: r'accountContextProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$accountContextHash,
-  dependencies: const <ProviderOrFamily>[],
-  allTransitiveDependencies: const <ProviderOrFamily>{},
-);
+const accountContextProvider = AccountContextProvider._();
 
-typedef AccountContextRef = AutoDisposeProviderRef<AccountContext>;
-String _$misskeyGetContextHash() => r'8c7e8fbe8b1add5fdd1f7a42efbeaefaf417657f';
+final class AccountContextProvider
+    extends $FunctionalProvider<AccountContext, AccountContext, AccountContext>
+    with $Provider<AccountContext> {
+  const AccountContextProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'accountContextProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[],
+        $allTransitiveDependencies: const <ProviderOrFamily>[],
+      );
 
-/// See also [misskeyGetContext].
+  @override
+  String debugGetCreateSourceHash() => _$accountContextHash();
+
+  @$internal
+  @override
+  $ProviderElement<AccountContext> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AccountContext create(Ref ref) {
+    return accountContext(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AccountContext value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AccountContext>(value),
+    );
+  }
+}
+
+String _$accountContextHash() => r'60c79f603d793d1efa1077712179b03cc831f51a';
+
 @ProviderFor(misskeyGetContext)
-final misskeyGetContextProvider = AutoDisposeProvider<Misskey>.internal(
-  misskeyGetContext,
-  name: r'misskeyGetContextProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$misskeyGetContextHash,
-  dependencies: <ProviderOrFamily>[accountContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
-  },
-);
+const misskeyGetContextProvider = MisskeyGetContextProvider._();
 
-typedef MisskeyGetContextRef = AutoDisposeProviderRef<Misskey>;
-String _$misskeyPostContextHash() =>
-    r'4c78e6717ea452a6e7bf8804a34e596edc71ab88';
+final class MisskeyGetContextProvider
+    extends $FunctionalProvider<Misskey, Misskey, Misskey>
+    with $Provider<Misskey> {
+  const MisskeyGetContextProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'misskeyGetContextProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          MisskeyGetContextProvider.$allTransitiveDependencies0,
+        ],
+      );
 
-/// See also [misskeyPostContext].
+  static const $allTransitiveDependencies0 = accountContextProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$misskeyGetContextHash();
+
+  @$internal
+  @override
+  $ProviderElement<Misskey> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Misskey create(Ref ref) {
+    return misskeyGetContext(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Misskey value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Misskey>(value),
+    );
+  }
+}
+
+String _$misskeyGetContextHash() => r'fc267a3d020bd51305b5def2d9badedf26c4faac';
+
 @ProviderFor(misskeyPostContext)
-final misskeyPostContextProvider = AutoDisposeProvider<Misskey>.internal(
-  misskeyPostContext,
-  name: r'misskeyPostContextProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$misskeyPostContextHash,
-  dependencies: <ProviderOrFamily>[accountContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    accountContextProvider,
-    ...?accountContextProvider.allTransitiveDependencies
-  },
-);
+const misskeyPostContextProvider = MisskeyPostContextProvider._();
 
-typedef MisskeyPostContextRef = AutoDisposeProviderRef<Misskey>;
+final class MisskeyPostContextProvider
+    extends $FunctionalProvider<Misskey, Misskey, Misskey>
+    with $Provider<Misskey> {
+  const MisskeyPostContextProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'misskeyPostContextProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[accountContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          MisskeyPostContextProvider.$allTransitiveDependencies0,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = accountContextProvider;
+
+  @override
+  String debugGetCreateSourceHash() => _$misskeyPostContextHash();
+
+  @$internal
+  @override
+  $ProviderElement<Misskey> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Misskey create(Ref ref) {
+    return misskeyPostContext(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Misskey value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Misskey>(value),
+    );
+  }
+}
+
+String _$misskeyPostContextHash() =>
+    r'2132cf565692af187c7efa17b3350e53c8c4d6fa';
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

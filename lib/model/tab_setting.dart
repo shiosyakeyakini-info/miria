@@ -19,7 +19,7 @@ Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
 }
 
 @freezed
-class TabSetting with _$TabSetting {
+abstract class TabSetting with _$TabSetting {
   const TabSetting._();
 
   const factory TabSetting({

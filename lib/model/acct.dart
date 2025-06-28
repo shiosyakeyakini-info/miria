@@ -4,7 +4,7 @@ part "acct.freezed.dart";
 part "acct.g.dart";
 
 @freezed
-class Acct with _$Acct {
+abstract class Acct with _$Acct {
   const factory Acct({
     required String host,
     required String username,

@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/users_sort_type_extension.dart";
@@ -13,7 +13,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "explore_users.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UserDetailed>> _pinnedUser(_PinnedUserRef ref) async {
+Future<List<UserDetailed>> _pinnedUser(Ref ref) async {
   return (await ref.read(misskeyGetContextProvider).pinnedUsers()).toList();
 }
 

@@ -18,7 +18,7 @@ part "photo_edit_state_notifier.freezed.dart";
 part "photo_edit_state_notifier.g.dart";
 
 @freezed
-class PhotoEdit with _$PhotoEdit {
+abstract class PhotoEdit with _$PhotoEdit {
   const factory PhotoEdit({
     @Default(false) bool clipMode,
     @Default(false) bool colorFilterMode,
@@ -38,13 +38,13 @@ class PhotoEdit with _$PhotoEdit {
 }
 
 @freezed
-class ColorFilterPreview with _$ColorFilterPreview {
+abstract class ColorFilterPreview with _$ColorFilterPreview {
   const factory ColorFilterPreview({required String name, Uint8List? image}) =
       _ColorFilterPreview;
 }
 
 @freezed
-class EditedEmojiData with _$EditedEmojiData {
+abstract class EditedEmojiData with _$EditedEmojiData {
   const factory EditedEmojiData({
     required MisskeyEmojiData emoji,
     required double scale,

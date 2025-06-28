@@ -12,9 +12,9 @@ extension FutureExtension<T> on Future<T> {
   @Deprecated("use `dialogStateNotifier`")
   Future<T> expectFailure(BuildContext context) {
     return catchError((e) {
-      final widgetRef = ProviderScope.containerOf(context, listen: false);
+      final Ref = ProviderScope.containerOf(context, listen: false);
 
-      widgetRef.read(errorEventProvider.notifier).state = (e, context);
+      Ref.read(errorEventProvider.notifier).state = (e, context);
     });
   }
 }
@@ -23,9 +23,9 @@ extension FutureFunctionExtension<T> on Future<T> Function() {
   @Deprecated("use `dialogStateNotifier`")
   Future<T> Function() expectFailure(BuildContext context) {
     return () => this.call().catchError((e) {
-          final widgetRef = ProviderScope.containerOf(context, listen: false);
+          final Ref = ProviderScope.containerOf(context, listen: false);
 
-          widgetRef.read(errorEventProvider.notifier).state = (e, context);
+          Ref.read(errorEventProvider.notifier).state = (e, context);
         });
   }
 }

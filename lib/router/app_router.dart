@@ -88,9 +88,9 @@ import "package:misskey_dart/misskey_dart.dart";
 part "app_router.gr.dart";
 
 @AutoRouterConfig(replaceInRouteName: "Page|Dialog|Sheet,Route")
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   @override
-  final List<AutoRoute> routes = [
+  List<AutoRoute> get routes => [
     AutoRoute(page: SplashRoute.page, initial: true),
     AutoRoute(page: TimeLineRoute.page),
     AutoRoute(page: NoteDetailRoute.page),

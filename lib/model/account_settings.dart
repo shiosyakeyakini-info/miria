@@ -12,7 +12,7 @@ enum CacheStrategy {
 }
 
 @freezed
-class AccountSettings with _$AccountSettings {
+abstract class AccountSettings with _$AccountSettings {
   const AccountSettings._();
 
   const factory AccountSettings({

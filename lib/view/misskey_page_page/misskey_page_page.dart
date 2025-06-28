@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm_parser/mfm_parser.dart" hide MfmText;
 import "package:miria/extensions/list_mfm_node_extension.dart";
@@ -123,7 +123,7 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
 }
 
 @Riverpod(dependencies: [misskeyGetContext, notesWith])
-Future<Note> fetchNote(FetchNoteRef ref, String noteId) async {
+Future<Note> fetchNote(Ref ref, String noteId) async {
   final note = await ref
       .read(misskeyGetContextProvider)
       .notes

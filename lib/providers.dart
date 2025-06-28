@@ -6,6 +6,7 @@ import "package:flutter_cache_manager/flutter_cache_manager.dart"
     hide FileSystem;
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:riverpod/riverpod.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/model/tab_setting.dart";
@@ -37,26 +38,26 @@ part "providers.freezed.dart";
 part "providers.g.dart";
 
 @Riverpod(keepAlive: true)
-Dio dio(DioRef ref) => Dio();
+Dio dio(Ref ref) => Dio();
 
 @Riverpod(keepAlive: true)
-FileSystem fileSystem(FileSystemRef ref) => const LocalFileSystem();
+FileSystem fileSystem(Ref ref) => const LocalFileSystem();
 
 @Riverpod(keepAlive: true)
 @Deprecated(
   "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
 )
-Misskey misskey(MisskeyRef ref, Account account) => Misskey(
+Misskey misskey(Ref ref, Account account) => Misskey(
       token: account.token,
       host: account.host,
       socketConnectionTimeout: const Duration(seconds: 20),
     );
 
 @Riverpod(keepAlive: true)
-Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
+Raw<AppRouter> appRouter(Ref ref) => AppRouter();
 
 @riverpod
-Misskey misskeyWithoutAccount(MisskeyWithoutAccountRef ref, String host) =>
+Misskey misskeyWithoutAccount(Ref ref, String host) =>
     Misskey(
       host: host,
       token: null,
@@ -64,24 +65,24 @@ Misskey misskeyWithoutAccount(MisskeyWithoutAccountRef ref, String host) =>
     );
 
 final favoriteProvider =
-    ChangeNotifierProvider.family<FavoriteRepository, Account>(
+    Provider.family<FavoriteRepository, Account>(
   (ref, account) => FavoriteRepository(
     ref.read(misskeyProvider(account)),
     ref.read(notesProvider(account)),
   ),
 );
 
-final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
+final notesProvider = Provider.family<NoteRepository, Account>(
   (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
 );
 
 @Riverpod(dependencies: [accountContext])
-Raw<NoteRepository> notesWith(NotesWithRef ref) {
+Raw<NoteRepository> notesWith(Ref ref) {
   return ref.read(notesProvider(ref.read(accountContextProvider).getAccount));
 }
 
 @Riverpod(keepAlive: true)
-EmojiRepository emojiRepository(EmojiRepositoryRef ref, Account account) =>
+EmojiRepository emojiRepository(Ref ref, Account account) =>
     EmojiRepositoryImpl(
       misskey: ref.read(misskeyProvider(account)),
       account: account,
@@ -90,33 +91,33 @@ EmojiRepository emojiRepository(EmojiRepositoryRef ref, Account account) =>
     );
 
 @riverpod
-List<Account> accounts(AccountsRef ref) => ref.watch(accountRepositoryProvider);
+List<Account> accounts(Ref ref) => ref.watch(accountRepositoryProvider);
 
 @riverpod
-MeDetailed i(IRef ref, Acct acct) {
+MeDetailed i(Ref ref, Acct acct) {
   final accounts = ref.watch(accountsProvider);
   final account = accounts.firstWhere((account) => account.acct == acct);
   return account.i;
 }
 
 @riverpod
-Account account(AccountRef ref, Acct acct) => ref.watch(
+Account account(Ref ref, Acct acct) => ref.watch(
       accountsProvider.select(
         (accounts) => accounts.firstWhere((account) => account.acct == acct),
       ),
     );
 
 final tabSettingsRepositoryProvider =
-    ChangeNotifierProvider((ref) => TabSettingsRepository());
+    Provider((ref) => TabSettingsRepository());
 
 final accountSettingsRepositoryProvider =
-    ChangeNotifierProvider((ref) => AccountSettingsRepository());
+    Provider((ref) => AccountSettingsRepository());
 
 final generalSettingsRepositoryProvider =
-    ChangeNotifierProvider((ref) => GeneralSettingsRepository());
+    Provider((ref) => GeneralSettingsRepository());
 
 final desktopSettingsRepositoryProvider =
-    ChangeNotifierProvider((ref) => DesktopSettingsRepository());
+    Provider((ref) => DesktopSettingsRepository());
 
 final errorEventProvider =
     StateProvider<(Object? error, BuildContext? context)>(
@@ -124,13 +125,13 @@ final errorEventProvider =
 );
 
 final importExportRepositoryProvider =
-    ChangeNotifierProvider((ref) => ImportExportRepository(ref.read));
+    Provider((ref) => ImportExportRepository(ref.read));
 
 @Riverpod(keepAlive: true)
-BaseCacheManager? cacheManager(CacheManagerRef ref) => null;
+BaseCacheManager? cacheManager(Ref ref) => null;
 
 @freezed
-class AccountContext with _$AccountContext {
+abstract class AccountContext with _$AccountContext {
   const factory AccountContext({
     /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
     required Account getAccount,
@@ -146,25 +147,25 @@ class AccountContext with _$AccountContext {
 }
 
 @Riverpod(dependencies: [])
-AccountContext accountContext(AccountContextRef ref) =>
+AccountContext accountContext(Ref ref) =>
     throw UnimplementedError();
 
 @Riverpod(dependencies: [accountContext])
-Misskey misskeyGetContext(MisskeyGetContextRef ref) {
+Misskey misskeyGetContext(Ref ref) {
   final account =
       ref.read(accountContextProvider.select((value) => value.getAccount));
   return ref.read(misskeyProvider(account));
 }
 
 @Riverpod(dependencies: [accountContext])
-Misskey misskeyPostContext(MisskeyPostContextRef ref) {
+Misskey misskeyPostContext(Ref ref) {
   final account =
       ref.read(accountContextProvider.select((value) => value.postAccount));
   return ref.read(misskeyProvider(account));
 }
 
 final timelineProvider =
-    ChangeNotifierProvider.family<TimelineRepository, TabSetting>(
+    Provider.family<TimelineRepository, TabSetting>(
         (ref, setting) {
   final account = ref.read(accountProvider(setting.acct));
 
@@ -226,6 +227,14 @@ final timelineProvider =
         ref,
       ),
     TabType.antenna => AntennaTimelineRepository(
+        ref.read(misskeyProvider(account)),
+        account,
+        ref.read(notesProvider(account)),
+        ref.read(generalSettingsRepositoryProvider),
+        setting,
+        ref,
+      ),
+    _ => LocalTimelineRepository(
         ref.read(misskeyProvider(account)),
         account,
         ref.read(notesProvider(account)),

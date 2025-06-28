@@ -1,6 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/several_account_settings_page/word_mute_page/word_mute_page.dart";

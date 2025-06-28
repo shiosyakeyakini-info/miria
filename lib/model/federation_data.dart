@@ -11,7 +11,7 @@ part "federation_data.freezed.dart";
 part "federation_data.g.dart";
 
 @freezed
-class FederationData with _$FederationData {
+abstract class FederationData with _$FederationData {
   const factory FederationData({
     required bool isSupportedEmoji,
     required bool isSupportedAnnouncement,
