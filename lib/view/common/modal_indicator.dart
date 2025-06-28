@@ -7,13 +7,11 @@ class IndicatorView {
   /*
    * インジケータ表示
    */
-  static showIndicator(BuildContext context) {
+  static void showIndicator(BuildContext context) {
     Navigator.push(
       context,
       ModalOverlay(
-        const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        const Center(child: CircularProgressIndicator.adaptive()),
         isAndroidBackEnable: false,
       ),
     );
@@ -22,7 +20,7 @@ class IndicatorView {
   /*
    * インジケータ非表示
    */
-  static hideIndicator(BuildContext context) {
+  static void hideIndicator(BuildContext context) {
     Navigator.of(context).pop();
   }
 }
@@ -46,7 +44,7 @@ class ModalOverlay extends ModalRoute<void> {
   @override
   bool get barrierDismissible => false;
   @override
-  Color get barrierColor => Colors.black.withOpacity(0.5);
+  Color get barrierColor => Colors.black.withValues(alpha: 0.5);
   @override
   String? get barrierLabel => null;
   @override
@@ -60,9 +58,7 @@ class ModalOverlay extends ModalRoute<void> {
   ) {
     return Material(
       type: MaterialType.transparency,
-      child: SafeArea(
-        child: _buildOverlayContent(context),
-      ),
+      child: SafeArea(child: _buildOverlayContent(context)),
     );
   }
 
@@ -75,23 +71,15 @@ class ModalOverlay extends ModalRoute<void> {
   ) {
     return FadeTransition(
       opacity: animation,
-      child: ScaleTransition(
-        scale: animation,
-        child: child,
-      ),
+      child: ScaleTransition(scale: animation, child: child),
     );
   }
 
   Widget _buildOverlayContent(BuildContext context) {
-    return Center(
-      child: dialogContent(context),
-    );
+    return Center(child: dialogContent(context));
   }
 
   Widget dialogContent(BuildContext context) {
-    return PopScope(
-      canPop: isAndroidBackEnable,
-      child: contents,
-    ); //
+    return PopScope(canPop: isAndroidBackEnable, child: contents); //
   }
 }

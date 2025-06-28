@@ -7,10 +7,7 @@ import "package:misskey_dart/misskey_dart.dart";
 
 class FederationUsers extends ConsumerWidget {
   final String host;
-  const FederationUsers({
-    required this.host,
-    super.key,
-  });
+  const FederationUsers({required this.host, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,10 +26,7 @@ class FederationUsers extends ConsumerWidget {
             .users(FederationUsersRequest(host: host, untilId: lastItem.id));
         return response.toList();
       },
-      itemBuilder: (context, user) => UserListItem(
-        user: user,
-        isDetail: true,
-      ),
+      itemBuilder: (context, user) => UserListItem(user: user, isDetail: true),
     );
   }
 }

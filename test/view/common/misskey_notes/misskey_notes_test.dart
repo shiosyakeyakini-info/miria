@@ -12,6 +12,7 @@ import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/misskey_notes/reaction_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:url_launcher_platform_interface/url_launcher_platform_interface.dart";
 
 import "../../../test_util/default_root_widget.dart";
@@ -50,26 +51,17 @@ void main() {
       testWidgets("ノートのテキストが表示されること", (tester) async {
         await tester.pumpWidget(buildTestWidget(note: TestData.note1));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
-          findsOneWidget,
-        );
+        expect(find.textContaining(TestData.note1.text!), findsOneWidget);
       });
 
       testWidgets("Renoteの場合、Renoteの表示が行われること", (tester) async {
         await tester.pumpWidget(buildTestWidget(note: TestData.note6AsRenote));
         await tester.pumpAndSettle();
         expect(
-          find.textContaining(
-            TestData.note6AsRenote.renote!.text!,
-            findRichText: true,
-          ),
+          find.textContaining(TestData.note6AsRenote.renote!.text!),
           findsOneWidget,
         );
-        expect(
-          find.textContaining("がリノート", findRichText: true),
-          findsOneWidget,
-        );
+        expect(find.textContaining("がリノート"), findsOneWidget);
       });
 
       testWidgets("引用Renoteの場合、引用Renoteの表示が行われること", (tester) async {
@@ -80,20 +72,11 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(
-          find.textContaining(
-            TestData.note6AsRenote.renote!.text!,
-            findRichText: true,
-          ),
+          find.textContaining(TestData.note6AsRenote.renote!.text!),
           findsOneWidget,
         );
-        expect(
-          find.textContaining("こころがふたつある〜", findRichText: true),
-          findsOneWidget,
-        );
-        expect(
-          find.textContaining("がRenote", findRichText: true),
-          findsNothing,
-        );
+        expect(find.textContaining("こころがふたつある〜"), findsOneWidget);
+        expect(find.textContaining("がRenote"), findsNothing);
       });
     });
 
@@ -124,9 +107,7 @@ System.out.println("@ai uneune");
         final mockUrlLauncher = MockUrlLauncherPlatform();
         UrlLauncherPlatform.instance = mockUrlLauncher;
         await tester.pumpWidget(
-          buildTestWidget(
-            note: TestData.note1.copyWith(text: "藍ちゃんやっほー 検索"),
-          ),
+          buildTestWidget(note: TestData.note1.copyWith(text: "藍ちゃんやっほー 検索")),
         );
         await tester.pumpAndSettle();
         expect(
@@ -154,55 +135,72 @@ System.out.println("@ai uneune");
           buildTestWidget(note: TestData.note1.copyWith(cw: "えっちなやつ")),
         );
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining("えっちなやつ", findRichText: true),
-          findsOneWidget,
-        );
-        expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
-          findsNothing,
-        );
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.textContaining(TestData.note1.text!), findsNothing);
       });
 
-      testWidgets("続きを見るをタップすると、本文が表示されること", (tester) async {
+      testWidgets("CW基本動作テスト - 初期状態確認", (tester) async {
         await tester.pumpWidget(
           buildTestWidget(note: TestData.note1.copyWith(cw: "えっちなやつ")),
         );
         await tester.pumpAndSettle();
+
+        // CWタイトルが表示されることを確認
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+
+        // CW開閉ボタンが表示されることを確認
+        expect(find.text("隠してあるのんの続きを見して"), findsOneWidget);
+
+        // 初期状態では本文が隠されていることを確認
+        expect(find.textContaining("気づいたら"), findsNothing);
+      });
+
+      testWidgets("続きを見るをタップすると、本文が表示されること", (tester) async {
+        // ChangeNotifierProvider.familyに修正済み
+        await tester.pumpWidget(
+          buildTestWidget(note: TestData.note1.copyWith(cw: "えっちなやつ")),
+        );
+        await tester.pumpAndSettle();
+
+        // 初期状態：CWタイトルは表示され、本文は隠されている
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.text("隠してあるのんの続きを見して"), findsOneWidget);
+        expect(find.textContaining("気づいたら"), findsNothing);
+
+        // CWボタンをタップ
         await tester.tap(find.text("隠してあるのんの続きを見して"));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining("えっちなやつ", findRichText: true),
-          findsOneWidget,
-        );
-        expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
-          findsOneWidget,
-        );
 
+        // タップ後：本文が表示され、ボタンが「隠す」に変わる
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.textContaining("気づいたら"), findsOneWidget);
+        expect(find.text("隠す"), findsOneWidget);
+        expect(find.text("隠してあるのんの続きを見して"), findsNothing);
+
+        // 「隠す」をタップして再び隠す
         await tester.tap(find.text("隠す"));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining("えっちなやつ", findRichText: true),
-          findsOneWidget,
-        );
-        expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
-          findsNothing,
-        );
+
+        // 隠した後：元の状態に戻る
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.textContaining("気づいたら"), findsNothing);
+        expect(find.text("隠してあるのんの続きを見して"), findsOneWidget);
+        expect(find.text("隠す"), findsNothing);
       });
     });
 
     group("長いノートの折りたたみ", () {
       testWidgets("長いノートの省略が有効な場合、500文字を超えるノートが折りたたまれること", (tester) async {
         final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(generalSettingsRepository.settings)
-            .thenReturn(const GeneralSettings(enableLongTextElipsed: true));
+        when(
+          generalSettingsRepository.settings,
+        ).thenReturn(const GeneralSettings(enableLongTextElipsed: true));
         await tester.pumpWidget(
           buildTestWidget(
             overrides: [
-              generalSettingsRepositoryProvider
-                  .overrideWith((ref) => generalSettingsRepository),
+              generalSettingsRepositoryProvider.overrideWith(
+                (ref) => generalSettingsRepository,
+              ),
             ],
             note: TestData.note1.copyWith(
               text: Iterable.generate(500, (index) => "あ").join(""),
@@ -216,25 +214,24 @@ System.out.println("@ai uneune");
       testWidgets("長いノートの省略が有効な場合、続きを表示をタップすると全てが表示されること", (tester) async {
         final longText = Iterable.generate(2000, (index) => "あ").join("");
         final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(generalSettingsRepository.settings)
-            .thenReturn(const GeneralSettings(enableLongTextElipsed: true));
+        when(
+          generalSettingsRepository.settings,
+        ).thenReturn(const GeneralSettings(enableLongTextElipsed: true));
         await tester.pumpWidget(
           buildTestWidget(
             overrides: [
-              generalSettingsRepositoryProvider
-                  .overrideWith((ref) => generalSettingsRepository),
+              generalSettingsRepositoryProvider.overrideWith(
+                (ref) => generalSettingsRepository,
+              ),
             ],
             note: TestData.note1.copyWith(text: longText),
           ),
         );
         await tester.pumpAndSettle();
-        expect(find.textContaining(longText, findRichText: true), findsNothing);
+        expect(find.textContaining(longText), findsNothing);
         await tester.tap(find.text("続きを表示"));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining(longText, findRichText: true),
-          findsOneWidget,
-        );
+        expect(find.textContaining(longText), findsOneWidget);
       });
     });
 
@@ -243,14 +240,8 @@ System.out.println("@ai uneune");
         await tester.pumpWidget(buildTestWidget(note: TestData.note4AsVote));
         await tester.pumpAndSettle();
         for (final choice in TestData.note4AsVote.poll!.choices) {
-          expect(
-            find.textContaining(choice.text, findRichText: true),
-            findsOneWidget,
-          );
-          expect(
-            find.textContaining("${choice.votes}票", findRichText: true),
-            findsOneWidget,
-          );
+          expect(find.textContaining(choice.text), findsOneWidget);
+          expect(find.textContaining("${choice.votes}票"), findsOneWidget);
         }
       });
     });
@@ -281,8 +272,9 @@ System.out.println("@ai uneune");
         });
       });
 
-      testWidgets("閲覧注意に設定している場合、画像が表示されないこと　閲覧注意をタップすると画像が表示されること",
-          (tester) async {
+      testWidgets("閲覧注意に設定している場合、画像が表示されないこと　閲覧注意をタップすると画像が表示されること", (
+        tester,
+      ) async {
         await tester.runAsync(() async {
           await tester.pumpWidget(
             buildTestWidget(
@@ -330,8 +322,9 @@ System.out.println("@ai uneune");
       final mockMisskeyNotes = MockMisskeyNotes();
       final mockMisskeyNotesReactions = MockMisskeyNotesReactions();
       when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
-      when(mockMisskeyNotes.featured(any))
-          .thenAnswer((_) async => [TestData.note1]);
+      when(
+        mockMisskeyNotes.featured(any),
+      ).thenAnswer((_) async => [TestData.note1]);
       when(mockMisskeyNotes.reactions).thenReturn(mockMisskeyNotesReactions);
       when(mockMisskeyNotesReactions.reactions(any)).thenAnswer(
         (_) async => [
@@ -345,7 +338,9 @@ System.out.println("@ai uneune");
       );
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [
+            misskeyProvider.overrideWith((ref, account) => mockMisskey),
+          ],
           child: DefaultRootWidget(
             initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
@@ -354,16 +349,10 @@ System.out.println("@ai uneune");
       await tester.pumpAndSettle();
       await tester.longPress(find.byType(ReactionButton).at(1));
       await tester.pumpAndSettle();
-      expect(
-        find.text(TestData.detailedUser2.name!, findRichText: true),
-        findsOneWidget,
-      );
+      expect(find.text(TestData.detailedUser2.name!), findsOneWidget);
       await tester.pageNation();
 
-      expect(
-        find.text(TestData.detailedUser2.name!, findRichText: true),
-        findsNWidgets(2),
-      );
+      expect(find.text(TestData.detailedUser2.name!), findsNWidgets(2));
     });
   });
 
@@ -372,13 +361,17 @@ System.out.println("@ai uneune");
       final mockMisskey = MockMisskey();
       final mockMisskeyNotes = MockMisskeyNotes();
       when(mockMisskey.notes).thenReturn(mockMisskeyNotes);
-      when(mockMisskeyNotes.renotes(any))
-          .thenAnswer((_) async => [TestData.note6AsRenote]);
-      when(mockMisskeyNotes.featured(any))
-          .thenAnswer((_) async => [TestData.note1]);
+      when(
+        mockMisskeyNotes.renotes(any),
+      ).thenAnswer((_) async => [TestData.note6AsRenote]);
+      when(
+        mockMisskeyNotes.featured(any),
+      ).thenAnswer((_) async => [TestData.note1]);
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((ref) => mockMisskey)],
+          overrides: [
+            misskeyProvider.overrideWith((ref, account) => mockMisskey),
+          ],
           child: DefaultRootWidget(
             initialRoute: ExploreRoute(accountContext: TestData.accountContext),
           ),
@@ -388,19 +381,13 @@ System.out.println("@ai uneune");
       await tester.longPress(find.byType(RenoteButton));
       await tester.pumpAndSettle();
       expect(
-        find.textContaining(
-          TestData.note6AsRenote.user.username,
-          findRichText: true,
-        ),
+        find.textContaining(TestData.note6AsRenote.user.username),
         findsOneWidget,
       );
       await tester.pageNation();
 
       expect(
-        find.textContaining(
-          TestData.note6AsRenote.user.username,
-          findRichText: true,
-        ),
+        find.textContaining(TestData.note6AsRenote.user.username),
         findsNWidgets(2),
       );
     });

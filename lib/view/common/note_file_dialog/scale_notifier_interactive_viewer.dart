@@ -43,11 +43,7 @@ class ScaleNotifierInteractiveViewerState
         child: NetworkImageView(
           url: widget.imageUrl,
           type: ImageType.image,
-          loadingBuilder: (
-            context,
-            child,
-            loadingProgress,
-          ) {
+          loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
             return const SizedBox(
               height: 48.0,

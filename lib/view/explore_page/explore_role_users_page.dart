@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
@@ -49,19 +49,16 @@ class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
                 return response.toList();
               },
               nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyGetContextProvider).roles.users(
-                          RolesUsersRequest(
-                            roleId: item.id,
-                            untilId: lastItem.id,
-                          ),
-                        );
+                final response = await ref
+                    .read(misskeyGetContextProvider)
+                    .roles
+                    .users(
+                      RolesUsersRequest(roleId: item.id, untilId: lastItem.id),
+                    );
                 return response.toList();
               },
-              itemBuilder: (context, item) => UserListItem(
-                user: item.user,
-                isDetail: true,
-              ),
+              itemBuilder: (context, item) =>
+                  UserListItem(user: item.user, isDetail: true),
             ),
             PushableListView(
               initializeFuture: () async {
@@ -73,13 +70,12 @@ class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
                 return response.toList();
               },
               nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyGetContextProvider).roles.notes(
-                          RolesNotesRequest(
-                            roleId: item.id,
-                            untilId: lastItem.id,
-                          ),
-                        );
+                final response = await ref
+                    .read(misskeyGetContextProvider)
+                    .roles
+                    .notes(
+                      RolesNotesRequest(roleId: item.id, untilId: lastItem.id),
+                    );
                 ref.read(notesWithProvider).registerAll(response);
                 return response.toList();
               },

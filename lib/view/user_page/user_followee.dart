@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/pushable_listview.dart";
@@ -35,19 +35,16 @@ class UserFolloweePage extends ConsumerWidget implements AutoRouteWrapper {
           return response.toList();
         },
         nextFuture: (lastItem, _) async {
-          final response =
-              await ref.read(misskeyGetContextProvider).users.following(
-                    UsersFollowingRequest(
-                      userId: userId,
-                      untilId: lastItem.id,
-                    ),
-                  );
+          final response = await ref
+              .read(misskeyGetContextProvider)
+              .users
+              .following(
+                UsersFollowingRequest(userId: userId, untilId: lastItem.id),
+              );
           return response.toList();
         },
-        itemBuilder: (context, item) => UserListItem(
-          user: item.followee!,
-          isDetail: true,
-        ),
+        itemBuilder: (context, item) =>
+            UserListItem(user: item.followee!, isDetail: true),
       ),
     );
   }

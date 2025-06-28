@@ -5,7 +5,7 @@ part "summaly_result.g.dart";
 
 // https://github.com/misskey-dev/summaly
 @freezed
-class SummalyResult with _$SummalyResult {
+abstract class SummalyResult with _$SummalyResult {
   const factory SummalyResult({
     required Player player,
     String? title,
@@ -22,7 +22,7 @@ class SummalyResult with _$SummalyResult {
 }
 
 @freezed
-class Player with _$Player {
+abstract class Player with _$Player {
   const factory Player({
     String? url,
     double? width,

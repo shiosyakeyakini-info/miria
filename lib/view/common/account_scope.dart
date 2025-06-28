@@ -16,15 +16,12 @@ class AccountContextScope extends ConsumerWidget {
   factory AccountContextScope.as({
     required Account account,
     required Widget child,
-  }) =>
-      AccountContextScope(context: AccountContext.as(account), child: child);
+  }) => AccountContextScope(context: AccountContext.as(account), child: child);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
-      overrides: [
-        accountContextProvider.overrideWithValue(this.context),
-      ],
+      overrides: [accountContextProvider.overrideWithValue(this.context)],
       child: child,
     );
   }

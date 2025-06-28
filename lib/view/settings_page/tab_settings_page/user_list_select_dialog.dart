@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -12,10 +12,10 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "user_list_select_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UsersList>> _usersList(_UsersListRef ref) async =>
+Future<List<UsersList>> _usersList(Ref ref) async =>
     (await ref.read(misskeyGetContextProvider).users.list.list()).toList();
 
-@RoutePage<UsersList>()
+@RoutePage()
 class UserListSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
   final Account account;
 
@@ -37,32 +37,34 @@ class UserListSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
         child: SingleChildScrollView(
           child: switch (usersList) {
             AsyncLoading() => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-            AsyncError(:final error, :final stackTrace) =>
-              ErrorDetail(error: error, stackTrace: stackTrace),
+              child: CircularProgressIndicator.adaptive(),
+            ),
+            AsyncError(:final error, :final stackTrace) => ErrorDetail(
+              error: error,
+              stackTrace: stackTrace,
+            ),
             AsyncData(:final value) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    S.of(context).list,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.of(context).pop(value[index]);
-                        },
-                        title: Text(value[index].name ?? ""),
-                      );
-                    },
-                  ),
-                ],
-              ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).list,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(value[index]);
+                      },
+                      title: Text(value[index].name ?? ""),
+                    );
+                  },
+                ),
+              ],
+            ),
           },
         ),
       ),

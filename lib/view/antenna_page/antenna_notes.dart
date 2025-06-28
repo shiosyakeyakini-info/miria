@@ -22,13 +22,12 @@ class AntennaNotes extends ConsumerWidget {
         return response.toList();
       },
       nextFuture: (lastItem, _) async {
-        final response =
-            await ref.read(misskeyGetContextProvider).antennas.notes(
-                  AntennasNotesRequest(
-                    antennaId: antennaId,
-                    untilId: lastItem.id,
-                  ),
-                );
+        final response = await ref
+            .read(misskeyGetContextProvider)
+            .antennas
+            .notes(
+              AntennasNotesRequest(antennaId: antennaId, untilId: lastItem.id),
+            );
         ref.read(notesWithProvider).registerAll(response);
         return response.toList();
       },

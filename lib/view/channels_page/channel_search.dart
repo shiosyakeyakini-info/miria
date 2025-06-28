@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/channels_page/community_channel_view.dart";
 import "package:miria/view/common/pushable_listview.dart";
@@ -58,13 +59,12 @@ class ChannelSearchList extends ConsumerWidget {
         return channels.toList();
       },
       nextFuture: (lastItem, _) async {
-        final channels =
-            await ref.read(misskeyGetContextProvider).channels.search(
-                  ChannelsSearchRequest(
-                    query: searchValue,
-                    untilId: lastItem.id,
-                  ),
-                );
+        final channels = await ref
+            .read(misskeyGetContextProvider)
+            .channels
+            .search(
+              ChannelsSearchRequest(query: searchValue, untilId: lastItem.id),
+            );
         return channels.toList();
       },
       itemBuilder: (context, item) {

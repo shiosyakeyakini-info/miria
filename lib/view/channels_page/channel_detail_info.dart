@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/date_time_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/misskey_notes/mfm_text.dart";
@@ -16,7 +16,7 @@ part "channel_detail_info.freezed.dart";
 part "channel_detail_info.g.dart";
 
 @freezed
-class ChannelDetailState with _$ChannelDetailState {
+abstract class ChannelDetailState with _$ChannelDetailState {
   factory ChannelDetailState({
     required CommunityChannel channel,
     AsyncValue<void>? follow,
@@ -27,9 +27,7 @@ class ChannelDetailState with _$ChannelDetailState {
 @Riverpod(dependencies: [misskeyGetContext, misskeyPostContext, notesWith])
 class ChannelDetail extends _$ChannelDetail {
   @override
-  Future<ChannelDetailState> build(
-    String channelId,
-  ) async {
+  Future<ChannelDetailState> build(String channelId) async {
     final result = await ref
         .read(misskeyGetContextProvider)
         .channels
@@ -115,10 +113,12 @@ class ChannelDetailInfo extends ConsumerWidget {
 
     return switch (data) {
       AsyncLoading() => const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
-      AsyncError(:final error, :final stackTrace) =>
-        ErrorDetail(error: error, stackTrace: stackTrace),
+        child: CircularProgressIndicator.adaptive(),
+      ),
+      AsyncError(:final error, :final stackTrace) => ErrorDetail(
+        error: error,
+        stackTrace: stackTrace,
+      ),
       AsyncData(:final value) => ChannelDetailArea(channel: value.channel),
     };
   }
@@ -157,7 +157,9 @@ class ChannelDetailArea extends ConsumerWidget {
                 ),
                 if (channel.lastNotedAt != null)
                   Text(
-                    S.of(context).channelLastNotedAt(
+                    S
+                        .of(context)
+                        .channelLastNotedAt(
                           channel.lastNotedAt!.differenceNow(context),
                         ),
                     style: Theme.of(context).textTheme.bodySmall,
@@ -172,8 +174,9 @@ class ChannelDetailArea extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: DecoratedBox(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
                 child: Text(
                   " ${S.of(context).sensitive} ",
                   style: const TextStyle(color: Colors.white),
@@ -245,11 +248,13 @@ class ChannelFavoriteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = channelDetailProvider(channelId);
     final followingState = ref.watch(
-      provider.select((value) => value.valueOrNull?.favorite),
+      provider.select((value) => value.value?.favorite),
     );
 
-    ref.listen(provider.select((value) => value.valueOrNull?.favorite?.error),
-        (_, next) async {
+    ref.listen(provider.select((value) => value.value?.favorite?.error), (
+      _,
+      next,
+    ) async {
       if (next == null) return;
       await SimpleMessageDialog.show(context, next.toString());
     });
@@ -257,18 +262,18 @@ class ChannelFavoriteButton extends ConsumerWidget {
     return switch (isFavorite) {
       null => const SizedBox.shrink(),
       true => ElevatedButton.icon(
-          onPressed: followingState is AsyncLoading
-              ? null
-              : ref.read(provider.notifier).unfavorite,
-          icon: const Icon(Icons.check),
-          label: Text(S.of(context).favorited),
-        ),
+        onPressed: followingState is AsyncLoading
+            ? null
+            : ref.read(provider.notifier).unfavorite,
+        icon: const Icon(Icons.check),
+        label: Text(S.of(context).favorited),
+      ),
       false => OutlinedButton(
-          onPressed: followingState is AsyncLoading
-              ? null
-              : ref.read(provider.notifier).favorite,
-          child: Text(S.of(context).willFavorite),
-        )
+        onPressed: followingState is AsyncLoading
+            ? null
+            : ref.read(provider.notifier).favorite,
+        child: Text(S.of(context).willFavorite),
+      ),
     };
   }
 }
@@ -287,11 +292,13 @@ class ChannelFollowingButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = channelDetailProvider(channelId);
     final followState = ref.watch(
-      provider.select((value) => value.valueOrNull?.follow),
+      provider.select((value) => value.value?.follow),
     );
 
-    ref.listen(provider.select((value) => value.valueOrNull?.follow?.error),
-        (_, next) async {
+    ref.listen(provider.select((value) => value.value?.follow?.error), (
+      _,
+      next,
+    ) async {
       if (next == null) return;
       await SimpleMessageDialog.show(context, next.toString());
     });
@@ -299,18 +306,18 @@ class ChannelFollowingButton extends ConsumerWidget {
     return switch (isFollowing) {
       null => const SizedBox.shrink(),
       true => ElevatedButton.icon(
-          onPressed: followState is AsyncLoading
-              ? null
-              : ref.read(provider.notifier).unfollow,
-          icon: const Icon(Icons.favorite_border),
-          label: Text(S.of(context).following),
-        ),
+        onPressed: followState is AsyncLoading
+            ? null
+            : ref.read(provider.notifier).unfollow,
+        icon: const Icon(Icons.favorite_border),
+        label: Text(S.of(context).following),
+      ),
       false => OutlinedButton(
-          onPressed: followState is AsyncLoading
-              ? null
-              : ref.read(provider.notifier).follow,
-          child: Text(S.of(context).willFollow),
-        )
+        onPressed: followState is AsyncLoading
+            ? null
+            : ref.read(provider.notifier).follow,
+        child: Text(S.of(context).willFollow),
+      ),
     };
   }
 }

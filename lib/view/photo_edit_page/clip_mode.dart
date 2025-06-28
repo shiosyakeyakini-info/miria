@@ -35,11 +35,13 @@ class ClipModeState extends ConsumerState<ClipMode> {
     final cropSize = ref.watch(
       photoEditStateNotifierProvider.select((value) => value.cropSize),
     );
-    final reactions = ref
-        .watch(photoEditStateNotifierProvider.select((value) => value.emojis));
+    final reactions = ref.watch(
+      photoEditStateNotifierProvider.select((value) => value.emojis),
+    );
     final selectedReaction = ref.watch(
-      photoEditStateNotifierProvider
-          .select((value) => value.selectedEmojiIndex),
+      photoEditStateNotifierProvider.select(
+        (value) => value.selectedEmojiIndex,
+      ),
     );
 
     final ratio = defaultSize.width / actualSize.width;
@@ -51,20 +53,20 @@ class ClipModeState extends ConsumerState<ClipMode> {
         onPointerMove: selectedReaction == null
             ? null
             : (detail) => ref
-                .read(photoEditStateNotifierProvider.notifier)
-                .reactionMove(detail),
+                  .read(photoEditStateNotifierProvider.notifier)
+                  .reactionMove(detail),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onScaleStart: selectedReaction == null
               ? null
               : (detail) => ref
-                  .read(photoEditStateNotifierProvider.notifier)
-                  .reactionScaleStart(detail),
+                    .read(photoEditStateNotifierProvider.notifier)
+                    .reactionScaleStart(detail),
           onScaleUpdate: selectedReaction == null
               ? null
               : (detail) => ref
-                  .read(photoEditStateNotifierProvider.notifier)
-                  .reactionScaleUpdate(detail),
+                    .read(photoEditStateNotifierProvider.notifier)
+                    .reactionScaleUpdate(detail),
           child: RepaintBoundary(
             key: widget.renderingGlobalKey,
             child: Stack(
@@ -95,8 +97,9 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     width: cropOffset.dx,
                     height: defaultSize.height,
                     child: DecoratedBox(
-                      decoration:
-                          BoxDecoration(color: Colors.black87.withAlpha(150)),
+                      decoration: BoxDecoration(
+                        color: Colors.black87.withAlpha(150),
+                      ),
                     ),
                   ),
                   //right top-down
@@ -152,7 +155,8 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     ),
                   ),
                   Positioned(
-                    left: cropOffset.dx +
+                    left:
+                        cropOffset.dx +
                         cropSize.width -
                         (iconSize / 2 - basePadding) * ratio,
                     top: cropOffset.dy - (iconSize / 2 - basePadding) * ratio,
@@ -166,7 +170,8 @@ class ClipModeState extends ConsumerState<ClipMode> {
                   ),
                   Positioned(
                     left: cropOffset.dx - (iconSize / 2 - basePadding) * ratio,
-                    top: cropOffset.dy +
+                    top:
+                        cropOffset.dy +
                         cropSize.height -
                         (iconSize / 2 - basePadding) / 2 * ratio,
                     child: Listener(
@@ -178,10 +183,12 @@ class ClipModeState extends ConsumerState<ClipMode> {
                     ),
                   ),
                   Positioned(
-                    left: cropOffset.dx +
+                    left:
+                        cropOffset.dx +
                         cropSize.width -
                         (iconSize / 2 - basePadding) * ratio,
-                    top: cropOffset.dy +
+                    top:
+                        cropOffset.dy +
                         cropSize.height -
                         (iconSize / 2 - basePadding) * ratio,
                     child: Listener(
@@ -195,21 +202,24 @@ class ClipModeState extends ConsumerState<ClipMode> {
                 ],
 
                 // Reactions
-                for (final reaction
-                    in reactions.mapIndexed((index, e) => (index, e)))
+                for (final reaction in reactions.mapIndexed(
+                  (index, e) => (index, e),
+                ))
                   Positioned(
-                    left: reaction.$2.position.dx +
+                    left:
+                        reaction.$2.position.dx +
                         basePadding * ratio +
                         (clipMode
                             ? 0
                             : (defaultSize.width - cropSize.width) / 2 -
-                                cropOffset.dx),
-                    top: reaction.$2.position.dy +
+                                  cropOffset.dx),
+                    top:
+                        reaction.$2.position.dy +
                         basePadding * ratio +
                         (clipMode
                             ? 0
                             : (defaultSize.height - cropSize.height) / 2 -
-                                cropOffset.dy),
+                                  cropOffset.dy),
                     width: reaction.$2.scale,
                     height: reaction.$2.scale,
                     child: GestureDetector(

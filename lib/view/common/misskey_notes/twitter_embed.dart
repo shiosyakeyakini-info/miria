@@ -52,8 +52,7 @@ class _TwitterEmbedState extends State<TwitterEmbed> {
         },
       )
       // https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-javascript-factory-function
-      ..loadHtmlString(
-        """
+      ..loadHtmlString("""
 <html>
 
   <head>
@@ -94,8 +93,7 @@ class _TwitterEmbedState extends State<TwitterEmbed> {
     );
   </script>
 
-</html>""",
-      );
+</html>""");
   }
 
   @override

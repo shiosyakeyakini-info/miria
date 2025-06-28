@@ -25,8 +25,5 @@ Future<DateTime?> showDateTimePicker({
   );
   if (time == null) return null;
 
-  return date.copyWith(
-    hour: time.hour,
-    minute: time.minute,
-  );
+  return date.copyWith(hour: time.hour, minute: time.minute);
 }

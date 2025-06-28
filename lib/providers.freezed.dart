@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,190 +10,174 @@ part of 'providers.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$AccountContext {
-  /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
-  Account get getAccount => throw _privateConstructorUsedError;
-  Account get postAccount => throw _privateConstructorUsedError;
 
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AccountContextCopyWith<AccountContext> get copyWith =>
-      throw _privateConstructorUsedError;
+/// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
+ Account get getAccount; Account get postAccount;
+/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AccountContextCopyWith<AccountContext> get copyWith => _$AccountContextCopyWithImpl<AccountContext>(this as AccountContext, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountContext&&(identical(other.getAccount, getAccount) || other.getAccount == getAccount)&&(identical(other.postAccount, postAccount) || other.postAccount == postAccount));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,getAccount,postAccount);
+
+@override
+String toString() {
+  return 'AccountContext(getAccount: $getAccount, postAccount: $postAccount)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $AccountContextCopyWith<$Res> {
-  factory $AccountContextCopyWith(
-          AccountContext value, $Res Function(AccountContext) then) =
-      _$AccountContextCopyWithImpl<$Res, AccountContext>;
-  @useResult
-  $Res call({Account getAccount, Account postAccount});
+abstract mixin class $AccountContextCopyWith<$Res>  {
+  factory $AccountContextCopyWith(AccountContext value, $Res Function(AccountContext) _then) = _$AccountContextCopyWithImpl;
+@useResult
+$Res call({
+ Account getAccount, Account postAccount
+});
 
-  $AccountCopyWith<$Res> get getAccount;
-  $AccountCopyWith<$Res> get postAccount;
+
+$AccountCopyWith<$Res> get getAccount;$AccountCopyWith<$Res> get postAccount;
+
 }
-
 /// @nodoc
-class _$AccountContextCopyWithImpl<$Res, $Val extends AccountContext>
+class _$AccountContextCopyWithImpl<$Res>
     implements $AccountContextCopyWith<$Res> {
-  _$AccountContextCopyWithImpl(this._value, this._then);
+  _$AccountContextCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final AccountContext _self;
+  final $Res Function(AccountContext) _then;
 
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? getAccount = null,
-    Object? postAccount = null,
-  }) {
-    return _then(_value.copyWith(
-      getAccount: null == getAccount
-          ? _value.getAccount
-          : getAccount // ignore: cast_nullable_to_non_nullable
-              as Account,
-      postAccount: null == postAccount
-          ? _value.postAccount
-          : postAccount // ignore: cast_nullable_to_non_nullable
-              as Account,
-    ) as $Val);
-  }
-
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AccountCopyWith<$Res> get getAccount {
-    return $AccountCopyWith<$Res>(_value.getAccount, (value) {
-      return _then(_value.copyWith(getAccount: value) as $Val);
-    });
-  }
-
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $AccountCopyWith<$Res> get postAccount {
-    return $AccountCopyWith<$Res>(_value.postAccount, (value) {
-      return _then(_value.copyWith(postAccount: value) as $Val);
-    });
-  }
+/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? getAccount = null,Object? postAccount = null,}) {
+  return _then(_self.copyWith(
+getAccount: null == getAccount ? _self.getAccount : getAccount // ignore: cast_nullable_to_non_nullable
+as Account,postAccount: null == postAccount ? _self.postAccount : postAccount // ignore: cast_nullable_to_non_nullable
+as Account,
+  ));
+}
+/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountCopyWith<$Res> get getAccount {
+  
+  return $AccountCopyWith<$Res>(_self.getAccount, (value) {
+    return _then(_self.copyWith(getAccount: value));
+  });
+}/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountCopyWith<$Res> get postAccount {
+  
+  return $AccountCopyWith<$Res>(_self.postAccount, (value) {
+    return _then(_self.copyWith(postAccount: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$AccountContextImplCopyWith<$Res>
-    implements $AccountContextCopyWith<$Res> {
-  factory _$$AccountContextImplCopyWith(_$AccountContextImpl value,
-          $Res Function(_$AccountContextImpl) then) =
-      __$$AccountContextImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({Account getAccount, Account postAccount});
-
-  @override
-  $AccountCopyWith<$Res> get getAccount;
-  @override
-  $AccountCopyWith<$Res> get postAccount;
-}
-
-/// @nodoc
-class __$$AccountContextImplCopyWithImpl<$Res>
-    extends _$AccountContextCopyWithImpl<$Res, _$AccountContextImpl>
-    implements _$$AccountContextImplCopyWith<$Res> {
-  __$$AccountContextImplCopyWithImpl(
-      _$AccountContextImpl _value, $Res Function(_$AccountContextImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? getAccount = null,
-    Object? postAccount = null,
-  }) {
-    return _then(_$AccountContextImpl(
-      getAccount: null == getAccount
-          ? _value.getAccount
-          : getAccount // ignore: cast_nullable_to_non_nullable
-              as Account,
-      postAccount: null == postAccount
-          ? _value.postAccount
-          : postAccount // ignore: cast_nullable_to_non_nullable
-              as Account,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$AccountContextImpl extends _AccountContext {
-  const _$AccountContextImpl(
-      {required this.getAccount, required this.postAccount})
-      : super._();
 
-  /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
-  @override
-  final Account getAccount;
-  @override
-  final Account postAccount;
+class _AccountContext extends AccountContext {
+  const _AccountContext({required this.getAccount, required this.postAccount}): super._();
+  
 
-  @override
-  String toString() {
-    return 'AccountContext(getAccount: $getAccount, postAccount: $postAccount)';
-  }
+/// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
+@override final  Account getAccount;
+@override final  Account postAccount;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AccountContextImpl &&
-            (identical(other.getAccount, getAccount) ||
-                other.getAccount == getAccount) &&
-            (identical(other.postAccount, postAccount) ||
-                other.postAccount == postAccount));
-  }
+/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AccountContextCopyWith<_AccountContext> get copyWith => __$AccountContextCopyWithImpl<_AccountContext>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, getAccount, postAccount);
 
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AccountContextImplCopyWith<_$AccountContextImpl> get copyWith =>
-      __$$AccountContextImplCopyWithImpl<_$AccountContextImpl>(
-          this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AccountContext&&(identical(other.getAccount, getAccount) || other.getAccount == getAccount)&&(identical(other.postAccount, postAccount) || other.postAccount == postAccount));
 }
 
-abstract class _AccountContext extends AccountContext {
-  const factory _AccountContext(
-      {required final Account getAccount,
-      required final Account postAccount}) = _$AccountContextImpl;
-  const _AccountContext._() : super._();
 
-  /// 他鯖を取得するなどの目的で、非ログイン状態として使用されるアカウント
-  @override
-  Account get getAccount;
-  @override
-  Account get postAccount;
+@override
+int get hashCode => Object.hash(runtimeType,getAccount,postAccount);
 
-  /// Create a copy of AccountContext
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AccountContextImplCopyWith<_$AccountContextImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'AccountContext(getAccount: $getAccount, postAccount: $postAccount)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$AccountContextCopyWith<$Res> implements $AccountContextCopyWith<$Res> {
+  factory _$AccountContextCopyWith(_AccountContext value, $Res Function(_AccountContext) _then) = __$AccountContextCopyWithImpl;
+@override @useResult
+$Res call({
+ Account getAccount, Account postAccount
+});
+
+
+@override $AccountCopyWith<$Res> get getAccount;@override $AccountCopyWith<$Res> get postAccount;
+
+}
+/// @nodoc
+class __$AccountContextCopyWithImpl<$Res>
+    implements _$AccountContextCopyWith<$Res> {
+  __$AccountContextCopyWithImpl(this._self, this._then);
+
+  final _AccountContext _self;
+  final $Res Function(_AccountContext) _then;
+
+/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? getAccount = null,Object? postAccount = null,}) {
+  return _then(_AccountContext(
+getAccount: null == getAccount ? _self.getAccount : getAccount // ignore: cast_nullable_to_non_nullable
+as Account,postAccount: null == postAccount ? _self.postAccount : postAccount // ignore: cast_nullable_to_non_nullable
+as Account,
+  ));
+}
+
+/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountCopyWith<$Res> get getAccount {
+  
+  return $AccountCopyWith<$Res>(_self.getAccount, (value) {
+    return _then(_self.copyWith(getAccount: value));
+  });
+}/// Create a copy of AccountContext
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AccountCopyWith<$Res> get postAccount {
+  
+  return $AccountCopyWith<$Res>(_self.postAccount, (value) {
+    return _then(_self.copyWith(postAccount: value));
+  });
+}
+}
+
+// dart format on

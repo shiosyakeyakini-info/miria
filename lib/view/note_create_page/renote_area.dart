@@ -16,10 +16,7 @@ class RenoteArea extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "RN:",
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
+          Text("RN:", style: TextStyle(color: Theme.of(context).primaryColor)),
           Container(
             decoration: BoxDecoration(
               border: Border.all(color: Theme.of(context).primaryColor),

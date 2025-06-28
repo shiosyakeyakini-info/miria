@@ -9,24 +9,17 @@ import "package:misskey_dart/misskey_dart.dart";
 class MediaViewer extends HookConsumerWidget {
   final DriveFile file;
   final bool autoPlay;
-  const MediaViewer({
-    required this.file,
-    this.autoPlay = false,
-    super.key,
-  });
+  const MediaViewer({required this.file, this.autoPlay = false, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isThumbnailVisible = useState(true);
     final enabledAutoPlay = useState(false);
 
-    useEffect(
-      () {
-        enabledAutoPlay.value = autoPlay;
-        return () {};
-      },
-      [],
-    );
+    useEffect(() {
+      enabledAutoPlay.value = autoPlay;
+      return () {};
+    }, []);
 
     final thumbnailWidget = GestureDetector(
       onTap: () {
@@ -53,7 +46,8 @@ class MediaViewer extends HookConsumerWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      child: (enabledAutoPlay.value ||
+      child:
+          (enabledAutoPlay.value ||
               (!enabledAutoPlay.value && !isThumbnailVisible.value))
           ? MediaPlayer(
               url: file.url,

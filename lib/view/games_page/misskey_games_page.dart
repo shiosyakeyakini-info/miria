@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -23,9 +23,7 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).misskeyGames),
-      ),
+      appBar: AppBar(title: Text(S.of(context).misskeyGames)),
       body: Column(
         children: [
           ListTile(
@@ -57,9 +55,7 @@ class MisskeyGamesPage extends ConsumerWidget implements AutoRouteWrapper {
 }
 
 @Riverpod(dependencies: [misskeyPostContext])
-Future<List<User>> _fetchReversiData(
-  _FetchReversiDataRef ref,
-) async {
+Future<List<User>> _fetchReversiData(Ref ref) async {
   return [...await ref.read(misskeyPostContextProvider).reversi.invitations()];
 }
 
@@ -72,13 +68,16 @@ class ReversiInvite extends ConsumerWidget {
 
     return switch (reversiInvitation) {
       AsyncLoading() => Text(S.of(context).loading),
-      AsyncData<List<User>>(:final value) => value.isEmpty
-          ? Text(S.of(context).nonInvitedReversi)
-          : Text(
-              S.of(context).invitedReversi(
-                    value.map((e) => e.name ?? e.username).join(", "),
-                  ),
-            ),
+      AsyncData<List<User>>(:final value) =>
+        value.isEmpty
+            ? Text(S.of(context).nonInvitedReversi)
+            : Text(
+                S
+                    .of(context)
+                    .invitedReversi(
+                      value.map((e) => e.name ?? e.username).join(", "),
+                    ),
+              ),
       AsyncError() => const SizedBox.shrink(),
     };
   }

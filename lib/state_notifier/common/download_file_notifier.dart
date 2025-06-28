@@ -44,19 +44,22 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final permissionStatus = await Permission.photosAddOnly.status;
       if (!permissionStatus.isGranted) {
-        return DownloadFileResult.permissionDenied;
+        final p = await Permission.photosAddOnly.request();
+        if (!p.isGranted) {
+          return DownloadFileResult.permissionDenied;
+        }
       }
     }
 
     final tempDir = ref.read(fileSystemProvider).systemTempDirectory;
     var savePath = "${tempDir.path}/${driveFile.name}";
 
-    await ref.read(dioProvider).download(
+    await ref
+        .read(dioProvider)
+        .download(
           driveFile.url,
           savePath,
-          options: Options(
-            responseType: ResponseType.bytes,
-          ),
+          options: Options(responseType: ResponseType.bytes),
         );
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -89,10 +92,7 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
         }
       }
     }
-    await ImageGallerySaver.saveFile(
-      savePath,
-      name: driveFile.name,
-    );
+    await ImageGallerySaver.saveFile(savePath, name: driveFile.name);
     return DownloadFileResult.succeeded;
   }
 }
