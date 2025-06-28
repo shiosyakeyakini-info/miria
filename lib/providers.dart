@@ -64,7 +64,7 @@ Misskey misskeyWithoutAccount(Ref ref, String host) => Misskey(
   socketConnectionTimeout: const Duration(seconds: 20),
 );
 
-final favoriteProvider = Provider.family<FavoriteRepository, Account>(
+final favoriteProvider = ChangeNotifierProvider.family<FavoriteRepository, Account>(
   (ref, account) => FavoriteRepository(
     ref.read(misskeyProvider(account)),
     ref.read(notesProvider(account)),
@@ -106,19 +106,19 @@ Account account(Ref ref, Acct acct) => ref.watch(
   ),
 );
 
-final tabSettingsRepositoryProvider = Provider(
+final tabSettingsRepositoryProvider = ChangeNotifierProvider(
   (ref) => TabSettingsRepository(),
 );
 
-final accountSettingsRepositoryProvider = Provider(
+final accountSettingsRepositoryProvider = ChangeNotifierProvider(
   (ref) => AccountSettingsRepository(),
 );
 
-final generalSettingsRepositoryProvider = Provider(
+final generalSettingsRepositoryProvider = ChangeNotifierProvider(
   (ref) => GeneralSettingsRepository(),
 );
 
-final desktopSettingsRepositoryProvider = Provider(
+final desktopSettingsRepositoryProvider = ChangeNotifierProvider(
   (ref) => DesktopSettingsRepository(),
 );
 
@@ -127,7 +127,7 @@ final errorEventProvider =
       (ref) => (null, null),
     );
 
-final importExportRepositoryProvider = Provider(
+final importExportRepositoryProvider = ChangeNotifierProvider(
   (ref) => ImportExportRepository(ref),
 );
 
@@ -169,7 +169,7 @@ Misskey misskeyPostContext(Ref ref) {
   return ref.read(misskeyProvider(account));
 }
 
-final timelineProvider = Provider.family<TimelineRepository, TabSetting>((
+final timelineProvider = ChangeNotifierProvider.family<TimelineRepository, TabSetting>((
   ref,
   setting,
 ) {
