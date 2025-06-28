@@ -128,6 +128,41 @@ class MisskeyPagePage extends ConsumerWidget implements AutoRouteWrapper {
                         pageId: page.id,
                         userId: page.userId,
                       ),
+                      OutlinedButton(
+                        onPressed: () async => launchUrl(
+                          Uri(
+                            scheme: "https",
+                            host: accountHost,
+                            pathSegments: [
+                              "@${page.user.username}",
+                              "pages",
+                              page.name,
+                            ],
+                          ),
+                        ),
+                        child: Text(
+                          S.of(context).openBrowsers,
+                          style: AppTheme.of(context).linkStyle,
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () async {
+                          await Clipboard.setData(
+                            ClipboardData(
+                              text:
+                                  "https://$accountHost/@${page.user.username}/pages/${page.name}",
+                            ),
+                          );
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(S.of(context).doneCopy),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.link),
+                      ),
                     ],
                   ),
                   Align(
