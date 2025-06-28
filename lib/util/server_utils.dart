@@ -27,7 +27,9 @@ String normalizeServer(String input) {
   final trimmed = input.trim().replaceAll(RegExp(r'/+$'), '');
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
     final uri = Uri.parse(trimmed);
-    if (uri.path.isNotEmpty || uri.query.isNotEmpty || uri.fragment.isNotEmpty) {
+    if (uri.path.isNotEmpty ||
+        uri.query.isNotEmpty ||
+        uri.fragment.isNotEmpty) {
       throw const FormatException('invalid server');
     }
     final asciiHost = toAscii(uri.host);
@@ -40,7 +42,8 @@ String normalizeServer(String input) {
 // Converts a normalized server string to a [Uri] object, defaulting to https if no scheme is present.
 Uri serverToUri(String server) {
   final normalized = normalizeServer(server);
-  final uri = normalized.startsWith('http://') || normalized.startsWith('https://')
+  final uri =
+      normalized.startsWith('http://') || normalized.startsWith('https://')
       ? Uri.parse(normalized)
       : Uri.parse('https://$normalized');
   if (uri.host.isEmpty) {

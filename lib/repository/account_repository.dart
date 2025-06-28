@@ -273,10 +273,12 @@ class AccountRepository extends _$AccountRepository {
     final version = nodeInfoResult["software"]["version"];
 
     try {
-      final hostWithPort =
-          serverUri.hasPort ? '${serverUri.host}:${serverUri.port}' : serverUri.host;
-      final meta =
-          await ref.read(misskeyWithoutAccountProvider(hostWithPort)).meta();
+      final hostWithPort = serverUri.hasPort
+          ? '${serverUri.host}:${serverUri.port}'
+          : serverUri.host;
+      final meta = await ref
+          .read(misskeyWithoutAccountProvider(hostWithPort))
+          .meta();
 
       final endpoints = await ref
           .read(misskeyProvider(Account.demoAccount(hostWithPort, meta)))
@@ -302,16 +304,13 @@ class AccountRepository extends _$AccountRepository {
   ) async {
     final uri = serverToUri(server);
     final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
-    final token =
-        await MisskeyServer().loginAsPassword(hostWithPort, userId, password);
-    final i = await Misskey(
-      token: token,
-      host: hostWithPort,
-    ).i.i();
-    final meta = await Misskey(
-      token: token,
-      host: hostWithPort,
-    ).meta();
+    final token = await MisskeyServer().loginAsPassword(
+      hostWithPort,
+      userId,
+      password,
+    );
+    final i = await Misskey(token: token, host: hostWithPort).i.i();
+    final meta = await Misskey(token: token, host: hostWithPort).meta();
     final account = Account(
       host: hostWithPort,
       token: token,
@@ -326,14 +325,17 @@ class AccountRepository extends _$AccountRepository {
     await _validateMisskey(server);
     final uri = serverToUri(server);
     final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
-    final misskey = Misskey(
-      token: token,
-      host: hostWithPort,
-    );
+    final misskey = Misskey(token: token, host: hostWithPort);
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
-      Account(host: hostWithPort, userId: i.username, token: token, i: i, meta: meta),
+      Account(
+        host: hostWithPort,
+        userId: i.username,
+        token: token,
+        i: i,
+        meta: meta,
+      ),
     );
   }
 
@@ -357,15 +359,21 @@ class AccountRepository extends _$AccountRepository {
   Future<void> validateMiAuth(String server) async {
     final uri = serverToUri(server);
     final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
-    final token = await MisskeyServer().checkMiAuthToken(hostWithPort, _sessionId);
-    final misskey = Misskey(
-      token: token,
-      host: hostWithPort,
+    final token = await MisskeyServer().checkMiAuthToken(
+      hostWithPort,
+      _sessionId,
     );
+    final misskey = Misskey(token: token, host: hostWithPort);
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
-      Account(host: hostWithPort, userId: i.username, token: token, i: i, meta: meta),
+      Account(
+        host: hostWithPort,
+        userId: i.username,
+        token: token,
+        i: i,
+        meta: meta,
+      ),
     );
   }
 
