@@ -148,7 +148,6 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<bool>(page: LicenseConfirmRoute.page),
     AutoDialogRoute(page: ColorPickerRoute.page),
     AutoDialogRoute(page: MisskeyServerListRoute.page),
-    AutoDialogRoute(page: ChannelDetailRoute.page),
     AutoDialogRoute(page: ServerDetailRoute.page),
     AutoDialogRoute(page: ReactionUserRoute.page),
     AutoDialogRoute<CommunityChannel>(page: ChannelSelectRoute.page),
