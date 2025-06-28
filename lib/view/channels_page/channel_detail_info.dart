@@ -221,7 +221,7 @@ class ChannelDetailArea extends ConsumerWidget {
                   ),
                 );
               },
-              child: const Icon(Icons.copy),
+              child: const Icon(Icons.link),
             ),
           ],
         ),
