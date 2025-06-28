@@ -73,7 +73,7 @@ final favoriteProvider =
   ),
 );
 
-final notesProvider = Provider.family<NoteRepository, Account>(
+final notesProvider = ChangeNotifierProvider.family<NoteRepository, Account>(
   (ref, account) => NoteRepository(ref.read(misskeyProvider(account)), account),
 );
 

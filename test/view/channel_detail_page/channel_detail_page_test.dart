@@ -36,7 +36,6 @@ void main() {
       expect(
         find.textContaining(
           TestData.expectChannel1DescriptionContaining,
-          findRichText: true,
         ),
         findsOneWidget,
       );

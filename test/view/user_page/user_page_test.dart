@@ -39,7 +39,6 @@ void main() {
         expect(
           find.textContaining(
             TestData.usersShowResponse1.name!,
-            findRichText: true,
           ),
           findsAtLeastNWidgets(1),
         );

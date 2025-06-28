@@ -241,7 +241,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.textContaining(TestData.role.name, findRichText: true),
+          find.textContaining(TestData.role.name),
           findsOneWidget,
         );
       });

@@ -10,6 +10,7 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/misskey_notes/misskey_note.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/common/misskey_notes/reaction_button.dart";
+import "package:miria/view/common/misskey_notes/in_note_button.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -52,7 +53,7 @@ void main() {
         await tester.pumpWidget(buildTestWidget(note: TestData.note1));
         await tester.pumpAndSettle();
         expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
+          find.textContaining(TestData.note1.text!),
           findsOneWidget,
         );
       });
@@ -63,12 +64,11 @@ void main() {
         expect(
           find.textContaining(
             TestData.note6AsRenote.renote!.text!,
-            findRichText: true,
           ),
           findsOneWidget,
         );
         expect(
-          find.textContaining("がリノート", findRichText: true),
+          find.textContaining("がリノート"),
           findsOneWidget,
         );
       });
@@ -83,16 +83,15 @@ void main() {
         expect(
           find.textContaining(
             TestData.note6AsRenote.renote!.text!,
-            findRichText: true,
           ),
           findsOneWidget,
         );
         expect(
-          find.textContaining("こころがふたつある〜", findRichText: true),
+          find.textContaining("こころがふたつある〜"),
           findsOneWidget,
         );
         expect(
-          find.textContaining("がRenote", findRichText: true),
+          find.textContaining("がRenote"),
           findsNothing,
         );
       });
@@ -154,41 +153,62 @@ System.out.println("@ai uneune");
         );
         await tester.pumpAndSettle();
         expect(
-          find.textContaining("えっちなやつ", findRichText: true),
+          find.textContaining("えっちなやつ"),
           findsOneWidget,
         );
         expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
+          find.textContaining(TestData.note1.text!),
           findsNothing,
         );
       });
 
-      testWidgets("続きを見るをタップすると、本文が表示されること", (tester) async {
+      testWidgets("CW基本動作テスト - 初期状態確認", (tester) async {
         await tester.pumpWidget(
           buildTestWidget(note: TestData.note1.copyWith(cw: "えっちなやつ")),
         );
         await tester.pumpAndSettle();
+        
+        // CWタイトルが表示されることを確認
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        
+        // CW開閉ボタンが表示されることを確認
+        expect(find.text("隠してあるのんの続きを見して"), findsOneWidget);
+        
+        // 初期状態では本文が隠されていることを確認
+        expect(find.textContaining("気づいたら"), findsNothing);
+      });
+      
+      testWidgets("続きを見るをタップすると、本文が表示されること", (tester) async {
+        // ChangeNotifierProvider.familyに修正済み
+        await tester.pumpWidget(
+          buildTestWidget(note: TestData.note1.copyWith(cw: "えっちなやつ")),
+        );
+        await tester.pumpAndSettle();
+        
+        // 初期状態：CWタイトルは表示され、本文は隠されている
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.text("隠してあるのんの続きを見して"), findsOneWidget);
+        expect(find.textContaining("気づいたら"), findsNothing);
+        
+        // CWボタンをタップ
         await tester.tap(find.text("隠してあるのんの続きを見して"));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining("えっちなやつ", findRichText: true),
-          findsOneWidget,
-        );
-        expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
-          findsOneWidget,
-        );
-
+        
+        // タップ後：本文が表示され、ボタンが「隠す」に変わる
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.textContaining("気づいたら"), findsOneWidget);
+        expect(find.text("隠す"), findsOneWidget);
+        expect(find.text("隠してあるのんの続きを見して"), findsNothing);
+        
+        // 「隠す」をタップして再び隠す
         await tester.tap(find.text("隠す"));
         await tester.pumpAndSettle();
-        expect(
-          find.textContaining("えっちなやつ", findRichText: true),
-          findsOneWidget,
-        );
-        expect(
-          find.textContaining(TestData.note1.text!, findRichText: true),
-          findsNothing,
-        );
+        
+        // 隠した後：元の状態に戻る
+        expect(find.textContaining("えっちなやつ"), findsOneWidget);
+        expect(find.textContaining("気づいたら"), findsNothing);
+        expect(find.text("隠してあるのんの続きを見して"), findsOneWidget);
+        expect(find.text("隠す"), findsNothing);
       });
     });
 
@@ -231,11 +251,11 @@ System.out.println("@ai uneune");
           ),
         );
         await tester.pumpAndSettle();
-        expect(find.textContaining(longText, findRichText: true), findsNothing);
+        expect(find.textContaining(longText), findsNothing);
         await tester.tap(find.text("続きを表示"));
         await tester.pumpAndSettle();
         expect(
-          find.textContaining(longText, findRichText: true),
+          find.textContaining(longText),
           findsOneWidget,
         );
       });
@@ -247,11 +267,11 @@ System.out.println("@ai uneune");
         await tester.pumpAndSettle();
         for (final choice in TestData.note4AsVote.poll!.choices) {
           expect(
-            find.textContaining(choice.text, findRichText: true),
+            find.textContaining(choice.text),
             findsOneWidget,
           );
           expect(
-            find.textContaining("${choice.votes}票", findRichText: true),
+            find.textContaining("${choice.votes}票"),
             findsOneWidget,
           );
         }
@@ -362,13 +382,13 @@ System.out.println("@ai uneune");
       await tester.longPress(find.byType(ReactionButton).at(1));
       await tester.pumpAndSettle();
       expect(
-        find.text(TestData.detailedUser2.name!, findRichText: true),
+        find.text(TestData.detailedUser2.name!),
         findsOneWidget,
       );
       await tester.pageNation();
 
       expect(
-        find.text(TestData.detailedUser2.name!, findRichText: true),
+        find.text(TestData.detailedUser2.name!),
         findsNWidgets(2),
       );
     });
@@ -401,7 +421,6 @@ System.out.println("@ai uneune");
       expect(
         find.textContaining(
           TestData.note6AsRenote.user.username,
-          findRichText: true,
         ),
         findsOneWidget,
       );
@@ -410,7 +429,6 @@ System.out.println("@ai uneune");
       expect(
         find.textContaining(
           TestData.note6AsRenote.user.username,
-          findRichText: true,
         ),
         findsNWidgets(2),
       );

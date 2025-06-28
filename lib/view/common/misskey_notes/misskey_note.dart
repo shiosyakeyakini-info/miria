@@ -448,7 +448,7 @@ class MisskeyNote extends HookConsumerWidget {
               isReactionedRenote: !status.isReactionedRenote,
             ),
           );
-    });
+    }, [account, note.id]);
     final toggleLongNote = useCallback(() {
       ref.read(notesProvider(account)).updateNoteStatus(
             note.id,
@@ -456,7 +456,7 @@ class MisskeyNote extends HookConsumerWidget {
               isLongVisible: !status.isLongVisible,
             ),
           );
-    });
+    }, [account, note.id]);
     final toggleCwOpen = useCallback(() {
       ref.read(notesProvider(account)).updateNoteStatus(
             note.id,
@@ -464,7 +464,7 @@ class MisskeyNote extends HookConsumerWidget {
               isCwOpened: !status.isCwOpened,
             ),
           );
-    });
+    }, [account, note.id]);
 
     final buildParent = useCallback<Widget Function({required Widget child})>(
       ({required child}) {

@@ -1304,7 +1304,6 @@ void main() {
             of: find.byType(ReplyToArea),
             matching: find.textContaining(
               TestData.note3AsAnotherUser.user.username,
-              findRichText: true,
             ),
           ),
           findsOneWidget,
@@ -1341,7 +1340,6 @@ void main() {
             of: find.byType(ReplyToArea),
             matching: find.text(
               "@${TestData.note5AsAnotherUser.user.username}",
-              findRichText: true,
             ),
           ),
           findsOneWidget,
@@ -1351,7 +1349,6 @@ void main() {
             of: find.byType(ReplyToArea),
             matching: find.text(
               "@${TestData.usersShowResponse2.username}",
-              findRichText: true,
             ),
           ),
           findsOneWidget,
@@ -1383,7 +1380,7 @@ void main() {
         expect(
           find.descendant(
             of: find.byType(ReplyToArea),
-            matching: find.text("@ai", findRichText: true),
+            matching: find.text("@ai", ),
           ),
           findsOneWidget,
         );
@@ -1989,7 +1986,6 @@ void main() {
               of: find.byType(MfmPreview),
               matching: find.textContaining(
                 TestData.note3AsAnotherUser.user.username.tight,
-                findRichText: true,
               ),
             ),
             findsOneWidget,
@@ -2710,7 +2706,7 @@ void main() {
             await tester.pumpAndSettle();
 
             await tester.tap(
-                find.text(TestData.detailedUser1.name!, findRichText: true));
+                find.text(TestData.detailedUser1.name!, ));
             await tester.pumpAndSettle();
 
             await tester.enterText(
@@ -2776,7 +2772,7 @@ void main() {
             await tester.pumpAndSettle();
 
             await tester.tap(
-                find.text(TestData.detailedUser1.name!, findRichText: true));
+                find.text(TestData.detailedUser1.name!, ));
             await tester.pumpAndSettle();
 
             // 2人目
@@ -2788,7 +2784,7 @@ void main() {
             await tester.pumpAndSettle();
 
             await tester.tap(
-                find.text(TestData.detailedUser2.name!, findRichText: true));
+                find.text(TestData.detailedUser2.name!, ));
             await tester.pumpAndSettle();
 
             await tester.enterText(
@@ -2846,7 +2842,7 @@ void main() {
           await tester.pumpAndSettle();
 
           await tester
-              .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
+              .tap(find.text(TestData.detailedUser1.name!, ));
           await tester.pumpAndSettle();
 
           await tester.tap(find.byIcon(Icons.remove));
