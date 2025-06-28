@@ -8,9 +8,7 @@ import "package:miria/view/common/pushable_listview.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class ExploreHighlight extends HookConsumerWidget {
-  const ExploreHighlight({
-    super.key,
-  });
+  const ExploreHighlight({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,18 +22,15 @@ class ExploreHighlight extends HookConsumerWidget {
             child: LayoutBuilder(
               builder: (context, constraints) => ToggleButtons(
                 constraints: BoxConstraints.expand(
-                  width: constraints.maxWidth / 2 -
-                      Theme.of(context)
-                              .toggleButtonsTheme
-                              .borderWidth!
-                              .toInt() *
+                  width:
+                      constraints.maxWidth / 2 -
+                      Theme.of(
+                            context,
+                          ).toggleButtonsTheme.borderWidth!.toInt() *
                           2,
                 ),
                 onPressed: (index) => isNote.value = index == 0,
-                isSelected: [
-                  isNote.value,
-                  !isNote.value,
-                ],
+                isSelected: [isNote.value, !isNote.value],
                 children: [
                   Text(S.of(context).note),
                   Text(S.of(context).searchVoteTab),
@@ -66,13 +61,12 @@ class ExploreHighlight extends HookConsumerWidget {
               nextFuture: (item, index) async {
                 final Iterable<Note> note;
                 if (isNote.value) {
-                  note =
-                      await ref.read(misskeyGetContextProvider).notes.featured(
-                            NotesFeaturedRequest(
-                              offset: index,
-                              untilId: item.id,
-                            ),
-                          );
+                  note = await ref
+                      .read(misskeyGetContextProvider)
+                      .notes
+                      .featured(
+                        NotesFeaturedRequest(offset: index, untilId: item.id),
+                      );
                 } else {
                   note = await ref
                       .read(misskeyGetContextProvider)

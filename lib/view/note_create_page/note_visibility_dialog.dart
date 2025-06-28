@@ -7,10 +7,7 @@ import "package:misskey_dart/misskey_dart.dart";
 class NoteVisibilityDialog extends ConsumerWidget {
   final Account account;
 
-  const NoteVisibilityDialog({
-    required this.account,
-    super.key,
-  });
+  const NoteVisibilityDialog({required this.account, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

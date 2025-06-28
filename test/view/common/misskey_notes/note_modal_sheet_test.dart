@@ -19,8 +19,9 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
-      when(misskeyNotes.featured(any))
-          .thenAnswer((e) async => [TestData.note1]);
+      when(
+        misskeyNotes.featured(any),
+      ).thenAnswer((e) async => [TestData.note1]);
       final misskeyFavorites = MockMisskeyNotesFavorites();
       when(misskeyNotes.favorites).thenAnswer((e) => misskeyFavorites);
       when(misskey.notes).thenReturn(misskeyNotes);
@@ -58,8 +59,9 @@ void main() {
       final misskeyFavorites = MockMisskeyNotesFavorites();
       when(misskeyNotes.favorites).thenAnswer((e) => misskeyFavorites);
       when(misskey.notes).thenReturn(misskeyNotes);
-      when(misskeyNotes.featured(any))
-          .thenAnswer((_) async => [TestData.note1]);
+      when(
+        misskeyNotes.featured(any),
+      ).thenAnswer((_) async => [TestData.note1]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
@@ -93,8 +95,9 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
-      when(misskeyNotes.featured(any))
-          .thenAnswer((e) async => [TestData.note1]);
+      when(
+        misskeyNotes.featured(any),
+      ).thenAnswer((e) async => [TestData.note1]);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
@@ -164,8 +167,9 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
-      when(misskeyNotes.featured(any))
-          .thenAnswer((e) async => [TestData.note3AsAnotherUser]);
+      when(
+        misskeyNotes.featured(any),
+      ).thenAnswer((e) async => [TestData.note3AsAnotherUser]);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(
@@ -260,8 +264,9 @@ void main() {
       );
       when(misskey.notes).thenReturn(misskeyNotes);
       when(misskeyNotes.featured(any)).thenAnswer(
-        (e) async =>
-            [TestData.note1.copyWith(text: "やっほー", renote: TestData.note2)],
+        (e) async => [
+          TestData.note1.copyWith(text: "やっほー", renote: TestData.note2),
+        ],
       );
       await tester.pumpWidget(
         ProviderScope(
@@ -376,7 +381,7 @@ void main() {
             text: null,
             renoteId: TestData.note2.id,
             renote: TestData.note2,
-          )
+          ),
         ],
       );
       await tester.pumpWidget(
@@ -412,8 +417,9 @@ void main() {
       );
       when(misskey.notes).thenReturn(misskeyNotes);
       when(misskeyNotes.featured(any)).thenAnswer(
-        (e) async =>
-            [TestData.note1.copyWith(text: "やっほー", renote: TestData.note2)],
+        (e) async => [
+          TestData.note1.copyWith(text: "やっほー", renote: TestData.note2),
+        ],
       );
       await tester.pumpWidget(
         ProviderScope(
@@ -444,9 +450,7 @@ void main() {
         fileIds: [TestData.drive1.id],
         files: [TestData.drive1],
       );
-      when(misskeyNotes.featured(any)).thenAnswer(
-        (e) async => [note],
-      );
+      when(misskeyNotes.featured(any)).thenAnswer((e) async => [note]);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [misskeyProvider.overrideWith((ref, account) => misskey)],
@@ -510,8 +514,10 @@ void main() {
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
       when(misskey.notes).thenReturn(misskeyNotes);
-      final note = TestData.note3AsAnotherUser
-          .copyWith(text: null, renote: TestData.note1);
+      final note = TestData.note3AsAnotherUser.copyWith(
+        text: null,
+        renote: TestData.note1,
+      );
       when(misskey.notes).thenReturn(misskeyNotes);
       when(misskeyNotes.featured(any)).thenAnswer((e) async => [note]);
 
@@ -539,8 +545,9 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
-      when(misskeyNotes.featured(any))
-          .thenAnswer((e) async => [TestData.note3AsAnotherUser]);
+      when(
+        misskeyNotes.featured(any),
+      ).thenAnswer((e) async => [TestData.note3AsAnotherUser]);
       final misskeyUsers = MockMisskeyUsers();
       when(misskey.notes).thenReturn(misskeyNotes);
       when(misskey.users).thenReturn(misskeyUsers);
@@ -590,8 +597,9 @@ void main() {
         (_) async =>
             const NotesStateResponse(isFavorited: false, isMutedThread: false),
       );
-      when(misskeyNotes.featured(any))
-          .thenAnswer((e) async => [TestData.note1]);
+      when(
+        misskeyNotes.featured(any),
+      ).thenAnswer((e) async => [TestData.note1]);
       when(misskey.notes).thenReturn(misskeyNotes);
       await tester.pumpWidget(
         ProviderScope(

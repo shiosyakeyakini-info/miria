@@ -39,36 +39,36 @@ class LicenseConfirmDialog extends ConsumerWidget implements AutoRouteWrapper {
     final emojiResponse = ref.watch(_emojiProvider(emoji));
     return switch (emojiResponse) {
       AsyncLoading() => const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        child: CircularProgressIndicator.adaptive(),
+      ),
       AsyncError(:final error) => SimpleMessageDialog(
-          message: "${S.of(context).thrownError}\n$error",
-        ),
+        message: "${S.of(context).thrownError}\n$error",
+      ),
       AsyncData(:final value) => AlertDialog(
-          content: SizedBox(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(S.of(context).customEmojiLicensedBy),
-                  MfmText(
-                    mfmText: value.license ??
-                        S.of(context).customEmojiLicensedByNone,
-                  ),
-                ],
-              ),
+        content: SizedBox(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(S.of(context).customEmojiLicensedBy),
+                MfmText(
+                  mfmText:
+                      value.license ?? S.of(context).customEmojiLicensedByNone,
+                ),
+              ],
             ),
           ),
-          actions: [
-            OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(S.of(context).cancelEmojiChoosing),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(S.of(context).doneEmojiChoosing),
-            ),
-          ],
         ),
+        actions: [
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(S.of(context).cancelEmojiChoosing),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(S.of(context).doneEmojiChoosing),
+          ),
+        ],
+      ),
     };
   }
 }

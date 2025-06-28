@@ -22,9 +22,10 @@ class FileSettingsDialog extends HookConsumerWidget {
   const FileSettingsDialog({required this.file, super.key});
 
   String generateRandomText() {
-    final str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        .split("")
-      ..shuffle();
+    final str =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split(
+          "",
+        )..shuffle();
     return str.take(10).join("");
   }
 
@@ -58,7 +59,8 @@ class FileSettingsDialog extends HookConsumerWidget {
                   if (period == -1) {
                     fileNameController.text = generateRandomText();
                   } else {
-                    fileNameController.text = generateRandomText() +
+                    fileNameController.text =
+                        generateRandomText() +
                         fileNameController.text.substring(period);
                   }
                 },

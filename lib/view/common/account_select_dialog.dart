@@ -26,8 +26,9 @@ class AccountSelectDialog extends HookConsumerWidget {
     final navigateAsRemote = useHandledFuture(() async {
       final remoteHost = this.remoteHost;
       if (remoteHost == null) return;
-      final meta =
-          await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
+      final meta = await ref
+          .read(misskeyWithoutAccountProvider(remoteHost))
+          .meta();
 
       await ref
           .read(appRouterProvider)
@@ -44,16 +45,17 @@ class AccountSelectDialog extends HookConsumerWidget {
             if (remoteHost != null)
               switch (navigateAsRemote.value) {
                 AsyncLoading() => const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
                 _ => ListTile(
-                    leading: const Icon(Icons.language),
-                    title: Text(S.of(context).remoteServerWithoutLogin),
-                    onTap: navigateAsRemote.executeOrNull,
-                  ),
+                  leading: const Icon(Icons.language),
+                  title: Text(S.of(context).remoteServerWithoutLogin),
+                  onTap: navigateAsRemote.executeOrNull,
+                ),
               },
-            for (final account in accounts
-                .where((account) => host == null || account.host == host))
+            for (final account in accounts.where(
+              (account) => host == null || account.host == host,
+            ))
               AccountContextScope.as(
                 account: account,
                 child: ListTile(

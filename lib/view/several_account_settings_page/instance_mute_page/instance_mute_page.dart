@@ -20,7 +20,7 @@ class InstanceMutePageNotifier extends _$InstanceMutePageNotifier {
   Future<(List<String>, AsyncValue<void>?)> build() async {
     return (
       (await ref.read(misskeyPostContextProvider).i.i()).mutedInstances,
-      null
+      null,
     );
   }
 
@@ -28,22 +28,20 @@ class InstanceMutePageNotifier extends _$InstanceMutePageNotifier {
     final beforeState = await future;
     state = AsyncData((beforeState.$1, const AsyncLoading()));
 
-    final mutedInstances =
-        text.split("\n").whereNot((element) => element.trim().isEmpty).toList();
-    state = AsyncData(
-      (
-        beforeState.$1,
-        await ref.read(dialogStateNotifierProvider.notifier).guard(
-          () async {
-            await ref
-                .read(misskeyPostContextProvider)
-                .i
-                .update(IUpdateRequest(mutedInstances: mutedInstances));
-            await ref.read(appRouterProvider).maybePop();
-          },
-        )
-      ),
-    );
+    final mutedInstances = text
+        .split("\n")
+        .whereNot((element) => element.trim().isEmpty)
+        .toList();
+    state = AsyncData((
+      beforeState.$1,
+      await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
+        await ref
+            .read(misskeyPostContextProvider)
+            .i
+            .update(IUpdateRequest(mutedInstances: mutedInstances));
+        await ref.read(appRouterProvider).maybePop();
+      }),
+    ));
   }
 }
 
@@ -63,11 +61,12 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
     final state = ref.watch(instanceMutePageNotifierProvider);
 
     ref.listen(
-        instanceMutePageNotifierProvider
-            .select((value) => value.value?.$1), (_, next) {
-      if (next == null) return;
-      controller.text = next.join("\n");
-    });
+      instanceMutePageNotifierProvider.select((value) => value.value?.$1),
+      (_, next) {
+        if (next == null) return;
+        controller.text = next.join("\n");
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).instanceMute)),
@@ -76,46 +75,46 @@ class InstanceMutePage extends HookConsumerWidget implements AutoRouteWrapper {
           padding: const EdgeInsets.all(10),
           child: switch (state) {
             AsyncLoading() => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-            AsyncError(:final error, :final stackTrace) =>
-              ErrorDetail(error: error, stackTrace: stackTrace),
+              child: CircularProgressIndicator.adaptive(),
+            ),
+            AsyncError(:final error, :final stackTrace) => ErrorDetail(
+              error: error,
+              stackTrace: stackTrace,
+            ),
             AsyncValue() => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(S.of(context).instanceMuteDescription1),
-                      ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(S.of(context).instanceMuteDescription1),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10),
-                  ),
-                  TextField(
-                    maxLines: null,
-                    minLines: 5,
-                    controller: controller,
-                    autofocus: true,
-                    textCapitalization: TextCapitalization.none,
-                  ),
-                  Text(
-                    S.of(context).instanceMuteDescription2,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () async => ref
-                        .read(instanceMutePageNotifierProvider.notifier)
-                        .save(controller.text),
-                    icon: const Icon(Icons.save),
-                    label: Text(S.of(context).save),
-                  ),
-                ],
-              ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10)),
+                TextField(
+                  maxLines: null,
+                  minLines: 5,
+                  controller: controller,
+                  autofocus: true,
+                  textCapitalization: TextCapitalization.none,
+                ),
+                Text(
+                  S.of(context).instanceMuteDescription2,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () async => ref
+                      .read(instanceMutePageNotifierProvider.notifier)
+                      .save(controller.text),
+                  icon: const Icon(Icons.save),
+                  label: Text(S.of(context).save),
+                ),
+              ],
+            ),
           },
         ),
       ),

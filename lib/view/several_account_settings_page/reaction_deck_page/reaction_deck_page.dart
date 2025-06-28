@@ -31,9 +31,12 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   final List<MisskeyEmojiData> reactions = [];
 
   void save() {
-    final currentData =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(widget.account);
-    ref.read(accountSettingsRepositoryProvider).save(
+    final currentData = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(widget.account);
+    ref
+        .read(accountSettingsRepositoryProvider)
+        .save(
           currentData.copyWith(
             reactions: reactions.map((e) => e.baseName).toList(),
           ),
@@ -53,9 +56,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).reactionDeck),
-      ),
+      appBar: AppBar(title: Text(S.of(context).reactionDeck)),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
@@ -99,13 +100,13 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                 children: [
                   IconButton(
                     onPressed: () async {
-                      final reaction =
-                          await context.pushRoute<MisskeyEmojiData>(
-                        ReactionPickerRoute(
-                          account: widget.account,
-                          isAcceptSensitive: true,
-                        ),
-                      );
+                      final reaction = await context
+                          .pushRoute<MisskeyEmojiData>(
+                            ReactionPickerRoute(
+                              account: widget.account,
+                              isAcceptSensitive: true,
+                            ),
+                          );
                       if (reaction == null) return;
                       if (reactions.any(
                         (element) => element.baseName == reaction.baseName,
@@ -161,10 +162,12 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
   }
 
   Future<void> showAddReactionsDialog({required BuildContext context}) async {
-    final endpoints =
-        await ref.read(misskeyProvider(widget.account)).endpoints();
-    final domain =
-        endpoints.contains("i/registry/scopes-with-domain") ? "@" : "system";
+    final endpoints = await ref
+        .read(misskeyProvider(widget.account))
+        .endpoints();
+    final domain = endpoints.contains("i/registry/scopes-with-domain")
+        ? "@"
+        : "system";
     final useEmojiPalette = endpoints.contains("chat/history");
     if (!context.mounted) return;
     final emojiNames = await showDialog<List<String>>(
@@ -187,9 +190,8 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
         )
         .where((emoji) => emoji.runtimeType != NotEmojiData)
         .where(
-          (emoji) => !reactions.any(
-            (element) => element.baseName == emoji.baseName,
-          ),
+          (emoji) =>
+              !reactions.any((element) => element.baseName == emoji.baseName),
         );
     setState(() {
       reactions.addAll(emojis);

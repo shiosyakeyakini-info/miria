@@ -44,10 +44,12 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
                     .emoji
                     ?.where(
                       (element) =>
-                          element.emoji.baseName
-                              .contains(reactionTextField.text) ||
-                          element.aliases
-                              .any((e) => e.contains(reactionTextField.text)),
+                          element.emoji.baseName.contains(
+                            reactionTextField.text,
+                          ) ||
+                          element.aliases.any(
+                            (e) => e.contains(reactionTextField.text),
+                          ),
                     )
                     .take(10)
                     .map((e) => e.emoji) ??
@@ -76,9 +78,7 @@ class NoteDetailDialogState extends ConsumerState<NoteDetailDialog> {
             child: Column(
               children: [
                 MisskeyNote(note: widget.note),
-                TextField(
-                  controller: reactionTextField,
-                ),
+                TextField(controller: reactionTextField),
                 Wrap(
                   children: [
                     for (final emoji in foundEmojis)

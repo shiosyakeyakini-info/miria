@@ -10,11 +10,7 @@ import "package:miria/view/common/misskey_notes/mfm_text.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
-enum HashtagListType {
-  localTrend,
-  local,
-  remote,
-}
+enum HashtagListType { localTrend, local, remote }
 
 class ExploreHashtags extends HookConsumerWidget {
   const ExploreHashtags({super.key});
@@ -30,7 +26,8 @@ class ExploreHashtags extends HookConsumerWidget {
           child: LayoutBuilder(
             builder: (context, constraints) => ToggleButtons(
               constraints: BoxConstraints.expand(
-                width: constraints.maxWidth / 3 -
+                width:
+                    constraints.maxWidth / 3 -
                     Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
                         3,
               ),
@@ -50,43 +47,48 @@ class ExploreHashtags extends HookConsumerWidget {
         ),
         switch (hashtagListType.value) {
           HashtagListType.localTrend => Expanded(
-              child: FutureListView(
-                future: ref.read(misskeyGetContextProvider).hashtags.trend(),
-                builder: (context, item) =>
-                    Hashtag(hashtag: item.tag, usersCount: item.usersCount),
-              ),
+            child: FutureListView(
+              future: ref.read(misskeyGetContextProvider).hashtags.trend(),
+              builder: (context, item) =>
+                  Hashtag(hashtag: item.tag, usersCount: item.usersCount),
             ),
+          ),
           HashtagListType.local => Expanded(
-              child: FutureListView(
-                future: ref.read(misskeyGetContextProvider).hashtags.list(
-                      const HashtagsListRequest(
-                        limit: 50,
-                        attachedToLocalUserOnly: true,
-                        sort: HashtagsListSortType.attachedLocalUsersDescendant,
-                      ),
+            child: FutureListView(
+              future: ref
+                  .read(misskeyGetContextProvider)
+                  .hashtags
+                  .list(
+                    const HashtagsListRequest(
+                      limit: 50,
+                      attachedToLocalUserOnly: true,
+                      sort: HashtagsListSortType.attachedLocalUsersDescendant,
                     ),
-                builder: (context, item) => Hashtag(
-                  hashtag: item.tag,
-                  usersCount: item.attachedLocalUsersCount,
-                ),
+                  ),
+              builder: (context, item) => Hashtag(
+                hashtag: item.tag,
+                usersCount: item.attachedLocalUsersCount,
               ),
             ),
+          ),
           HashtagListType.remote => Expanded(
-              child: FutureListView(
-                future: ref.read(misskeyGetContextProvider).hashtags.list(
-                      const HashtagsListRequest(
-                        limit: 50,
-                        attachedToRemoteUserOnly: true,
-                        sort:
-                            HashtagsListSortType.attachedRemoteUsersDescendant,
-                      ),
+            child: FutureListView(
+              future: ref
+                  .read(misskeyGetContextProvider)
+                  .hashtags
+                  .list(
+                    const HashtagsListRequest(
+                      limit: 50,
+                      attachedToRemoteUserOnly: true,
+                      sort: HashtagsListSortType.attachedRemoteUsersDescendant,
                     ),
-                builder: (context, item) => Hashtag(
-                  hashtag: item.tag,
-                  usersCount: item.attachedRemoteUsersCount,
-                ),
+                  ),
+              builder: (context, item) => Hashtag(
+                hashtag: item.tag,
+                usersCount: item.attachedRemoteUsersCount,
               ),
             ),
+          ),
         },
       ],
     );

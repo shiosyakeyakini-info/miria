@@ -42,12 +42,13 @@ class ReactionAcceptanceDialog extends StatelessWidget {
           title: Text(S.of(context).favoriteNonSensitiveOnly),
         ),
         ListTile(
-          onTap: () => Navigator.of(context).pop(
-            ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote,
-          ),
+          onTap: () => Navigator.of(
+            context,
+          ).pop(ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote),
           leading: const Icon(Icons.add_moderator_outlined),
-          title:
-              Text(S.of(context).favoriteNonSensitiveOnlyAndLikeOnlyForRemote),
+          title: Text(
+            S.of(context).favoriteNonSensitiveOnlyAndLikeOnlyForRemote,
+          ),
         ),
       ],
     );

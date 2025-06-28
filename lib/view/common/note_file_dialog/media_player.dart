@@ -110,12 +110,8 @@ class MediaPlayerState extends State<MediaPlayer> {
         return ListView(
           children: [
             ListTile(
-              leading: const Icon(
-                Icons.open_in_browser,
-              ),
-              title: Text(
-                S.of(context).openBrowsers,
-              ),
+              leading: const Icon(Icons.open_in_browser),
+              title: Text(S.of(context).openBrowsers),
               onTap: () async {
                 Navigator.of(innerContext).pop();
                 Navigator.of(context).pop();
@@ -127,12 +123,8 @@ class MediaPlayerState extends State<MediaPlayer> {
             ),
             if (!isAudioFile)
               ListTile(
-                leading: const Icon(
-                  Icons.fullscreen,
-                ),
-                title: Text(
-                  S.of(context).changeFullScreen,
-                ),
+                leading: const Icon(Icons.fullscreen),
+                title: Text(S.of(context).changeFullScreen),
                 onTap: () async {
                   Navigator.of(innerContext).pop();
                   await videoKey.currentState?.enterFullscreen();
@@ -169,8 +161,11 @@ class MediaPlayerState extends State<MediaPlayer> {
       seekOnDoubleTap: true,
       automaticallyImplySkipNextButton: false,
       automaticallyImplySkipPreviousButton: false,
-      bottomButtonBarMargin:
-          const EdgeInsets.only(left: 16.0, right: 8.0, bottom: 16.0),
+      bottomButtonBarMargin: const EdgeInsets.only(
+        left: 16.0,
+        right: 8.0,
+        bottom: 16.0,
+      ),
       seekBarMargin: const EdgeInsets.only(bottom: 16.0),
     );
 
@@ -238,8 +233,9 @@ class MediaPlayerState extends State<MediaPlayer> {
                             onExitFullscreen: () async {
                               await defaultExitNativeFullscreen();
                               isFullscreen = false;
-                              videoKey.currentState
-                                  ?.update(fill: Colors.transparent);
+                              videoKey.currentState?.update(
+                                fill: Colors.transparent,
+                              );
                             },
                           ),
                         ),
@@ -250,9 +246,7 @@ class MediaPlayerState extends State<MediaPlayer> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child: Container(
-                        color: Colors.transparent,
-                      ),
+                      child: Container(color: Colors.transparent),
                     ),
                 ],
               ),
@@ -285,9 +279,7 @@ class MediaPlayerState extends State<MediaPlayer> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       border: Border(
-                        top: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                        ),
+                        top: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
                     child: Column(
@@ -339,8 +331,9 @@ class MediaPlayerState extends State<MediaPlayer> {
                                   cancelHideTimer();
                                   final isMute =
                                       controller.player.state.volume == 0;
-                                  await controller.player
-                                      .setVolume(isMute ? 100 : 0);
+                                  await controller.player.setVolume(
+                                    isMute ? 100 : 0,
+                                  );
                                   startHideTimer();
                                 },
                                 icon: StreamBuilder(
@@ -381,11 +374,13 @@ class MediaPlayerState extends State<MediaPlayer> {
                                 child: Slider(
                                   thumbColor: Theme.of(context).primaryColor,
                                   activeColor: Theme.of(context).primaryColor,
-                                  value: min(position.inMilliseconds,
-                                          duration.inMilliseconds)
+                                  value: min(
+                                    position.inMilliseconds,
+                                    duration.inMilliseconds,
+                                  ).toDouble(),
+                                  secondaryTrackValue: bufferPosition
+                                      .inMilliseconds
                                       .toDouble(),
-                                  secondaryTrackValue:
-                                      bufferPosition.inMilliseconds.toDouble(),
                                   min: 0,
                                   max: duration.inMilliseconds.toDouble(),
                                   onChangeStart: (value) {
@@ -394,8 +389,9 @@ class MediaPlayerState extends State<MediaPlayer> {
                                   },
                                   onChanged: (value) {
                                     setState(() {
-                                      position =
-                                          Duration(milliseconds: value.toInt());
+                                      position = Duration(
+                                        milliseconds: value.toInt(),
+                                      );
                                     });
                                   },
                                   onChangeEnd: (value) async {

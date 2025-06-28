@@ -23,10 +23,8 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountContextScope(
-        context: accountContext,
-        child: this,
-      );
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,9 +41,7 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
       content: TextField(
         controller: controller,
         maxLines: null,
-        decoration: InputDecoration(
-          hintText: S.of(context).memoDescription,
-        ),
+        decoration: InputDecoration(hintText: S.of(context).memoDescription),
       ),
       actions: [
         OutlinedButton(
@@ -55,9 +51,9 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
         switch (updateMemo.value) {
           AsyncLoading() => const SendingElevatedButton(),
           _ => ElevatedButton(
-              onPressed: () async => updateMemo.execute(),
-              child: Text(S.of(context).save),
-            ),
+            onPressed: () async => updateMemo.execute(),
+            child: Text(S.of(context).save),
+          ),
         },
       ],
     );

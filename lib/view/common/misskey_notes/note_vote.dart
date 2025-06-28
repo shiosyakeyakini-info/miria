@@ -33,26 +33,22 @@ class NoteVoteNotifier extends _$NoteVoteNotifier {
     if (dialogValue != 0) return false;
     state = const AsyncLoading();
 
-    state =
-        await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyPostContextProvider).notes.polls.vote(
-            NotesPollsVoteRequest(
-              noteId: note.id,
-              choice: index,
-            ),
-          );
-      await ref.read(notesWithProvider).refresh(note.id);
-    });
+    state = await ref.read(dialogStateNotifierProvider.notifier).guard(
+      () async {
+        await ref
+            .read(misskeyPostContextProvider)
+            .notes
+            .polls
+            .vote(NotesPollsVoteRequest(noteId: note.id, choice: index));
+        await ref.read(notesWithProvider).refresh(note.id);
+      },
+    );
     return true;
   }
 }
 
 class NoteVote extends HookConsumerWidget {
-  const NoteVote({
-    required this.displayNote,
-    required this.poll,
-    super.key,
-  });
+  const NoteVote({required this.displayNote, required this.poll, super.key});
 
   final Note displayNote;
   final NotePoll poll;
@@ -138,9 +134,9 @@ class NoteVote extends HookConsumerWidget {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent),
                       borderRadius: BorderRadius.circular(3),
-                      color: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withAlpha(215),
+                      color: Theme.of(
+                        context,
+                      ).scaffoldBackgroundColor.withAlpha(215),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 3, right: 3),
@@ -154,24 +150,20 @@ class NoteVote extends HookConsumerWidget {
                               child: Icon(
                                 Icons.check,
                                 size: MediaQuery.textScalerOf(context).scale(
-                                  Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.fontSize ??
+                                  Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.fontSize ??
                                       22,
                                 ),
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.color,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.color,
                               ),
                             ),
                         ],
                         suffixSpan: [
                           const WidgetSpan(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 5),
-                            ),
+                            child: Padding(padding: EdgeInsets.only(left: 5)),
                           ),
                           if (isOpened.value)
                             TextSpan(
@@ -198,17 +190,15 @@ class NoteVote extends HookConsumerWidget {
                 text: isExpired
                     ? S.of(context).finished
                     : !isOpened.value
-                        ? S.of(context).openResult
-                        : isAnyVotable(ref)
-                            ? S.of(context).doVoting
-                            : S.of(context).alreadyVoted,
+                    ? S.of(context).openResult
+                    : isAnyVotable(ref)
+                    ? S.of(context).doVoting
+                    : S.of(context).alreadyVoted,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => isOpened.value = !isOpened.value,
               ),
               const WidgetSpan(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                ),
+                child: Padding(padding: EdgeInsets.only(left: 10)),
               ),
               TextSpan(
                 text: differ == null ? "" : S.of(context).remainDiffer(differ),

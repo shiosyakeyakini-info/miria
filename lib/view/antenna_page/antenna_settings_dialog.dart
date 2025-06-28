@@ -16,8 +16,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 part "antenna_settings_dialog.g.dart";
 
 @Riverpod(dependencies: [])
-AntennaSettings _initialSettings(Ref ref) =>
-    throw UnimplementedError();
+AntennaSettings _initialSettings(Ref ref) => throw UnimplementedError();
 
 @Riverpod(dependencies: [_initialSettings])
 class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
@@ -96,8 +95,9 @@ class _AntennaSettingsNotifier extends _$AntennaSettingsNotifier {
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
-Future<List<UsersList>> _usersListList(Ref ref) async =>
-    [...await ref.read(misskeyGetContextProvider).users.list.list()];
+Future<List<UsersList>> _usersListList(Ref ref) async => [
+  ...await ref.read(misskeyGetContextProvider).users.list.list(),
+];
 
 @RoutePage()
 class AntennaSettingsDialog extends StatelessWidget
@@ -124,9 +124,7 @@ class AntennaSettingsDialog extends StatelessWidget
         ],
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
-          child: AntennaSettingsForm(
-            account: account,
-          ),
+          child: AntennaSettingsForm(account: account),
         ),
       ),
     );
@@ -138,10 +136,7 @@ class AntennaSettingsDialog extends StatelessWidget
 }
 
 class AntennaSettingsForm extends HookConsumerWidget {
-  const AntennaSettingsForm({
-    required this.account,
-    super.key,
-  });
+  const AntennaSettingsForm({required this.account, super.key});
 
   final Account account;
 
@@ -152,13 +147,10 @@ class AntennaSettingsForm extends HookConsumerWidget {
     final settings = ref.watch(_antennaSettingsNotifierProvider);
     final list = ref.watch(_usersListListProvider);
     final controller = useTextEditingController();
-    useEffect(
-      () {
-        controller.text = settings.users.join("\n");
-        return null;
-      },
-      const [],
-    );
+    useEffect(() {
+      controller.text = settings.users.join("\n");
+      return null;
+    }, const []);
 
     return Form(
       key: formKey.value,
@@ -179,8 +171,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
               }
               return null;
             },
-            onSaved:
-                ref.read(_antennaSettingsNotifierProvider.notifier).updateName,
+            onSaved: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateName,
           ),
           const SizedBox(height: 10),
           Text(S.of(context).antennaSource),
@@ -190,22 +183,21 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 .map(
                   (e) => DropdownMenuItem<AntennaSource>(
                     value: e,
-                    child: Text(
-                      switch (e) {
-                        AntennaSource.home => S.of(context).antennaSourceHome,
-                        AntennaSource.all => S.of(context).antennaSourceAll,
-                        AntennaSource.users => S.of(context).antennaSourceUser,
-                        AntennaSource.usersBlackList => "指定したユーザー以外",
-                        AntennaSource.list => S.of(context).antennaSourceList,
-                      },
-                    ),
+                    child: Text(switch (e) {
+                      AntennaSource.home => S.of(context).antennaSourceHome,
+                      AntennaSource.all => S.of(context).antennaSourceAll,
+                      AntennaSource.users => S.of(context).antennaSourceUser,
+                      AntennaSource.usersBlackList => "指定したユーザー以外",
+                      AntennaSource.list => S.of(context).antennaSourceList,
+                    }),
                   ),
                 )
                 .toList(),
             value: settings.src,
             hint: Text(S.of(context).selectAntennaSource),
-            onChanged:
-                ref.read(_antennaSettingsNotifierProvider.notifier).updateSrc,
+            onChanged: ref
+                .read(_antennaSettingsNotifierProvider.notifier)
+                .updateSrc,
           ),
           const SizedBox(height: 10),
           if (settings.src == AntennaSource.list)
@@ -224,8 +216,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
                 }
                 return null;
               },
-              value: list.value
-                  ?.firstWhereOrNull((e) => e.id == settings.userListId),
+              value: list.value?.firstWhereOrNull(
+                (e) => e.id == settings.userListId,
+              ),
               hint: Text(S.of(context).selectList),
               onChanged: ref
                   .read(_antennaSettingsNotifierProvider.notifier)
@@ -249,9 +242,7 @@ class AntennaSettingsForm extends HookConsumerWidget {
             TextButton(
               onPressed: () async {
                 final user = await context.pushRoute<User>(
-                  UserSelectRoute(
-                    accountContext: AccountContext.as(account),
-                  ),
+                  UserSelectRoute(accountContext: AccountContext.as(account)),
                 );
                 if (user == null) return;
 
@@ -267,8 +258,9 @@ class AntennaSettingsForm extends HookConsumerWidget {
           ],
           const SizedBox(height: 10),
           TextFormField(
-            initialValue:
-                initialSettings.keywords.map((e) => e.join(" ")).join("\n"),
+            initialValue: initialSettings.keywords
+                .map((e) => e.join(" "))
+                .join("\n"),
             minLines: 2,
             maxLines: 20,
             decoration: InputDecoration(

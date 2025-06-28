@@ -125,8 +125,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
                 },
                 listKey: path.value.map((e) => e.id).join("/"),
                 itemBuilder: (context, item) {
-                  final isSelected =
-                      files.value.any((file) => file.id == item.id);
+                  final isSelected = files.value.any(
+                    (file) => file.id == item.id,
+                  );
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     child: InkWell(
@@ -150,9 +151,9 @@ class DriveFileSelectDialog extends HookConsumerWidget
                         padding: const EdgeInsets.all(10),
                         decoration: (allowMultiple && isSelected)
                             ? BoxDecoration(
-                                color: AppTheme.of(context)
-                                    .currentDisplayTabColor
-                                    .withOpacity(0.7),
+                                color: AppTheme.of(
+                                  context,
+                                ).currentDisplayTabColor.withOpacity(0.7),
                                 borderRadius: BorderRadius.circular(5),
                               )
                             : null,

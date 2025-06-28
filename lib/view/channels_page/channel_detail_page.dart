@@ -66,9 +66,7 @@ class ChannelDetailPage extends ConsumerWidget implements AutoRouteWrapper {
           ],
         ),
         floatingActionButton: ref.read(accountContextProvider).isSame
-            ? ChannelDetailFloatingActionButton(
-                channelId: channelId,
-              )
+            ? ChannelDetailFloatingActionButton(channelId: channelId)
             : null,
       ),
     );
@@ -84,21 +82,23 @@ class ChannelDetailFloatingActionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final channelDetail = ref.watch(channelDetailProvider(channelId));
     return switch (channelDetail) {
-      AsyncData(:final value) => (value.channel.isArchived)
-          ? const SizedBox.shrink()
-          : FloatingActionButton(
-              child: const Icon(Icons.edit),
-              onPressed: () async {
-                if (!context.mounted) return;
-                await context.pushRoute(
-                  NoteCreateRoute(
-                    initialAccount:
-                        ref.read(accountContextProvider).postAccount,
-                    channel: value.channel,
-                  ),
-                );
-              },
-            ),
+      AsyncData(:final value) =>
+        (value.channel.isArchived)
+            ? const SizedBox.shrink()
+            : FloatingActionButton(
+                child: const Icon(Icons.edit),
+                onPressed: () async {
+                  if (!context.mounted) return;
+                  await context.pushRoute(
+                    NoteCreateRoute(
+                      initialAccount: ref
+                          .read(accountContextProvider)
+                          .postAccount,
+                      channel: value.channel,
+                    ),
+                  );
+                },
+              ),
       _ => const SizedBox.shrink(),
     };
   }

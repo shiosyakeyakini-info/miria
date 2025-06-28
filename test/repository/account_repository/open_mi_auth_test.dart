@@ -29,8 +29,9 @@ void main() {
     final dio = MockDio();
     // ignore: discarded_futures
     when(dio.getUri(any)).thenAnswer((_) async => throw TestData.response404);
-    final provider =
-        ProviderContainer(overrides: [dioProvider.overrideWithValue(dio)]);
+    final provider = ProviderContainer(
+      overrides: [dioProvider.overrideWithValue(dio)],
+    );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(

@@ -21,15 +21,17 @@ part "server_detail_dialog.g.dart";
 
 @Riverpod(dependencies: [misskeyGetContext])
 Future<int> _onlineCounts(Ref ref) async {
-  final onlineUserCountsResponse =
-      await ref.read(misskeyGetContextProvider).getOnlineUsersCount();
+  final onlineUserCountsResponse = await ref
+      .read(misskeyGetContextProvider)
+      .getOnlineUsersCount();
   return onlineUserCountsResponse.count;
 }
 
 @Riverpod(dependencies: [misskeyGetContext])
 Future<int> _totalMemories(Ref ref) async {
-  final serverInfoResponse =
-      await ref.read(misskeyGetContextProvider).serverInfo();
+  final serverInfoResponse = await ref
+      .read(misskeyGetContextProvider)
+      .serverInfo();
   return serverInfoResponse.mem.total;
 }
 
@@ -46,10 +48,7 @@ class ServerDetailDialog extends HookConsumerWidget
     implements AutoRouteWrapper {
   final AccountContext accountContext;
 
-  const ServerDetailDialog({
-    required this.accountContext,
-    super.key,
-  });
+  const ServerDetailDialog({required this.accountContext, super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) =>
@@ -73,46 +72,45 @@ class ServerDetailDialog extends HookConsumerWidget
     final queueId = useMemoized(() => const Uuid().v4());
     final statsId = useMemoized(() => const Uuid().v4());
 
-    useEffect(
-      () {
-        final misskey = ref.read(misskeyGetContextProvider);
-        StreamSubscription<StreamingResponse>? serverStats;
-        StreamSubscription<StreamingResponse>? jobQueue;
-        StreamingController? streaming;
+    useEffect(() {
+      final misskey = ref.read(misskeyGetContextProvider);
+      StreamSubscription<StreamingResponse>? serverStats;
+      StreamSubscription<StreamingResponse>? jobQueue;
+      StreamingController? streaming;
+      unawaited(() async {
+        streaming = await ref.read(misskeyStreamingProvider(misskey).future);
+        jobQueue = streaming!.queueStatsLogStream(id: queueId).listen((
+          response,
+        ) {
+          final body = response.body;
+          if (body is! StatsChannelEvent) return;
+          final innerBody = body.body;
+          if (innerBody is! JobQueueResponse) return;
+          queueLogged.value = [...queueLogged.value, innerBody];
+        });
+
+        serverStats = streaming!.serverStatsLogStream(id: statsId).listen((
+          response,
+        ) {
+          final body = response.body;
+          if (body is! StatsChannelEvent) return;
+          final innerBody = body.body;
+          if (innerBody is! ServerMetricsResponse) return;
+          logged.value = [...logged.value, innerBody];
+        });
+      }());
+
+      return () {
         unawaited(() async {
-          streaming = await ref.read(misskeyStreamingProvider(misskey).future);
-          jobQueue =
-              streaming!.queueStatsLogStream(id: queueId).listen((response) {
-            final body = response.body;
-            if (body is! StatsChannelEvent) return;
-            final innerBody = body.body;
-            if (innerBody is! JobQueueResponse) return;
-            queueLogged.value = [...queueLogged.value, innerBody];
-          });
-
-          serverStats =
-              streaming!.serverStatsLogStream(id: statsId).listen((response) {
-            final body = response.body;
-            if (body is! StatsChannelEvent) return;
-            final innerBody = body.body;
-            if (innerBody is! ServerMetricsResponse) return;
-            logged.value = [...logged.value, innerBody];
-          });
+          await (
+            streaming?.removeChannel(queueId) ?? Future.value(),
+            streaming?.removeChannel(statsId) ?? Future.value(),
+            jobQueue?.cancel() ?? Future.value(),
+            serverStats?.cancel() ?? Future.value(),
+          ).wait;
         }());
-
-        return () {
-          unawaited(() async {
-            await (
-              streaming?.removeChannel(queueId) ?? Future.value(),
-              streaming?.removeChannel(statsId) ?? Future.value(),
-              jobQueue?.cancel() ?? Future.value(),
-              serverStats?.cancel() ?? Future.value(),
-            ).wait;
-          }());
-        };
-      },
-      const [],
-    );
+      };
+    }, const []);
 
     return AlertDialog(
       title: Row(
@@ -173,8 +171,9 @@ class ServerDetailDialog extends HookConsumerWidget
                                   text:
                                       ((currentStat.cpu * 10000).toInt() / 100)
                                           .toString(),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
                                 ),
                                 TextSpan(
                                   text: " %",
@@ -211,8 +210,9 @@ class ServerDetailDialog extends HookConsumerWidget
                                   text: format(
                                     currentStat.mem.used / totalMemories,
                                   ),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
                                 ),
                                 TextSpan(
                                   text: " %",
@@ -253,8 +253,9 @@ class ServerDetailDialog extends HookConsumerWidget
                               children: [
                                 TextSpan(
                                   text: ping.format(),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineSmall,
                                 ),
                                 TextSpan(
                                   text: " ${S.of(context).milliSeconds}",
@@ -411,8 +412,9 @@ class Chart extends StatelessWidget {
             LineChartBarData(
               spots: data,
               isCurved: true,
-              color:
-                  Theme.of(context).textTheme.bodyMedium?.color?.withAlpha(200),
+              color: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color?.withAlpha(200),
               barWidth: 4,
               belowBarData: BarAreaData(
                 show: true,

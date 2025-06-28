@@ -90,19 +90,11 @@ abstract class NoteCreate with _$NoteCreate {
 
 @freezed
 abstract class NoteCreateChannel with _$NoteCreateChannel {
-  const factory NoteCreateChannel({
-    required String id,
-    required String name,
-  }) = _NoteCreateChannel;
+  const factory NoteCreateChannel({required String id, required String name}) =
+      _NoteCreateChannel;
 }
 
-@Riverpod(
-  dependencies: [
-    misskeyPostContext,
-    notesWith,
-    accountContext,
-  ],
-)
+@Riverpod(dependencies: [misskeyPostContext, notesWith, accountContext])
 class NoteCreateNotifier extends _$NoteCreateNotifier {
   late final _fileSystem = ref.read(fileSystemProvider);
   late final _dio = ref.read(dioProvider);
@@ -145,8 +137,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     if (channel != null) {
       channelData = NoteCreateChannel(id: channel.id, name: channel.name);
     } else if (reply?.channel != null) {
-      channelData =
-          NoteCreateChannel(id: reply!.channel!.id, name: reply.channel!.name);
+      channelData = NoteCreateChannel(
+        id: reply!.channel!.id,
+        name: reply.channel!.name,
+      );
     } else {
       channelData = null;
     }
@@ -164,8 +158,16 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
             final file = _fileSystem.file(media);
             final fileName = file.basename;
             final extension = fileName.split(".").last.toLowerCase();
-            if (["jpg", "jpeg", "png", "gif", "webp", "heic", "tif", "tiff"]
-                .contains(extension)) {
+            if ([
+              "jpg",
+              "jpeg",
+              "png",
+              "gif",
+              "webp",
+              "heic",
+              "tif",
+              "tiff",
+            ].contains(extension)) {
               final d = await loadImage(file);
               if (d.data.isEmpty) {
                 await _dialogNotifier.showSimpleDialog(
@@ -182,9 +184,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
               );
             }
           }),
-        ))
-            .nonNulls
-            .toList(),
+        )).nonNulls.toList(),
       );
     }
 
@@ -223,8 +223,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final replyTo = <User>[];
       if (note.mentions.isNotEmpty) {
         replyTo.addAll(
-          await _misskey.users
-              .showByIds(UsersShowByIdsRequest(userIds: note.mentions)),
+          await _misskey.users.showByIds(
+            UsersShowByIdsRequest(userIds: note.mentions),
+          ),
         );
       }
 
@@ -274,21 +275,22 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
       final replyTo = <User>[];
       if (reply.mentions.isNotEmpty) {
         replyTo.addAll(
-          await _misskey.users
-              .showByIds(UsersShowByIdsRequest(userIds: reply.mentions)),
+          await _misskey.users.showByIds(
+            UsersShowByIdsRequest(userIds: reply.mentions),
+          ),
         );
       }
 
       resultState = resultState.copyWith(
         reply: reply,
-        noteVisibility:
-            NoteVisibility.min(resultState.noteVisibility, reply.visibility),
+        noteVisibility: NoteVisibility.min(
+          resultState.noteVisibility,
+          reply.visibility,
+        ),
         cwText: reply.cw ?? "",
         isCw: reply.cw?.isNotEmpty == true,
-        replyTo: [
-          reply.user,
-          ...replyTo,
-        ]..removeWhere(
+        replyTo: [reply.user, ...replyTo]
+          ..removeWhere(
             (element) =>
                 element.id == ref.read(accountContextProvider).postAccount.i.id,
           ),
@@ -304,8 +306,11 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     }
 
     // サイレンスの場合、ホーム以下に強制
-    final isSilenced =
-        ref.read(accountContextProvider).postAccount.i.isSilenced;
+    final isSilenced = ref
+        .read(accountContextProvider)
+        .postAccount
+        .i
+        .isSilenced;
     if (isSilenced) {
       resultState = resultState.copyWith(
         noteVisibility: NoteVisibility.min(
@@ -370,8 +375,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
                     fileName.endsWith("jpeg") ||
                     fileName.endsWith("tiff") ||
                     fileName.endsWith("tif")) {
-                  imageData =
-                      await FlutterImageCompress.compressWithList(file.data);
+                  imageData = await FlutterImageCompress.compressWithList(
+                    file.data,
+                  );
                 }
               } catch (e) {
                 logger.shout("failed to compress file");
@@ -432,8 +438,10 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
               !ref.read(accountContextProvider).postAccount.i.alwaysMarkNsfw) {
             final result = await _dialogNotifier.showDialog(
               message: (context) => S.of(context).unexpectedSensitive,
-              actions: (context) =>
-                  [S.of(context).staySensitive, S.of(context).unsetSensitive],
+              actions: (context) => [
+                S.of(context).staySensitive,
+                S.of(context).unsetSensitive,
+              ],
             );
             if (result == 1) {
               await _misskey.drive.files.update(
@@ -562,7 +570,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         .push<DriveModalSheetReturnValue>(const DriveModalRoute());
 
     if (result == DriveModalSheetReturnValue.drive) {
-      final result = await ref.read(appRouterProvider).push<List<DriveFile>>(
+      final result = await ref
+          .read(appRouterProvider)
+          .push<List<DriveFile>>(
             DriveFileSelectRoute(
               account: ref.read(accountContextProvider).postAccount,
               allowMultiple: true,
@@ -593,12 +603,7 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           );
         }),
       );
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files,
-        ],
-      );
+      state = state.copyWith(files: [...state.files, ...files]);
     } else if (result == DriveModalSheetReturnValue.upload) {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -616,27 +621,20 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
         return null;
       }).nonNulls;
       final files = await Future.wait(
-        fsFiles.map(
-          (file) async {
-            final d = await loadImage(file);
-            if (d.data.isEmpty) {
-              await _dialogNotifier.showSimpleDialog(
-                message: (context) =>
-                    S.of(context).unsupportedFileWithFilename(file.basename),
-              );
-              return null;
-            }
-            return d;
-          },
-        ),
+        fsFiles.map((file) async {
+          final d = await loadImage(file);
+          if (d.data.isEmpty) {
+            await _dialogNotifier.showSimpleDialog(
+              message: (context) =>
+                  S.of(context).unsupportedFileWithFilename(file.basename),
+            );
+            return null;
+          }
+          return d;
+        }),
       );
 
-      state = state.copyWith(
-        files: [
-          ...state.files,
-          ...files.nonNulls,
-        ],
-      );
+      state = state.copyWith(files: [...state.files, ...files.nonNulls]);
     }
   }
 
@@ -691,7 +689,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
           tiff.exif = exif;
 
           return ImageFile(
-              fileName: "$basename.jpg", data: encodeJpg(tiff, quality: 95));
+            fileName: "$basename.jpg",
+            data: encodeJpg(tiff, quality: 95),
+          );
 
         default:
           return ImageFile(fileName: basename, data: imageBytes);
@@ -790,7 +790,9 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
 
   /// リプライ先ユーザーを追加する
   Future<void> addReplyUser() async {
-    final user = await ref.read(appRouterProvider).push<User>(
+    final user = await ref
+        .read(appRouterProvider)
+        .push<User>(
           UserSelectRoute(accountContext: ref.read(accountContextProvider)),
         );
     if (user != null) {
@@ -808,15 +810,15 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
     state = state.copyWith(isCw: !state.isCw);
   }
 
-  Future<bool> validateNoteVisibility(
-    NoteVisibility visibility,
-  ) async {
+  Future<bool> validateNoteVisibility(NoteVisibility visibility) async {
     final replyVisibility = state.reply?.visibility;
     if (replyVisibility == NoteVisibility.specified ||
         replyVisibility == NoteVisibility.followers ||
         replyVisibility == NoteVisibility.home) {
       await _dialogNotifier.showSimpleDialog(
-        message: (context) => S.of(context).cannotPublicReplyToPrivateNote(
+        message: (context) => S
+            .of(context)
+            .cannotPublicReplyToPrivateNote(
               replyVisibility!.displayName(context),
             ),
       );
@@ -841,20 +843,26 @@ class NoteCreateNotifier extends _$NoteCreateNotifier {
   Future<void> toggleLocalOnly() async {
     // チャンネルのノートは強制ローカルから変えられない
     if (state.channel != null) {
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
             message: (context) => S.of(context).cannotFederateNoteToChannel,
           );
       return;
     }
     if (state.reply?.localOnly == true) {
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
             message: (context) =>
                 S.of(context).cannotFederateReplyToLocalOnlyNote,
           );
       return;
     }
     if (state.renote?.localOnly == true) {
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
             message: (context) =>
                 S.of(context).cannotFederateRenoteToLocalOnlyNote,
           );

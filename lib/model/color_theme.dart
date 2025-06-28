@@ -33,12 +33,12 @@ abstract class ColorTheme with _$ColorTheme {
 
   factory ColorTheme.misskey(MisskeyTheme theme) {
     final isDarkTheme = theme.base == "dark";
-    final props = {
-      ...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps,
-    }
-      ..addAll(theme.props)
-      ..cast<String, String>()
-          .removeWhere((key, value) => value.startsWith('"'));
+    final props =
+        {...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps}
+          ..addAll(theme.props)
+          ..cast<String, String>().removeWhere(
+            (key, value) => value.startsWith('"'),
+          );
 
     // https://github.com/misskey-dev/misskey/blob/13.14.1/packages/frontend/src/scripts/theme.ts#L98-L124
     Color getColor(String val) {
@@ -88,9 +88,7 @@ abstract class ColorTheme with _$ColorTheme {
       throw FormatException("invalid color format", val);
     }
 
-    final colors = props.map(
-      (key, value) => MapEntry(key, getColor(value)),
-    );
+    final colors = props.map((key, value) => MapEntry(key, getColor(value)));
 
     return ColorTheme(
       id: theme.id,

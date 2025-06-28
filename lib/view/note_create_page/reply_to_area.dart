@@ -42,8 +42,8 @@ class ReplyToArea extends ConsumerWidget {
                 Text(
                   "@${replyTo.username}${replyTo.host == null ? "" : "@${replyTo.host}"}",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.of(context).mentionStyle.color,
-                      ),
+                    color: AppTheme.of(context).mentionStyle.color,
+                  ),
                 ),
                 IconButton(
                   onPressed: () async => ref
@@ -78,8 +78,9 @@ class ReplyToArea extends ConsumerWidget {
             ),
             icon: Icon(
               Icons.add,
-              size: MediaQuery.textScalerOf(context)
-                  .scale(Theme.of(context).textTheme.bodySmall?.fontSize ?? 22),
+              size: MediaQuery.textScalerOf(
+                context,
+              ).scale(Theme.of(context).textTheme.bodySmall?.fontSize ?? 22),
             ),
           ),
         ],

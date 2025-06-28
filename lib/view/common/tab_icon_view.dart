@@ -11,12 +11,7 @@ class TabIconView extends ConsumerWidget {
   final Color? color;
   final double? size;
 
-  const TabIconView({
-    required this.icon,
-    super.key,
-    this.color,
-    this.size,
-  });
+  const TabIconView({required this.icon, super.key, this.color, this.size});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

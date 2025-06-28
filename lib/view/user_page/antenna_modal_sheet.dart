@@ -51,9 +51,9 @@ class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
                         .read(antennasNotifierProvider.notifier)
                         .updateAntenna(
                           antenna.id,
-                          AntennaSettings.fromAntenna(antenna).copyWith(
-                            users: [...antenna.users, user.acct],
-                          ),
+                          AntennaSettings.fromAntenna(
+                            antenna,
+                          ).copyWith(users: [...antenna.users, user.acct]),
                         );
                   } else {
                     await ref
@@ -95,7 +95,9 @@ class AntennaModalSheet extends ConsumerWidget implements AutoRouteWrapper {
           },
         );
       },
-      error: (e, st) => Center(child: ErrorDetail(error: e, stackTrace: st)),
+      error: (e, st) => Center(
+        child: ErrorDetail(error: e, stackTrace: st),
+      ),
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
     );
   }

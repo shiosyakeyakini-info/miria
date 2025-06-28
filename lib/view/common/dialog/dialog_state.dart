@@ -14,9 +14,7 @@ part "dialog_state.g.dart";
 
 @freezed
 abstract class DialogsState with _$DialogsState {
-  factory DialogsState({
-    @Default([]) List<DialogData> dialogs,
-  }) = _DialogsState;
+  factory DialogsState({@Default([]) List<DialogData> dialogs}) = _DialogsState;
 }
 
 @freezed

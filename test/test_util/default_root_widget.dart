@@ -32,9 +32,7 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       locale: const Locale("ja", "JP"),
-      supportedLocales: const [
-        Locale("ja", "JP"),
-      ],
+      supportedLocales: const [Locale("ja", "JP")],
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,
@@ -47,9 +45,7 @@ class DefaultRootWidgetState extends State<DefaultRootWidget> {
           child: SharingIntentListener(
             router: router,
             child: ErrorDialogListener(
-              child: DialogScope(
-                child: widget ?? Container(),
-              ),
+              child: DialogScope(child: widget ?? Container()),
             ),
           ),
         );
@@ -72,9 +68,7 @@ class DefaultRootNoRouterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       locale: const Locale("ja", "JP"),
-      supportedLocales: const [
-        Locale("ja", "JP"),
-      ],
+      supportedLocales: const [Locale("ja", "JP")],
       home: child,
       scrollBehavior: AppScrollBehavior(),
       localizationsDelegates: const [
@@ -85,9 +79,7 @@ class DefaultRootNoRouterWidget extends StatelessWidget {
       ],
       builder: (context, widget) {
         return AppThemeScope(
-          child: ErrorDialogListener(
-            child: widget ?? Container(),
-          ),
+          child: ErrorDialogListener(child: widget ?? Container()),
         );
       },
     );

@@ -13,11 +13,10 @@ import "package:miria/view/common/note_create/input_completation.dart";
 
 final _filteredEmojisProvider = NotifierProvider.autoDispose
     .family<_FilteredEmojis, List<MisskeyEmojiData>, Account>(
-  _FilteredEmojis.new,
-);
+      _FilteredEmojis.new,
+    );
 
-class _FilteredEmojis
-    extends FamilyNotifier<List<MisskeyEmojiData>, Account> {
+class _FilteredEmojis extends FamilyNotifier<List<MisskeyEmojiData>, Account> {
   @override
   List<MisskeyEmojiData> build(Account arg) {
     ref.listen(
@@ -29,8 +28,9 @@ class _FilteredEmojis
 
   Future<void> _updateEmojis(InputCompletionType type) async {
     if (type is Emoji) {
-      state =
-          await ref.read(emojiRepositoryProvider(arg)).searchEmojis(type.query);
+      state = await ref
+          .read(emojiRepositoryProvider(arg))
+          .searchEmojis(type.query);
     }
   }
 }
@@ -49,8 +49,10 @@ class EmojiKeyboard extends ConsumerWidget {
     final currentPosition = controller.selection.base.offset;
     final text = controller.text;
 
-    final beforeSearchText =
-        text.substring(0, text.substring(0, currentPosition).lastIndexOf(":"));
+    final beforeSearchText = text.substring(
+      0,
+      text.substring(0, currentPosition).lastIndexOf(":"),
+    );
 
     final after = (currentPosition == text.length || currentPosition == -1)
         ? ""
@@ -84,10 +86,7 @@ class EmojiKeyboard extends ConsumerWidget {
     );
 
     if (filteredEmojis.isEmpty) {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
 
     return Row(

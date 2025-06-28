@@ -71,8 +71,9 @@ class NoteRepository extends ChangeNotifier {
       }
       if (regExp != null) {
         try {
-          hardMuteWordRegExps
-              .add(RegExp(regExp.substring(1, regExp.length - 1)));
+          hardMuteWordRegExps.add(
+            RegExp(regExp.substring(1, regExp.length - 1)),
+          );
         } catch (e) {}
       }
     }
@@ -116,7 +117,9 @@ class NoteRepository extends ChangeNotifier {
       myReaction: note.myReaction?.isEmpty == true
           ? null
           : (note.myReaction ??
-              (note.reactions.isNotEmpty ? registeredNote?.myReaction : null)),
+                (note.reactions.isNotEmpty
+                    ? registeredNote?.myReaction
+                    : null)),
     );
     _noteStatuses[note.id] ??= NoteStatus(
       isCwOpened: false,
@@ -125,8 +128,8 @@ class NoteRepository extends ChangeNotifier {
       isLongVisibleInitialized: false,
       isIncludeMuteWord:
           (note.user.host != null || note.user.id != account.i.id) &&
-                  softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
-              softMuteWordRegExps.any(isMuteTarget),
+              softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
+          softMuteWordRegExps.any(isMuteTarget),
       isMuteOpened: false,
     );
     final renote = note.renote;

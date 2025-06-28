@@ -20,10 +20,7 @@ import "package:misskey_dart/misskey_dart.dart";
 class UserDetail extends ConsumerWidget {
   final UserDetailed response;
 
-  const UserDetail({
-    required this.response,
-    super.key,
-  });
+  const UserDetail({required this.response, super.key});
 
   Widget buildContent(BuildContext context, WidgetRef ref) {
     final response = this.response;
@@ -94,9 +91,7 @@ class UserDetail extends ConsumerWidget {
                             else if (response.hasPendingFollowRequestFromYou)
                               ElevatedButton(
                                 onPressed: notifier.cancelFollowRequest,
-                                child: Text(
-                                  S.of(context).followRequestPending,
-                                ),
+                                child: Text(S.of(context).followRequestPending),
                               )
                             else
                               OutlinedButton(
@@ -157,10 +152,7 @@ class UserDetail extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  AvatarIcon(
-                    user: response,
-                    height: 80,
-                  ),
+                  AvatarIcon(user: response, height: 80),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -199,9 +191,9 @@ class UserDetail extends ConsumerWidget {
                                 : S.of(context).memoDescription,
                             style: memo.isNotEmpty
                                 ? null
-                                : Theme.of(context)
-                                    .inputDecorationTheme
-                                    .hintStyle,
+                                : Theme.of(
+                                    context,
+                                  ).inputDecorationTheme.hintStyle,
                           ),
                         ),
                         IconButton(
@@ -446,9 +438,8 @@ class UserDetail extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 10),
             sliver: SliverList.builder(
               itemCount: response.pinnedNotes!.length,
-              itemBuilder: (context, index) => MisskeyNote(
-                note: response.pinnedNotes![index],
-              ),
+              itemBuilder: (context, index) =>
+                  MisskeyNote(note: response.pinnedNotes![index]),
             ),
           ),
       ],
@@ -471,8 +462,9 @@ class BirthdayConfetti extends StatefulWidget {
 }
 
 class BirthdayConfettiState extends State<BirthdayConfetti> {
-  final confettiController =
-      ConfettiController(duration: const Duration(seconds: 30));
+  final confettiController = ConfettiController(
+    duration: const Duration(seconds: 30),
+  );
 
   @override
   void initState() {
@@ -511,8 +503,9 @@ class RoleChip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = Theme.of(context).textTheme.bodyMedium;
-    final height = MediaQuery.textScalerOf(context)
-        .scale((textStyle?.fontSize ?? 14) * (textStyle?.height ?? 1));
+    final height = MediaQuery.textScalerOf(
+      context,
+    ).scale((textStyle?.fontSize ?? 14) * (textStyle?.height ?? 1));
     return Tooltip(
       message: role.description,
       child: GestureDetector(
@@ -538,10 +531,7 @@ class RoleChip extends ConsumerWidget {
             ),
             borderRadius: BorderRadius.circular(height),
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 5,
-            horizontal: 10,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

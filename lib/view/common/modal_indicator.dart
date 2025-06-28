@@ -11,9 +11,7 @@ class IndicatorView {
     Navigator.push(
       context,
       ModalOverlay(
-        const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        const Center(child: CircularProgressIndicator.adaptive()),
         isAndroidBackEnable: false,
       ),
     );
@@ -60,9 +58,7 @@ class ModalOverlay extends ModalRoute<void> {
   ) {
     return Material(
       type: MaterialType.transparency,
-      child: SafeArea(
-        child: _buildOverlayContent(context),
-      ),
+      child: SafeArea(child: _buildOverlayContent(context)),
     );
   }
 
@@ -75,23 +71,15 @@ class ModalOverlay extends ModalRoute<void> {
   ) {
     return FadeTransition(
       opacity: animation,
-      child: ScaleTransition(
-        scale: animation,
-        child: child,
-      ),
+      child: ScaleTransition(scale: animation, child: child),
     );
   }
 
   Widget _buildOverlayContent(BuildContext context) {
-    return Center(
-      child: dialogContent(context),
-    );
+    return Center(child: dialogContent(context));
   }
 
   Widget dialogContent(BuildContext context) {
-    return PopScope(
-      canPop: isAndroidBackEnable,
-      child: contents,
-    ); //
+    return PopScope(canPop: isAndroidBackEnable, child: contents); //
   }
 }

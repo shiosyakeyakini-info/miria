@@ -49,24 +49,22 @@ FileSystem fileSystem(Ref ref) => const LocalFileSystem();
   "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
 )
 Misskey misskey(Ref ref, Account account) => Misskey(
-      token: account.token,
-      host: account.host,
-      socketConnectionTimeout: const Duration(seconds: 20),
-    );
+  token: account.token,
+  host: account.host,
+  socketConnectionTimeout: const Duration(seconds: 20),
+);
 
 @Riverpod(keepAlive: true)
 Raw<AppRouter> appRouter(Ref ref) => AppRouter();
 
 @riverpod
-Misskey misskeyWithoutAccount(Ref ref, String host) =>
-    Misskey(
-      host: host,
-      token: null,
-      socketConnectionTimeout: const Duration(seconds: 20),
-    );
+Misskey misskeyWithoutAccount(Ref ref, String host) => Misskey(
+  host: host,
+  token: null,
+  socketConnectionTimeout: const Duration(seconds: 20),
+);
 
-final favoriteProvider =
-    Provider.family<FavoriteRepository, Account>(
+final favoriteProvider = Provider.family<FavoriteRepository, Account>(
   (ref, account) => FavoriteRepository(
     ref.read(misskeyProvider(account)),
     ref.read(notesProvider(account)),
@@ -103,30 +101,35 @@ MeDetailed i(Ref ref, Acct acct) {
 
 @riverpod
 Account account(Ref ref, Acct acct) => ref.watch(
-      accountsProvider.select(
-        (accounts) => accounts.firstWhere((account) => account.acct == acct),
-      ),
-    );
+  accountsProvider.select(
+    (accounts) => accounts.firstWhere((account) => account.acct == acct),
+  ),
+);
 
-final tabSettingsRepositoryProvider =
-    Provider((ref) => TabSettingsRepository());
+final tabSettingsRepositoryProvider = Provider(
+  (ref) => TabSettingsRepository(),
+);
 
-final accountSettingsRepositoryProvider =
-    Provider((ref) => AccountSettingsRepository());
+final accountSettingsRepositoryProvider = Provider(
+  (ref) => AccountSettingsRepository(),
+);
 
-final generalSettingsRepositoryProvider =
-    Provider((ref) => GeneralSettingsRepository());
+final generalSettingsRepositoryProvider = Provider(
+  (ref) => GeneralSettingsRepository(),
+);
 
-final desktopSettingsRepositoryProvider =
-    Provider((ref) => DesktopSettingsRepository());
+final desktopSettingsRepositoryProvider = Provider(
+  (ref) => DesktopSettingsRepository(),
+);
 
 final errorEventProvider =
     StateProvider<(Object? error, BuildContext? context)>(
-  (ref) => (null, null),
-);
+      (ref) => (null, null),
+    );
 
-final importExportRepositoryProvider =
-    Provider((ref) => ImportExportRepository(ref));
+final importExportRepositoryProvider = Provider(
+  (ref) => ImportExportRepository(ref),
+);
 
 @Riverpod(keepAlive: true)
 BaseCacheManager? cacheManager(Ref ref) => null;
@@ -148,100 +151,102 @@ abstract class AccountContext with _$AccountContext {
 }
 
 @Riverpod(dependencies: [])
-AccountContext accountContext(Ref ref) =>
-    throw UnimplementedError();
+AccountContext accountContext(Ref ref) => throw UnimplementedError();
 
 @Riverpod(dependencies: [accountContext])
 Misskey misskeyGetContext(Ref ref) {
-  final account =
-      ref.read(accountContextProvider.select((value) => value.getAccount));
+  final account = ref.read(
+    accountContextProvider.select((value) => value.getAccount),
+  );
   return ref.read(misskeyProvider(account));
 }
 
 @Riverpod(dependencies: [accountContext])
 Misskey misskeyPostContext(Ref ref) {
-  final account =
-      ref.read(accountContextProvider.select((value) => value.postAccount));
+  final account = ref.read(
+    accountContextProvider.select((value) => value.postAccount),
+  );
   return ref.read(misskeyProvider(account));
 }
 
-final timelineProvider =
-    Provider.family<TimelineRepository, TabSetting>(
-        (ref, setting) {
+final timelineProvider = Provider.family<TimelineRepository, TabSetting>((
+  ref,
+  setting,
+) {
   final account = ref.read(accountProvider(setting.acct));
 
   return switch (setting.tabType) {
     TabType.localTimeline => LocalTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.homeTimeline => HomeTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.globalTimeline => GlobalTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.hybridTimeline => HybridTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.roleTimeline => RoleTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.channel => ChannelTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.userList => UserListTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     TabType.antenna => AntennaTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      ),
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
     _ => LocalTimelineRepository(
-        ref.read(misskeyProvider(account)),
-        account,
-        ref.read(notesProvider(account)),
-        ref.read(generalSettingsRepositoryProvider),
-        setting,
-        ref,
-      )
+      ref.read(misskeyProvider(account)),
+      account,
+      ref.read(notesProvider(account)),
+      ref.read(generalSettingsRepositoryProvider),
+      setting,
+      ref,
+    ),
   };
 });

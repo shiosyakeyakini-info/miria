@@ -68,90 +68,96 @@ class NoteDetailPage extends ConsumerWidget implements AutoRouteWrapper {
         padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
         child: switch (notesShow) {
           AsyncLoading() => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          AsyncError(:final error, :final stackTrace) =>
-            ErrorDetail(error: error, stackTrace: stackTrace),
+            child: CircularProgressIndicator.adaptive(),
+          ),
+          AsyncError(:final error, :final stackTrace) => ErrorDetail(
+            error: error,
+            stackTrace: stackTrace,
+          ),
           AsyncData(:final value) => SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  switch (conversation) {
-                    AsyncLoading() => const SizedBox.square(
-                        dimension: 100,
-                        child: CircularProgressIndicator.adaptive(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                switch (conversation) {
+                  AsyncLoading() => const SizedBox.square(
+                    dimension: 100,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                  AsyncError(:final error, :final stackTrace) => ErrorDetail(
+                    error: error,
+                    stackTrace: stackTrace,
+                  ),
+                  AsyncData(:final value) => ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      return MisskeyNote(
+                        note: value[index],
+                        isForceUnvisibleRenote: true,
+                        isForceUnvisibleReply: true,
+                      );
+                    },
+                  ),
+                },
+                MisskeyNote(
+                  note: value,
+                  recursive: 1,
+                  isForceUnvisibleReply: true,
+                  isDisplayBorder: false,
+                  isForceVisibleLong: true,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5)),
+                Text(
+                  S
+                      .of(context)
+                      .noteCreatedAt(
+                        value.createdAt.formatUntilMilliSeconds(context),
                       ),
-                    AsyncError(:final error, :final stackTrace) =>
-                      ErrorDetail(error: error, stackTrace: stackTrace),
-                    AsyncData(:final value) => ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return MisskeyNote(
-                            note: value[index],
-                            isForceUnvisibleRenote: true,
-                            isForceUnvisibleReply: true,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5)),
+                const Divider(),
+                const Padding(padding: EdgeInsets.only(top: 5)),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: PushableListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    hideIsEmpty: true,
+                    initializeFuture: () async {
+                      final repliesResult = await ref
+                          .read(misskeyGetContextProvider)
+                          .notes
+                          .children(NotesChildrenRequest(noteId: note.id));
+                      ref.read(notesWithProvider).registerAll(repliesResult);
+                      return repliesResult.toList();
+                    },
+                    nextFuture: (lastItem, _) async {
+                      final repliesResult = await ref
+                          .read(misskeyGetContextProvider)
+                          .notes
+                          .children(
+                            NotesChildrenRequest(
+                              noteId: note.id,
+                              untilId: lastItem.id,
+                            ),
                           );
-                        },
-                      ),
-                  },
-                  MisskeyNote(
-                    note: value,
-                    recursive: 1,
-                    isForceUnvisibleReply: true,
-                    isDisplayBorder: false,
-                    isForceVisibleLong: true,
+                      ref.read(notesWithProvider).registerAll(repliesResult);
+                      return repliesResult.toList();
+                    },
+                    itemBuilder: (context, item) {
+                      return MisskeyNote(
+                        note: item,
+                        recursive: 1,
+                        isForceUnvisibleRenote: true,
+                        isForceUnvisibleReply: true,
+                      );
+                    },
                   ),
-                  const Padding(padding: EdgeInsets.only(top: 5)),
-                  Text(
-                    S.of(context).noteCreatedAt(
-                          value.createdAt.formatUntilMilliSeconds(context),
-                        ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 5)),
-                  const Divider(),
-                  const Padding(padding: EdgeInsets.only(top: 5)),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: PushableListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      hideIsEmpty: true,
-                      initializeFuture: () async {
-                        final repliesResult = await ref
-                            .read(misskeyGetContextProvider)
-                            .notes
-                            .children(NotesChildrenRequest(noteId: note.id));
-                        ref.read(notesWithProvider).registerAll(repliesResult);
-                        return repliesResult.toList();
-                      },
-                      nextFuture: (lastItem, _) async {
-                        final repliesResult = await ref
-                            .read(misskeyGetContextProvider)
-                            .notes
-                            .children(
-                              NotesChildrenRequest(
-                                noteId: note.id,
-                                untilId: lastItem.id,
-                              ),
-                            );
-                        ref.read(notesWithProvider).registerAll(repliesResult);
-                        return repliesResult.toList();
-                      },
-                      itemBuilder: (context, item) {
-                        return MisskeyNote(
-                          note: item,
-                          recursive: 1,
-                          isForceUnvisibleRenote: true,
-                          isForceUnvisibleReply: true,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )
+                ),
+              ],
+            ),
+          ),
         },
       ),
     );

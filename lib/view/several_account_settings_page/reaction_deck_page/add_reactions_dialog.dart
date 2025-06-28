@@ -29,14 +29,7 @@ class AddReactionsDialog extends HookConsumerWidget {
       host: host,
       pathSegments: useEmojiPalette
           ? ["settings", "emoji-palette"]
-          : [
-              "registry",
-              "value",
-              domain,
-              "client",
-              "base",
-              "reactions",
-            ],
+          : ["registry", "value", domain, "client", "base", "reactions"],
     );
     final s = S.of(context);
 
@@ -114,8 +107,9 @@ class AddReactionsDialog extends HookConsumerWidget {
                   final emojiNames = text.startsWith("[")
                       ? JSON5.parse(value!) as List
                       : text.split(" ");
-                  Navigator.of(context)
-                      .pop(emojiNames.map((name) => name as String).toList());
+                  Navigator.of(
+                    context,
+                  ).pop(emojiNames.map((name) => name as String).toList());
                 }
               },
             ),

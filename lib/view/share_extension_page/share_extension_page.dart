@@ -26,10 +26,7 @@ abstract class ShareExtensionData with _$ShareExtensionData {
 
 @freezed
 abstract class SharedFiles with _$SharedFiles {
-  factory SharedFiles({
-    required String path,
-    required int type,
-  }) = _SharedFiles;
+  factory SharedFiles({required String path, required int type}) = _SharedFiles;
 
   factory SharedFiles.fromJson(Map<String, dynamic> json) =>
       _$SharedFilesFromJson(json);
@@ -44,9 +41,7 @@ class ShareExtensionPage extends ConsumerStatefulWidget {
       ShareExtensionPageState();
 }
 
-final isShareExtensionProvider = StateProvider(
-  (ref) => false,
-);
+final isShareExtensionProvider = StateProvider((ref) => false);
 
 class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   var sharedPreference = "";
@@ -63,8 +58,9 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
           await SharedPreferenceAppGroup.get("ShareKey") as String? ?? "",
         );
         await SharedPreferenceAppGroup.setString("ShareKey", "");
-        final sharedData =
-            ShareExtensionData.fromJson(json as Map<String, dynamic>);
+        final sharedData = ShareExtensionData.fromJson(
+          json as Map<String, dynamic>,
+        );
 
         if (ref.read(accountsProvider).length >= 2) {
           if (!mounted) return;

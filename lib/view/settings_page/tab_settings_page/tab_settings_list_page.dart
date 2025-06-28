@@ -18,8 +18,9 @@ class TabSettingsListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tabSettings = ref
         .watch(
-          tabSettingsRepositoryProvider
-              .select((repository) => repository.tabSettings),
+          tabSettingsRepositoryProvider.select(
+            (repository) => repository.tabSettings,
+          ),
         )
         .toList();
 

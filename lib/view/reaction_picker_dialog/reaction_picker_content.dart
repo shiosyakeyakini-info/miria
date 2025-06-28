@@ -30,8 +30,8 @@ class ReactionPickerContent extends ConsumerStatefulWidget {
 class ReactionPickerContentState extends ConsumerState<ReactionPickerContent> {
   final categoryList = <String>[];
   EmojiRepository get emojiRepository => ref.read(
-        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
-      );
+    emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+  );
 
   @override
   void didChangeDependencies() {
@@ -189,8 +189,8 @@ class EmojiSearchState extends ConsumerState<EmojiSearch> {
   final emojis = <MisskeyEmojiData>[];
 
   EmojiRepository get emojiRepository => ref.read(
-        emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
-      );
+    emojiRepositoryProvider(ref.read(accountContextProvider).getAccount),
+  );
 
   @override
   void didChangeDependencies() {

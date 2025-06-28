@@ -70,7 +70,8 @@ class UserSelectContent extends HookConsumerWidget {
                 for (final element in Origin.values) element == origin.value,
               ],
               constraints: BoxConstraints.expand(
-                width: constraints.maxWidth / Origin.values.length -
+                width:
+                    constraints.maxWidth / Origin.values.length -
                     Theme.of(context).toggleButtonsTheme.borderWidth!.toInt() *
                         Origin.values.length,
               ),
@@ -137,12 +138,11 @@ class UsersSelectContentList extends ConsumerWidget {
       nextFuture: (lastItem, length) async {
         if (query.isEmpty) return [];
 
-        final response = await ref.read(misskeyGetContextProvider).users.search(
-              UsersSearchRequest(
-                query: query,
-                origin: origin,
-                offset: length,
-              ),
+        final response = await ref
+            .read(misskeyGetContextProvider)
+            .users
+            .search(
+              UsersSearchRequest(query: query, origin: origin, offset: length),
             );
         return response.toList();
       },

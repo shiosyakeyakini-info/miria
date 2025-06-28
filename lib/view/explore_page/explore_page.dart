@@ -16,10 +16,7 @@ import "package:miria/view/explore_page/explore_users.dart";
 class ExplorePage extends ConsumerWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
 
-  const ExplorePage({
-    required this.accountContext,
-    super.key,
-  });
+  const ExplorePage({required this.accountContext, super.key});
 
   @override
   Widget wrappedRoute(BuildContext context) =>

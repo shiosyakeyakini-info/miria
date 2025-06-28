@@ -31,7 +31,8 @@ class AppInfoPage extends ConsumerWidget {
             child: Column(
               children: [
                 MfmText(
-                  mfmText: '''
+                  mfmText:
+                      '''
 <center>\$[x3 Miria]</center>
 ${S.of(context).packageName}: ${packageInfo?.packageName ?? ""}
 ${S.of(context).version}: ${packageInfo?.version ?? ""}+${packageInfo?.buildNumber ?? ""}

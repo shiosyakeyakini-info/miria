@@ -38,18 +38,16 @@ class AntennasNotifier extends _$AntennasNotifier {
 
   Future<void> delete(String antennaId) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await _misskey.antennas
-          .delete(AntennasDeleteRequest(antennaId: antennaId));
+      await _misskey.antennas.delete(
+        AntennasDeleteRequest(antennaId: antennaId),
+      );
       state = AsyncValue.data(
         state.value?.where((e) => e.id != antennaId).toList() ?? [],
       );
     });
   }
 
-  Future<void> updateAntenna(
-    String antennaId,
-    AntennaSettings settings,
-  ) async {
+  Future<void> updateAntenna(String antennaId, AntennaSettings settings) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       await _misskey.antennas.update(
         AntennasUpdateRequest(

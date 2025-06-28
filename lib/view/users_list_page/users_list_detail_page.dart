@@ -26,7 +26,11 @@ class _UsersListNotifier extends _$UsersListNotifier {
     return response.toUsersList();
   }
 
-  Future<void> updateList(UsersListSettings settings, Misskey misskey, String listId) async {
+  Future<void> updateList(
+    UsersListSettings settings,
+    Misskey misskey,
+    String listId,
+  ) async {
     await misskey.users.list.update(
       UsersListsUpdateRequest(
         listId: listId,
@@ -37,10 +41,7 @@ class _UsersListNotifier extends _$UsersListNotifier {
     final list = state.value;
     if (list != null) {
       state = AsyncValue.data(
-        list.copyWith(
-          name: settings.name,
-          isPublic: settings.isPublic,
-        ),
+        list.copyWith(name: settings.name, isPublic: settings.isPublic),
       );
     }
   }
@@ -50,31 +51,25 @@ class _UsersListNotifier extends _$UsersListNotifier {
 class _UsersListUsers extends _$UsersListUsers {
   @override
   Future<List<User>> build(Misskey misskey, String listId) async {
-    final list = await ref.watch(_usersListNotifierProvider(misskey, listId).future);
+    final list = await ref.watch(
+      _usersListNotifierProvider(misskey, listId).future,
+    );
     final response = await misskey.users.showByIds(
-      UsersShowByIdsRequest(
-        userIds: list.userIds,
-      ),
+      UsersShowByIdsRequest(userIds: list.userIds),
     );
     return response.toList();
   }
 
   Future<void> push(User user, Misskey misskey, String listId) async {
     await misskey.users.list.push(
-      UsersListsPushRequest(
-        listId: listId,
-        userId: user.id,
-      ),
+      UsersListsPushRequest(listId: listId, userId: user.id),
     );
     state = AsyncValue.data([...?state.value, user]);
   }
 
   Future<void> pull(User user, Misskey misskey, String listId) async {
     await misskey.users.list.pull(
-      UsersListsPullRequest(
-        listId: listId,
-        userId: user.id,
-      ),
+      UsersListsPullRequest(listId: listId, userId: user.id),
     );
     state = AsyncValue.data(
       state.value?.where((e) => e.id != user.id).toList() ?? [],
@@ -139,24 +134,29 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                 ListTile(
                   title: Text(S.of(context).members),
                   subtitle: Text(
-                    S.of(context).listCapacity(
+                    S
+                        .of(context)
+                        .listCapacity(
                           users.length,
                           accountContext
-                              .postAccount.i.policies.userEachUserListsLimit,
+                              .postAccount
+                              .i
+                              .policies
+                              .userEachUserListsLimit,
                         ),
                   ),
                   trailing: ElevatedButton(
                     child: Text(S.of(context).addUser),
                     onPressed: () async {
                       final user = await context.pushRoute<User>(
-                        UserSelectRoute(
-                          accountContext: accountContext,
-                        ),
+                        UserSelectRoute(accountContext: accountContext),
                       );
                       if (user == null) return;
                       if (!context.mounted) return;
                       await ref
-                          .read(_usersListUsersProvider(misskey, listId).notifier)
+                          .read(
+                            _usersListUsersProvider(misskey, listId).notifier,
+                          )
                           .push(user, misskey, listId)
                           .expectFailure(context);
                     },
@@ -170,9 +170,7 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                       final user = users[index];
                       return Row(
                         children: [
-                          Expanded(
-                            child: UserListItem(user: user),
-                          ),
+                          Expanded(child: UserListItem(user: user)),
                           IconButton(
                             icon: const Icon(Icons.close),
                             onPressed: () async {
@@ -186,7 +184,10 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                               if (result ?? false) {
                                 await ref
                                     .read(
-                                      _usersListUsersProvider(misskey, listId).notifier,
+                                      _usersListUsersProvider(
+                                        misskey,
+                                        listId,
+                                      ).notifier,
                                     )
                                     .pull(user, misskey, listId)
                                     .expectFailure(context);
@@ -201,11 +202,11 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
               ],
             );
           },
-          error: (e, st) =>
-              Center(child: ErrorDetail(error: e, stackTrace: st)),
-          loading: () => const Center(
-            child: CircularProgressIndicator.adaptive(),
+          error: (e, st) => Center(
+            child: ErrorDetail(error: e, stackTrace: st),
           ),
+          loading: () =>
+              const Center(child: CircularProgressIndicator.adaptive()),
         ),
       ),
     );

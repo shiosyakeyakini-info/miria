@@ -26,23 +26,26 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountContextScope.as(
-        account: account,
-        child: this,
-      );
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: defaultText);
 
     final abuse = useHandledFuture(() async {
-      await ref.read(misskeyPostContextProvider).users.reportAbuse(
+      await ref
+          .read(misskeyPostContextProvider)
+          .users
+          .reportAbuse(
             UsersReportAbuseRequest(
               userId: targetUser.id,
               comment: controller.text,
             ),
           );
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
             message: (context) => S.of(context).thanksForReport,
           );
       await ref.read(appRouterProvider).maybePop();
@@ -74,9 +77,9 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
         switch (abuse.value) {
           AsyncLoading() => const SendingElevatedButton(),
           _ => ElevatedButton(
-              onPressed: () async => abuse.execute(),
-              child: Text(S.of(context).reportAbuse),
-            ),
+            onPressed: () async => abuse.execute(),
+            child: Text(S.of(context).reportAbuse),
+          ),
         },
       ],
     );

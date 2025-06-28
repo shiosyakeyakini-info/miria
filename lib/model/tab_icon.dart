@@ -5,10 +5,7 @@ part "tab_icon.g.dart";
 
 @freezed
 abstract class TabIcon with _$TabIcon {
-  const factory TabIcon({
-    int? codePoint,
-    String? customEmojiName,
-  }) = _TabIcon;
+  const factory TabIcon({int? codePoint, String? customEmojiName}) = _TabIcon;
 
   factory TabIcon.fromJson(Map<String, dynamic> json) =>
       _$TabIconFromJson(json);

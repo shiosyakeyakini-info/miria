@@ -43,23 +43,26 @@ class RoleSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               switch (roles) {
-                AsyncLoading() =>
-                  const Center(child: CircularProgressIndicator.adaptive()),
-                AsyncError(:final error, :final stackTrace) =>
-                  ErrorDetail(error: error, stackTrace: stackTrace),
+                AsyncLoading() => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+                AsyncError(:final error, :final stackTrace) => ErrorDetail(
+                  error: error,
+                  stackTrace: stackTrace,
+                ),
                 AsyncData(:final value) => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.of(context).pop(value[index]);
-                        },
-                        title: Text(value[index].name),
-                      );
-                    },
-                  ),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop(value[index]);
+                      },
+                      title: Text(value[index].name),
+                    );
+                  },
+                ),
               },
             ],
           ),

@@ -30,10 +30,7 @@ abstract class UserInfo with _$UserInfo {
 // https://github.com/rrousselGit/riverpod/issues/2383 のようなこともあるので、
 // UserInfoNotifierが直接accountContextにdependenciesを設定したり、引数のデフォルトにしたりすることが現状できない。
 @Riverpod(dependencies: [accountContext])
-Raw<UserInfoNotifier> userInfoNotifierProxy(
-  Ref ref,
-  String userId,
-) {
+Raw<UserInfoNotifier> userInfoNotifierProxy(Ref ref, String userId) {
   return ref.read(
     userInfoNotifierProvider(
       userId: userId,
@@ -66,8 +63,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     required String userId,
     required AccountContext context,
   }) async {
-    final localResponse =
-        await _getMisskey.users.show(UsersShowRequest(userId: userId));
+    final localResponse = await _getMisskey.users.show(
+      UsersShowRequest(userId: userId),
+    );
     _noteRepo.registerAll(localResponse.pinnedNotes ?? []);
 
     final remoteHost = localResponse.host;
@@ -80,8 +78,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     }
 
     try {
-      final meta =
-          await ref.read(misskeyWithoutAccountProvider(remoteHost)).meta();
+      final meta = await ref
+          .read(misskeyWithoutAccountProvider(remoteHost))
+          .meta();
       final remoteResponse = await ref
           .read(misskeyWithoutAccountProvider(remoteHost))
           .users
@@ -90,9 +89,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
           );
 
       await ref
-          .read(
-            emojiRepositoryProvider(Account.demoAccount(remoteHost, meta)),
-          )
+          .read(emojiRepositoryProvider(Account.demoAccount(remoteHost, meta)))
           .loadFromSourceIfNeed();
 
       ref
@@ -123,8 +120,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
           //TODO: こういう使い方するならAPIの結果をsealed classにしてあげたい
           response: switch (before.response) {
             UserDetailedNotMe(:final copyWith) => copyWith(memo: text),
-            UserDetailedNotMeWithRelations(:final copyWith) =>
-              copyWith(memo: text),
+            UserDetailedNotMeWithRelations(:final copyWith) => copyWith(
+              memo: text,
+            ),
             MeDetailed(:final copyWith) => copyWith(memo: text),
             UserDetailed() => before.response,
           },
@@ -135,8 +133,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
   Future<AsyncValue<void>> createFollow() async {
     return await _dialog.guard(() async {
-      await _postMisskey.following
-          .create(FollowingCreateRequest(userId: userId));
+      await _postMisskey.following.create(
+        FollowingCreateRequest(userId: userId),
+      );
 
       final before = await future;
       final response = before.response;
@@ -164,8 +163,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
     if (confirm == 1) return null;
 
     return await _dialog.guard(() async {
-      await _postMisskey.following
-          .delete(FollowingDeleteRequest(userId: userId));
+      await _postMisskey.following.delete(
+        FollowingDeleteRequest(userId: userId),
+      );
 
       final before = await future;
       final response = before.response;
@@ -181,8 +181,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
   Future<AsyncValue<void>> cancelFollowRequest() async {
     return await _dialog.guard(() async {
-      await _postMisskey.following.requests
-          .cancel(FollowingRequestsCancelRequest(userId: userId));
+      await _postMisskey.following.requests.cancel(
+        FollowingRequestsCancelRequest(userId: userId),
+      );
       final before = await future;
       final response = before.response;
       if (response is! UserDetailedNotMeWithRelations) {
@@ -199,9 +200,9 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
   /// ミュートする
   Future<AsyncValue<void>?> createMute() async {
-    final expires = await ref.read(appRouterProvider).push<Expire?>(
-          const ExpireSelectRoute(),
-        );
+    final expires = await ref
+        .read(appRouterProvider)
+        .push<Expire?>(const ExpireSelectRoute());
     if (expires == null) {
       await ref.read(appRouterProvider).maybePop();
       return null;
@@ -212,10 +213,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
 
     return await _dialog.guard(() async {
       await _postMisskey.mute.create(
-        MuteCreateRequest(
-          userId: userId,
-          expiresAt: expiresDate,
-        ),
+        MuteCreateRequest(userId: userId, expiresAt: expiresDate),
       );
 
       final before = await future;
@@ -290,10 +288,7 @@ class UserInfoNotifier extends _$UserInfoNotifier {
   Future<AsyncValue<void>?> createBlocking() async {
     final confirm = await _dialog.showDialog(
       message: (context) => S.of(context).confirmCreateBlock,
-      actions: (context) => [
-        S.of(context).createBlock,
-        S.of(context).cancel,
-      ],
+      actions: (context) => [S.of(context).createBlock, S.of(context).cancel],
     );
     if (confirm == 1) {
       await ref.read(appRouterProvider).maybePop();

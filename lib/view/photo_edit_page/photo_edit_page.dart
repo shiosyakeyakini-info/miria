@@ -100,9 +100,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                     height: constraints.maxHeight,
                     child: FittedBox(
                       fit: BoxFit.contain,
-                      child: ClipMode(
-                        renderingGlobalKey: renderingAreaKey,
-                      ),
+                      child: ClipMode(renderingGlobalKey: renderingAreaKey),
                     ),
                   );
                 },

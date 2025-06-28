@@ -49,19 +49,16 @@ class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
                 return response.toList();
               },
               nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyGetContextProvider).roles.users(
-                          RolesUsersRequest(
-                            roleId: item.id,
-                            untilId: lastItem.id,
-                          ),
-                        );
+                final response = await ref
+                    .read(misskeyGetContextProvider)
+                    .roles
+                    .users(
+                      RolesUsersRequest(roleId: item.id, untilId: lastItem.id),
+                    );
                 return response.toList();
               },
-              itemBuilder: (context, item) => UserListItem(
-                user: item.user,
-                isDetail: true,
-              ),
+              itemBuilder: (context, item) =>
+                  UserListItem(user: item.user, isDetail: true),
             ),
             PushableListView(
               initializeFuture: () async {
@@ -73,13 +70,12 @@ class ExploreRoleUsersPage extends ConsumerWidget implements AutoRouteWrapper {
                 return response.toList();
               },
               nextFuture: (lastItem, _) async {
-                final response =
-                    await ref.read(misskeyGetContextProvider).roles.notes(
-                          RolesNotesRequest(
-                            roleId: item.id,
-                            untilId: lastItem.id,
-                          ),
-                        );
+                final response = await ref
+                    .read(misskeyGetContextProvider)
+                    .roles
+                    .notes(
+                      RolesNotesRequest(roleId: item.id, untilId: lastItem.id),
+                    );
                 ref.read(notesWithProvider).registerAll(response);
                 return response.toList();
               },

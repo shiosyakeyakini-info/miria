@@ -12,9 +12,9 @@ final _initialSettingsProvider = Provider.autoDispose<ClipSettings>(
 
 final _clipSettingsNotifierProvider =
     NotifierProvider.autoDispose<_ClipSettingsNotifier, ClipSettings>(
-  _ClipSettingsNotifier.new,
-  dependencies: [_initialSettingsProvider],
-);
+      _ClipSettingsNotifier.new,
+      dependencies: [_initialSettingsProvider],
+    );
 
 class _ClipSettingsNotifier extends Notifier<ClipSettings> {
   @override
@@ -96,8 +96,9 @@ class UsersListSettingsForm extends ConsumerWidget {
               }
               return null;
             },
-            onSaved:
-                ref.read(_clipSettingsNotifierProvider.notifier).updateName,
+            onSaved: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateName,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -115,8 +116,9 @@ class UsersListSettingsForm extends ConsumerWidget {
           CheckboxListTile(
             title: Text(S.of(context).public),
             value: settings.isPublic,
-            onChanged:
-                ref.read(_clipSettingsNotifierProvider.notifier).updateIsPublic,
+            onChanged: ref
+                .read(_clipSettingsNotifierProvider.notifier)
+                .updateIsPublic,
           ),
           ElevatedButton(
             child: Text(S.of(context).done),

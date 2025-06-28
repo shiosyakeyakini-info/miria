@@ -19,12 +19,10 @@ class _HashtagsSearch extends _$HashtagsSearch {
     if (query.isEmpty) {
       return [];
     } else {
-      final response = await ref.read(misskeyProvider(account)).hashtags.search(
-            HashtagsSearchRequest(
-              query: query,
-              limit: 30,
-            ),
-          );
+      final response = await ref
+          .read(misskeyProvider(account))
+          .hashtags
+          .search(HashtagsSearchRequest(query: query, limit: 30));
       return response.toList();
     }
   }
@@ -33,8 +31,7 @@ class _HashtagsSearch extends _$HashtagsSearch {
 final _filteredHashtagsProvider = NotifierProvider.autoDispose
     .family<_FilteredHashtags, List<String>, Account>(_FilteredHashtags.new);
 
-class _FilteredHashtags
-    extends FamilyNotifier<List<String>, Account> {
+class _FilteredHashtags extends FamilyNotifier<List<String>, Account> {
   @override
   List<String> build(Account arg) {
     ref.listen(
@@ -55,9 +52,7 @@ class _FilteredHashtags
         final response = await ref.read(misskeyProvider(arg)).hashtags.trend();
         state = response.map((hashtag) => hashtag.tag).toList();
       } else {
-        state = await ref.read(
-          _hashtagsSearchProvider(query, account).future,
-        );
+        state = await ref.read(_hashtagsSearchProvider(query, account).future);
       }
     }
   }
@@ -88,10 +83,7 @@ class HashtagKeyboard extends ConsumerWidget {
     );
 
     if (filteredHashtags.isEmpty) {
-      return BasicKeyboard(
-        controller: controller,
-        focusNode: focusNode,
-      );
+      return BasicKeyboard(controller: controller, focusNode: focusNode);
     }
 
     return Row(

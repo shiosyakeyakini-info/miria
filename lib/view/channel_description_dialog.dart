@@ -40,9 +40,7 @@ class ChannelDescriptionDialog extends ConsumerWidget
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(right: 5),
-            ),
+            const Padding(padding: EdgeInsets.only(right: 5)),
             IconButton(
               onPressed: () async {
                 await context.pushRoute(

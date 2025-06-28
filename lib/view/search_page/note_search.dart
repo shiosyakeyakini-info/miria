@@ -16,16 +16,13 @@ class NoteSearch extends HookConsumerWidget {
   final NoteSearchCondition? initialCondition;
   final FocusNode? focusNode;
 
-  const NoteSearch({
-    super.key,
-    this.initialCondition,
-    this.focusNode,
-  });
+  const NoteSearch({super.key, this.initialCondition, this.focusNode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conditionController =
-        useTextEditingController(text: initialCondition?.query);
+    final conditionController = useTextEditingController(
+      text: initialCondition?.query,
+    );
     final searchQuery = useState("");
     final selectedUser = useState(initialCondition?.user);
     final selectedChannel = useState(initialCondition?.channel);
@@ -98,13 +95,14 @@ class NoteSearch extends HookConsumerWidget {
                             ? Text(S.of(context).channel)
                             : Text(selectedChannelValue.name),
                         onTap: () async {
-                          final selected =
-                              await context.pushRoute<CommunityChannel>(
-                            ChannelSelectRoute(
-                              account:
-                                  ref.read(accountContextProvider).postAccount,
-                            ),
-                          );
+                          final selected = await context
+                              .pushRoute<CommunityChannel>(
+                                ChannelSelectRoute(
+                                  account: ref
+                                      .read(accountContextProvider)
+                                      .postAccount,
+                                ),
+                              );
                           selectedChannel.value = selected;
                         },
                         trailing: const Icon(Icons.keyboard_arrow_right),
@@ -163,13 +161,19 @@ class NoteSearchList extends ConsumerWidget {
       initializeFuture: () async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyGetContextProvider).notes.search(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,
@@ -185,14 +189,20 @@ class NoteSearchList extends ConsumerWidget {
       nextFuture: (lastItem, _) async {
         final Iterable<Note> notes;
         if (isHashtagOnly) {
-          notes = await ref.read(misskeyGetContextProvider).notes.searchByTag(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .searchByTag(
                 NotesSearchByTagRequest(
                   tag: (parsedSearchValue[0] as MfmHashTag).hashTag,
                   untilId: lastItem.id,
                 ),
               );
         } else {
-          notes = await ref.read(misskeyGetContextProvider).notes.search(
+          notes = await ref
+              .read(misskeyGetContextProvider)
+              .notes
+              .search(
                 NotesSearchRequest(
                   query: query,
                   userId: userId,

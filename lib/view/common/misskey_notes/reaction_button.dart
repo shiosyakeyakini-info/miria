@@ -33,20 +33,21 @@ class ReactionButton extends HookConsumerWidget {
     final emojiData = this.emojiData;
     final isMyReaction =
         (emojiData is CustomEmojiData && myReaction == emojiData.hostedName) ||
-            (emojiData is UnicodeEmojiData && myReaction == emojiData.char);
+        (emojiData is UnicodeEmojiData && myReaction == emojiData.char);
 
     final backgroundColor = isMyReaction
         ? AppTheme.of(context).reactionButtonMeReactedColor
         : (emojiData is CustomEmojiData && !emojiData.isCurrentServer)
-            ? Colors.transparent
-            : AppTheme.of(context).reactionButtonBackgroundColor;
+        ? Colors.transparent
+        : AppTheme.of(context).reactionButtonBackgroundColor;
 
     final foreground = isMyReaction
         ? Theme.of(context).primaryColor
         : Theme.of(context).textTheme.bodyMedium?.color;
 
-    final borderColor =
-        isMyReaction ? Theme.of(context).primaryColor : Colors.transparent;
+    final borderColor = isMyReaction
+        ? Theme.of(context).primaryColor
+        : Colors.transparent;
 
     final reaction = useAsync(() async {
       final accountContext = ref.read(accountContextProvider);
@@ -54,14 +55,15 @@ class ReactionButton extends HookConsumerWidget {
       // リアクション取り消し
       final account = accountContext.postAccount;
       if (isMyReaction) {
-        final dialogValue =
-            await ref.read(dialogStateNotifierProvider.notifier).showDialog(
-                  message: (context) => S.of(context).confirmDeleteReaction,
-                  actions: (context) => [
-                    S.of(context).cancelReaction,
-                    S.of(context).cancel,
-                  ],
-                );
+        final dialogValue = await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .showDialog(
+              message: (context) => S.of(context).confirmDeleteReaction,
+              actions: (context) => [
+                S.of(context).cancelReaction,
+                S.of(context).cancel,
+              ],
+            );
         if (dialogValue != 0) return;
 
         await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
@@ -98,7 +100,11 @@ class ReactionButton extends HookConsumerWidget {
       }
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
         final notesRepository = ref.read(notesWithProvider);
-        await ref.read(misskeyPostContextProvider).notes.reactions.create(
+        await ref
+            .read(misskeyPostContextProvider)
+            .notes
+            .reactions
+            .create(
               NotesReactionsCreateRequest(
                 noteId: noteId,
                 reaction: reactionString,
@@ -128,11 +134,9 @@ class ReactionButton extends HookConsumerWidget {
         );
       },
       style: AppTheme.of(context).reactionButtonStyle.copyWith(
-            backgroundColor: WidgetStatePropertyAll(backgroundColor),
-            side: WidgetStatePropertyAll(
-              BorderSide(color: borderColor),
-            ),
-          ),
+        backgroundColor: WidgetStatePropertyAll(backgroundColor),
+        side: WidgetStatePropertyAll(BorderSide(color: borderColor)),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -143,16 +147,10 @@ class ReactionButton extends HookConsumerWidget {
               minHeight: MediaQuery.textScalerOf(context).scale(24),
               maxHeight: MediaQuery.textScalerOf(context).scale(24),
             ),
-            child: CustomEmoji(
-              emojiData: emojiData,
-              isAttachTooltip: false,
-            ),
+            child: CustomEmoji(emojiData: emojiData, isAttachTooltip: false),
           ),
           const Padding(padding: EdgeInsets.only(left: 5)),
-          Text(
-            reactionCount.toString(),
-            style: TextStyle(color: foreground),
-          ),
+          Text(reactionCount.toString(), style: TextStyle(color: foreground)),
         ],
       ),
     );

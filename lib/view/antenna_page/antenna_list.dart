@@ -17,42 +17,43 @@ class AntennaList extends ConsumerWidget {
 
     return switch (antennas) {
       AsyncData(value: final antennas) => ListView.builder(
-          itemCount: antennas.length,
-          itemBuilder: (context, index) {
-            final antenna = antennas[index];
-            return ListTile(
-              title: Text(antenna.name),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () async {
-                  final result = await SimpleConfirmDialog.show(
-                    context: context,
-                    message: S.of(context).confirmDeletingAntenna,
-                    primary: S.of(context).delete,
-                    secondary: S.of(context).cancel,
-                  );
-                  if (!context.mounted) return;
-                  if (result ?? false) {
-                    await ref
-                        .read(antennasNotifierProvider.notifier)
-                        .delete(antenna.id);
-                  }
-                },
+        itemCount: antennas.length,
+        itemBuilder: (context, index) {
+          final antenna = antennas[index];
+          return ListTile(
+            title: Text(antenna.name),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                final result = await SimpleConfirmDialog.show(
+                  context: context,
+                  message: S.of(context).confirmDeletingAntenna,
+                  primary: S.of(context).delete,
+                  secondary: S.of(context).cancel,
+                );
+                if (!context.mounted) return;
+                if (result ?? false) {
+                  await ref
+                      .read(antennasNotifierProvider.notifier)
+                      .delete(antenna.id);
+                }
+              },
+            ),
+            onTap: () async => context.pushRoute(
+              AntennaNotesRoute(
+                antenna: antenna,
+                accountContext: ref.read(accountContextProvider),
               ),
-              onTap: () async => context.pushRoute(
-                AntennaNotesRoute(
-                  antenna: antenna,
-                  accountContext: ref.read(accountContextProvider),
-                ),
-              ),
-            );
-          },
-        ),
-      AsyncError(error: final e, stackTrace: final st) =>
-        Center(child: ErrorDetail(error: e, stackTrace: st)),
+            ),
+          );
+        },
+      ),
+      AsyncError(error: final e, stackTrace: final st) => Center(
+        child: ErrorDetail(error: e, stackTrace: st),
+      ),
       AsyncLoading() => const Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
+        child: CircularProgressIndicator.adaptive(),
+      ),
     };
   }
 }

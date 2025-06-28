@@ -77,8 +77,10 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
     final imageData = await ImageDescriptor.encoded(
       await ImmutableBuffer.fromUint8List(initialImage),
     );
-    final defaultSize =
-        Size(imageData.width.toDouble(), imageData.height.toDouble());
+    final defaultSize = Size(
+      imageData.width.toDouble(),
+      imageData.height.toDouble(),
+    );
 
     state = state.copyWith(
       isInitialized: true,
@@ -133,8 +135,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   Future<Uint8List?> createSaveData(GlobalKey renderingAreaKey) async {
     // RenderObjectを取得
-    final boundary = renderingAreaKey.currentContext?.findRenderObject()
-        as RenderRepaintBoundary?;
+    final boundary =
+        renderingAreaKey.currentContext?.findRenderObject()
+            as RenderRepaintBoundary?;
     if (boundary == null) return null;
     final image = await boundary.toImage();
     final byteData = await image.toByteData(format: ImageByteFormat.png);
@@ -340,7 +343,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   /// リアクションを追加する
   Future<void> addReaction() async {
-    final reaction = await ref.read(appRouterProvider).push<MisskeyEmojiData>(
+    final reaction = await ref
+        .read(appRouterProvider)
+        .push<MisskeyEmojiData>(
           ReactionPickerRoute(
             account: ref.read(accountContextProvider).postAccount,
             isAcceptSensitive: true,
@@ -352,7 +357,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
       case CustomEmojiData():
         // カスタム絵文字の場合、ライセンスを確認する
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
-          final dialogResult = await ref.read(appRouterProvider).push<bool>(
+          final dialogResult = await ref
+              .read(appRouterProvider)
+              .push<bool>(
                 LicenseConfirmRoute(
                   emoji: reaction.baseName,
                   account: ref.read(accountContextProvider).postAccount,

@@ -135,11 +135,7 @@ Future<Note> fetchNote(Ref ref, String noteId) async {
 class PageContent extends ConsumerWidget {
   final misskey.AbstractPageContent content;
   final misskey.Page page;
-  const PageContent({
-    required this.content,
-    required this.page,
-    super.key,
-  });
+  const PageContent({required this.content, required this.page, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -149,16 +145,11 @@ class PageContent extends ConsumerWidget {
       final nodes = const MfmParser().parse(text);
       return Column(
         children: [
-          MfmText(
-            mfmNode: nodes,
-          ),
+          MfmText(mfmNode: nodes),
           ...nodes.extractLinks().map(
-                (link) => LinkPreview(
-                  account: account,
-                  link: link,
-                  host: account.host,
-                ),
-              ),
+            (link) =>
+                LinkPreview(account: account, link: link, host: account.host),
+          ),
         ],
       );
     }
@@ -189,13 +180,13 @@ class PageContent extends ConsumerWidget {
       final note = ref.watch(fetchNoteProvider(noteId));
       return switch (note) {
         AsyncLoading() => const Center(
-            child: SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator.adaptive(),
-            ),
+          child: SizedBox.square(
+            dimension: 20,
+            child: CircularProgressIndicator.adaptive(),
           ),
+        ),
         AsyncError() => Text(S.of(context).thrownError),
-        AsyncData(:final value) => MisskeyNote(note: value)
+        AsyncData(:final value) => MisskeyNote(note: value),
       };
     }
     if (content is misskey.PageSection) {
@@ -261,23 +252,27 @@ class PageLikeButton extends ConsumerWidget {
 
     if (liked) {
       return ElevatedButton.icon(
-        onPressed:
-            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
+        onPressed: isLoading
+            ? null
+            : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
-          size: MediaQuery.textScalerOf(context)
-              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+          size: MediaQuery.textScalerOf(
+            context,
+          ).scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
         ),
         label: Text(likeCount.format()),
       );
     } else {
       return OutlinedButton.icon(
-        onPressed:
-            isLoading ? null : () async => ref.read(provider.notifier).likeOr(),
+        onPressed: isLoading
+            ? null
+            : () async => ref.read(provider.notifier).likeOr(),
         icon: Icon(
           Icons.favorite,
-          size: MediaQuery.textScalerOf(context)
-              .scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
+          size: MediaQuery.textScalerOf(
+            context,
+          ).scale(Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22),
         ),
         label: Text(likeCount.format()),
       );

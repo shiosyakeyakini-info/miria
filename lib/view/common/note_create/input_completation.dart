@@ -34,17 +34,14 @@ class InputComplement extends HookConsumerWidget {
 
     final isClose = useState(!ref.read(this.focusNode).hasFocus);
 
-    useEffect(
-      () {
-        InputCompletionType updateType() =>
-            ref.read(inputCompletionTypeProvider.notifier).state =
-                controller.inputCompletionType;
-        controller.addListener(updateType);
+    useEffect(() {
+      InputCompletionType updateType() =>
+          ref.read(inputCompletionTypeProvider.notifier).state =
+              controller.inputCompletionType;
+      controller.addListener(updateType);
 
-        return () => controller.removeListener(updateType);
-      },
-      const [],
-    );
+      return () => controller.removeListener(updateType);
+    }, const []);
 
     ref.listen(this.focusNode, (previous, next) async {
       if (!next.hasFocus) {
@@ -73,23 +70,31 @@ class InputComplement extends HookConsumerWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width,
+                ),
                 child: switch (inputCompletionType) {
-                  Basic() =>
-                    BasicKeyboard(controller: controller, focusNode: focusNode),
-                  Emoji() =>
-                    EmojiKeyboard(controller: controller, focusNode: focusNode),
+                  Basic() => BasicKeyboard(
+                    controller: controller,
+                    focusNode: focusNode,
+                  ),
+                  Emoji() => EmojiKeyboard(
+                    controller: controller,
+                    focusNode: focusNode,
+                  ),
                   MfmFn() => MfmFnKeyboard(
-                      controller: controller,
-                      focusNode: focusNode,
-                      parentContext: context,
-                    ),
+                    controller: controller,
+                    focusNode: focusNode,
+                    parentContext: context,
+                  ),
                   Hashtag() => HashtagKeyboard(
-                      controller: controller,
-                      focusNode: focusNode,
-                    ),
-                  _ => BasicKeyboard(controller: controller, focusNode: focusNode),
+                    controller: controller,
+                    focusNode: focusNode,
+                  ),
+                  _ => BasicKeyboard(
+                    controller: controller,
+                    focusNode: focusNode,
+                  ),
                 },
               ),
             ),

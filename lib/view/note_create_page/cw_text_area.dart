@@ -17,12 +17,12 @@ class CwTextArea extends HookConsumerWidget {
           .setCwText(cwController.text);
     });
 
-    ref.listen(
-      noteCreateNotifierProvider.select((value) => value.cwText),
-      (_, next) {
-        if (next != cwController.text) cwController.text = next;
-      },
-    );
+    ref.listen(noteCreateNotifierProvider.select((value) => value.cwText), (
+      _,
+      next,
+    ) {
+      if (next != cwController.text) cwController.text = next;
+    });
 
     final cw = ref.watch(
       noteCreateNotifierProvider.select((value) => value.isCw),
@@ -42,9 +42,9 @@ class CwTextArea extends HookConsumerWidget {
           controller: cwController,
           keyboardType: TextInputType.multiline,
           decoration: AppTheme.of(context).noteTextStyle.copyWith(
-                hintText: S.of(context).contentWarning,
-                contentPadding: const EdgeInsets.all(5),
-              ),
+            hintText: S.of(context).contentWarning,
+            contentPadding: const EdgeInsets.all(5),
+          ),
         ),
       ),
     );

@@ -65,8 +65,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   Future<void> loadFromLocalCache() async {
-    final storedData =
-        await sharePreferenceController.getString("emojis@${account.host}");
+    final storedData = await sharePreferenceController.getString(
+      "emojis@${account.host}",
+    );
     if (storedData == null || storedData.isEmpty) {
       return;
     }
@@ -127,18 +128,22 @@ class EmojiRepositoryImpl extends EmojiRepository {
   Future<void> _setEmojiData(EmojisResponse response) async {
     final toH = toHiraganaSafe;
 
-    final unicodeEmojis = (jsonDecode(
-            await rootBundle.loadString("assets/emoji_list.json")) as List)
-        .map((e) => UnicodeEmoji.fromJson(e))
-        .map(
-          (e) => EmojiRepositoryData(
-            emoji: UnicodeEmojiData(char: e.char),
-            kanaName: toH(e.char),
-            kanaAliases: [e.name, ...e.keywords].map((e2) => toH(e2)).toList(),
-            aliases: [e.name, ...e.keywords],
-            category: e.category,
-          ),
-        );
+    final unicodeEmojis =
+        (jsonDecode(await rootBundle.loadString("assets/emoji_list.json"))
+                as List)
+            .map((e) => UnicodeEmoji.fromJson(e))
+            .map(
+              (e) => EmojiRepositoryData(
+                emoji: UnicodeEmojiData(char: e.char),
+                kanaName: toH(e.char),
+                kanaAliases: [
+                  e.name,
+                  ...e.keywords,
+                ].map((e2) => toH(e2)).toList(),
+                aliases: [e.name, ...e.keywords],
+                category: e.category,
+              ),
+            );
 
     emoji = response.emojis
         .map(
@@ -180,8 +185,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
     return element.emoji.baseName.contains(query) ||
         element.aliases.any((element2) => element2.contains(query)) ||
         element.kanaName.contains(convertedQuery) ||
-        element.kanaAliases
-            .any((element2) => element2.contains(convertedQuery));
+        element.kanaAliases.any(
+          (element2) => element2.contains(convertedQuery),
+        );
   }
 
   @override
@@ -224,8 +230,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   @override
   List<MisskeyEmojiData> defaultEmojis({int limit = 30}) {
-    final reactionDeck =
-        accountSettingsRepository.fromAccount(account).reactions;
+    final reactionDeck = accountSettingsRepository
+        .fromAccount(account)
+        .reactions;
     if (reactionDeck.isEmpty) {
       return [];
     } else {

@@ -176,32 +176,30 @@ class AppRouter extends RootStackRouter {
 
 /// ダイアログ
 class AutoDialogRoute<ReturnT extends Object> extends CustomRoute {
-  AutoDialogRoute({
-    required super.page,
-  }) : super(
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-          durationInMilliseconds: 200,
-          fullscreenDialog: false,
-          customRouteBuilder: <T>(context, child, page) => DialogRoute<T>(
-            context: context,
-            builder: (context) => child,
-            settings: page,
-          ),
-        );
+  AutoDialogRoute({required super.page})
+    : super(
+        transitionsBuilder: TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        fullscreenDialog: false,
+        customRouteBuilder: <T>(context, child, page) => DialogRoute<T>(
+          context: context,
+          builder: (context) => child,
+          settings: page,
+        ),
+      );
 }
 
 /// モーダルボトムシート
 class AutoModalRouteSheet<ReturnT extends Object> extends CustomRoute {
-  AutoModalRouteSheet({
-    required super.page,
-  }) : super(
-          transitionsBuilder: TransitionsBuilders.slideBottom,
-          durationInMilliseconds: 200,
-          customRouteBuilder: <T>(context, child, page) =>
-              ModalBottomSheetRoute<T>(
-            builder: (context) => child,
-            isScrollControlled: false,
-            settings: page,
-          ),
-        );
+  AutoModalRouteSheet({required super.page})
+    : super(
+        transitionsBuilder: TransitionsBuilders.slideBottom,
+        durationInMilliseconds: 200,
+        customRouteBuilder: <T>(context, child, page) =>
+            ModalBottomSheetRoute<T>(
+              builder: (context) => child,
+              isScrollControlled: false,
+              settings: page,
+            ),
+      );
 }

@@ -10,10 +10,7 @@ part "tab_setting.g.dart";
 Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
   final account = json["account"] as Map<String, dynamic>?;
   if (account != null) {
-    return {
-      "host": account["host"],
-      "username": account["userId"],
-    };
+    return {"host": account["host"], "username": account["userId"]};
   }
   return json[name]! as Map<String, dynamic>;
 }

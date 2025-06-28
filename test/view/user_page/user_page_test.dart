@@ -18,8 +18,9 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse1);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse1);
 
         await tester.pumpWidget(
           ProviderScope(
@@ -37,9 +38,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(
-          find.textContaining(
-            TestData.usersShowResponse1.name!,
-          ),
+          find.textContaining(TestData.usersShowResponse1.name!),
           findsAtLeastNWidgets(1),
         );
       });
@@ -48,10 +47,12 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse3AsRemoteUser);
-        when(mockUser.showByName(any))
-            .thenAnswer((_) async => TestData.usersShowResponse3AsLocalUser);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse3AsRemoteUser);
+        when(
+          mockUser.showByName(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse3AsLocalUser);
 
         final emojiRepository = MockEmojiRepository();
 
@@ -59,8 +60,12 @@ void main() {
           ProviderScope(
             overrides: [
               misskeyProvider.overrideWith((ref, account) => mockMisskey),
-              misskeyWithoutAccountProvider.overrideWith((ref, host) => mockMisskey),
-              emojiRepositoryProvider.overrideWith((ref, account) => emojiRepository),
+              misskeyWithoutAccountProvider.overrideWith(
+                (ref, host) => mockMisskey,
+              ),
+              emojiRepositoryProvider.overrideWith(
+                (ref, account) => emojiRepository,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: UserRoute(
@@ -156,8 +161,9 @@ void main() {
 
           expect(find.text("フォロー解除"), findsOneWidget);
         });
-        testWidgets("フォローしていない場合でフォロー申請が必要ない場合、フォローするのボタンが表示されること",
-            (tester) async {
+        testWidgets("フォローしていない場合でフォロー申請が必要ない場合、フォローするのボタンが表示されること", (
+          tester,
+        ) async {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
@@ -185,8 +191,9 @@ void main() {
 
           expect(find.text("フォローする"), findsOneWidget);
         });
-        testWidgets("フォローしていない場合でフォロー申請が必要な場合、フォロー申請のボタンが表示されること",
-            (tester) async {
+        testWidgets("フォローしていない場合でフォロー申請が必要な場合、フォロー申請のボタンが表示されること", (
+          tester,
+        ) async {
           final mockMisskey = MockMisskey();
           final mockUser = MockMisskeyUsers();
           when(mockMisskey.users).thenReturn(mockUser);
@@ -353,8 +360,9 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
@@ -411,8 +419,9 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
@@ -450,8 +459,9 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
@@ -489,8 +499,9 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
 
         await tester.pumpWidget(
@@ -528,11 +539,13 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.notes(any)).thenAnswer((_) async => [TestData.note1]);
-        when(mockUser.featuredNotes(any))
-            .thenAnswer((_) async => [TestData.note2]);
+        when(
+          mockUser.featuredNotes(any),
+        ).thenAnswer((_) async => [TestData.note2]);
 
         await tester.pumpWidget(
           ProviderScope(
@@ -564,8 +577,9 @@ void main() {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
         when(mockUser.clips(any)).thenAnswer((_) async => [TestData.clip]);
 
         await tester.pumpWidget(

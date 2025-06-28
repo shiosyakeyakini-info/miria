@@ -14,8 +14,9 @@ import "package:misskey_dart/misskey_dart.dart";
 
 final noteSearchProvider = StateProvider.autoDispose((ref) => "");
 final noteSearchUserProvider = StateProvider.autoDispose<User?>((ref) => null);
-final noteSearchChannelProvider =
-    StateProvider.autoDispose<CommunityChannel?>((ref) => null);
+final noteSearchChannelProvider = StateProvider.autoDispose<CommunityChannel?>(
+  (ref) => null,
+);
 
 final noteSearchLocalOnlyProvider = StateProvider.autoDispose((ref) => false);
 

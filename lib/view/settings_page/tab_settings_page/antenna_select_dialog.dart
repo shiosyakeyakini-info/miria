@@ -37,30 +37,32 @@ class AntennaSelectDialog extends ConsumerWidget implements AutoRouteWrapper {
         child: SingleChildScrollView(
           child: switch (antennas) {
             AsyncLoading() => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-            AsyncError(:final error, :final stackTrace) =>
-              ErrorDetail(error: error, stackTrace: stackTrace),
+              child: CircularProgressIndicator.adaptive(),
+            ),
+            AsyncError(:final error, :final stackTrace) => ErrorDetail(
+              error: error,
+              stackTrace: stackTrace,
+            ),
             AsyncData(:final value) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    S.of(context).antenna,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () => Navigator.of(context).pop(value[index]),
-                        title: Text(value[index].name),
-                      );
-                    },
-                  ),
-                ],
-              ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).antenna,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () => Navigator.of(context).pop(value[index]),
+                      title: Text(value[index].name),
+                    );
+                  },
+                ),
+              ],
+            ),
           },
         ),
       ),

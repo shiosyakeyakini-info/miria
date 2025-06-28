@@ -36,101 +36,100 @@ class FederationPage extends ConsumerWidget implements AutoRouteWrapper {
 
     return switch (federate) {
       AsyncLoading() => Scaffold(
-          appBar: AppBar(title: Text(host)),
-          body: const Center(child: CircularProgressIndicator.adaptive()),
-        ),
+        appBar: AppBar(title: Text(host)),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
+      ),
       AsyncError(:final error, :final stackTrace) => Scaffold(
-          appBar: AppBar(title: Text(host)),
-          body: ErrorDetail(error: error, stackTrace: stackTrace),
-        ),
+        appBar: AppBar(title: Text(host)),
+        body: ErrorDetail(error: error, stackTrace: stackTrace),
+      ),
       AsyncData(:final value) => Builder(
-          builder: (context) {
-            final adsAvailable = value.ads.isNotEmpty;
-            final isMisskey = value.isSupportedEmoji;
-            final isAnotherHost = accountContext.postAccount.host != host;
-            final isSupportedTimeline =
-                isMisskey && value.isSupportedLocalTimeline;
-            final enableLocalTimeline = isSupportedTimeline &&
-                value.meta?.policies?.ltlAvailable == true;
-            final enableSearch = isSupportedTimeline &&
-                value.meta?.policies?.canSearchNotes == true;
+        builder: (context) {
+          final adsAvailable = value.ads.isNotEmpty;
+          final isMisskey = value.isSupportedEmoji;
+          final isAnotherHost = accountContext.postAccount.host != host;
+          final isSupportedTimeline =
+              isMisskey && value.isSupportedLocalTimeline;
+          final enableLocalTimeline =
+              isSupportedTimeline && value.meta?.policies?.ltlAvailable == true;
+          final enableSearch =
+              isSupportedTimeline &&
+              value.meta?.policies?.canSearchNotes == true;
 
-            return DefaultTabController(
-              length: 1 +
-                  (isAnotherHost ? 1 : 0) +
-                  (adsAvailable ? 1 : 0) +
-                  (isMisskey ? 1 : 0) +
-                  (isSupportedTimeline ? 2 : 0) +
-                  (enableLocalTimeline ? 1 : 0) +
-                  (enableSearch ? 1 : 0),
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(host),
-                  bottom: TabBar(
-                    isScrollable: true,
-                    tabs: [
-                      Tab(text: S.of(context).serverInformation),
-                      if (isAnotherHost) Tab(text: S.of(context).user),
-                      if (adsAvailable) Tab(text: S.of(context).ad),
-                      if (isMisskey) Tab(text: S.of(context).announcement),
-                      if (isSupportedTimeline)
-                        Tab(text: S.of(context).customEmoji),
-                      if (isSupportedTimeline)
-                        Tab(text: S.of(context).localTimelineAbbr),
-                      if (enableSearch) Tab(text: S.of(context).search),
-                    ],
-                    tabAlignment: TabAlignment.center,
-                  ),
-                ),
-                body: TabBarView(
-                  children: [
-                    FederationInfo(data: value),
-                    if (isAnotherHost) FederationUsers(host: host),
-                    if (adsAvailable) FederationAds(ads: [...value.ads]),
-                    if (isMisskey)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(host, value.meta),
-                          postAccount: accountContext.postAccount,
-                        ),
-                        child: FederationAnnouncements(host: host),
-                      ),
+          return DefaultTabController(
+            length:
+                1 +
+                (isAnotherHost ? 1 : 0) +
+                (adsAvailable ? 1 : 0) +
+                (isMisskey ? 1 : 0) +
+                (isSupportedTimeline ? 2 : 0) +
+                (enableLocalTimeline ? 1 : 0) +
+                (enableSearch ? 1 : 0),
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(host),
+                bottom: TabBar(
+                  isScrollable: true,
+                  tabs: [
+                    Tab(text: S.of(context).serverInformation),
+                    if (isAnotherHost) Tab(text: S.of(context).user),
+                    if (adsAvailable) Tab(text: S.of(context).ad),
+                    if (isMisskey) Tab(text: S.of(context).announcement),
                     if (isSupportedTimeline)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(host, value.meta),
-                          postAccount: accountContext.postAccount,
-                        ),
-                        child: FederationCustomEmojis(
-                          host: host,
-                          meta: value.meta!,
-                        ),
-                      ),
+                      Tab(text: S.of(context).customEmoji),
                     if (isSupportedTimeline)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(host, value.meta),
-                          postAccount: accountContext.postAccount,
-                        ),
-                        child: FederationTimeline(
-                          host: host,
-                          meta: value.meta!,
-                        ),
-                      ),
-                    if (enableSearch)
-                      AccountContextScope(
-                        context: AccountContext(
-                          getAccount: Account.demoAccount(host, value.meta),
-                          postAccount: accountContext.postAccount,
-                        ),
-                        child: NoteSearch(focusNode: FocusNode()),
-                      ),
+                      Tab(text: S.of(context).localTimelineAbbr),
+                    if (enableSearch) Tab(text: S.of(context).search),
                   ],
+                  tabAlignment: TabAlignment.center,
                 ),
               ),
-            );
-          },
-        ),
+              body: TabBarView(
+                children: [
+                  FederationInfo(data: value),
+                  if (isAnotherHost) FederationUsers(host: host),
+                  if (adsAvailable) FederationAds(ads: [...value.ads]),
+                  if (isMisskey)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(host, value.meta),
+                        postAccount: accountContext.postAccount,
+                      ),
+                      child: FederationAnnouncements(host: host),
+                    ),
+                  if (isSupportedTimeline)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(host, value.meta),
+                        postAccount: accountContext.postAccount,
+                      ),
+                      child: FederationCustomEmojis(
+                        host: host,
+                        meta: value.meta!,
+                      ),
+                    ),
+                  if (isSupportedTimeline)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(host, value.meta),
+                        postAccount: accountContext.postAccount,
+                      ),
+                      child: FederationTimeline(host: host, meta: value.meta!),
+                    ),
+                  if (enableSearch)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(host, value.meta),
+                        postAccount: accountContext.postAccount,
+                      ),
+                      child: NoteSearch(focusNode: FocusNode()),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     };
   }
 }

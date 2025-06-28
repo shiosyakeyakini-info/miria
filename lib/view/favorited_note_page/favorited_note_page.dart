@@ -21,9 +21,7 @@ class FavoritedNotePage extends ConsumerWidget implements AutoRouteWrapper {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).favorite),
-      ),
+      appBar: AppBar(title: Text(S.of(context).favorite)),
       body: Padding(
         padding: const EdgeInsets.only(right: 10),
         child: PushableListView(

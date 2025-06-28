@@ -55,10 +55,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                 initializeFuture: () async {
                   final localize = S.of(context);
                   final result = await misskey.i.notifications(
-                    const INotificationsRequest(
-                      limit: 50,
-                      markAsRead: true,
-                    ),
+                    const INotificationsRequest(limit: 50, markAsRead: true),
                   );
                   ref
                       .read(notesWithProvider)
@@ -72,10 +69,7 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
                 nextFuture: (lastElement, _) async {
                   final localize = S.of(context);
                   final result = await misskey.i.notifications(
-                    INotificationsRequest(
-                      limit: 50,
-                      untilId: lastElement.id,
-                    ),
+                    INotificationsRequest(limit: 50, untilId: lastElement.id),
                   );
                   ref
                       .read(notesWithProvider)
@@ -113,23 +107,27 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
               ),
               PushableListView<Note>(
                 initializeFuture: () async {
-                  final notes =
-                      await ref.read(misskeyPostContextProvider).notes.mentions(
-                            const NotesMentionsRequest(
-                              visibility: NoteVisibility.specified,
-                            ),
-                          );
+                  final notes = await ref
+                      .read(misskeyPostContextProvider)
+                      .notes
+                      .mentions(
+                        const NotesMentionsRequest(
+                          visibility: NoteVisibility.specified,
+                        ),
+                      );
                   ref.read(notesWithProvider).registerAll(notes);
                   return notes.toList();
                 },
                 nextFuture: (item, _) async {
-                  final notes =
-                      await ref.read(misskeyPostContextProvider).notes.mentions(
-                            NotesMentionsRequest(
-                              untilId: item.id,
-                              visibility: NoteVisibility.specified,
-                            ),
-                          );
+                  final notes = await ref
+                      .read(misskeyPostContextProvider)
+                      .notes
+                      .mentions(
+                        NotesMentionsRequest(
+                          untilId: item.id,
+                          visibility: NoteVisibility.specified,
+                        ),
+                      );
                   ref.read(notesWithProvider).registerAll(notes);
                   return notes.toList();
                 },
@@ -145,8 +143,8 @@ class NotificationPage extends ConsumerWidget implements AutoRouteWrapper {
   }
 }
 
-final showActionsProvider =
-    StateProvider.autoDispose.family<bool, NotificationData>((ref, _) => true);
+final showActionsProvider = StateProvider.autoDispose
+    .family<bool, NotificationData>((ref, _) => true);
 
 @Riverpod(dependencies: [misskeyPostContext])
 Future<List<FollowRequest>> followRequests(Ref ref) async {
@@ -161,10 +159,7 @@ Future<List<FollowRequest>> followRequests(Ref ref) async {
 class NotificationItem extends ConsumerWidget {
   final NotificationData notification;
 
-  const NotificationItem({
-    required this.notification,
-    super.key,
-  });
+  const NotificationItem({required this.notification, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -190,27 +185,39 @@ class NotificationItem extends ConsumerWidget {
                     if (hasReaction && hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).renoteAndReactionsNotification(
+                          S
+                              .of(context)
+                              .renoteAndReactionsNotification(
                                 notification.reactionUsers.first.$2?.name ??
                                     notification
-                                        .reactionUsers.first.$2?.username,
+                                        .reactionUsers
+                                        .first
+                                        .$2
+                                        ?.username,
                                 notification.renoteUsers.first?.name ??
                                     notification.renoteUsers.first?.username,
                               ),
-                          emojis: Map.of(
-                            notification.reactionUsers.first.$2?.emojis ?? {},
-                          )..addAll(
-                              notification.renoteUsers.first?.emojis ?? {},
-                            ),
+                          emojis:
+                              Map.of(
+                                notification.reactionUsers.first.$2?.emojis ??
+                                    {},
+                              )..addAll(
+                                notification.renoteUsers.first?.emojis ?? {},
+                              ),
                         ),
                       ),
                     if (hasReaction && !hasRenote)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).reactionNotification(
+                          S
+                              .of(context)
+                              .reactionNotification(
                                 notification.reactionUsers.first.$2?.name ??
                                     notification
-                                        .reactionUsers.first.$2?.username,
+                                        .reactionUsers
+                                        .first
+                                        .$2
+                                        ?.username,
                               ),
                           emojis:
                               notification.reactionUsers.first.$2?.emojis ?? {},
@@ -219,7 +226,9 @@ class NotificationItem extends ConsumerWidget {
                     if (hasRenote && !hasReaction)
                       Expanded(
                         child: SimpleMfmText(
-                          S.of(context).renoteNotification(
+                          S
+                              .of(context)
+                              .renoteNotification(
                                 notification.renoteUsers.first?.name ??
                                     notification.renoteUsers.first?.username,
                               ),
@@ -279,13 +288,13 @@ class NotificationItem extends ConsumerWidget {
                             Text(S.of(context).reactionUsersInNotification),
                             for (final reaction
                                 in notification.reactionUsers.mapIndexed(
-                              (index, element) => (index, element),
-                            )) ...[
+                                  (index, element) => (index, element),
+                                )) ...[
                               if (reaction.$2.$1 != null &&
                                       (reaction.$1 > 0 &&
                                           notification
-                                                  .reactionUsers[
-                                                      reaction.$1 - 1]
+                                                  .reactionUsers[reaction.$1 -
+                                                      1]
                                                   .$1 !=
                                               reaction.$2.$1) ||
                                   reaction.$1 == 0)
@@ -335,8 +344,12 @@ class NotificationItem extends ConsumerWidget {
         final type = notification.type;
 
         return Padding(
-          padding:
-              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          padding: const EdgeInsets.only(
+            left: 10,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,8 +358,10 @@ class NotificationItem extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: SimpleMfmText(
-                      notification.type
-                          .name(context, (user?.name ?? user?.username) ?? ""),
+                      notification.type.name(
+                        context,
+                        (user?.name ?? user?.username) ?? "",
+                      ),
                       emojis: user?.emojis ?? {},
                     ),
                   ),
@@ -359,8 +374,9 @@ class NotificationItem extends ConsumerWidget {
                     FollowNotificationDataType.receiveFollowRequest)
                   followRequests.maybeWhen(
                     data: (requests) {
-                      final isPending = requests
-                          .any((request) => request.follower.id == user.id);
+                      final isPending = requests.any(
+                        (request) => request.follower.id == user.id,
+                      );
                       if (isPending) {
                         return Row(
                           children: [
@@ -402,14 +418,18 @@ class NotificationItem extends ConsumerWidget {
               if (type is FollowRequestAccepted && type.message != null)
                 SimpleMfmText(
                   S.of(context).messageForFollower(type.message ?? ""),
-                )
+                ),
             ],
           ),
         );
       case SimpleNotificationData():
         return Padding(
-          padding:
-              const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+          padding: const EdgeInsets.only(
+            left: 10,
+            top: 10,
+            bottom: 10,
+            right: 10,
+          ),
           child: Row(
             children: [
               Expanded(child: Text(notification.text)),
@@ -461,8 +481,12 @@ class NotificationItem extends ConsumerWidget {
         );
       case RoleNotification():
         return Padding(
-          padding:
-              const EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10.0),
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+            right: 10,
+            left: 10.0,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -487,11 +511,13 @@ class NotificationItem extends ConsumerWidget {
       final misskey = ref.watch(misskeyPostContextProvider);
 
       if (accept) {
-        await misskey.following.requests
-            .accept(FollowingRequestsAcceptRequest(userId: userId));
+        await misskey.following.requests.accept(
+          FollowingRequestsAcceptRequest(userId: userId),
+        );
       } else {
-        await misskey.following.requests
-            .reject(FollowingRequestsRejectRequest(userId: userId));
+        await misskey.following.requests.reject(
+          FollowingRequestsRejectRequest(userId: userId),
+        );
       }
 
       ref.invalidate(followRequestsProvider);

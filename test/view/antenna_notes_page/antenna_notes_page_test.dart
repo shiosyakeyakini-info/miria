@@ -34,9 +34,7 @@ void main() {
       expect(find.text(TestData.note1.text!), findsOneWidget);
       verify(
         antennas.notes(
-          argThat(
-            equals(AntennasNotesRequest(antennaId: TestData.antenna.id)),
-          ),
+          argThat(equals(AntennasNotesRequest(antennaId: TestData.antenna.id))),
         ),
       );
 

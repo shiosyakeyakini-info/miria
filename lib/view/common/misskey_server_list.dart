@@ -27,11 +27,10 @@ class MisskeyServerList extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: TextField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-              ),
-              onChanged:
-                  ref.read(misskeyServerListNotifierProvider.notifier).setQuery,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+              onChanged: ref
+                  .read(misskeyServerListNotifierProvider.notifier)
+                  .setQuery,
             ),
           ),
           Expanded(
@@ -43,7 +42,8 @@ class MisskeyServerList extends ConsumerWidget {
                   final server = servers[index];
                   final description =
                       server.description?.replaceAll(htmlTagRemove, "") ?? "";
-                  final available = !isDisableUnloginable ||
+                  final available =
+                      !isDisableUnloginable ||
                       server.nodeInfo?.software?.name == "misskey" &&
                           availableServerVersion
                               .allMatches(
@@ -59,8 +59,9 @@ class MisskeyServerList extends ConsumerWidget {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: available ? null : Colors.grey.withAlpha(160),
-                          border:
-                              Border.all(color: Theme.of(context).dividerColor),
+                          border: Border.all(
+                            color: Theme.of(context).dividerColor,
+                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,12 +74,12 @@ class MisskeyServerList extends ConsumerWidget {
                                     child: SizedBox(
                                       width: MediaQuery.textScalerOf(context)
                                           .scale(
-                                        Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.fontSize ??
-                                            22 * 2,
-                                      ),
+                                            Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.fontSize ??
+                                                22 * 2,
+                                          ),
                                       child: Image.network(
                                         "https://instanceapp.misskey.page/instance-icons/${server.url}.webp",
                                       ),
@@ -93,7 +94,9 @@ class MisskeyServerList extends ConsumerWidget {
                             ),
                             const Padding(padding: EdgeInsets.only(top: 10)),
                             Text(
-                              S.of(context).joiningServerUsers(
+                              S
+                                  .of(context)
+                                  .joiningServerUsers(
                                     server.nodeInfo?.usage?.users?.total ?? 0,
                                   ),
                               style: Theme.of(context).textTheme.bodySmall,
@@ -124,9 +127,8 @@ class MisskeyServerList extends ConsumerWidget {
                 },
               ),
               error: (e, st) => ErrorDetail(error: e, stackTrace: st),
-              loading: () => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
+              loading: () =>
+                  const Center(child: CircularProgressIndicator.adaptive()),
             ),
           ),
         ],

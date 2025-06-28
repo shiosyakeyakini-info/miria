@@ -28,13 +28,16 @@ class ImportExportRepository extends ChangeNotifier {
     String? folderId,
   ) async {
     final files = await Future.wait([
-      ref.read(misskeyProvider(account)).drive.files.find(
-            DriveFilesFindRequest(
-              name: "miria.json",
-              folderId: folderId,
-            ),
-          ),
-      ref.read(misskeyProvider(account)).drive.files.find(
+      ref
+          .read(misskeyProvider(account))
+          .drive
+          .files
+          .find(DriveFilesFindRequest(name: "miria.json", folderId: folderId)),
+      ref
+          .read(misskeyProvider(account))
+          .drive
+          .files
+          .find(
             DriveFilesFindRequest(
               name: "miria.json.unknown",
               folderId: folderId,
@@ -69,7 +72,8 @@ class ImportExportRepository extends ChangeNotifier {
 
     final importFile = alreadyExists.sortedBy((file) => file.createdAt).last;
 
-    final response = await ref.read(dioProvider)
+    final response = await ref
+        .read(dioProvider)
         .get(importFile.url, options: Options(responseType: ResponseType.json));
 
     final json = jsonDecode(response.data);
@@ -86,15 +90,17 @@ class ImportExportRepository extends ChangeNotifier {
     }
 
     // 全般設定
-    await ref.read(generalSettingsRepositoryProvider)
+    await ref
+        .read(generalSettingsRepositoryProvider)
         .update(importedSettings.generalSettings);
 
     // タブ設定
     final tabSettings = <TabSetting>[];
 
     for (final tabSetting in importedSettings.tabSettings) {
-      final account = accounts
-          .firstWhereOrNull((account) => tabSetting.acct == account.acct);
+      final account = accounts.firstWhereOrNull(
+        (account) => tabSetting.acct == account.acct,
+      );
 
       if (account == null) {
         continue;
@@ -139,7 +145,8 @@ class ImportExportRepository extends ChangeNotifier {
       if (alreadyConfirm != true) return;
 
       for (final element in alreadyExists) {
-        await ref.read(misskeyProvider(account))
+        await ref
+            .read(misskeyProvider(account))
             .drive
             .files
             .delete(DriveFilesDeleteRequest(fileId: element.id));
@@ -151,9 +158,14 @@ class ImportExportRepository extends ChangeNotifier {
     final data = {
       ...ExportedSetting(
         generalSettings: ref.read(generalSettingsRepositoryProvider).settings,
-        tabSettings: ref.read(tabSettingsRepositoryProvider).tabSettings.toList(),
-        accountSettings:
-            ref.read(accountSettingsRepositoryProvider).accountSettings.toList(),
+        tabSettings: ref
+            .read(tabSettingsRepositoryProvider)
+            .tabSettings
+            .toList(),
+        accountSettings: ref
+            .read(accountSettingsRepositoryProvider)
+            .accountSettings
+            .toList(),
       ).toJson(),
       "metadata": {
         "createdAt": DateTime.now().toUtc().toIso8601String(),
@@ -163,7 +175,11 @@ class ImportExportRepository extends ChangeNotifier {
     };
 
     if (!context.mounted) return;
-    await ref.read(misskeyProvider(account)).drive.files.createAsBinary(
+    await ref
+        .read(misskeyProvider(account))
+        .drive
+        .files
+        .createAsBinary(
           DriveFilesCreateRequest(
             folderId: folder?.id,
             name: "miria.json",
