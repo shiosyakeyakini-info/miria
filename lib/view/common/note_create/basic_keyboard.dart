@@ -104,6 +104,20 @@ class BasicKeyboard extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
         ),
+        CustomKeyboardButton(
+          keyboard: "[",
+          afterInsert: "]()",
+          displayText: "[]()",
+          controller: controller,
+          focusNode: focusNode,
+        ),
+        CustomKeyboardButton(
+          keyboard: "?[",
+          afterInsert: "]()",
+          displayText: "?[]()",
+          controller: controller,
+          focusNode: focusNode,
+        ),
       ],
     );
   }

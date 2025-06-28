@@ -416,9 +416,11 @@ class NotificationItem extends ConsumerWidget {
                     orElse: () => Container(),
                   ),
               if (type is FollowRequestAccepted && type.message != null)
-                SimpleMfmText(
-                  S.of(context).messageForFollower(type.message ?? ""),
-                  emojis: type.user?.emojis ?? {},
+                Padding(
+                  padding: const EdgeInsets.only(left: 85),
+                  child: SimpleMfmText(
+                    S.of(context).messageForFollower(type.message ?? ""),
+                  ),
                 ),
             ],
           ),
