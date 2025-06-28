@@ -166,7 +166,7 @@ class MfmFnKeyboard extends ConsumerWidget {
           );
         } else {
           controller.insert(
-            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.a * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+            ".color=${((result.value.r * 15.0).round() & 0xff).toRadixString(16)}${((result.value.g * 15.0).round() & 0xff).toRadixString(16)}${((result.value.b * 15.0).round() & 0xff).toRadixString(16)}${((result.value.a * 15.0).round() & 0xff).toRadixString(16)} ",
           );
         }
       } else {
