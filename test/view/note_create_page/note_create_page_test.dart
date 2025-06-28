@@ -1727,7 +1727,7 @@ void main() {
           );
           await tester.pumpAndSettle();
 
-          await tester.tap(find.text(":"));
+          await tester.tap(find.text("："));
           await tester.pumpAndSettle();
 
           expect(
@@ -1786,7 +1786,7 @@ void main() {
           );
           await tester.pumpAndSettle();
 
-          await tester.tap(find.text(":"));
+          await tester.tap(find.text("："));
           await tester.pumpAndSettle();
 
           await tester.tap(find.text(TestData.unicodeEmoji1.char));
