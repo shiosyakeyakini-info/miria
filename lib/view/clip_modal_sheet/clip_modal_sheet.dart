@@ -1,9 +1,9 @@
 import "package:auto_route/auto_route.dart";
 import "package:dio/dio.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
@@ -21,30 +21,27 @@ part "clip_modal_sheet.g.dart";
 class _NotesClipsNotifier extends _$NotesClipsNotifier {
   @override
   Future<List<Clip>> build(String noteId) async {
-    final response = await ref.read(misskeyPostContextProvider).notes.clips(
-          NotesClipsRequest(noteId: noteId),
-        );
+    final response = await ref
+        .read(misskeyPostContextProvider)
+        .notes
+        .clips(NotesClipsRequest(noteId: noteId));
     return response.toList();
   }
 
   void addClip(Clip clip) {
-    state = AsyncValue.data([...state.valueOrNull ?? [], clip]);
+    state = AsyncValue.data([...state.value ?? [], clip]);
   }
 
   void removeClip(String clipId) {
     state = AsyncValue.data(
-      (state.valueOrNull ?? []).where((clip) => clip.id != clipId).toList(),
+      (state.value ?? []).where((clip) => clip.id != clipId).toList(),
     );
   }
 }
 
 @Riverpod(
   keepAlive: false,
-  dependencies: [
-    ClipsNotifier,
-    _NotesClipsNotifier,
-    misskeyPostContext,
-  ],
+  dependencies: [ClipsNotifier, _NotesClipsNotifier, misskeyPostContext],
 )
 class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   @override
@@ -63,21 +60,25 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
   Future<void> addToClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
       try {
-        await ref.read(misskeyPostContextProvider).clips.addNote(
-              ClipsAddNoteRequest(clipId: clip.id, noteId: noteId),
-            );
+        await ref
+            .read(misskeyPostContextProvider)
+            .clips
+            .addNote(ClipsAddNoteRequest(clipId: clip.id, noteId: noteId));
         ref.read(_notesClipsNotifierProvider(noteId).notifier).addClip(clip);
       } on DioException catch (e) {
         if (e.response != null) {
           // すでにクリップに追加されている場合、削除するかどうかを確認する
           if (((e.response?.data as Map?)?["error"] as Map?)?["code"] ==
               "ALREADY_CLIPPED") {
-            final confirm =
-                await ref.read(dialogStateNotifierProvider.notifier).showDialog(
-                      message: (context) => S.of(context).alreadyAddedClip,
-                      actions: (context) =>
-                          [S.of(context).deleteClip, S.of(context).noneAction],
-                    );
+            final confirm = await ref
+                .read(dialogStateNotifierProvider.notifier)
+                .showDialog(
+                  message: (context) => S.of(context).alreadyAddedClip,
+                  actions: (context) => [
+                    S.of(context).deleteClip,
+                    S.of(context).noneAction,
+                  ],
+                );
             if (confirm == 0) {
               await removeFromClip(clip);
             }
@@ -91,12 +92,10 @@ class _ClipModalSheetNotifier extends _$ClipModalSheetNotifier {
 
   Future<void> removeFromClip(Clip clip) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref.read(misskeyPostContextProvider).clips.removeNote(
-            ClipsRemoveNoteRequest(
-              clipId: clip.id,
-              noteId: noteId,
-            ),
-          );
+      await ref
+          .read(misskeyPostContextProvider)
+          .clips
+          .removeNote(ClipsRemoveNoteRequest(clipId: clip.id, noteId: noteId));
       ref
           .read(_notesClipsNotifierProvider(noteId).notifier)
           .removeClip(clip.id);
@@ -134,37 +133,39 @@ class ClipModalSheet extends HookConsumerWidget implements AutoRouteWrapper {
 
     return switch (state) {
       AsyncData(:final value) => ListView.builder(
-          itemCount: value.length + 1,
-          itemBuilder: (context, index) {
-            if (index < value.length) {
-              final (clip, isClipped) = value[index];
-              return ListTile(
-                leading: isClipped
-                    ? const Icon(Icons.check)
-                    : SizedBox(width: Theme.of(context).iconTheme.size),
-                onTap: () async {
-                  if (isClipped) {
-                    await ref.read(notifier).removeFromClip(clip);
-                  } else {
-                    await ref.read(notifier).addToClip(clip);
-                  }
-                },
-                title: Text(clip.name ?? ""),
-                subtitle: Text(clip.description ?? ""),
-              );
-            } else {
-              return ListTile(
-                leading: const Icon(Icons.add),
-                title: Text(S.of(context).createClip),
-                onTap: create.executeOrNull,
-              );
-            }
-          },
-        ),
-      AsyncLoading() =>
-        const Center(child: CircularProgressIndicator.adaptive()),
-      AsyncError(:final error, :final stackTrace) =>
-        Center(child: ErrorDetail(error: error, stackTrace: stackTrace))
+        itemCount: value.length + 1,
+        itemBuilder: (context, index) {
+          if (index < value.length) {
+            final (clip, isClipped) = value[index];
+            return ListTile(
+              leading: isClipped
+                  ? const Icon(Icons.check)
+                  : SizedBox(width: Theme.of(context).iconTheme.size),
+              onTap: () async {
+                if (isClipped) {
+                  await ref.read(notifier).removeFromClip(clip);
+                } else {
+                  await ref.read(notifier).addToClip(clip);
+                }
+              },
+              title: Text(clip.name ?? ""),
+              subtitle: Text(clip.description ?? ""),
+            );
+          } else {
+            return ListTile(
+              leading: const Icon(Icons.add),
+              title: Text(S.of(context).createClip),
+              onTap: create.executeOrNull,
+            );
+          }
+        },
+      ),
+      AsyncLoading() => const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+      AsyncError(:final error, :final stackTrace) => Center(
+        child: ErrorDetail(error: error, stackTrace: stackTrace),
+      ),
     };
   }
 }

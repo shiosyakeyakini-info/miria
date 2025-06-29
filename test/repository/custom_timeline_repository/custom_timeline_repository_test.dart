@@ -36,9 +36,11 @@ class FakeApiService extends Fake implements ApiService {
   dynamic response;
 
   @override
-  Future<T> post<T>(String path, Map<String, dynamic> request,
-      {bool Function(String key, String? value)?
-          excludeRemoveNullPredicate}) async {
+  Future<T> post<T>(
+    String path,
+    Map<String, dynamic> request, {
+    bool Function(String key, String? value)? excludeRemoveNullPredicate,
+  }) async {
     lastPath = path;
     lastRequest = request;
     return response as T;
@@ -70,8 +72,9 @@ void main() {
       when(misskey.apiService).thenReturn(apiService);
       when(misskey.host).thenReturn('example.com');
       when(misskey.token).thenReturn('TOKEN');
-      when(misskey.socketConnectionTimeout)
-          .thenReturn(const Duration(seconds: 20));
+      when(
+        misskey.socketConnectionTimeout,
+      ).thenReturn(const Duration(seconds: 20));
       setting = TabSetting(
         icon: const TabIcon(codePoint: 0xe001),
         tabType: TabType.customTimeline,
@@ -115,8 +118,10 @@ void main() {
 
       final count = await repo.previousLoad();
 
-      expect(
-          apiService.lastRequest, {'foo': 'bar', 'untilId': TestData.note1.id});
+      expect(apiService.lastRequest, {
+        'foo': 'bar',
+        'untilId': TestData.note1.id,
+      });
       expect(count, 1);
       expect(repo.olderNotes.last.id, TestData.note2.id);
     });

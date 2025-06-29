@@ -1,10 +1,10 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:flutter_colorpicker/flutter_colorpicker.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:miria/l10n/app_localizations.dart";
 
-@RoutePage<Color>()
+@RoutePage()
 class ColorPickerDialog extends HookWidget {
   const ColorPickerDialog({super.key});
 

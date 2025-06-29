@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 
 enum TabType {
   localTimeline,
@@ -10,8 +10,7 @@ enum TabType {
   channel,
   userList,
   antenna,
-  customTimeline,
-  ;
+  customTimeline;
 
   String displayName(BuildContext context) {
     return switch (this) {

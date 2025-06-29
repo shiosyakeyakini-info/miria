@@ -825,6 +825,8 @@
     "serverCache": "服务器信息",
     "instanceMuteDescription1": "隐藏已配置的服务器帖子。",
     "instanceMuteDescription2": "将已配置服务器上的所有帖子和转帖屏蔽，包括对屏蔽服务器上的用户的回复。\n设置在新行上，以换行符分隔。",
+    "reactionMute": "表情回应屏蔽",
+    "reactionMuteDescription": "按行输入 :emoji: 或 :emoji@host: 的形式。也可以仅输入 @host，表示屏蔽该主机的所有表情。",
     "bulkAddReactions": "批量添加",
     "bulkAddReactionsDescription1": "请使用您的浏览器登录到要复制回应面板的帐户",
     "bulkAddReactionsDescription2": "在同一个浏览器中访问以下 URL，选择并复制「值 (JSON)」中的所有内容",

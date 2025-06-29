@@ -18,7 +18,7 @@ part "photo_edit_state_notifier.freezed.dart";
 part "photo_edit_state_notifier.g.dart";
 
 @freezed
-class PhotoEdit with _$PhotoEdit {
+abstract class PhotoEdit with _$PhotoEdit {
   const factory PhotoEdit({
     @Default(false) bool clipMode,
     @Default(false) bool colorFilterMode,
@@ -38,13 +38,13 @@ class PhotoEdit with _$PhotoEdit {
 }
 
 @freezed
-class ColorFilterPreview with _$ColorFilterPreview {
+abstract class ColorFilterPreview with _$ColorFilterPreview {
   const factory ColorFilterPreview({required String name, Uint8List? image}) =
       _ColorFilterPreview;
 }
 
 @freezed
-class EditedEmojiData with _$EditedEmojiData {
+abstract class EditedEmojiData with _$EditedEmojiData {
   const factory EditedEmojiData({
     required MisskeyEmojiData emoji,
     required double scale,
@@ -77,8 +77,10 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
     final imageData = await ImageDescriptor.encoded(
       await ImmutableBuffer.fromUint8List(initialImage),
     );
-    final defaultSize =
-        Size(imageData.width.toDouble(), imageData.height.toDouble());
+    final defaultSize = Size(
+      imageData.width.toDouble(),
+      imageData.height.toDouble(),
+    );
 
     state = state.copyWith(
       isInitialized: true,
@@ -133,8 +135,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   Future<Uint8List?> createSaveData(GlobalKey renderingAreaKey) async {
     // RenderObjectを取得
-    final boundary = renderingAreaKey.currentContext?.findRenderObject()
-        as RenderRepaintBoundary?;
+    final boundary =
+        renderingAreaKey.currentContext?.findRenderObject()
+            as RenderRepaintBoundary?;
     if (boundary == null) return null;
     final image = await boundary.toImage();
     final byteData = await image.toByteData(format: ImageByteFormat.png);
@@ -319,7 +322,7 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
             imageEditorOption: ImageEditorOption()..addOptions(preset.option),
           ),
         ),
-    ].whereNotNull();
+    ].nonNulls;
 
     state = state.copyWith(colorFilterPreviewImages: result.toList());
   }
@@ -340,7 +343,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
 
   /// リアクションを追加する
   Future<void> addReaction() async {
-    final reaction = await ref.read(appRouterProvider).push<MisskeyEmojiData>(
+    final reaction = await ref
+        .read(appRouterProvider)
+        .push<MisskeyEmojiData>(
           ReactionPickerRoute(
             account: ref.read(accountContextProvider).postAccount,
             isAcceptSensitive: true,
@@ -352,7 +357,9 @@ class PhotoEditStateNotifier extends _$PhotoEditStateNotifier {
       case CustomEmojiData():
         // カスタム絵文字の場合、ライセンスを確認する
         if (_acceptReactions.none((e) => e == reaction.baseName)) {
-          final dialogResult = await ref.read(appRouterProvider).push<bool>(
+          final dialogResult = await ref
+              .read(appRouterProvider)
+              .push<bool>(
                 LicenseConfirmRoute(
                   emoji: reaction.baseName,
                   account: ref.read(accountContextProvider).postAccount,

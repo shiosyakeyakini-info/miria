@@ -1,7 +1,7 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -31,9 +31,10 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfo = ref.watch(userInfoProxyProvider(userId)).valueOrNull;
+    final userInfo = ref.watch(userInfoProxyProvider(userId)).value;
 
-    final isReactionAvailable = userInfo?.response.publicReactions == true ||
+    final isReactionAvailable =
+        userInfo?.response.publicReactions == true ||
         (userInfo?.response.host == null &&
             userInfo?.response.username == accountContext.postAccount.userId);
     final isRemoteUser =
@@ -81,16 +82,15 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
                           userInfo!.response.host!,
                           userInfo.metaResponse,
                         ),
-                        postAccount:
-                            ref.read(accountContextProvider).postAccount,
+                        postAccount: ref
+                            .read(accountContextProvider)
+                            .postAccount,
                       ),
                       child: UserDetail(response: userInfo.remoteResponse!),
                     ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: UserNotes(
-                      userId: userId,
-                    ),
+                    child: UserNotes(userId: userId),
                   ),
                   if (isRemoteUser)
                     AccountContextScope(
@@ -99,8 +99,9 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
                           userInfo!.response.host!,
                           userInfo.metaResponse,
                         ),
-                        postAccount:
-                            ref.read(accountContextProvider).postAccount,
+                        postAccount: ref
+                            .read(accountContextProvider)
+                            .postAccount,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -128,8 +129,9 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
                           userInfo!.response.host!,
                           userInfo.metaResponse,
                         ),
-                        postAccount:
-                            ref.read(accountContextProvider).postAccount,
+                        postAccount: ref
+                            .read(accountContextProvider)
+                            .postAccount,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -152,8 +154,9 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
                           userInfo!.response.host!,
                           userInfo.metaResponse,
                         ),
-                        postAccount:
-                            ref.read(accountContextProvider).postAccount,
+                        postAccount: ref
+                            .read(accountContextProvider)
+                            .postAccount,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -185,13 +188,14 @@ class UserDetailTab extends ConsumerWidget {
     final userDetail = ref.watch(userInfoProxyProvider(userId));
 
     return switch (userDetail) {
-      AsyncLoading() =>
-        const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncLoading() => const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(
-          error: error,
-          stackTrace: stackTrace,
-        ),
-      AsyncData(:final value) => UserDetail(response: value.response)
+        error: error,
+        stackTrace: stackTrace,
+      ),
+      AsyncData(:final value) => UserDetail(response: value.response),
     };
   }
 }

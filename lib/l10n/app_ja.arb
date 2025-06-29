@@ -882,11 +882,18 @@
     "serverCache": "サーバーの情報",
     "instanceMuteDescription1": "設定したサーバーのノートを隠します。",
     "instanceMuteDescription2": "ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとリノートをミュートします。\n改行で区切って設定します。",
+    "reactionMute": "リアクションミュート",
+    "reactionMuteDescription": "改行区切りで :emoji: または :emoji@host: の形式で入力します。@host のみも受け付け、この場合該当ホストすべてを対象とします。",
     "bulkAddReactions": "一括追加",
     "bulkAddReactionsDescription1": "お使いのブラウザでリアクションデッキをコピーしたいアカウントにログインしてください",
     "bulkAddReactionsDescription2": "同じブラウザで以下のURLにアクセスして「値 (JSON)」の内容をすべて選択してコピーしてください",
     "bulkAddReactionsDescription2ForEmojiPalette": "同じブラウザで以下のURLにアクセスして絵文字パレットをコピーしてください",
     "bulkAddReactionsDescription3": "コピーしたものを下のテキストボックスに貼り付けてください",
+    "bulkAddMutedReactions": "ミュート設定をインポート",
+    "bulkAddMutedReactionsDescription1": "お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください",
+    "bulkAddMutedReactionsDescription2": "同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください",
+    "bulkAddMutedReactionsDescription3": "コピーしたものを下のテキストボックスに貼り付けてください",
+    "importMutedReactions": "ミュート設定をインポート",
     "pasteHere": "ここに貼り付け",
     "invalidInput": "入力が有効な値ではありません",
     "clear": "クリア",
@@ -997,6 +1004,13 @@
 
     "unsupportedFile": "対応してないファイルやわ",
     "unsupportedFileWithFilename": "{filename}は対応してないファイルやわ",
+    "@unsupportedFileWithFilename": {
+        "placeholders": {
+            "filename": {
+                "type": "String"
+            }
+        }
+    },
     "failedFileSave": "ファイルの保存に失敗したみたいや",
 
     "misskeyGames": "Misskey Games",

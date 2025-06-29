@@ -8,7 +8,7 @@ import "package:miria/model/misskey_theme.dart";
 part "color_theme.freezed.dart";
 
 @freezed
-class ColorTheme with _$ColorTheme {
+abstract class ColorTheme with _$ColorTheme {
   const factory ColorTheme({
     required String id,
     required String name,
@@ -33,12 +33,12 @@ class ColorTheme with _$ColorTheme {
 
   factory ColorTheme.misskey(MisskeyTheme theme) {
     final isDarkTheme = theme.base == "dark";
-    final props = {
-      ...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps,
-    }
-      ..addAll(theme.props)
-      ..cast<String, String>()
-          .removeWhere((key, value) => value.startsWith('"'));
+    final props =
+        {...isDarkTheme ? defaultDarkThemeProps : defaultLightThemeProps}
+          ..addAll(theme.props)
+          ..cast<String, String>().removeWhere(
+            (key, value) => value.startsWith('"'),
+          );
 
     // https://github.com/misskey-dev/misskey/blob/13.14.1/packages/frontend/src/scripts/theme.ts#L98-L124
     Color getColor(String val) {
@@ -55,7 +55,7 @@ class ColorTheme with _$ColorTheme {
         return switch (func) {
           "darken" => color.darken(arg / 100),
           "lighten" => color.lighten(arg / 100),
-          "alpha" => color.withOpacity(arg),
+          "alpha" => color.withValues(alpha: arg),
           "hue" => color.spin(arg),
           "saturate" => color.saturate(arg / 100),
           _ => color,
@@ -88,9 +88,7 @@ class ColorTheme with _$ColorTheme {
       throw FormatException("invalid color format", val);
     }
 
-    final colors = props.map(
-      (key, value) => MapEntry(key, getColor(value)),
-    );
+    final colors = props.map((key, value) => MapEntry(key, getColor(value)));
 
     return ColorTheme(
       id: theme.id,

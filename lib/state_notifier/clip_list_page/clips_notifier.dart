@@ -1,4 +1,4 @@
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/clip_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
@@ -17,24 +17,30 @@ class ClipsNotifier extends _$ClipsNotifier {
 
   Future<void> create(ClipSettings settings) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      final list = await ref.read(misskeyPostContextProvider).clips.create(
+      final list = await ref
+          .read(misskeyPostContextProvider)
+          .clips
+          .create(
             ClipsCreateRequest(
               name: settings.name,
               description: settings.description,
               isPublic: settings.isPublic,
             ),
           );
-      state = AsyncValue.data([...?state.valueOrNull, list]);
+      state = AsyncValue.data([...?state.value, list]);
     });
   }
 
   Future<void> delete(String clipId) async {
-    final result =
-        await ref.read(dialogStateNotifierProvider.notifier).showDialog(
-              message: (context) => S.of(context).confirmDeleteClip,
-              actions: (context) =>
-                  [S.of(context).willDelete, S.of(context).cancel],
-            );
+    final result = await ref
+        .read(dialogStateNotifierProvider.notifier)
+        .showDialog(
+          message: (context) => S.of(context).confirmDeleteClip,
+          actions: (context) => [
+            S.of(context).willDelete,
+            S.of(context).cancel,
+          ],
+        );
     if (result != 0) return;
 
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
@@ -42,18 +48,16 @@ class ClipsNotifier extends _$ClipsNotifier {
           .read(misskeyPostContextProvider)
           .clips
           .delete(ClipsDeleteRequest(clipId: clipId));
-      state = AsyncValue.data(
-        [...?state.valueOrNull?.where((e) => e.id != clipId)],
-      );
+      state = AsyncValue.data([...?state.value?.where((e) => e.id != clipId)]);
     });
   }
 
-  Future<void> updateClip(
-    String clipId,
-    ClipSettings settings,
-  ) async {
+  Future<void> updateClip(String clipId, ClipSettings settings) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      final clip = await ref.read(misskeyPostContextProvider).clips.update(
+      final clip = await ref
+          .read(misskeyPostContextProvider)
+          .clips
+          .update(
             ClipsUpdateRequest(
               clipId: clipId,
               name: settings.name,
@@ -62,7 +66,7 @@ class ClipsNotifier extends _$ClipsNotifier {
             ),
           );
       state = AsyncValue.data([
-        for (final e in [...?state.valueOrNull]) e.id == clipId ? clip : e,
+        for (final e in [...?state.value]) e.id == clipId ? clip : e,
       ]);
     });
   }

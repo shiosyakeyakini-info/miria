@@ -1,9 +1,9 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/sending_elevated_button.dart";
@@ -23,10 +23,8 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountContextScope(
-        context: accountContext,
-        child: this,
-      );
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope(context: accountContext, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,9 +41,7 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
       content: TextField(
         controller: controller,
         maxLines: null,
-        decoration: InputDecoration(
-          hintText: S.of(context).memoDescription,
-        ),
+        decoration: InputDecoration(hintText: S.of(context).memoDescription),
       ),
       actions: [
         OutlinedButton(
@@ -55,9 +51,9 @@ class UpdateMemoDialog extends HookConsumerWidget implements AutoRouteWrapper {
         switch (updateMemo.value) {
           AsyncLoading() => const SendingElevatedButton(),
           _ => ElevatedButton(
-              onPressed: () async => updateMemo.execute(),
-              child: Text(S.of(context).save),
-            ),
+            onPressed: () async => updateMemo.execute(),
+            child: Text(S.of(context).save),
+          ),
         },
       ],
     );

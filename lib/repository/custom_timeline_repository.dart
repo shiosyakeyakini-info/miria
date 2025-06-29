@@ -33,9 +33,9 @@ class CustomTimelineRepository extends SocketTimelineRepository {
 
   @override
   Channel get channel => Channel.values.firstWhere(
-        (e) => e.name == tabSetting.customChannelName,
-        orElse: () => Channel.homeTimeline,
-      );
+    (e) => e.name == tabSetting.customChannelName,
+    orElse: () => Channel.homeTimeline,
+  );
 
   @override
   Map<String, dynamic> get parameters => tabSetting.customParameters ?? {};

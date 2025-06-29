@@ -6,26 +6,71 @@ part of 'instance_mute_page.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(InstanceMutePageNotifier)
+const instanceMutePageNotifierProvider = InstanceMutePageNotifierProvider._();
+
+final class InstanceMutePageNotifierProvider
+    extends
+        $AsyncNotifierProvider<
+          InstanceMutePageNotifier,
+          (List<String>, AsyncValue<void>?)
+        > {
+  const InstanceMutePageNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'instanceMutePageNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          InstanceMutePageNotifierProvider.$allTransitiveDependencies0,
+          InstanceMutePageNotifierProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$instanceMutePageNotifierHash();
+
+  @$internal
+  @override
+  InstanceMutePageNotifier create() => InstanceMutePageNotifier();
+}
+
 String _$instanceMutePageNotifierHash() =>
     r'66d63bb0c86f7bec0da2078bfcaff5f43a86d50f';
 
-/// See also [InstanceMutePageNotifier].
-@ProviderFor(InstanceMutePageNotifier)
-final instanceMutePageNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    InstanceMutePageNotifier, (List<String>, AsyncValue<void>?)>.internal(
-  InstanceMutePageNotifier.new,
-  name: r'instanceMutePageNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$instanceMutePageNotifierHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+abstract class _$InstanceMutePageNotifier
+    extends $AsyncNotifier<(List<String>, AsyncValue<void>?)> {
+  FutureOr<(List<String>, AsyncValue<void>?)> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<(List<String>, AsyncValue<void>?)>,
+              (List<String>, AsyncValue<void>?)
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<(List<String>, AsyncValue<void>?)>,
+                (List<String>, AsyncValue<void>?)
+              >,
+              AsyncValue<(List<String>, AsyncValue<void>?)>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$InstanceMutePageNotifier
-    = AutoDisposeAsyncNotifier<(List<String>, AsyncValue<void>?)>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
