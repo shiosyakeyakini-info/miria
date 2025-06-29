@@ -1519,6 +1519,22 @@ class SZh extends S {
   String get blockedUsers => '已拉黑的用户';
 
   @override
+  String confirmUnblockUser(String userName) {
+    return '$userNameのブロックを解除してもええか？';
+  }
+
+  @override
+  String confirmUnmuteUser(String userName) {
+    return '$userNameのミュートを解除してもええか？';
+  }
+
+  @override
+  String get unblock => 'ブロック解除';
+
+  @override
+  String get unmute => 'ミュート解除';
+
+  @override
   String get cacheSettings => '缓存设置';
 
   @override

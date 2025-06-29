@@ -55,6 +55,7 @@ class MutedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.volume_up),
+                    tooltip: S.of(context).unmute,
                     onPressed: unmute.executeOrNull,
                   ),
                   onTap: () async => context.pushRoute(

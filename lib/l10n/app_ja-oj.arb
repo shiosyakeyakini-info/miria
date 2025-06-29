@@ -129,6 +129,24 @@
     "lookupHint": "@ai@misskey.io やhttps://... を入力してくださいまし",
     "lookupFailed": "照会に失敗いたしましたわ",
     "lookupExamples": "入力例:",
-    "unknownObject": "未知のオブジェクトですわね"
+    "unknownObject": "未知のオブジェクトですわね",
+
+
+    "confirmUnblockUser": "{userName}のブロックを解除してもよろしくて？",
+    "@confirmUnblockUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmUnmuteUser": "{userName}のミュートを解除してもよろしくて？",
+    "@confirmUnmuteUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    }
 
 }

@@ -1,3 +1,4 @@
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -18,13 +19,26 @@ class MutedUsersNotifier extends _$MutedUsersNotifier {
 
   Future<void> delete(String userId) async {
     await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
-      await ref
-          .read(misskeyPostContextProvider)
-          .mute
-          .delete(MuteDeleteRequest(userId: userId));
-      state = AsyncValue.data([
-        ...?state.value?.where((e) => e.muteeId != userId),
-      ]);
+      // ユーザー名を取得
+      final user = state.value?.firstWhere((e) => e.muteeId == userId);
+      final userName = user?.mutee.name ?? user?.mutee.username ?? "";
+
+      final result = await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showDialog(
+            message: (context) => S.of(context).confirmUnmuteUser(userName),
+            actions: (context) => [S.of(context).unmute, S.of(context).cancel],
+          );
+
+      if (result == 0) {
+        await ref
+            .read(misskeyPostContextProvider)
+            .mute
+            .delete(MuteDeleteRequest(userId: userId));
+        state = AsyncValue.data([
+          ...?state.value?.where((e) => e.muteeId != userId),
+        ]);
+      }
     });
   }
 }

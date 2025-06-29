@@ -1525,6 +1525,22 @@ class SJa extends S {
   String get blockedUsers => 'ブロック済みユーザー';
 
   @override
+  String confirmUnblockUser(String userName) {
+    return '$userNameのブロックを解除してもええか？';
+  }
+
+  @override
+  String confirmUnmuteUser(String userName) {
+    return '$userNameのミュートを解除してもええか？';
+  }
+
+  @override
+  String get unblock => 'ブロック解除';
+
+  @override
+  String get unmute => 'ミュート解除';
+
+  @override
   String get cacheSettings => 'キャッシュ設定';
 
   @override
@@ -2247,6 +2263,16 @@ class SJaOj extends SJa {
 
   @override
   String get staySensitive => 'センシティブのままにしますわ';
+
+  @override
+  String confirmUnblockUser(String userName) {
+    return '$userNameのブロックを解除してもよろしくて？';
+  }
+
+  @override
+  String confirmUnmuteUser(String userName) {
+    return '$userNameのミュートを解除してもよろしくて？';
+  }
 
   @override
   String get memoDescription => 'メモしたいことをお書きくださいまし';

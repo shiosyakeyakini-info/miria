@@ -54,7 +54,8 @@ class BlockedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.block),
+                    icon: const Icon(Icons.block_rounded),
+                    tooltip: S.of(context).unblock,
                     onPressed: unblock.executeOrNull,
                   ),
                   onTap: () async => context.pushRoute(
