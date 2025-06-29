@@ -24,17 +24,17 @@ String toAscii(String host) {
 
 // Validates and normalizes the user's server input to a host with an optional scheme and port.
 String normalizeServer(String input) {
-  final trimmed = input.trim().replaceAll(RegExp(r'/+$'), '');
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+  final trimmed = input.trim().replaceAll(RegExp(r"/+$"), "");
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     final uri = Uri.parse(trimmed);
     if (uri.path.isNotEmpty ||
         uri.query.isNotEmpty ||
         uri.fragment.isNotEmpty) {
-      throw const FormatException('invalid server');
+      throw const FormatException("invalid server");
     }
     final asciiHost = toAscii(uri.host);
-    final portPart = uri.hasPort ? ':${uri.port}' : '';
-    return '${uri.scheme}://$asciiHost$portPart';
+    final portPart = uri.hasPort ? ":${uri.port}" : "";
+    return "${uri.scheme}://$asciiHost$portPart";
   }
   return toAscii(trimmed);
 }
@@ -43,11 +43,11 @@ String normalizeServer(String input) {
 Uri serverToUri(String server) {
   final normalized = normalizeServer(server);
   final uri =
-      normalized.startsWith('http://') || normalized.startsWith('https://')
+      normalized.startsWith("http://") || normalized.startsWith("https://")
       ? Uri.parse(normalized)
-      : Uri.parse('https://$normalized');
+      : Uri.parse("https://$normalized");
   if (uri.host.isEmpty) {
-    throw const FormatException('invalid server');
+    throw const FormatException("invalid server");
   }
   return uri;
 }

@@ -10,8 +10,8 @@ import "package:miria/model/account_settings.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/shared_preference_controller.dart";
-import "package:misskey_dart/misskey_dart.dart";
 import "package:miria/util/server_utils.dart";
+import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preference_app_group/shared_preference_app_group.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -274,7 +274,7 @@ class AccountRepository extends _$AccountRepository {
 
     try {
       final hostWithPort = serverUri.hasPort
-          ? '${serverUri.host}:${serverUri.port}'
+          ? "${serverUri.host}:${serverUri.port}"
           : serverUri.host;
       final meta = await ref
           .read(misskeyWithoutAccountProvider(hostWithPort))
@@ -303,7 +303,7 @@ class AccountRepository extends _$AccountRepository {
     String password,
   ) async {
     final uri = serverToUri(server);
-    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
     final token = await MisskeyServer().loginAsPassword(
       hostWithPort,
       userId,
@@ -324,7 +324,7 @@ class AccountRepository extends _$AccountRepository {
   Future<void> loginAsToken(String server, String token) async {
     await _validateMisskey(server);
     final uri = serverToUri(server);
-    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
     final misskey = Misskey(token: token, host: hostWithPort);
     final i = await misskey.i.i();
     final meta = await misskey.meta();
@@ -342,7 +342,7 @@ class AccountRepository extends _$AccountRepository {
   Future<void> openMiAuth(String server) async {
     await _validateMisskey(server);
     final uri = serverToUri(server);
-    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
 
     _sessionId = const Uuid().v4();
     await launchUrl(
@@ -358,7 +358,7 @@ class AccountRepository extends _$AccountRepository {
 
   Future<void> validateMiAuth(String server) async {
     final uri = serverToUri(server);
-    final hostWithPort = uri.hasPort ? '${uri.host}:${uri.port}' : uri.host;
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
     final token = await MisskeyServer().checkMiAuthToken(
       hostWithPort,
       _sessionId,
