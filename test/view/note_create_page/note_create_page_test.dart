@@ -1919,6 +1919,98 @@ void main() {
             "#def ",
           );
         });
+
+        testWidgets("CWへの入力補完が本文ではなくCWに挿入されること", (tester) async {
+          final emojiRepository = MockEmojiRepository();
+          when(emojiRepository.emoji).thenReturn([
+            TestData.unicodeEmojiRepositoryData1,
+            TestData.customEmojiRepositoryData1,
+          ]);
+          when(emojiRepository.defaultEmojis()).thenAnswer(
+              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          final generalSettingsRepository = MockGeneralSettingsRepository();
+          when(generalSettingsRepository.settings)
+              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+                generalSettingsRepositoryProvider
+                    .overrideWith((ref) => generalSettingsRepository),
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byIcon(Icons.remove_red_eye));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byType(TextField).first);
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(":"));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byType(NetworkImageView).at(1));
+          await tester.pumpAndSettle();
+
+          expect(
+            tester.textEditingController(find.byType(TextField).at(0)).text,
+            ":${TestData.customEmoji1.baseName}:",
+          );
+          expect(
+            tester.textEditingController(find.byType(TextField).at(1)).text,
+            "",
+          );
+        });
+
+        testWidgets("本文への入力補完がCWではなく本文に挿入されること", (tester) async {
+          final emojiRepository = MockEmojiRepository();
+          when(emojiRepository.emoji).thenReturn([
+            TestData.unicodeEmojiRepositoryData1,
+            TestData.customEmojiRepositoryData1,
+          ]);
+          when(emojiRepository.defaultEmojis()).thenAnswer(
+              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          final generalSettingsRepository = MockGeneralSettingsRepository();
+          when(generalSettingsRepository.settings)
+              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+                generalSettingsRepositoryProvider
+                    .overrideWith((ref) => generalSettingsRepository),
+                inputComplementDelayedProvider.overrideWithValue(1),
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byIcon(Icons.remove_red_eye));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byType(TextField).at(1));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(":"));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byType(NetworkImageView).at(1));
+          await tester.pumpAndSettle();
+
+          expect(
+            tester.textEditingController(find.byType(TextField).at(1)).text,
+            ":${TestData.customEmoji1.baseName}:",
+          );
+          expect(
+            tester.textEditingController(find.byType(TextField).at(0)).text,
+            "",
+          );
+        });
       });
 
       group("プレビュー", () {

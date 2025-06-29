@@ -10,11 +10,19 @@ class NoteEmoji extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final baseHeight = MediaQuery.textScalerOf(context)
         .scale((Theme.of(context).textTheme.bodyMedium?.fontSize ?? 22) * 1.35);
+    final cwFocus = ref.watch(cwFocusProvider);
+    final noteFocus = ref.watch(noteFocusProvider);
+
+    final useCw = cwFocus.hasFocus && !noteFocus.hasFocus;
+    final controller =
+        useCw ? ref.read(cwInputTextProvider) : ref.read(noteInputTextProvider);
+    final focusProvider = useCw ? cwFocusProvider : noteFocusProvider;
+
     return SizedBox(
       height: baseHeight + 40,
       child: InputComplement(
-        controller: ref.read(noteInputTextProvider),
-        focusNode: noteFocusProvider,
+        controller: controller,
+        focusNode: focusProvider,
       ),
     );
   }

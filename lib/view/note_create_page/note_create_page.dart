@@ -37,6 +37,16 @@ final noteInputTextProvider =
 final noteFocusProvider =
     ChangeNotifierProvider.autoDispose((ref) => FocusNode());
 
+final cwInputTextProvider =
+    ChangeNotifierProvider.autoDispose<TextEditingController>((ref) {
+  final controller = TextEditingController();
+
+  return controller;
+});
+
+final cwFocusProvider =
+    ChangeNotifierProvider.autoDispose((ref) => FocusNode());
+
 enum NoteCreationMode { update, recreate }
 
 @RoutePage()
