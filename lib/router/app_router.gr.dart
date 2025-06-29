@@ -550,6 +550,55 @@ class AppInfoRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [BlockedUsersPage]
+class BlockedUsersRoute extends PageRouteInfo<BlockedUsersRouteArgs> {
+  BlockedUsersRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BlockedUsersRoute.name,
+         args: BlockedUsersRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'BlockedUsersRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BlockedUsersRouteArgs>();
+      return WrappedRoute(
+        child: BlockedUsersPage(account: args.account, key: args.key),
+      );
+    },
+  );
+}
+
+class BlockedUsersRouteArgs {
+  const BlockedUsersRouteArgs({required this.account, this.key});
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'BlockedUsersRouteArgs{account: $account, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BlockedUsersRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [CacheManagementPage]
 class CacheManagementRoute extends PageRouteInfo<CacheManagementRouteArgs> {
   CacheManagementRoute({
@@ -1852,6 +1901,55 @@ class MisskeyServerListRoute extends PageRouteInfo<void> {
       return const MisskeyServerListDialog();
     },
   );
+}
+
+/// generated route for
+/// [MutedUsersPage]
+class MutedUsersRoute extends PageRouteInfo<MutedUsersRouteArgs> {
+  MutedUsersRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         MutedUsersRoute.name,
+         args: MutedUsersRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'MutedUsersRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<MutedUsersRouteArgs>();
+      return WrappedRoute(
+        child: MutedUsersPage(account: args.account, key: args.key),
+      );
+    },
+  );
+}
+
+class MutedUsersRouteArgs {
+  const MutedUsersRouteArgs({required this.account, this.key});
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'MutedUsersRouteArgs{account: $account, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! MutedUsersRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
 }
 
 /// generated route for

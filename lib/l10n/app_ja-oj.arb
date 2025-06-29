@@ -121,8 +121,23 @@
 
     "nothingHere": "ここには何もありませんわ",
     
-    "cacheManualUpdateCompleted": "情報の取得が完了しましたわ"
+    "cacheManualUpdateCompleted": "情報の取得が完了しましたわ",
 
-
+    "confirmUnblockUser": "{userName}のブロックを解除してもよろしくて？",
+    "@confirmUnblockUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmUnmuteUser": "{userName}のミュートを解除してもよろしくて？",
+    "@confirmUnmuteUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    }
 
 }

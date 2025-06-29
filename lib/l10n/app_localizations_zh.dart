@@ -1513,6 +1513,28 @@ class SZh extends S {
   String get instanceMute => '被屏蔽的服务器';
 
   @override
+  String get mutedUsers => '已屏蔽的用户';
+
+  @override
+  String get blockedUsers => '已拉黑的用户';
+
+  @override
+  String confirmUnblockUser(String userName) {
+    return '$userNameのブロックを解除してもええか？';
+  }
+
+  @override
+  String confirmUnmuteUser(String userName) {
+    return '$userNameのミュートを解除してもええか？';
+  }
+
+  @override
+  String get unblock => 'ブロック解除';
+
+  @override
+  String get unmute => 'ミュート解除';
+
+  @override
   String get cacheSettings => '缓存设置';
 
   @override
@@ -3382,6 +3404,12 @@ class SZhCn extends SZh {
 
   @override
   String get instanceMute => '被屏蔽的服务器';
+
+  @override
+  String get mutedUsers => '已屏蔽的用户';
+
+  @override
+  String get blockedUsers => '已拉黑的用户';
 
   @override
   String get cacheSettings => '缓存设置';

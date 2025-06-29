@@ -871,6 +871,26 @@
     "wordMute": "ワードミュート",
     "hardWordMute": "ハードワードミュート",
     "instanceMute": "インスタンスミュート",
+    "mutedUsers": "ミュート済みユーザー",
+    "blockedUsers": "ブロック済みユーザー",
+    "confirmUnblockUser": "{userName}のブロックを解除してもええか？",
+    "@confirmUnblockUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmUnmuteUser": "{userName}のミュートを解除してもええか？",
+    "@confirmUnmuteUser": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "unblock": "ブロック解除",
+    "unmute": "ミュート解除",
     "cacheSettings": "キャッシュ設定",
     "hideConditionalNotes": "指定した条件のノートをタイムラインから隠します。",
     "muteSettingDescription": "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。",

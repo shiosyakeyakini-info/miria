@@ -2574,6 +2574,42 @@ abstract class S {
   /// **'インスタンスミュート'**
   String get instanceMute;
 
+  /// No description provided for @mutedUsers.
+  ///
+  /// In ja, this message translates to:
+  /// **'ミュート済みユーザー'**
+  String get mutedUsers;
+
+  /// No description provided for @blockedUsers.
+  ///
+  /// In ja, this message translates to:
+  /// **'ブロック済みユーザー'**
+  String get blockedUsers;
+
+  /// No description provided for @confirmUnblockUser.
+  ///
+  /// In ja, this message translates to:
+  /// **'{userName}のブロックを解除してもええか？'**
+  String confirmUnblockUser(String userName);
+
+  /// No description provided for @confirmUnmuteUser.
+  ///
+  /// In ja, this message translates to:
+  /// **'{userName}のミュートを解除してもええか？'**
+  String confirmUnmuteUser(String userName);
+
+  /// No description provided for @unblock.
+  ///
+  /// In ja, this message translates to:
+  /// **'ブロック解除'**
+  String get unblock;
+
+  /// No description provided for @unmute.
+  ///
+  /// In ja, this message translates to:
+  /// **'ミュート解除'**
+  String get unmute;
+
   /// No description provided for @cacheSettings.
   ///
   /// In ja, this message translates to:

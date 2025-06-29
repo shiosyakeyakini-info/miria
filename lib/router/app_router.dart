@@ -64,8 +64,10 @@ import "package:miria/view/settings_page/tab_settings_page/tab_settings_list_pag
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_page.dart";
 import "package:miria/view/settings_page/tab_settings_page/timeline_preset_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart";
+import "package:miria/view/several_account_settings_page/blocked_users_page/blocked_users_page.dart";
 import "package:miria/view/several_account_settings_page/cache_management_page/cache_management_page.dart";
 import "package:miria/view/several_account_settings_page/instance_mute_page/instance_mute_page.dart";
+import "package:miria/view/several_account_settings_page/muted_users_page/muted_users_page.dart";
 import "package:miria/view/several_account_settings_page/reaction_deck_page/reaction_deck_page.dart";
 import "package:miria/view/several_account_settings_page/reaction_mute_page/reaction_mute_page.dart";
 import "package:miria/view/several_account_settings_page/several_account_general_settings_page/several_account_general_settings_page.dart";
@@ -134,6 +136,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ReactionMuteRoute.page),
     AutoRoute(page: WordMuteRoute.page),
     AutoRoute(page: InstanceMuteRoute.page),
+    AutoRoute(page: MutedUsersRoute.page),
+    AutoRoute(page: BlockedUsersRoute.page),
     AutoRoute(page: CacheManagementRoute.page),
     AutoRoute(page: SeveralAccountGeneralSettingsRoute.page),
     AutoRoute(page: SharingAccountSelectRoute.page),
