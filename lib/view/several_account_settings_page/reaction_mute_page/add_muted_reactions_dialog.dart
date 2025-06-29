@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:json5/json5.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
+import "package:miria/view/several_account_settings_page/reaction_mute_page/muted_reactions_parser.dart";
 import "package:miria/view/themes/app_theme.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -88,7 +88,7 @@ class AddMutedReactionsDialog extends HookConsumerWidget {
                 final text = value.trim();
                 if (text.startsWith("[")) {
                   try {
-                    (JSON5.parse(value) as List).map((name) => name as String);
+                    MutedReactionsParser.parseMutedReactionsData(value);
                   } catch (e) {
                     return s.invalidInput;
                   }
@@ -100,19 +100,8 @@ class AddMutedReactionsDialog extends HookConsumerWidget {
                 if (formKey.value.currentState!.validate()) {
                   final text = value?.trim();
                   if (text == null) return;
-                  final List<String> mutedReactions;
-                  if (text.startsWith("[")) {
-                    final parsed = JSON5.parse(value!) as List;
-                    mutedReactions = parsed
-                        .map((name) => name as String)
-                        .toList();
-                  } else {
-                    mutedReactions = text
-                        .split("\n")
-                        .where((line) => line.trim().isNotEmpty)
-                        .map((line) => line.trim())
-                        .toList();
-                  }
+                  final mutedReactions =
+                      MutedReactionsParser.parseMutedReactionsData(value!);
                   Navigator.of(context).pop(mutedReactions);
                 }
               },
