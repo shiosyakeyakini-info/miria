@@ -27,7 +27,7 @@ class UserListTimelineRepository extends SocketTimelineRepository {
 
   @override
   // TODO: implement channel
-  Channel get channel => Channel.userList;
+  Channel get channel => Channel.userList();
 
   @override
   // TODO: implement parameters

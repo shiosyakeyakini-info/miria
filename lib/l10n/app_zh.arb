@@ -67,6 +67,7 @@
     "socialTimelineAbbr": "STL",
     "globalTimeline": "全球时间线",
     "roleTimeline": "角色时间线",
+    "customTimeline": "自定义时间线",
     "server": "服务器",
     "miAuth": "MiAuth",
     "apiKey": "API密钥",
@@ -805,6 +806,10 @@
     "pleaseSelectList": "请选择列表。",
     "pleaseSelectAntenna": "请选择天线。",
     "pleaseSelectRole": "请选择角色。",
+    "customChannelName": "频道名",
+    "customApiPath": "POST端点路径",
+    "customTimelineParameters": "参数(JSON)",
+    "customPresetSelect": "从预设中选择",
     "reactionDeck": "回应面板",
     "wordMute": "文字屏蔽",
     "hardWordMute": "屏蔽关键词",
@@ -820,6 +825,8 @@
     "serverCache": "服务器信息",
     "instanceMuteDescription1": "隐藏已配置的服务器帖子。",
     "instanceMuteDescription2": "将已配置服务器上的所有帖子和转帖屏蔽，包括对屏蔽服务器上的用户的回复。\n设置在新行上，以换行符分隔。",
+    "reactionMute": "表情回应屏蔽",
+    "reactionMuteDescription": "按行输入 :emoji: 或 :emoji@host: 的形式。也可以仅输入 @host，表示屏蔽该主机的所有表情。",
     "bulkAddReactions": "批量添加",
     "bulkAddReactionsDescription1": "请使用您的浏览器登录到要复制回应面板的帐户",
     "bulkAddReactionsDescription2": "在同一个浏览器中访问以下 URL，选择并复制「值 (JSON)」中的所有内容",
@@ -939,5 +946,7 @@
             }
         }
     },
-    "nonInvitedReversi": "好像没有收到邀请"
+    "nonInvitedReversi": "好像没有收到邀请",
+
+    "template": "模板"
 }

@@ -14,9 +14,7 @@ class MfmPreview extends ConsumerWidget {
     );
 
     final replyTo = ref
-        .watch(
-          noteCreateNotifierProvider.select((value) => value.replyTo),
-        )
+        .watch(noteCreateNotifierProvider.select((value) => value.replyTo))
         .map((e) => "@${e.username}${e.host == null ? " " : "@${e.host}"} ")
         .join("");
 

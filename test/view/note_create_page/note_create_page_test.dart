@@ -39,7 +39,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -74,15 +74,16 @@ void main() {
         );
       });
 
-      testWidgets("削除されたノートを直す場合で、そのノートがチャンネルのノートの場合、チャンネルのノートになること",
-          (tester) async {
+      testWidgets("削除されたノートを直す場合で、そのノートがチャンネルのノートの場合、チャンネルのノートになること", (
+        tester,
+      ) async {
         final mockMisskey = MockMisskey();
         final mockNote = MockMisskeyNotes();
         when(mockMisskey.notes).thenReturn(mockNote);
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -130,7 +131,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -178,7 +179,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -237,10 +238,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
-              accountSettingsRepositoryProvider
-                  .overrideWith((ref) => accountSettings),
+              accountSettingsRepositoryProvider.overrideWith(
+                (ref) => accountSettings,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -276,14 +278,15 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                 initialAccount: TestData.account,
-                note: TestData.note1
-                    .copyWith(visibility: NoteVisibility.specified),
+                note: TestData.note1.copyWith(
+                  visibility: NoteVisibility.specified,
+                ),
               ),
             ),
           ),
@@ -312,14 +315,15 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                 initialAccount: TestData.account,
-                renote:
-                    TestData.note1.copyWith(visibility: NoteVisibility.home),
+                renote: TestData.note1.copyWith(
+                  visibility: NoteVisibility.home,
+                ),
               ),
             ),
           ),
@@ -349,7 +353,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -378,8 +382,9 @@ void main() {
         );
       });
 
-      testWidgets("ユーザーがサイレンスの場合で、デフォルトの公開範囲設定がパブリックの場合、強制ホームになること",
-          (tester) async {
+      testWidgets("ユーザーがサイレンスの場合で、デフォルトの公開範囲設定がパブリックの場合、強制ホームになること", (
+        tester,
+      ) async {
         final mockMisskey = MockMisskey();
         final mockNote = MockMisskeyNotes();
         when(mockMisskey.notes).thenReturn(mockNote);
@@ -394,10 +399,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
-              accountSettingsRepositoryProvider
-                  .overrideWith((ref) => accountSettings),
+              accountSettingsRepositoryProvider.overrideWith(
+                (ref) => accountSettings,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
@@ -430,57 +436,60 @@ void main() {
         );
       });
 
-      testWidgets("ユーザーがサイレンスの場合、デフォルトの公開範囲設定がフォロワーのみの場合、デフォルトの公開範囲設定が反映されること",
-          (tester) async {
-        final mockMisskey = MockMisskey();
-        final mockNote = MockMisskeyNotes();
-        when(mockMisskey.notes).thenReturn(mockNote);
-        final accountSettings = MockAccountSettingsRepository();
-        when(accountSettings.fromAccount(any)).thenReturn(
-          AccountSettings(
-            userId: TestData.account.userId,
-            host: TestData.account.host,
-            defaultNoteVisibility: NoteVisibility.followers,
-          ),
-        );
-        await tester.pumpWidget(
-          ProviderScope(
-            overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
-              inputComplementDelayedProvider.overrideWithValue(1),
-              accountSettingsRepositoryProvider
-                  .overrideWith((ref) => accountSettings),
-            ],
-            child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account.copyWith(
-                  i: TestData.account.i.copyWith(isSilenced: true),
+      testWidgets(
+        "ユーザーがサイレンスの場合、デフォルトの公開範囲設定がフォロワーのみの場合、デフォルトの公開範囲設定が反映されること",
+        (tester) async {
+          final mockMisskey = MockMisskey();
+          final mockNote = MockMisskeyNotes();
+          when(mockMisskey.notes).thenReturn(mockNote);
+          final accountSettings = MockAccountSettingsRepository();
+          when(accountSettings.fromAccount(any)).thenReturn(
+            AccountSettings(
+              userId: TestData.account.userId,
+              host: TestData.account.host,
+              defaultNoteVisibility: NoteVisibility.followers,
+            ),
+          );
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
+                inputComplementDelayedProvider.overrideWithValue(1),
+                accountSettingsRepositoryProvider.overrideWith(
+                  (ref) => accountSettings,
+                ),
+              ],
+              child: DefaultRootWidget(
+                initialRoute: NoteCreateRoute(
+                  initialAccount: TestData.account.copyWith(
+                    i: TestData.account.i.copyWith(isSilenced: true),
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-        await tester.pumpAndSettle();
+          );
+          await tester.pumpAndSettle();
 
-        await tester.enterText(
-          find.byType(TextField).hitTestable(),
-          ":ai_yay:",
-        );
-        await tester.tap(find.byIcon(Icons.send));
-        await tester.pumpAndSettle();
+          await tester.enterText(
+            find.byType(TextField).hitTestable(),
+            ":ai_yay:",
+          );
+          await tester.tap(find.byIcon(Icons.send));
+          await tester.pumpAndSettle();
 
-        verify(
-          mockNote.create(
-            argThat(
-              equals(
-                predicate<NotesCreateRequest>(
-                  (arg) => arg.visibility == NoteVisibility.followers,
+          verify(
+            mockNote.create(
+              argThat(
+                equals(
+                  predicate<NotesCreateRequest>(
+                    (arg) => arg.visibility == NoteVisibility.followers,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
     });
 
     group("連合オン・オフ", () {
@@ -499,10 +508,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
-              accountSettingsRepositoryProvider
-                  .overrideWith((ref) => accountSettings),
+              accountSettingsRepositoryProvider.overrideWith(
+                (ref) => accountSettings,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -536,7 +546,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -569,7 +579,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -606,7 +616,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -648,10 +658,11 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
                 inputComplementDelayedProvider.overrideWithValue(1),
-                accountSettingsRepositoryProvider
-                    .overrideWith((ref) => accountSettings),
+                accountSettingsRepositoryProvider.overrideWith(
+                  (ref) => accountSettings,
+                ),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
@@ -699,10 +710,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
-              accountSettingsRepositoryProvider
-                  .overrideWith((ref) => accountSettings),
+              accountSettingsRepositoryProvider.overrideWith(
+                (ref) => accountSettings,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -733,8 +745,9 @@ void main() {
         );
       });
 
-      testWidgets("削除されたノートを直す場合、削除されたノートのリアクション受け入れ設定が適用されること",
-          (tester) async {
+      testWidgets("削除されたノートを直す場合、削除されたノートのリアクション受け入れ設定が適用されること", (
+        tester,
+      ) async {
         final mockMisskey = MockMisskey();
         final mockNote = MockMisskeyNotes();
         when(mockMisskey.notes).thenReturn(mockNote);
@@ -748,10 +761,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
-              accountSettingsRepositoryProvider
-                  .overrideWith((ref) => accountSettings),
+              accountSettingsRepositoryProvider.overrideWith(
+                (ref) => accountSettings,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
@@ -793,7 +807,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -834,7 +848,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -877,7 +891,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -900,7 +914,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -926,7 +940,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -945,15 +959,16 @@ void main() {
         );
       });
 
-      testWidgets("引用リノートをする場合で、リノート元が注釈ありの場合、その注釈が適用され**ない**こと",
-          (tester) async {
+      testWidgets("引用リノートをする場合で、リノート元が注釈ありの場合、その注釈が適用され**ない**こと", (
+        tester,
+      ) async {
         final mockMisskey = MockMisskey();
         final mockNote = MockMisskeyNotes();
         when(mockMisskey.notes).thenReturn(mockNote);
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -981,7 +996,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1001,7 +1016,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1027,7 +1042,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1055,7 +1070,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1085,13 +1100,14 @@ void main() {
         when(mockMisskey.notes).thenReturn(mockNote);
 
         final mockDio = MockDio();
-        when(mockDio.get(any, options: anyNamed("options")))
-            .thenAnswer((_) async => await TestData.binaryImageResponse);
+        when(
+          mockDio.get(any, options: anyNamed("options")),
+        ).thenAnswer((_) async => await TestData.binaryImageResponse);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
@@ -1115,8 +1131,9 @@ void main() {
             argThat(
               equals(
                 predicate<NotesCreateRequest>(
-                  (arg) => const DeepCollectionEquality()
-                      .equals(arg.fileIds, [TestData.drive1.id]),
+                  (arg) => const DeepCollectionEquality().equals(arg.fileIds, [
+                    TestData.drive1.id,
+                  ]),
                 ),
               ),
             ),
@@ -1133,13 +1150,14 @@ void main() {
         when(mockMisskey.drive).thenReturn(mockDrive);
         when(mockDrive.files).thenReturn(mockDriveFiles);
 
-        when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
-          (_) async => TestData.drive1.copyWith(name: "test.png"),
-        );
+        when(
+          mockDriveFiles.createAsBinary(any, any),
+        ).thenAnswer((_) async => TestData.drive1.copyWith(name: "test.png"));
 
         final mockDio = MockDio();
-        when(mockDio.get(any, options: anyNamed("options")))
-            .thenAnswer((_) async => await TestData.binaryImageResponse);
+        when(
+          mockDio.get(any, options: anyNamed("options")),
+        ).thenAnswer((_) async => await TestData.binaryImageResponse);
 
         final memoryFileSystem = MemoryFileSystem();
         final binaryImage = await TestData.binaryImage;
@@ -1148,7 +1166,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => memoryFileSystem),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
@@ -1192,8 +1210,9 @@ void main() {
             argThat(
               equals(
                 predicate<NotesCreateRequest>(
-                  (arg) => const DeepCollectionEquality()
-                      .equals([TestData.drive1.id], arg.fileIds),
+                  (arg) => const DeepCollectionEquality().equals([
+                    TestData.drive1.id,
+                  ], arg.fileIds),
                 ),
               ),
             ),
@@ -1210,23 +1229,25 @@ void main() {
         when(mockMisskey.drive).thenReturn(mockDrive);
         when(mockDrive.files).thenReturn(mockDriveFiles);
 
-        when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
-          (_) async => TestData.drive1.copyWith(name: "test.txt"),
-        );
+        when(
+          mockDriveFiles.createAsBinary(any, any),
+        ).thenAnswer((_) async => TestData.drive1.copyWith(name: "test.txt"));
 
         final mockDio = MockDio();
-        when(mockDio.get(any, options: anyNamed("options")))
-            .thenAnswer((_) async => await TestData.binaryImageResponse);
+        when(
+          mockDio.get(any, options: anyNamed("options")),
+        ).thenAnswer((_) async => await TestData.binaryImageResponse);
 
         final memoryFileSystem = MemoryFileSystem();
-        final binaryData =
-            utf8.encode(":murakamisan_tutinoko_hasitumami_crying:");
+        final binaryData = utf8.encode(
+          ":murakamisan_tutinoko_hasitumami_crying:",
+        );
         await memoryFileSystem.file("/test.txt").writeAsBytes(binaryData);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => memoryFileSystem),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
@@ -1272,8 +1293,9 @@ void main() {
             argThat(
               equals(
                 predicate<NotesCreateRequest>(
-                  (arg) => const DeepCollectionEquality()
-                      .equals([TestData.drive1.id], arg.fileIds),
+                  (arg) => const DeepCollectionEquality().equals([
+                    TestData.drive1.id,
+                  ], arg.fileIds),
                 ),
               ),
             ),
@@ -1286,9 +1308,7 @@ void main() {
       testWidgets("リプライの場合、返信先が表示されていること", (tester) async {
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
+            overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                 initialAccount: TestData.account,
@@ -1304,7 +1324,6 @@ void main() {
             of: find.byType(ReplyToArea),
             matching: find.textContaining(
               TestData.note3AsAnotherUser.user.username,
-              findRichText: true,
             ),
           ),
           findsOneWidget,
@@ -1315,13 +1334,14 @@ void main() {
         final misskey = MockMisskey();
         final users = MockMisskeyUsers();
         when(misskey.users).thenReturn(users);
-        when(users.showByIds(any))
-            .thenAnswer((_) async => [TestData.usersShowResponse2]);
+        when(
+          users.showByIds(any),
+        ).thenAnswer((_) async => [TestData.usersShowResponse2]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => misskey),
+              misskeyProvider.overrideWith((ref, account) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1341,7 +1361,6 @@ void main() {
             of: find.byType(ReplyToArea),
             matching: find.text(
               "@${TestData.note5AsAnotherUser.user.username}",
-              findRichText: true,
             ),
           ),
           findsOneWidget,
@@ -1349,10 +1368,7 @@ void main() {
         expect(
           find.descendant(
             of: find.byType(ReplyToArea),
-            matching: find.text(
-              "@${TestData.usersShowResponse2.username}",
-              findRichText: true,
-            ),
+            matching: find.text("@${TestData.usersShowResponse2.username}"),
           ),
           findsOneWidget,
         );
@@ -1362,12 +1378,13 @@ void main() {
         final misskey = MockMisskey();
         final users = MockMisskeyUsers();
         when(misskey.users).thenReturn(users);
-        when(users.showByIds(any))
-            .thenAnswer((_) async => [TestData.usersShowResponse1]);
+        when(
+          users.showByIds(any),
+        ).thenAnswer((_) async => [TestData.usersShowResponse1]);
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => misskey),
+              misskeyProvider.overrideWith((ref, account) => misskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1383,7 +1400,7 @@ void main() {
         expect(
           find.descendant(
             of: find.byType(ReplyToArea),
-            matching: find.text("@ai", findRichText: true),
+            matching: find.text("@ai"),
           ),
           findsOneWidget,
         );
@@ -1392,9 +1409,7 @@ void main() {
       testWidgets("自分自身はリプライの返信先に含まれていないこと", (tester) async {
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
+            overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                 initialAccount: TestData.account,
@@ -1410,9 +1425,7 @@ void main() {
       testWidgets("リプライでない場合、返信先が表示されていないこと", (tester) async {
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
+            overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
@@ -1431,7 +1444,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1447,9 +1460,7 @@ void main() {
         verify(
           mockNote.create(
             argThat(
-              equals(
-                predicate<NotesCreateRequest>((arg) => arg.poll == null),
-              ),
+              equals(predicate<NotesCreateRequest>((arg) => arg.poll == null)),
             ),
           ),
         ).called(1);
@@ -1463,7 +1474,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1509,7 +1520,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -1551,13 +1562,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
           ),
         );
@@ -1570,9 +1579,7 @@ void main() {
           mockNote.create(
             argThat(
               equals(
-                predicate<NotesCreateRequest>(
-                  (arg) => arg.text == ":ai_bonk:",
-                ),
+                predicate<NotesCreateRequest>((arg) => arg.text == ":ai_bonk:"),
               ),
             ),
           ),
@@ -1587,13 +1594,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
           ),
         );
@@ -1615,23 +1620,25 @@ void main() {
         when(mockMisskey.drive).thenReturn(mockDrive);
         when(mockDrive.files).thenReturn(mockDriveFiles);
 
-        when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
-          (_) async => TestData.drive1.copyWith(name: "test.txt"),
-        );
+        when(
+          mockDriveFiles.createAsBinary(any, any),
+        ).thenAnswer((_) async => TestData.drive1.copyWith(name: "test.txt"));
 
         final mockDio = MockDio();
-        when(mockDio.get(any, options: anyNamed("options")))
-            .thenAnswer((_) async => await TestData.binaryImageResponse);
+        when(
+          mockDio.get(any, options: anyNamed("options")),
+        ).thenAnswer((_) async => await TestData.binaryImageResponse);
 
         final memoryFileSystem = MemoryFileSystem();
-        final binaryData =
-            utf8.encode(":murakamisan_tutinoko_hasitumami_crying:");
+        final binaryData = utf8.encode(
+          ":murakamisan_tutinoko_hasitumami_crying:",
+        );
         await memoryFileSystem.file("/test.txt").writeAsBytes(binaryData);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               fileSystemProvider.overrideWith((ref) => memoryFileSystem),
               dioProvider.overrideWith((ref) => mockDio),
               inputComplementDelayedProvider.overrideWithValue(1),
@@ -1678,8 +1685,9 @@ void main() {
                 predicate<NotesCreateRequest>(
                   (arg) =>
                       arg.text == null &&
-                      const DeepCollectionEquality()
-                          .equals([TestData.drive1.id], arg.fileIds),
+                      const DeepCollectionEquality().equals([
+                        TestData.drive1.id,
+                      ], arg.fileIds),
                 ),
               ),
             ),
@@ -1694,19 +1702,23 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1,
           ]);
-          when(emojiRepository.defaultEmojis()).thenAnswer(
-            (_) => [TestData.unicodeEmoji1, TestData.customEmoji1],
-          );
+          when(
+            emojiRepository.defaultEmojis(),
+          ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
           final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(generalSettingsRepository.settings)
-              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+          when(
+            generalSettingsRepository.settings,
+          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
-                generalSettingsRepositoryProvider
-                    .overrideWith((ref) => generalSettingsRepository),
+                emojiRepositoryProvider.overrideWith(
+                  (ref, account) => emojiRepository,
+                ),
+                generalSettingsRepositoryProvider.overrideWith(
+                  (ref) => generalSettingsRepository,
+                ),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1715,7 +1727,7 @@ void main() {
           );
           await tester.pumpAndSettle();
 
-          await tester.tap(find.text(":"));
+          await tester.tap(find.text("："));
           await tester.pumpAndSettle();
 
           expect(
@@ -1748,20 +1760,24 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1,
           ]);
-          when(emojiRepository.defaultEmojis()).thenAnswer(
-            (_) => [TestData.unicodeEmoji1, TestData.customEmoji1],
-          );
+          when(
+            emojiRepository.defaultEmojis(),
+          ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
 
           final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(generalSettingsRepository.settings)
-              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+          when(
+            generalSettingsRepository.settings,
+          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
-                generalSettingsRepositoryProvider
-                    .overrideWith((ref) => generalSettingsRepository),
+                emojiRepositoryProvider.overrideWith(
+                  (ref, account) => emojiRepository,
+                ),
+                generalSettingsRepositoryProvider.overrideWith(
+                  (ref) => generalSettingsRepository,
+                ),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1770,7 +1786,7 @@ void main() {
           );
           await tester.pumpAndSettle();
 
-          await tester.tap(find.text(":"));
+          await tester.tap(find.text("："));
           await tester.pumpAndSettle();
 
           await tester.tap(find.text(TestData.unicodeEmoji1.char));
@@ -1787,8 +1803,7 @@ void main() {
           );
         });
 
-        testWidgets(
-            "「他のん」を押下するとリアクションピッカーが表示されること"
+        testWidgets("「他のん」を押下するとリアクションピッカーが表示されること"
             "選択したカスタム絵文字が補完されること", (tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
@@ -1800,13 +1815,16 @@ void main() {
           when(emojiRepository.searchEmojis(any)).thenAnswer(
             (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1],
           );
-          when(emojiRepository.defaultEmojis())
-              .thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(
+            emojiRepository.defaultEmojis(),
+          ).thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
 
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+                emojiRepositoryProvider.overrideWith(
+                  (ref, account) => emojiRepository,
+                ),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1889,14 +1907,12 @@ void main() {
               const HashtagsTrendResponse(tag: "abc", chart: [], usersCount: 0),
             ],
           );
-          when(mockHashtags.search(any)).thenAnswer(
-            (_) async => ["def"],
-          );
+          when(mockHashtags.search(any)).thenAnswer((_) async => ["def"]);
 
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
               ],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -1926,18 +1942,21 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1,
           ]);
-          when(emojiRepository.defaultEmojis()).thenAnswer(
-              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(
+            emojiRepository.defaultEmojis(),
+          ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
           final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(generalSettingsRepository.settings)
-              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+          when(
+            generalSettingsRepository.settings,
+          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
                 emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
-                generalSettingsRepositoryProvider
-                    .overrideWith((ref) => generalSettingsRepository),
+                generalSettingsRepositoryProvider.overrideWith(
+                  (ref) => generalSettingsRepository,
+                ),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
@@ -1972,18 +1991,21 @@ void main() {
             TestData.unicodeEmojiRepositoryData1,
             TestData.customEmojiRepositoryData1,
           ]);
-          when(emojiRepository.defaultEmojis()).thenAnswer(
-              (_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
+          when(
+            emojiRepository.defaultEmojis(),
+          ).thenAnswer((_) => [TestData.unicodeEmoji1, TestData.customEmoji1]);
           final generalSettingsRepository = MockGeneralSettingsRepository();
-          when(generalSettingsRepository.settings)
-              .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+          when(
+            generalSettingsRepository.settings,
+          ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
                 emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
-                generalSettingsRepositoryProvider
-                    .overrideWith((ref) => generalSettingsRepository),
+                generalSettingsRepositoryProvider.overrideWith(
+                  (ref) => generalSettingsRepository,
+                ),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
@@ -2017,13 +2039,12 @@ void main() {
         testWidgets("プレビューのテキストはisCatの場合nyaizeされること", (tester) async {
           await tester.pumpWidget(
             ProviderScope(
-              overrides: [
-                inputComplementDelayedProvider.overrideWithValue(1),
-              ],
+              overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
-                  initialAccount: TestData.account
-                      .copyWith(i: TestData.account.i.copyWith(isCat: true)),
+                  initialAccount: TestData.account.copyWith(
+                    i: TestData.account.i.copyWith(isCat: true),
+                  ),
                 ),
               ),
             ),
@@ -2040,13 +2061,12 @@ void main() {
         testWidgets("プレビューのテキストはisCatでない場合nyaizeされないこと", (tester) async {
           await tester.pumpWidget(
             ProviderScope(
-              overrides: [
-                inputComplementDelayedProvider.overrideWithValue(1),
-              ],
+              overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
-                  initialAccount: TestData.account
-                      .copyWith(i: TestData.account.i.copyWith(isCat: false)),
+                  initialAccount: TestData.account.copyWith(
+                    i: TestData.account.i.copyWith(isCat: false),
+                  ),
                 ),
               ),
             ),
@@ -2064,9 +2084,7 @@ void main() {
         testWidgets("リプライ先がプレビューには反映されていること", (tester) async {
           await tester.pumpWidget(
             ProviderScope(
-              overrides: [
-                inputComplementDelayedProvider.overrideWithValue(1),
-              ],
+              overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
               child: DefaultRootWidget(
                 initialRoute: NoteCreateRoute(
                   initialAccount: TestData.account,
@@ -2081,7 +2099,6 @@ void main() {
               of: find.byType(MfmPreview),
               matching: find.textContaining(
                 TestData.note3AsAnotherUser.user.username.tight,
-                findRichText: true,
               ),
             ),
             findsOneWidget,
@@ -2095,9 +2112,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
           ),
         );
@@ -2121,13 +2136,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
           ),
         );
@@ -2160,13 +2173,11 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
-              initialRoute: NoteCreateRoute(
-                initialAccount: TestData.account,
-              ),
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
           ),
         );
@@ -2184,9 +2195,7 @@ void main() {
         verify(
           mockNote.create(
             argThat(
-              equals(
-                predicate<NotesCreateRequest>((arg) => arg.cw == null),
-              ),
+              equals(predicate<NotesCreateRequest>((arg) => arg.cw == null)),
             ),
           ),
         ).called(1);
@@ -2210,7 +2219,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
@@ -2253,7 +2262,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2292,14 +2301,15 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(
                 initialAccount: TestData.account,
-                reply: TestData.note1
-                    .copyWith(visibility: NoteVisibility.followers),
+                reply: TestData.note1.copyWith(
+                  visibility: NoteVisibility.followers,
+                ),
               ),
             ),
           ),
@@ -2332,19 +2342,19 @@ void main() {
         "全て": (find.byType(SvgPicture), null),
         "全て（リモートはいいねのみ）": (
           find.byIcon(Icons.add_reaction_outlined),
-          ReactionAcceptance.likeOnlyForRemote
+          ReactionAcceptance.likeOnlyForRemote,
         ),
         "非センシティブのみ": (
           find.byIcon(Icons.shield_outlined),
-          ReactionAcceptance.nonSensitiveOnly
+          ReactionAcceptance.nonSensitiveOnly,
         ),
         "非センシティブのみ（リモートはいいねのみ）": (
           find.byIcon(Icons.add_moderator_outlined),
-          ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote
+          ReactionAcceptance.nonSensitiveOnlyForLocalLikeOnlyForRemote,
         ),
         "いいねのみ": (
           find.byIcon(Icons.favorite_border),
-          ReactionAcceptance.likeOnly
+          ReactionAcceptance.likeOnly,
         ),
       };
 
@@ -2357,7 +2367,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
+                misskeyProvider.overrideWith((ref, account) => mockMisskey),
                 inputComplementDelayedProvider.overrideWithValue(1),
               ],
               child: DefaultRootWidget(
@@ -2397,9 +2407,7 @@ void main() {
       testWidgets("連合の表示が切り替わること", (tester) async {
         await tester.pumpWidget(
           ProviderScope(
-            overrides: [
-              inputComplementDelayedProvider.overrideWithValue(1),
-            ],
+            overrides: [inputComplementDelayedProvider.overrideWithValue(1)],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
@@ -2424,7 +2432,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2441,9 +2449,7 @@ void main() {
           mockNote.create(
             argThat(
               equals(
-                predicate<NotesCreateRequest>(
-                  (arg) => arg.localOnly == false,
-                ),
+                predicate<NotesCreateRequest>((arg) => arg.localOnly == false),
               ),
             ),
           ),
@@ -2458,7 +2464,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2476,9 +2482,7 @@ void main() {
           mockNote.create(
             argThat(
               equals(
-                predicate<NotesCreateRequest>(
-                  (arg) => arg.localOnly == true,
-                ),
+                predicate<NotesCreateRequest>((arg) => arg.localOnly == true),
               ),
             ),
           ),
@@ -2493,7 +2497,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2524,7 +2528,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2555,7 +2559,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2584,13 +2588,14 @@ void main() {
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.notes).thenReturn(mockNote);
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.showByName(any))
-            .thenAnswer((_) async => TestData.usersShowResponse2);
+        when(
+          mockUser.showByName(any),
+        ).thenAnswer((_) async => TestData.usersShowResponse2);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2633,7 +2638,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2678,13 +2683,16 @@ void main() {
         when(emojiRepository.searchEmojis(any)).thenAnswer(
           (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1],
         );
-        when(emojiRepository.defaultEmojis())
-            .thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
+        when(
+          emojiRepository.defaultEmojis(),
+        ).thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+              emojiRepositoryProvider.overrideWith(
+                (ref, account) => emojiRepository,
+              ),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -2723,19 +2731,24 @@ void main() {
         when(emojiRepository.searchEmojis(any)).thenAnswer(
           (_) async => [TestData.unicodeEmoji1, TestData.customEmoji1],
         );
-        when(emojiRepository.defaultEmojis())
-            .thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
+        when(
+          emojiRepository.defaultEmojis(),
+        ).thenReturn([TestData.unicodeEmoji1, TestData.customEmoji1]);
         final generalSettingsRepository = MockGeneralSettingsRepository();
-        when(generalSettingsRepository.settings)
-            .thenReturn(const GeneralSettings(emojiType: EmojiType.system));
+        when(
+          generalSettingsRepository.settings,
+        ).thenReturn(const GeneralSettings(emojiType: EmojiType.system));
 
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+              emojiRepositoryProvider.overrideWith(
+                (ref, account) => emojiRepository,
+              ),
               inputComplementDelayedProvider.overrideWithValue(1),
-              generalSettingsRepositoryProvider
-                  .overrideWith((ref) => generalSettingsRepository),
+              generalSettingsRepositoryProvider.overrideWith(
+                (ref) => generalSettingsRepository,
+              ),
             ],
             child: DefaultRootWidget(
               initialRoute: NoteCreateRoute(initialAccount: TestData.account),
@@ -2764,456 +2777,421 @@ void main() {
       });
     });
 
-    group(
-      "返信先",
-      () {
-        testWidgets(
-          "返信先の追加できること",
-          (tester) async {
-            final misskey = MockMisskey();
-            final note = MockMisskeyNotes();
-            final users = MockMisskeyUsers();
-            when(misskey.notes).thenReturn(note);
-            when(misskey.users).thenReturn(users);
+    group("返信先", () {
+      testWidgets("返信先の追加できること", (tester) async {
+        final misskey = MockMisskey();
+        final note = MockMisskeyNotes();
+        final users = MockMisskeyUsers();
+        when(misskey.notes).thenReturn(note);
+        when(misskey.users).thenReturn(users);
 
-            when(users.search(any))
-                .thenAnswer((_) async => [TestData.detailedUser1]);
+        when(
+          users.search(any),
+        ).thenAnswer((_) async => [TestData.detailedUser1]);
 
-            await tester.pumpWidget(
-              ProviderScope(
-                overrides: [
-                  misskeyProvider.overrideWith((ref) => misskey),
-                  inputComplementDelayedProvider.overrideWithValue(1),
-                ],
-                child: DefaultRootWidget(
-                  initialRoute:
-                      NoteCreateRoute(initialAccount: TestData.account),
-                ),
-              ),
-            );
-            await tester.pumpAndSettle();
-
-            await tester.tap(find.byIcon(Icons.mail_outline));
-            await tester.pumpAndSettle();
-
-            await tester.enterText(
-                find.byType(TextField).hitTestable(), "おいしいbot");
-            await tester.testTextInput.receiveAction(TextInputAction.done);
-            await tester.pumpAndSettle();
-
-            await tester.tap(
-                find.text(TestData.detailedUser1.name!, findRichText: true));
-            await tester.pumpAndSettle();
-
-            await tester.enterText(
-              find.byType(TextField).hitTestable(),
-              ":ai_yay:",
-            );
-            await tester.tap(find.byIcon(Icons.send));
-
-            verify(
-              note.create(
-                argThat(
-                  equals(
-                    predicate<NotesCreateRequest>(
-                      (arg) =>
-                          arg.text ==
-                          "@${TestData.detailedUser1.username} :ai_yay:",
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-          skip: true,
-        );
-
-        testWidgets(
-          "複数の返信先を追加できること",
-          (tester) async {
-            final misskey = MockMisskey();
-            final note = MockMisskeyNotes();
-            final users = MockMisskeyUsers();
-            when(misskey.notes).thenReturn(note);
-            when(misskey.users).thenReturn(users);
-
-            var count = 0;
-            when(users.search(any)).thenAnswer((_) async {
-              count++;
-              if (count == 1) return [TestData.detailedUser1];
-              return [TestData.detailedUser2];
-            });
-
-            await tester.pumpWidget(
-              ProviderScope(
-                overrides: [
-                  misskeyProvider.overrideWith((ref) => misskey),
-                  inputComplementDelayedProvider.overrideWithValue(1),
-                ],
-                child: DefaultRootWidget(
-                  initialRoute:
-                      NoteCreateRoute(initialAccount: TestData.account),
-                ),
-              ),
-            );
-            await tester.pumpAndSettle();
-
-            await tester.tap(find.byIcon(Icons.mail_outline));
-            await tester.pumpAndSettle();
-
-            // 1人目
-            await tester.enterText(
-                find.byType(TextField).hitTestable(), "おいしいbot");
-            await tester.testTextInput.receiveAction(TextInputAction.done);
-            await tester.pumpAndSettle();
-
-            await tester.tap(
-                find.text(TestData.detailedUser1.name!, findRichText: true));
-            await tester.pumpAndSettle();
-
-            // 2人目
-            await tester.tap(find.byIcon(Icons.mail_outline));
-            await tester.pumpAndSettle();
-
-            await tester.enterText(find.byType(TextField).hitTestable(), "藍");
-            await tester.testTextInput.receiveAction(TextInputAction.done);
-            await tester.pumpAndSettle();
-
-            await tester.tap(
-                find.text(TestData.detailedUser2.name!, findRichText: true));
-            await tester.pumpAndSettle();
-
-            await tester.enterText(
-              find.byType(TextField).hitTestable(),
-              ":ai_yay:",
-            );
-            await tester.tap(find.byIcon(Icons.send));
-
-            verify(
-              note.create(
-                argThat(
-                  equals(
-                    predicate<NotesCreateRequest>(
-                      (arg) =>
-                          arg.text ==
-                          "@${TestData.detailedUser1.username} @${TestData.detailedUser2.username}@${TestData.detailedUser2.host} :ai_yay:",
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-          skip: true,
-        );
-
-        testWidgets("追加した返信先を削除できること", (tester) async {
-          final misskey = MockMisskey();
-          final note = MockMisskeyNotes();
-          final users = MockMisskeyUsers();
-          when(misskey.notes).thenReturn(note);
-          when(misskey.users).thenReturn(users);
-
-          when(users.search(any))
-              .thenAnswer((_) async => [TestData.detailedUser1]);
-
-          await tester.pumpWidget(
-            ProviderScope(
-              overrides: [
-                misskeyProvider.overrideWith((ref) => misskey),
-                inputComplementDelayedProvider.overrideWithValue(1),
-              ],
-              child: DefaultRootWidget(
-                initialRoute: NoteCreateRoute(initialAccount: TestData.account),
-              ),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
-          );
-          await tester.pumpAndSettle();
+          ),
+        );
+        await tester.pumpAndSettle();
 
-          await tester.tap(find.byIcon(Icons.mail_outline));
-          await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
 
-          await tester.enterText(
-              find.byType(TextField).hitTestable(), "おいしいbot");
-          await tester.testTextInput.receiveAction(TextInputAction.done);
-          await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
 
-          await tester
-              .tap(find.text(TestData.detailedUser1.name!, findRichText: true));
-          await tester.pumpAndSettle();
+        await tester.tap(find.text(TestData.detailedUser1.name!));
+        await tester.pumpAndSettle();
 
-          await tester.tap(find.byIcon(Icons.remove));
-          await tester.pumpAndSettle();
+        await tester.enterText(
+          find.byType(TextField).hitTestable(),
+          ":ai_yay:",
+        );
+        await tester.tap(find.byIcon(Icons.send));
 
-          await tester.enterText(
-            find.byType(TextField).hitTestable(),
-            ":ai_yay:",
-          );
-          await tester.tap(find.byIcon(Icons.send));
-
-          verify(
-            note.create(
-              argThat(
-                equals(
-                  predicate<NotesCreateRequest>(
-                      (arg) => arg.text == ":ai_yay:"),
+        verify(
+          note.create(
+            argThat(
+              equals(
+                predicate<NotesCreateRequest>(
+                  (arg) =>
+                      arg.text ==
+                      "@${TestData.detailedUser1.username} :ai_yay:",
                 ),
               ),
             ),
-          );
+          ),
+        );
+      }, skip: true);
+
+      testWidgets("複数の返信先を追加できること", (tester) async {
+        final misskey = MockMisskey();
+        final note = MockMisskeyNotes();
+        final users = MockMisskeyUsers();
+        when(misskey.notes).thenReturn(note);
+        when(misskey.users).thenReturn(users);
+
+        var count = 0;
+        when(users.search(any)).thenAnswer((_) async {
+          count++;
+          if (count == 1) return [TestData.detailedUser1];
+          return [TestData.detailedUser2];
         });
-      },
-      skip: true,
-    );
 
-    group(
-      "メディア",
-      () {
-        testWidgets(
-          "ドライブからメディアを投稿できること",
-          (tester) async {
-            final mockMisskey = MockMisskey();
-            final mockNote = MockMisskeyNotes();
-            final mockDrive = MockMisskeyDrive();
-            final mockDriveFolders = MockMisskeyDriveFolders();
-            final mockDriveFiles = MockMisskeyDriveFiles();
-            when(mockMisskey.notes).thenReturn(mockNote);
-            when(mockMisskey.drive).thenReturn(mockDrive);
-            when(mockDrive.folders).thenReturn(mockDriveFolders);
-            when(mockDrive.files).thenReturn(mockDriveFiles);
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-            when(mockDriveFolders.folders(any)).thenAnswer((_) async => []);
-            when(mockDriveFiles.files(any))
-                .thenAnswer((_) async => [TestData.drive1]);
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
 
-            final mockDio = MockDio();
-            when(mockDio.get(any, options: anyNamed("options")))
-                .thenAnswer((_) async => await TestData.binaryImageResponse);
+        // 1人目
+        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
 
-            await tester.pumpWidget(
-              ProviderScope(
-                overrides: [
-                  misskeyProvider.overrideWith((ref) => mockMisskey),
-                  inputComplementDelayedProvider.overrideWithValue(1),
-                  dioProvider.overrideWith((ref) => mockDio),
-                ],
-                child: DefaultRootWidget(
-                  initialRoute: NoteCreateRoute(
-                    initialAccount: TestData.account,
-                  ),
+        await tester.tap(find.text(TestData.detailedUser1.name!));
+        await tester.pumpAndSettle();
+
+        // 2人目
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).hitTestable(), "藍");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(TestData.detailedUser2.name!));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+          find.byType(TextField).hitTestable(),
+          ":ai_yay:",
+        );
+        await tester.tap(find.byIcon(Icons.send));
+
+        verify(
+          note.create(
+            argThat(
+              equals(
+                predicate<NotesCreateRequest>(
+                  (arg) =>
+                      arg.text ==
+                      "@${TestData.detailedUser1.username} @${TestData.detailedUser2.username}@${TestData.detailedUser2.host} :ai_yay:",
                 ),
               ),
-            );
-            await tester.pumpAndSettle();
+            ),
+          ),
+        );
+      }, skip: true);
 
-            await tester.tap(find.byIcon(Icons.image));
-            await tester.pumpAndSettle();
+      testWidgets("追加した返信先を削除できること", (tester) async {
+        final misskey = MockMisskey();
+        final note = MockMisskeyNotes();
+        final users = MockMisskeyUsers();
+        when(misskey.notes).thenReturn(note);
+        when(misskey.users).thenReturn(users);
 
-            await tester.tap(find.text("ドライブから"));
-            await tester.pumpAndSettle();
+        when(
+          users.search(any),
+        ).thenAnswer((_) async => [TestData.detailedUser1]);
 
-            await tester.tap(find.text(TestData.drive1.name),
-                warnIfMissed: false);
-            await tester.pumpAndSettle();
-            await tester.tap(find.byIcon(Icons.check));
-            await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => misskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-            await tester.enterText(
-              find.byType(TextField).hitTestable(),
-              ":ai_yay:",
-            );
-            await tester.tap(find.byIcon(Icons.send));
-            await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.mail_outline));
+        await tester.pumpAndSettle();
 
-            verify(
-              mockNote.create(
-                argThat(
-                  equals(
-                    predicate<NotesCreateRequest>(
-                      (arg) => const DeepCollectionEquality()
-                          .equals([TestData.drive1.id], arg.fileIds),
-                    ),
-                  ),
+        await tester.enterText(find.byType(TextField).hitTestable(), "おいしいbot");
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(TestData.detailedUser1.name!));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+          find.byType(TextField).hitTestable(),
+          ":ai_yay:",
+        );
+        await tester.tap(find.byIcon(Icons.send));
+
+        verify(
+          note.create(
+            argThat(
+              equals(
+                predicate<NotesCreateRequest>((arg) => arg.text == ":ai_yay:"),
+              ),
+            ),
+          ),
+        );
+      });
+    }, skip: true);
+
+    group("メディア", () {
+      testWidgets("ドライブからメディアを投稿できること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        final mockDrive = MockMisskeyDrive();
+        final mockDriveFolders = MockMisskeyDriveFolders();
+        final mockDriveFiles = MockMisskeyDriveFiles();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        when(mockMisskey.drive).thenReturn(mockDrive);
+        when(mockDrive.folders).thenReturn(mockDriveFolders);
+        when(mockDrive.files).thenReturn(mockDriveFiles);
+
+        when(mockDriveFolders.folders(any)).thenAnswer((_) async => []);
+        when(
+          mockDriveFiles.files(any),
+        ).thenAnswer((_) async => [TestData.drive1]);
+
+        final mockDio = MockDio();
+        when(
+          mockDio.get(any, options: anyNamed("options")),
+        ).thenAnswer((_) async => await TestData.binaryImageResponse);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+              dioProvider.overrideWith((ref) => mockDio),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.image));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("ドライブから"));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(TestData.drive1.name), warnIfMissed: false);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.check));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+          find.byType(TextField).hitTestable(),
+          ":ai_yay:",
+        );
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(
+          mockNote.create(
+            argThat(
+              equals(
+                predicate<NotesCreateRequest>(
+                  (arg) => const DeepCollectionEquality().equals([
+                    TestData.drive1.id,
+                  ], arg.fileIds),
                 ),
               ),
-            );
-          },
-          skip: true,
+            ),
+          ),
+        );
+      }, skip: true);
+
+      testWidgets("単一の画像のアップロードができること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        final mockDrive = MockMisskeyDrive();
+        final mockDriveFiles = MockMisskeyDriveFiles();
+        when(mockMisskey.notes).thenReturn(mockNote);
+        when(mockMisskey.drive).thenReturn(mockDrive);
+        when(mockDrive.files).thenReturn(mockDriveFiles);
+
+        when(
+          mockDriveFiles.createAsBinary(any, any),
+        ).thenAnswer((_) async => TestData.drive1.copyWith(name: "test.png"));
+
+        final binaryImage = await TestData.binaryImage;
+        final filePicker = MockFilePickerPlatform();
+        FilePicker.platform = filePicker;
+        when(
+          filePicker.pickFiles(
+            dialogTitle: anyNamed("dialogTitle"),
+            initialDirectory: anyNamed("initialDirectory"),
+            type: anyNamed("type"),
+            allowedExtensions: anyNamed("allowedExtensions"),
+            onFileLoading: anyNamed("onFileLoading"),
+            allowCompression: anyNamed("allowCompression"),
+            allowMultiple: anyNamed("allowMultiple"),
+            withData: anyNamed("withData"),
+            withReadStream: anyNamed("withReadStream"),
+            lockParentWindow: anyNamed("lockParentWindow"),
+          ),
+        ).thenAnswer(
+          (_) async => FilePickerResult([
+            PlatformFile(
+              path: "/test.png",
+              name: "test.png",
+              size: binaryImage.length,
+              bytes: binaryImage,
+            ),
+          ]),
+        );
+        final fileSystem = MemoryFileSystem();
+        await fileSystem.file("/test.png").writeAsBytes(binaryImage);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+              fileSystemProvider.overrideWith((ref) => fileSystem),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.image));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("アップロード"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+          find.byType(TextField).hitTestable(),
+          ":ai_yay:",
+        );
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(
+          mockNote.create(
+            argThat(
+              equals(
+                predicate<NotesCreateRequest>(
+                  (arg) => const DeepCollectionEquality().equals([
+                    TestData.drive1.id,
+                  ], arg.fileIds),
+                ),
+              ),
+            ),
+          ),
         );
 
-        testWidgets(
-          "単一の画像のアップロードができること",
-          (tester) async {
-            final mockMisskey = MockMisskey();
-            final mockNote = MockMisskeyNotes();
-            final mockDrive = MockMisskeyDrive();
-            final mockDriveFiles = MockMisskeyDriveFiles();
-            when(mockMisskey.notes).thenReturn(mockNote);
-            when(mockMisskey.drive).thenReturn(mockDrive);
-            when(mockDrive.files).thenReturn(mockDriveFiles);
-
-            when(mockDriveFiles.createAsBinary(any, any)).thenAnswer(
-              (_) async => TestData.drive1.copyWith(name: "test.png"),
-            );
-
-            final binaryImage = await TestData.binaryImage;
-            final filePicker = MockFilePickerPlatform();
-            FilePicker.platform = filePicker;
-            when(
-              filePicker.pickFiles(
-                dialogTitle: anyNamed("dialogTitle"),
-                initialDirectory: anyNamed("initialDirectory"),
-                type: anyNamed("type"),
-                allowedExtensions: anyNamed("allowedExtensions"),
-                onFileLoading: anyNamed("onFileLoading"),
-                allowCompression: anyNamed("allowCompression"),
-                allowMultiple: anyNamed("allowMultiple"),
-                withData: anyNamed("withData"),
-                withReadStream: anyNamed("withReadStream"),
-                lockParentWindow: anyNamed("lockParentWindow"),
-              ),
-            ).thenAnswer(
-              (_) async => FilePickerResult([
-                PlatformFile(
-                  path: "/test.png",
+        verify(
+          mockDriveFiles.createAsBinary(
+            argThat(
+              equals(
+                const DriveFilesCreateRequest(
                   name: "test.png",
-                  size: binaryImage.length,
-                  bytes: binaryImage,
-                ),
-              ]),
-            );
-            final fileSystem = MemoryFileSystem();
-            await fileSystem.file("/test.png").writeAsBytes(binaryImage);
-
-            await tester.pumpWidget(
-              ProviderScope(
-                overrides: [
-                  misskeyProvider.overrideWith((ref) => mockMisskey),
-                  fileSystemProvider.overrideWith((ref) => fileSystem),
-                  inputComplementDelayedProvider.overrideWithValue(1),
-                ],
-                child: DefaultRootWidget(
-                  initialRoute: NoteCreateRoute(
-                    initialAccount: TestData.account,
-                  ),
+                  force: true,
+                  isSensitive: false,
                 ),
               ),
-            );
-            await tester.pumpAndSettle();
-
-            await tester.tap(find.byIcon(Icons.image));
-            await tester.pumpAndSettle();
-
-            await tester.tap(find.text("アップロード"));
-            await tester.pumpAndSettle();
-
-            await tester.enterText(
-              find.byType(TextField).hitTestable(),
-              ":ai_yay:",
-            );
-            await tester.tap(find.byIcon(Icons.send));
-            await tester.pumpAndSettle();
-
-            verify(
-              mockNote.create(
-                argThat(
-                  equals(
-                    predicate<NotesCreateRequest>(
-                      (arg) => const DeepCollectionEquality()
-                          .equals([TestData.drive1.id], arg.fileIds),
-                    ),
-                  ),
+            ),
+            argThat(
+              equals(
+                predicate<Uint8List>(
+                  (value) =>
+                      const DeepCollectionEquality().equals(value, binaryImage),
                 ),
               ),
-            );
-
-            verify(
-              mockDriveFiles.createAsBinary(
-                argThat(
-                  equals(
-                    const DriveFilesCreateRequest(
-                      name: "test.png",
-                      force: true,
-                      isSensitive: false,
-                    ),
-                  ),
-                ),
-                argThat(
-                  equals(
-                    predicate<Uint8List>(
-                      (value) => const DeepCollectionEquality()
-                          .equals(value, binaryImage),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-          skip: true,
+            ),
+          ),
         );
+      }, skip: true);
 
-        testWidgets("画像を何も選択しなかった場合、何もアップロードされないこと", (tester) async {
-          final mockMisskey = MockMisskey();
-          final mockNote = MockMisskeyNotes();
-          when(mockMisskey.notes).thenReturn(mockNote);
+      testWidgets("画像を何も選択しなかった場合、何もアップロードされないこと", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockNote = MockMisskeyNotes();
+        when(mockMisskey.notes).thenReturn(mockNote);
 
-          final filePicker = MockFilePickerPlatform();
-          FilePicker.platform = filePicker;
-          when(
-            filePicker.pickFiles(
-              dialogTitle: anyNamed("dialogTitle"),
-              initialDirectory: anyNamed("initialDirectory"),
-              type: anyNamed("type"),
-              allowedExtensions: anyNamed("allowedExtensions"),
-              onFileLoading: anyNamed("onFileLoading"),
-              allowCompression: anyNamed("allowCompression"),
-              allowMultiple: anyNamed("allowMultiple"),
-              withData: anyNamed("withData"),
-              withReadStream: anyNamed("withReadStream"),
-              lockParentWindow: anyNamed("lockParentWindow"),
+        final filePicker = MockFilePickerPlatform();
+        FilePicker.platform = filePicker;
+        when(
+          filePicker.pickFiles(
+            dialogTitle: anyNamed("dialogTitle"),
+            initialDirectory: anyNamed("initialDirectory"),
+            type: anyNamed("type"),
+            allowedExtensions: anyNamed("allowedExtensions"),
+            onFileLoading: anyNamed("onFileLoading"),
+            allowCompression: anyNamed("allowCompression"),
+            allowMultiple: anyNamed("allowMultiple"),
+            withData: anyNamed("withData"),
+            withReadStream: anyNamed("withReadStream"),
+            lockParentWindow: anyNamed("lockParentWindow"),
+          ),
+        ).thenAnswer((_) async => null);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+              inputComplementDelayedProvider.overrideWithValue(1),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: NoteCreateRoute(initialAccount: TestData.account),
             ),
-          ).thenAnswer((_) async => null);
+          ),
+        );
+        await tester.pumpAndSettle();
 
-          await tester.pumpWidget(
-            ProviderScope(
-              overrides: [
-                misskeyProvider.overrideWith((ref) => mockMisskey),
-                inputComplementDelayedProvider.overrideWithValue(1),
-              ],
-              child: DefaultRootWidget(
-                initialRoute: NoteCreateRoute(
-                  initialAccount: TestData.account,
-                ),
+        await tester.tap(find.byIcon(Icons.image));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text("アップロード"));
+        await tester.pumpAndSettle();
+
+        await tester.enterText(
+          find.byType(TextField).hitTestable(),
+          ":ai_yay:",
+        );
+        await tester.tap(find.byIcon(Icons.send));
+        await tester.pumpAndSettle();
+
+        verify(
+          mockNote.create(
+            argThat(
+              equals(
+                predicate<NotesCreateRequest>((arg) => arg.fileIds == null),
               ),
             ),
-          );
-          await tester.pumpAndSettle();
-
-          await tester.tap(find.byIcon(Icons.image));
-          await tester.pumpAndSettle();
-
-          await tester.tap(find.text("アップロード"));
-          await tester.pumpAndSettle();
-
-          await tester.enterText(
-            find.byType(TextField).hitTestable(),
-            ":ai_yay:",
-          );
-          await tester.tap(find.byIcon(Icons.send));
-          await tester.pumpAndSettle();
-
-          verify(
-            mockNote.create(
-              argThat(
-                equals(
-                  predicate<NotesCreateRequest>((arg) => arg.fileIds == null),
-                ),
-              ),
-            ),
-          );
-        });
-      },
-      skip: true,
-    );
+          ),
+        );
+      });
+    }, skip: true);
 
     group("投票", () {
       testWidgets("投票つきノートを投稿できること", (tester) async {
@@ -3223,7 +3201,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3267,7 +3245,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3328,7 +3306,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3415,7 +3393,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3477,7 +3455,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3530,7 +3508,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3613,7 +3591,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3703,7 +3681,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3760,7 +3738,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3823,7 +3801,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3886,7 +3864,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(
@@ -3949,7 +3927,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              misskeyProvider.overrideWith((ref) => mockMisskey),
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
               inputComplementDelayedProvider.overrideWithValue(1),
             ],
             child: DefaultRootWidget(

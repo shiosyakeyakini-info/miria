@@ -2,8 +2,8 @@ import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
@@ -18,8 +18,9 @@ class TabSettingsListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tabSettings = ref
         .watch(
-          tabSettingsRepositoryProvider
-              .select((repository) => repository.tabSettings),
+          tabSettingsRepositoryProvider.select(
+            (repository) => repository.tabSettings,
+          ),
         )
         .toList();
 

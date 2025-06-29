@@ -10,11 +10,7 @@ class ClipItem extends ConsumerWidget {
   final Clip clip;
   final Widget? trailing;
 
-  const ClipItem({
-    required this.clip,
-    super.key,
-    this.trailing,
-  });
+  const ClipItem({required this.clip, super.key, this.trailing});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

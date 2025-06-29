@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
 import "package:miria/view/common/note_create/input_completation.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
@@ -15,26 +15,23 @@ class CwTextArea extends HookConsumerWidget {
     final cwController = ref.watch(cwInputTextProvider);
     final focusNode = ref.watch(cwFocusProvider);
 
-    useEffect(
-      () {
-        void listener() {
-          ref
-              .read(noteCreateNotifierProvider.notifier)
-              .setCwText(cwController.text);
-        }
+    useEffect(() {
+      void listener() {
+        ref
+            .read(noteCreateNotifierProvider.notifier)
+            .setCwText(cwController.text);
+      }
 
-        cwController.addListener(listener);
-        return () => cwController.removeListener(listener);
-      },
-      [cwController],
-    );
+      cwController.addListener(listener);
+      return () => cwController.removeListener(listener);
+    }, [cwController]);
 
-    ref.listen(
-      noteCreateNotifierProvider.select((value) => value.cwText),
-      (_, next) {
-        if (next != cwController.text) cwController.text = next;
-      },
-    );
+    ref.listen(noteCreateNotifierProvider.select((value) => value.cwText), (
+      _,
+      next,
+    ) {
+      if (next != cwController.text) cwController.text = next;
+    });
 
     final cw = ref.watch(
       noteCreateNotifierProvider.select((value) => value.isCw),
@@ -58,9 +55,9 @@ class CwTextArea extends HookConsumerWidget {
               focusNode: focusNode,
               keyboardType: TextInputType.multiline,
               decoration: AppTheme.of(context).noteTextStyle.copyWith(
-                    hintText: S.of(context).contentWarning,
-                    contentPadding: const EdgeInsets.all(5),
-                  ),
+                hintText: S.of(context).contentWarning,
+                contentPadding: const EdgeInsets.all(5),
+              ),
             ),
             InputComplement(
               controller: cwController,

@@ -54,8 +54,10 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
     );
     currentIndex = tabSettings.indexOf(widget.initialTabSetting);
     pageController = PageController(initialPage: currentIndex);
-    scrollControllers =
-        List.generate(tabSettings.length, (_) => TimelineScrollController());
+    scrollControllers = List.generate(
+      tabSettings.length,
+      (_) => TimelineScrollController(),
+    );
     super.initState();
   }
 
@@ -80,12 +82,16 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       FocusManager.instance.primaryFocus?.unfocus();
 
       final account = ref.read(accountProvider(currentTabSetting.acct));
-      await ref.read(misskeyProvider(account)).notes.create(
+      await ref
+          .read(misskeyProvider(account))
+          .notes
+          .create(
             NotesCreateRequest(
               text: text,
               channelId: currentTabSetting.channelId,
               visibility: accountSettings.defaultNoteVisibility,
-              localOnly: currentTabSetting.channelId != null ||
+              localOnly:
+                  currentTabSetting.channelId != null ||
                   accountSettings.defaultIsLocalOnly,
               reactionAcceptance: accountSettings.defaultReactionAcceptance,
             ),
@@ -160,30 +166,28 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       title: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: tabSettings.mapIndexed(
-            (index, tabSetting) {
-              final account = ref.watch(accountProvider(tabSetting.acct));
-              return Ink(
-                color: tabSetting == currentTabSetting
-                    ? AppTheme.of(context).currentDisplayTabColor
-                    : Colors.transparent,
-                child: AccountContextScope.as(
-                  account: account,
-                  child: IconButton(
-                    icon: TabIconView(
-                      icon: tabSetting.icon,
-                      color: tabSetting == currentTabSetting
-                          ? Theme.of(context).primaryColor
-                          : Colors.white,
-                    ),
-                    onPressed: () => tabSetting == currentTabSetting
-                        ? reload()
-                        : pageController.jumpToPage(index),
+          children: tabSettings.mapIndexed((index, tabSetting) {
+            final account = ref.watch(accountProvider(tabSetting.acct));
+            return Ink(
+              color: tabSetting == currentTabSetting
+                  ? AppTheme.of(context).currentDisplayTabColor
+                  : Colors.transparent,
+              child: AccountContextScope.as(
+                account: account,
+                child: IconButton(
+                  icon: TabIconView(
+                    icon: tabSetting.icon,
+                    color: tabSetting == currentTabSetting
+                        ? Theme.of(context).primaryColor
+                        : Colors.white,
                   ),
+                  onPressed: () => tabSetting == currentTabSetting
+                      ? reload()
+                      : pageController.jumpToPage(index),
                 ),
-              );
-            },
-          ).toList(),
+              ),
+            );
+          }).toList(),
         ),
       ),
       actions: [
@@ -202,12 +206,14 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
   @override
   Widget build(BuildContext context) {
     final deckMode = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.isDeckMode),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.isDeckMode,
+      ),
     );
     final tabPosition = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.tabPosition),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.tabPosition,
+      ),
     );
 
     if (deckMode) return const TimelineTablet();
@@ -225,9 +231,7 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
       key: scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-        ),
+        child: AppBar(automaticallyImplyLeading: false),
       ),
       body: SafeArea(
         child: Column(
@@ -297,17 +301,15 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                       icon: const Icon(Icons.smart_toy_outlined),
                     ),
                   ],
-                  const Padding(
-                    padding: EdgeInsets.only(right: 5),
-                  ),
+                  const Padding(padding: EdgeInsets.only(right: 5)),
                   IconButton(
                     onPressed: () async => ref
                         .read(timelineProvider(currentTabSetting))
                         .reconnect(),
                     icon:
                         socketTimeline != null && socketTimeline.isReconnecting
-                            ? const CircularProgressIndicator.adaptive()
-                            : const Icon(Icons.refresh),
+                        ? const CircularProgressIndicator.adaptive()
+                        : const Icon(Icons.refresh),
                   ),
                 ],
               ),
@@ -407,8 +409,9 @@ class BannerArea extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bannerAnnouncement = ref.watch(
-      iProvider(tabSetting.acct)
-          .select((account) => account.unreadAnnouncements),
+      iProvider(
+        tabSetting.acct,
+      ).select((account) => account.unreadAnnouncements),
     );
 
     // ダイアログの実装が大変なので（状態管理とか）いったんバナーと一緒に扱う
@@ -439,10 +442,9 @@ class BannerArea extends ConsumerWidget {
                   child: Text(
                     "${bannerData.title}　${bannerData.text.replaceAll("\n", "　")}",
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.white),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -468,8 +470,9 @@ class AnnoucementInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasUnread = ref.watch(
-      iProvider(tabSetting.acct)
-          .select((i) => i.unreadAnnouncements.isNotEmpty),
+      iProvider(
+        tabSetting.acct,
+      ).select((i) => i.unreadAnnouncements.isNotEmpty),
     );
 
     if (hasUnread) {

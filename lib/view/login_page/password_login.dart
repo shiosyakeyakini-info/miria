@@ -27,7 +27,9 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
   }
 
   Future<void> login() async {
-    await ref.read(accountRepositoryProvider.notifier).loginAsPassword(
+    await ref
+        .read(accountRepositoryProvider.notifier)
+        .loginAsPassword(
           serverController.text,
           userController.text,
           passwordController.text,
@@ -36,8 +38,10 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
     if (!mounted) return;
     await context.pushRoute(
       TimeLineRoute(
-        initialTabSetting:
-            ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+        initialTabSetting: ref
+            .read(tabSettingsRepositoryProvider)
+            .tabSettings
+            .first,
       ),
     );
   }
@@ -63,8 +67,9 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                   TextField(
                     enabled: false,
                     controller: serverController,
-                    decoration:
-                        const InputDecoration(prefixIcon: Icon(Icons.dns)),
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.dns),
+                    ),
                   ),
                 ],
               ),
@@ -101,8 +106,9 @@ class PasswordLoginState extends ConsumerState<PasswordLogin> {
                   TextField(
                     enabled: false,
                     controller: passwordController,
-                    decoration:
-                        const InputDecoration(prefixIcon: Icon(Icons.key)),
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.key),
+                    ),
                     obscureText: true,
                   ),
                 ],

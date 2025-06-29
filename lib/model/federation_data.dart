@@ -11,7 +11,7 @@ part "federation_data.freezed.dart";
 part "federation_data.g.dart";
 
 @freezed
-class FederationData with _$FederationData {
+abstract class FederationData with _$FederationData {
   const factory FederationData({
     required bool isSupportedEmoji,
     required bool isSupportedAnnouncement,
@@ -118,8 +118,10 @@ class FederationState extends _$FederationState {
 
       try {
         final misskeyServer = ref.read(misskeyWithoutAccountProvider(host));
-        final (endpoints, meta) =
-            await (misskeyServer.endpoints(), misskeyServer.meta()).wait;
+        final (endpoints, meta) = await (
+          misskeyServer.endpoints(),
+          misskeyServer.meta(),
+        ).wait;
         misskeyMeta = meta;
 
         if (endpoints.contains("announcement")) {

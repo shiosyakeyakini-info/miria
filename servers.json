@@ -23,7 +23,7 @@
             "name": "ソーシャルタイムライン（ローカルのみ）",
             "endpoint": "api/notes/hybrid-timeline",
             "websocketChannelName": "hybridTimeline",
-            "parameters": "{\"onlyLocal: true \"}"
+            "parameters": "{\"onlyLocal\": true}"
         },
         {
             "host": "misskey.flowers",

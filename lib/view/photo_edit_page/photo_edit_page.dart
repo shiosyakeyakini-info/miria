@@ -2,8 +2,8 @@ import "dart:typed_data";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/photo_edit_page/photo_edit_state_notifier.dart";
@@ -13,7 +13,7 @@ import "package:miria/view/photo_edit_page/clip_mode.dart";
 import "package:miria/view/photo_edit_page/color_filter_image_preview.dart";
 import "package:miria/view/photo_edit_page/photo_edit_bottom_bar.dart";
 
-@RoutePage<Uint8List?>()
+@RoutePage()
 class PhotoEditPage extends ConsumerStatefulWidget implements AutoRouteWrapper {
   final AccountContext accountContext;
   final MisskeyPostFile file;
@@ -100,9 +100,7 @@ class PhotoEditPageState extends ConsumerState<PhotoEditPage> {
                     height: constraints.maxHeight,
                     child: FittedBox(
                       fit: BoxFit.contain,
-                      child: ClipMode(
-                        renderingGlobalKey: renderingAreaKey,
-                      ),
+                      child: ClipMode(renderingGlobalKey: renderingAreaKey),
                     ),
                   );
                 },

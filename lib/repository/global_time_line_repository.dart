@@ -16,15 +16,12 @@ class GlobalTimelineRepository extends SocketTimelineRepository {
   @override
   Future<Iterable<Note>> requestNotes({String? untilId}) async {
     return await misskey.notes.globalTimeline(
-      NotesGlobalTimelineRequest(
-        limit: 30,
-        untilId: untilId,
-      ),
+      NotesGlobalTimelineRequest(limit: 30, untilId: untilId),
     );
   }
 
   @override
-  Channel get channel => Channel.globalTimeline;
+  Channel get channel => Channel.globalTimeline();
 
   @override
   Map<String, dynamic> get parameters => {"channelId": tabSetting.channelId};

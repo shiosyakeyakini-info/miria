@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,230 +10,145 @@ part of 'image_viewer_info_notifier.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$ImageViewerInfo {
-  double get scale => throw _privateConstructorUsedError;
-  double get lastScale => throw _privateConstructorUsedError;
-  int get pointersCount => throw _privateConstructorUsedError;
-  bool get isDoubleTap => throw _privateConstructorUsedError;
-  Offset? get lastTapLocalPosition => throw _privateConstructorUsedError;
 
-  /// Create a copy of ImageViewerInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ImageViewerInfoCopyWith<ImageViewerInfo> get copyWith =>
-      throw _privateConstructorUsedError;
+ double get scale; double get lastScale; int get pointersCount; bool get isDoubleTap; Offset? get lastTapLocalPosition;
+/// Create a copy of ImageViewerInfo
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ImageViewerInfoCopyWith<ImageViewerInfo> get copyWith => _$ImageViewerInfoCopyWithImpl<ImageViewerInfo>(this as ImageViewerInfo, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageViewerInfo&&(identical(other.scale, scale) || other.scale == scale)&&(identical(other.lastScale, lastScale) || other.lastScale == lastScale)&&(identical(other.pointersCount, pointersCount) || other.pointersCount == pointersCount)&&(identical(other.isDoubleTap, isDoubleTap) || other.isDoubleTap == isDoubleTap)&&(identical(other.lastTapLocalPosition, lastTapLocalPosition) || other.lastTapLocalPosition == lastTapLocalPosition));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,scale,lastScale,pointersCount,isDoubleTap,lastTapLocalPosition);
+
+@override
+String toString() {
+  return 'ImageViewerInfo(scale: $scale, lastScale: $lastScale, pointersCount: $pointersCount, isDoubleTap: $isDoubleTap, lastTapLocalPosition: $lastTapLocalPosition)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ImageViewerInfoCopyWith<$Res> {
-  factory $ImageViewerInfoCopyWith(
-          ImageViewerInfo value, $Res Function(ImageViewerInfo) then) =
-      _$ImageViewerInfoCopyWithImpl<$Res, ImageViewerInfo>;
-  @useResult
-  $Res call(
-      {double scale,
-      double lastScale,
-      int pointersCount,
-      bool isDoubleTap,
-      Offset? lastTapLocalPosition});
-}
+abstract mixin class $ImageViewerInfoCopyWith<$Res>  {
+  factory $ImageViewerInfoCopyWith(ImageViewerInfo value, $Res Function(ImageViewerInfo) _then) = _$ImageViewerInfoCopyWithImpl;
+@useResult
+$Res call({
+ double scale, double lastScale, int pointersCount, bool isDoubleTap, Offset? lastTapLocalPosition
+});
 
+
+
+
+}
 /// @nodoc
-class _$ImageViewerInfoCopyWithImpl<$Res, $Val extends ImageViewerInfo>
+class _$ImageViewerInfoCopyWithImpl<$Res>
     implements $ImageViewerInfoCopyWith<$Res> {
-  _$ImageViewerInfoCopyWithImpl(this._value, this._then);
+  _$ImageViewerInfoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ImageViewerInfo _self;
+  final $Res Function(ImageViewerInfo) _then;
 
-  /// Create a copy of ImageViewerInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? scale = null,
-    Object? lastScale = null,
-    Object? pointersCount = null,
-    Object? isDoubleTap = null,
-    Object? lastTapLocalPosition = freezed,
-  }) {
-    return _then(_value.copyWith(
-      scale: null == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double,
-      lastScale: null == lastScale
-          ? _value.lastScale
-          : lastScale // ignore: cast_nullable_to_non_nullable
-              as double,
-      pointersCount: null == pointersCount
-          ? _value.pointersCount
-          : pointersCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      isDoubleTap: null == isDoubleTap
-          ? _value.isDoubleTap
-          : isDoubleTap // ignore: cast_nullable_to_non_nullable
-              as bool,
-      lastTapLocalPosition: freezed == lastTapLocalPosition
-          ? _value.lastTapLocalPosition
-          : lastTapLocalPosition // ignore: cast_nullable_to_non_nullable
-              as Offset?,
-    ) as $Val);
-  }
+/// Create a copy of ImageViewerInfo
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? scale = null,Object? lastScale = null,Object? pointersCount = null,Object? isDoubleTap = null,Object? lastTapLocalPosition = freezed,}) {
+  return _then(_self.copyWith(
+scale: null == scale ? _self.scale : scale // ignore: cast_nullable_to_non_nullable
+as double,lastScale: null == lastScale ? _self.lastScale : lastScale // ignore: cast_nullable_to_non_nullable
+as double,pointersCount: null == pointersCount ? _self.pointersCount : pointersCount // ignore: cast_nullable_to_non_nullable
+as int,isDoubleTap: null == isDoubleTap ? _self.isDoubleTap : isDoubleTap // ignore: cast_nullable_to_non_nullable
+as bool,lastTapLocalPosition: freezed == lastTapLocalPosition ? _self.lastTapLocalPosition : lastTapLocalPosition // ignore: cast_nullable_to_non_nullable
+as Offset?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$ImageViewerInfoImplCopyWith<$Res>
-    implements $ImageViewerInfoCopyWith<$Res> {
-  factory _$$ImageViewerInfoImplCopyWith(_$ImageViewerInfoImpl value,
-          $Res Function(_$ImageViewerInfoImpl) then) =
-      __$$ImageViewerInfoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {double scale,
-      double lastScale,
-      int pointersCount,
-      bool isDoubleTap,
-      Offset? lastTapLocalPosition});
 }
 
-/// @nodoc
-class __$$ImageViewerInfoImplCopyWithImpl<$Res>
-    extends _$ImageViewerInfoCopyWithImpl<$Res, _$ImageViewerInfoImpl>
-    implements _$$ImageViewerInfoImplCopyWith<$Res> {
-  __$$ImageViewerInfoImplCopyWithImpl(
-      _$ImageViewerInfoImpl _value, $Res Function(_$ImageViewerInfoImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ImageViewerInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? scale = null,
-    Object? lastScale = null,
-    Object? pointersCount = null,
-    Object? isDoubleTap = null,
-    Object? lastTapLocalPosition = freezed,
-  }) {
-    return _then(_$ImageViewerInfoImpl(
-      scale: null == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double,
-      lastScale: null == lastScale
-          ? _value.lastScale
-          : lastScale // ignore: cast_nullable_to_non_nullable
-              as double,
-      pointersCount: null == pointersCount
-          ? _value.pointersCount
-          : pointersCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      isDoubleTap: null == isDoubleTap
-          ? _value.isDoubleTap
-          : isDoubleTap // ignore: cast_nullable_to_non_nullable
-              as bool,
-      lastTapLocalPosition: freezed == lastTapLocalPosition
-          ? _value.lastTapLocalPosition
-          : lastTapLocalPosition // ignore: cast_nullable_to_non_nullable
-              as Offset?,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$ImageViewerInfoImpl implements _ImageViewerInfo {
-  const _$ImageViewerInfoImpl(
-      {this.scale = 1.0,
-      this.lastScale = 1.0,
-      this.pointersCount = 0,
-      this.isDoubleTap = false,
-      this.lastTapLocalPosition = null});
 
-  @override
-  @JsonKey()
-  final double scale;
-  @override
-  @JsonKey()
-  final double lastScale;
-  @override
-  @JsonKey()
-  final int pointersCount;
-  @override
-  @JsonKey()
-  final bool isDoubleTap;
-  @override
-  @JsonKey()
-  final Offset? lastTapLocalPosition;
+class _ImageViewerInfo implements ImageViewerInfo {
+  const _ImageViewerInfo({this.scale = 1.0, this.lastScale = 1.0, this.pointersCount = 0, this.isDoubleTap = false, this.lastTapLocalPosition = null});
+  
 
-  @override
-  String toString() {
-    return 'ImageViewerInfo(scale: $scale, lastScale: $lastScale, pointersCount: $pointersCount, isDoubleTap: $isDoubleTap, lastTapLocalPosition: $lastTapLocalPosition)';
-  }
+@override@JsonKey() final  double scale;
+@override@JsonKey() final  double lastScale;
+@override@JsonKey() final  int pointersCount;
+@override@JsonKey() final  bool isDoubleTap;
+@override@JsonKey() final  Offset? lastTapLocalPosition;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ImageViewerInfoImpl &&
-            (identical(other.scale, scale) || other.scale == scale) &&
-            (identical(other.lastScale, lastScale) ||
-                other.lastScale == lastScale) &&
-            (identical(other.pointersCount, pointersCount) ||
-                other.pointersCount == pointersCount) &&
-            (identical(other.isDoubleTap, isDoubleTap) ||
-                other.isDoubleTap == isDoubleTap) &&
-            (identical(other.lastTapLocalPosition, lastTapLocalPosition) ||
-                other.lastTapLocalPosition == lastTapLocalPosition));
-  }
+/// Create a copy of ImageViewerInfo
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ImageViewerInfoCopyWith<_ImageViewerInfo> get copyWith => __$ImageViewerInfoCopyWithImpl<_ImageViewerInfo>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, scale, lastScale, pointersCount,
-      isDoubleTap, lastTapLocalPosition);
 
-  /// Create a copy of ImageViewerInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ImageViewerInfoImplCopyWith<_$ImageViewerInfoImpl> get copyWith =>
-      __$$ImageViewerInfoImplCopyWithImpl<_$ImageViewerInfoImpl>(
-          this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImageViewerInfo&&(identical(other.scale, scale) || other.scale == scale)&&(identical(other.lastScale, lastScale) || other.lastScale == lastScale)&&(identical(other.pointersCount, pointersCount) || other.pointersCount == pointersCount)&&(identical(other.isDoubleTap, isDoubleTap) || other.isDoubleTap == isDoubleTap)&&(identical(other.lastTapLocalPosition, lastTapLocalPosition) || other.lastTapLocalPosition == lastTapLocalPosition));
 }
 
-abstract class _ImageViewerInfo implements ImageViewerInfo {
-  const factory _ImageViewerInfo(
-      {final double scale,
-      final double lastScale,
-      final int pointersCount,
-      final bool isDoubleTap,
-      final Offset? lastTapLocalPosition}) = _$ImageViewerInfoImpl;
 
-  @override
-  double get scale;
-  @override
-  double get lastScale;
-  @override
-  int get pointersCount;
-  @override
-  bool get isDoubleTap;
-  @override
-  Offset? get lastTapLocalPosition;
+@override
+int get hashCode => Object.hash(runtimeType,scale,lastScale,pointersCount,isDoubleTap,lastTapLocalPosition);
 
-  /// Create a copy of ImageViewerInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ImageViewerInfoImplCopyWith<_$ImageViewerInfoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'ImageViewerInfo(scale: $scale, lastScale: $lastScale, pointersCount: $pointersCount, isDoubleTap: $isDoubleTap, lastTapLocalPosition: $lastTapLocalPosition)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ImageViewerInfoCopyWith<$Res> implements $ImageViewerInfoCopyWith<$Res> {
+  factory _$ImageViewerInfoCopyWith(_ImageViewerInfo value, $Res Function(_ImageViewerInfo) _then) = __$ImageViewerInfoCopyWithImpl;
+@override @useResult
+$Res call({
+ double scale, double lastScale, int pointersCount, bool isDoubleTap, Offset? lastTapLocalPosition
+});
+
+
+
+
+}
+/// @nodoc
+class __$ImageViewerInfoCopyWithImpl<$Res>
+    implements _$ImageViewerInfoCopyWith<$Res> {
+  __$ImageViewerInfoCopyWithImpl(this._self, this._then);
+
+  final _ImageViewerInfo _self;
+  final $Res Function(_ImageViewerInfo) _then;
+
+/// Create a copy of ImageViewerInfo
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? scale = null,Object? lastScale = null,Object? pointersCount = null,Object? isDoubleTap = null,Object? lastTapLocalPosition = freezed,}) {
+  return _then(_ImageViewerInfo(
+scale: null == scale ? _self.scale : scale // ignore: cast_nullable_to_non_nullable
+as double,lastScale: null == lastScale ? _self.lastScale : lastScale // ignore: cast_nullable_to_non_nullable
+as double,pointersCount: null == pointersCount ? _self.pointersCount : pointersCount // ignore: cast_nullable_to_non_nullable
+as int,isDoubleTap: null == isDoubleTap ? _self.isDoubleTap : isDoubleTap // ignore: cast_nullable_to_non_nullable
+as bool,lastTapLocalPosition: freezed == lastTapLocalPosition ? _self.lastTapLocalPosition : lastTapLocalPosition // ignore: cast_nullable_to_non_nullable
+as Offset?,
+  ));
+}
+
+
+}
+
+// dart format on

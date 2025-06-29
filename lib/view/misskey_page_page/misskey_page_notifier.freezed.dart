@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,173 +10,154 @@ part of 'misskey_page_notifier.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$MisskeyPageNotifierState {
-  Page get page => throw _privateConstructorUsedError;
-  AsyncValue<void>? get likeOr => throw _privateConstructorUsedError;
 
-  /// Create a copy of MisskeyPageNotifierState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $MisskeyPageNotifierStateCopyWith<MisskeyPageNotifierState> get copyWith =>
-      throw _privateConstructorUsedError;
+ Page get page; AsyncValue<void>? get likeOr;
+/// Create a copy of MisskeyPageNotifierState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MisskeyPageNotifierStateCopyWith<MisskeyPageNotifierState> get copyWith => _$MisskeyPageNotifierStateCopyWithImpl<MisskeyPageNotifierState>(this as MisskeyPageNotifierState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MisskeyPageNotifierState&&(identical(other.page, page) || other.page == page)&&(identical(other.likeOr, likeOr) || other.likeOr == likeOr));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,page,likeOr);
+
+@override
+String toString() {
+  return 'MisskeyPageNotifierState(page: $page, likeOr: $likeOr)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MisskeyPageNotifierStateCopyWith<$Res> {
-  factory $MisskeyPageNotifierStateCopyWith(MisskeyPageNotifierState value,
-          $Res Function(MisskeyPageNotifierState) then) =
-      _$MisskeyPageNotifierStateCopyWithImpl<$Res, MisskeyPageNotifierState>;
-  @useResult
-  $Res call({Page page, AsyncValue<void>? likeOr});
+abstract mixin class $MisskeyPageNotifierStateCopyWith<$Res>  {
+  factory $MisskeyPageNotifierStateCopyWith(MisskeyPageNotifierState value, $Res Function(MisskeyPageNotifierState) _then) = _$MisskeyPageNotifierStateCopyWithImpl;
+@useResult
+$Res call({
+ Page page, AsyncValue<void>? likeOr
+});
 
-  $PageCopyWith<$Res> get page;
+
+$PageCopyWith<$Res> get page;
+
 }
-
 /// @nodoc
-class _$MisskeyPageNotifierStateCopyWithImpl<$Res,
-        $Val extends MisskeyPageNotifierState>
+class _$MisskeyPageNotifierStateCopyWithImpl<$Res>
     implements $MisskeyPageNotifierStateCopyWith<$Res> {
-  _$MisskeyPageNotifierStateCopyWithImpl(this._value, this._then);
+  _$MisskeyPageNotifierStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final MisskeyPageNotifierState _self;
+  final $Res Function(MisskeyPageNotifierState) _then;
 
-  /// Create a copy of MisskeyPageNotifierState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? page = null,
-    Object? likeOr = freezed,
-  }) {
-    return _then(_value.copyWith(
-      page: null == page
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as Page,
-      likeOr: freezed == likeOr
-          ? _value.likeOr
-          : likeOr // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-    ) as $Val);
-  }
-
-  /// Create a copy of MisskeyPageNotifierState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $PageCopyWith<$Res> get page {
-    return $PageCopyWith<$Res>(_value.page, (value) {
-      return _then(_value.copyWith(page: value) as $Val);
-    });
-  }
+/// Create a copy of MisskeyPageNotifierState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? page = null,Object? likeOr = freezed,}) {
+  return _then(_self.copyWith(
+page: null == page ? _self.page : page // ignore: cast_nullable_to_non_nullable
+as Page,likeOr: freezed == likeOr ? _self.likeOr : likeOr // ignore: cast_nullable_to_non_nullable
+as AsyncValue<void>?,
+  ));
+}
+/// Create a copy of MisskeyPageNotifierState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PageCopyWith<$Res> get page {
+  
+  return $PageCopyWith<$Res>(_self.page, (value) {
+    return _then(_self.copyWith(page: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$MisskeyPageNotifierStateImplCopyWith<$Res>
-    implements $MisskeyPageNotifierStateCopyWith<$Res> {
-  factory _$$MisskeyPageNotifierStateImplCopyWith(
-          _$MisskeyPageNotifierStateImpl value,
-          $Res Function(_$MisskeyPageNotifierStateImpl) then) =
-      __$$MisskeyPageNotifierStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({Page page, AsyncValue<void>? likeOr});
-
-  @override
-  $PageCopyWith<$Res> get page;
-}
-
-/// @nodoc
-class __$$MisskeyPageNotifierStateImplCopyWithImpl<$Res>
-    extends _$MisskeyPageNotifierStateCopyWithImpl<$Res,
-        _$MisskeyPageNotifierStateImpl>
-    implements _$$MisskeyPageNotifierStateImplCopyWith<$Res> {
-  __$$MisskeyPageNotifierStateImplCopyWithImpl(
-      _$MisskeyPageNotifierStateImpl _value,
-      $Res Function(_$MisskeyPageNotifierStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of MisskeyPageNotifierState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? page = null,
-    Object? likeOr = freezed,
-  }) {
-    return _then(_$MisskeyPageNotifierStateImpl(
-      page: null == page
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as Page,
-      likeOr: freezed == likeOr
-          ? _value.likeOr
-          : likeOr // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$MisskeyPageNotifierStateImpl implements _MisskeyPageNotifierState {
-  const _$MisskeyPageNotifierStateImpl({required this.page, this.likeOr});
 
-  @override
-  final Page page;
-  @override
-  final AsyncValue<void>? likeOr;
+class _MisskeyPageNotifierState implements MisskeyPageNotifierState {
+  const _MisskeyPageNotifierState({required this.page, this.likeOr});
+  
 
-  @override
-  String toString() {
-    return 'MisskeyPageNotifierState(page: $page, likeOr: $likeOr)';
-  }
+@override final  Page page;
+@override final  AsyncValue<void>? likeOr;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MisskeyPageNotifierStateImpl &&
-            (identical(other.page, page) || other.page == page) &&
-            (identical(other.likeOr, likeOr) || other.likeOr == likeOr));
-  }
+/// Create a copy of MisskeyPageNotifierState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MisskeyPageNotifierStateCopyWith<_MisskeyPageNotifierState> get copyWith => __$MisskeyPageNotifierStateCopyWithImpl<_MisskeyPageNotifierState>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, page, likeOr);
 
-  /// Create a copy of MisskeyPageNotifierState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MisskeyPageNotifierStateImplCopyWith<_$MisskeyPageNotifierStateImpl>
-      get copyWith => __$$MisskeyPageNotifierStateImplCopyWithImpl<
-          _$MisskeyPageNotifierStateImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MisskeyPageNotifierState&&(identical(other.page, page) || other.page == page)&&(identical(other.likeOr, likeOr) || other.likeOr == likeOr));
 }
 
-abstract class _MisskeyPageNotifierState implements MisskeyPageNotifierState {
-  const factory _MisskeyPageNotifierState(
-      {required final Page page,
-      final AsyncValue<void>? likeOr}) = _$MisskeyPageNotifierStateImpl;
 
-  @override
-  Page get page;
-  @override
-  AsyncValue<void>? get likeOr;
+@override
+int get hashCode => Object.hash(runtimeType,page,likeOr);
 
-  /// Create a copy of MisskeyPageNotifierState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$MisskeyPageNotifierStateImplCopyWith<_$MisskeyPageNotifierStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'MisskeyPageNotifierState(page: $page, likeOr: $likeOr)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MisskeyPageNotifierStateCopyWith<$Res> implements $MisskeyPageNotifierStateCopyWith<$Res> {
+  factory _$MisskeyPageNotifierStateCopyWith(_MisskeyPageNotifierState value, $Res Function(_MisskeyPageNotifierState) _then) = __$MisskeyPageNotifierStateCopyWithImpl;
+@override @useResult
+$Res call({
+ Page page, AsyncValue<void>? likeOr
+});
+
+
+@override $PageCopyWith<$Res> get page;
+
+}
+/// @nodoc
+class __$MisskeyPageNotifierStateCopyWithImpl<$Res>
+    implements _$MisskeyPageNotifierStateCopyWith<$Res> {
+  __$MisskeyPageNotifierStateCopyWithImpl(this._self, this._then);
+
+  final _MisskeyPageNotifierState _self;
+  final $Res Function(_MisskeyPageNotifierState) _then;
+
+/// Create a copy of MisskeyPageNotifierState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? page = null,Object? likeOr = freezed,}) {
+  return _then(_MisskeyPageNotifierState(
+page: null == page ? _self.page : page // ignore: cast_nullable_to_non_nullable
+as Page,likeOr: freezed == likeOr ? _self.likeOr : likeOr // ignore: cast_nullable_to_non_nullable
+as AsyncValue<void>?,
+  ));
+}
+
+/// Create a copy of MisskeyPageNotifierState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PageCopyWith<$Res> get page {
+  
+  return $PageCopyWith<$Res>(_self.page, (value) {
+    return _then(_self.copyWith(page: value));
+  });
+}
+}
+
+// dart format on

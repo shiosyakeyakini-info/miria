@@ -25,8 +25,7 @@ class SharingIntentListener extends ConsumerStatefulWidget {
 
 class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
   late final StreamSubscription<List<SharedMediaFile>>
-      intentDataStreamSubscription;
-  late final StreamSubscription<String> intentDataTextStreamSubscription;
+  intentDataStreamSubscription;
   late Iterable<Account> account = [];
 
   @override
@@ -34,48 +33,43 @@ class SharingIntentListenerState extends ConsumerState<SharingIntentListener> {
     super.initState();
     if (defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS) {
-      intentDataStreamSubscription =
-          ReceiveSharingIntent.getMediaStream().listen((event) {
-        final items = event.map((e) => e.path).toList();
-        if (account.length == 1) {
-          widget.router.push(
-            NoteCreateRoute(
-              initialMediaFiles: items,
-              initialAccount: account.first,
-            ),
-          );
-        } else {
-          widget.router.push(
-            SharingAccountSelectRoute(
-              filePath: items,
-            ),
-          );
-        }
-      });
-      intentDataTextStreamSubscription =
-          ReceiveSharingIntent.getTextStream().listen((event) {
-        if (account.length == 1) {
-          widget.router.push(
-            NoteCreateRoute(
-              initialText: event,
-              initialAccount: account.first,
-            ),
-          );
-        } else {
-          widget.router.push(
-            SharingAccountSelectRoute(
-              sharingText: event,
-            ),
-          );
-        }
-      });
+      intentDataStreamSubscription = ReceiveSharingIntent.instance
+          .getMediaStream()
+          .listen((event) {
+            final mediaFiles = <String>[];
+            String? textContent;
+
+            for (final file in event) {
+              if (file.type == SharedMediaType.text) {
+                textContent = file.path;
+              } else {
+                mediaFiles.add(file.path);
+              }
+            }
+
+            if (account.length == 1) {
+              widget.router.push(
+                NoteCreateRoute(
+                  initialMediaFiles: mediaFiles.isNotEmpty ? mediaFiles : null,
+                  initialText: textContent,
+                  initialAccount: account.first,
+                ),
+              );
+            } else {
+              widget.router.push(
+                SharingAccountSelectRoute(
+                  filePath: mediaFiles.isNotEmpty ? mediaFiles : null,
+                  sharingText: textContent,
+                ),
+              );
+            }
+          });
     }
   }
 
   @override
   void dispose() {
     intentDataStreamSubscription.cancel();
-    intentDataTextStreamSubscription.cancel();
     super.dispose();
   }
 
