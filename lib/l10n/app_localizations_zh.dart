@@ -1898,6 +1898,9 @@ class SZh extends S {
 
   @override
   String get enableDeckMode => 'デッキモードにする';
+
+  @override
+  String get template => '模板';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3712,4 +3715,7 @@ class SZhCn extends SZh {
 
   @override
   String get nonInvitedReversi => '好像没有收到邀请';
+
+  @override
+  String get template => '模板';
 }

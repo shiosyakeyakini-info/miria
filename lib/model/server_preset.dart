@@ -1,9 +1,9 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:freezed_annotation/freezed_annotation.dart";
 
-part 'server_preset.freezed.dart';
-part 'server_preset.g.dart';
+part "server_preset.freezed.dart";
+part "server_preset.g.dart";
 
 @freezed
 abstract class ServerPresets with _$ServerPresets {
@@ -54,8 +54,8 @@ List<String> _limitedApiServersFromJson(dynamic source) {
     return source
         .map((e) {
           if (e is String) return e;
-          if (e is Map<String, dynamic> && e['host'] is String) {
-            return e['host'] as String;
+          if (e is Map<String, dynamic> && e["host"] is String) {
+            return e["host"] as String;
           }
           return null;
         })

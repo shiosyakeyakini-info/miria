@@ -15,6 +15,7 @@ import "package:miria/repository/account_repository.dart";
 import "package:miria/repository/account_settings_repository.dart";
 import "package:miria/repository/antenna_timeline_repository.dart";
 import "package:miria/repository/channel_time_line_repository.dart";
+import "package:miria/repository/custom_timeline_repository.dart";
 import "package:miria/repository/desktop_settings_repository.dart";
 import "package:miria/repository/emoji_repository.dart";
 import "package:miria/repository/favorite_repository.dart";
@@ -30,7 +31,6 @@ import "package:miria/repository/shared_preference_controller.dart";
 import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
-import "package:miria/repository/custom_timeline_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod/riverpod.dart";
@@ -40,7 +40,11 @@ part "providers.freezed.dart";
 part "providers.g.dart";
 
 @Riverpod(keepAlive: true)
-Dio dio(Ref ref) => Dio();
+Dio dio(Ref ref) {
+  final dio = Dio();
+  dio.options.responseType = ResponseType.json;
+  return dio;
+}
 
 @Riverpod(keepAlive: true)
 FileSystem fileSystem(Ref ref) => const LocalFileSystem();

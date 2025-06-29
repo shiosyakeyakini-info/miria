@@ -1,34 +1,17 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:miria/model/tab_icon.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/model/tab_type.dart';
-import 'package:miria/repository/custom_timeline_repository.dart';
-import 'package:miria/repository/general_settings_repository.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:misskey_dart/src/services/api_service.dart';
+import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/model/tab_icon.dart";
+import "package:miria/model/tab_setting.dart";
+import "package:miria/model/tab_type.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/account_repository.dart";
+import "package:miria/repository/custom_timeline_repository.dart";
+import "package:misskey_dart/src/services/api_service.dart";
+import "package:mockito/mockito.dart";
 
-import '../../test_util/mock.mocks.dart';
-import '../../test_util/test_datas.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:miria/repository/emoji_repository.dart';
-import 'package:miria/repository/account_repository.dart';
-import 'package:miria/providers.dart';
-
-class FakeRef extends Fake implements Ref {
-  final Map<dynamic, dynamic> values = {};
-
-  @override
-  ProviderContainer get container => throw UnimplementedError();
-
-  @override
-  T read<T>(ProviderListenable<T> provider) => values[provider] as T;
-
-  @override
-  T refresh<T>(Refreshable<T> provider) => read(provider);
-}
+import "../../test_util/mock.mocks.dart";
+import "../../test_util/test_datas.dart";
 
 class FakeApiService extends Fake implements ApiService {
   String? lastPath;
@@ -39,7 +22,7 @@ class FakeApiService extends Fake implements ApiService {
   Future<T> post<T>(
     String path,
     Map<String, dynamic> request, {
-    bool Function(String key, String? value)? excludeRemoveNullPredicate,
+    bool Function(String, String?)? excludeRemoveNullPredicate,
   }) async {
     lastPath = path;
     lastRequest = request;
@@ -48,14 +31,14 @@ class FakeApiService extends Fake implements ApiService {
 }
 
 void main() {
-  group('CustomTimelineRepository', () {
+  group("CustomTimelineRepository", () {
     late MockMisskey misskey;
     late FakeApiService apiService;
     late MockNoteRepository noteRepository;
     late MockGeneralSettingsRepository generalSettings;
     late MockEmojiRepository emojiRepository;
     late MockAccountRepository accountRepository;
-    late FakeRef ref;
+    late ProviderContainer container;
     late TabSetting setting;
 
     setUp(() {
@@ -65,13 +48,11 @@ void main() {
       generalSettings = MockGeneralSettingsRepository();
       emojiRepository = MockEmojiRepository();
       accountRepository = MockAccountRepository();
-      ref = FakeRef();
-      ref.values[emojiRepositoryProvider(TestData.account)] = emojiRepository;
-      ref.values[accountRepositoryProvider.notifier] = accountRepository;
+
       when(generalSettings.settings).thenReturn(const GeneralSettings());
       when(misskey.apiService).thenReturn(apiService);
-      when(misskey.host).thenReturn('example.com');
-      when(misskey.token).thenReturn('TOKEN');
+      when(misskey.host).thenReturn("example.com");
+      when(misskey.token).thenReturn("TOKEN");
       when(
         misskey.socketConnectionTimeout,
       ).thenReturn(const Duration(seconds: 20));
@@ -79,51 +60,87 @@ void main() {
         icon: const TabIcon(codePoint: 0xe001),
         tabType: TabType.customTimeline,
         acct: TestData.account.acct,
-        customApiPath: 'notes/custom',
-        customParameters: {'foo': 'bar'},
+        customApiPath: "notes/custom",
+        customParameters: {"foo": "bar"},
         customWebSocketPath: null,
       );
     });
 
-    test('initial load uses custom path and parameters', () async {
+    test("initial load uses custom path and parameters", () async {
       apiService.response = [TestData.note1.toJson()];
 
-      final repo = CustomTimelineRepository(
-        misskey,
-        TestData.account,
-        noteRepository,
-        generalSettings,
-        setting,
-        ref,
+      container = ProviderContainer(
+        overrides: [
+          emojiRepositoryProvider(
+            TestData.account,
+          ).overrideWith((ref) => emojiRepository),
+          accountRepositoryProvider.overrideWith(() => accountRepository),
+        ],
+      );
+
+      // Use container to get a Ref instance for the constructor
+      late CustomTimelineRepository repo;
+      container.read(
+        Provider<CustomTimelineRepository>((ref) {
+          repo = CustomTimelineRepository(
+            misskey,
+            TestData.account,
+            noteRepository,
+            generalSettings,
+            setting,
+            ref,
+          );
+          return repo;
+        }),
       );
 
       final notes = await repo.requestNotes();
 
-      expect(apiService.lastPath, 'notes/custom');
-      expect(apiService.lastRequest, {'foo': 'bar'});
+      expect(apiService.lastPath, "notes/custom");
+      expect(apiService.lastRequest, {"foo": "bar"});
       expect(notes.first.id, TestData.note1.id);
+
+      container.dispose();
     });
 
-    test('previousLoad uses untilId when available', () async {
+    test("previousLoad uses untilId when available", () async {
       apiService.response = [TestData.note2.toJson()];
-      final repo = CustomTimelineRepository(
-        misskey,
-        TestData.account,
-        noteRepository,
-        generalSettings,
-        setting,
-        ref,
+
+      container = ProviderContainer(
+        overrides: [
+          emojiRepositoryProvider(
+            TestData.account,
+          ).overrideWith((ref) => emojiRepository),
+          accountRepositoryProvider.overrideWith(() => accountRepository),
+        ],
+      );
+
+      late CustomTimelineRepository repo;
+      container.read(
+        Provider<CustomTimelineRepository>((ref) {
+          repo = CustomTimelineRepository(
+            misskey,
+            TestData.account,
+            noteRepository,
+            generalSettings,
+            setting,
+            ref,
+          );
+          return repo;
+        }),
       );
       repo.olderNotes.add(TestData.note1);
 
       final count = await repo.previousLoad();
 
       expect(apiService.lastRequest, {
-        'foo': 'bar',
-        'untilId': TestData.note1.id,
+        "foo": "bar",
+        "untilId": TestData.note1.id,
       });
       expect(count, 1);
       expect(repo.olderNotes.last.id, TestData.note2.id);
+
+      container.dispose();
     });
   });
 }

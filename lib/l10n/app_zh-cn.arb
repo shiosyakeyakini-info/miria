@@ -946,5 +946,7 @@
             }
         }
     },
-    "nonInvitedReversi": "好像没有收到邀请"
+    "nonInvitedReversi": "好像没有收到邀请",
+
+    "template": "模板"
 }

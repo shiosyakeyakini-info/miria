@@ -1906,6 +1906,9 @@ class SJa extends S {
 
   @override
   String get enableDeckMode => 'デッキモードにする';
+
+  @override
+  String get template => 'テンプレ';
 }
 
 /// The translations for Japanese (`ja_OJ`).

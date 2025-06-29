@@ -3299,6 +3299,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'デッキモードにする'**
   String get enableDeckMode;
+
+  /// No description provided for @template.
+  ///
+  /// In ja, this message translates to:
+  /// **'テンプレ'**
+  String get template;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

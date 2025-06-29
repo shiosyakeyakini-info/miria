@@ -24,7 +24,7 @@ part "main.g.dart";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+  if (!kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
     await windowManager.ensureInitialized();
   }
   FlutterError.demangleStackTrace = (stack) {

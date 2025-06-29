@@ -1,6 +1,6 @@
-import "package:miria/repository/emoji_repository.dart";
-import "package:miria/repository/account_settings_repository.dart";
 import "package:miria/model/account.dart";
+import "package:miria/repository/account_settings_repository.dart";
+import "package:miria/repository/emoji_repository.dart";
 
 sealed class MisskeyEmojiData {
   final String baseName;

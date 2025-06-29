@@ -18,7 +18,7 @@ class CustomTimelineRepository extends SocketTimelineRepository {
     final path = tabSetting.customApiPath;
     if (path == null) return [];
     final params = Map<String, dynamic>.from(tabSetting.customParameters ?? {});
-    if (untilId != null) params['untilId'] = untilId;
+    if (untilId != null) params["untilId"] = untilId;
     final res = await misskey.apiService.post<List>(path, params);
     return res.map((e) => Note.fromJson(e));
   }

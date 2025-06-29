@@ -1033,6 +1033,8 @@
     "nothingHere": "なんもないで",
 
     "deckMode": "デッキモード",
-    "enableDeckMode": "デッキモードにする"
+    "enableDeckMode": "デッキモードにする",
+
+    "template": "テンプレ"
 
 }

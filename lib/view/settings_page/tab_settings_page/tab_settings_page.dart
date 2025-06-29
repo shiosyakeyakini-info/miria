@@ -9,6 +9,7 @@ import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
+import "package:miria/model/server_preset.dart";
 import "package:miria/model/tab_icon.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
@@ -18,9 +19,7 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/tab_icon_view.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/icon_select_dialog.dart";
-import "package:miria/view/settings_page/tab_settings_page/timeline_preset_dialog.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import "package:miria/model/server_preset.dart";
 
 @RoutePage()
 class TabSettingsPage extends HookConsumerWidget {
@@ -317,8 +316,9 @@ class TabSettingsPage extends HookConsumerWidget {
                 Row(
                   children: [
                     Expanded(child: Text(S.of(context).customChannelName)),
-                    IconButton(
-                      icon: const Icon(Icons.list),
+                    OutlinedButton.icon(
+                      icon: const Icon(Icons.list, size: 18),
+                      label: Text(S.of(context).template),
                       onPressed: () async {
                         final preset = await context.pushRoute<TimelinePreset>(
                           TimelinePresetRoute(),
@@ -330,6 +330,7 @@ class TabSettingsPage extends HookConsumerWidget {
                           customParamsController.text = jsonEncode(
                             preset.parameters,
                           );
+                          nameController.text = preset.name;
                         }
                       },
                     ),
