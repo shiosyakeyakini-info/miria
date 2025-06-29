@@ -2610,6 +2610,18 @@ abstract class S {
   /// **'ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとリノートをミュートします。\n改行で区切って設定します。'**
   String get instanceMuteDescription2;
 
+  /// No description provided for @reactionMute.
+  ///
+  /// In ja, this message translates to:
+  /// **'リアクションミュート'**
+  String get reactionMute;
+
+  /// No description provided for @reactionMuteDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'改行区切りで :emoji: または :emoji@host: の形式で入力します。@host のみも受け付け、この場合該当ホストすべてを対象とします。'**
+  String get reactionMuteDescription;
+
   /// No description provided for @bulkAddReactions.
   ///
   /// In ja, this message translates to:
@@ -2639,6 +2651,36 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'コピーしたものを下のテキストボックスに貼り付けてください'**
   String get bulkAddReactionsDescription3;
+
+  /// No description provided for @bulkAddMutedReactions.
+  ///
+  /// In ja, this message translates to:
+  /// **'ミュート設定をインポート'**
+  String get bulkAddMutedReactions;
+
+  /// No description provided for @bulkAddMutedReactionsDescription1.
+  ///
+  /// In ja, this message translates to:
+  /// **'お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください'**
+  String get bulkAddMutedReactionsDescription1;
+
+  /// No description provided for @bulkAddMutedReactionsDescription2.
+  ///
+  /// In ja, this message translates to:
+  /// **'同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください'**
+  String get bulkAddMutedReactionsDescription2;
+
+  /// No description provided for @bulkAddMutedReactionsDescription3.
+  ///
+  /// In ja, this message translates to:
+  /// **'コピーしたものを下のテキストボックスに貼り付けてください'**
+  String get bulkAddMutedReactionsDescription3;
+
+  /// No description provided for @importMutedReactions.
+  ///
+  /// In ja, this message translates to:
+  /// **'ミュート設定をインポート'**
+  String get importMutedReactions;
 
   /// No description provided for @pasteHere.
   ///

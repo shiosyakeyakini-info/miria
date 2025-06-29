@@ -1533,6 +1533,13 @@ class SZh extends S {
       '将已配置服务器上的所有帖子和转帖屏蔽，包括对屏蔽服务器上的用户的回复。\n设置在新行上，以换行符分隔。';
 
   @override
+  String get reactionMute => '表情回应屏蔽';
+
+  @override
+  String get reactionMuteDescription =>
+      '按行输入 :emoji: 或 :emoji@host: 的形式。也可以仅输入 @host，表示屏蔽该主机的所有表情。';
+
+  @override
   String get bulkAddReactions => '批量添加';
 
   @override
@@ -1548,6 +1555,24 @@ class SZh extends S {
 
   @override
   String get bulkAddReactionsDescription3 => '将复制的内容粘贴到下面的文本框中';
+
+  @override
+  String get bulkAddMutedReactions => 'ミュート設定をインポート';
+
+  @override
+  String get bulkAddMutedReactionsDescription1 =>
+      'お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription2 =>
+      '同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription3 =>
+      'コピーしたものを下のテキストボックスに貼り付けてください';
+
+  @override
+  String get importMutedReactions => 'ミュート設定をインポート';
 
   @override
   String get pasteHere => '粘贴在这里';
@@ -3353,6 +3378,13 @@ class SZhCn extends SZh {
   @override
   String get instanceMuteDescription2 =>
       '将已配置服务器上的所有帖子和转帖屏蔽，包括对屏蔽服务器上的用户的回复。\n设置在新行上，以换行符分隔。';
+
+  @override
+  String get reactionMute => '表情回应屏蔽';
+
+  @override
+  String get reactionMuteDescription =>
+      '按行输入 :emoji: 或 :emoji@host: 的形式。也可以仅输入 @host，表示屏蔽该主机的所有表情。';
 
   @override
   String get bulkAddReactions => '批量添加';

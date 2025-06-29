@@ -1,4 +1,6 @@
 import "package:miria/repository/emoji_repository.dart";
+import "package:miria/repository/account_settings_repository.dart";
+import "package:miria/model/account.dart";
 
 sealed class MisskeyEmojiData {
   final String baseName;
@@ -9,10 +11,66 @@ sealed class MisskeyEmojiData {
     required String emojiName,
     Map<String, String>? emojiInfo,
     EmojiRepository? repository,
+    String? host,
+    AccountSettingsRepository? accountSettingsRepository,
+    Account? account,
   }) {
+    // ミュート判定用のヘルパー関数
+    MisskeyEmojiData checkMuted(MisskeyEmojiData emojiData) {
+      if (accountSettingsRepository == null || account == null) {
+        return emojiData;
+      }
+
+      final mutedReactions = accountSettingsRepository
+          .fromAccount(account)
+          .mutedReactions;
+
+      switch (emojiData) {
+        case CustomEmojiData():
+          // 特定の絵文字ミュート（:emoji_name: または :emoji_name@host:）
+          if (mutedReactions.contains(emojiData.hostedName)) {
+            return MutedEmojiData(originalData: emojiData);
+          }
+
+          // ローカル絵文字の場合、ベース名でのミュートもチェック（:emoji_name:）
+          if (emojiData.isCurrentServer) {
+            final baseName = ":${emojiData.baseName}:";
+            if (mutedReactions.contains(baseName)) {
+              return MutedEmojiData(originalData: emojiData);
+            }
+          }
+
+          // ホスト単位のミュート（@host形式）でリモート絵文字をチェック
+          if (!emojiData.isCurrentServer) {
+            // :emoji_name@host: から host 部分を抽出
+            final match = RegExp(
+              r"^:(.+?)@(.+?):$",
+            ).firstMatch(emojiData.hostedName);
+            if (match != null) {
+              final hostPart = match.group(2)!;
+              if (mutedReactions.contains("@$hostPart")) {
+                return MutedEmojiData(originalData: emojiData);
+              }
+            }
+          }
+          return emojiData;
+        case UnicodeEmojiData():
+          // Unicode絵文字のミュートチェック
+          if (mutedReactions.contains(emojiData.char)) {
+            return MutedEmojiData(originalData: emojiData);
+          }
+          return emojiData;
+        case NotEmojiData():
+          return emojiData;
+        case MutedEmojiData():
+          return emojiData;
+      }
+    }
+
     // Unicodeの絵文字
     if (!emojiName.startsWith(":")) {
-      return UnicodeEmojiData(char: emojiName);
+      final emojiData = UnicodeEmojiData(char: emojiName);
+      return checkMuted(emojiData);
     }
 
     final customEmojiRegExp = RegExp(":(.+?)@(.+?):");
@@ -27,13 +85,18 @@ sealed class MisskeyEmojiData {
 
       final found = emojiInfo[hostIncludedBaseName];
       if (found != null) {
-        return CustomEmojiData(
+        // リモート絵文字の場合、ホスト情報を含んだhostedNameを作成
+        final hostedName = host != null && !emojiName.contains("@")
+            ? ":$hostIncludedBaseName@$host:"
+            : emojiName;
+        final emojiData = CustomEmojiData(
           baseName: baseName,
-          hostedName: emojiName,
+          hostedName: hostedName,
           url: Uri.parse(found),
           isCurrentServer: false,
           isSensitive: false,
         );
+        return checkMuted(emojiData);
       }
     }
 
@@ -45,7 +108,7 @@ sealed class MisskeyEmojiData {
       final found = repository!.emojiMap?[name];
 
       if (found != null) {
-        return found.emoji;
+        return checkMuted(found.emoji);
       } else {
         return NotEmojiData(name: emojiName);
       }
@@ -59,7 +122,7 @@ sealed class MisskeyEmojiData {
           customEmojiRegExp2.firstMatch(emojiName)?.group(1) ?? emojiName;
       final found = repository!.emojiMap?[name];
       if (found != null) {
-        return found.emoji;
+        return checkMuted(found.emoji);
       } else {
         return NotEmojiData(name: emojiName);
       }
@@ -95,4 +158,12 @@ class UnicodeEmojiData extends MisskeyEmojiData {
   const UnicodeEmojiData({required this.char}) : super(char, false);
 
   final String char;
+}
+
+/// ミュートされた絵文字
+class MutedEmojiData extends MisskeyEmojiData {
+  MutedEmojiData({required this.originalData})
+    : super(originalData.baseName, originalData.isSensitive);
+
+  final MisskeyEmojiData originalData;
 }

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:flutter_twemoji/flutter_twemoji.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
@@ -75,7 +76,16 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
         );
 
     final emojiData = widget.emojiData;
+
     switch (emojiData) {
+      case MutedEmojiData():
+        // ミュートされている絵文字の場合はエラーアイコンを表示
+        cachedImage = SvgPicture.asset(
+          "assets/images/miria_error.svg",
+          height: scopedFontSize,
+          width: scopedFontSize,
+        );
+        return cachedImage!;
       case CustomEmojiData():
         cachedImage = ConditionalTooltip(
           isAttachTooltip: widget.isAttachTooltip,

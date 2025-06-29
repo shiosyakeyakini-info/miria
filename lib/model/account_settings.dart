@@ -15,6 +15,7 @@ abstract class AccountSettings with _$AccountSettings {
     required String userId,
     required String host,
     @Default([]) List<String> reactions,
+    @Default([]) List<String> mutedReactions,
     @Default(NoteVisibility.public) NoteVisibility defaultNoteVisibility,
     @Default(false) bool defaultIsLocalOnly,
     @Default(null) ReactionAcceptance? defaultReactionAcceptance,

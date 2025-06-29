@@ -1539,6 +1539,13 @@ class SJa extends S {
       'ミュートしたサーバーのユーザーへの返信を含めて、設定したサーバーの全てのノートとリノートをミュートします。\n改行で区切って設定します。';
 
   @override
+  String get reactionMute => 'リアクションミュート';
+
+  @override
+  String get reactionMuteDescription =>
+      '改行区切りで :emoji: または :emoji@host: の形式で入力します。@host のみも受け付け、この場合該当ホストすべてを対象とします。';
+
+  @override
   String get bulkAddReactions => '一括追加';
 
   @override
@@ -1555,6 +1562,24 @@ class SJa extends S {
 
   @override
   String get bulkAddReactionsDescription3 => 'コピーしたものを下のテキストボックスに貼り付けてください';
+
+  @override
+  String get bulkAddMutedReactions => 'ミュート設定をインポート';
+
+  @override
+  String get bulkAddMutedReactionsDescription1 =>
+      'お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription2 =>
+      '同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription3 =>
+      'コピーしたものを下のテキストボックスに貼り付けてください';
+
+  @override
+  String get importMutedReactions => 'ミュート設定をインポート';
 
   @override
   String get pasteHere => 'ここに貼り付け';
