@@ -3216,11 +3216,11 @@ abstract class S {
   /// **'なんもないで'**
   String get nothingHere;
 
-  /// No description provided for @refresh.
+  /// No description provided for @cacheRefreshNow.
   ///
   /// In ja, this message translates to:
-  /// **'更新'**
-  String get refresh;
+  /// **'いますぐキャッシュを更新'**
+  String get cacheRefreshNow;
 
   /// No description provided for @cacheManualUpdateCompleted.
   ///

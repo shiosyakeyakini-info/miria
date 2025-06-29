@@ -1019,8 +1019,8 @@
 
     "remoteServerWithoutLogin": "相手先のサーバー（ログインなし）",
     "nothingHere": "なんもないで",
-    
-    "refresh": "更新",
+
+    "cacheRefreshNow": "いますぐキャッシュを更新",
     "cacheManualUpdateCompleted": "情報の取得が完了したで",
 
     "deckMode": "デッキモード",

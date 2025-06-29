@@ -1854,7 +1854,7 @@ class SZh extends S {
   String get nothingHere => 'なんもないで';
 
   @override
-  String get refresh => '更新';
+  String get cacheRefreshNow => 'いますぐキャッシュを更新';
 
   @override
   String get cacheManualUpdateCompleted => '情報の取得が完了したで';

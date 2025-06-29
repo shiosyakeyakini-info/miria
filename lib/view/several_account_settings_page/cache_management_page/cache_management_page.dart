@@ -171,7 +171,7 @@ class CacheManagementPageState extends ConsumerState<CacheManagementPage> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.refresh),
                   onPressed: refresh,
-                  label: Text(S.of(context).refresh),
+                  label: Text(S.of(context).cacheRefreshNow),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(5),
                     minimumSize: const Size(double.infinity, 0),
