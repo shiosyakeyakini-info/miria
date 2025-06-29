@@ -1040,6 +1040,14 @@
     "deckMode": "デッキモード",
     "enableDeckMode": "デッキモードにする",
 
-    "template": "テンプレ"
+    "template": "テンプレ",
+
+    "lookup": "照会",
+    "lookupDescription": "URLやアカウント名からユーザーやノートを照会できるで",
+    "lookupInput": "URL、アカウント名、またはノートID",
+    "lookupHint": "@ai@misskey.io やhttps://... を入力",
+    "lookupFailed": "照会に失敗したで",
+    "lookupExamples": "入力例:",
+    "unknownObject": "未知のオブジェクトやな"
 
 }

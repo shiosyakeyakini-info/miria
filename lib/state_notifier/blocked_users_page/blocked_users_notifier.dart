@@ -23,7 +23,7 @@ class BlockedUsersNotifier extends _$BlockedUsersNotifier {
           .blocking
           .delete(BlockDeleteRequest(userId: userId));
       state = AsyncValue.data([
-        ...?state.valueOrNull?.where((e) => e.blockeeId != userId),
+        ...?state.value?.where((e) => e.blockeeId != userId),
       ]);
     });
   }

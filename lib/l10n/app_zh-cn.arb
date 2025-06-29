@@ -950,5 +950,13 @@
     },
     "nonInvitedReversi": "好像没有收到邀请",
 
-    "template": "模板"
+    "template": "模板",
+
+    "lookup": "查找",
+    "lookupDescription": "可以通过URL或账户名查找用户和笔记",
+    "lookupInput": "URL、账户名或笔记ID",
+    "lookupHint": "输入 @ai@misskey.io 或 https://...",
+    "lookupFailed": "查找失败",
+    "lookupExamples": "输入示例:",
+    "unknownObject": "未知对象"
 }

@@ -121,8 +121,14 @@
 
     "nothingHere": "ここには何もありませんわ",
     
-    "cacheManualUpdateCompleted": "情報の取得が完了しましたわ"
+    "cacheManualUpdateCompleted": "情報の取得が完了しましたわ",
 
-
+    "lookup": "照会",
+    "lookupDescription": "URLやアカウント名からユーザーやノートを照会できますわ",
+    "lookupInput": "URL、アカウント名、またはノートID",
+    "lookupHint": "@ai@misskey.io やhttps://... を入力してくださいまし",
+    "lookupFailed": "照会に失敗いたしましたわ",
+    "lookupExamples": "入力例:",
+    "unknownObject": "未知のオブジェクトですわね"
 
 }
