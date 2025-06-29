@@ -4,6 +4,7 @@ import "dart:convert";
 import "package:collection/collection.dart";
 import "package:flutter/services.dart";
 import "package:kana_kit/kana_kit.dart";
+import "package:miria/util/emoji_search.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
@@ -53,16 +54,6 @@ class EmojiRepositoryImpl extends EmojiRepository {
 
   bool thisLaunchLoaded = false;
 
-  final romajiPattern = RegExp(r"^[A-Za-z0-9_+-]+$");
-  final splitPattern = RegExp("[_+-]");
-
-  String format(String emojiName) {
-    return emojiName
-        .replaceAll("_", "")
-        .replaceAll("+", "")
-        .replaceAll("-", "");
-  }
-
   @override
   Future<void> loadFromLocalCache() async {
     final storedData =
@@ -110,35 +101,24 @@ class EmojiRepositoryImpl extends EmojiRepository {
     }
   }
 
-  String toHiraganaSafe(String text) {
-    try {
-      if (romajiPattern.hasMatch(text)) {
-        return text
-            .split(splitPattern)
-            .map((e) => const KanaKit().toHiragana(e))
-            .join();
-      }
-      return const KanaKit().toHiragana(format(text));
-    } catch (e) {
-      return text;
-    }
-  }
+  // Utilities moved to emoji_search.dart
 
   Future<void> _setEmojiData(EmojisResponse response) async {
-    final toH = toHiraganaSafe;
-
-    final unicodeEmojis = (jsonDecode(
-            await rootBundle.loadString("assets/emoji_list.json")) as List)
-        .map((e) => UnicodeEmoji.fromJson(e))
-        .map(
-          (e) => EmojiRepositoryData(
-            emoji: UnicodeEmojiData(char: e.char),
-            kanaName: toH(e.char),
-            kanaAliases: [e.name, ...e.keywords].map((e2) => toH(e2)).toList(),
-            aliases: [e.name, ...e.keywords],
-            category: e.category,
-          ),
-        );
+    final unicodeEmojis =
+        (jsonDecode(await rootBundle.loadString("assets/emoji_list.json"))
+                as List)
+            .map((e) => UnicodeEmoji.fromJson(e))
+            .map(
+              (e) => EmojiRepositoryData(
+                emoji: UnicodeEmojiData(char: e.char),
+                kanaName: toHiraganaSafe(e.char),
+                kanaAliases: [e.name, ...e.keywords]
+                    .map((e2) => toHiraganaSafe(e2))
+                    .toList(),
+                aliases: [e.name, ...e.keywords],
+                category: e.category,
+              ),
+            );
 
     emoji = response.emojis
         .map(
@@ -151,9 +131,9 @@ class EmojiRepositoryImpl extends EmojiRepository {
               isSensitive: e.isSensitive,
             ),
             category: e.category ?? "",
-            kanaName: toH(e.name),
+            kanaName: toHiraganaSafe(e.name),
             aliases: e.aliases,
-            kanaAliases: e.aliases.map((e2) => toH(e2)).toList(),
+            kanaAliases: e.aliases.map((e2) => toHiraganaSafe(e2)).toList(),
           ),
         )
         .toList();
@@ -166,24 +146,6 @@ class EmojiRepositoryImpl extends EmojiRepository {
     );
   }
 
-  bool emojiSearchCondition(
-    String query,
-    String convertedQuery,
-    EmojiRepositoryData element,
-  ) {
-    if (query.length == 1) {
-      return element.emoji.baseName == query ||
-          element.aliases.any((element2) => element2 == query) ||
-          element.kanaName == convertedQuery ||
-          element.kanaAliases.any((element2) => element2 == convertedQuery);
-    }
-    return element.emoji.baseName.contains(query) ||
-        element.aliases.any((element2) => element2.contains(query)) ||
-        element.kanaName.contains(convertedQuery) ||
-        element.kanaAliases
-            .any((element2) => element2.contains(convertedQuery));
-  }
-
   @override
   Future<List<MisskeyEmojiData>> searchEmojis(
     String name, {
@@ -193,10 +155,17 @@ class EmojiRepositoryImpl extends EmojiRepository {
       return defaultEmojis(limit: limit);
     }
 
-    final converted = format(const KanaKit().toHiragana(name));
+    final converted = formatEmojiName(const KanaKit().toHiragana(name));
 
     return emoji
-            ?.where((element) => emojiSearchCondition(name, converted, element))
+            ?.where((element) => emojiSearchCondition(
+                  name,
+                  converted,
+                  baseName: element.emoji.baseName,
+                  aliases: element.aliases,
+                  kanaName: element.kanaName,
+                  kanaAliases: element.kanaAliases,
+                ))
             .sorted((a, b) {
               final aValue = [
                 if (a.emoji.baseName.contains(name)) a.emoji.baseName,
