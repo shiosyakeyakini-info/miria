@@ -8,6 +8,8 @@ import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/pushable_listview.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
+import "package:miria/util/ap_query.dart";
+import "package:miria/state_notifier/common/misskey_notes/misskey_note_notifier.dart";
 
 @RoutePage<User>()
 class UserSelectDialog extends StatelessWidget implements AutoRouteWrapper {
@@ -60,7 +62,10 @@ class UserSelectContent extends HookConsumerWidget {
           focusNode: focusNode,
           autofocus: true,
           decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
-          onSubmitted: (value) => searchQuery.value = value,
+          onSubmitted: (value) async {
+            if (await _handleApSearch(context, ref, value)) return;
+            searchQuery.value = value;
+          },
         ),
         const Padding(padding: EdgeInsets.only(bottom: 10)),
         LayoutBuilder(
@@ -153,4 +158,41 @@ class UsersSelectContentList extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<bool> _handleApSearch(
+  BuildContext context,
+  WidgetRef ref,
+  String value,
+) async {
+  if (!isApQuery(value)) return false;
+  final dialogValue = await ref.read(dialogStateNotifierProvider.notifier).showDialog(
+        message: (c) => S.of(c).confirmApSearch,
+        actions: (c) => [S.of(c).done, S.of(c).cancel],
+      );
+  if (dialogValue != 0) return false;
+
+  final response = await ref.read(dialogStateNotifierProvider.notifier).guard(
+        () async => await ref
+            .read(misskeyGetContextProvider)
+            .ap
+            .show(ApShowRequest(uri: apQueryToUri(value))),
+      );
+  final res = response.valueOrNull;
+  if (res == null) return true;
+  if (res.type.toLowerCase() == 'note') {
+    final note = Note.fromJson(res.object);
+    await ref
+        .read(misskeyNoteNotifierProvider.notifier)
+        .navigateToNoteDetailPage(note);
+    return true;
+  }
+  if (res.type.toLowerCase() == 'user') {
+    final user = UserDetailed.fromJson(res.object);
+    await ref
+        .read(misskeyNoteNotifierProvider.notifier)
+        .navigateToUserPage(user);
+    return true;
+  }
+  return true;
 }

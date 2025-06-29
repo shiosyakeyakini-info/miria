@@ -111,7 +111,9 @@
     "unsupportedFileWithFilename": "{filename}は対応してないファイルのようですわ",
     "failedFileSave": "ファイルの保存に失敗したようですわね…",
 
-    "nothingHere": "ここには何もありませんわ"
+    "nothingHere": "ここには何もありませんわ",
+
+    "confirmApSearch": "照会を実行いたしますこと？"
 
 
 

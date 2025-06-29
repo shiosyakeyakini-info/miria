@@ -1011,6 +1011,8 @@
     "remoteServerWithoutLogin": "相手先のサーバー（ログインなし）",
     "nothingHere": "なんもないで",
 
+    "confirmApSearch": "照会を実行するか？",
+
     "deckMode": "デッキモード",
     "enableDeckMode": "デッキモードにする"
 

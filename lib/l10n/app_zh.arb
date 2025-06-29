@@ -939,5 +939,6 @@
             }
         }
     },
-    "nonInvitedReversi": "好像没有收到邀请"
+    "nonInvitedReversi": "好像没有收到邀请",
+    "confirmApSearch": "要执行照会吗？"
 }
