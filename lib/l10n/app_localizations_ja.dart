@@ -204,6 +204,9 @@ class SJa extends S {
   String get roleTimeline => 'ロールタイムライン';
 
   @override
+  String get customTimeline => 'サーバー独自タイムライン';
+
+  @override
   String get server => 'サーバー';
 
   @override
@@ -1492,6 +1495,18 @@ class SJa extends S {
   String get pleaseSelectRole => 'ロールを選択してください。';
 
   @override
+  String get customChannelName => 'チャンネル名';
+
+  @override
+  String get customApiPath => 'POSTエンドポイントのパス';
+
+  @override
+  String get customTimelineParameters => 'パラメータ (JSON)';
+
+  @override
+  String get customPresetSelect => 'プリセットから選択';
+
+  @override
   String get reactionDeck => 'リアクションデッキ';
 
   @override
@@ -1891,6 +1906,9 @@ class SJa extends S {
 
   @override
   String get enableDeckMode => 'デッキモードにする';
+
+  @override
+  String get template => 'テンプレ';
 }
 
 /// The translations for Japanese (`ja_OJ`).

@@ -15,6 +15,7 @@ import "package:miria/repository/account_repository.dart";
 import "package:miria/repository/account_settings_repository.dart";
 import "package:miria/repository/antenna_timeline_repository.dart";
 import "package:miria/repository/channel_time_line_repository.dart";
+import "package:miria/repository/custom_timeline_repository.dart";
 import "package:miria/repository/desktop_settings_repository.dart";
 import "package:miria/repository/emoji_repository.dart";
 import "package:miria/repository/favorite_repository.dart";
@@ -39,7 +40,11 @@ part "providers.freezed.dart";
 part "providers.g.dart";
 
 @Riverpod(keepAlive: true)
-Dio dio(Ref ref) => Dio();
+Dio dio(Ref ref) {
+  final dio = Dio();
+  dio.options.responseType = ResponseType.json;
+  return dio;
+}
 
 @Riverpod(keepAlive: true)
 FileSystem fileSystem(Ref ref) => const LocalFileSystem();
@@ -235,6 +240,14 @@ final timelineProvider =
           ref,
         ),
         TabType.antenna => AntennaTimelineRepository(
+          ref.read(misskeyProvider(account)),
+          account,
+          ref.read(notesProvider(account)),
+          ref.read(generalSettingsRepositoryProvider),
+          setting,
+          ref,
+        ),
+        TabType.customTimeline => CustomTimelineRepository(
           ref.read(misskeyProvider(account)),
           account,
           ref.read(notesProvider(account)),

@@ -48,13 +48,13 @@ void main() {
     });
 
     test("handles empty registry format", () {
-      const jsonData = '''
+      const jsonData = """
 [
     [
         {},
         []
     ]
-]''';
+]""";
 
       final result = MutedReactionsParser.parseMutedReactionsData(jsonData);
 
@@ -89,7 +89,7 @@ void main() {
     });
 
     test("throws FormatException for malformed JSON", () {
-      const jsonData = '''[invalid json}''';
+      const jsonData = """[invalid json}""";
 
       expect(
         () => MutedReactionsParser.parseMutedReactionsData(jsonData),

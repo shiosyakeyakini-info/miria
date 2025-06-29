@@ -39,9 +39,9 @@ class MutedReactionsParser {
         }
       }
 
-      throw FormatException('Unsupported data format');
+      throw FormatException("Unsupported data format");
     } catch (e) {
-      throw FormatException('Failed to parse muted reactions data: $e');
+      throw FormatException("Failed to parse muted reactions data: $e");
     }
   }
 }

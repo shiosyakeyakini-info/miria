@@ -3192,6 +3192,22 @@ class TimeLineRouteArgs {
 }
 
 /// generated route for
+/// [TimelinePresetDialog]
+class TimelinePresetRoute extends PageRouteInfo<void> {
+  const TimelinePresetRoute({List<PageRouteInfo>? children})
+    : super(TimelinePresetRoute.name, initialChildren: children);
+
+  static const String name = 'TimelinePresetRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TimelinePresetDialog();
+    },
+  );
+}
+
+/// generated route for
 /// [UpdateMemoDialog]
 class UpdateMemoRoute extends PageRouteInfo<UpdateMemoRouteArgs> {
   UpdateMemoRoute({

@@ -42,6 +42,18 @@ abstract class TabSetting with _$TabSetting {
     /// アンテナのノートの場合、アンテナID
     String? antennaId,
 
+    /// カスタムタイムラインのチャンネル名
+    String? customChannelName,
+
+    /// カスタムタイムラインのWebSocketパス
+    String? customWebSocketPath,
+
+    /// カスタムタイムラインのAPIパス
+    String? customApiPath,
+
+    /// カスタムタイムラインのパラメータ
+    Map<String, dynamic>? customParameters,
+
     /// ノートの投稿のキャプチャをするかどうか
     @Default(true) bool isSubscribe,
 

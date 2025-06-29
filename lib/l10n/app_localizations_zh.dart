@@ -204,6 +204,9 @@ class SZh extends S {
   String get roleTimeline => '角色时间线';
 
   @override
+  String get customTimeline => '自定义时间线';
+
+  @override
   String get server => '服务器';
 
   @override
@@ -1486,6 +1489,18 @@ class SZh extends S {
   String get pleaseSelectRole => '请选择角色。';
 
   @override
+  String get customChannelName => '频道名';
+
+  @override
+  String get customApiPath => 'POST端点路径';
+
+  @override
+  String get customTimelineParameters => '参数(JSON)';
+
+  @override
+  String get customPresetSelect => '从预设中选择';
+
+  @override
   String get reactionDeck => '回应面板';
 
   @override
@@ -1883,6 +1898,9 @@ class SZh extends S {
 
   @override
   String get enableDeckMode => 'デッキモードにする';
+
+  @override
+  String get template => '模板';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -2083,6 +2101,9 @@ class SZhCn extends SZh {
 
   @override
   String get roleTimeline => '角色时间线';
+
+  @override
+  String get customTimeline => '自定义时间线';
 
   @override
   String get server => '服务器';
@@ -3333,6 +3354,18 @@ class SZhCn extends SZh {
   String get pleaseSelectRole => '请选择角色。';
 
   @override
+  String get customChannelName => '频道名';
+
+  @override
+  String get customApiPath => 'POST端点路径';
+
+  @override
+  String get customTimelineParameters => '参数(JSON)';
+
+  @override
+  String get customPresetSelect => '从预设中选择';
+
+  @override
   String get reactionDeck => '回应面板';
 
   @override
@@ -3682,4 +3715,7 @@ class SZhCn extends SZh {
 
   @override
   String get nonInvitedReversi => '好像没有收到邀请';
+
+  @override
+  String get template => '模板';
 }

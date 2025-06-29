@@ -9,6 +9,7 @@ import "package:miria/model/clip_settings.dart";
 import "package:miria/model/image_file.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/model/note_search_condition.dart";
+import "package:miria/model/server_preset.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
@@ -61,6 +62,7 @@ import "package:miria/view/settings_page/tab_settings_page/channel_select_dialog
 import "package:miria/view/settings_page/tab_settings_page/role_select_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_list_page.dart";
 import "package:miria/view/settings_page/tab_settings_page/tab_settings_page.dart";
+import "package:miria/view/settings_page/tab_settings_page/timeline_preset_dialog.dart";
 import "package:miria/view/settings_page/tab_settings_page/user_list_select_dialog.dart";
 import "package:miria/view/several_account_settings_page/cache_management_page/cache_management_page.dart";
 import "package:miria/view/several_account_settings_page/instance_mute_page/instance_mute_page.dart";
@@ -164,6 +166,7 @@ class AppRouter extends RootStackRouter {
     AutoDialogRoute<AntennaSettings>(page: AntennaSettingsRoute.page),
     AutoDialogRoute<FolderResult>(page: FolderSelectRoute.page),
     AutoDialogRoute<List<DriveFile>>(page: DriveFileSelectRoute.page),
+    AutoDialogRoute<TimelinePreset>(page: TimelinePresetRoute.page),
 
     // モーダルシート
     AutoModalRouteSheet(page: UserControlRoute.page),

@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:convert";
 
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
@@ -8,6 +9,7 @@ import "package:miria/extensions/users_lists_show_response_extension.dart";
 import "package:miria/hooks/use_async.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
+import "package:miria/model/server_preset.dart";
 import "package:miria/model/tab_icon.dart";
 import "package:miria/model/tab_setting.dart";
 import "package:miria/model/tab_type.dart";
@@ -64,6 +66,18 @@ class TabSettingsPage extends HookConsumerWidget {
     final selectedChannel = useState<CommunityChannel?>(null);
     final selectedUserList = useState<UsersList?>(null);
     final selectedAntenna = useState<Antenna?>(null);
+
+    final customChannelController = useTextEditingController(
+      text: initialTabSetting?.customChannelName ?? "",
+    );
+    final customApiController = useTextEditingController(
+      text: initialTabSetting?.customApiPath ?? "",
+    );
+    final customParamsController = useTextEditingController(
+      text: initialTabSetting?.customParameters != null
+          ? jsonEncode(initialTabSetting!.customParameters)
+          : "{}",
+    );
 
     final nameController = useTextEditingController(
       text: initialTabSetting != null
@@ -298,6 +312,42 @@ class TabSettingsPage extends HookConsumerWidget {
                   ],
                 ),
               ],
+              if (selectedTabType.value == TabType.customTimeline) ...[
+                Row(
+                  children: [
+                    Expanded(child: Text(S.of(context).customChannelName)),
+                    OutlinedButton.icon(
+                      icon: const Icon(Icons.list, size: 18),
+                      label: Text(S.of(context).template),
+                      onPressed: () async {
+                        final preset = await context.pushRoute<TimelinePreset>(
+                          TimelinePresetRoute(),
+                        );
+                        if (preset != null) {
+                          customChannelController.text =
+                              preset.websocketChannelName;
+                          customApiController.text = preset.endpoint;
+                          customParamsController.text = jsonEncode(
+                            preset.parameters,
+                          );
+                          nameController.text = preset.name;
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                TextField(controller: customChannelController),
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).customApiPath),
+                TextField(controller: customApiController),
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(S.of(context).customTimelineParameters),
+                TextField(
+                  controller: customParamsController,
+                  minLines: 3,
+                  maxLines: null,
+                ),
+              ],
               const Padding(padding: EdgeInsets.all(10)),
               Text(S.of(context).tabName),
               TextField(
@@ -435,6 +485,30 @@ class TabSettingsPage extends HookConsumerWidget {
                       );
                       return;
                     }
+                    Map<String, dynamic>? customParams;
+                    if (tabType == TabType.customTimeline) {
+                      if (customApiController.text.isEmpty) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).invalidInput,
+                        );
+                        return;
+                      }
+                      try {
+                        final decoded = jsonDecode(customParamsController.text);
+                        if (decoded is Map<String, dynamic>) {
+                          customParams = decoded;
+                        } else {
+                          throw Exception();
+                        }
+                      } catch (_) {
+                        await SimpleMessageDialog.show(
+                          context,
+                          S.of(context).invalidInput,
+                        );
+                        return;
+                      }
+                    }
 
                     final list = ref
                         .read(tabSettingsRepositoryProvider)
@@ -449,6 +523,13 @@ class TabSettingsPage extends HookConsumerWidget {
                       channelId: selectedChannel.value?.id,
                       listId: selectedUserList.value?.id,
                       antennaId: selectedAntenna.value?.id,
+                      customChannelName: customChannelController.text.isNotEmpty
+                          ? customChannelController.text
+                          : null,
+                      customApiPath: customApiController.text.isNotEmpty
+                          ? customApiController.text
+                          : null,
+                      customParameters: customParams,
                       renoteDisplay: renoteDisplay.value,
                       isSubscribe: isSubscribe.value,
                       isIncludeReplies: isIncludeReply.value,

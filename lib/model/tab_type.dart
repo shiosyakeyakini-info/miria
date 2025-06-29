@@ -9,7 +9,8 @@ enum TabType {
   roleTimeline,
   channel,
   userList,
-  antenna;
+  antenna,
+  customTimeline;
 
   String displayName(BuildContext context) {
     return switch (this) {
@@ -21,6 +22,7 @@ enum TabType {
       TabType.channel => S.of(context).channel,
       TabType.userList => S.of(context).list,
       TabType.antenna => S.of(context).antenna,
+      TabType.customTimeline => S.of(context).customTimeline,
     };
   }
 }

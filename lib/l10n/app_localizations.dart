@@ -489,6 +489,12 @@ abstract class S {
   /// **'ロールタイムライン'**
   String get roleTimeline;
 
+  /// No description provided for @customTimeline.
+  ///
+  /// In ja, this message translates to:
+  /// **'サーバー独自タイムライン'**
+  String get customTimeline;
+
   /// No description provided for @server.
   ///
   /// In ja, this message translates to:
@@ -2520,6 +2526,30 @@ abstract class S {
   /// **'ロールを選択してください。'**
   String get pleaseSelectRole;
 
+  /// No description provided for @customChannelName.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャンネル名'**
+  String get customChannelName;
+
+  /// No description provided for @customApiPath.
+  ///
+  /// In ja, this message translates to:
+  /// **'POSTエンドポイントのパス'**
+  String get customApiPath;
+
+  /// No description provided for @customTimelineParameters.
+  ///
+  /// In ja, this message translates to:
+  /// **'パラメータ (JSON)'**
+  String get customTimelineParameters;
+
+  /// No description provided for @customPresetSelect.
+  ///
+  /// In ja, this message translates to:
+  /// **'プリセットから選択'**
+  String get customPresetSelect;
+
   /// No description provided for @reactionDeck.
   ///
   /// In ja, this message translates to:
@@ -3269,6 +3299,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'デッキモードにする'**
   String get enableDeckMode;
+
+  /// No description provided for @template.
+  ///
+  /// In ja, this message translates to:
+  /// **'テンプレ'**
+  String get template;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

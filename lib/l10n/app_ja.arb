@@ -67,6 +67,7 @@
     "socialTimelineAbbr": "STL",
     "globalTimeline": "グローバルタイムライン",
     "roleTimeline": "ロールタイムライン",
+    "customTimeline": "サーバー独自タイムライン",
     "server": "サーバー",
     "miAuth": "MiAuth",
     "apiKey": "APIキー",
@@ -861,6 +862,10 @@
     "pleaseSelectList": "リストを選択してください。",
     "pleaseSelectAntenna": "アンテナを選択してください。",
     "pleaseSelectRole": "ロールを選択してください。",
+    "customChannelName": "チャンネル名",
+    "customApiPath": "POSTエンドポイントのパス",
+    "customTimelineParameters": "パラメータ (JSON)",
+    "customPresetSelect": "プリセットから選択",
 
     "reactionDeck": "リアクションデッキ",
     "wordMute": "ワードミュート",
@@ -1028,6 +1033,8 @@
     "nothingHere": "なんもないで",
 
     "deckMode": "デッキモード",
-    "enableDeckMode": "デッキモードにする"
+    "enableDeckMode": "デッキモードにする",
+
+    "template": "テンプレ"
 
 }

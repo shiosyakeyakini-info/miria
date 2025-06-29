@@ -21,7 +21,7 @@ class GlobalTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.globalTimeline;
+  Channel get channel => Channel.globalTimeline();
 
   @override
   Map<String, dynamic> get parameters => {"channelId": tabSetting.channelId};

@@ -25,7 +25,7 @@ class AntennaTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.antenna;
+  Channel get channel => Channel.antenna();
 
   @override
   Map<String, dynamic> get parameters => {"antennaId": tabSetting.antennaId};
