@@ -122,6 +122,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AppInfoPage(),
       );
     },
+    BlockedUsersRoute.name: (routeData) {
+      final args = routeData.argsAs<BlockedUsersRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: BlockedUsersPage(
+          account: args.account,
+          key: args.key,
+        )),
+      );
+    },
     CacheManagementRoute.name: (routeData) {
       final args = routeData.argsAs<CacheManagementRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -393,6 +404,17 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<String>(
         routeData: routeData,
         child: const MisskeyServerListDialog(),
+      );
+    },
+    MutedUsersRoute.name: (routeData) {
+      final args = routeData.argsAs<MutedUsersRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: MutedUsersPage(
+          account: args.account,
+          key: args.key,
+        )),
       );
     },
     NoteCreateRoute.name: (routeData) {
@@ -1168,6 +1190,44 @@ class AppInfoRoute extends PageRouteInfo<void> {
   static const String name = 'AppInfoRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [BlockedUsersPage]
+class BlockedUsersRoute extends PageRouteInfo<BlockedUsersRouteArgs> {
+  BlockedUsersRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          BlockedUsersRoute.name,
+          args: BlockedUsersRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'BlockedUsersRoute';
+
+  static const PageInfo<BlockedUsersRouteArgs> page =
+      PageInfo<BlockedUsersRouteArgs>(name);
+}
+
+class BlockedUsersRouteArgs {
+  const BlockedUsersRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'BlockedUsersRouteArgs{account: $account, key: $key}';
+  }
 }
 
 /// generated route for
@@ -2092,6 +2152,44 @@ class MisskeyServerListRoute extends PageRouteInfo<void> {
   static const String name = 'MisskeyServerListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [MutedUsersPage]
+class MutedUsersRoute extends PageRouteInfo<MutedUsersRouteArgs> {
+  MutedUsersRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MutedUsersRoute.name,
+          args: MutedUsersRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MutedUsersRoute';
+
+  static const PageInfo<MutedUsersRouteArgs> page =
+      PageInfo<MutedUsersRouteArgs>(name);
+}
+
+class MutedUsersRouteArgs {
+  const MutedUsersRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'MutedUsersRouteArgs{account: $account, key: $key}';
+  }
 }
 
 /// generated route for

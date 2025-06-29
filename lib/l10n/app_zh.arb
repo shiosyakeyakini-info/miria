@@ -809,6 +809,8 @@
     "wordMute": "文字屏蔽",
     "hardWordMute": "屏蔽关键词",
     "instanceMute": "被屏蔽的服务器",
+    "mutedUsers": "已屏蔽的用户",
+    "blockedUsers": "已拉黑的用户",
     "cacheSettings": "缓存设置",
     "hideConditionalNotes": "从时间线中隐藏具有指定条件的帖子。",
     "muteSettingDescription": "用空格分隔的单词按 AND 条件处理，用换行符分隔的行按 OR 条件处理。\n用斜杠括住关键字可使其成为正则表达式。",

@@ -866,6 +866,8 @@
     "wordMute": "ワードミュート",
     "hardWordMute": "ハードワードミュート",
     "instanceMute": "インスタンスミュート",
+    "mutedUsers": "ミュート済みユーザー",
+    "blockedUsers": "ブロック済みユーザー",
     "cacheSettings": "キャッシュ設定",
     "hideConditionalNotes": "指定した条件のノートをタイムラインから隠します。",
     "muteSettingDescription": "スペースで区切るとAND指定になり、改行で区切るとOR指定になります。\nキーワードをスラッシュで囲むと正規表現になります。",

@@ -4,6 +4,8 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/several_account_settings_page/word_mute_page/word_mute_page.dart";
+import "package:miria/view/several_account_settings_page/muted_users_page/muted_users_page.dart";
+import "package:miria/view/several_account_settings_page/blocked_users_page/blocked_users_page.dart";
 
 @RoutePage()
 class SeveralAccountSettingsPage extends StatelessWidget {
@@ -30,8 +32,7 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () async =>
-                await context.pushRoute(ReactionDeckRoute(account: account)),
+            onTap: () async => await context.pushRoute(ReactionDeckRoute(account: account)),
             title: Text(S.of(context).reactionDeck),
             leading: const Icon(Icons.favorite),
             trailing: const Icon(Icons.chevron_right),
@@ -58,6 +59,18 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             ),
             title: Text(S.of(context).instanceMute),
             leading: const Icon(Icons.comments_disabled),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () async => await context.pushRoute(MutedUsersRoute(account: account)),
+            title: Text(S.of(context).mutedUsers),
+            leading: const Icon(Icons.volume_off),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () async => await context.pushRoute(BlockedUsersRoute(account: account)),
+            title: Text(S.of(context).blockedUsers),
+            leading: const Icon(Icons.block),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
