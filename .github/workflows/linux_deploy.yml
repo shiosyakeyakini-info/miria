@@ -118,7 +118,6 @@ jobs:
             cp ./snap/gui/miria.desktop .debpkg/usr/share/applications/
             cp ./assets/images/icon.png .debpkg/usr/share/pixmaps/miria.png
             ln -s /opt/miria/miria .debpkg/usr/bin/miria
-            chmod a+x .debpkg/usr/bin/miria
             sed -i -E 's|^Version=.*|Version=1.5|g' .debpkg/usr/share/applications/miria.desktop
             sed -i -E 's|^Icon=.*|Icon=miria|g' .debpkg/usr/share/applications/miria.desktop
             echo "DESC=$(awk -F '=' '/^Comment=/{print $2}' .debpkg/usr/share/applications/miria.desktop)" >> $GITHUB_ENV
