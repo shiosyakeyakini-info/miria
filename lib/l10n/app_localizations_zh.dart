@@ -1913,6 +1913,27 @@ class SZh extends S {
 
   @override
   String get template => '模板';
+
+  @override
+  String get lookup => '查找';
+
+  @override
+  String get lookupDescription => '可以通过URL或账户名查找用户和笔记';
+
+  @override
+  String get lookupInput => 'URL、账户名或笔记ID';
+
+  @override
+  String get lookupHint => '输入 @ai@misskey.io 或 https://...';
+
+  @override
+  String get lookupFailed => '查找失败';
+
+  @override
+  String get lookupExamples => '输入示例:';
+
+  @override
+  String get unknownObject => '未知对象';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3736,4 +3757,25 @@ class SZhCn extends SZh {
 
   @override
   String get template => '模板';
+
+  @override
+  String get lookup => '查找';
+
+  @override
+  String get lookupDescription => '可以通过URL或账户名查找用户和笔记';
+
+  @override
+  String get lookupInput => 'URL、账户名或笔记ID';
+
+  @override
+  String get lookupHint => '输入 @ai@misskey.io 或 https://...';
+
+  @override
+  String get lookupFailed => '查找失败';
+
+  @override
+  String get lookupExamples => '输入示例:';
+
+  @override
+  String get unknownObject => '未知对象';
 }

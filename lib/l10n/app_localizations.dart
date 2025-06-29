@@ -3329,6 +3329,48 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'テンプレ'**
   String get template;
+
+  /// No description provided for @lookup.
+  ///
+  /// In ja, this message translates to:
+  /// **'照会'**
+  String get lookup;
+
+  /// No description provided for @lookupDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'URLやアカウント名からユーザーやノートを照会できるで'**
+  String get lookupDescription;
+
+  /// No description provided for @lookupInput.
+  ///
+  /// In ja, this message translates to:
+  /// **'URL、アカウント名、またはノートID'**
+  String get lookupInput;
+
+  /// No description provided for @lookupHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'@ai@misskey.io やhttps://... を入力'**
+  String get lookupHint;
+
+  /// No description provided for @lookupFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'照会に失敗したで'**
+  String get lookupFailed;
+
+  /// No description provided for @lookupExamples.
+  ///
+  /// In ja, this message translates to:
+  /// **'入力例:'**
+  String get lookupExamples;
+
+  /// No description provided for @unknownObject.
+  ///
+  /// In ja, this message translates to:
+  /// **'未知のオブジェクトやな'**
+  String get unknownObject;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {
