@@ -25,7 +25,6 @@ import "package:miria/repository/home_time_line_repository.dart";
 import "package:miria/repository/hybrid_timeline_repository.dart";
 import "package:miria/repository/import_export_repository.dart";
 import "package:miria/repository/local_time_line_repository.dart";
-import "package:miria/repository/lookup_repository.dart";
 import "package:miria/repository/note_repository.dart";
 import "package:miria/repository/role_timeline_repository.dart";
 import "package:miria/repository/shared_preference_controller.dart";
@@ -258,8 +257,3 @@ final timelineProvider =
         ),
       };
     });
-
-@riverpod
-LookupRepository lookupRepository(Ref ref, Account account) {
-  return LookupRepository(ref.read(misskeyProvider(account)), account);
-}

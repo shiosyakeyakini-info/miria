@@ -1937,27 +1937,6 @@ class SJa extends S {
 
   @override
   String get template => 'テンプレ';
-
-  @override
-  String get lookup => '照会';
-
-  @override
-  String get lookupDescription => 'URLやアカウント名からユーザーやノートを照会できるで';
-
-  @override
-  String get lookupInput => 'URL、アカウント名、またはノートID';
-
-  @override
-  String get lookupHint => '@ai@misskey.io やhttps://... を入力';
-
-  @override
-  String get lookupFailed => '照会に失敗したで';
-
-  @override
-  String get lookupExamples => '入力例:';
-
-  @override
-  String get unknownObject => '未知のオブジェクトやな';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2307,25 +2286,4 @@ class SJaOj extends SJa {
 
   @override
   String get cacheManualUpdateCompleted => '情報の取得が完了しましたわ';
-
-  @override
-  String get lookup => '照会';
-
-  @override
-  String get lookupDescription => 'URLやアカウント名からユーザーやノートを照会できますわ';
-
-  @override
-  String get lookupInput => 'URL、アカウント名、またはノートID';
-
-  @override
-  String get lookupHint => '@ai@misskey.io やhttps://... を入力してくださいまし';
-
-  @override
-  String get lookupFailed => '照会に失敗いたしましたわ';
-
-  @override
-  String get lookupExamples => '入力例:';
-
-  @override
-  String get unknownObject => '未知のオブジェクトですわね';
 }
