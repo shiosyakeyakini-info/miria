@@ -86,7 +86,8 @@ class ImageViewer extends HookConsumerWidget {
               onTap: () {
                 if (provider.scale == 1.0 && provider.lastScale == 1.0) {
                   commentVisibility.value =
-                      (commentVisibility.value == VisibilityStatus.visible)
+                      (commentVisibility.value == VisibilityStatus.visible ||
+                          commentVisibility.value == VisibilityStatus.hiding)
                       ? VisibilityStatus.hiding
                       : VisibilityStatus.visible;
                 }
@@ -140,9 +141,10 @@ class ImageViewer extends HookConsumerWidget {
               ? 1.0
               : 0.0,
           duration: const Duration(milliseconds: 500),
-          onEnd: () => {
-            if (commentVisibility.value == VisibilityStatus.hiding)
-              {commentVisibility.value = VisibilityStatus.hidden},
+          onEnd: () {
+            if (commentVisibility.value == VisibilityStatus.hiding) {
+              commentVisibility.value = VisibilityStatus.hidden;
+            }
           },
           child: Visibility(
             maintainState: true,
