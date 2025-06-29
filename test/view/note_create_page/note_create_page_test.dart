@@ -1953,7 +1953,9 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+                emojiRepositoryProvider.overrideWith(
+                  (ref, account) => emojiRepository,
+                ),
                 generalSettingsRepositoryProvider.overrideWith(
                   (ref) => generalSettingsRepository,
                 ),
@@ -1970,7 +1972,7 @@ void main() {
           await tester.pumpAndSettle();
           await tester.tap(find.byType(TextField).first);
           await tester.pumpAndSettle();
-          await tester.tap(find.text(":"));
+          await tester.tap(find.text("："));
           await tester.pumpAndSettle();
           await tester.tap(find.byType(NetworkImageView).at(1));
           await tester.pumpAndSettle();
@@ -2002,7 +2004,9 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                emojiRepositoryProvider.overrideWith((ref) => emojiRepository),
+                emojiRepositoryProvider.overrideWith(
+                  (ref, account) => emojiRepository,
+                ),
                 generalSettingsRepositoryProvider.overrideWith(
                   (ref) => generalSettingsRepository,
                 ),
@@ -2019,7 +2023,7 @@ void main() {
           await tester.pumpAndSettle();
           await tester.tap(find.byType(TextField).at(1));
           await tester.pumpAndSettle();
-          await tester.tap(find.text(":"));
+          await tester.tap(find.text("："));
           await tester.pumpAndSettle();
           await tester.tap(find.byType(NetworkImageView).at(1));
           await tester.pumpAndSettle();
