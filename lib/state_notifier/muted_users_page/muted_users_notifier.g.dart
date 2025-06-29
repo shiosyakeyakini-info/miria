@@ -38,7 +38,7 @@ final class MutedUsersNotifierProvider
 }
 
 String _$mutedUsersNotifierHash() =>
-    r'7d5337ea9b85d7acecb1d0a93b8ac71fd898e073';
+    r'43db3650e0ed4ba3bd827f0ae4289783ab4b589d';
 
 abstract class _$MutedUsersNotifier extends $AsyncNotifier<List<Muting>> {
   FutureOr<List<Muting>> build();

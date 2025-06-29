@@ -19,7 +19,7 @@ void main() {
       when(blocking.list(const BlockingListRequest())).thenAnswer(
         (_) async => [
           Blocking(
-            id: '1',
+            id: "1",
             createdAt: DateTime.now(),
             blockeeId: user.id,
             blockee: user,

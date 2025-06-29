@@ -2,7 +2,6 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/state_notifier/muted_users_page/muted_users_notifier.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:mockito/mockito.dart";
 
@@ -33,7 +32,7 @@ void main() {
       when(mute.list(const MuteListRequest())).thenAnswer(
         (_) => Future<Iterable<Muting>>.value([
           Muting(
-            id: '1',
+            id: "1",
             createdAt: DateTime.now(),
             muteeId: user.id,
             mutee: user,
