@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ServerPresets {
 
- List<String> get limitedApiServers; List<TimelinePreset> get particularTimelinePresets;
+@JsonKey(fromJson: _limitedApiServersFromJson) List<String> get limitedApiServers; List<TimelinePreset> get particularTimelinePresets;
 /// Create a copy of ServerPresets
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $ServerPresetsCopyWith<$Res>  {
   factory $ServerPresetsCopyWith(ServerPresets value, $Res Function(ServerPresets) _then) = _$ServerPresetsCopyWithImpl;
 @useResult
 $Res call({
- List<String> limitedApiServers, List<TimelinePreset> particularTimelinePresets
+@JsonKey(fromJson: _limitedApiServersFromJson) List<String> limitedApiServers, List<TimelinePreset> particularTimelinePresets
 });
 
 
@@ -81,11 +81,11 @@ as List<TimelinePreset>,
 @JsonSerializable()
 
 class _ServerPresets implements ServerPresets {
-  const _ServerPresets({final  List<String> limitedApiServers = const [], final  List<TimelinePreset> particularTimelinePresets = const []}): _limitedApiServers = limitedApiServers,_particularTimelinePresets = particularTimelinePresets;
+  const _ServerPresets({@JsonKey(fromJson: _limitedApiServersFromJson) final  List<String> limitedApiServers = const [], final  List<TimelinePreset> particularTimelinePresets = const []}): _limitedApiServers = limitedApiServers,_particularTimelinePresets = particularTimelinePresets;
   factory _ServerPresets.fromJson(Map<String, dynamic> json) => _$ServerPresetsFromJson(json);
 
  final  List<String> _limitedApiServers;
-@override@JsonKey() List<String> get limitedApiServers {
+@override@JsonKey(fromJson: _limitedApiServersFromJson) List<String> get limitedApiServers {
   if (_limitedApiServers is EqualUnmodifiableListView) return _limitedApiServers;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_limitedApiServers);
@@ -132,7 +132,7 @@ abstract mixin class _$ServerPresetsCopyWith<$Res> implements $ServerPresetsCopy
   factory _$ServerPresetsCopyWith(_ServerPresets value, $Res Function(_ServerPresets) _then) = __$ServerPresetsCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> limitedApiServers, List<TimelinePreset> particularTimelinePresets
+@JsonKey(fromJson: _limitedApiServersFromJson) List<String> limitedApiServers, List<TimelinePreset> particularTimelinePresets
 });
 
 

@@ -1,11 +1,7 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:miria/repository/socket_timeline_repository.dart';
-import 'package:miria/model/tab_setting.dart';
-import 'package:miria/repository/note_repository.dart';
-import 'package:miria/model/account.dart';
-import 'package:miria/repository/general_settings_repository.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:miria/repository/socket_timeline_repository.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 /// Timeline repository for custom endpoints.
 class CustomTimelineRepository extends SocketTimelineRepository {
@@ -32,10 +28,12 @@ class CustomTimelineRepository extends SocketTimelineRepository {
       _request(untilId: untilId);
 
   @override
-  Channel get channel => Channel.values.firstWhere(
-    (e) => e.name == tabSetting.customChannelName,
-    orElse: () => Channel.homeTimeline,
-  );
+  Channel get channel {
+    final channelName = tabSetting.customChannelName;
+    return channelName != null
+        ? Channel.custom(channelName)
+        : Channel.homeTimeline();
+  }
 
   @override
   Map<String, dynamic> get parameters => tabSetting.customParameters ?? {};

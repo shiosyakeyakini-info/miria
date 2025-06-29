@@ -8,11 +8,9 @@ part of 'server_preset.dart';
 
 _ServerPresets _$ServerPresetsFromJson(Map<String, dynamic> json) =>
     _ServerPresets(
-      limitedApiServers:
-          (json['limitedApiServers'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+      limitedApiServers: json['limitedApiServers'] == null
+          ? const []
+          : _limitedApiServersFromJson(json['limitedApiServers']),
       particularTimelinePresets:
           (json['particularTimelinePresets'] as List<dynamic>?)
               ?.map((e) => TimelinePreset.fromJson(e as Map<String, dynamic>))

@@ -1111,8 +1111,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "feature/migrate_freezed3"
-      resolved-ref: "83b50c50c473a2d1b1b54cd32b0110e03dc4e48a"
+      ref: master
+      resolved-ref: f206bad281003e9978eb3afbc27a0cc2edbbc726
       url: "https://github.com/shiosyakeyakini-info/misskey_dart.git"
     source: git
     version: "1.0.0"

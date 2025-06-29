@@ -26,7 +26,7 @@ class HomeTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.homeTimeline;
+  Channel get channel => Channel.homeTimeline();
 
   @override
   Map<String, dynamic> get parameters => {
