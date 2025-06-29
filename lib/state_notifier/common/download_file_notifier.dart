@@ -54,12 +54,12 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
     final tempDir = ref.read(fileSystemProvider).systemTempDirectory;
     var savePath = "${tempDir.path}/${driveFile.name}";
 
-    await ref.read(dioProvider).download(
+    await ref
+        .read(dioProvider)
+        .download(
           driveFile.url,
           savePath,
-          options: Options(
-            responseType: ResponseType.bytes,
-          ),
+          options: Options(responseType: ResponseType.bytes),
         );
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -92,10 +92,7 @@ class DownloadFileNotifier extends _$DownloadFileNotifier {
         }
       }
     }
-    await ImageGallerySaver.saveFile(
-      savePath,
-      name: driveFile.name,
-    );
+    await ImageGallerySaver.saveFile(savePath, name: driveFile.name);
     return DownloadFileResult.succeeded;
   }
 }

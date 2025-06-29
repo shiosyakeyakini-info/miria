@@ -1,16 +1,13 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 class NoteVisibilityDialog extends ConsumerWidget {
   final Account account;
 
-  const NoteVisibilityDialog({
-    required this.account,
-    super.key,
-  });
+  const NoteVisibilityDialog({required this.account, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

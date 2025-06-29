@@ -29,15 +29,18 @@ class BlockedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).blockedUsers)),
       body: switch (blocking) {
-        AsyncLoading() =>
-          const Center(child: CircularProgressIndicator.adaptive()),
-        AsyncError(:final error, :final stackTrace) =>
-          Center(child: ErrorDetail(error: error, stackTrace: stackTrace)),
+        AsyncLoading() => const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
+        AsyncError(:final error, :final stackTrace) => Center(
+          child: ErrorDetail(error: error, stackTrace: stackTrace),
+        ),
         AsyncData(:final value) => ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              final block = value[index];
-              return HookBuilder(builder: (context) {
+          itemCount: value.length,
+          itemBuilder: (context, index) {
+            final block = value[index];
+            return HookBuilder(
+              builder: (context) {
                 final unblock = useAsync(
                   () async => ref
                       .read(blockedUsersNotifierProvider.notifier)
@@ -61,9 +64,10 @@ class BlockedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
                     ),
                   ),
                 );
-              });
-            },
-          )
+              },
+            );
+          },
+        ),
       },
     );
   }

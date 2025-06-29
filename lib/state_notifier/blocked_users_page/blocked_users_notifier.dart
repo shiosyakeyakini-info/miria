@@ -22,8 +22,9 @@ class BlockedUsersNotifier extends _$BlockedUsersNotifier {
           .read(misskeyPostContextProvider)
           .blocking
           .delete(BlockDeleteRequest(userId: userId));
-      state = AsyncValue.data(
-          [...?state.valueOrNull?.where((e) => e.blockeeId != userId)]);
+      state = AsyncValue.data([
+        ...?state.valueOrNull?.where((e) => e.blockeeId != userId),
+      ]);
     });
   }
 }

@@ -12,11 +12,15 @@ import "../../test_util/test_datas.dart";
 
 class MockMisskeyMute extends Mock implements MisskeyMute {
   @override
-  Future<Iterable<Muting>> list(MuteListRequest? request) => super.noSuchMethod(
-        Invocation.method(#list, [request]),
-        returnValue: Future<Iterable<Muting>>.value(<Muting>[]),
-        returnValueForMissingStub: Future<Iterable<Muting>>.value(<Muting>[]),
-      ) as Future<Iterable<Muting>>;
+  Future<Iterable<Muting>> list(MuteListRequest? request) =>
+      super.noSuchMethod(
+            Invocation.method(#list, [request]),
+            returnValue: Future<Iterable<Muting>>.value(<Muting>[]),
+            returnValueForMissingStub: Future<Iterable<Muting>>.value(
+              <Muting>[],
+            ),
+          )
+          as Future<Iterable<Muting>>;
 }
 
 void main() {
@@ -33,7 +37,7 @@ void main() {
             createdAt: DateTime.now(),
             muteeId: user.id,
             mutee: user,
-          )
+          ),
         ]),
       );
 

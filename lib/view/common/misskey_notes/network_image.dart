@@ -13,7 +13,7 @@ enum ImageType {
   serverIcon,
   role,
   ad,
-  other
+  other,
 }
 
 class NetworkImageView extends ConsumerWidget {

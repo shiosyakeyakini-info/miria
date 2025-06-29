@@ -1,9 +1,9 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/hooks/use_async.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -26,23 +26,26 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
   });
 
   @override
-  Widget wrappedRoute(BuildContext context) => AccountContextScope.as(
-        account: account,
-        child: this,
-      );
+  Widget wrappedRoute(BuildContext context) =>
+      AccountContextScope.as(account: account, child: this);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: defaultText);
 
     final abuse = useHandledFuture(() async {
-      await ref.read(misskeyPostContextProvider).users.reportAbuse(
+      await ref
+          .read(misskeyPostContextProvider)
+          .users
+          .reportAbuse(
             UsersReportAbuseRequest(
               userId: targetUser.id,
               comment: controller.text,
             ),
           );
-      await ref.read(dialogStateNotifierProvider.notifier).showSimpleDialog(
+      await ref
+          .read(dialogStateNotifierProvider.notifier)
+          .showSimpleDialog(
             message: (context) => S.of(context).thanksForReport,
           );
       await ref.read(appRouterProvider).maybePop();
@@ -74,9 +77,9 @@ class AbuseDialog extends HookConsumerWidget implements AutoRouteWrapper {
         switch (abuse.value) {
           AsyncLoading() => const SendingElevatedButton(),
           _ => ElevatedButton(
-              onPressed: () async => abuse.execute(),
-              child: Text(S.of(context).reportAbuse),
-            ),
+            onPressed: () async => abuse.execute(),
+            child: Text(S.of(context).reportAbuse),
+          ),
         },
       ],
     );

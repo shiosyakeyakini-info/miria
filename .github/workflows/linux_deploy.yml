@@ -113,14 +113,14 @@ jobs:
 
         - name: Prepare to build DEB
           run: |
-            echo "DESC=$(awk -F '=' '/^Comment=/{print $2}' ./snap/gui/miria.desktop)" >> $GITHUB_ENV
-            sed -i -E 's|^Version=.*|Version=${{ env.VERSION }}|g' ./snap/gui/miria.desktop
-            sed -i -E 's|^Icon=.*|Icon=/usr/share/pixmaps/miria.png|g' ./snap/gui/miria.desktop
-            sed -i -E 's|^Exec=.*|Exec=/opt/miria/miria|g' ./snap/gui/miria.desktop
-            mkdir -p .debpkg/opt/miria .debpkg/usr/share/applications .debpkg/usr/share/pixmaps
+            mkdir -p .debpkg/opt/miria .debpkg/usr/share/applications .debpkg/usr/share/pixmaps .debpkg/usr/bin
             cp -rp ./build/linux/x64/release/bundle/* .debpkg/opt/miria/
             cp ./snap/gui/miria.desktop .debpkg/usr/share/applications/
             cp ./assets/images/icon.png .debpkg/usr/share/pixmaps/miria.png
+            ln -s /opt/miria/miria .debpkg/usr/bin/miria
+            sed -i -E 's|^Version=.*|Version=1.5|g' .debpkg/usr/share/applications/miria.desktop
+            sed -i -E 's|^Icon=.*|Icon=miria|g' .debpkg/usr/share/applications/miria.desktop
+            echo "DESC=$(awk -F '=' '/^Comment=/{print $2}' .debpkg/usr/share/applications/miria.desktop)" >> $GITHUB_ENV
 
         - name: Build DEB
           uses: jiro4989/build-deb-action@v3

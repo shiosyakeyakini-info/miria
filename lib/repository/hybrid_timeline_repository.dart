@@ -26,7 +26,7 @@ class HybridTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.hybridTimeline;
+  Channel get channel => Channel.hybridTimeline();
 
   @override
   Map<String, dynamic> get parameters => {};

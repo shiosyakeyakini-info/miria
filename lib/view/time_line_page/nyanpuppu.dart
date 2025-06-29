@@ -30,10 +30,7 @@ class Nyanpuppu extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 24,
-      child: NetworkImageView(
-        url: _selectedEmoji,
-        type: ImageType.customEmoji,
-      ),
+      child: NetworkImageView(url: _selectedEmoji, type: ImageType.customEmoji),
     );
   }
 }

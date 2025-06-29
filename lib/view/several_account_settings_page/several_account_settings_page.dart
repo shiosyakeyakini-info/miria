@@ -1,6 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/several_account_settings_page/word_mute_page/word_mute_page.dart";
@@ -32,9 +32,17 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () async => await context.pushRoute(ReactionDeckRoute(account: account)),
+            onTap: () async =>
+                await context.pushRoute(ReactionDeckRoute(account: account)),
             title: Text(S.of(context).reactionDeck),
             leading: const Icon(Icons.favorite),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () async =>
+                await context.pushRoute(ReactionMuteRoute(account: account)),
+            title: Text(S.of(context).reactionMute),
+            leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
@@ -54,29 +62,29 @@ class SeveralAccountSettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () async => await context.pushRoute(
-              InstanceMuteRoute(account: account),
-            ),
+            onTap: () async =>
+                await context.pushRoute(InstanceMuteRoute(account: account)),
             title: Text(S.of(context).instanceMute),
             leading: const Icon(Icons.comments_disabled),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () async => await context.pushRoute(MutedUsersRoute(account: account)),
+            onTap: () async =>
+                await context.pushRoute(MutedUsersRoute(account: account)),
             title: Text(S.of(context).mutedUsers),
             leading: const Icon(Icons.volume_off),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () async => await context.pushRoute(BlockedUsersRoute(account: account)),
+            onTap: () async =>
+                await context.pushRoute(BlockedUsersRoute(account: account)),
             title: Text(S.of(context).blockedUsers),
             leading: const Icon(Icons.block),
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
-            onTap: () async => await context.pushRoute(
-              CacheManagementRoute(account: account),
-            ),
+            onTap: () async =>
+                await context.pushRoute(CacheManagementRoute(account: account)),
             title: Text(S.of(context).cacheSettings),
             leading: const Icon(Icons.cached),
             trailing: const Icon(Icons.chevron_right),

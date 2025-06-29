@@ -12,11 +12,7 @@ class CreateFileView extends ConsumerWidget {
   final int index;
   final MisskeyPostFile file;
 
-  const CreateFileView({
-    required this.file,
-    required this.index,
-    super.key,
-  });
+  const CreateFileView({required this.file, required this.index, super.key});
 
   Future<void> onTap(BuildContext context, WidgetRef ref) async {
     if (defaultTargetPlatform == TargetPlatform.iOS ||

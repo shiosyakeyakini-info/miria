@@ -4,11 +4,11 @@ import "dart:io";
 import "package:flutter/foundation.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_localizations/flutter_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:media_kit/media_kit.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/desktop_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/dialog/dialog_scope.dart";
@@ -24,7 +24,7 @@ part "main.g.dart";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+  if (!kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
     await windowManager.ensureInitialized();
   }
   FlutterError.demangleStackTrace = (stack) {
@@ -87,19 +87,16 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useEffect(
-      () {
-        if (!isDesktop) return null;
-        final windowListener = ref.read(miriaWindowListenerProvider);
-        WidgetsBinding.instance.addObserver(this);
-        windowManager.addListener(windowListener);
-        return () {
-          WidgetsBinding.instance.removeObserver(this);
-          windowManager.removeListener(windowListener);
-        };
-      },
-      const [],
-    );
+    useEffect(() {
+      if (!isDesktop) return null;
+      final windowListener = ref.read(miriaWindowListenerProvider);
+      WidgetsBinding.instance.addObserver(this);
+      windowManager.addListener(windowListener);
+      return () {
+        WidgetsBinding.instance.removeObserver(this);
+        windowManager.removeListener(windowListener);
+      };
+    }, const []);
     useMemoized(() {
       unawaited(() async {
         await ref.read(desktopSettingsRepositoryProvider).load();
@@ -108,8 +105,9 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
     });
 
     final language = ref.watch(
-      generalSettingsRepositoryProvider
-          .select((value) => value.settings.languages),
+      generalSettingsRepositoryProvider.select(
+        (value) => value.settings.languages,
+      ),
     );
     final appRouter = ref.watch(appRouterProvider);
 
@@ -130,13 +128,11 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, widget) {
-        return DialogScope(
-          child: AppThemeScope(
+        return AppThemeScope(
+          child: DialogScope(
             child: SharingIntentListener(
               router: appRouter,
-              child: ErrorDialogListener(
-                child: widget ?? Container(),
-              ),
+              child: ErrorDialogListener(child: widget ?? Container()),
             ),
           ),
         );
@@ -149,15 +145,14 @@ class Miria extends HookConsumerWidget with WidgetsBindingObserver {
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        PointerDeviceKind.trackpad,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+  };
 }
 
 @riverpod
-MiriaWindowListener miriaWindowListener(MiriaWindowListenerRef ref) =>
-    MiriaWindowListener(ref);
+MiriaWindowListener miriaWindowListener(Ref ref) => MiriaWindowListener(ref);
 
 class MiriaWindowListener with WindowListener {
   final Ref ref;
@@ -194,7 +189,9 @@ class MiriaWindowListener with WindowListener {
     try {
       if (size != null && position != null) {
         final settings = ref.read(desktopSettingsRepositoryProvider).settings;
-        await ref.read(desktopSettingsRepositoryProvider).update(
+        await ref
+            .read(desktopSettingsRepositoryProvider)
+            .update(
               settings.copyWith(
                 window: DesktopWindowSettings(
                   w: size!.width,

@@ -16,14 +16,16 @@ void main() {
       final misskey = MockMisskey();
       when(misskey.blocking).thenReturn(blocking);
       final user = UserDetailedNotMe.fromJson(TestData.detailedUser1.toJson());
-      when(blocking.list(const BlockingListRequest())).thenAnswer((_) async => [
-            Blocking(
-              id: '1',
-              createdAt: DateTime.now(),
-              blockeeId: user.id,
-              blockee: user,
-            )
-          ]);
+      when(blocking.list(const BlockingListRequest())).thenAnswer(
+        (_) async => [
+          Blocking(
+            id: '1',
+            createdAt: DateTime.now(),
+            blockeeId: user.id,
+            blockee: user,
+          ),
+        ],
+      );
 
       await tester.pumpWidget(
         ProviderScope(

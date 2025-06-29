@@ -10,16 +10,13 @@ part "tab_setting.g.dart";
 Map<String, dynamic> _readAcct(Map<dynamic, dynamic> json, String name) {
   final account = json["account"] as Map<String, dynamic>?;
   if (account != null) {
-    return {
-      "host": account["host"],
-      "username": account["userId"],
-    };
+    return {"host": account["host"], "username": account["userId"]};
   }
   return json[name]! as Map<String, dynamic>;
 }
 
 @freezed
-class TabSetting with _$TabSetting {
+abstract class TabSetting with _$TabSetting {
   const TabSetting._();
 
   const factory TabSetting({
@@ -44,6 +41,18 @@ class TabSetting with _$TabSetting {
 
     /// アンテナのノートの場合、アンテナID
     String? antennaId,
+
+    /// カスタムタイムラインのチャンネル名
+    String? customChannelName,
+
+    /// カスタムタイムラインのWebSocketパス
+    String? customWebSocketPath,
+
+    /// カスタムタイムラインのAPIパス
+    String? customApiPath,
+
+    /// カスタムタイムラインのパラメータ
+    Map<String, dynamic>? customParameters,
 
     /// ノートの投稿のキャプチャをするかどうか
     @Default(true) bool isSubscribe,

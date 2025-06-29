@@ -25,7 +25,7 @@ class RoleTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.roleTimeline;
+  Channel get channel => Channel.roleTimeline();
 
   @override
   Map<String, dynamic> get parameters => {"roleId": tabSetting.roleId};

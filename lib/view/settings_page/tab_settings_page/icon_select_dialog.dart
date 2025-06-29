@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/tab_icon.dart";
 import "package:miria/view/common/account_scope.dart";
@@ -92,8 +92,9 @@ class IconSelectDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: DecoratedBox(
-                  decoration:
-                      BoxDecoration(color: Theme.of(context).primaryColor),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                  ),
                   child: TabBar(
                     tabs: [
                       Tab(text: S.of(context).standardIcon),
@@ -110,8 +111,9 @@ class IconSelectDialog extends StatelessWidget {
                         children: [
                           for (final icon in icons)
                             IconButton(
-                              onPressed: () => Navigator.of(context)
-                                  .pop(TabIcon(codePoint: icon.codePoint)),
+                              onPressed: () => Navigator.of(
+                                context,
+                              ).pop(TabIcon(codePoint: icon.codePoint)),
                               icon: Icon(icon),
                             ),
                         ],
@@ -121,8 +123,9 @@ class IconSelectDialog extends StatelessWidget {
                       account: account,
                       child: ReactionPickerContent(
                         isAcceptSensitive: true,
-                        onTap: (emoji) => Navigator.of(context)
-                            .pop(TabIcon(customEmojiName: emoji.baseName)),
+                        onTap: (emoji) => Navigator.of(
+                          context,
+                        ).pop(TabIcon(customEmojiName: emoji.baseName)),
                       ),
                     ),
                   ],

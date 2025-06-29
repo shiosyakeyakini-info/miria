@@ -29,15 +29,18 @@ class MutedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).mutedUsers)),
       body: switch (muted) {
-        AsyncLoading() =>
-          const Center(child: CircularProgressIndicator.adaptive()),
-        AsyncError(:final error, :final stackTrace) =>
-          Center(child: ErrorDetail(error: error, stackTrace: stackTrace)),
+        AsyncLoading() => const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
+        AsyncError(:final error, :final stackTrace) => Center(
+          child: ErrorDetail(error: error, stackTrace: stackTrace),
+        ),
         AsyncData(:final value) => ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              final muting = value[index];
-              return HookBuilder(builder: (context) {
+          itemCount: value.length,
+          itemBuilder: (context, index) {
+            final muting = value[index];
+            return HookBuilder(
+              builder: (context) {
                 final unmute = useAsync(
                   () async => ref
                       .read(mutedUsersNotifierProvider.notifier)
@@ -61,9 +64,10 @@ class MutedUsersPage extends HookConsumerWidget implements AutoRouteWrapper {
                     ),
                   ),
                 );
-              });
-            },
-          )
+              },
+            );
+          },
+        ),
       },
     );
   }

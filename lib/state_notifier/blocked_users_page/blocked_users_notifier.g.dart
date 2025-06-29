@@ -11,19 +11,22 @@ String _$blockedUsersNotifierHash() =>
 
 /// See also [BlockedUsersNotifier].
 @ProviderFor(BlockedUsersNotifier)
-final blockedUsersNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    BlockedUsersNotifier, List<Blocking>>.internal(
-  BlockedUsersNotifier.new,
-  name: r'blockedUsersNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$blockedUsersNotifierHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+final blockedUsersNotifierProvider =
+    AutoDisposeAsyncNotifierProvider<
+      BlockedUsersNotifier,
+      List<Blocking>
+    >.internal(
+      BlockedUsersNotifier.new,
+      name: r'blockedUsersNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$blockedUsersNotifierHash,
+      dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+      allTransitiveDependencies: <ProviderOrFamily>{
+        misskeyPostContextProvider,
+        ...?misskeyPostContextProvider.allTransitiveDependencies,
+      },
+    );
 
 typedef _$BlockedUsersNotifier = AutoDisposeAsyncNotifier<List<Blocking>>;
 // ignore_for_file: type=lint

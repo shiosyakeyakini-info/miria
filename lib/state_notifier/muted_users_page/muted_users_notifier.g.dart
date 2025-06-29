@@ -13,17 +13,17 @@ String _$mutedUsersNotifierHash() =>
 @ProviderFor(MutedUsersNotifier)
 final mutedUsersNotifierProvider =
     AutoDisposeAsyncNotifierProvider<MutedUsersNotifier, List<Muting>>.internal(
-  MutedUsersNotifier.new,
-  name: r'mutedUsersNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$mutedUsersNotifierHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+      MutedUsersNotifier.new,
+      name: r'mutedUsersNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$mutedUsersNotifierHash,
+      dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
+      allTransitiveDependencies: <ProviderOrFamily>{
+        misskeyPostContextProvider,
+        ...?misskeyPostContextProvider.allTransitiveDependencies,
+      },
+    );
 
 typedef _$MutedUsersNotifier = AutoDisposeAsyncNotifier<List<Muting>>;
 // ignore_for_file: type=lint

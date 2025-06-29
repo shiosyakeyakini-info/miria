@@ -26,12 +26,12 @@ class LocalTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.localTimeline;
+  Channel get channel => Channel.localTimeline();
 
   @override
   Map<String, dynamic> get parameters => {
-        "withRenotes": tabSetting.renoteDisplay,
-        "withReplies": tabSetting.isIncludeReplies,
-        "withFiles": tabSetting.isMediaOnly,
-      };
+    "withRenotes": tabSetting.renoteDisplay,
+    "withReplies": tabSetting.isIncludeReplies,
+    "withFiles": tabSetting.isMediaOnly,
+  };
 }

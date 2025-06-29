@@ -22,8 +22,9 @@ class MutedUsersNotifier extends _$MutedUsersNotifier {
           .read(misskeyPostContextProvider)
           .mute
           .delete(MuteDeleteRequest(userId: userId));
-      state = AsyncValue.data(
-          [...?state.valueOrNull?.where((e) => e.muteeId != userId)]);
+      state = AsyncValue.data([
+        ...?state.valueOrNull?.where((e) => e.muteeId != userId),
+      ]);
     });
   }
 }
