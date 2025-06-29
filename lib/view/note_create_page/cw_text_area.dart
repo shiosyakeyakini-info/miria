@@ -3,7 +3,6 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/state_notifier/note_create_page/note_create_state_notifier.dart";
-import "package:miria/view/common/note_create/input_completation.dart";
 import "package:miria/view/note_create_page/note_create_page.dart";
 import "package:miria/view/themes/app_theme.dart";
 
@@ -58,10 +57,6 @@ class CwTextArea extends HookConsumerWidget {
                 hintText: S.of(context).contentWarning,
                 contentPadding: const EdgeInsets.all(5),
               ),
-            ),
-            InputComplement(
-              controller: cwController,
-              focusNode: cwFocusProvider,
             ),
           ],
         ),
