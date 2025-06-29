@@ -95,6 +95,7 @@ class BasicKeyboard extends StatelessWidget {
         CustomKeyboardButton(
           keyboard: "```\n",
           afterInsert: "\n```",
+          displayText: "```",
           controller: controller,
           focusNode: focusNode,
         ),
