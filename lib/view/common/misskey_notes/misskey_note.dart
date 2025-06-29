@@ -735,6 +735,11 @@ class MisskeyNote extends HookConsumerWidget {
                                     emojiRepositoryProvider(account),
                                   ),
                                   emojiInfo: displayNote.reactionEmojis,
+                                  host: displayNote.user.host,
+                                  accountSettingsRepository: ref.read(
+                                    accountSettingsRepositoryProvider,
+                                  ),
+                                  account: account,
                                 ),
                                 reactionCount: reaction.element.value,
                                 myReaction: displayNote.myReaction,

@@ -208,6 +208,7 @@ class ReactionDeckPageState extends ConsumerState<ReactionDeckPage> {
                   UnicodeEmojiData(char: final char) => char,
                   CustomEmojiData(hostedName: final name) => name,
                   NotEmojiData() => null,
+                  MutedEmojiData() => null,
                 },
               )
               .nonNulls

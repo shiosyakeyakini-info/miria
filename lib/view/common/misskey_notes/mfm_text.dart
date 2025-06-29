@@ -100,14 +100,16 @@ class MfmText extends ConsumerWidget {
       mfmText: mfmText,
       mfmNode: mfmNode,
       emojiBuilder: (builderContext, emojiName, style) {
+        final account = ref.read(accountContextProvider).getAccount;
         final emojiData = MisskeyEmojiData.fromEmojiName(
           emojiName: ":$emojiName:",
-          repository: ref.read(
-            emojiRepositoryProvider(
-              ref.read(accountContextProvider).getAccount,
-            ),
-          ),
+          repository: ref.read(emojiRepositoryProvider(account)),
           emojiInfo: emoji,
+          host: host,
+          accountSettingsRepository: ref.read(
+            accountSettingsRepositoryProvider,
+          ),
+          account: account,
         );
         return DefaultTextStyle(
           style: style ?? DefaultTextStyle.of(builderContext).style,

@@ -60,46 +60,6 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
     );
   }
 
-  /// リアクションがミュートされているかチェックする
-  bool isReactionMuted(MisskeyEmojiData emojiData) {
-    final mutedReactions = ref
-        .read(accountSettingsRepositoryProvider)
-        .fromAccount(ref.read(accountContextProvider).getAccount)
-        .mutedReactions;
-
-    switch (emojiData) {
-      case CustomEmojiData():
-        // 特定の絵文字ミュート（:emoji_name: または :emoji_name@host:）
-        if (mutedReactions.contains(emojiData.hostedName)) {
-          return true;
-        }
-
-        // ローカル絵文字の場合、ベース名でのミュートもチェック（:emoji_name:）
-        if (emojiData.isCurrentServer) {
-          final baseName = ":${emojiData.baseName}:";
-          if (mutedReactions.contains(baseName)) {
-            return true;
-          }
-        }
-
-        // ホスト単位のミュート（@host形式）でリモート絵文字をチェック
-        if (!emojiData.isCurrentServer) {
-          final host = emojiData.hostedName
-              .replaceAll(RegExp(r"^\:(.+?)@"), "")
-              .replaceAll(":", "");
-          if (mutedReactions.contains("@$host")) {
-            return true;
-          }
-        }
-        return false;
-      case UnicodeEmojiData():
-        // Unicode絵文字のミュートチェック
-        return mutedReactions.contains(emojiData.char);
-      case NotEmojiData():
-        return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
@@ -117,17 +77,15 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
 
     final emojiData = widget.emojiData;
 
-    // ミュートされているリアクションの場合はエラーアイコンを表示
-    if (isReactionMuted(emojiData)) {
-      cachedImage = SvgPicture.asset(
-        "assets/images/miria_error.svg",
-        height: scopedFontSize,
-        width: scopedFontSize,
-      );
-      return cachedImage!;
-    }
-
     switch (emojiData) {
+      case MutedEmojiData():
+        // ミュートされている絵文字の場合はエラーアイコンを表示
+        cachedImage = SvgPicture.asset(
+          "assets/images/miria_error.svg",
+          height: scopedFontSize,
+          width: scopedFontSize,
+        );
+        return cachedImage!;
       case CustomEmojiData():
         cachedImage = ConditionalTooltip(
           isAttachTooltip: widget.isAttachTooltip,

@@ -97,6 +97,8 @@ class ReactionButton extends HookConsumerWidget {
           reactionString = ":${emojiData.baseName}:";
         case NotEmojiData():
           return;
+        case MutedEmojiData():
+          return;
       }
       await ref.read(dialogStateNotifierProvider.notifier).guard(() async {
         final notesRepository = ref.read(notesWithProvider);
