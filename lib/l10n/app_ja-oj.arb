@@ -119,7 +119,9 @@
     "invitedReversi": "{users}から招待されているようですわ",
     "nonInvitedReversi": "招待されていないようですわね…",
 
-    "nothingHere": "ここには何もありませんわ"
+    "nothingHere": "ここには何もありませんわ",
+    
+    "cacheManualUpdateCompleted": "情報の取得が完了しましたわ"
 
 
 
