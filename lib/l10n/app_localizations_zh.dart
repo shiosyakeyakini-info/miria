@@ -1557,6 +1557,24 @@ class SZh extends S {
   String get bulkAddReactionsDescription3 => '将复制的内容粘贴到下面的文本框中';
 
   @override
+  String get bulkAddMutedReactions => 'ミュート設定をインポート';
+
+  @override
+  String get bulkAddMutedReactionsDescription1 =>
+      'お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription2 =>
+      '同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription3 =>
+      'コピーしたものを下のテキストボックスに貼り付けてください';
+
+  @override
+  String get importMutedReactions => 'ミュート設定をインポート';
+
+  @override
   String get pasteHere => '粘贴在这里';
 
   @override

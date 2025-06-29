@@ -2652,6 +2652,36 @@ abstract class S {
   /// **'コピーしたものを下のテキストボックスに貼り付けてください'**
   String get bulkAddReactionsDescription3;
 
+  /// No description provided for @bulkAddMutedReactions.
+  ///
+  /// In ja, this message translates to:
+  /// **'ミュート設定をインポート'**
+  String get bulkAddMutedReactions;
+
+  /// No description provided for @bulkAddMutedReactionsDescription1.
+  ///
+  /// In ja, this message translates to:
+  /// **'お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください'**
+  String get bulkAddMutedReactionsDescription1;
+
+  /// No description provided for @bulkAddMutedReactionsDescription2.
+  ///
+  /// In ja, this message translates to:
+  /// **'同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください'**
+  String get bulkAddMutedReactionsDescription2;
+
+  /// No description provided for @bulkAddMutedReactionsDescription3.
+  ///
+  /// In ja, this message translates to:
+  /// **'コピーしたものを下のテキストボックスに貼り付けてください'**
+  String get bulkAddMutedReactionsDescription3;
+
+  /// No description provided for @importMutedReactions.
+  ///
+  /// In ja, this message translates to:
+  /// **'ミュート設定をインポート'**
+  String get importMutedReactions;
+
   /// No description provided for @pasteHere.
   ///
   /// In ja, this message translates to:

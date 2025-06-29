@@ -1564,6 +1564,24 @@ class SJa extends S {
   String get bulkAddReactionsDescription3 => 'コピーしたものを下のテキストボックスに貼り付けてください';
 
   @override
+  String get bulkAddMutedReactions => 'ミュート設定をインポート';
+
+  @override
+  String get bulkAddMutedReactionsDescription1 =>
+      'お使いのブラウザでミュート設定をコピーしたいアカウントにログインしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription2 =>
+      '同じブラウザで以下のURLにアクセスしてミュート設定の内容をコピーしてください';
+
+  @override
+  String get bulkAddMutedReactionsDescription3 =>
+      'コピーしたものを下のテキストボックスに貼り付けてください';
+
+  @override
+  String get importMutedReactions => 'ミュート設定をインポート';
+
+  @override
   String get pasteHere => 'ここに貼り付け';
 
   @override
