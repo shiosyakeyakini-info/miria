@@ -43,7 +43,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [misskeyProvider.overrideWith((_) => misskey)],
+          overrides: [misskeyProvider.overrideWith((_, __) => misskey)],
           child: DefaultRootWidget(
             initialRoute: MutedUsersRoute(account: TestData.account),
           ),

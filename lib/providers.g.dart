@@ -44,7 +44,7 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$dioHash() => r'73be4093313fcb2b7055df1752404e24a2b1f68c';
+String _$dioHash() => r'26309262f0000d1b9dc277bb27f212a83dea1b6b';
 
 @ProviderFor(fileSystem)
 const fileSystemProvider = FileSystemProvider._();

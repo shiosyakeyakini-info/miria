@@ -23,7 +23,7 @@ class MutedUsersNotifier extends _$MutedUsersNotifier {
           .mute
           .delete(MuteDeleteRequest(userId: userId));
       state = AsyncValue.data([
-        ...?state.valueOrNull?.where((e) => e.muteeId != userId),
+        ...?state.value?.where((e) => e.muteeId != userId),
       ]);
     });
   }
