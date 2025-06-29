@@ -16,6 +16,7 @@ abstract class NoteStatus with _$NoteStatus {
     required bool isLongVisibleInitialized,
     required bool isIncludeMuteWord,
     required bool isMuteOpened,
+    required bool isPollResultOpened,
   }) = _NoteStatus;
 }
 
@@ -131,6 +132,7 @@ class NoteRepository extends ChangeNotifier {
               softMuteWordContents.any((e) => e.every(isMuteTarget)) ||
           softMuteWordRegExps.any(isMuteTarget),
       isMuteOpened: false,
+      isPollResultOpened: _getInitialPollResultState(note),
     );
     final renote = note.renote;
     final reply = note.reply;
@@ -168,5 +170,54 @@ class NoteRepository extends ChangeNotifier {
     Future(() {
       notifyListeners();
     });
+  }
+
+  /// 投票結果表示状態の初期値を決定
+  /// 元のロジック: !isAnyVotable(ref) と同等の判定
+  bool _getInitialPollResultState(Note note) {
+    final poll = note.poll;
+    if (poll == null) return false;
+    
+    // 期限切れの場合は表示
+    final expiresAt = poll.expiresAt;
+    if (expiresAt != null && expiresAt.isBefore(DateTime.now())) {
+      return true;
+    }
+    
+    // 既に投票済みの場合は表示
+    if (poll.choices.any((choice) => choice.isVoted)) {
+      return true;
+    }
+    
+    // 投票可能な場合は非表示（元のロジック通り）
+    // isAnyVotableがtrueの場合、!isAnyVotableはfalseになる
+    return false;
+  }
+
+  /// 投票結果表示状態を切り替え
+  void togglePollResult(String noteId) {
+    final status = _noteStatuses[noteId];
+    if (status != null) {
+      _noteStatuses[noteId] = status.copyWith(
+        isPollResultOpened: !status.isPollResultOpened,
+      );
+      notifyListeners();
+    }
+  }
+
+  /// 投票結果表示状態を設定
+  void setPollResultOpened(String noteId, bool isOpened) {
+    final status = _noteStatuses[noteId];
+    if (status != null) {
+      _noteStatuses[noteId] = status.copyWith(
+        isPollResultOpened: isOpened,
+      );
+      notifyListeners();
+    }
+  }
+
+  /// 投票結果表示状態を取得
+  bool getPollResultOpened(String noteId) {
+    return _noteStatuses[noteId]?.isPollResultOpened ?? false;
   }
 }

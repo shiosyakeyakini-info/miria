@@ -1169,6 +1169,28 @@ class MockNoteRepository extends _i1.Mock implements _i26.NoteRepository {
   );
 
   @override
+  void togglePollResult(String? noteId) => super.noSuchMethod(
+    Invocation.method(#togglePollResult, [noteId]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setPollResultOpened(String? noteId, bool? isOpened) =>
+      super.noSuchMethod(
+        Invocation.method(#setPollResultOpened, [noteId, isOpened]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool getPollResultOpened(String? noteId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getPollResultOpened, [noteId]),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
   void addListener(_i16.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#addListener, [listener]),
     returnValueForMissingStub: null,
