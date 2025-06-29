@@ -67,6 +67,7 @@ import "package:miria/view/several_account_settings_page/reaction_deck_page/reac
 import "package:miria/view/several_account_settings_page/several_account_general_settings_page/several_account_general_settings_page.dart";
 import "package:miria/view/several_account_settings_page/several_account_settings_page.dart";
 import "package:miria/view/several_account_settings_page/word_mute_page/word_mute_page.dart";
+import "package:miria/view/profile_edit_page/profile_edit_page.dart";
 import "package:miria/view/share_extension_page/share_extension_page.dart";
 import "package:miria/view/sharing_account_select_page/account_select_page.dart";
 import "package:miria/view/splash_page/splash_page.dart";
@@ -126,6 +127,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: AccountListRoute.page),
     AutoRoute(page: AppInfoRoute.page),
     AutoRoute(page: SeveralAccountSettingsRoute.page),
+    AutoRoute(page: ProfileEditRoute.page),
     AutoRoute(page: ReactionDeckRoute.page),
     AutoRoute(page: WordMuteRoute.page),
     AutoRoute(page: InstanceMuteRoute.page),

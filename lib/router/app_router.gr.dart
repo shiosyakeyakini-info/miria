@@ -476,6 +476,17 @@ abstract class _$AppRouter extends RootStackRouter {
         )),
       );
     },
+    ProfileEditRoute.name: (routeData) {
+      final args = routeData.argsAs<ProfileEditRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(
+            child: ProfileEditPage(
+          account: args.account,
+          key: args.key,
+        )),
+      );
+    },
     ReactionDeckRoute.name: (routeData) {
       final args = routeData.argsAs<ReactionDeckRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -2394,6 +2405,44 @@ class PhotoEditRouteArgs {
   @override
   String toString() {
     return 'PhotoEditRouteArgs{accountContext: $accountContext, file: $file, onSubmit: $onSubmit, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ProfileEditPage]
+class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
+  ProfileEditRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ProfileEditRoute.name,
+          args: ProfileEditRouteArgs(
+            account: account,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileEditRoute';
+
+  static const PageInfo<ProfileEditRouteArgs> page =
+      PageInfo<ProfileEditRouteArgs>(name);
+}
+
+class ProfileEditRouteArgs {
+  const ProfileEditRouteArgs({
+    required this.account,
+    this.key,
+  });
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ProfileEditRouteArgs{account: $account, key: $key}';
   }
 }
 

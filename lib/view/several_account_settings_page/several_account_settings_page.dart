@@ -31,6 +31,13 @@ class SeveralAccountSettingsPage extends StatelessWidget {
           ),
           ListTile(
             onTap: () async =>
+                await context.pushRoute(ProfileEditRoute(account: account)),
+            title: const Text('Edit Profile'),
+            leading: const Icon(Icons.edit),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () async =>
                 await context.pushRoute(ReactionDeckRoute(account: account)),
             title: Text(S.of(context).reactionDeck),
             leading: const Icon(Icons.favorite),
