@@ -142,6 +142,7 @@ final importExportRepositoryProvider = ChangeNotifierProvider(
 CacheManager cacheManager(Ref ref) => CacheManager(
   Config(
     "libCachedImageData",
+    maxNrOfCacheObjects: 10000,
     fileSystem: fs.IOFileSystem("libCachedImageData"),
   ),
 );
