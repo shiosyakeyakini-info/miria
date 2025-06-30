@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,220 +10,154 @@ part of 'unicode_emoji.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-UnicodeEmoji _$UnicodeEmojiFromJson(Map<String, dynamic> json) {
-  return _UnicodeEmoji.fromJson(json);
-}
 
 /// @nodoc
 mixin _$UnicodeEmoji {
-  String get category => throw _privateConstructorUsedError;
-  String get char => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  List<String> get keywords => throw _privateConstructorUsedError;
+
+ String get category; String get char; String get name; List<String> get keywords;
+/// Create a copy of UnicodeEmoji
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UnicodeEmojiCopyWith<UnicodeEmoji> get copyWith => _$UnicodeEmojiCopyWithImpl<UnicodeEmoji>(this as UnicodeEmoji, _$identity);
 
   /// Serializes this UnicodeEmoji to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of UnicodeEmoji
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $UnicodeEmojiCopyWith<UnicodeEmoji> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UnicodeEmoji&&(identical(other.category, category) || other.category == category)&&(identical(other.char, char) || other.char == char)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.keywords, keywords));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,category,char,name,const DeepCollectionEquality().hash(keywords));
+
+@override
+String toString() {
+  return 'UnicodeEmoji(category: $category, char: $char, name: $name, keywords: $keywords)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $UnicodeEmojiCopyWith<$Res> {
-  factory $UnicodeEmojiCopyWith(
-          UnicodeEmoji value, $Res Function(UnicodeEmoji) then) =
-      _$UnicodeEmojiCopyWithImpl<$Res, UnicodeEmoji>;
-  @useResult
-  $Res call({String category, String char, String name, List<String> keywords});
-}
+abstract mixin class $UnicodeEmojiCopyWith<$Res>  {
+  factory $UnicodeEmojiCopyWith(UnicodeEmoji value, $Res Function(UnicodeEmoji) _then) = _$UnicodeEmojiCopyWithImpl;
+@useResult
+$Res call({
+ String category, String char, String name, List<String> keywords
+});
 
+
+
+
+}
 /// @nodoc
-class _$UnicodeEmojiCopyWithImpl<$Res, $Val extends UnicodeEmoji>
+class _$UnicodeEmojiCopyWithImpl<$Res>
     implements $UnicodeEmojiCopyWith<$Res> {
-  _$UnicodeEmojiCopyWithImpl(this._value, this._then);
+  _$UnicodeEmojiCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final UnicodeEmoji _self;
+  final $Res Function(UnicodeEmoji) _then;
 
-  /// Create a copy of UnicodeEmoji
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? category = null,
-    Object? char = null,
-    Object? name = null,
-    Object? keywords = null,
-  }) {
-    return _then(_value.copyWith(
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      char: null == char
-          ? _value.char
-          : char // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      keywords: null == keywords
-          ? _value.keywords
-          : keywords // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ) as $Val);
-  }
+/// Create a copy of UnicodeEmoji
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? category = null,Object? char = null,Object? name = null,Object? keywords = null,}) {
+  return _then(_self.copyWith(
+category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String,char: null == char ? _self.char : char // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,keywords: null == keywords ? _self.keywords : keywords // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
 }
 
-/// @nodoc
-abstract class _$$UnicodeEmojiImplCopyWith<$Res>
-    implements $UnicodeEmojiCopyWith<$Res> {
-  factory _$$UnicodeEmojiImplCopyWith(
-          _$UnicodeEmojiImpl value, $Res Function(_$UnicodeEmojiImpl) then) =
-      __$$UnicodeEmojiImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String category, String char, String name, List<String> keywords});
 }
 
-/// @nodoc
-class __$$UnicodeEmojiImplCopyWithImpl<$Res>
-    extends _$UnicodeEmojiCopyWithImpl<$Res, _$UnicodeEmojiImpl>
-    implements _$$UnicodeEmojiImplCopyWith<$Res> {
-  __$$UnicodeEmojiImplCopyWithImpl(
-      _$UnicodeEmojiImpl _value, $Res Function(_$UnicodeEmojiImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of UnicodeEmoji
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? category = null,
-    Object? char = null,
-    Object? name = null,
-    Object? keywords = null,
-  }) {
-    return _then(_$UnicodeEmojiImpl(
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      char: null == char
-          ? _value.char
-          : char // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      keywords: null == keywords
-          ? _value._keywords
-          : keywords // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$UnicodeEmojiImpl implements _UnicodeEmoji {
-  const _$UnicodeEmojiImpl(
-      {required this.category,
-      required this.char,
-      required this.name,
-      required final List<String> keywords})
-      : _keywords = keywords;
 
-  factory _$UnicodeEmojiImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UnicodeEmojiImplFromJson(json);
+class _UnicodeEmoji implements UnicodeEmoji {
+  const _UnicodeEmoji({required this.category, required this.char, required this.name, required final  List<String> keywords}): _keywords = keywords;
+  factory _UnicodeEmoji.fromJson(Map<String, dynamic> json) => _$UnicodeEmojiFromJson(json);
 
-  @override
-  final String category;
-  @override
-  final String char;
-  @override
-  final String name;
-  final List<String> _keywords;
-  @override
-  List<String> get keywords {
-    if (_keywords is EqualUnmodifiableListView) return _keywords;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_keywords);
-  }
-
-  @override
-  String toString() {
-    return 'UnicodeEmoji(category: $category, char: $char, name: $name, keywords: $keywords)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UnicodeEmojiImpl &&
-            (identical(other.category, category) ||
-                other.category == category) &&
-            (identical(other.char, char) || other.char == char) &&
-            (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality().equals(other._keywords, _keywords));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, category, char, name,
-      const DeepCollectionEquality().hash(_keywords));
-
-  /// Create a copy of UnicodeEmoji
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$UnicodeEmojiImplCopyWith<_$UnicodeEmojiImpl> get copyWith =>
-      __$$UnicodeEmojiImplCopyWithImpl<_$UnicodeEmojiImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$UnicodeEmojiImplToJson(
-      this,
-    );
-  }
+@override final  String category;
+@override final  String char;
+@override final  String name;
+ final  List<String> _keywords;
+@override List<String> get keywords {
+  if (_keywords is EqualUnmodifiableListView) return _keywords;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_keywords);
 }
 
-abstract class _UnicodeEmoji implements UnicodeEmoji {
-  const factory _UnicodeEmoji(
-      {required final String category,
-      required final String char,
-      required final String name,
-      required final List<String> keywords}) = _$UnicodeEmojiImpl;
 
-  factory _UnicodeEmoji.fromJson(Map<String, dynamic> json) =
-      _$UnicodeEmojiImpl.fromJson;
+/// Create a copy of UnicodeEmoji
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UnicodeEmojiCopyWith<_UnicodeEmoji> get copyWith => __$UnicodeEmojiCopyWithImpl<_UnicodeEmoji>(this, _$identity);
 
-  @override
-  String get category;
-  @override
-  String get char;
-  @override
-  String get name;
-  @override
-  List<String> get keywords;
-
-  /// Create a copy of UnicodeEmoji
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UnicodeEmojiImplCopyWith<_$UnicodeEmojiImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+Map<String, dynamic> toJson() {
+  return _$UnicodeEmojiToJson(this, );
 }
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UnicodeEmoji&&(identical(other.category, category) || other.category == category)&&(identical(other.char, char) || other.char == char)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other._keywords, _keywords));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,category,char,name,const DeepCollectionEquality().hash(_keywords));
+
+@override
+String toString() {
+  return 'UnicodeEmoji(category: $category, char: $char, name: $name, keywords: $keywords)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UnicodeEmojiCopyWith<$Res> implements $UnicodeEmojiCopyWith<$Res> {
+  factory _$UnicodeEmojiCopyWith(_UnicodeEmoji value, $Res Function(_UnicodeEmoji) _then) = __$UnicodeEmojiCopyWithImpl;
+@override @useResult
+$Res call({
+ String category, String char, String name, List<String> keywords
+});
+
+
+
+
+}
+/// @nodoc
+class __$UnicodeEmojiCopyWithImpl<$Res>
+    implements _$UnicodeEmojiCopyWith<$Res> {
+  __$UnicodeEmojiCopyWithImpl(this._self, this._then);
+
+  final _UnicodeEmoji _self;
+  final $Res Function(_UnicodeEmoji) _then;
+
+/// Create a copy of UnicodeEmoji
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? category = null,Object? char = null,Object? name = null,Object? keywords = null,}) {
+  return _then(_UnicodeEmoji(
+category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String,char: null == char ? _self.char : char // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,keywords: null == keywords ? _self._keywords : keywords // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+
+}
+
+// dart format on

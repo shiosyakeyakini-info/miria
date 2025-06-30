@@ -10,6 +10,7 @@ import "package:miria/model/account_settings.dart";
 import "package:miria/model/acct.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/shared_preference_controller.dart";
+import "package:miria/util/server_utils.dart";
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preference_app_group/shared_preference_app_group.dart";
@@ -53,14 +54,34 @@ class AlreadyLoggedInException implements ValidateMisskeyException {
 
 @riverpod
 class AccountRepository extends _$AccountRepository {
-  late final SharedPreferenceController sharedPreferenceController =
-      ref.read(sharedPrefenceControllerProvider);
+  late final SharedPreferenceController sharedPreferenceController = ref.read(
+    sharedPrefenceControllerProvider,
+  );
 
   AccountRepository();
 
   final _validatedAccts = <Acct>{};
   final _validateMetaAccts = <Acct>{};
   String _sessionId = "";
+
+  String _buildHttpMiAuthUrl(Uri uri, String sessionId) {
+    final baseUrl =
+        "${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}";
+    final permissions = Permission.values.map((p) => p.value).join(",");
+    return "$baseUrl/miauth/$sessionId?name=Miria&permission=$permissions";
+  }
+
+  Future<String> _checkHttpMiAuthToken(Uri uri, String sessionId) async {
+    final checkUrl =
+        "${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}/api/miauth/$sessionId/check";
+    final response = await ref.read(dioProvider).post(checkUrl);
+    final data = response.data as Map<String, dynamic>;
+    if (data["ok"] == true) {
+      return data["token"] as String;
+    } else {
+      throw Exception("MiAuth authentication failed");
+    }
+  }
 
   @override
   List<Account> build() {
@@ -74,8 +95,9 @@ class AccountRepository extends _$AccountRepository {
       );
     }
 
-    final storedData =
-        await sharedPreferenceController.getStringSecure("accounts");
+    final storedData = await sharedPreferenceController.getStringSecure(
+      "accounts",
+    );
     if (storedData == null) return;
 
     try {
@@ -105,8 +127,9 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> updateI(Account account) async {
-    final setting =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    final setting = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(account);
     _validatedAccts.add(account.acct);
 
     final i = await ref.read(misskeyProvider(account)).i.i();
@@ -124,8 +147,9 @@ class AccountRepository extends _$AccountRepository {
   }
 
   Future<void> updateMeta(Account account) async {
-    final setting =
-        ref.read(accountSettingsRepositoryProvider).fromAccount(account);
+    final setting = ref
+        .read(accountSettingsRepositoryProvider)
+        .fromAccount(account);
     _validateMetaAccts.add(account.acct);
 
     final meta = await ref.read(misskeyProvider(account)).meta();
@@ -199,9 +223,7 @@ class AccountRepository extends _$AccountRepository {
 
   Future<void> removeUnreadAnnouncement(Account account) async {
     final index = state.indexOf(account);
-    final i = state[index].i.copyWith(
-      unreadAnnouncements: [],
-    );
+    final i = state[index].i.copyWith(unreadAnnouncements: []);
 
     final accounts = List.of(state);
     accounts[index] = account.copyWith(i: i);
@@ -238,20 +260,29 @@ class AccountRepository extends _$AccountRepository {
     //先にnodeInfoを取得する
     final Response nodeInfo;
 
-    final Uri uri;
+    final Uri serverUri;
     try {
-      uri = Uri(
-        scheme: "https",
-        host: server,
-        pathSegments: [".well-known", "nodeinfo"],
-      );
+      serverUri = serverToUri(server);
     } catch (e) {
       throw InvalidServerException(server);
     }
 
+    final uri = Uri(
+      scheme: serverUri.scheme,
+      host: serverUri.host,
+      port: serverUri.hasPort ? serverUri.port : null,
+      pathSegments: [".well-known", "nodeinfo"],
+    );
+
     try {
       nodeInfo = await ref.read(dioProvider).getUri(uri);
     } catch (e) {
+      // HandshakeExceptionの場合、HTTPを使用するよう促す
+      if (e.toString().contains("HandshakeException") &&
+          !server.startsWith("http://") &&
+          !server.startsWith("https://")) {
+        throw InvalidServerException(server);
+      }
       throw ServerIsNotMisskeyException(server);
     }
     final nodeInfoHref = nodeInfo.data["links"][0]["href"];
@@ -267,10 +298,26 @@ class AccountRepository extends _$AccountRepository {
     final version = nodeInfoResult["software"]["version"];
 
     try {
-      final meta = await ref.read(misskeyWithoutAccountProvider(server)).meta();
+      final serverUrl =
+          "${serverUri.scheme}://${serverUri.host}${serverUri.hasPort ? ':${serverUri.port}' : ''}";
+      final hostWithPort = serverUri.hasPort
+          ? "${serverUri.host}:${serverUri.port}"
+          : serverUri.host;
+      final meta = await ref
+          .read(misskeyWithoutAccountProvider(serverUrl))
+          .meta();
 
       final endpoints = await ref
-          .read(misskeyProvider(Account.demoAccount(server, meta)))
+          .read(
+            misskeyProvider(
+              Account.demoAccount(
+                serverUri.host,
+                meta,
+                scheme: serverUri.scheme == "http" ? "http" : null,
+                port: serverUri.hasPort ? serverUri.port : null,
+              ),
+            ),
+          )
           .endpoints();
       if (!endpoints.contains("emojis")) {
         throw SoftwareNotCompatibleException(
@@ -291,47 +338,107 @@ class AccountRepository extends _$AccountRepository {
     String userId,
     String password,
   ) async {
-    final token =
-        await MisskeyServer().loginAsPassword(server, userId, password);
-    final i = await Misskey(token: token, host: server).i.i();
-    final meta = await Misskey(token: token, host: server).meta();
-    final account =
-        Account(host: server, token: token, userId: userId, i: i, meta: meta);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
+    final token = await MisskeyServer().loginAsPassword(
+      hostWithPort,
+      userId,
+      password,
+    );
+    final i = await Misskey(token: token, host: hostWithPort).i.i();
+    final meta = await Misskey(token: token, host: hostWithPort).meta();
+    final account = Account(
+      host: uri.host,
+      token: token,
+      userId: userId,
+      i: i,
+      meta: meta,
+      scheme: uri.scheme == "http" ? "http" : null,
+      port: uri.hasPort ? uri.port : null,
+    );
     await _addAccount(account);
   }
 
   Future<void> loginAsToken(String server, String token) async {
     await _validateMisskey(server);
-    final misskey = Misskey(token: token, host: server);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
+    final apiUrl = uri.scheme == "http" ? "http://$hostWithPort/api/" : null;
+    final streamingUrl = uri.scheme == "http"
+        ? "ws://$hostWithPort/streaming/"
+        : null;
+    final misskey = Misskey(
+      token: token,
+      host: hostWithPort,
+      apiUrl: apiUrl,
+      streamingUrl: streamingUrl,
+    );
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
-      Account(host: server, userId: i.username, token: token, i: i, meta: meta),
+      Account(
+        host: uri.host,
+        userId: i.username,
+        token: token,
+        i: i,
+        meta: meta,
+        scheme: uri.scheme == "http" ? "http" : null,
+        port: uri.hasPort ? uri.port : null,
+      ),
     );
   }
 
   Future<void> openMiAuth(String server) async {
     await _validateMisskey(server);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
 
     _sessionId = const Uuid().v4();
+
+    // MiAuth URLを構築
+    final miAuthUrl = uri.scheme == "http"
+        ? _buildHttpMiAuthUrl(uri, _sessionId)
+        : MisskeyServer().buildMiAuthURL(
+            uri.host,
+            _sessionId,
+            name: "Miria",
+            permission: Permission.values,
+          );
+
     await launchUrl(
-      MisskeyServer().buildMiAuthURL(
-        server,
-        _sessionId,
-        name: "Miria",
-        permission: Permission.values,
-      ),
+      Uri.parse(miAuthUrl.toString()),
       mode: LaunchMode.externalApplication,
     );
   }
 
   Future<void> validateMiAuth(String server) async {
-    final token = await MisskeyServer().checkMiAuthToken(server, _sessionId);
-    final misskey = Misskey(token: token, host: server);
+    final uri = serverToUri(server);
+    final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
+    final token = uri.scheme == "http"
+        ? await _checkHttpMiAuthToken(uri, _sessionId)
+        : await MisskeyServer().checkMiAuthToken(uri.host, _sessionId);
+    final apiUrl = uri.scheme == "http" ? "http://$hostWithPort/api/" : null;
+    final streamingUrl = uri.scheme == "http"
+        ? "ws://$hostWithPort/streaming/"
+        : null;
+    final misskey = Misskey(
+      token: token,
+      host: hostWithPort,
+      apiUrl: apiUrl,
+      streamingUrl: streamingUrl,
+    );
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
-      Account(host: server, userId: i.username, token: token, i: i, meta: meta),
+      Account(
+        host: uri.host,
+        userId: i.username,
+        token: token,
+        i: i,
+        meta: meta,
+        scheme: uri.scheme == "http" ? "http" : null,
+        port: uri.hasPort ? uri.port : null,
+      ),
     );
   }
 

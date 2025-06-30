@@ -1,4 +1,4 @@
-name: デプロイ(windows zip)
+name: デプロイ(windows)
 
 on:
   workflow_dispatch:
@@ -47,10 +47,7 @@ jobs:
           curl -o ${{ env.builddir }}\ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl
 
       - name: Compile .ISS to .EXE Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
-        with:
-          path: windows/innosetup.iss
-          options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}" /Qp
+        run: iscc windows/innosetup.iss /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}" /Qp
 
       - name: Rename .EXE Installer
         run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe

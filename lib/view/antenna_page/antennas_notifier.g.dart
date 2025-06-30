@@ -6,24 +6,57 @@ part of 'antennas_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$antennasNotifierHash() => r'0cecb08c54c64bfafc6cc235c2e1e86f3ec237d2';
-
-/// See also [AntennasNotifier].
 @ProviderFor(AntennasNotifier)
-final antennasNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<AntennasNotifier, List<Antenna>>.internal(
-  AntennasNotifier.new,
-  name: r'antennasNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$antennasNotifierHash,
-  dependencies: <ProviderOrFamily>[misskeyPostContextProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies
-  },
-);
+const antennasNotifierProvider = AntennasNotifierProvider._();
 
-typedef _$AntennasNotifier = AutoDisposeAsyncNotifier<List<Antenna>>;
+final class AntennasNotifierProvider
+    extends $AsyncNotifierProvider<AntennasNotifier, List<Antenna>> {
+  const AntennasNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'antennasNotifierProvider',
+        isAutoDispose: true,
+        dependencies: const <ProviderOrFamily>[misskeyPostContextProvider],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          AntennasNotifierProvider.$allTransitiveDependencies0,
+          AntennasNotifierProvider.$allTransitiveDependencies1,
+        ],
+      );
+
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+
+  @override
+  String debugGetCreateSourceHash() => _$antennasNotifierHash();
+
+  @$internal
+  @override
+  AntennasNotifier create() => AntennasNotifier();
+}
+
+String _$antennasNotifierHash() => r'4881a49f432581ebccd22e4988c71d30f11d7dbd';
+
+abstract class _$AntennasNotifier extends $AsyncNotifier<List<Antenna>> {
+  FutureOr<List<Antenna>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<List<Antenna>>, List<Antenna>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Antenna>>, List<Antenna>>,
+              AsyncValue<List<Antenna>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

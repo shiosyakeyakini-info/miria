@@ -323,9 +323,7 @@ class _TimelineListViewState extends State<TimelineListView> {
           defaultValue: null,
         ),
       )
-      ..add(
-        DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null),
-      )
+      ..add(DoubleProperty("itemExtent", widget.itemExtent, defaultValue: null))
       ..add(
         DoubleProperty("cacheExtent", widget.cacheExtent, defaultValue: null),
       );

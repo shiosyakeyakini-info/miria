@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:flutter_twemoji/flutter_twemoji.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/misskey_notes/network_image.dart";
 import "package:miria/view/themes/app_theme.dart";
-import "package:flutter_twemoji/flutter_twemoji.dart";
 
 class CustomEmoji extends ConsumerStatefulWidget {
   final MisskeyEmojiData emojiData;
@@ -49,8 +50,8 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
       host: emojiData.isCurrentServer
           ? ref.read(accountContextProvider).getAccount.host
           : emojiData.hostedName
-              .replaceAll(RegExp(r"^\:(.+?)@"), "")
-              .replaceAll(":", ""),
+                .replaceAll(RegExp(r"^\:(.+?)@"), "")
+                .replaceAll(":", ""),
       pathSegments: ["proxy", "image.webp"],
       queryParameters: {
         "url": Uri.encodeFull(emojiData.url.toString()),
@@ -62,10 +63,12 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
   @override
   Widget build(BuildContext context) {
     if (cachedImage != null) return cachedImage!;
-    final scopedFontSize = widget.size ??
+    final scopedFontSize =
+        widget.size ??
         (DefaultTextStyle.of(context).style.fontSize ?? 22) *
             widget.fontSizeRatio;
-    final style = widget.style ??
+    final style =
+        widget.style ??
         TextStyle(
           height: 1.0,
           fontSize: scopedFontSize,
@@ -73,7 +76,16 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
         );
 
     final emojiData = widget.emojiData;
+
     switch (emojiData) {
+      case MutedEmojiData():
+        // ミュートされている絵文字の場合はエラーアイコンを表示
+        cachedImage = SvgPicture.asset(
+          "assets/images/miria_error.svg",
+          height: scopedFontSize,
+          width: scopedFontSize,
+        );
+        return cachedImage!;
       case CustomEmojiData():
         cachedImage = ConditionalTooltip(
           isAttachTooltip: widget.isAttachTooltip,
@@ -84,25 +96,23 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             errorBuilder: (context, e, s) => NetworkImageView(
               url: resolveFallbackCustomEmojiUrl(emojiData).toString(),
               type: ImageType.customEmoji,
-              loadingBuilder: (context, widget, chunk) => SizedBox(
-                height: scopedFontSize,
-                width: scopedFontSize,
-              ),
+              loadingBuilder: (context, widget, chunk) =>
+                  SizedBox(height: scopedFontSize, width: scopedFontSize),
               height: scopedFontSize,
               errorBuilder: (context, e, s) =>
                   Text(emojiData.hostedName, style: style),
             ),
-            loadingBuilder: (context, widget, chunk) => SizedBox(
-              height: scopedFontSize,
-              width: scopedFontSize,
-            ),
+            loadingBuilder: (context, widget, chunk) =>
+                SizedBox(height: scopedFontSize, width: scopedFontSize),
             width: widget.forceSquare ? scopedFontSize : null,
             height: scopedFontSize,
           ),
         );
       case UnicodeEmojiData():
-        switch (
-            ref.read(generalSettingsRepositoryProvider).settings.emojiType) {
+        switch (ref
+            .read(generalSettingsRepositoryProvider)
+            .settings
+            .emojiType) {
           case EmojiType.system:
             cachedImage = FittedBox(
               fit: BoxFit.fitHeight,
@@ -123,10 +133,7 @@ class CustomEmojiState extends ConsumerState<CustomEmoji> {
             );
         }
       case NotEmojiData():
-        cachedImage = Text(
-          emojiData.name,
-          style: style,
-        );
+        cachedImage = Text(emojiData.name, style: style);
     }
     return cachedImage!;
   }
@@ -147,10 +154,7 @@ class ConditionalTooltip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isAttachTooltip) {
-      return Tooltip(
-        message: message,
-        child: child,
-      );
+      return Tooltip(message: message, child: child);
     } else {
       return child;
     }

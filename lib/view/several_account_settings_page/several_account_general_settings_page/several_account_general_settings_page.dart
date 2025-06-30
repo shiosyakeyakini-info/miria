@@ -1,11 +1,11 @@
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mfm/mfm.dart";
 import "package:miria/extensions/note_visibility_extension.dart";
 import "package:miria/extensions/reaction_acceptance_extension.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/providers.dart";
@@ -16,10 +16,7 @@ import "package:misskey_dart/misskey_dart.dart";
 class SeveralAccountGeneralSettingsPage extends ConsumerStatefulWidget {
   final Account account;
 
-  const SeveralAccountGeneralSettingsPage({
-    required this.account,
-    super.key,
-  });
+  const SeveralAccountGeneralSettingsPage({required this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -60,7 +57,9 @@ class SeveralAccountGeneralSettingsPageState
   }
 
   Future<void> save() async {
-    await ref.read(accountSettingsRepositoryProvider).save(
+    await ref
+        .read(accountSettingsRepositoryProvider)
+        .save(
           AccountSettings(
             userId: widget.account.userId,
             host: widget.account.host,
@@ -80,7 +79,9 @@ class SeveralAccountGeneralSettingsPageState
       child: Scaffold(
         appBar: AppBar(
           title: SimpleMfm(
-            S.of(context).accountGeneralSettings(
+            S
+                .of(context)
+                .accountGeneralSettings(
                   widget.account.i.name ?? widget.account.i.username,
                 ),
           ),
@@ -113,8 +114,9 @@ class SeveralAccountGeneralSettingsPageState
                             for (final noteVisibility in NoteVisibility.values)
                               DropdownMenuItem(
                                 value: noteVisibility,
-                                child:
-                                    Text(noteVisibility.displayName(context)),
+                                child: Text(
+                                  noteVisibility.displayName(context),
+                                ),
                               ),
                           ],
                           value: defaultNoteVisibility,
@@ -130,8 +132,9 @@ class SeveralAccountGeneralSettingsPageState
                         CheckboxListTile(
                           value: defaultIsLocalOnly,
                           title: Text(S.of(context).disableFederation),
-                          subtitle:
-                              Text(S.of(context).disableFederationDescription),
+                          subtitle: Text(
+                            S.of(context).disableFederationDescription,
+                          ),
                           onChanged: (value) {
                             setState(() {
                               defaultIsLocalOnly = !defaultIsLocalOnly;
@@ -166,12 +169,10 @@ class SeveralAccountGeneralSettingsPageState
                           value: forceShowAd,
                           title: Text(S.of(context).forceShowAds),
                           enabled: widget.account.i.policies.canHideAds,
-                          onChanged: (value) => setState(
-                            () {
-                              forceShowAd = value ?? false;
-                              save();
-                            },
-                          ),
+                          onChanged: (value) => setState(() {
+                            forceShowAd = value ?? false;
+                            save();
+                          }),
                         ),
                       ],
                     ),

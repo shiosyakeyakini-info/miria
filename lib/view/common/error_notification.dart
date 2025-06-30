@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/view/common/error_detail.dart";
 
 class ErrorNotification extends StatelessWidget {
@@ -31,10 +31,7 @@ class ErrorNotification extends StatelessWidget {
                 S.of(context).thrownError,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              ErrorDetail(
-                error: error,
-                stackTrace: stackTrace,
-              ),
+              ErrorDetail(error: error, stackTrace: stackTrace),
             ],
           ),
         ),

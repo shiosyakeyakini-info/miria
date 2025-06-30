@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,268 +10,160 @@ part of 'misskey_theme.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-MisskeyTheme _$MisskeyThemeFromJson(Map<String, dynamic> json) {
-  return _MisskeyTheme.fromJson(json);
-}
 
 /// @nodoc
 mixin _$MisskeyTheme {
-  String get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  Map<String, String> get props => throw _privateConstructorUsedError;
-  String? get author => throw _privateConstructorUsedError;
-  String? get desc => throw _privateConstructorUsedError;
-  String? get base => throw _privateConstructorUsedError;
+
+ String get id; String get name; Map<String, String> get props; String? get author; String? get desc; String? get base;
+/// Create a copy of MisskeyTheme
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MisskeyThemeCopyWith<MisskeyTheme> get copyWith => _$MisskeyThemeCopyWithImpl<MisskeyTheme>(this as MisskeyTheme, _$identity);
 
   /// Serializes this MisskeyTheme to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of MisskeyTheme
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $MisskeyThemeCopyWith<MisskeyTheme> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MisskeyTheme&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.props, props)&&(identical(other.author, author) || other.author == author)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.base, base) || other.base == base));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,const DeepCollectionEquality().hash(props),author,desc,base);
+
+@override
+String toString() {
+  return 'MisskeyTheme(id: $id, name: $name, props: $props, author: $author, desc: $desc, base: $base)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MisskeyThemeCopyWith<$Res> {
-  factory $MisskeyThemeCopyWith(
-          MisskeyTheme value, $Res Function(MisskeyTheme) then) =
-      _$MisskeyThemeCopyWithImpl<$Res, MisskeyTheme>;
-  @useResult
-  $Res call(
-      {String id,
-      String name,
-      Map<String, String> props,
-      String? author,
-      String? desc,
-      String? base});
-}
+abstract mixin class $MisskeyThemeCopyWith<$Res>  {
+  factory $MisskeyThemeCopyWith(MisskeyTheme value, $Res Function(MisskeyTheme) _then) = _$MisskeyThemeCopyWithImpl;
+@useResult
+$Res call({
+ String id, String name, Map<String, String> props, String? author, String? desc, String? base
+});
 
+
+
+
+}
 /// @nodoc
-class _$MisskeyThemeCopyWithImpl<$Res, $Val extends MisskeyTheme>
+class _$MisskeyThemeCopyWithImpl<$Res>
     implements $MisskeyThemeCopyWith<$Res> {
-  _$MisskeyThemeCopyWithImpl(this._value, this._then);
+  _$MisskeyThemeCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final MisskeyTheme _self;
+  final $Res Function(MisskeyTheme) _then;
 
-  /// Create a copy of MisskeyTheme
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? props = null,
-    Object? author = freezed,
-    Object? desc = freezed,
-    Object? base = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      props: null == props
-          ? _value.props
-          : props // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      author: freezed == author
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
-              as String?,
-      desc: freezed == desc
-          ? _value.desc
-          : desc // ignore: cast_nullable_to_non_nullable
-              as String?,
-      base: freezed == base
-          ? _value.base
-          : base // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
+/// Create a copy of MisskeyTheme
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? props = null,Object? author = freezed,Object? desc = freezed,Object? base = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,props: null == props ? _self.props : props // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,author: freezed == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as String?,desc: freezed == desc ? _self.desc : desc // ignore: cast_nullable_to_non_nullable
+as String?,base: freezed == base ? _self.base : base // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$MisskeyThemeImplCopyWith<$Res>
-    implements $MisskeyThemeCopyWith<$Res> {
-  factory _$$MisskeyThemeImplCopyWith(
-          _$MisskeyThemeImpl value, $Res Function(_$MisskeyThemeImpl) then) =
-      __$$MisskeyThemeImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String id,
-      String name,
-      Map<String, String> props,
-      String? author,
-      String? desc,
-      String? base});
 }
 
-/// @nodoc
-class __$$MisskeyThemeImplCopyWithImpl<$Res>
-    extends _$MisskeyThemeCopyWithImpl<$Res, _$MisskeyThemeImpl>
-    implements _$$MisskeyThemeImplCopyWith<$Res> {
-  __$$MisskeyThemeImplCopyWithImpl(
-      _$MisskeyThemeImpl _value, $Res Function(_$MisskeyThemeImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of MisskeyTheme
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? name = null,
-    Object? props = null,
-    Object? author = freezed,
-    Object? desc = freezed,
-    Object? base = freezed,
-  }) {
-    return _then(_$MisskeyThemeImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      props: null == props
-          ? _value._props
-          : props // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      author: freezed == author
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
-              as String?,
-      desc: freezed == desc
-          ? _value.desc
-          : desc // ignore: cast_nullable_to_non_nullable
-              as String?,
-      base: freezed == base
-          ? _value.base
-          : base // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
 
 /// @nodoc
 @JsonSerializable()
-class _$MisskeyThemeImpl implements _MisskeyTheme {
-  const _$MisskeyThemeImpl(
-      {required this.id,
-      required this.name,
-      required final Map<String, String> props,
-      this.author,
-      this.desc,
-      this.base})
-      : _props = props;
 
-  factory _$MisskeyThemeImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MisskeyThemeImplFromJson(json);
+class _MisskeyTheme implements MisskeyTheme {
+  const _MisskeyTheme({required this.id, required this.name, required final  Map<String, String> props, this.author, this.desc, this.base}): _props = props;
+  factory _MisskeyTheme.fromJson(Map<String, dynamic> json) => _$MisskeyThemeFromJson(json);
 
-  @override
-  final String id;
-  @override
-  final String name;
-  final Map<String, String> _props;
-  @override
-  Map<String, String> get props {
-    if (_props is EqualUnmodifiableMapView) return _props;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_props);
-  }
-
-  @override
-  final String? author;
-  @override
-  final String? desc;
-  @override
-  final String? base;
-
-  @override
-  String toString() {
-    return 'MisskeyTheme(id: $id, name: $name, props: $props, author: $author, desc: $desc, base: $base)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MisskeyThemeImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality().equals(other._props, _props) &&
-            (identical(other.author, author) || other.author == author) &&
-            (identical(other.desc, desc) || other.desc == desc) &&
-            (identical(other.base, base) || other.base == base));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, name,
-      const DeepCollectionEquality().hash(_props), author, desc, base);
-
-  /// Create a copy of MisskeyTheme
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MisskeyThemeImplCopyWith<_$MisskeyThemeImpl> get copyWith =>
-      __$$MisskeyThemeImplCopyWithImpl<_$MisskeyThemeImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MisskeyThemeImplToJson(
-      this,
-    );
-  }
+@override final  String id;
+@override final  String name;
+ final  Map<String, String> _props;
+@override Map<String, String> get props {
+  if (_props is EqualUnmodifiableMapView) return _props;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_props);
 }
 
-abstract class _MisskeyTheme implements MisskeyTheme {
-  const factory _MisskeyTheme(
-      {required final String id,
-      required final String name,
-      required final Map<String, String> props,
-      final String? author,
-      final String? desc,
-      final String? base}) = _$MisskeyThemeImpl;
+@override final  String? author;
+@override final  String? desc;
+@override final  String? base;
 
-  factory _MisskeyTheme.fromJson(Map<String, dynamic> json) =
-      _$MisskeyThemeImpl.fromJson;
+/// Create a copy of MisskeyTheme
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MisskeyThemeCopyWith<_MisskeyTheme> get copyWith => __$MisskeyThemeCopyWithImpl<_MisskeyTheme>(this, _$identity);
 
-  @override
-  String get id;
-  @override
-  String get name;
-  @override
-  Map<String, String> get props;
-  @override
-  String? get author;
-  @override
-  String? get desc;
-  @override
-  String? get base;
-
-  /// Create a copy of MisskeyTheme
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$MisskeyThemeImplCopyWith<_$MisskeyThemeImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+Map<String, dynamic> toJson() {
+  return _$MisskeyThemeToJson(this, );
 }
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MisskeyTheme&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other._props, _props)&&(identical(other.author, author) || other.author == author)&&(identical(other.desc, desc) || other.desc == desc)&&(identical(other.base, base) || other.base == base));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,const DeepCollectionEquality().hash(_props),author,desc,base);
+
+@override
+String toString() {
+  return 'MisskeyTheme(id: $id, name: $name, props: $props, author: $author, desc: $desc, base: $base)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MisskeyThemeCopyWith<$Res> implements $MisskeyThemeCopyWith<$Res> {
+  factory _$MisskeyThemeCopyWith(_MisskeyTheme value, $Res Function(_MisskeyTheme) _then) = __$MisskeyThemeCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name, Map<String, String> props, String? author, String? desc, String? base
+});
+
+
+
+
+}
+/// @nodoc
+class __$MisskeyThemeCopyWithImpl<$Res>
+    implements _$MisskeyThemeCopyWith<$Res> {
+  __$MisskeyThemeCopyWithImpl(this._self, this._then);
+
+  final _MisskeyTheme _self;
+  final $Res Function(_MisskeyTheme) _then;
+
+/// Create a copy of MisskeyTheme
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? props = null,Object? author = freezed,Object? desc = freezed,Object? base = freezed,}) {
+  return _then(_MisskeyTheme(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,props: null == props ? _self._props : props // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,author: freezed == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as String?,desc: freezed == desc ? _self.desc : desc // ignore: cast_nullable_to_non_nullable
+as String?,base: freezed == base ? _self.base : base // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

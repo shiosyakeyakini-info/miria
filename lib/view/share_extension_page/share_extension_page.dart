@@ -4,6 +4,7 @@ import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:freezed_annotation/freezed_annotation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:hooks_riverpod/legacy.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
@@ -13,7 +14,7 @@ part "share_extension_page.freezed.dart";
 part "share_extension_page.g.dart";
 
 @freezed
-class ShareExtensionData with _$ShareExtensionData {
+abstract class ShareExtensionData with _$ShareExtensionData {
   factory ShareExtensionData({
     required List<String> text,
     required List<SharedFiles> files,
@@ -24,11 +25,8 @@ class ShareExtensionData with _$ShareExtensionData {
 }
 
 @freezed
-class SharedFiles with _$SharedFiles {
-  factory SharedFiles({
-    required String path,
-    required int type,
-  }) = _SharedFiles;
+abstract class SharedFiles with _$SharedFiles {
+  factory SharedFiles({required String path, required int type}) = _SharedFiles;
 
   factory SharedFiles.fromJson(Map<String, dynamic> json) =>
       _$SharedFilesFromJson(json);
@@ -43,9 +41,7 @@ class ShareExtensionPage extends ConsumerStatefulWidget {
       ShareExtensionPageState();
 }
 
-final isShareExtensionProvider = StateProvider(
-  (ref) => false,
-);
+final isShareExtensionProvider = StateProvider((ref) => false);
 
 class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
   var sharedPreference = "";
@@ -62,8 +58,9 @@ class ShareExtensionPageState extends ConsumerState<ShareExtensionPage> {
           await SharedPreferenceAppGroup.get("ShareKey") as String? ?? "",
         );
         await SharedPreferenceAppGroup.setString("ShareKey", "");
-        final sharedData =
-            ShareExtensionData.fromJson(json as Map<String, dynamic>);
+        final sharedData = ShareExtensionData.fromJson(
+          json as Map<String, dynamic>,
+        );
 
         if (ref.read(accountsProvider).length >= 2) {
           if (!mounted) return;

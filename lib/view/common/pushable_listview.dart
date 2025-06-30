@@ -2,9 +2,9 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/view/common/error_detail.dart";
@@ -43,49 +43,40 @@ class PushableListView<T> extends HookConsumerWidget {
     final scrollController = useScrollController();
     final items = useState<List<T>>([]);
 
-    final initialize = useCallback(
-      () async {
-        isLoading.value = true;
-        isFinalPage.value = false;
-        items.value = [];
-        try {
-          final initialItems = await initializeFuture();
-          items.value = initialItems;
-          isLoading.value = false;
-          await scrollController.animateTo(
-            -scrollController.position.pixels,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeIn,
-          );
-        } catch (e, s) {
-          if (kDebugMode) print(e);
-          error.value = (e, s);
-          isLoading.value = false;
-        }
-      },
-      [initializeFuture, scrollController, listKey],
-    );
+    final initialize = useCallback(() async {
+      isLoading.value = true;
+      isFinalPage.value = false;
+      items.value = [];
+      try {
+        final initialItems = await initializeFuture();
+        items.value = initialItems;
+        isLoading.value = false;
+        await scrollController.animateTo(
+          -scrollController.position.pixels,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeIn,
+        );
+      } catch (e, s) {
+        if (kDebugMode) print(e);
+        error.value = (e, s);
+        isLoading.value = false;
+      }
+    }, [initializeFuture, scrollController, listKey]);
 
-    useMemoized(
-      () => unawaited(initialize()),
-      [listKey],
-    );
+    useMemoized(() => unawaited(initialize()), [listKey]);
 
-    final nextLoad = useCallback(
-      () async {
-        if (isLoading.value || items.value.isEmpty) return;
-        isLoading.value = true;
-        try {
-          final result = await nextFuture(items.value.last, items.value.length);
-          if (result.isEmpty) isFinalPage.value = true;
-          items.value = [...items.value, ...result];
-          isLoading.value = false;
-        } catch (e) {
-          isLoading.value = false;
-        }
-      },
-      [isLoading.value, items.value, nextFuture],
-    );
+    final nextLoad = useCallback(() async {
+      if (isLoading.value || items.value.isEmpty) return;
+      isLoading.value = true;
+      try {
+        final result = await nextFuture(items.value.last, items.value.length);
+        if (result.isEmpty) isFinalPage.value = true;
+        items.value = [...items.value, ...result];
+        isLoading.value = false;
+      } catch (e) {
+        isLoading.value = false;
+      }
+    }, [isLoading.value, items.value, nextFuture]);
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -132,8 +123,9 @@ class PushableListView<T> extends HookConsumerWidget {
             }
 
             if (ref.read(
-                  generalSettingsRepositoryProvider
-                      .select((value) => value.settings.automaticPush),
+                  generalSettingsRepositoryProvider.select(
+                    (value) => value.settings.automaticPush,
+                  ),
                 ) ==
                 AutomaticPush.automatic) {
               unawaited(nextLoad());

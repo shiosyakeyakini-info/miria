@@ -1,28 +1,77 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'profile_edit_provider.g.dart';
-
-final profileNameProvider = StateProvider.autoDispose<String>((ref) => '');
-final profileDescriptionProvider =
-    StateProvider.autoDispose<String>((ref) => '');
-final profileLocationProvider = StateProvider.autoDispose<String>((ref) => '');
-final profileBirthdayProvider =
-    StateProvider.autoDispose<DateTime?>((ref) => null);
-final profileFieldsProvider =
-    StateProvider.autoDispose<List<UserField>>((ref) => []);
-final profileFollowedMessageProvider =
-    StateProvider.autoDispose<String>((ref) => '');
-final profileAvatarDriveIdProvider =
-    StateProvider.autoDispose<String?>((ref) => null);
-final profileAvatarFileProvider =
-    StateProvider.autoDispose<({Uint8List data, String name})?>((ref) => null);
+part "profile_edit_provider.g.dart";
 
 @riverpod
-IUpdateRequest profileEditRequest(ProfileEditRequestRef ref) {
+class ProfileName extends _$ProfileName {
+  @override
+  String build() => "";
+
+  void update(String value) => state = value;
+}
+
+@riverpod
+class ProfileDescription extends _$ProfileDescription {
+  @override
+  String build() => "";
+
+  void update(String value) => state = value;
+}
+
+@riverpod
+class ProfileLocation extends _$ProfileLocation {
+  @override
+  String build() => "";
+
+  void update(String value) => state = value;
+}
+
+@riverpod
+class ProfileBirthday extends _$ProfileBirthday {
+  @override
+  DateTime? build() => null;
+
+  void update(DateTime? value) => state = value;
+}
+
+@riverpod
+class ProfileFields extends _$ProfileFields {
+  @override
+  List<UserField> build() => [];
+
+  void update(List<UserField> value) => state = value;
+}
+
+@riverpod
+class ProfileFollowedMessage extends _$ProfileFollowedMessage {
+  @override
+  String build() => "";
+
+  void update(String value) => state = value;
+}
+
+@riverpod
+class ProfileAvatarDriveId extends _$ProfileAvatarDriveId {
+  @override
+  String? build() => null;
+
+  void update(String? value) => state = value;
+}
+
+@riverpod
+class ProfileAvatarFile extends _$ProfileAvatarFile {
+  @override
+  ({Uint8List data, String name})? build() => null;
+
+  void update(({Uint8List data, String name})? value) => state = value;
+}
+
+@riverpod
+IUpdateRequest profileEditRequest(Ref ref) {
   final name = ref.watch(profileNameProvider);
   final description = ref.watch(profileDescriptionProvider);
   final location = ref.watch(profileLocationProvider);

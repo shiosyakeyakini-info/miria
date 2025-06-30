@@ -12,11 +12,7 @@ enum VisibilityStatus { visible, hiding, hidden }
 class ImageViewer extends HookConsumerWidget {
   final DriveFile file;
   final double maxScale;
-  const ImageViewer({
-    required this.file,
-    super.key,
-    this.maxScale = 8.0,
-  });
+  const ImageViewer({required this.file, super.key, this.maxScale = 8.0});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,13 +22,10 @@ class ImageViewer extends HookConsumerWidget {
 
     final commentVisibility = useState(VisibilityStatus.visible);
 
-    final resetScale = useCallback(
-      () {
-        transformationController.value = Matrix4.identity();
-        ref.read(imageViewerInfoNotifierProvider.notifier).reset();
-      },
-      [transformationController, 1.0],
-    );
+    final resetScale = useCallback(() {
+      transformationController.value = Matrix4.identity();
+      ref.read(imageViewerInfoNotifierProvider.notifier).reset();
+    }, [transformationController, 1.0]);
     return Stack(
       children: [
         Positioned.fill(
@@ -55,10 +48,7 @@ class ImageViewer extends HookConsumerWidget {
                 final delta = event.localPosition - position!;
 
                 final s = max(
-                  min(
-                    prov.lastScale + (delta.dy / 75.0),
-                    maxScale,
-                  ),
+                  min(prov.lastScale + (delta.dy / 75.0), maxScale),
                   1.0,
                 );
                 ref
@@ -71,9 +61,9 @@ class ImageViewer extends HookConsumerWidget {
 
                 final v2 = transformationController.toScene(position) - v;
 
-                transformationController.value = transformationController.value
-                    .clone()
-                  ..translate(v2.dx, v2.dy);
+                transformationController.value =
+                    transformationController.value.clone()
+                      ..translate(v2.dx, v2.dy);
               }
               if (commentVisibility.value == VisibilityStatus.visible) {
                 commentVisibility.value = VisibilityStatus.hiding;
@@ -81,8 +71,12 @@ class ImageViewer extends HookConsumerWidget {
             },
             child: GestureDetector(
               onDoubleTapDown: (details) {
-                ref.read(imageViewerInfoNotifierProvider.notifier).update(
-                      ref.read(imageViewerInfoNotifierProvider).copyWith(
+                ref
+                    .read(imageViewerInfoNotifierProvider.notifier)
+                    .update(
+                      ref
+                          .read(imageViewerInfoNotifierProvider)
+                          .copyWith(
                             lastScale: provider.scale,
                             isDoubleTap: true,
                             lastTapLocalPosition: details.localPosition,
@@ -92,27 +86,31 @@ class ImageViewer extends HookConsumerWidget {
               onTap: () {
                 if (provider.scale == 1.0 && provider.lastScale == 1.0) {
                   commentVisibility.value =
-                      (commentVisibility.value == VisibilityStatus.visible)
-                          ? VisibilityStatus.hiding
-                          : VisibilityStatus.visible;
+                      (commentVisibility.value == VisibilityStatus.visible ||
+                          commentVisibility.value == VisibilityStatus.hiding)
+                      ? VisibilityStatus.hiding
+                      : VisibilityStatus.visible;
                 }
               },
               onDoubleTap: () {
                 if (provider.scale != 1.0) {
-                  resetScale();
+                  if (provider.scale == provider.lastScale) {
+                    resetScale();
+                  }
                 } else {
                   final position = ref
                       .read(imageViewerInfoNotifierProvider)
                       .lastTapLocalPosition;
                   if (position == null) return;
                   transformationController.value = Matrix4.identity()
-                    ..translate(
-                      -position.dx * 2,
-                      -position.dy * 2,
-                    )
+                    ..translate(-position.dx * 2, -position.dy * 2)
                     ..scale(3.0);
-                  ref.read(imageViewerInfoNotifierProvider.notifier).update(
-                        ref.read(imageViewerInfoNotifierProvider).copyWith(
+                  ref
+                      .read(imageViewerInfoNotifierProvider.notifier)
+                      .update(
+                        ref
+                            .read(imageViewerInfoNotifierProvider)
+                            .copyWith(
                               scale: 3.0,
                               isDoubleTap: false,
                               lastTapLocalPosition: null,
@@ -139,14 +137,14 @@ class ImageViewer extends HookConsumerWidget {
         ),
         AnimatedOpacity(
           curve: Curves.easeInOut,
-          opacity:
-              (commentVisibility.value == VisibilityStatus.visible) ? 1.0 : 0.0,
+          opacity: (commentVisibility.value == VisibilityStatus.visible)
+              ? 1.0
+              : 0.0,
           duration: const Duration(milliseconds: 500),
-          onEnd: () => {
-            if (commentVisibility.value == VisibilityStatus.hiding)
-              {
-                commentVisibility.value = VisibilityStatus.hidden,
-              },
+          onEnd: () {
+            if (commentVisibility.value == VisibilityStatus.hiding) {
+              commentVisibility.value = VisibilityStatus.hidden;
+            }
           },
           child: Visibility(
             maintainState: true,
@@ -159,15 +157,11 @@ class ImageViewer extends HookConsumerWidget {
                   child: Container(
                     padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
                     width: MediaQuery.of(context).size.width,
-                    constraints: const BoxConstraints(
-                      maxHeight: 150,
-                    ),
+                    constraints: const BoxConstraints(maxHeight: 150),
                     decoration: BoxDecoration(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       border: Border(
-                        top: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                        ),
+                        top: BorderSide(color: Theme.of(context).primaryColor),
                       ),
                     ),
                     child: SingleChildScrollView(

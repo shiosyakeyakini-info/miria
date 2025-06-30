@@ -1,13 +1,13 @@
 import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/l10n/app_localizations.dart";
 import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/util/punycode.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/util/server_utils.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
@@ -34,12 +34,14 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
       IndicatorView.showIndicator(context);
       await ref
           .read(accountRepositoryProvider.notifier)
-          .validateMiAuth(toAscii(serverController.text));
+          .validateMiAuth(normalizeServer(serverController.text));
       if (!mounted) return;
       await context.pushRoute(
         TimeLineRoute(
-          initialTabSetting:
-              ref.read(tabSettingsRepositoryProvider).tabSettings.first,
+          initialTabSetting: ref
+              .read(tabSettingsRepositoryProvider)
+              .tabSettings
+              .first,
         ),
       );
     } catch (e) {
@@ -98,9 +100,14 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                   ElevatedButton(
                     onPressed: () async {
                       await ref
-                          .read(accountRepositoryProvider.notifier)
-                          .openMiAuth(toAscii(serverController.text))
-                          .expectFailure(context);
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() async {
+                            await ref
+                                .read(accountRepositoryProvider.notifier)
+                                .openMiAuth(
+                                  normalizeServer(serverController.text),
+                                );
+                          });
                       setState(() {
                         isAuthed = true;
                       });
@@ -124,7 +131,9 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                   children: [
                     Container(),
                     ElevatedButton(
-                      onPressed: () async => login().expectFailure(context),
+                      onPressed: () async => ref
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() => login()),
                       child: Text(S.of(context).didAuthorize),
                     ),
                   ],

@@ -20,7 +20,7 @@ void main() {
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(
-      () => accountRepository.openMiAuth("https://misskey.io/"),
+      () => accountRepository.openMiAuth("https://misskey.io/path"),
       throwsA(isA<InvalidServerException>()),
     );
   });
@@ -29,8 +29,9 @@ void main() {
     final dio = MockDio();
     // ignore: discarded_futures
     when(dio.getUri(any)).thenAnswer((_) async => throw TestData.response404);
-    final provider =
-        ProviderContainer(overrides: [dioProvider.overrideWithValue(dio)]);
+    final provider = ProviderContainer(
+      overrides: [dioProvider.overrideWithValue(dio)],
+    );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);
 
     expect(
@@ -63,7 +64,7 @@ void main() {
   //   final provider = ProviderContainer(
   //     overrides: [
   //       dioProvider.overrideWithValue(dio),
-  //       misskeyProvider.overrideWith((ref) => mockMisskey),
+  //       misskeyProvider.overrideWith((ref, account) => mockMisskey),
   //     ],
   //   );
   //   final accountRepository = provider.read(accountRepositoryProvider.notifier);
@@ -104,8 +105,8 @@ void main() {
     final provider = ProviderContainer(
       overrides: [
         dioProvider.overrideWithValue(dio),
-        misskeyProvider.overrideWith((ref) => mockMisskey),
-        misskeyWithoutAccountProvider.overrideWith((ref) => mockMisskey),
+        misskeyProvider.overrideWith((ref, account) => mockMisskey),
+        misskeyWithoutAccountProvider.overrideWith((ref, host) => mockMisskey),
       ],
     );
     final accountRepository = provider.read(accountRepositoryProvider.notifier);

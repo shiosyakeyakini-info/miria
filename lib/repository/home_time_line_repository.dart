@@ -26,11 +26,11 @@ class HomeTimelineRepository extends SocketTimelineRepository {
   }
 
   @override
-  Channel get channel => Channel.homeTimeline;
+  Channel get channel => Channel.homeTimeline();
 
   @override
   Map<String, dynamic> get parameters => {
-        "withRenotes": tabSetting.renoteDisplay,
-        "withFiles": tabSetting.isMediaOnly,
-      };
+    "withRenotes": tabSetting.renoteDisplay,
+    "withFiles": tabSetting.isMediaOnly,
+  };
 }

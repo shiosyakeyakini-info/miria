@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,244 +10,169 @@ part of 'user_info_notifier.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$UserInfo {
-  String get userId => throw _privateConstructorUsedError;
-  UserDetailed get response => throw _privateConstructorUsedError;
-  String? get remoteUserId => throw _privateConstructorUsedError;
-  UserDetailed? get remoteResponse => throw _privateConstructorUsedError;
-  MetaResponse? get metaResponse => throw _privateConstructorUsedError;
 
-  /// Create a copy of UserInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $UserInfoCopyWith<UserInfo> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get userId; UserDetailed get response; String? get remoteUserId; UserDetailed? get remoteResponse; MetaResponse? get metaResponse;
+/// Create a copy of UserInfo
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UserInfoCopyWith<UserInfo> get copyWith => _$UserInfoCopyWithImpl<UserInfo>(this as UserInfo, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInfo&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.response, response) || other.response == response)&&(identical(other.remoteUserId, remoteUserId) || other.remoteUserId == remoteUserId)&&(identical(other.remoteResponse, remoteResponse) || other.remoteResponse == remoteResponse)&&(identical(other.metaResponse, metaResponse) || other.metaResponse == metaResponse));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,userId,response,remoteUserId,remoteResponse,metaResponse);
+
+@override
+String toString() {
+  return 'UserInfo(userId: $userId, response: $response, remoteUserId: $remoteUserId, remoteResponse: $remoteResponse, metaResponse: $metaResponse)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $UserInfoCopyWith<$Res> {
-  factory $UserInfoCopyWith(UserInfo value, $Res Function(UserInfo) then) =
-      _$UserInfoCopyWithImpl<$Res, UserInfo>;
-  @useResult
-  $Res call(
-      {String userId,
-      UserDetailed response,
-      String? remoteUserId,
-      UserDetailed? remoteResponse,
-      MetaResponse? metaResponse});
+abstract mixin class $UserInfoCopyWith<$Res>  {
+  factory $UserInfoCopyWith(UserInfo value, $Res Function(UserInfo) _then) = _$UserInfoCopyWithImpl;
+@useResult
+$Res call({
+ String userId, UserDetailed response, String? remoteUserId, UserDetailed? remoteResponse, MetaResponse? metaResponse
+});
 
-  $MetaResponseCopyWith<$Res>? get metaResponse;
+
+$MetaResponseCopyWith<$Res>? get metaResponse;
+
 }
-
 /// @nodoc
-class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
+class _$UserInfoCopyWithImpl<$Res>
     implements $UserInfoCopyWith<$Res> {
-  _$UserInfoCopyWithImpl(this._value, this._then);
+  _$UserInfoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final UserInfo _self;
+  final $Res Function(UserInfo) _then;
 
-  /// Create a copy of UserInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? userId = null,
-    Object? response = null,
-    Object? remoteUserId = freezed,
-    Object? remoteResponse = freezed,
-    Object? metaResponse = freezed,
-  }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      response: null == response
-          ? _value.response
-          : response // ignore: cast_nullable_to_non_nullable
-              as UserDetailed,
-      remoteUserId: freezed == remoteUserId
-          ? _value.remoteUserId
-          : remoteUserId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      remoteResponse: freezed == remoteResponse
-          ? _value.remoteResponse
-          : remoteResponse // ignore: cast_nullable_to_non_nullable
-              as UserDetailed?,
-      metaResponse: freezed == metaResponse
-          ? _value.metaResponse
-          : metaResponse // ignore: cast_nullable_to_non_nullable
-              as MetaResponse?,
-    ) as $Val);
+/// Create a copy of UserInfo
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? response = null,Object? remoteUserId = freezed,Object? remoteResponse = freezed,Object? metaResponse = freezed,}) {
+  return _then(_self.copyWith(
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,response: null == response ? _self.response : response // ignore: cast_nullable_to_non_nullable
+as UserDetailed,remoteUserId: freezed == remoteUserId ? _self.remoteUserId : remoteUserId // ignore: cast_nullable_to_non_nullable
+as String?,remoteResponse: freezed == remoteResponse ? _self.remoteResponse : remoteResponse // ignore: cast_nullable_to_non_nullable
+as UserDetailed?,metaResponse: freezed == metaResponse ? _self.metaResponse : metaResponse // ignore: cast_nullable_to_non_nullable
+as MetaResponse?,
+  ));
+}
+/// Create a copy of UserInfo
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MetaResponseCopyWith<$Res>? get metaResponse {
+    if (_self.metaResponse == null) {
+    return null;
   }
 
-  /// Create a copy of UserInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MetaResponseCopyWith<$Res>? get metaResponse {
-    if (_value.metaResponse == null) {
-      return null;
-    }
-
-    return $MetaResponseCopyWith<$Res>(_value.metaResponse!, (value) {
-      return _then(_value.copyWith(metaResponse: value) as $Val);
-    });
-  }
+  return $MetaResponseCopyWith<$Res>(_self.metaResponse!, (value) {
+    return _then(_self.copyWith(metaResponse: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$UserInfoImplCopyWith<$Res>
-    implements $UserInfoCopyWith<$Res> {
-  factory _$$UserInfoImplCopyWith(
-          _$UserInfoImpl value, $Res Function(_$UserInfoImpl) then) =
-      __$$UserInfoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String userId,
-      UserDetailed response,
-      String? remoteUserId,
-      UserDetailed? remoteResponse,
-      MetaResponse? metaResponse});
-
-  @override
-  $MetaResponseCopyWith<$Res>? get metaResponse;
-}
-
-/// @nodoc
-class __$$UserInfoImplCopyWithImpl<$Res>
-    extends _$UserInfoCopyWithImpl<$Res, _$UserInfoImpl>
-    implements _$$UserInfoImplCopyWith<$Res> {
-  __$$UserInfoImplCopyWithImpl(
-      _$UserInfoImpl _value, $Res Function(_$UserInfoImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of UserInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? userId = null,
-    Object? response = null,
-    Object? remoteUserId = freezed,
-    Object? remoteResponse = freezed,
-    Object? metaResponse = freezed,
-  }) {
-    return _then(_$UserInfoImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      response: null == response
-          ? _value.response
-          : response // ignore: cast_nullable_to_non_nullable
-              as UserDetailed,
-      remoteUserId: freezed == remoteUserId
-          ? _value.remoteUserId
-          : remoteUserId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      remoteResponse: freezed == remoteResponse
-          ? _value.remoteResponse
-          : remoteResponse // ignore: cast_nullable_to_non_nullable
-              as UserDetailed?,
-      metaResponse: freezed == metaResponse
-          ? _value.metaResponse
-          : metaResponse // ignore: cast_nullable_to_non_nullable
-              as MetaResponse?,
-    ));
-  }
-}
 
 /// @nodoc
 
-class _$UserInfoImpl extends _UserInfo {
-  const _$UserInfoImpl(
-      {required this.userId,
-      required this.response,
-      this.remoteUserId,
-      this.remoteResponse,
-      this.metaResponse})
-      : super._();
 
-  @override
-  final String userId;
-  @override
-  final UserDetailed response;
-  @override
-  final String? remoteUserId;
-  @override
-  final UserDetailed? remoteResponse;
-  @override
-  final MetaResponse? metaResponse;
+class _UserInfo extends UserInfo {
+  const _UserInfo({required this.userId, required this.response, this.remoteUserId, this.remoteResponse, this.metaResponse}): super._();
+  
 
-  @override
-  String toString() {
-    return 'UserInfo(userId: $userId, response: $response, remoteUserId: $remoteUserId, remoteResponse: $remoteResponse, metaResponse: $metaResponse)';
-  }
+@override final  String userId;
+@override final  UserDetailed response;
+@override final  String? remoteUserId;
+@override final  UserDetailed? remoteResponse;
+@override final  MetaResponse? metaResponse;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UserInfoImpl &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.response, response) ||
-                other.response == response) &&
-            (identical(other.remoteUserId, remoteUserId) ||
-                other.remoteUserId == remoteUserId) &&
-            (identical(other.remoteResponse, remoteResponse) ||
-                other.remoteResponse == remoteResponse) &&
-            (identical(other.metaResponse, metaResponse) ||
-                other.metaResponse == metaResponse));
-  }
+/// Create a copy of UserInfo
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UserInfoCopyWith<_UserInfo> get copyWith => __$UserInfoCopyWithImpl<_UserInfo>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, userId, response, remoteUserId,
-      remoteResponse, metaResponse);
 
-  /// Create a copy of UserInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
-      __$$UserInfoImplCopyWithImpl<_$UserInfoImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInfo&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.response, response) || other.response == response)&&(identical(other.remoteUserId, remoteUserId) || other.remoteUserId == remoteUserId)&&(identical(other.remoteResponse, remoteResponse) || other.remoteResponse == remoteResponse)&&(identical(other.metaResponse, metaResponse) || other.metaResponse == metaResponse));
 }
 
-abstract class _UserInfo extends UserInfo {
-  const factory _UserInfo(
-      {required final String userId,
-      required final UserDetailed response,
-      final String? remoteUserId,
-      final UserDetailed? remoteResponse,
-      final MetaResponse? metaResponse}) = _$UserInfoImpl;
-  const _UserInfo._() : super._();
 
-  @override
-  String get userId;
-  @override
-  UserDetailed get response;
-  @override
-  String? get remoteUserId;
-  @override
-  UserDetailed? get remoteResponse;
-  @override
-  MetaResponse? get metaResponse;
+@override
+int get hashCode => Object.hash(runtimeType,userId,response,remoteUserId,remoteResponse,metaResponse);
 
-  /// Create a copy of UserInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'UserInfo(userId: $userId, response: $response, remoteUserId: $remoteUserId, remoteResponse: $remoteResponse, metaResponse: $metaResponse)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UserInfoCopyWith<$Res> implements $UserInfoCopyWith<$Res> {
+  factory _$UserInfoCopyWith(_UserInfo value, $Res Function(_UserInfo) _then) = __$UserInfoCopyWithImpl;
+@override @useResult
+$Res call({
+ String userId, UserDetailed response, String? remoteUserId, UserDetailed? remoteResponse, MetaResponse? metaResponse
+});
+
+
+@override $MetaResponseCopyWith<$Res>? get metaResponse;
+
+}
+/// @nodoc
+class __$UserInfoCopyWithImpl<$Res>
+    implements _$UserInfoCopyWith<$Res> {
+  __$UserInfoCopyWithImpl(this._self, this._then);
+
+  final _UserInfo _self;
+  final $Res Function(_UserInfo) _then;
+
+/// Create a copy of UserInfo
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? response = null,Object? remoteUserId = freezed,Object? remoteResponse = freezed,Object? metaResponse = freezed,}) {
+  return _then(_UserInfo(
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,response: null == response ? _self.response : response // ignore: cast_nullable_to_non_nullable
+as UserDetailed,remoteUserId: freezed == remoteUserId ? _self.remoteUserId : remoteUserId // ignore: cast_nullable_to_non_nullable
+as String?,remoteResponse: freezed == remoteResponse ? _self.remoteResponse : remoteResponse // ignore: cast_nullable_to_non_nullable
+as UserDetailed?,metaResponse: freezed == metaResponse ? _self.metaResponse : metaResponse // ignore: cast_nullable_to_non_nullable
+as MetaResponse?,
+  ));
+}
+
+/// Create a copy of UserInfo
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MetaResponseCopyWith<$Res>? get metaResponse {
+    if (_self.metaResponse == null) {
+    return null;
+  }
+
+  return $MetaResponseCopyWith<$Res>(_self.metaResponse!, (value) {
+    return _then(_self.copyWith(metaResponse: value));
+  });
+}
+}
+
+// dart format on

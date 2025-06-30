@@ -1,9 +1,9 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:miria/providers.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'profile_edit_provider.dart';
+import "package:miria/providers.dart";
+import "package:miria/view/profile_edit_page/profile_edit_provider.dart";
+import "package:misskey_dart/misskey_dart.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'profile_update_notifier.g.dart';
+part "profile_update_notifier.g.dart";
 
 @Riverpod(dependencies: [accountContext, profileEditRequest])
 class ProfileUpdateNotifier extends _$ProfileUpdateNotifier {
@@ -17,7 +17,7 @@ class ProfileUpdateNotifier extends _$ProfileUpdateNotifier {
     String? avatarId = request.avatarId;
     if (avatarFile != null) {
       final file = await misskey.drive.files.createAsBinary(
-        const DriveFilesCreateRequest(force: true, name: 'avatar'),
+        const DriveFilesCreateRequest(force: true, name: "avatar"),
         avatarFile.data,
       );
       avatarId = file.id;

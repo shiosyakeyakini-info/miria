@@ -67,6 +67,7 @@
     "socialTimelineAbbr": "STL",
     "globalTimeline": "全球时间线",
     "roleTimeline": "角色时间线",
+    "customTimeline": "自定义时间线",
     "server": "服务器",
     "miAuth": "MiAuth",
     "apiKey": "API密钥",
@@ -773,6 +774,8 @@
     "fontFantasy": "字体 （适用于 $[font.fantasy ）",
     "fontSize": "字体大小",
     "systemFont": "系统标准",
+    "cache": "快取",
+    "clearCache": "清除快取",
     "selectFolder": "选择文件夹",
     "importSettings": "导入设置",
     "importSettingsDescription": "从驱动器加载配置文件。配置文件保存时会记录所有账号的配置信息，但只会加载登录本设备的账号的信息。",
@@ -805,10 +808,16 @@
     "pleaseSelectList": "请选择列表。",
     "pleaseSelectAntenna": "请选择天线。",
     "pleaseSelectRole": "请选择角色。",
+    "customChannelName": "频道名",
+    "customApiPath": "POST端点路径",
+    "customTimelineParameters": "参数(JSON)",
+    "customPresetSelect": "从预设中选择",
     "reactionDeck": "回应面板",
     "wordMute": "文字屏蔽",
     "hardWordMute": "屏蔽关键词",
     "instanceMute": "被屏蔽的服务器",
+    "mutedUsers": "已屏蔽的用户",
+    "blockedUsers": "已拉黑的用户",
     "cacheSettings": "缓存设置",
     "hideConditionalNotes": "从时间线中隐藏具有指定条件的帖子。",
     "muteSettingDescription": "用空格分隔的单词按 AND 条件处理，用换行符分隔的行按 OR 条件处理。\n用斜杠括住关键字可使其成为正则表达式。",
@@ -820,6 +829,8 @@
     "serverCache": "服务器信息",
     "instanceMuteDescription1": "隐藏已配置的服务器帖子。",
     "instanceMuteDescription2": "将已配置服务器上的所有帖子和转帖屏蔽，包括对屏蔽服务器上的用户的回复。\n设置在新行上，以换行符分隔。",
+    "reactionMute": "表情回应屏蔽",
+    "reactionMuteDescription": "按行输入 :emoji: 或 :emoji@host: 的形式。也可以仅输入 @host，表示屏蔽该主机的所有表情。",
     "bulkAddReactions": "批量添加",
     "bulkAddReactionsDescription1": "请使用您的浏览器登录到要复制回应面板的帐户",
     "bulkAddReactionsDescription2": "在同一个浏览器中访问以下 URL，选择并复制「值 (JSON)」中的所有内容",
@@ -939,5 +950,15 @@
             }
         }
     },
-    "nonInvitedReversi": "好像没有收到邀请"
+    "nonInvitedReversi": "好像没有收到邀请",
+
+    "template": "模板",
+
+    "lookup": "查找",
+    "lookupDescription": "可以通过URL或账户名查找用户和笔记",
+    "lookupInput": "URL、账户名或笔记ID",
+    "lookupHint": "输入 @ai@misskey.io 或 https://...",
+    "lookupFailed": "查找失败",
+    "lookupExamples": "输入示例:",
+    "unknownObject": "未知对象"
 }

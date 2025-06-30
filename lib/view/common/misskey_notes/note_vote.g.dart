@@ -6,219 +6,115 @@ part of 'note_vote.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$noteVoteNotifierHash() => r'421dc72908e2fd868f90df56516d266c6a1de281';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$NoteVoteNotifier
-    extends BuildlessAutoDisposeNotifier<AsyncValue?> {
-  late final Note note;
-
-  AsyncValue? build(
-    Note note,
-  );
-}
-
-/// See also [NoteVoteNotifier].
 @ProviderFor(NoteVoteNotifier)
-const noteVoteNotifierProvider = NoteVoteNotifierFamily();
+const noteVoteNotifierProvider = NoteVoteNotifierFamily._();
 
-/// See also [NoteVoteNotifier].
-class NoteVoteNotifierFamily extends Family {
-  /// See also [NoteVoteNotifier].
-  const NoteVoteNotifierFamily();
+final class NoteVoteNotifierProvider
+    extends $NotifierProvider<NoteVoteNotifier, AsyncValue?> {
+  const NoteVoteNotifierProvider._({
+    required NoteVoteNotifierFamily super.from,
+    required Note super.argument,
+  }) : super(
+         retry: null,
+         name: r'noteVoteNotifierProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    misskeyPostContextProvider,
-    notesWithProvider
-  ];
-
-  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
-      <ProviderOrFamily>{
-    misskeyPostContextProvider,
-    ...?misskeyPostContextProvider.allTransitiveDependencies,
-    notesWithProvider,
-    ...?notesWithProvider.allTransitiveDependencies
-  };
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+  static const $allTransitiveDependencies0 = misskeyPostContextProvider;
+  static const $allTransitiveDependencies1 =
+      MisskeyPostContextProvider.$allTransitiveDependencies0;
+  static const $allTransitiveDependencies2 = notesWithProvider;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  String debugGetCreateSourceHash() => _$noteVoteNotifierHash();
 
   @override
-  String? get name => r'noteVoteNotifierProvider';
-
-  /// See also [NoteVoteNotifier].
-  NoteVoteNotifierProvider call(
-    Note note,
-  ) {
-    return NoteVoteNotifierProvider(
-      note,
-    );
+  String toString() {
+    return r'noteVoteNotifierProvider'
+        ''
+        '($argument)';
   }
 
-  @visibleForOverriding
+  @$internal
   @override
-  NoteVoteNotifierProvider getProviderOverride(
-    covariant NoteVoteNotifierProvider provider,
-  ) {
-    return call(
-      provider.note,
-    );
-  }
+  NoteVoteNotifier create() => NoteVoteNotifier();
 
-  /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(NoteVoteNotifier Function() create) {
-    return _$NoteVoteNotifierFamilyOverride(this, create);
-  }
-}
-
-class _$NoteVoteNotifierFamilyOverride implements FamilyOverride {
-  _$NoteVoteNotifierFamilyOverride(this.overriddenFamily, this.create);
-
-  final NoteVoteNotifier Function() create;
-
-  @override
-  final NoteVoteNotifierFamily overriddenFamily;
-
-  @override
-  NoteVoteNotifierProvider getProviderOverride(
-    covariant NoteVoteNotifierProvider provider,
-  ) {
-    return provider._copyWith(create);
-  }
-}
-
-/// See also [NoteVoteNotifier].
-class NoteVoteNotifierProvider
-    extends AutoDisposeNotifierProviderImpl<NoteVoteNotifier, AsyncValue?> {
-  /// See also [NoteVoteNotifier].
-  NoteVoteNotifierProvider(
-    Note note,
-  ) : this._internal(
-          () => NoteVoteNotifier()..note = note,
-          from: noteVoteNotifierProvider,
-          name: r'noteVoteNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$noteVoteNotifierHash,
-          dependencies: NoteVoteNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              NoteVoteNotifierFamily._allTransitiveDependencies,
-          note: note,
-        );
-
-  NoteVoteNotifierProvider._internal(
-    super.create, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.note,
-  }) : super.internal();
-
-  final Note note;
-
-  @override
-  AsyncValue? runNotifierBuild(
-    covariant NoteVoteNotifier notifier,
-  ) {
-    return notifier.build(
-      note,
-    );
-  }
-
-  @override
-  Override overrideWith(NoteVoteNotifier Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue? value) {
+    return $ProviderOverride(
       origin: this,
-      override: NoteVoteNotifierProvider._internal(
-        () => create()..note = note,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        note: note,
-      ),
-    );
-  }
-
-  @override
-  (Note,) get argument {
-    return (note,);
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<NoteVoteNotifier, AsyncValue?>
-      createElement() {
-    return _NoteVoteNotifierProviderElement(this);
-  }
-
-  NoteVoteNotifierProvider _copyWith(
-    NoteVoteNotifier Function() create,
-  ) {
-    return NoteVoteNotifierProvider._internal(
-      () => create()..note = note,
-      name: name,
-      dependencies: dependencies,
-      allTransitiveDependencies: allTransitiveDependencies,
-      debugGetCreateSourceHash: debugGetCreateSourceHash,
-      from: from,
-      note: note,
+      providerOverride: $SyncValueProvider<AsyncValue?>(value),
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is NoteVoteNotifierProvider && other.note == note;
+    return other is NoteVoteNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, note.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin NoteVoteNotifierRef on AutoDisposeNotifierProviderRef<AsyncValue?> {
-  /// The parameter `note` of this provider.
-  Note get note;
-}
+String _$noteVoteNotifierHash() => r'421dc72908e2fd868f90df56516d266c6a1de281';
 
-class _NoteVoteNotifierProviderElement
-    extends AutoDisposeNotifierProviderElement<NoteVoteNotifier, AsyncValue?>
-    with NoteVoteNotifierRef {
-  _NoteVoteNotifierProviderElement(super.provider);
+final class NoteVoteNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          NoteVoteNotifier,
+          AsyncValue?,
+          AsyncValue?,
+          AsyncValue?,
+          Note
+        > {
+  const NoteVoteNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'noteVoteNotifierProvider',
+        dependencies: const <ProviderOrFamily>[
+          misskeyPostContextProvider,
+          notesWithProvider,
+        ],
+        $allTransitiveDependencies: const <ProviderOrFamily>[
+          NoteVoteNotifierProvider.$allTransitiveDependencies0,
+          NoteVoteNotifierProvider.$allTransitiveDependencies1,
+          NoteVoteNotifierProvider.$allTransitiveDependencies2,
+        ],
+        isAutoDispose: true,
+      );
+
+  NoteVoteNotifierProvider call(Note note) =>
+      NoteVoteNotifierProvider._(argument: note, from: this);
 
   @override
-  Note get note => (origin as NoteVoteNotifierProvider).note;
+  String toString() => r'noteVoteNotifierProvider';
 }
+
+abstract class _$NoteVoteNotifier extends $Notifier<AsyncValue?> {
+  late final _$args = ref.$arg as Note;
+  Note get note => _$args;
+
+  AsyncValue? build(Note note);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue?, AsyncValue?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue?, AsyncValue?>,
+              AsyncValue?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
