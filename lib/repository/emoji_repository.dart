@@ -4,13 +4,13 @@ import "dart:convert";
 import "package:collection/collection.dart";
 import "package:flutter/services.dart";
 import "package:kana_kit/kana_kit.dart";
-import "package:miria/util/emoji_search.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/account_settings.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/model/unicode_emoji.dart";
 import "package:miria/repository/account_settings_repository.dart";
 import "package:miria/repository/shared_preference_controller.dart";
+import "package:miria/util/emoji_search.dart";
 import "package:misskey_dart/misskey_dart.dart";
 
 abstract class EmojiRepository {
@@ -113,9 +113,10 @@ class EmojiRepositoryImpl extends EmojiRepository {
               (e) => EmojiRepositoryData(
                 emoji: UnicodeEmojiData(char: e.char),
                 kanaName: toHiraganaSafe(e.char),
-                kanaAliases: [e.name, ...e.keywords]
-                    .map((e2) => toHiraganaSafe(e2))
-                    .toList(),
+                kanaAliases: [
+                  e.name,
+                  ...e.keywords,
+                ].map((e2) => toHiraganaSafe(e2)).toList(),
                 aliases: [e.name, ...e.keywords],
                 category: e.category,
               ),
@@ -159,14 +160,16 @@ class EmojiRepositoryImpl extends EmojiRepository {
     final converted = formatEmojiName(const KanaKit().toHiragana(name));
 
     return emoji
-            ?.where((element) => emojiSearchCondition(
-                  name,
-                  converted,
-                  baseName: element.emoji.baseName,
-                  aliases: element.aliases,
-                  kanaName: element.kanaName,
-                  kanaAliases: element.kanaAliases,
-                ))
+            ?.where(
+              (element) => emojiSearchCondition(
+                name,
+                converted,
+                baseName: element.emoji.baseName,
+                aliases: element.aliases,
+                kanaName: element.kanaName,
+                kanaAliases: element.kanaAliases,
+              ),
+            )
             .sorted((a, b) {
               final aValue = [
                 if (a.emoji.baseName.contains(name)) a.emoji.baseName,

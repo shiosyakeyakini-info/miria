@@ -1,15 +1,14 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/misskey_emoji_data.dart";
 import "package:miria/providers.dart";
+import "package:miria/util/emoji_search.dart";
 import "package:miria/view/common/error_detail.dart";
 import "package:miria/view/common/misskey_notes/custom_emoji.dart";
 import "package:misskey_dart/misskey_dart.dart";
-import "package:miria/util/emoji_search.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "federation_custom_emojis.g.dart";
@@ -38,36 +37,35 @@ class FederationCustomEmojis extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final emoji = ref.watch(fetchEmojiProvider(host, meta));
-    final query = useState('');
+    final query = useState("");
 
     return switch (emoji) {
       AsyncLoading() => const Center(
         child: CircularProgressIndicator.adaptive(),
       ),
       AsyncError(:final error, :final stackTrace) => ErrorDetail(
-          error: error,
-          stackTrace: stackTrace,
-        ),
+        error: error,
+        stackTrace: stackTrace,
+      ),
       AsyncData(:final value) => Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextField(
-                decoration:
-                    const InputDecoration(prefixIcon: Icon(Icons.search)),
-                onChanged: (v) => query.value = v,
-              ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextField(
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+              onChanged: (v) => query.value = v,
             ),
-            Expanded(
-              child: ListView(
-                children: [
-                  for (final entry in value.entries)
-                    _buildCategory(context, entry, query.value),
-                ],
-              ),
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                for (final entry in value.entries)
+                  _buildCategory(context, entry, query.value),
+              ],
             ),
-          ],
-        )
+          ),
+        ],
+      ),
     };
   }
 
@@ -145,9 +143,7 @@ class FederationCustomEmojis extends HookConsumerWidget {
                               padding: const EdgeInsets.only(left: 3, right: 3),
                               child: Text(
                                 S.of(context).sensitive,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
+                                style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(color: Colors.white),
                               ),
                             ),
@@ -159,7 +155,7 @@ class FederationCustomEmojis extends HookConsumerWidget {
                 if (element.aliases.isNotEmpty) ...[
                   const Padding(padding: EdgeInsets.only(top: 10)),
                   Text(
-                    element.aliases.join(' '),
+                    element.aliases.join(" "),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],

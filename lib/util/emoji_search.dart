@@ -1,10 +1,10 @@
-import 'package:kana_kit/kana_kit.dart';
+import "package:kana_kit/kana_kit.dart";
 
-final RegExp _romajiPattern = RegExp(r'^[A-Za-z0-9_+-]+$');
-final RegExp _splitPattern = RegExp('[_+-]');
+final RegExp _romajiPattern = RegExp(r"^[A-Za-z0-9_+-]+$");
+final RegExp _splitPattern = RegExp("[_+-]");
 
 String formatEmojiName(String emojiName) {
-  return emojiName.replaceAll('_', '').replaceAll('+', '').replaceAll('-', '');
+  return emojiName.replaceAll("_", "").replaceAll("+", "").replaceAll("-", "");
 }
 
 String toHiraganaSafe(String text) {
