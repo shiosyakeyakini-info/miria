@@ -530,9 +530,9 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                     return Text(cacheSize);
                                   },
                                 ),
-                              )
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                       if (cacheSize.hasValue)

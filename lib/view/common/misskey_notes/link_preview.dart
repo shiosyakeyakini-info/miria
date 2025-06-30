@@ -253,7 +253,9 @@ class LinkPreviewTile extends ConsumerWidget {
                                     imageUrl: icon,
                                     height: textTheme.labelMedium?.fontSize,
                                     width: textTheme.labelMedium?.fontSize,
-                                    cacheManager: ref.read(cacheManagerProvider),
+                                    cacheManager: ref.read(
+                                      cacheManagerProvider,
+                                    ),
                                   ),
                                 ),
                               Expanded(

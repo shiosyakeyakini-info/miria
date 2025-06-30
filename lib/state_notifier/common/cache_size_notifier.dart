@@ -42,8 +42,9 @@ class CacheSizeNotifier extends _$CacheSizeNotifier {
     final unit = unitArr[unitIndex];
 
     // "00.0 GB"の形にする
-    final cacheSizeStr =
-        (cacheSizeByte / pow(1000, unitIndex)).toStringAsFixed(1);
+    final cacheSizeStr = (cacheSizeByte / pow(1000, unitIndex)).toStringAsFixed(
+      1,
+    );
 
     return "$cacheSizeStr $unit";
   }
