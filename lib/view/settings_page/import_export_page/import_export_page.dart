@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/dialogs/simple_message_dialog.dart";
 
 @RoutePage()
@@ -72,10 +72,13 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                       );
                       return;
                     }
-                    await ref
-                        .read(importExportRepositoryProvider)
-                        .import(context, account)
-                        .expectFailure(context);
+                    await ref.read(dialogStateNotifierProvider.notifier).guard(
+                      () async {
+                        await ref
+                            .read(importExportRepositoryProvider)
+                            .import(context, account);
+                      },
+                    );
                   },
                   child: Text(S.of(context).select),
                 ),
@@ -117,10 +120,13 @@ class ImportExportPageState extends ConsumerState<ImportExportPage> {
                       );
                       return;
                     }
-                    await ref
-                        .read(importExportRepositoryProvider)
-                        .export(context, account)
-                        .expectFailure(context);
+                    await ref.read(dialogStateNotifierProvider.notifier).guard(
+                      () async {
+                        await ref
+                            .read(importExportRepositoryProvider)
+                            .export(context, account);
+                      },
+                    );
                   },
                   child: Text(S.of(context).save),
                 ),

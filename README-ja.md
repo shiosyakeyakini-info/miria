@@ -50,6 +50,17 @@ MiriaはiOS, Android向けMisskeyクライアントです。Windowsでも動作�
 
 [Issue #164](https://github.com/shiosyakeyakini-info/miria/issues/164)を確認してください。
 
+### 開発
+
+#### ローカル開発サーバーへの接続
+
+ローカルのMisskeyサーバーでの開発やテスト時は、HTTPスキームを含む完全なURLを指定する必要があります：
+
+- **正しい例**: `http://localhost:3000`
+- **間違った例**: `localhost:3000` （これはHTTPSがデフォルトとなり接続に失敗します）
+
+これはMiAuth認証とAPIキー認証の両方に適用されます。
+
 ## ライセンス
 
 ### アイコンについて

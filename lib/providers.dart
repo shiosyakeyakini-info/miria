@@ -53,21 +53,52 @@ FileSystem fileSystem(Ref ref) => const LocalFileSystem();
 @Deprecated(
   "Most case will be replace misskeyGetContext or misskeyPostContext, but will be remain",
 )
-Misskey misskey(Ref ref, Account account) => Misskey(
-  token: account.token,
-  host: account.host,
-  socketConnectionTimeout: const Duration(seconds: 20),
-);
+Misskey misskey(Ref ref, Account account) {
+  final hostWithPort = account.port != null
+      ? "${account.host}:${account.port}"
+      : account.host;
+
+  final apiUrl = account.scheme == "http" ? "http://$hostWithPort/api/" : null;
+
+  final streamingUrl = account.scheme == "http"
+      ? "ws://$hostWithPort/streaming/"
+      : null;
+
+  return Misskey(
+    token: account.token,
+    host: hostWithPort,
+    apiUrl: apiUrl,
+    streamingUrl: streamingUrl,
+    socketConnectionTimeout: const Duration(seconds: 20),
+  );
+}
 
 @Riverpod(keepAlive: true)
 Raw<AppRouter> appRouter(Ref ref) => AppRouter();
 
 @riverpod
-Misskey misskeyWithoutAccount(Ref ref, String host) => Misskey(
-  host: host,
-  token: null,
-  socketConnectionTimeout: const Duration(seconds: 20),
-);
+Misskey misskeyWithoutAccount(Ref ref, String hostOrUrl) {
+  // HTTP接続をサポートするためにカスタムURL指定
+  final uri = Uri.parse(
+    hostOrUrl.startsWith("http") ? hostOrUrl : "https://$hostOrUrl",
+  );
+
+  final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
+
+  final apiUrl = uri.scheme == "http" ? "http://$hostWithPort/api/" : null;
+
+  final streamingUrl = uri.scheme == "http"
+      ? "ws://$hostWithPort/streaming/"
+      : null;
+
+  return Misskey(
+    host: hostWithPort,
+    token: null,
+    apiUrl: apiUrl,
+    streamingUrl: streamingUrl,
+    socketConnectionTimeout: const Duration(seconds: 20),
+  );
+}
 
 final favoriteProvider =
     ChangeNotifierProvider.family<FavoriteRepository, Account>(
