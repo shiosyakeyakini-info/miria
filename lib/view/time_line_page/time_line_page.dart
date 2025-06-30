@@ -14,8 +14,8 @@ import "package:miria/repository/time_line_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
 import "package:miria/view/common/common_drawer.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/notification_icon.dart";
 import "package:miria/view/common/tab_icon_view.dart";
 import "package:miria/view/common/timeline_listview.dart";
@@ -368,7 +368,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                         if (event is KeyDownEvent) {
                           if (event.logicalKey == LogicalKeyboardKey.enter &&
                               HardwareKeyboard.instance.isControlPressed) {
-                            note().expectFailure(context);
+                            ref
+                                .read(dialogStateNotifierProvider.notifier)
+                                .guard(() => note());
                             return KeyEventResult.handled;
                           }
                         }
@@ -378,7 +380,9 @@ class TimeLinePageState extends ConsumerState<TimeLinePage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: note.expectFailure(context),
+                    onPressed: () => ref
+                        .read(dialogStateNotifierProvider.notifier)
+                        .guard(() => note()),
                     icon: const Icon(Icons.send),
                   ),
                   IconButton(

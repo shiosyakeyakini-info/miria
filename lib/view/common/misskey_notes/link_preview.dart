@@ -9,7 +9,7 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/account.dart";
 import "package:miria/model/summaly_result.dart";
 import "package:miria/providers.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/misskey_notes/link_navigator.dart";
 import "package:miria/view/common/misskey_notes/player_embed.dart";
 import "package:miria/view/common/misskey_notes/twitter_embed.dart";
@@ -191,9 +191,11 @@ class LinkPreviewTile extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: InkWell(
-        onTap: () async => await const LinkNavigator()
-            .onTapLink(context, ref, link, host)
-            .expectFailure(context),
+        onTap: () async => await ref
+            .read(dialogStateNotifierProvider.notifier)
+            .guard(() async {
+              await const LinkNavigator().onTapLink(context, ref, link, host);
+            }),
         onLongPress: () async {
           await Clipboard.setData(ClipboardData(text: link));
           if (!context.mounted) return;

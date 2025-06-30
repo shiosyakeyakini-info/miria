@@ -7,8 +7,8 @@ import "package:miria/model/users_list_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/view/common/account_scope.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_detail.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/dialogs/simple_confirm_dialog.dart";
 import "package:miria/view/user_page/user_list_item.dart";
 import "package:misskey_dart/misskey_dart.dart";
@@ -115,10 +115,15 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                 if (!context.mounted) return;
                 if (settings == null) return;
 
-                await ref
-                    .read(_usersListNotifierProvider(misskey, listId).notifier)
-                    .updateList(settings, misskey, listId)
-                    .expectFailure(context);
+                await ref.read(dialogStateNotifierProvider.notifier).guard(
+                  () async {
+                    await ref
+                        .read(
+                          _usersListNotifierProvider(misskey, listId).notifier,
+                        )
+                        .updateList(settings, misskey, listId);
+                  },
+                );
               },
             ),
           ],
@@ -154,11 +159,17 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                       if (user == null) return;
                       if (!context.mounted) return;
                       await ref
-                          .read(
-                            _usersListUsersProvider(misskey, listId).notifier,
-                          )
-                          .push(user, misskey, listId)
-                          .expectFailure(context);
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() async {
+                            await ref
+                                .read(
+                                  _usersListUsersProvider(
+                                    misskey,
+                                    listId,
+                                  ).notifier,
+                                )
+                                .push(user, misskey, listId);
+                          });
                     },
                   ),
                 ),
@@ -183,14 +194,17 @@ class UsersListDetailPage extends ConsumerWidget implements AutoRouteWrapper {
                               if (!context.mounted) return;
                               if (result ?? false) {
                                 await ref
-                                    .read(
-                                      _usersListUsersProvider(
-                                        misskey,
-                                        listId,
-                                      ).notifier,
-                                    )
-                                    .pull(user, misskey, listId)
-                                    .expectFailure(context);
+                                    .read(dialogStateNotifierProvider.notifier)
+                                    .guard(() async {
+                                      await ref
+                                          .read(
+                                            _usersListUsersProvider(
+                                              misskey,
+                                              listId,
+                                            ).notifier,
+                                          )
+                                          .pull(user, misskey, listId);
+                                    });
                               }
                             },
                           ),

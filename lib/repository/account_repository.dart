@@ -313,7 +313,7 @@ class AccountRepository extends _$AccountRepository {
               Account.demoAccount(
                 serverUri.host,
                 meta,
-                scheme: serverUri.scheme == 'http' ? 'http' : null,
+                scheme: serverUri.scheme == "http" ? "http" : null,
                 port: serverUri.hasPort ? serverUri.port : null,
               ),
             ),

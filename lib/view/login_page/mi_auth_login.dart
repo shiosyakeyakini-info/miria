@@ -7,7 +7,7 @@ import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/util/server_utils.dart";
-import "package:miria/view/common/error_dialog_handler.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
@@ -71,7 +71,6 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     controller: serverController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.dns),
-                      hintText: "example.com",
                       suffixIcon: IconButton(
                         onPressed: () async {
                           final url = await showDialog<String?>(
@@ -101,9 +100,14 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                   ElevatedButton(
                     onPressed: () async {
                       await ref
-                          .read(accountRepositoryProvider.notifier)
-                          .openMiAuth(normalizeServer(serverController.text))
-                          .expectFailure(context);
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() async {
+                            await ref
+                                .read(accountRepositoryProvider.notifier)
+                                .openMiAuth(
+                                  normalizeServer(serverController.text),
+                                );
+                          });
                       setState(() {
                         isAuthed = true;
                       });
@@ -127,7 +131,9 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                   children: [
                     Container(),
                     ElevatedButton(
-                      onPressed: () async => login().expectFailure(context),
+                      onPressed: () async => ref
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() => login()),
                       child: Text(S.of(context).didAuthorize),
                     ),
                   ],
