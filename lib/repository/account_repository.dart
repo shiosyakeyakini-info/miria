@@ -64,6 +64,25 @@ class AccountRepository extends _$AccountRepository {
   final _validateMetaAccts = <Acct>{};
   String _sessionId = "";
 
+  String _buildHttpMiAuthUrl(Uri uri, String sessionId) {
+    final baseUrl =
+        "${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}";
+    final permissions = Permission.values.map((p) => p.value).join(",");
+    return "$baseUrl/miauth/$sessionId?name=Miria&permission=$permissions";
+  }
+
+  Future<String> _checkHttpMiAuthToken(Uri uri, String sessionId) async {
+    final checkUrl =
+        "${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}/api/miauth/$sessionId/check";
+    final response = await ref.read(dioProvider).post(checkUrl);
+    final data = response.data as Map<String, dynamic>;
+    if (data["ok"] == true) {
+      return data["token"] as String;
+    } else {
+      throw Exception("MiAuth authentication failed");
+    }
+  }
+
   @override
   List<Account> build() {
     return [];
@@ -258,6 +277,14 @@ class AccountRepository extends _$AccountRepository {
     try {
       nodeInfo = await ref.read(dioProvider).getUri(uri);
     } catch (e) {
+      // HandshakeExceptionの場合、HTTPを使用するよう促す
+      if (e.toString().contains("HandshakeException") &&
+          !server.startsWith("http://") &&
+          !server.startsWith("https://")) {
+        throw InvalidServerException(
+          "$server\n\nローカル開発環境の場合は http:// を含めて入力してください。\n例: http://localhost:3000",
+        );
+      }
       throw ServerIsNotMisskeyException(server);
     }
     final nodeInfoHref = nodeInfo.data["links"][0]["href"];
@@ -273,15 +300,26 @@ class AccountRepository extends _$AccountRepository {
     final version = nodeInfoResult["software"]["version"];
 
     try {
+      final serverUrl =
+          "${serverUri.scheme}://${serverUri.host}${serverUri.hasPort ? ':${serverUri.port}' : ''}";
       final hostWithPort = serverUri.hasPort
           ? "${serverUri.host}:${serverUri.port}"
           : serverUri.host;
       final meta = await ref
-          .read(misskeyWithoutAccountProvider(hostWithPort))
+          .read(misskeyWithoutAccountProvider(serverUrl))
           .meta();
 
       final endpoints = await ref
-          .read(misskeyProvider(Account.demoAccount(hostWithPort, meta)))
+          .read(
+            misskeyProvider(
+              Account.demoAccount(
+                serverUri.host,
+                meta,
+                scheme: serverUri.scheme == 'http' ? 'http' : null,
+                port: serverUri.hasPort ? serverUri.port : null,
+              ),
+            ),
+          )
           .endpoints();
       if (!endpoints.contains("emojis")) {
         throw SoftwareNotCompatibleException(
@@ -312,11 +350,13 @@ class AccountRepository extends _$AccountRepository {
     final i = await Misskey(token: token, host: hostWithPort).i.i();
     final meta = await Misskey(token: token, host: hostWithPort).meta();
     final account = Account(
-      host: hostWithPort,
+      host: uri.host,
       token: token,
       userId: userId,
       i: i,
       meta: meta,
+      scheme: uri.scheme == "http" ? "http" : null,
+      port: uri.hasPort ? uri.port : null,
     );
     await _addAccount(account);
   }
@@ -325,16 +365,27 @@ class AccountRepository extends _$AccountRepository {
     await _validateMisskey(server);
     final uri = serverToUri(server);
     final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
-    final misskey = Misskey(token: token, host: hostWithPort);
+    final apiUrl = uri.scheme == "http" ? "http://$hostWithPort/api/" : null;
+    final streamingUrl = uri.scheme == "http"
+        ? "ws://$hostWithPort/streaming/"
+        : null;
+    final misskey = Misskey(
+      token: token,
+      host: hostWithPort,
+      apiUrl: apiUrl,
+      streamingUrl: streamingUrl,
+    );
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
       Account(
-        host: hostWithPort,
+        host: uri.host,
         userId: i.username,
         token: token,
         i: i,
         meta: meta,
+        scheme: uri.scheme == "http" ? "http" : null,
+        port: uri.hasPort ? uri.port : null,
       ),
     );
   }
@@ -345,13 +396,19 @@ class AccountRepository extends _$AccountRepository {
     final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
 
     _sessionId = const Uuid().v4();
+
+    // MiAuth URLを構築
+    final miAuthUrl = uri.scheme == "http"
+        ? _buildHttpMiAuthUrl(uri, _sessionId)
+        : MisskeyServer().buildMiAuthURL(
+            uri.host,
+            _sessionId,
+            name: "Miria",
+            permission: Permission.values,
+          );
+
     await launchUrl(
-      MisskeyServer().buildMiAuthURL(
-        hostWithPort,
-        _sessionId,
-        name: "Miria",
-        permission: Permission.values,
-      ),
+      Uri.parse(miAuthUrl.toString()),
       mode: LaunchMode.externalApplication,
     );
   }
@@ -359,20 +416,30 @@ class AccountRepository extends _$AccountRepository {
   Future<void> validateMiAuth(String server) async {
     final uri = serverToUri(server);
     final hostWithPort = uri.hasPort ? "${uri.host}:${uri.port}" : uri.host;
-    final token = await MisskeyServer().checkMiAuthToken(
-      hostWithPort,
-      _sessionId,
+    final token = uri.scheme == "http"
+        ? await _checkHttpMiAuthToken(uri, _sessionId)
+        : await MisskeyServer().checkMiAuthToken(uri.host, _sessionId);
+    final apiUrl = uri.scheme == "http" ? "http://$hostWithPort/api/" : null;
+    final streamingUrl = uri.scheme == "http"
+        ? "ws://$hostWithPort/streaming/"
+        : null;
+    final misskey = Misskey(
+      token: token,
+      host: hostWithPort,
+      apiUrl: apiUrl,
+      streamingUrl: streamingUrl,
     );
-    final misskey = Misskey(token: token, host: hostWithPort);
     final i = await misskey.i.i();
     final meta = await misskey.meta();
     await _addAccount(
       Account(
-        host: hostWithPort,
+        host: uri.host,
         userId: i.username,
         token: token,
         i: i,
         meta: meta,
+        scheme: uri.scheme == "http" ? "http" : null,
+        port: uri.hasPort ? uri.port : null,
       ),
     );
   }

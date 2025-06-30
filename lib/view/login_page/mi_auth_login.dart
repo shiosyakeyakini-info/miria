@@ -71,6 +71,10 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                     controller: serverController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.dns),
+                      hintText: "example.com",
+                      helperText:
+                          "ローカル開発環境では http://localhost:3000 のように入力してください",
+                      helperMaxLines: 2,
                       suffixIcon: IconButton(
                         onPressed: () async {
                           final url = await showDialog<String?>(

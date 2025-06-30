@@ -147,7 +147,7 @@ final class MisskeyProvider
   }
 }
 
-String _$misskeyHash() => r'5f10aa38a56d482bf42572c93b20bb2babd87058';
+String _$misskeyHash() => r'c1dede29fabcc1bbff0c065f1ad6fc5f395efb63';
 
 final class MisskeyFamily extends $Family
     with $FunctionalFamilyOverride<Misskey, Account> {
@@ -266,7 +266,7 @@ final class MisskeyWithoutAccountProvider
 }
 
 String _$misskeyWithoutAccountHash() =>
-    r'e222a8dd22abe066249f52f043f6a6a38446a225';
+    r'1cebee6922380b9c1e0e7ff964edba58635511fd';
 
 final class MisskeyWithoutAccountFamily extends $Family
     with $FunctionalFamilyOverride<Misskey, String> {
@@ -279,8 +279,8 @@ final class MisskeyWithoutAccountFamily extends $Family
         isAutoDispose: true,
       );
 
-  MisskeyWithoutAccountProvider call(String host) =>
-      MisskeyWithoutAccountProvider._(argument: host, from: this);
+  MisskeyWithoutAccountProvider call(String hostOrUrl) =>
+      MisskeyWithoutAccountProvider._(argument: hostOrUrl, from: this);
 
   @override
   String toString() => r'misskeyWithoutAccountProvider';

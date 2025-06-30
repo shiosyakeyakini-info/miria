@@ -3,6 +3,8 @@
 /// These helpers normalize server strings, ensuring any internationalized
 /// domain names are converted to punycode and that only valid host and port
 /// information is retained.
+library;
+
 import "package:punycode/punycode.dart";
 
 // Converts a hostname containing non-ASCII characters into its punycode

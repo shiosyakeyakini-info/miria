@@ -15,6 +15,8 @@ abstract class Account with _$Account {
     required MeDetailed i,
     String? token,
     MetaResponse? meta,
+    String? scheme,
+    int? port,
   }) = _Account;
 
   factory Account.fromJson(Map<String, Object?> json) =>
@@ -37,11 +39,18 @@ abstract class Account with _$Account {
 
   bool get isDemoAccount => userId.isEmpty;
 
-  factory Account.demoAccount(String host, MetaResponse? meta) => Account(
+  factory Account.demoAccount(
+    String host,
+    MetaResponse? meta, {
+    String? scheme,
+    int? port,
+  }) => Account(
     host: host,
     userId: "",
     token: null,
     meta: meta,
+    scheme: scheme,
+    port: port,
     i: MeDetailed(
       id: "",
       username: "",

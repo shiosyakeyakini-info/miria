@@ -14,6 +14,8 @@ _Account _$AccountFromJson(Map<String, dynamic> json) => _Account(
   meta: json['meta'] == null
       ? null
       : MetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
+  scheme: json['scheme'] as String?,
+  port: (json['port'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$AccountToJson(_Account instance) => <String, dynamic>{
@@ -22,4 +24,6 @@ Map<String, dynamic> _$AccountToJson(_Account instance) => <String, dynamic>{
   'i': instance.i.toJson(),
   'token': instance.token,
   'meta': instance.meta?.toJson(),
+  'scheme': instance.scheme,
+  'port': instance.port,
 };
