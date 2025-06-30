@@ -2328,6 +2328,30 @@ abstract class S {
   /// **'システム標準'**
   String get systemFont;
 
+  /// No description provided for @cache.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャッシュ'**
+  String get cache;
+
+  /// No description provided for @cacheSize.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャッシュサイズ'**
+  String get cacheSize;
+
+  /// No description provided for @cacheSizeError.
+  ///
+  /// In ja, this message translates to:
+  /// **'取得に失敗しました'**
+  String get cacheSizeError;
+
+  /// No description provided for @clearCache.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャッシュをクリア'**
+  String get clearCache;
+
   /// No description provided for @selectFolder.
   ///
   /// In ja, this message translates to:

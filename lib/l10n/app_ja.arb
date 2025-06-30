@@ -829,6 +829,8 @@
     "systemFont": "システム標準",
 
     "cache": "キャッシュ",
+    "cacheSize": "キャッシュサイズ",
+    "cacheSizeError": "取得に失敗しました",
     "clearCache": "キャッシュをクリア",
 
     "selectFolder": "フォルダー選択",

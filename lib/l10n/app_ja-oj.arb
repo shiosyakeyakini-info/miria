@@ -111,8 +111,8 @@
     "memoDescription": "メモしたいことをお書きくださいまし",
     "confirmCreateBlock": "ブロックなさりますの？",
     "confirmUnfollow": "フォロー解除なさりますの？",
-    
-    "cache": "キャッシュ",
+
+    "cacheSizeError": "取得に失敗しましたわ",
     "clearCache": "キャッシュとお別れいたしますわ",
 
     "unsupportedFile": "対応してないファイルのようですわ",
