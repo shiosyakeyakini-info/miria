@@ -958,5 +958,6 @@
     "lookupHint": "输入 @ai@misskey.io 或 https://...",
     "lookupFailed": "查找失败",
     "lookupExamples": "输入示例:",
-    "unknownObject": "未知对象"
+    "unknownObject": "未知对象",
+    "limitedApiServerWarning": "该服务器限制了一些API。如果无法登录，请自行查看或联系管理员或支持"
 }

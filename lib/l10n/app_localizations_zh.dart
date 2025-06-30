@@ -918,6 +918,9 @@ class SZh extends S {
   String get didAuthorize => '我已认证';
 
   @override
+  String get limitedApiServerWarning => '该服务器限制了一些API。如果无法登录，请自行查看或联系管理员或支持';
+
+  @override
   String get thrownConnectionError => '连接通讯失败。';
 
   @override
@@ -2820,6 +2823,9 @@ class SZhCn extends SZh {
 
   @override
   String get didAuthorize => '我已认证';
+
+  @override
+  String get limitedApiServerWarning => '该服务器限制了一些API。如果无法登录，请自行查看或联系管理员或支持';
 
   @override
   String get thrownConnectionError => '连接通讯失败。';

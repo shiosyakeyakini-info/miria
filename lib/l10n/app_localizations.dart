@@ -1668,6 +1668,12 @@ abstract class S {
   /// **'認証してきた'**
   String get didAuthorize;
 
+  /// No description provided for @limitedApiServerWarning.
+  ///
+  /// In ja, this message translates to:
+  /// **'そのサーバーはなんぼか制限かけてはんねん、ログインできひんかったら調べるなり管理者やサポートに聞くなりしてな'**
+  String get limitedApiServerWarning;
+
   /// No description provided for @thrownConnectionError.
   ///
   /// In ja, this message translates to:

@@ -7,6 +7,7 @@ import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/util/punycode.dart";
 import "package:miria/view/common/dialog/dialog_state.dart";
+import "package:miria/state_notifier/common/server_preset_provider.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
 import "package:miria/view/login_page/misskey_server_list_dialog.dart";
@@ -121,12 +122,22 @@ class APiKeyLoginState extends ConsumerState<ApiKeyLogin> {
                         await ref
                             .read(dialogStateNotifierProvider.notifier)
                             .guard(() async {
+                              final host = toAscii(serverController.text);
+                              final isLimited = await ref.read(
+                                isLimitedApiServerProvider(host).future,
+                              );
+                              if (isLimited) {
+                                await ref
+                                    .read(dialogStateNotifierProvider.notifier)
+                                    .showSimpleDialog(
+                                      message: (context) =>
+                                          S.of(context).limitedApiServerWarning,
+                                    );
+                              }
+
                               await ref
                                   .read(accountRepositoryProvider.notifier)
-                                  .loginAsToken(
-                                    toAscii(serverController.text),
-                                    apiKeyController.text,
-                                  );
+                                  .loginAsToken(host, apiKeyController.text);
 
                               if (!context.mounted) return;
                               await context.pushRoute(
