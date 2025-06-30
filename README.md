@@ -47,6 +47,17 @@ I'm planning to deploy from F-Droid.
 
 See [Issue #164](https://github.com/shiosyakeyakini-info/miria/issues/164).
 
+### Development
+
+#### Connecting to Local Development Server
+
+When developing or testing with a local Misskey server, you need to specify the full URL including the HTTP scheme:
+
+- **Correct**: `http://localhost:3000`
+- **Incorrect**: `localhost:3000` (this will default to HTTPS and fail)
+
+This applies to both MiAuth login and API key login methods.
+
 ## License
 
 ### About Miria Icon

@@ -281,9 +281,7 @@ class AccountRepository extends _$AccountRepository {
       if (e.toString().contains("HandshakeException") &&
           !server.startsWith("http://") &&
           !server.startsWith("https://")) {
-        throw InvalidServerException(
-          "$server\n\nローカル開発環境の場合は http:// を含めて入力してください。\n例: http://localhost:3000",
-        );
+        throw InvalidServerException(server);
       }
       throw ServerIsNotMisskeyException(server);
     }
