@@ -1,5 +1,4 @@
 import "dart:async";
-import "dart:io";
 
 import "package:auto_route/auto_route.dart";
 import "package:collection/collection.dart";

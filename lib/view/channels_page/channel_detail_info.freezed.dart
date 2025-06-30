@@ -12,55 +12,47 @@ part of 'channel_detail_info.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$ChannelDetailState {
-  CommunityChannel get channel;
-  AsyncValue<void>? get follow;
-  AsyncValue<void>? get favorite;
 
-  /// Create a copy of ChannelDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $ChannelDetailStateCopyWith<ChannelDetailState> get copyWith =>
-      _$ChannelDetailStateCopyWithImpl<ChannelDetailState>(
-          this as ChannelDetailState, _$identity);
+ CommunityChannel get channel; AsyncValue<void>? get follow; AsyncValue<void>? get favorite;
+/// Create a copy of ChannelDetailState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ChannelDetailStateCopyWith<ChannelDetailState> get copyWith => _$ChannelDetailStateCopyWithImpl<ChannelDetailState>(this as ChannelDetailState, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is ChannelDetailState &&
-            (identical(other.channel, channel) || other.channel == channel) &&
-            (identical(other.follow, follow) || other.follow == follow) &&
-            (identical(other.favorite, favorite) ||
-                other.favorite == favorite));
-  }
 
-  @override
-  int get hashCode => Object.hash(runtimeType, channel, follow, favorite);
 
-  @override
-  String toString() {
-    return 'ChannelDetailState(channel: $channel, follow: $follow, favorite: $favorite)';
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChannelDetailState&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.follow, follow) || other.follow == follow)&&(identical(other.favorite, favorite) || other.favorite == favorite));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,channel,follow,favorite);
+
+@override
+String toString() {
+  return 'ChannelDetailState(channel: $channel, follow: $follow, favorite: $favorite)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $ChannelDetailStateCopyWith<$Res> {
-  factory $ChannelDetailStateCopyWith(
-          ChannelDetailState value, $Res Function(ChannelDetailState) _then) =
-      _$ChannelDetailStateCopyWithImpl;
-  @useResult
-  $Res call(
-      {CommunityChannel channel,
-      AsyncValue<void>? follow,
-      AsyncValue<void>? favorite});
+abstract mixin class $ChannelDetailStateCopyWith<$Res>  {
+  factory $ChannelDetailStateCopyWith(ChannelDetailState value, $Res Function(ChannelDetailState) _then) = _$ChannelDetailStateCopyWithImpl;
+@useResult
+$Res call({
+ CommunityChannel channel, AsyncValue<void>? follow, AsyncValue<void>? favorite
+});
 
-  $CommunityChannelCopyWith<$Res> get channel;
+
+$CommunityChannelCopyWith<$Res> get channel;
+
 }
-
 /// @nodoc
 class _$ChannelDetailStateCopyWithImpl<$Res>
     implements $ChannelDetailStateCopyWith<$Res> {
@@ -69,99 +61,77 @@ class _$ChannelDetailStateCopyWithImpl<$Res>
   final ChannelDetailState _self;
   final $Res Function(ChannelDetailState) _then;
 
-  /// Create a copy of ChannelDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? channel = null,
-    Object? follow = freezed,
-    Object? favorite = freezed,
-  }) {
-    return _then(_self.copyWith(
-      channel: null == channel
-          ? _self.channel
-          : channel // ignore: cast_nullable_to_non_nullable
-              as CommunityChannel,
-      follow: freezed == follow
-          ? _self.follow
-          : follow // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      favorite: freezed == favorite
-          ? _self.favorite
-          : favorite // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-    ));
-  }
-
-  /// Create a copy of ChannelDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CommunityChannelCopyWith<$Res> get channel {
-    return $CommunityChannelCopyWith<$Res>(_self.channel, (value) {
-      return _then(_self.copyWith(channel: value));
-    });
-  }
+/// Create a copy of ChannelDetailState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? channel = null,Object? follow = freezed,Object? favorite = freezed,}) {
+  return _then(_self.copyWith(
+channel: null == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
+as CommunityChannel,follow: freezed == follow ? _self.follow : follow // ignore: cast_nullable_to_non_nullable
+as AsyncValue<void>?,favorite: freezed == favorite ? _self.favorite : favorite // ignore: cast_nullable_to_non_nullable
+as AsyncValue<void>?,
+  ));
+}
+/// Create a copy of ChannelDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CommunityChannelCopyWith<$Res> get channel {
+  
+  return $CommunityChannelCopyWith<$Res>(_self.channel, (value) {
+    return _then(_self.copyWith(channel: value));
+  });
+}
 }
 
+
 /// @nodoc
+
 
 class _ChannelDetailState implements ChannelDetailState {
-  _ChannelDetailState({required this.channel, this.follow, this.favorite});
+   _ChannelDetailState({required this.channel, this.follow, this.favorite});
+  
 
-  @override
-  final CommunityChannel channel;
-  @override
-  final AsyncValue<void>? follow;
-  @override
-  final AsyncValue<void>? favorite;
+@override final  CommunityChannel channel;
+@override final  AsyncValue<void>? follow;
+@override final  AsyncValue<void>? favorite;
 
-  /// Create a copy of ChannelDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$ChannelDetailStateCopyWith<_ChannelDetailState> get copyWith =>
-      __$ChannelDetailStateCopyWithImpl<_ChannelDetailState>(this, _$identity);
+/// Create a copy of ChannelDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ChannelDetailStateCopyWith<_ChannelDetailState> get copyWith => __$ChannelDetailStateCopyWithImpl<_ChannelDetailState>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _ChannelDetailState &&
-            (identical(other.channel, channel) || other.channel == channel) &&
-            (identical(other.follow, follow) || other.follow == follow) &&
-            (identical(other.favorite, favorite) ||
-                other.favorite == favorite));
-  }
 
-  @override
-  int get hashCode => Object.hash(runtimeType, channel, follow, favorite);
 
-  @override
-  String toString() {
-    return 'ChannelDetailState(channel: $channel, follow: $follow, favorite: $favorite)';
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChannelDetailState&&(identical(other.channel, channel) || other.channel == channel)&&(identical(other.follow, follow) || other.follow == follow)&&(identical(other.favorite, favorite) || other.favorite == favorite));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,channel,follow,favorite);
+
+@override
+String toString() {
+  return 'ChannelDetailState(channel: $channel, follow: $follow, favorite: $favorite)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class _$ChannelDetailStateCopyWith<$Res>
-    implements $ChannelDetailStateCopyWith<$Res> {
-  factory _$ChannelDetailStateCopyWith(
-          _ChannelDetailState value, $Res Function(_ChannelDetailState) _then) =
-      __$ChannelDetailStateCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {CommunityChannel channel,
-      AsyncValue<void>? follow,
-      AsyncValue<void>? favorite});
+abstract mixin class _$ChannelDetailStateCopyWith<$Res> implements $ChannelDetailStateCopyWith<$Res> {
+  factory _$ChannelDetailStateCopyWith(_ChannelDetailState value, $Res Function(_ChannelDetailState) _then) = __$ChannelDetailStateCopyWithImpl;
+@override @useResult
+$Res call({
+ CommunityChannel channel, AsyncValue<void>? follow, AsyncValue<void>? favorite
+});
 
-  @override
-  $CommunityChannelCopyWith<$Res> get channel;
+
+@override $CommunityChannelCopyWith<$Res> get channel;
+
 }
-
 /// @nodoc
 class __$ChannelDetailStateCopyWithImpl<$Res>
     implements _$ChannelDetailStateCopyWith<$Res> {
@@ -170,40 +140,27 @@ class __$ChannelDetailStateCopyWithImpl<$Res>
   final _ChannelDetailState _self;
   final $Res Function(_ChannelDetailState) _then;
 
-  /// Create a copy of ChannelDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? channel = null,
-    Object? follow = freezed,
-    Object? favorite = freezed,
-  }) {
-    return _then(_ChannelDetailState(
-      channel: null == channel
-          ? _self.channel
-          : channel // ignore: cast_nullable_to_non_nullable
-              as CommunityChannel,
-      follow: freezed == follow
-          ? _self.follow
-          : follow // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-      favorite: freezed == favorite
-          ? _self.favorite
-          : favorite // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<void>?,
-    ));
-  }
+/// Create a copy of ChannelDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? channel = null,Object? follow = freezed,Object? favorite = freezed,}) {
+  return _then(_ChannelDetailState(
+channel: null == channel ? _self.channel : channel // ignore: cast_nullable_to_non_nullable
+as CommunityChannel,follow: freezed == follow ? _self.follow : follow // ignore: cast_nullable_to_non_nullable
+as AsyncValue<void>?,favorite: freezed == favorite ? _self.favorite : favorite // ignore: cast_nullable_to_non_nullable
+as AsyncValue<void>?,
+  ));
+}
 
-  /// Create a copy of ChannelDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CommunityChannelCopyWith<$Res> get channel {
-    return $CommunityChannelCopyWith<$Res>(_self.channel, (value) {
-      return _then(_self.copyWith(channel: value));
-    });
-  }
+/// Create a copy of ChannelDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CommunityChannelCopyWith<$Res> get channel {
+  
+  return $CommunityChannelCopyWith<$Res>(_self.channel, (value) {
+    return _then(_self.copyWith(channel: value));
+  });
+}
 }
 
 // dart format on

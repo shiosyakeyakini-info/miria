@@ -15,51 +15,47 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ShareExtensionData {
-  List<String> get text;
-  List<SharedFiles> get files;
 
-  /// Create a copy of ShareExtensionData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $ShareExtensionDataCopyWith<ShareExtensionData> get copyWith =>
-      _$ShareExtensionDataCopyWithImpl<ShareExtensionData>(
-          this as ShareExtensionData, _$identity);
+ List<String> get text; List<SharedFiles> get files;
+/// Create a copy of ShareExtensionData
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ShareExtensionDataCopyWith<ShareExtensionData> get copyWith => _$ShareExtensionDataCopyWithImpl<ShareExtensionData>(this as ShareExtensionData, _$identity);
 
   /// Serializes this ShareExtensionData to a JSON map.
   Map<String, dynamic> toJson();
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is ShareExtensionData &&
-            const DeepCollectionEquality().equals(other.text, text) &&
-            const DeepCollectionEquality().equals(other.files, files));
-  }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(text),
-      const DeepCollectionEquality().hash(files));
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ShareExtensionData&&const DeepCollectionEquality().equals(other.text, text)&&const DeepCollectionEquality().equals(other.files, files));
+}
 
-  @override
-  String toString() {
-    return 'ShareExtensionData(text: $text, files: $files)';
-  }
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(text),const DeepCollectionEquality().hash(files));
+
+@override
+String toString() {
+  return 'ShareExtensionData(text: $text, files: $files)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $ShareExtensionDataCopyWith<$Res> {
-  factory $ShareExtensionDataCopyWith(
-          ShareExtensionData value, $Res Function(ShareExtensionData) _then) =
-      _$ShareExtensionDataCopyWithImpl;
-  @useResult
-  $Res call({List<String> text, List<SharedFiles> files});
-}
+abstract mixin class $ShareExtensionDataCopyWith<$Res>  {
+  factory $ShareExtensionDataCopyWith(ShareExtensionData value, $Res Function(ShareExtensionData) _then) = _$ShareExtensionDataCopyWithImpl;
+@useResult
+$Res call({
+ List<String> text, List<SharedFiles> files
+});
 
+
+
+
+}
 /// @nodoc
 class _$ShareExtensionDataCopyWithImpl<$Res>
     implements $ShareExtensionDataCopyWith<$Res> {
@@ -68,102 +64,81 @@ class _$ShareExtensionDataCopyWithImpl<$Res>
   final ShareExtensionData _self;
   final $Res Function(ShareExtensionData) _then;
 
-  /// Create a copy of ShareExtensionData
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? text = null,
-    Object? files = null,
-  }) {
-    return _then(_self.copyWith(
-      text: null == text
-          ? _self.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      files: null == files
-          ? _self.files
-          : files // ignore: cast_nullable_to_non_nullable
-              as List<SharedFiles>,
-    ));
-  }
+/// Create a copy of ShareExtensionData
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? text = null,Object? files = null,}) {
+  return _then(_self.copyWith(
+text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
+as List<String>,files: null == files ? _self.files : files // ignore: cast_nullable_to_non_nullable
+as List<SharedFiles>,
+  ));
 }
+
+}
+
 
 /// @nodoc
 @JsonSerializable()
+
 class _ShareExtensionData implements ShareExtensionData {
-  _ShareExtensionData(
-      {required final List<String> text,
-      required final List<SharedFiles> files})
-      : _text = text,
-        _files = files;
-  factory _ShareExtensionData.fromJson(Map<String, dynamic> json) =>
-      _$ShareExtensionDataFromJson(json);
+   _ShareExtensionData({required final  List<String> text, required final  List<SharedFiles> files}): _text = text,_files = files;
+  factory _ShareExtensionData.fromJson(Map<String, dynamic> json) => _$ShareExtensionDataFromJson(json);
 
-  final List<String> _text;
-  @override
-  List<String> get text {
-    if (_text is EqualUnmodifiableListView) return _text;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_text);
-  }
+ final  List<String> _text;
+@override List<String> get text {
+  if (_text is EqualUnmodifiableListView) return _text;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_text);
+}
 
-  final List<SharedFiles> _files;
-  @override
-  List<SharedFiles> get files {
-    if (_files is EqualUnmodifiableListView) return _files;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_files);
-  }
+ final  List<SharedFiles> _files;
+@override List<SharedFiles> get files {
+  if (_files is EqualUnmodifiableListView) return _files;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_files);
+}
 
-  /// Create a copy of ShareExtensionData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$ShareExtensionDataCopyWith<_ShareExtensionData> get copyWith =>
-      __$ShareExtensionDataCopyWithImpl<_ShareExtensionData>(this, _$identity);
 
-  @override
-  Map<String, dynamic> toJson() {
-    return _$ShareExtensionDataToJson(
-      this,
-    );
-  }
+/// Create a copy of ShareExtensionData
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ShareExtensionDataCopyWith<_ShareExtensionData> get copyWith => __$ShareExtensionDataCopyWithImpl<_ShareExtensionData>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _ShareExtensionData &&
-            const DeepCollectionEquality().equals(other._text, _text) &&
-            const DeepCollectionEquality().equals(other._files, _files));
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$ShareExtensionDataToJson(this, );
+}
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_text),
-      const DeepCollectionEquality().hash(_files));
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ShareExtensionData&&const DeepCollectionEquality().equals(other._text, _text)&&const DeepCollectionEquality().equals(other._files, _files));
+}
 
-  @override
-  String toString() {
-    return 'ShareExtensionData(text: $text, files: $files)';
-  }
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_text),const DeepCollectionEquality().hash(_files));
+
+@override
+String toString() {
+  return 'ShareExtensionData(text: $text, files: $files)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class _$ShareExtensionDataCopyWith<$Res>
-    implements $ShareExtensionDataCopyWith<$Res> {
-  factory _$ShareExtensionDataCopyWith(
-          _ShareExtensionData value, $Res Function(_ShareExtensionData) _then) =
-      __$ShareExtensionDataCopyWithImpl;
-  @override
-  @useResult
-  $Res call({List<String> text, List<SharedFiles> files});
-}
+abstract mixin class _$ShareExtensionDataCopyWith<$Res> implements $ShareExtensionDataCopyWith<$Res> {
+  factory _$ShareExtensionDataCopyWith(_ShareExtensionData value, $Res Function(_ShareExtensionData) _then) = __$ShareExtensionDataCopyWithImpl;
+@override @useResult
+$Res call({
+ List<String> text, List<SharedFiles> files
+});
 
+
+
+
+}
 /// @nodoc
 class __$ShareExtensionDataCopyWithImpl<$Res>
     implements _$ShareExtensionDataCopyWith<$Res> {
@@ -172,181 +147,153 @@ class __$ShareExtensionDataCopyWithImpl<$Res>
   final _ShareExtensionData _self;
   final $Res Function(_ShareExtensionData) _then;
 
-  /// Create a copy of ShareExtensionData
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? text = null,
-    Object? files = null,
-  }) {
-    return _then(_ShareExtensionData(
-      text: null == text
-          ? _self._text
-          : text // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      files: null == files
-          ? _self._files
-          : files // ignore: cast_nullable_to_non_nullable
-              as List<SharedFiles>,
-    ));
-  }
+/// Create a copy of ShareExtensionData
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? text = null,Object? files = null,}) {
+  return _then(_ShareExtensionData(
+text: null == text ? _self._text : text // ignore: cast_nullable_to_non_nullable
+as List<String>,files: null == files ? _self._files : files // ignore: cast_nullable_to_non_nullable
+as List<SharedFiles>,
+  ));
 }
+
+
+}
+
 
 /// @nodoc
 mixin _$SharedFiles {
-  String get path;
-  int get type;
 
-  /// Create a copy of SharedFiles
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $SharedFilesCopyWith<SharedFiles> get copyWith =>
-      _$SharedFilesCopyWithImpl<SharedFiles>(this as SharedFiles, _$identity);
+ String get path; int get type;
+/// Create a copy of SharedFiles
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SharedFilesCopyWith<SharedFiles> get copyWith => _$SharedFilesCopyWithImpl<SharedFiles>(this as SharedFiles, _$identity);
 
   /// Serializes this SharedFiles to a JSON map.
   Map<String, dynamic> toJson();
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is SharedFiles &&
-            (identical(other.path, path) || other.path == path) &&
-            (identical(other.type, type) || other.type == type));
-  }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, path, type);
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SharedFiles&&(identical(other.path, path) || other.path == path)&&(identical(other.type, type) || other.type == type));
+}
 
-  @override
-  String toString() {
-    return 'SharedFiles(path: $path, type: $type)';
-  }
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,path,type);
+
+@override
+String toString() {
+  return 'SharedFiles(path: $path, type: $type)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $SharedFilesCopyWith<$Res> {
-  factory $SharedFilesCopyWith(
-          SharedFiles value, $Res Function(SharedFiles) _then) =
-      _$SharedFilesCopyWithImpl;
-  @useResult
-  $Res call({String path, int type});
-}
+abstract mixin class $SharedFilesCopyWith<$Res>  {
+  factory $SharedFilesCopyWith(SharedFiles value, $Res Function(SharedFiles) _then) = _$SharedFilesCopyWithImpl;
+@useResult
+$Res call({
+ String path, int type
+});
 
+
+
+
+}
 /// @nodoc
-class _$SharedFilesCopyWithImpl<$Res> implements $SharedFilesCopyWith<$Res> {
+class _$SharedFilesCopyWithImpl<$Res>
+    implements $SharedFilesCopyWith<$Res> {
   _$SharedFilesCopyWithImpl(this._self, this._then);
 
   final SharedFiles _self;
   final $Res Function(SharedFiles) _then;
 
-  /// Create a copy of SharedFiles
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? path = null,
-    Object? type = null,
-  }) {
-    return _then(_self.copyWith(
-      path: null == path
-          ? _self.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _self.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
+/// Create a copy of SharedFiles
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? path = null,Object? type = null,}) {
+  return _then(_self.copyWith(
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
 }
+
+}
+
 
 /// @nodoc
 @JsonSerializable()
+
 class _SharedFiles implements SharedFiles {
-  _SharedFiles({required this.path, required this.type});
-  factory _SharedFiles.fromJson(Map<String, dynamic> json) =>
-      _$SharedFilesFromJson(json);
+   _SharedFiles({required this.path, required this.type});
+  factory _SharedFiles.fromJson(Map<String, dynamic> json) => _$SharedFilesFromJson(json);
 
-  @override
-  final String path;
-  @override
-  final int type;
+@override final  String path;
+@override final  int type;
 
-  /// Create a copy of SharedFiles
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$SharedFilesCopyWith<_SharedFiles> get copyWith =>
-      __$SharedFilesCopyWithImpl<_SharedFiles>(this, _$identity);
+/// Create a copy of SharedFiles
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SharedFilesCopyWith<_SharedFiles> get copyWith => __$SharedFilesCopyWithImpl<_SharedFiles>(this, _$identity);
 
-  @override
-  Map<String, dynamic> toJson() {
-    return _$SharedFilesToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$SharedFilesToJson(this, );
+}
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _SharedFiles &&
-            (identical(other.path, path) || other.path == path) &&
-            (identical(other.type, type) || other.type == type));
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SharedFiles&&(identical(other.path, path) || other.path == path)&&(identical(other.type, type) || other.type == type));
+}
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, path, type);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,path,type);
 
-  @override
-  String toString() {
-    return 'SharedFiles(path: $path, type: $type)';
-  }
+@override
+String toString() {
+  return 'SharedFiles(path: $path, type: $type)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class _$SharedFilesCopyWith<$Res>
-    implements $SharedFilesCopyWith<$Res> {
-  factory _$SharedFilesCopyWith(
-          _SharedFiles value, $Res Function(_SharedFiles) _then) =
-      __$SharedFilesCopyWithImpl;
-  @override
-  @useResult
-  $Res call({String path, int type});
-}
+abstract mixin class _$SharedFilesCopyWith<$Res> implements $SharedFilesCopyWith<$Res> {
+  factory _$SharedFilesCopyWith(_SharedFiles value, $Res Function(_SharedFiles) _then) = __$SharedFilesCopyWithImpl;
+@override @useResult
+$Res call({
+ String path, int type
+});
 
+
+
+
+}
 /// @nodoc
-class __$SharedFilesCopyWithImpl<$Res> implements _$SharedFilesCopyWith<$Res> {
+class __$SharedFilesCopyWithImpl<$Res>
+    implements _$SharedFilesCopyWith<$Res> {
   __$SharedFilesCopyWithImpl(this._self, this._then);
 
   final _SharedFiles _self;
   final $Res Function(_SharedFiles) _then;
 
-  /// Create a copy of SharedFiles
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? path = null,
-    Object? type = null,
-  }) {
-    return _then(_SharedFiles(
-      path: null == path
-          ? _self.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _self.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
+/// Create a copy of SharedFiles
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? path = null,Object? type = null,}) {
+  return _then(_SharedFiles(
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
 }
 
 // dart format on
