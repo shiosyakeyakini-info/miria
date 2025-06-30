@@ -223,6 +223,7 @@ class LinkPreviewTile extends ConsumerWidget {
                       height: imageSize,
                       width: imageSize,
                       fit: BoxFit.cover,
+                      cacheManager: ref.read(cacheManagerProvider),
                     ),
                   Expanded(
                     child: Padding(
@@ -252,6 +253,7 @@ class LinkPreviewTile extends ConsumerWidget {
                                     imageUrl: icon,
                                     height: textTheme.labelMedium?.fontSize,
                                     width: textTheme.labelMedium?.fontSize,
+                                    cacheManager: ref.read(cacheManagerProvider),
                                   ),
                                 ),
                               Expanded(
