@@ -611,13 +611,8 @@ final class AccountFamily extends $Family
 const cacheManagerProvider = CacheManagerProvider._();
 
 final class CacheManagerProvider
-    extends
-        $FunctionalProvider<
-          BaseCacheManager?,
-          BaseCacheManager?,
-          BaseCacheManager?
-        >
-    with $Provider<BaseCacheManager?> {
+    extends $FunctionalProvider<CacheManager, CacheManager, CacheManager>
+    with $Provider<CacheManager> {
   const CacheManagerProvider._()
     : super(
         from: null,
@@ -634,25 +629,24 @@ final class CacheManagerProvider
 
   @$internal
   @override
-  $ProviderElement<BaseCacheManager?> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  $ProviderElement<CacheManager> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  BaseCacheManager? create(Ref ref) {
+  CacheManager create(Ref ref) {
     return cacheManager(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(BaseCacheManager? value) {
+  Override overrideWithValue(CacheManager value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<BaseCacheManager?>(value),
+      providerOverride: $SyncValueProvider<CacheManager>(value),
     );
   }
 }
 
-String _$cacheManagerHash() => r'4de111f3ed09ad0694b65f0a69ee9cacfacae1e7';
+String _$cacheManagerHash() => r'81234bc72d89ecfb6d61316b393e804cbeaf6ca0';
 
 @ProviderFor(accountContext)
 const accountContextProvider = AccountContextProvider._();

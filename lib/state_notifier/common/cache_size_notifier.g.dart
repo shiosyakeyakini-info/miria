@@ -6,21 +6,50 @@ part of 'cache_size_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$cacheSizeNotifierHash() => r'018059b18e8276f6ba7b7aa21ec9d705b0f38b84';
-
-/// See also [CacheSizeNotifier].
 @ProviderFor(CacheSizeNotifier)
-final cacheSizeNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<CacheSizeNotifier, String>.internal(
-  CacheSizeNotifier.new,
-  name: r'cacheSizeNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$cacheSizeNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const cacheSizeNotifierProvider = CacheSizeNotifierProvider._();
 
-typedef _$CacheSizeNotifier = AutoDisposeAsyncNotifier<String>;
+final class CacheSizeNotifierProvider
+    extends $AsyncNotifierProvider<CacheSizeNotifier, String> {
+  const CacheSizeNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cacheSizeNotifierProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cacheSizeNotifierHash();
+
+  @$internal
+  @override
+  CacheSizeNotifier create() => CacheSizeNotifier();
+}
+
+String _$cacheSizeNotifierHash() => r'b24913c827247481c1679e444826e724830a2bb7';
+
+abstract class _$CacheSizeNotifier extends $AsyncNotifier<String> {
+  FutureOr<String> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<String>, String>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<String>, String>,
+              AsyncValue<String>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

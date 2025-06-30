@@ -32,6 +32,7 @@ import "package:miria/repository/tab_settings_repository.dart";
 import "package:miria/repository/time_line_repository.dart";
 import "package:miria/repository/user_list_time_line_repository.dart";
 import "package:miria/router/app_router.dart";
+import "package:miria/util/file_system_io.dart" as fs;
 import "package:misskey_dart/misskey_dart.dart";
 import "package:riverpod/riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -138,7 +139,12 @@ final importExportRepositoryProvider = ChangeNotifierProvider(
 );
 
 @Riverpod(keepAlive: true)
-BaseCacheManager? cacheManager(Ref ref) => null;
+CacheManager cacheManager(Ref ref) => CacheManager(
+  Config(
+    "libCachedImageData",
+    fileSystem: fs.IOFileSystem("libCachedImageData"),
+  ),
+);
 
 @freezed
 abstract class AccountContext with _$AccountContext {
