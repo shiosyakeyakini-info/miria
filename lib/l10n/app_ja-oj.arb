@@ -112,6 +112,9 @@
     "confirmCreateBlock": "ブロックなさりますの？",
     "confirmUnfollow": "フォロー解除なさりますの？",
 
+    "cacheSizeError": "取得に失敗しましたわ",
+    "clearCache": "キャッシュとお別れいたしますわ",
+
     "unsupportedFile": "対応してないファイルのようですわ",
     "unsupportedFileWithFilename": "{filename}は対応してないファイルのようですわ",
     "failedFileSave": "ファイルの保存に失敗したようですわね…",

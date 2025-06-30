@@ -1387,6 +1387,18 @@ class SZh extends S {
   String get systemFont => '系统标准';
 
   @override
+  String get cache => '快取';
+
+  @override
+  String get cacheSize => 'キャッシュサイズ';
+
+  @override
+  String get cacheSizeError => '取得に失敗しました';
+
+  @override
+  String get clearCache => '清除快取';
+
+  @override
   String get selectFolder => '选择文件夹';
 
   @override
@@ -3289,6 +3301,12 @@ class SZhCn extends SZh {
 
   @override
   String get systemFont => '系统标准';
+
+  @override
+  String get cache => '快取';
+
+  @override
+  String get clearCache => '清除快取';
 
   @override
   String get selectFolder => '选择文件夹';

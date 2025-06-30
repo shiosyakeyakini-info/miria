@@ -1392,6 +1392,18 @@ class SJa extends S {
   String get systemFont => 'システム標準';
 
   @override
+  String get cache => 'キャッシュ';
+
+  @override
+  String get cacheSize => 'キャッシュサイズ';
+
+  @override
+  String get cacheSizeError => '取得に失敗しました';
+
+  @override
+  String get clearCache => 'キャッシュをクリア';
+
+  @override
   String get selectFolder => 'フォルダー選択';
 
   @override
@@ -2242,6 +2254,12 @@ class SJaOj extends SJa {
 
   @override
   String get staySensitive => 'センシティブのままにしますわ';
+
+  @override
+  String get cacheSizeError => '取得に失敗しましたわ';
+
+  @override
+  String get clearCache => 'キャッシュとお別れいたしますわ';
 
   @override
   String confirmUnblockUser(String userName) {

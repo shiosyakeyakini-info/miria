@@ -26,7 +26,7 @@ Widget buildTestWidget({
 }) {
   final notesRepository = NoteRepository(MockMisskey(), TestData.account);
   notesRepository.registerNote(note);
-  final mockCacheManager = MockBaseCacheManager();
+  final mockCacheManager = MockCacheManager();
 
   return ProviderScope(
     overrides: [

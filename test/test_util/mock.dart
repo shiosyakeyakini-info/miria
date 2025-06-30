@@ -52,13 +52,13 @@ import "package:url_launcher_platform_interface/url_launcher_platform_interface.
   MockSpec<StreamingController>(),
   MockSpec<WebSocketController>(),
   MockSpec<FakeFilePickerPlatform>(as: #MockFilePickerPlatform),
-  MockSpec<$MockBaseCacheManager>(as: #MockBaseCacheManager),
+  MockSpec<$MockCacheManager>(as: #MockCacheManager),
   MockSpec<$MockUrlLauncherPlatform>(as: #MockUrlLauncherPlatform),
 ])
 // ignore: unused_import
 import "mock.mocks.dart";
 
-class $MockBaseCacheManager extends Mock implements BaseCacheManager {}
+class $MockCacheManager extends Mock implements CacheManager {}
 
 class FakeFilePickerPlatform extends Mock
     with MockPlatformInterfaceMixin
