@@ -7,6 +7,8 @@ import "package:miria/providers.dart";
 import "package:miria/repository/account_repository.dart";
 import "package:miria/router/app_router.dart";
 import "package:miria/util/punycode.dart";
+import "package:miria/state_notifier/common/server_preset_provider.dart";
+import "package:miria/view/common/dialog/dialog_state.dart";
 import "package:miria/view/common/error_dialog_handler.dart";
 import "package:miria/view/common/modal_indicator.dart";
 import "package:miria/view/login_page/centraing_widget.dart";
@@ -100,12 +102,28 @@ class MiAuthLoginState extends ConsumerState<MiAuthLogin> {
                   ElevatedButton(
                     onPressed: () async {
                       await ref
-                          .read(accountRepositoryProvider.notifier)
-                          .openMiAuth(toAscii(serverController.text))
-                          .expectFailure(context);
-                      setState(() {
-                        isAuthed = true;
-                      });
+                          .read(dialogStateNotifierProvider.notifier)
+                          .guard(() async {
+                            final host = toAscii(serverController.text);
+                            final isLimited = await ref.read(
+                              isLimitedApiServerProvider(host).future,
+                            );
+                            if (isLimited) {
+                              await ref
+                                  .read(dialogStateNotifierProvider.notifier)
+                                  .showSimpleDialog(
+                                    message: (context) =>
+                                        S.of(context).limitedApiServerWarning,
+                                  );
+                            }
+
+                            await ref
+                                .read(accountRepositoryProvider.notifier)
+                                .openMiAuth(host);
+                            setState(() {
+                              isAuthed = true;
+                            });
+                          });
                     },
                     child: Text(
                       isAuthed

@@ -524,6 +524,7 @@
     "reauthorizate": "再度認証をする",
     "chooseLoginServer": "ログインするサーバーを選んでください",
     "didAuthorize": "認証してきた",
+    "limitedApiServerWarning": "そのサーバーはなんぼか制限かけてはんねん、ログインできひんかったら調べるなり管理者やサポートに聞くなりしてな",
 
 
 

@@ -39,3 +39,9 @@ Future<ServerPresets> serverPresets(Ref ref) async {
     throw Exception("Failed to load server presets: $e");
   }
 }
+
+@riverpod
+Future<bool> isLimitedApiServer(Ref ref, String host) async {
+  final presets = await ref.watch(serverPresetsProvider.future);
+  return presets.limitedApiServers.contains(host);
+}

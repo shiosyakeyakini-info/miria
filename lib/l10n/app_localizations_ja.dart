@@ -921,6 +921,10 @@ class SJa extends S {
   String get didAuthorize => '認証してきた';
 
   @override
+  String get limitedApiServerWarning =>
+      'そのサーバーはなんぼか制限かけてはんねん、ログインできひんかったら調べるなり管理者やサポートに聞くなりしてな';
+
+  @override
   String get thrownConnectionError => '通信に失敗しました。';
 
   @override
@@ -2200,6 +2204,10 @@ class SJaOj extends SJa {
 
   @override
   String get didNotReadAnnouncement => 'まだですわ';
+
+  @override
+  String get limitedApiServerWarning =>
+      'そのサーバーはいくらかの制限をかけていましてよ。ログインできないなどがあればご自身でお調べするか管理者やサポートに問い合わせていただいてくださいまし？';
 
   @override
   String get thrownError => 'なにか様子がおかしいですわね…';
