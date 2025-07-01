@@ -351,11 +351,21 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
             ),
           );
         case NotificationType.createToken:
-          // TODO: Handle this case.
-          throw UnimplementedError();
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.createTokenNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
         case NotificationType.chatRoomInvitationReceived:
-          // TODO: Handle this case.
-          throw UnimplementedError();
+          resultList.add(
+            SimpleNotificationData(
+              text: localize.chatRoomInvitationReceivedNotification,
+              createdAt: element.createdAt,
+              id: element.id,
+            ),
+          );
       }
     }
 

@@ -1254,6 +1254,18 @@ abstract class S {
   /// **'知らんタイプの通知やわ'**
   String get unknownNotification;
 
+  /// No description provided for @createTokenNotification.
+  ///
+  /// In ja, this message translates to:
+  /// **'アクセストークンが作成されたで'**
+  String get createTokenNotification;
+
+  /// No description provided for @chatRoomInvitationReceivedNotification.
+  ///
+  /// In ja, this message translates to:
+  /// **'チャットルームに招待されたで'**
+  String get chatRoomInvitationReceivedNotification;
+
   /// No description provided for @messageForFollower.
   ///
   /// In ja, this message translates to:

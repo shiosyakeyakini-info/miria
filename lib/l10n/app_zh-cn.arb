@@ -960,5 +960,10 @@
     "lookupHint": "输入 @ai@misskey.io 或 https://...",
     "lookupFailed": "查找失败",
     "lookupExamples": "输入示例:",
-    "unknownObject": "未知对象"
+    "unknownObject": "未知对象",
+    "appNotification": "来自应用的通知",
+    "someoneLogined": "有人登录了您的账户",
+    "unknownNotification": "未知类型的通知",
+    "createTokenNotification": "访问令牌已创建",
+    "chatRoomInvitationReceivedNotification": "收到聊天室邀请"
 }
