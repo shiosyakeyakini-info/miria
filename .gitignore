@@ -60,4 +60,3 @@ app.*.map.json
 miria-installer*.exe
 # FVM Version Cache
 .fvm/
-flutter_sdk/
