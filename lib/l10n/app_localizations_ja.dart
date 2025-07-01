@@ -1949,6 +1949,9 @@ class SJa extends S {
 
   @override
   String get template => 'テンプレ';
+
+  @override
+  String get noteBackgroundColor => 'ノート背景色';
 }
 
 /// The translations for Japanese (`ja_OJ`).
@@ -2304,4 +2307,7 @@ class SJaOj extends SJa {
 
   @override
   String get cacheManualUpdateCompleted => '情報の取得が完了しましたわ';
+
+  @override
+  String get noteBackgroundColor => 'ノート背景色';
 }

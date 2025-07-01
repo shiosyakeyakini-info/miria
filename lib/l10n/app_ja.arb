@@ -1063,6 +1063,7 @@
     "deckMode": "デッキモード",
     "enableDeckMode": "デッキモードにする",
 
-    "template": "テンプレ"
+    "template": "テンプレ",
+    "noteBackgroundColor": "ノート背景色"
 
 }

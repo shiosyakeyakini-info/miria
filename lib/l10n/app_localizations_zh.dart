@@ -1941,6 +1941,9 @@ class SZh extends S {
 
   @override
   String get template => '模板';
+
+  @override
+  String get noteBackgroundColor => '笔记背景颜色';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3770,4 +3773,7 @@ class SZhCn extends SZh {
 
   @override
   String get template => '模板';
+
+  @override
+  String get noteBackgroundColor => '笔记背景颜色';
 }

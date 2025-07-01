@@ -3377,6 +3377,12 @@ abstract class S {
   /// In ja, this message translates to:
   /// **'テンプレ'**
   String get template;
+
+  /// No description provided for @noteBackgroundColor.
+  ///
+  /// In ja, this message translates to:
+  /// **'ノート背景色'**
+  String get noteBackgroundColor;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

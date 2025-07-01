@@ -960,5 +960,6 @@
     "lookupHint": "输入 @ai@misskey.io 或 https://...",
     "lookupFailed": "查找失败",
     "lookupExamples": "输入示例:",
-    "unknownObject": "未知对象"
+    "unknownObject": "未知对象",
+    "noteBackgroundColor": "笔记背景颜色"
 }

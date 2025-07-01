@@ -141,6 +141,7 @@
                 "type": "String"
             }
         }
-    }
+    },
 
+    "noteBackgroundColor": "ノート背景色"
 }

@@ -11,6 +11,7 @@ import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/state_notifier/common/cache_size_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
+import "package:miria/view/common/color_picker_dialog.dart";
 
 @RoutePage()
 class GeneralSettingsPage extends HookConsumerWidget {
@@ -41,6 +42,16 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final fantasyFontName = useState(settings.fantasyFontName);
     final language = useState(settings.languages);
     final isDeckMode = useState(settings.isDeckMode);
+    final lightNoteBgPublic = useState(settings.lightNoteBackgroundPublic);
+    final lightNoteBgHome = useState(settings.lightNoteBackgroundHome);
+    final lightNoteBgFollowers = useState(
+      settings.lightNoteBackgroundFollowers,
+    );
+    final lightNoteBgDirect = useState(settings.lightNoteBackgroundDirect);
+    final darkNoteBgPublic = useState(settings.darkNoteBackgroundPublic);
+    final darkNoteBgHome = useState(settings.darkNoteBackgroundHome);
+    final darkNoteBgFollowers = useState(settings.darkNoteBackgroundFollowers);
+    final darkNoteBgDirect = useState(settings.darkNoteBackgroundDirect);
     final cacheSize = ref.watch(cacheSizeNotifierProvider);
 
     useMemoized(() {
@@ -82,6 +93,14 @@ class GeneralSettingsPage extends HookConsumerWidget {
       fantasyFontName.value,
       language.value,
       isDeckMode.value,
+      lightNoteBgPublic.value,
+      lightNoteBgHome.value,
+      lightNoteBgFollowers.value,
+      lightNoteBgDirect.value,
+      darkNoteBgPublic.value,
+      darkNoteBgHome.value,
+      darkNoteBgFollowers.value,
+      darkNoteBgDirect.value,
     ];
     final save = useCallback(() async {
       await ref
@@ -107,6 +126,14 @@ class GeneralSettingsPage extends HookConsumerWidget {
               fantasyFontName: fantasyFontName.value,
               languages: language.value,
               isDeckMode: isDeckMode.value,
+              lightNoteBackgroundPublic: lightNoteBgPublic.value,
+              lightNoteBackgroundHome: lightNoteBgHome.value,
+              lightNoteBackgroundFollowers: lightNoteBgFollowers.value,
+              lightNoteBackgroundDirect: lightNoteBgDirect.value,
+              darkNoteBackgroundPublic: darkNoteBgPublic.value,
+              darkNoteBackgroundHome: darkNoteBgHome.value,
+              darkNoteBackgroundFollowers: darkNoteBgFollowers.value,
+              darkNoteBackgroundDirect: darkNoteBgDirect.value,
             ),
           );
     }, dependencies);
@@ -331,6 +358,201 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         isExpanded: true,
                         onChanged: (value) =>
                             emojiType.value = value ?? EmojiType.twemoji,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).noteBackgroundColor,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).lightMode),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).public)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  lightNoteBgPublic.value ?? Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                lightNoteBgPublic.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).homeOnly)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  lightNoteBgHome.value ?? Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                lightNoteBgHome.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).followersOnly)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  lightNoteBgFollowers.value ??
+                                  Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                lightNoteBgFollowers.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).direct)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  lightNoteBgDirect.value ?? Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                lightNoteBgDirect.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(S.of(context).darkMode),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).public)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  darkNoteBgPublic.value ?? Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                darkNoteBgPublic.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).homeOnly)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color: darkNoteBgHome.value ?? Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                darkNoteBgHome.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).followersOnly)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  darkNoteBgFollowers.value ??
+                                  Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                darkNoteBgFollowers.value = result.value;
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Text(S.of(context).direct)),
+                          IconButton(
+                            icon: ColoredBox(
+                              color:
+                                  darkNoteBgDirect.value ?? Colors.transparent,
+                              child: const SizedBox(width: 24, height: 24),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await showDialog<ValueNotifier<Color>>(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ColorPickerDialog(),
+                                  );
+                              if (result != null)
+                                darkNoteBgDirect.value = result.value;
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
