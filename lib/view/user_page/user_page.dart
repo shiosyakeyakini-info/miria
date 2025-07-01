@@ -111,10 +111,27 @@ class UserPage extends HookConsumerWidget implements AutoRouteWrapper {
                         ),
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: UserClips(userId: userId),
-                  ),
+                  if (isRemoteUser)
+                    AccountContextScope(
+                      context: AccountContext(
+                        getAccount: Account.demoAccount(
+                          userInfo!.response.host!,
+                          userInfo.metaResponse,
+                        ),
+                        postAccount: ref
+                            .read(accountContextProvider)
+                            .postAccount,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: UserClips(userId: userInfo.remoteResponse!.id),
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: UserClips(userId: userId),
+                    ),
                   if (isReactionAvailable)
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
