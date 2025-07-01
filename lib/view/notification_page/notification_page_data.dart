@@ -44,8 +44,7 @@ class _QuotedRenote implements MentionQuoteNotificationDataType {
 
 class _Reply implements MentionQuoteNotificationDataType {
   @override
-  String Function(BuildContext context) get name =>
-      (context) => "";
+  String Function(BuildContext context) get name => (context) => "";
 }
 
 class MentionQuoteNotificationData extends NotificationData {
@@ -68,7 +67,8 @@ sealed class FollowNotificationDataType {
   factory FollowNotificationDataType.followRequestAccepted(
     String? message,
     User? user,
-  ) => FollowRequestAccepted(message, user);
+  ) =>
+      FollowRequestAccepted(message, user);
   static final receiveFollowRequest = _ReceiveFollowRequest();
 }
 
@@ -156,11 +156,11 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.id == e.note?.id)
               .forEach((e) {
-                isSummarize = true;
-                if (element.user != null) {
-                  e.reactionUsers.add((element.reaction!, element.user!));
-                }
-              });
+            isSummarize = true;
+            if (element.user != null) {
+              e.reactionUsers.add((element.reaction!, element.user!));
+            }
+          });
 
           if (!isSummarize) {
             resultList.add(
@@ -180,9 +180,9 @@ extension INotificationsResponseExtension on Iterable<INotificationsResponse> {
               .whereType<RenoteReactionNotificationData>()
               .where((e) => element.note?.renote?.id == e.note?.id)
               .forEach((e) {
-                isSummarize = true;
-                e.renoteUsers.add(element.user);
-              });
+            isSummarize = true;
+            e.renoteUsers.add(element.user);
+          });
 
           if (!isSummarize) {
             resultList.add(
