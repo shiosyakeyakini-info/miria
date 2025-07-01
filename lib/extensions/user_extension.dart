@@ -29,7 +29,7 @@ extension UserDetailedExtension on UserDetailed {
 
     final user = this;
 
-    return switch (ffVisibility) {
+    return switch (followingVisibility ?? ffVisibility) {
       FFVisibility.public => true,
       FFVisibility.followers =>
         user is UserDetailedNotMeWithRelations && user.isFollowing,

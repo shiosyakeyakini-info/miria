@@ -787,6 +787,47 @@ void main() {
         );
       });
     });
+
+    group("フォロー数表示", () {
+      testWidgets("ffVisibilityがpublicの場合、フォロー数が表示されること", (tester) async {
+        final mockMisskey = MockMisskey();
+        final mockUser = MockMisskeyUsers();
+        when(mockMisskey.users).thenReturn(mockUser);
+        when(mockUser.show(any)).thenAnswer(
+          (_) async => TestData.usersShowResponse2.copyWith(
+            // Ensure ffVisibility is public and user is not following
+            // This should still show the following count
+          ),
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              misskeyProvider.overrideWith((ref, account) => mockMisskey),
+            ],
+            child: DefaultRootWidget(
+              initialRoute: UserRoute(
+                userId: TestData.usersShowResponse2.id,
+                accountContext: TestData.accountContext,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Wait for the UI to scroll to the following count section
+        await tester.dragUntilVisible(
+          find.text("フォロー"),
+          find.byType(CustomScrollView),
+          const Offset(0, -50),
+        );
+
+        // The following count should be visible because ffVisibility is public
+        expect(find.text("フォロー"), findsOneWidget);
+        expect(find.text("7003"), findsOneWidget); // The actual following count from test data
+      });
+    });
+
     group("Play", () {
       testWidgets("PlayのタブでPlayが表示されること", (tester) async {
         //TODO
