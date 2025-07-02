@@ -243,8 +243,8 @@ class _ProfileEditForm extends HookConsumerWidget {
                       final result = await showDatePicker(
                         context: context,
                         initialDate: data.birthday ?? now,
-                        firstDate: DateTime(0),
-                        lastDate: DateTime(now.year + 1),
+                        firstDate: DateTime(0, 1, 1),
+                        lastDate: DateTime(9999, 12, 31),
                       );
                       if (result != null) {
                         notifier.updateBirthday(result);
