@@ -14,7 +14,7 @@ class ProfileUpdateNotifier extends _$ProfileUpdateNotifier {
     final misskey = ref.read(misskeyPostContextProvider);
     final request = ref.read(profileEditRequestProvider);
     final avatarFile = ref.read(profileAvatarFileProvider);
-    String? avatarId = request.avatarId;
+    var avatarId = request.avatarId;
     if (avatarFile != null) {
       final file = await misskey.drive.files.createAsBinary(
         const DriveFilesCreateRequest(force: true, name: "avatar"),

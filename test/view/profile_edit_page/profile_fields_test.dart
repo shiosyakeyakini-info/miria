@@ -26,10 +26,7 @@ void main() {
     container.read(profileFieldsProvider.notifier).update(const []);
     final notifier = container.read(profileFieldsProvider.notifier);
     final current = container.read(profileFieldsProvider);
-    notifier.update([
-      ...current,
-      const UserField(name: "a", value: "1"),
-    ]);
+    notifier.update([...current, const UserField(name: "a", value: "1")]);
     final updated = container.read(profileFieldsProvider);
     expect(updated.length, 1);
     expect(updated.first.name, "a");

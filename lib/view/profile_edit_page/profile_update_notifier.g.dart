@@ -40,7 +40,7 @@ final class ProfileUpdateNotifierProvider
 }
 
 String _$profileUpdateNotifierHash() =>
-    r'4dea8c197b922568967d7917ae5ae7a7050162f7';
+    r'a50ed87aedb0999777dcb50998cd4960f0697b41';
 
 abstract class _$ProfileUpdateNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();
