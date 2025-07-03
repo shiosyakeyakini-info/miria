@@ -346,7 +346,10 @@ void main() {
       );
 
       // ドライブからのアバターIDを設定
-      notifier.updateAvatarDriveId("selected_drive_file_id");
+      notifier.updateAvatarDriveId(
+        "selected_drive_file_id",
+        Uri.parse("https://example.com/drive/file.jpg"),
+      );
 
       // 状態が更新されるのを待つ
       await tester.pump();

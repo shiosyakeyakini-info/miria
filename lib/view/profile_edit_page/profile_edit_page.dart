@@ -78,9 +78,10 @@ class _ProfileEditForm extends HookConsumerWidget {
     if (data.avatarFile != null) {
       // ファイルが選択されている場合は一時的な空のURLを使う
       avatarUrl = Uri.parse("temp://avatar");
-    } else if (data.avatarDriveId != null) {
-      // ドライブから選択された場合は現在のURLを維持（後でAPIから取得するまで）
-      avatarUrl = data.currentAvatarUrl;
+    } else if (data.avatarDriveId != null &&
+        data.selectedDriveFileUrl != null) {
+      // ドライブから選択された場合は選択したファイルのURLを使用
+      avatarUrl = data.selectedDriveFileUrl;
     } else {
       // それ以外は現在のURLを使用
       avatarUrl = data.currentAvatarUrl;
@@ -164,7 +165,10 @@ class _ProfileEditForm extends HookConsumerWidget {
                               ),
                             );
                         if (selected != null && selected.isNotEmpty) {
-                          notifier.updateAvatarDriveId(selected.first.id);
+                          notifier.updateAvatarDriveId(
+                            selected.first.id,
+                            Uri.parse(selected.first.url),
+                          );
                         }
                       }
                     },

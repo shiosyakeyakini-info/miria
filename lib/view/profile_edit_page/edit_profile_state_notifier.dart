@@ -20,6 +20,7 @@ sealed class EditProfileState with _$EditProfileState {
     String? avatarDriveId,
     ({Uint8List data, String name})? avatarFile,
     Uri? currentAvatarUrl,
+    Uri? selectedDriveFileUrl,
     @Default(false) bool isLoading,
     @Default(false) bool isSubmitting,
   }) = _EditProfileState;
@@ -145,18 +146,26 @@ class EditProfileStateNotifier extends _$EditProfileStateNotifier {
     switch (state) {
       case AsyncData(value: final currentData):
         state = AsyncData(
-          currentData.copyWith(avatarFile: file, avatarDriveId: null),
+          currentData.copyWith(
+            avatarFile: file,
+            avatarDriveId: null,
+            selectedDriveFileUrl: null,
+          ),
         );
       default:
         break;
     }
   }
 
-  void updateAvatarDriveId(String id) {
+  void updateAvatarDriveId(String id, Uri url) {
     switch (state) {
       case AsyncData(value: final currentData):
         state = AsyncData(
-          currentData.copyWith(avatarDriveId: id, avatarFile: null),
+          currentData.copyWith(
+            avatarDriveId: id,
+            avatarFile: null,
+            selectedDriveFileUrl: url,
+          ),
         );
       default:
         break;
