@@ -277,14 +277,14 @@ void main() {
     });
 
     testWidgets("アバターファイル設定のテスト", (tester) async {
-      final initialState = EditProfileState(
-        name: "Test User",
-        description: "Test description",
+      when(mockMisskeyI.i()).thenAnswer(
+        (_) async => TestData.i1.copyWith(
+          name: "Test User",
+          description: "Test description",
+        ),
       );
 
-      await tester.pumpWidget(
-        createTestWidget(account: testAccount, initialState: initialState),
-      );
+      await tester.pumpWidget(createTestWidget(account: testAccount));
       await tester.pumpAndSettle();
 
       // アバター画像選択エリアが存在することを確認
@@ -302,26 +302,28 @@ void main() {
         editProfileStateNotifierProvider.notifier,
       );
 
+      // TestData.binaryImageを使用
+      final testImageData = await TestData.binaryImage;
+
+      // 初期状態を確認
+      final initialState = container.read(editProfileStateNotifierProvider);
+      expect(initialState, isA<AsyncData<EditProfileState>>());
+
       // アバターファイルを設定
-      notifier.updateAvatarFile((
-        data: Uint8List.fromList([1, 2, 3, 4, 5]),
-        name: "avatar.png",
-      ));
+      notifier.updateAvatarFile((data: testImageData, name: "avatar.png"));
 
-      // 状態が更新されるのを待つ
-      await tester.pump();
-
-      // 状態にアバターファイルが設定されていることを確認
+      // 状態にアバターファイルが設定されていることを確認（画像レンダリング前）
       final currentState = container.read(editProfileStateNotifierProvider);
       expect(currentState, isA<AsyncData<EditProfileState>>());
       final data = (currentState as AsyncData<EditProfileState>).value;
       expect(data.avatarFile, isNotNull);
-      expect(data.avatarFile!.data.length, equals(5));
+      expect(data.avatarFile!.data.length, equals(testImageData.length));
       expect(data.avatarFile!.name, equals("avatar.png"));
       expect(data.avatarDriveId, isNull); // ドライブIDはクリアされる
     });
 
     testWidgets("ドライブアバターID設定のテスト", (tester) async {
+      // 初期状態を明示的に設定
       final initialState = EditProfileState(
         name: "Test User",
         description: "Test description",
@@ -345,14 +347,15 @@ void main() {
         editProfileStateNotifierProvider.notifier,
       );
 
+      // 初期状態を確認（TestEditProfileStateNotifierを使用しているため即座にAsyncData）
+      final beforeState = container.read(editProfileStateNotifierProvider);
+      expect(beforeState, isA<AsyncData<EditProfileState>>());
+
       // ドライブからのアバターIDを設定
       notifier.updateAvatarDriveId(
         "selected_drive_file_id",
         Uri.parse("https://example.com/drive/file.jpg"),
       );
-
-      // 状態が更新されるのを待つ
-      await tester.pump();
 
       // 状態にアバターIDが設定されていることを確認
       final currentState = container.read(editProfileStateNotifierProvider);
@@ -363,6 +366,13 @@ void main() {
     });
 
     testWidgets("アバターファイルアップロードのsubmitテスト", (tester) async {
+      when(mockMisskeyI.i()).thenAnswer(
+        (_) async => TestData.i1.copyWith(
+          name: "Test User",
+          description: "Test description",
+        ),
+      );
+
       // ドライブファイル作成のモック設定
       when(
         mockMisskeyDriveFiles.createAsBinary(any, any),
@@ -370,43 +380,7 @@ void main() {
 
       when(mockMisskeyI.update(any)).thenAnswer((_) async => TestData.i1);
 
-      // 実際のPNG画像データ（最小限のPNGヘッダー）
-      final pngData = Uint8List.fromList([
-        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, // PNG signature
-        0x00, 0x00, 0x00, 0x0D, // IHDR length
-        0x49, 0x48, 0x44, 0x52, // IHDR
-        0x00, 0x00, 0x00, 0x01, // width = 1
-        0x00, 0x00, 0x00, 0x01, // height = 1
-        0x08, 0x02, 0x00, 0x00, 0x00, // bit depth, color type, etc.
-        0x90, 0x77, 0x53, 0xDE, // CRC
-        0x00, 0x00, 0x00, 0x0C, // IDAT length
-        0x49, 0x44, 0x41, 0x54, // IDAT
-        0x08,
-        0xD7,
-        0x63,
-        0xF8,
-        0x0F,
-        0x00,
-        0x00,
-        0x01,
-        0x01,
-        0x00,
-        0x01,
-        0x00, // data
-        0x00, 0x00, 0x00, 0x00, // IEND length
-        0x49, 0x45, 0x4E, 0x44, // IEND
-        0xAE, 0x42, 0x60, 0x82, // CRC
-      ]);
-
-      final initialState = EditProfileState(
-        name: "Test User",
-        description: "Test description",
-        avatarFile: (data: pngData, name: "avatar.png"),
-      );
-
-      await tester.pumpWidget(
-        createTestWidget(account: testAccount, initialState: initialState),
-      );
+      await tester.pumpWidget(createTestWidget(account: testAccount));
       await tester.pumpAndSettle();
 
       // StateNotifierを取得
@@ -418,6 +392,12 @@ void main() {
       final notifier = container.read(
         editProfileStateNotifierProvider.notifier,
       );
+
+      // TestData.binaryImageを使用
+      final testImageData = await TestData.binaryImage;
+
+      // アバターファイルを設定
+      notifier.updateAvatarFile((data: testImageData, name: "avatar.png"));
 
       // 手動でsubmitを呼び出す（async処理をテスト環境で制御）
       await notifier.submit();
@@ -434,7 +414,7 @@ void main() {
             isA<Uint8List>().having(
               (data) => data.length,
               "length",
-              equals(pngData.length),
+              equals(testImageData.length),
             ),
           ),
         ),
@@ -455,13 +435,14 @@ void main() {
     });
 
     testWidgets("ドライブアバターIDのsubmitテスト", (tester) async {
-      when(mockMisskeyI.update(any)).thenAnswer((_) async => TestData.i1);
-
+      // 初期状態を明示的に設定（ドライブIDも含む）
       final initialState = EditProfileState(
         name: "Test User",
         description: "Test description",
         avatarDriveId: "selected_drive_file_id",
       );
+
+      when(mockMisskeyI.update(any)).thenAnswer((_) async => TestData.i1);
 
       await tester.pumpWidget(
         createTestWidget(account: testAccount, initialState: initialState),
@@ -477,6 +458,12 @@ void main() {
       final notifier = container.read(
         editProfileStateNotifierProvider.notifier,
       );
+
+      // 初期状態を確認
+      final beforeState = container.read(editProfileStateNotifierProvider);
+      expect(beforeState, isA<AsyncData<EditProfileState>>());
+      final beforeData = (beforeState as AsyncData<EditProfileState>).value;
+      expect(beforeData.avatarDriveId, equals("selected_drive_file_id"));
 
       // 手動でsubmitを呼び出す
       await notifier.submit();
