@@ -39,6 +39,12 @@ class SZh extends S {
   String get edit => '编辑';
 
   @override
+  String get editProfile => '编辑个人资料';
+
+  @override
+  String get apply => '应用';
+
+  @override
   String get create => '创建';
 
   @override
@@ -1450,9 +1456,6 @@ class SZh extends S {
   String get selectRole => '选择角色';
 
   @override
-  String get apply => '应用';
-
-  @override
   String get account => '账户';
 
   @override
@@ -1941,6 +1944,30 @@ class SZh extends S {
 
   @override
   String get template => '模板';
+
+  @override
+  String get profileName => '名称';
+
+  @override
+  String get profileBio => '简介';
+
+  @override
+  String get profileUpload => '上传';
+
+  @override
+  String get profileFromDrive => '从网盘选择';
+
+  @override
+  String get profileFieldName => '名称';
+
+  @override
+  String get profileFieldValue => '内容';
+
+  @override
+  String get profileAddField => '添加';
+
+  @override
+  String get profileFollowedMessage => '被关注时的消息';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -1976,6 +2003,12 @@ class SZhCn extends SZh {
 
   @override
   String get edit => '编辑';
+
+  @override
+  String get editProfile => '编辑个人资料';
+
+  @override
+  String get apply => '应用';
 
   @override
   String get create => '创建';
@@ -3349,9 +3382,6 @@ class SZhCn extends SZh {
   String get selectRole => '选择角色';
 
   @override
-  String get apply => '应用';
-
-  @override
   String get account => '账户';
 
   @override
@@ -3770,4 +3800,28 @@ class SZhCn extends SZh {
 
   @override
   String get template => '模板';
+
+  @override
+  String get profileName => '名称';
+
+  @override
+  String get profileBio => '简介';
+
+  @override
+  String get profileUpload => '上传';
+
+  @override
+  String get profileFromDrive => '从网盘选择';
+
+  @override
+  String get profileFieldName => '名称';
+
+  @override
+  String get profileFieldValue => '内容';
+
+  @override
+  String get profileAddField => '添加';
+
+  @override
+  String get profileFollowedMessage => '被关注时的消息';
 }

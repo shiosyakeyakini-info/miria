@@ -9,6 +9,8 @@
     "trend": "趋势",
     "clip": "便签",
     "edit": "编辑",
+    "editProfile": "编辑个人资料",
+    "apply": "应用",
     "create": "创建",
     "delete": "删除",
     "search": "搜索",
@@ -960,5 +962,14 @@
     "lookupHint": "输入 @ai@misskey.io 或 https://...",
     "lookupFailed": "查找失败",
     "lookupExamples": "输入示例:",
-    "unknownObject": "未知对象"
+    "unknownObject": "未知对象",
+
+    "profileName": "名称",
+    "profileBio": "简介",
+    "profileUpload": "上传",
+    "profileFromDrive": "从网盘选择",
+    "profileFieldName": "名称",
+    "profileFieldValue": "内容",
+    "profileAddField": "添加",
+    "profileFollowedMessage": "被关注时的消息"
 }
