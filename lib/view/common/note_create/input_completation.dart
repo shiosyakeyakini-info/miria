@@ -46,54 +46,59 @@ class InputComplement extends HookConsumerWidget {
       return Container();
     }
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Theme.of(context).primaryColor)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: MediaQuery.of(context).size.width,
+    return TextFieldTapRegion(
+      onTapOutside: (_) => primaryFocus?.unfocus(),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Theme.of(context).primaryColor),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                  ),
+                  child: switch (inputCompletionType) {
+                    Basic() => BasicKeyboard(
+                      controller: controller,
+                      focusNode: focusNode,
+                    ),
+                    Emoji() => EmojiKeyboard(
+                      controller: controller,
+                      focusNode: focusNode,
+                    ),
+                    MfmFn() => MfmFnKeyboard(
+                      controller: controller,
+                      focusNode: focusNode,
+                      parentContext: context,
+                    ),
+                    Hashtag() => HashtagKeyboard(
+                      controller: controller,
+                      focusNode: focusNode,
+                    ),
+                    _ => BasicKeyboard(
+                      controller: controller,
+                      focusNode: focusNode,
+                    ),
+                  },
                 ),
-                child: switch (inputCompletionType) {
-                  Basic() => BasicKeyboard(
-                    controller: controller,
-                    focusNode: focusNode,
-                  ),
-                  Emoji() => EmojiKeyboard(
-                    controller: controller,
-                    focusNode: focusNode,
-                  ),
-                  MfmFn() => MfmFnKeyboard(
-                    controller: controller,
-                    focusNode: focusNode,
-                    parentContext: context,
-                  ),
-                  Hashtag() => HashtagKeyboard(
-                    controller: controller,
-                    focusNode: focusNode,
-                  ),
-                  _ => BasicKeyboard(
-                    controller: controller,
-                    focusNode: focusNode,
-                  ),
-                },
               ),
             ),
-          ),
-          if (defaultTargetPlatform == TargetPlatform.android ||
-              defaultTargetPlatform == TargetPlatform.iOS)
-            IconButton(
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-              icon: const Icon(Icons.keyboard_arrow_down),
-            ),
-        ],
+            if (defaultTargetPlatform == TargetPlatform.android ||
+                defaultTargetPlatform == TargetPlatform.iOS)
+              IconButton(
+                onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                icon: const Icon(Icons.keyboard_arrow_down),
+              ),
+          ],
+        ),
       ),
     );
   }
