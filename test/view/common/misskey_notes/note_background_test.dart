@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:miria/view/common/misskey_notes/note_background.dart';
-import 'package:misskey_dart/misskey_dart.dart';
-import 'package:miria/repository/general_settings_repository.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/model/general_settings.dart";
+import "package:miria/providers.dart";
+import "package:miria/repository/general_settings_repository.dart";
+import "package:miria/view/common/misskey_notes/note_background.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class FakeGeneralSettingsRepository extends GeneralSettingsRepository {
   FakeGeneralSettingsRepository(this._settings);
@@ -45,7 +45,7 @@ Widget buildTestWidget({
 }
 
 void main() {
-  testWidgets('returns child when color is null', (tester) async {
+  testWidgets("returns child when color is null", (tester) async {
     await tester.pumpWidget(
       buildTestWidget(
         settings: const GeneralSettings(),
@@ -56,7 +56,7 @@ void main() {
     expect(find.byType(ColoredBox), findsNothing);
   });
 
-  testWidgets('apply background color', (tester) async {
+  testWidgets("apply background color", (tester) async {
     const color = Colors.red;
     await tester.pumpWidget(
       buildTestWidget(

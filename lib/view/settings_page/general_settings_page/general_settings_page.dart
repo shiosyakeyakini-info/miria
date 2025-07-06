@@ -9,9 +9,9 @@ import "package:miria/const.dart";
 import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/state_notifier/common/cache_size_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
-import "package:miria/view/common/color_picker_dialog.dart";
 
 @RoutePage()
 class GeneralSettingsPage extends HookConsumerWidget {
@@ -379,20 +379,26 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).public)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  lightNoteBgPublic.value ?? Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgPublic.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                lightNoteBgPublic.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgPublic.value = result;
+                              }
                             },
                           ),
                         ],
@@ -401,20 +407,25 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).homeOnly)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  lightNoteBgHome.value ?? Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgHome.value ?? Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                lightNoteBgHome.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgHome.value = result;
+                              }
                             },
                           ),
                         ],
@@ -423,21 +434,26 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).followersOnly)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  lightNoteBgFollowers.value ??
-                                  Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgFollowers.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                lightNoteBgFollowers.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgFollowers.value = result;
+                              }
                             },
                           ),
                         ],
@@ -446,20 +462,26 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).direct)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  lightNoteBgDirect.value ?? Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    lightNoteBgDirect.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                lightNoteBgDirect.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                lightNoteBgDirect.value = result;
+                              }
                             },
                           ),
                         ],
@@ -470,20 +492,26 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).public)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  darkNoteBgPublic.value ?? Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgPublic.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                darkNoteBgPublic.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgPublic.value = result;
+                              }
                             },
                           ),
                         ],
@@ -492,19 +520,25 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).homeOnly)),
                           IconButton(
-                            icon: ColoredBox(
-                              color: darkNoteBgHome.value ?? Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgHome.value ?? Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                darkNoteBgHome.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgHome.value = result;
+                              }
                             },
                           ),
                         ],
@@ -513,21 +547,26 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).followersOnly)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  darkNoteBgFollowers.value ??
-                                  Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgFollowers.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                darkNoteBgFollowers.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgFollowers.value = result;
+                              }
                             },
                           ),
                         ],
@@ -536,20 +575,26 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         children: [
                           Expanded(child: Text(S.of(context).direct)),
                           IconButton(
-                            icon: ColoredBox(
-                              color:
-                                  darkNoteBgDirect.value ?? Colors.transparent,
-                              child: const SizedBox(width: 24, height: 24),
+                            icon: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color:
+                                    darkNoteBgDirect.value ??
+                                    Colors.transparent,
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
                             onPressed: () async {
-                              final result =
-                                  await showDialog<ValueNotifier<Color>>(
-                                    context: context,
-                                    builder: (context) =>
-                                        const ColorPickerDialog(),
-                                  );
-                              if (result != null)
-                                darkNoteBgDirect.value = result.value;
+                              final result = await context.pushRoute<Color>(
+                                const ColorPickerRoute(),
+                              );
+                              if (result != null) {
+                                darkNoteBgDirect.value = result;
+                              }
                             },
                           ),
                         ],

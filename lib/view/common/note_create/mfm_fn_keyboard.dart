@@ -1,8 +1,9 @@
+import "package:auto_route/auto_route.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:miria/extensions/text_editing_controller_extension.dart";
 import "package:miria/model/input_completion_type.dart";
-import "package:miria/view/common/color_picker_dialog.dart";
+import "package:miria/router/app_router.dart";
 import "package:miria/view/common/date_time_picker.dart";
 import "package:miria/view/common/note_create/basic_keyboard.dart";
 import "package:miria/view/common/note_create/custom_keyboard_button.dart";
@@ -155,18 +156,17 @@ class MfmFnKeyboard extends ConsumerWidget {
         controller.insert(" $unixtime");
       }
     } else if (mfmFnName == "fg" || mfmFnName == "bg") {
-      final result = await showDialog<ValueNotifier<Color>>(
-        context: parentContext,
-        builder: (context) => const ColorPickerDialog(),
+      final result = await parentContext.pushRoute<Color>(
+        const ColorPickerRoute(),
       );
       if (result != null) {
-        if (((result.value.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
+        if (((result.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
           controller.insert(
-            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+            ".color=${((result.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         } else {
           controller.insert(
-            ".color=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.a * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+            ".color=${((result.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.a * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         }
       } else {
@@ -206,18 +206,17 @@ class MfmFnKeyboard extends ConsumerWidget {
     }
     if ((mfmFnName == "fg" || mfmFnName == "bg" || mfmFnName == "border") &&
         arg.name == "color") {
-      final result = await showDialog<ValueNotifier<Color>>(
-        context: parentContext,
-        builder: (context) => const ColorPickerDialog(),
+      final result = await parentContext.pushRoute<Color>(
+        const ColorPickerRoute(),
       );
       if (result != null) {
-        if (((result.value.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
+        if (((result.a * 15.0).round() & 0xff).toRadixString(16) == "f") {
           controller.insert(
-            "=${((result.value.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.value.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
+            "=${((result.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")}${((result.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, "0")} ",
           );
         } else {
           controller.insert(
-            "=${((result.value.r * 15.0).round() & 0xff).toRadixString(16)}${((result.value.g * 15.0).round() & 0xff).toRadixString(16)}${((result.value.b * 15.0).round() & 0xff).toRadixString(16)}${((result.value.a * 15.0).round() & 0xff).toRadixString(16)} ",
+            "=${((result.r * 15.0).round() & 0xff).toRadixString(16)}${((result.g * 15.0).round() & 0xff).toRadixString(16)}${((result.b * 15.0).round() & 0xff).toRadixString(16)}${((result.a * 15.0).round() & 0xff).toRadixString(16)} ",
           );
         }
       } else {

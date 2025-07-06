@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import "package:flutter/material.dart";
+import "package:freezed_annotation/freezed_annotation.dart";
 
 class ColorConverter extends JsonConverter<Color?, int?> {
   const ColorConverter();

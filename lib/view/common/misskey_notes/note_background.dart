@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:miria/model/general_settings.dart';
-import 'package:miria/providers.dart';
-import 'package:misskey_dart/misskey_dart.dart';
+import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:miria/providers.dart";
+import "package:misskey_dart/misskey_dart.dart";
 
 class NoteBackground extends ConsumerWidget {
   final NoteVisibility visibility;
@@ -25,22 +24,18 @@ class NoteBackground extends ConsumerWidget {
         color = isDark
             ? settings.darkNoteBackgroundPublic
             : settings.lightNoteBackgroundPublic;
-        break;
       case NoteVisibility.home:
         color = isDark
             ? settings.darkNoteBackgroundHome
             : settings.lightNoteBackgroundHome;
-        break;
       case NoteVisibility.followers:
         color = isDark
             ? settings.darkNoteBackgroundFollowers
             : settings.lightNoteBackgroundFollowers;
-        break;
       case NoteVisibility.specified:
         color = isDark
             ? settings.darkNoteBackgroundDirect
             : settings.lightNoteBackgroundDirect;
-        break;
     }
 
     if (color == null || color.opacity == 0) {

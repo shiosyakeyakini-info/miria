@@ -19,7 +19,7 @@ class ColorPickerDialog extends HookWidget {
       ),
       actions: [
         TextButton(
-          onPressed: () async => context.maybePop(pickedColor),
+          onPressed: () async => context.maybePop(pickedColor.value),
           child: Text(S.of(context).decideColor),
         ),
       ],
