@@ -8,6 +8,8 @@
     "noneAction": "なにもいたしませんわ",
     "pleaseInput": "お入れなさって",
     "pleaseSelect": "お選びになさって",
+    "editProfile": "プロフィール編集",
+    "apply": "変更いたしますわ",
 
     "serverRules": "サーバーの定め",
     "antennaSourceUserHintText": "ユーザーネームを改行で区切って指定いたしますわ",
@@ -143,6 +145,15 @@
                 "type": "String"
             }
         }
-    }
+    },
+
+    "profileName": "お名前",
+    "profileBio": "自己紹介",
+    "profileUpload": "アップロード",
+    "profileFromDrive": "ドライブから",
+    "profileFieldName": "名前",
+    "profileFieldValue": "内容",
+    "profileAddField": "追加",
+    "profileFollowedMessage": "フォローされたときのメッセージ"
 
 }

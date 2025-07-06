@@ -365,7 +365,7 @@ class GeneralSettingsPage extends HookConsumerWidget {
                                   textScaleFactor.value)
                               ? null
                               : save,
-                          child: const Text("変更"),
+                          child: Text(S.of(context).apply),
                         ),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 10)),

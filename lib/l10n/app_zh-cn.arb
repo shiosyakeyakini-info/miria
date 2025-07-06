@@ -9,6 +9,8 @@
     "trend": "趋势",
     "clip": "便签",
     "edit": "编辑",
+    "editProfile": "编辑个人资料",
+    "apply": "应用",
     "create": "创建",
     "delete": "删除",
     "search": "搜索",
@@ -965,5 +967,14 @@
     "someoneLogined": "有人登录了您的账户",
     "unknownNotification": "未知类型的通知",
     "createTokenNotification": "访问令牌已创建",
-    "chatRoomInvitationReceivedNotification": "收到聊天室邀请"
+    "chatRoomInvitationReceivedNotification": "收到聊天室邀请",
+
+    "profileName": "名称",
+    "profileBio": "简介",
+    "profileUpload": "上传",
+    "profileFromDrive": "从网盘选择",
+    "profileFieldName": "名称",
+    "profileFieldValue": "内容",
+    "profileAddField": "添加",
+    "profileFollowedMessage": "被关注时的消息"
 }
