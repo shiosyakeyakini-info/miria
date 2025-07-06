@@ -789,13 +789,15 @@ void main() {
     });
 
     group("フォロー数表示", () {
-      testWidgets("followingVisibilityがpublicの場合、フォロー数が表示されること", (tester) async {
+      testWidgets("followingVisibilityがpublicの場合、フォロー数が表示されること", (
+        tester,
+      ) async {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any)).thenAnswer(
-          (_) async => TestData.userWithFollowingVisibilityPublic,
-        );
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.userWithFollowingVisibilityPublic);
 
         await tester.pumpWidget(
           ProviderScope(
@@ -821,16 +823,21 @@ void main() {
 
         // The following count should be visible because followingVisibility is public
         expect(find.text("フォロー"), findsOneWidget);
-        expect(find.text("50"), findsOneWidget); // The actual following count from test data
+        expect(
+          find.text("3,699"),
+          findsOneWidget,
+        ); // The actual following count from test data (formatted)
       });
 
-      testWidgets("followingVisibilityがprivateの場合、フォロー数が表示されないこと", (tester) async {
+      testWidgets("followingVisibilityがprivateの場合、フォロー数が表示されないこと", (
+        tester,
+      ) async {
         final mockMisskey = MockMisskey();
         final mockUser = MockMisskeyUsers();
         when(mockMisskey.users).thenReturn(mockUser);
-        when(mockUser.show(any)).thenAnswer(
-          (_) async => TestData.userWithFollowingVisibilityPrivate,
-        );
+        when(
+          mockUser.show(any),
+        ).thenAnswer((_) async => TestData.userWithFollowingVisibilityPrivate);
 
         await tester.pumpWidget(
           ProviderScope(
