@@ -760,12 +760,12 @@ void main() {
         );
         await tester.pumpAndSettle();
         await tester.dragUntilVisible(
-          find.text("フォロワー"),
+          find.text("フォロー"),
           find.byType(CustomScrollView),
           const Offset(0, -50),
         );
         await tester.pump();
-        await tester.tap(find.text("フォロワー"));
+        await tester.tap(find.text("フォロー"));
         await tester.pumpAndSettle();
 
         expect(
