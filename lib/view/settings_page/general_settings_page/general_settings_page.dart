@@ -10,7 +10,6 @@ import "package:miria/l10n/app_localizations.dart";
 import "package:miria/model/general_settings.dart";
 import "package:miria/providers.dart";
 import "package:miria/router/app_router.dart";
-import "package:miria/state_notifier/common/cache_size_notifier.dart";
 import "package:miria/view/themes/built_in_color_themes.dart";
 
 @RoutePage()
@@ -52,7 +51,6 @@ class GeneralSettingsPage extends HookConsumerWidget {
     final darkNoteBgHome = useState(settings.darkNoteBackgroundHome);
     final darkNoteBgFollowers = useState(settings.darkNoteBackgroundFollowers);
     final darkNoteBgDirect = useState(settings.darkNoteBackgroundDirect);
-    final cacheSize = ref.watch(cacheSizeNotifierProvider);
 
     useMemoized(() {
       if (lightModeTheme.value.isEmpty) {
@@ -760,53 +758,6 @@ class GeneralSettingsPage extends HookConsumerWidget {
                         onChanged: (item) =>
                             fantasyFontName.value = item?.actualName ?? "",
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Table(
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
-                        columnWidths: const {
-                          0: IntrinsicColumnWidth(),
-                          1: FlexColumnWidth(),
-                        },
-                        children: [
-                          TableRow(
-                            children: [
-                              Text(S.of(context).cacheSize),
-                              Center(
-                                child: cacheSize.when(
-                                  loading: () =>
-                                      const CircularProgressIndicator(),
-                                  error: (_, __) =>
-                                      Text(S.of(context).cacheSizeError),
-                                  data: (cacheSize) {
-                                    return Text(cacheSize);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      if (cacheSize.hasValue)
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await ref
-                                  .read(cacheSizeNotifierProvider.notifier)
-                                  .clear();
-                            },
-                            child: Text(S.of(context).clearCache),
-                          ),
-                        ),
                     ],
                   ),
                 ),
