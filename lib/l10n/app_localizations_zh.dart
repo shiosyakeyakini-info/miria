@@ -39,6 +39,12 @@ class SZh extends S {
   String get edit => '编辑';
 
   @override
+  String get editProfile => '编辑个人资料';
+
+  @override
+  String get apply => '应用';
+
+  @override
   String get create => '创建';
 
   @override
@@ -654,13 +660,19 @@ class SZh extends S {
   }
 
   @override
-  String get appNotification => 'なんかのアプリからの通知らしいわ';
+  String get appNotification => '来自应用的通知';
 
   @override
-  String get someoneLogined => '自分のアカウントにログインがあったらしいで';
+  String get someoneLogined => '有人登录了您的账户';
 
   @override
-  String get unknownNotification => '知らんタイプの通知やわ';
+  String get unknownNotification => '未知类型的通知';
+
+  @override
+  String get createTokenNotification => '访问令牌已创建';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => '收到聊天室邀请';
 
   @override
   String messageForFollower(String message) {
@@ -1450,9 +1462,6 @@ class SZh extends S {
   String get selectRole => '选择角色';
 
   @override
-  String get apply => '应用';
-
-  @override
   String get account => '账户';
 
   @override
@@ -1944,6 +1953,30 @@ class SZh extends S {
 
   @override
   String get noteBackgroundColor => '笔记背景颜色';
+
+  @override
+  String get profileName => '名称';
+
+  @override
+  String get profileBio => '简介';
+
+  @override
+  String get profileUpload => '上传';
+
+  @override
+  String get profileFromDrive => '从网盘选择';
+
+  @override
+  String get profileFieldName => '名称';
+
+  @override
+  String get profileFieldValue => '内容';
+
+  @override
+  String get profileAddField => '添加';
+
+  @override
+  String get profileFollowedMessage => '被关注时的消息';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -1979,6 +2012,12 @@ class SZhCn extends SZh {
 
   @override
   String get edit => '编辑';
+
+  @override
+  String get editProfile => '编辑个人资料';
+
+  @override
+  String get apply => '应用';
 
   @override
   String get create => '创建';
@@ -2585,6 +2624,21 @@ class SZhCn extends SZh {
   String roleAssignedNotification(String role) {
     return '您已被分配至角色「$role」';
   }
+
+  @override
+  String get appNotification => '来自应用的通知';
+
+  @override
+  String get someoneLogined => '有人登录了您的账户';
+
+  @override
+  String get unknownNotification => '未知类型的通知';
+
+  @override
+  String get createTokenNotification => '访问令牌已创建';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => '收到聊天室邀请';
 
   @override
   String get notificationAll => '所有人';
@@ -3352,9 +3406,6 @@ class SZhCn extends SZh {
   String get selectRole => '选择角色';
 
   @override
-  String get apply => '应用';
-
-  @override
   String get account => '账户';
 
   @override
@@ -3776,4 +3827,28 @@ class SZhCn extends SZh {
 
   @override
   String get noteBackgroundColor => '笔记背景颜色';
+
+  @override
+  String get profileName => '名称';
+
+  @override
+  String get profileBio => '简介';
+
+  @override
+  String get profileUpload => '上传';
+
+  @override
+  String get profileFromDrive => '从网盘选择';
+
+  @override
+  String get profileFieldName => '名称';
+
+  @override
+  String get profileFieldValue => '内容';
+
+  @override
+  String get profileAddField => '添加';
+
+  @override
+  String get profileFollowedMessage => '被关注时的消息';
 }

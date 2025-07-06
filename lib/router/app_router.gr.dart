@@ -2422,6 +2422,55 @@ class PhotoEditRouteArgs {
 }
 
 /// generated route for
+/// [ProfileEditPage]
+class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
+  ProfileEditRoute({
+    required Account account,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ProfileEditRoute.name,
+         args: ProfileEditRouteArgs(account: account, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'ProfileEditRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ProfileEditRouteArgs>();
+      return WrappedRoute(
+        child: ProfileEditPage(account: args.account, key: args.key),
+      );
+    },
+  );
+}
+
+class ProfileEditRouteArgs {
+  const ProfileEditRouteArgs({required this.account, this.key});
+
+  final Account account;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ProfileEditRouteArgs{account: $account, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ProfileEditRouteArgs) return false;
+    return account == other.account && key == other.key;
+  }
+
+  @override
+  int get hashCode => account.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ReactionDeckPage]
 class ReactionDeckRoute extends PageRouteInfo<ReactionDeckRouteArgs> {
   ReactionDeckRoute({

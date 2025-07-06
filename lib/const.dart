@@ -1,3 +1,5 @@
+import "dart:io";
+
 const misskeyHQReactionDelay = 1500;
 
 class Font {
@@ -61,3 +63,6 @@ const choosableFonts = [
   Font("Potta One", "Potta One"),
   Font("ニューテゴミン", "New Tegomin"),
 ];
+
+bool get isDesktop =>
+    Platform.isWindows || Platform.isMacOS || Platform.isLinux;
