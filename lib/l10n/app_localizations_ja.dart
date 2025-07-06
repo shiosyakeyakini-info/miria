@@ -671,6 +671,12 @@ class SJa extends S {
   String get unknownNotification => '知らんタイプの通知やわ';
 
   @override
+  String get createTokenNotification => 'アクセストークンが作成されたで';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => 'チャットルームに招待されたで';
+
+  @override
   String messageForFollower(String message) {
     return 'フォロワーへ 「$message」';
   }
@@ -2204,6 +2210,12 @@ class SJaOj extends SJa {
 
   @override
   String get unknownNotification => '存じ上げない種類の通知ですの';
+
+  @override
+  String get createTokenNotification => 'アクセストークンが作成されましたの';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => 'チャットルームにお招きいただきましたの';
 
   @override
   String get cancelEmojiChoosing => 'やめておきますわ';

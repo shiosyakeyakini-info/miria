@@ -75,6 +75,8 @@
     "appNotification": "なにかしらのアプリからの通知のようでして",
     "someoneLogined": "ログインされたようですわ",
     "unknownNotification": "存じ上げない種類の通知ですの",
+    "createTokenNotification": "アクセストークンが作成されましたの",
+    "chatRoomInvitationReceivedNotification": "チャットルームにお招きいただきましたの",
 
     "cancelEmojiChoosing": "やめておきますわ",
     "doneEmojiChoosing": "使いますわ",

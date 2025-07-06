@@ -381,6 +381,8 @@
     "appNotification": "なんかのアプリからの通知らしいわ",
     "someoneLogined": "自分のアカウントにログインがあったらしいで",
     "unknownNotification": "知らんタイプの通知やわ",
+    "createTokenNotification": "アクセストークンが作成されたで",
+    "chatRoomInvitationReceivedNotification": "チャットルームに招待されたで",
     "messageForFollower": "フォロワーへ 「{message}」",
     "@messageForFollower": {
         "placeholders": {

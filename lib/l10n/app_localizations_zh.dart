@@ -660,13 +660,19 @@ class SZh extends S {
   }
 
   @override
-  String get appNotification => 'なんかのアプリからの通知らしいわ';
+  String get appNotification => '来自应用的通知';
 
   @override
-  String get someoneLogined => '自分のアカウントにログインがあったらしいで';
+  String get someoneLogined => '有人登录了您的账户';
 
   @override
-  String get unknownNotification => '知らんタイプの通知やわ';
+  String get unknownNotification => '未知类型的通知';
+
+  @override
+  String get createTokenNotification => '访问令牌已创建';
+
+  @override
+  String get chatRoomInvitationReceivedNotification => '收到聊天室邀请';
 
   @override
   String messageForFollower(String message) {
