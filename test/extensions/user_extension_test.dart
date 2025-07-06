@@ -1,12 +1,12 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:miria/extensions/user_extension.dart';
+import "package:flutter_test/flutter_test.dart";
+import "package:miria/extensions/user_extension.dart";
 
-import '../test_util/test_datas.dart';
+import "../test_util/test_datas.dart";
 
 void main() {
-  group('UserDetailedExtension following visibility', () {
+  group("UserDetailedExtension following visibility", () {
     test(
-      'isFollowingVisibleForMe returns true when followingVisibility is public',
+      "isFollowingVisibleForMe returns true when followingVisibility is public",
       () {
         final user = TestData.userWithFollowingVisibilityPublic;
 
@@ -16,7 +16,7 @@ void main() {
     );
 
     test(
-      'isFollowingVisibleForMe returns false when followingVisibility is private',
+      "isFollowingVisibleForMe returns false when followingVisibility is private",
       () {
         final user = TestData.userWithFollowingVisibilityPrivate;
 
@@ -26,7 +26,7 @@ void main() {
     );
 
     test(
-      'isFollowingVisibleForMe falls back to ffVisibility when followingVisibility is null',
+      "isFollowingVisibleForMe falls back to ffVisibility when followingVisibility is null",
       () {
         final user = TestData.userWithFollowingVisibilityNull;
 
